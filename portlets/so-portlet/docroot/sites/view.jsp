@@ -59,7 +59,9 @@ pageContext.setAttribute("portletURL", portletURL);
 <liferay-portlet:renderURLParams varImpl="portletURL" />
 
 <div class="sites-tabs">
-	<aui:select label="" name="tabs1">
+	<span>All Sites</span>
+
+	<aui:select label="" name="tabs1" style="display: hidden">
 		<aui:option label="all-sites" selected='<%= tabs1.equals("all-sites") %>' value="all-sites" />
 		<aui:option label="my-sites" selected='<%= tabs1.equals("my-sites") %>' value="my-sites" />
 		<aui:option label="my-favorites" selected='<%= tabs1.equals("my-favorites") %>' value="my-favorites" />
@@ -69,7 +71,7 @@ pageContext.setAttribute("portletURL", portletURL);
 <div class="search">
 	<input class="search-input" id="<portlet:namespace />name" name="<portlet:namespace />name" size="30" type="text" value="<%= HtmlUtil.escape(name) %>" />
 
-	<input src="<%= themeDisplay.getPathThemeImages() %>/common/search.png" type="image" value='<liferay-ui:message key="search" />' />
+	<input src="<%= themeDisplay.getPathThemeImages() %>/common/search.png" type="image" value='<liferay-ui:message key="search" />' style="display: none;"/>
 </div>
 
 <div class="site-list-container">

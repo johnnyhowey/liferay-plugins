@@ -16,6 +16,136 @@
 
 <%@ include file="/css_init.jsp" %>
 
+.contacts-portlet .contacts-search {
+	border-bottom: 1px solid #CCC;
+
+	.contacts-search-content {
+		padding: 5px;
+	}
+
+	.contact-group-filter {
+		float: left;
+	}
+
+	select {
+		font-size: 14px;
+		height: 28px;
+	}
+
+	.search-input {
+		vertical-align: top;
+	}
+}
+
+.contacts-portlet .contacts-result-container {
+	.contacts-result {
+		border-right: 1px solid #CCC;
+		height: 1080px;
+		width: 200px;
+
+		.lfr-contact-grid-item {
+			cursor: pointer;
+			display: block;
+			height: 50px;
+			overflow: hidden;
+			padding: 5px;
+			white-space: nowrap;
+
+			.clear {
+				clear: both;
+			}
+
+			.lfr-contact-thumb {
+				float: left;
+			}
+
+			.lfr-contact-thumb img {
+				width: 50px;
+			}
+
+			.lfr-contact-info {
+				margin-left: 55px;
+				font-size: 1em;
+
+				.lfr-contact-name {
+					font-weight: bold;
+				}
+
+				.lfr-contact-extra {
+					color: #777;
+				}
+			}
+		}
+
+		.lfr-contact-grid-item:hover {
+			background-color: #E8EFF4;
+		}
+	}
+
+	.contact-summary-container {
+		width: 622px;
+
+		.aui-column-content, .aui-column-content-center {
+			padding: 0;
+		}
+
+		.lfr-contact-grid-item {
+			display: block;
+			padding: 5px 0;
+			white-space: nowrap;
+
+			.clear {
+				clear: both;
+			}
+
+			.lfr-contact-thumb {
+				float: left;
+			}
+
+			.lfr-contact-thumb img {
+				width: 75px;
+			}
+
+			.lfr-contact-info {
+				font-size: 1.4em;
+				margin-left: 80px;
+
+
+				.lfr-contact-name {
+					font-size: 1.2em;
+					font-weight: bold;
+				}
+
+				.lfr-contact-extra {
+					color: #777;
+				}
+			}
+		}
+
+		.lfr-asset-metadata {
+			margin-bottom: 5px;
+		}
+
+		.contact-action-content {
+			background-color: #E8EFF4;
+			font-size: 1em;
+			margin-bottom: 5px;
+			padding: 5px 0;
+
+			span {
+				padding:0 5px 0 0;
+			}
+		}
+
+		.contact-summary {
+			padding: 0 5px;
+		}
+	}
+
+}
+
+
+
 .lfr-menu-list .disabled .taglib-icon {
 	color: #999;
 }
@@ -169,11 +299,16 @@
 	width: 45%;
 }
 
+.contacts-portlet .lfr-user-comments {
+	float: none;
+	width: 100%;
+}
+
 .contacts-portlet .section h3 {
 	color: #555;
 	background: no-repeat 2px 50%;
 	border-bottom: 1px dotted #CCC;
-	font-size: 1.2em;
+	font-size: 1em;
 	margin-top: 0;
 	padding: 2px 0 2px 25px;
 }

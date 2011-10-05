@@ -55,24 +55,20 @@ a:active {
 /* ---------- Heading ---------- */
 
 #banner {
-	border-bottom: 3px solid #3E3639;
-	margin-bottom: 1.5em;
-	min-height: 90px;
 	position: relative;
+	margin: 0 auto;
+	width: 1024px;
 
-	h1.company-title {
-		margin: 10px 15px 30px;
+	.company-title {
+		float: left;
 	}
 
-	h2.community-title {
-		bottom: 3px;
-		left: 15px;
-		margin: 0;
-		position: absolute;
-
-		a {
-			color: #8D1E31;
-		}
+	.community-title {
+		color: #8D1E31;
+		font-size: 2.2em;
+		font-weight: bold;
+		margin-left: 10px;
+		padding: 32px 0 0 0;
 	}
 
 	h3.page-title {
@@ -162,6 +158,7 @@ a:active {
 
 .site-breadcrumbs {
 	margin-bottom: 1.5em;
+	display: none;
 }
 
 .site-breadcrumbs h1 {
@@ -515,27 +512,6 @@ a:active {
 
 .results-row.alt td {
 	background: #F0F5F7;
-}
-
-/* Tabs */
-
-.aui-tabview-list {
-	background: #E8EFF4;
-}
-
-.aui-tab-active {
-	background: #FFF;
-	border: 1px solid #C8C9CA;
-}
-
-.aui-tab-active,
-.aui-tab-active a {
-	color: #403638;
-	text-shadow: none;
-}
-
-.aui-tab-active:after {
-	border-width: 0;
 }
 
 /* Taglib */
@@ -1146,8 +1122,6 @@ table.calendar {
 /* Navigation */
 
 .portlet-navigation .nav-menu {
-	background: #E8EFF4;
-	border: 1px solid #C8C9CA;
 	margin-bottom: 1em;
 }
 
@@ -1163,15 +1137,13 @@ table.calendar {
 }
 
 .portlet-navigation .nav-menu a {
-	border: 1px solid #E8EFF4;
 	display: block;
 	padding: 3px 10px;
 }
 
 .portlet-navigation .nav-menu a:hover,
 .portlet-navigation .nav-menu a.selected {
-	background: #FFF;
-	border: 1px solid #C8C9CA;
+	background: #E8EFF4;
 }
 
 .portlet-navigation .control-container {
@@ -1180,14 +1152,6 @@ table.calendar {
 
 .portlet-navigation .nav-menu li.add-page input {
 	margin-left: 10px;
-}
-
-.portlet-navigation .nav-menu,
-.portlet-navigation a:hover,
-.portlet-navigation a.selected {
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
 }
 
 /* Recent Documents */
