@@ -1,4 +1,4 @@
-#if ($page_group.isUser() && ($page_group.getClassPK() == $user_id))
+#if ($userPage)
 	<nav id="navigation">
 		<h1>
 			<span>#language("navigation")</span>
@@ -39,7 +39,7 @@
 		</ul>
 	</nav>
 #else
-	<nav class="sort-pages modify-pages" id="navigation">
+	<nav class="$navClass" id="navigation">
 		<h1>
 			<span>#language("navigation")</span>
 		</h1>

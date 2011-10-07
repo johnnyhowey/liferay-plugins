@@ -10,9 +10,6 @@
 	$theme.include($top_head_include)
 </head>
 
-#if ($page_group.isUser())
-	#set($css_class = $css_class + " user-group")
-#end
 
 <body class="$css_class">
 
@@ -27,46 +24,45 @@ $theme.include($body_top_include)
 
 	<header id="banner" role="banner">
 		<hgroup id="heading">
-			<h1 class="company-title">
-				<a class="$logo_css_class" href="$company_url" title="#language("go-to") $company_name">
+			<div class="company-title">
+				<a class="$logo" href="$company_url" title="#language("go-to") $company_name">
 					<span>$company_name</span>
 				</a>
-			</h1>
+			</div>
 
-			<h2 class="community-title">
+			<div class="community-title">
 				<a href="$community_default_url" title="#language("go-to") $community_name">
 					<span>$community_name</span>
 				</a>
-			</h2>
+			</div>
 
 			<h3 class="page-title">
 				<span>$the_title</span>
 			</h3>
+
+			#if ($is_signed_in)
+				<div id="page-search">
+					$theme.search()
+				</div>
+			#end
 		</hgroup>
 
 		#if (!$is_signed_in)
 			<a href="$sign_in_url" id="sign-in" rel="nofollow">$sign_in_text</a>
 		#end
-
-		#if ($is_signed_in)
-			<div id="page-search">
-				$theme.search()
-			</div>
-		#end
-
+	</header>
+	<div id="content">
 		#if ($has_navigation || ($page_group.isUser() && ($page_group.getClassPK() == $user_id)))
 			#parse ("$full_templates_path/navigation.vm")
 		#end
-	</header>
 
-	<div id="content">
-		<nav class="site-breadcrumbs" id="breadcrumbs">
-			<h1>
-				<span>#language("breadcrumbs")</span>
-			</h1>
-
-			#breadcrumbs()
-		</nav>
+##		<nav class="site-breadcrumbs" id="breadcrumbs">
+##			<h1>
+##				<span>#language("breadcrumbs")</span>
+##			</h1>
+##
+##			#breadcrumbs()
+##		</nav>
 
 		#if ($selectable)
 			$theme.include($content_include)
