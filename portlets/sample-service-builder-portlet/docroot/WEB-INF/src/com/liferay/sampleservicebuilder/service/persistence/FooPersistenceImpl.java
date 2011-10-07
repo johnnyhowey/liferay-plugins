@@ -165,6 +165,9 @@ public class FooPersistenceImpl extends BasePersistenceImpl<Foo>
 						FooImpl.class, foo.getPrimaryKey()) == null) {
 				cacheResult(foo);
 			}
+			else {
+				foo.resetOriginalValues();
+			}
 		}
 	}
 
@@ -369,6 +372,12 @@ public class FooPersistenceImpl extends BasePersistenceImpl<Foo>
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
 					args);
+
+				args = new Object[] { fooModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 			}
 
 			if ((fooModelImpl.getColumnBitmask() &
@@ -376,6 +385,12 @@ public class FooPersistenceImpl extends BasePersistenceImpl<Foo>
 				Object[] args = new Object[] {
 						Boolean.valueOf(fooModelImpl.getOriginalField2())
 					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FIELD2, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FIELD2,
+					args);
+
+				args = new Object[] { Boolean.valueOf(fooModelImpl.getField2()) };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_FIELD2, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_FIELD2,
@@ -394,11 +409,13 @@ public class FooPersistenceImpl extends BasePersistenceImpl<Foo>
 		else {
 			if ((fooModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
+				Object[] args = new Object[] {
 						fooModelImpl.getOriginalUuid(),
 						Long.valueOf(fooModelImpl.getOriginalGroupId())
-					});
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 					new Object[] { foo.getUuid(), Long.valueOf(foo.getGroupId()) },

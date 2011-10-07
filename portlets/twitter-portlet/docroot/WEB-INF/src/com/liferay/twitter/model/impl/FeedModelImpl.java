@@ -83,8 +83,8 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 				"value.object.column.bitmask.enabled.com.liferay.twitter.model.Feed"),
 			true);
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
-	public static long TWITTERUSERID_COLUMN_BITMASK = 2L;
-	public static long TWITTERSCREENNAME_COLUMN_BITMASK = 4L;
+	public static long TWITTERSCREENNAME_COLUMN_BITMASK = 2L;
+	public static long TWITTERUSERID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.twitter.model.Feed"));
 
@@ -254,18 +254,13 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 
 	@Override
 	public Feed toEscapedModel() {
-		if (isEscapedModel()) {
-			return (Feed)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (Feed)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (Feed)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -360,7 +355,7 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 
 		feedModelImpl._originalTwitterScreenName = feedModelImpl._twitterScreenName;
 
-		_columnBitmask = 0;
+		feedModelImpl._columnBitmask = 0;
 	}
 
 	@Override

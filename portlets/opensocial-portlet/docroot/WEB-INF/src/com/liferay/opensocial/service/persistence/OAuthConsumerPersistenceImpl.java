@@ -152,6 +152,9 @@ public class OAuthConsumerPersistenceImpl extends BasePersistenceImpl<OAuthConsu
 						OAuthConsumerImpl.class, oAuthConsumer.getPrimaryKey()) == null) {
 				cacheResult(oAuthConsumer);
 			}
+			else {
+				oAuthConsumer.resetOriginalValues();
+			}
 		}
 	}
 
@@ -361,6 +364,13 @@ public class OAuthConsumerPersistenceImpl extends BasePersistenceImpl<OAuthConsu
 					args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GADGETKEY,
 					args);
+
+				args = new Object[] { oAuthConsumerModelImpl.getGadgetKey() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GADGETKEY,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GADGETKEY,
+					args);
 			}
 		}
 
@@ -379,12 +389,14 @@ public class OAuthConsumerPersistenceImpl extends BasePersistenceImpl<OAuthConsu
 		else {
 			if ((oAuthConsumerModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_G_S.getColumnBitmask()) != 0) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_S,
-					new Object[] {
+				Object[] args = new Object[] {
 						oAuthConsumerModelImpl.getOriginalGadgetKey(),
 						
-					oAuthConsumerModelImpl.getOriginalServiceName()
-					});
+						oAuthConsumerModelImpl.getOriginalServiceName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_G_S, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_G_S,
 					new Object[] {

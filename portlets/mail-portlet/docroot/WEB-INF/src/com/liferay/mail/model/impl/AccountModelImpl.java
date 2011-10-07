@@ -102,8 +102,8 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.mail.model.Account"),
 			true);
-	public static long USERID_COLUMN_BITMASK = 1L;
-	public static long ADDRESS_COLUMN_BITMASK = 2L;
+	public static long ADDRESS_COLUMN_BITMASK = 1L;
+	public static long USERID_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.mail.model.Account"));
 
@@ -448,18 +448,13 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 
 	@Override
 	public Account toEscapedModel() {
-		if (isEscapedModel()) {
-			return (Account)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (Account)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (Account)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -565,7 +560,7 @@ public class AccountModelImpl extends BaseModelImpl<Account>
 
 		accountModelImpl._originalAddress = accountModelImpl._address;
 
-		_columnBitmask = 0;
+		accountModelImpl._columnBitmask = 0;
 	}
 
 	@Override

@@ -92,11 +92,11 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 				"value.object.column.bitmask.enabled.com.liferay.portal.workflow.kaleo.model.KaleoInstance"),
 			true);
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
-	public static long KALEODEFINITIONVERSION_COLUMN_BITMASK = 2L;
-	public static long COMPLETED_COLUMN_BITMASK = 4L;
-	public static long COMPLETIONDATE_COLUMN_BITMASK = 8L;
-	public static long KALEODEFINITIONID_COLUMN_BITMASK = 16L;
-	public static long KALEODEFINITIONNAME_COLUMN_BITMASK = 32L;
+	public static long COMPLETED_COLUMN_BITMASK = 2L;
+	public static long COMPLETIONDATE_COLUMN_BITMASK = 4L;
+	public static long KALEODEFINITIONID_COLUMN_BITMASK = 8L;
+	public static long KALEODEFINITIONNAME_COLUMN_BITMASK = 16L;
+	public static long KALEODEFINITIONVERSION_COLUMN_BITMASK = 32L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoInstance"));
 
@@ -361,18 +361,13 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 
 	@Override
 	public KaleoInstance toEscapedModel() {
-		if (isEscapedModel()) {
-			return (KaleoInstance)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (KaleoInstance)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (KaleoInstance)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -490,7 +485,7 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 
 		kaleoInstanceModelImpl._originalCompletionDate = kaleoInstanceModelImpl._completionDate;
 
-		_columnBitmask = 0;
+		kaleoInstanceModelImpl._columnBitmask = 0;
 	}
 
 	@Override

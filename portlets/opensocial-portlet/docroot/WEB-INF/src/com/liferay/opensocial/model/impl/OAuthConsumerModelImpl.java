@@ -83,8 +83,8 @@ public class OAuthConsumerModelImpl extends BaseModelImpl<OAuthConsumer>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.opensocial.model.OAuthConsumer"),
 			true);
-	public static long SERVICENAME_COLUMN_BITMASK = 1L;
-	public static long GADGETKEY_COLUMN_BITMASK = 2L;
+	public static long GADGETKEY_COLUMN_BITMASK = 1L;
+	public static long SERVICENAME_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.opensocial.model.OAuthConsumer"));
 
@@ -238,18 +238,13 @@ public class OAuthConsumerModelImpl extends BaseModelImpl<OAuthConsumer>
 
 	@Override
 	public OAuthConsumer toEscapedModel() {
-		if (isEscapedModel()) {
-			return (OAuthConsumer)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (OAuthConsumer)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (OAuthConsumer)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -336,7 +331,7 @@ public class OAuthConsumerModelImpl extends BaseModelImpl<OAuthConsumer>
 
 		oAuthConsumerModelImpl._originalServiceName = oAuthConsumerModelImpl._serviceName;
 
-		_columnBitmask = 0;
+		oAuthConsumerModelImpl._columnBitmask = 0;
 	}
 
 	@Override

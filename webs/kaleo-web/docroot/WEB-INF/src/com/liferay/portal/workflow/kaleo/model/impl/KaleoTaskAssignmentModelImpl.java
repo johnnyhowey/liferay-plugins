@@ -91,11 +91,11 @@ public class KaleoTaskAssignmentModelImpl extends BaseModelImpl<KaleoTaskAssignm
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment"),
 			true);
-	public static long COMPANYID_COLUMN_BITMASK = 1L;
-	public static long KALEOCLASSNAME_COLUMN_BITMASK = 2L;
-	public static long KALEOCLASSPK_COLUMN_BITMASK = 4L;
-	public static long KALEODEFINITIONID_COLUMN_BITMASK = 8L;
-	public static long ASSIGNEECLASSNAME_COLUMN_BITMASK = 16L;
+	public static long ASSIGNEECLASSNAME_COLUMN_BITMASK = 1L;
+	public static long COMPANYID_COLUMN_BITMASK = 2L;
+	public static long KALEOCLASSNAME_COLUMN_BITMASK = 4L;
+	public static long KALEOCLASSPK_COLUMN_BITMASK = 8L;
+	public static long KALEODEFINITIONID_COLUMN_BITMASK = 16L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment"));
 
@@ -354,18 +354,13 @@ public class KaleoTaskAssignmentModelImpl extends BaseModelImpl<KaleoTaskAssignm
 
 	@Override
 	public KaleoTaskAssignment toEscapedModel() {
-		if (isEscapedModel()) {
-			return (KaleoTaskAssignment)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (KaleoTaskAssignment)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (KaleoTaskAssignment)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -479,7 +474,7 @@ public class KaleoTaskAssignmentModelImpl extends BaseModelImpl<KaleoTaskAssignm
 
 		kaleoTaskAssignmentModelImpl._originalAssigneeClassName = kaleoTaskAssignmentModelImpl._assigneeClassName;
 
-		_columnBitmask = 0;
+		kaleoTaskAssignmentModelImpl._columnBitmask = 0;
 	}
 
 	@Override

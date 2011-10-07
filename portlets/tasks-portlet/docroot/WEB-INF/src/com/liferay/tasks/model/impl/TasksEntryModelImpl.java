@@ -98,8 +98,8 @@ public class TasksEntryModelImpl extends BaseModelImpl<TasksEntry>
 			true);
 	public static long ASSIGNEEUSERID_COLUMN_BITMASK = 1L;
 	public static long GROUPID_COLUMN_BITMASK = 2L;
-	public static long USERID_COLUMN_BITMASK = 4L;
-	public static long RESOLVERUSERID_COLUMN_BITMASK = 8L;
+	public static long RESOLVERUSERID_COLUMN_BITMASK = 4L;
+	public static long USERID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -390,18 +390,13 @@ public class TasksEntryModelImpl extends BaseModelImpl<TasksEntry>
 
 	@Override
 	public TasksEntry toEscapedModel() {
-		if (isEscapedModel()) {
-			return (TasksEntry)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (TasksEntry)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (TasksEntry)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -525,7 +520,7 @@ public class TasksEntryModelImpl extends BaseModelImpl<TasksEntry>
 
 		tasksEntryModelImpl._setOriginalResolverUserId = false;
 
-		_columnBitmask = 0;
+		tasksEntryModelImpl._columnBitmask = 0;
 	}
 
 	@Override

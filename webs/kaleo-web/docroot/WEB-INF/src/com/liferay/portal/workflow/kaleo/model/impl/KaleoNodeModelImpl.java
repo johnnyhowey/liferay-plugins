@@ -304,18 +304,13 @@ public class KaleoNodeModelImpl extends BaseModelImpl<KaleoNode>
 
 	@Override
 	public KaleoNode toEscapedModel() {
-		if (isEscapedModel()) {
-			return (KaleoNode)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (KaleoNode)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (KaleoNode)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -419,7 +414,7 @@ public class KaleoNodeModelImpl extends BaseModelImpl<KaleoNode>
 
 		kaleoNodeModelImpl._setOriginalKaleoDefinitionId = false;
 
-		_columnBitmask = 0;
+		kaleoNodeModelImpl._columnBitmask = 0;
 	}
 
 	@Override

@@ -288,18 +288,13 @@ public class MeetupsEntryModelImpl extends BaseModelImpl<MeetupsEntry>
 
 	@Override
 	public MeetupsEntry toEscapedModel() {
-		if (isEscapedModel()) {
-			return (MeetupsEntry)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (MeetupsEntry)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (MeetupsEntry)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -397,7 +392,7 @@ public class MeetupsEntryModelImpl extends BaseModelImpl<MeetupsEntry>
 
 		meetupsEntryModelImpl._setOriginalUserId = false;
 
-		_columnBitmask = 0;
+		meetupsEntryModelImpl._columnBitmask = 0;
 	}
 
 	@Override
