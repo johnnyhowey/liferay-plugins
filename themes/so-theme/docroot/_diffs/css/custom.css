@@ -2,27 +2,32 @@
 
 @import url(color_schemes/website.css);
 
+@import "compass";
+
+$header: #8F0920;
+$link: #2571AD;
+$border-color: #C7D0DA;
+
 /* ---------- Base ---------- */
 
 body {
 	color: #403638;
+	font: 12px/1.5em 'Helvetica', Arial, sans-serif;
 }
 
 a,
 a:visited,
 a:active {
-	color: #369;
+	color: $link;
 	text-decoration: none;
 }
 
-#wrapper {
-	margin: 0 auto;
-	width: 95%;
+a:hover {
+	text-decoration: underline;
 }
 
-#main-content {
-	font-size: 1.2em;
-	margin-bottom: 4em;
+#wrapper {
+	min-width: 1024px;
 }
 
 .ie6 img {
@@ -33,42 +38,44 @@ a:active {
 	display: none;
 }
 
-.portlet-content,
-.portlet-minimized .portlet-content-container {
-	padding: 0 0 10px;
-}
-
-.portlet-boundary h1 {
-	border-bottom: 4px solid #7F80A4;
-	color: #8F0920;
-	font-size: 18px;
-	font-weight: bold;
-	margin: 0 0 .5em;
-}
-
-.portlet-boundary h3 {
-	border-bottom: 1px solid #C0C0C0;
-	color: #3E3639;
-	font-size: 1.1em;
+#banner:after {
+	content: "";
+	clear: both;
+	display: block;
 }
 
 /* ---------- Heading ---------- */
 
 #banner {
-	position: relative;
-	margin: 0 auto;
-	width: 1024px;
+	border-bottom: 1px solid $border-color;
+
+	#heading {
+		margin: 0 auto;
+		position: relative;
+		width: 1024px;
+	}
 
 	.company-title {
 		float: left;
+		padding: 5px 0 10px;
+
+		.theme-logo {
+			background-image: url(../images/custom/so-logo.png);
+			height: 64px;
+			width: 186px;
+		}
 	}
 
 	.community-title {
-		color: #8D1E31;
+		float: left;
 		font-size: 2.2em;
 		font-weight: bold;
-		margin-left: 10px;
-		padding: 32px 0 0 0;
+		line-height: 1em;
+		padding: 30px 20px 0;
+
+		a {
+			color: $header;
+		}
 	}
 
 	h3.page-title {
@@ -77,135 +84,102 @@ a:active {
 
 	#page-search {
 		position: absolute;
-		right: 15px;
-		top: 20px;
+		right: 0;
+		top: 22px;
 
 		input {
 			float: left;
 			margin-left: 3px;
 		}
 
-		select {
+		select, input[type="image"] {
 			display: none;
 		}
+	}
+
+	#sign-in {
+		position: absolute;
+		right: 0;
+		top: 30px;
 	}
 }
 
 /* ---------- Navigation ---------- */
 
 #navigation {
-	position: absolute;
-	right: 0;
-	bottom: 0;
-}
-
-#navigation h1 {
-	display: none;
-}
-
-#navigation ul {
-	float: right;
-	margin: 0 auto;
-}
-
-#navigation ul:after {
-	clear: both;
-	content: ".";
-	display: block;
-	height: 0;
-	visibility: hidden;
-}
-
-#navigation li {
 	float: left;
-	list-style-type: none;
-	position: relative;
+	width: 200px;
+
+	ul, li {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	h1, ul {
+		padding: 10px;
+	}
+
+	h1 {
+		color: #8E9AA8;
+		font-size: 1em;
+		margin: 0;
+		padding-bottom: 0;
+	}
+
+	ul {
+		padding-top: 0;
+		margin-left: 5px;
+	}
+
+	li {
+		a {
+			display: block;
+			padding: 3px 7px;
+
+		}
+
+		a:hover, &.selected a  {
+			background: #F4F4F4;
+			text-decoration: none;
+		}
+
+		&.selected a {
+			color: $header;
+			font-weight: bold;
+		}
+	}
+
+	.child-menu {
+		display: none;
+	}
 }
 
-#navigation a {
-	border-bottom: 3px solid #FFF;
-	color: #8D1E31;
-	display: block;
-	font: bold 14px Arial, Helvetica, sans-serif;
-	padding: 2px 15px;
-}
+#content {
+	margin: 0 auto;
+	width: 1024px;
+	#main-content {
+		border: 1px solid $border-color;
+		border-width: 0 1px 1px 0;
+		float: left;
+		position: relative;
+		width: 823px;
+		min-height: 500px;
+	}
 
-#navigation li.selected a,
-#navigation li a:hover {
-	border-bottom: 3px solid #7F80A4;
-	color: #3E3639;
-}
+	.portlet-layout {
+		.portlet-column:before {
+			content: "";
+			border-right: 1px solid $border-color;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+		}
 
-.ie #navigation ul {
-	height: 1%;
-}
-
-.ie6 #navigation,
-.ie6 #navigation ul {
-	height: 2em;
-	overflow: visible;
-}
-
-.controls-hidden #navigation .delete-tab {
-	display: none;
-}
-
-#navigation .child-menu {
-	display: none;
-}
-
-/* ---------- Breadcrumbs ---------- */
-
-.site-breadcrumbs {
-	margin-bottom: 1.5em;
-	display: none;
-}
-
-.site-breadcrumbs h1 {
-	display: none;
-}
-
-.site-breadcrumbs ul {
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	background-color: #F4F4F4;
-	border: 1px solid #C0C2C5;
-	margin: 0 0 1.5em;
-}
-
-.site-breadcrumbs li {
-	background-image: none;
-	display: inline-block;
-	margin-right: 0;
-	max-width: 50%;
-	padding-left: 0.75em;
-	padding-right: 0;
-	vertical-align: middle;
-}
-
-.site-breadcrumbs li span {
-	background: url("../images/common/breadcrumbs.png") no-repeat 100% 50%;
-	display: block;
-	padding: .5em 15px .5em 0;
-}
-
-.site-breadcrumbs .last span {
-	background-image: none;
-}
-
-.ie7 .breadcrumbs li {
-	display: inline;
-	zoom: 1;
-}
-
-.ie6 .breadcrumbs li {
-	display: inline;
-	zoom: 1;
-}
-
-.ie6 .breadcrumbs {
-	zoom: 1;
+		.portlet-column-content {
+			padding: 0;
+		}
+	}
 }
 
 /* ---------- Portal tool tips ---------- */
@@ -221,73 +195,34 @@ a:active {
 /* ---------- Portlets ---------- */
 
 .portlet {
-	margin-bottom: 1em;
-}
-
-.portlet-borderless-container {
-	min-height: 0;
-}
-
-.ie6 .portlet-borderless-container {
-	height: 0;
-}
-
-.portlet-title {
-	border-bottom: 4px solid #7F80A4;
-	color: #8F0920;
-	font-size: 18px;
-	font-weight: bold;
-}
-
-.portlet-title img {
-	display: none;
-}
-
-.portlet-topper-toolbar {
-	right: 2px;
-	top: 2px;
-}
-
-.portlet-topper-toolbar .portlet-options {
-	width: 20px;
-}
-
-.lfr-actions.portlet-options .lfr-trigger strong {
-	padding: 2px 1px 1px;
-}
-
-.portlet-content .so-portlet-configuration {
+	border-bottom: 1px solid $border-color;
 	position: relative;
-}
 
-.portlet-content .so-portlet-configuration a {
-	display: block;
-	font-size: 11px;
-	position: absolute;
-	right: 0;
-	top: -32px;
+	.portlet-topper {
+		color: $header;
+		padding: 3px 5px;
+
+		.portlet-title .icon, .portlet-topper-toolbar {
+			display: none;
+		}
+
+		.portlet-topper-toolbar {
+			right: 0;
+			top: -2px;
+		}
+	}
 }
 
 /* ---------- Layout ---------- */
 
-.portlet-column-content {
-	padding: 0 15px;
-}
-
-.portlet-column-content-first,
-.portlet-column-content-only {
-	padding-left: 0;
-}
-
-.portlet-column-content-last,
-.portlet-column-content-only {
-	padding-right: 0;
-}
 
 /* ---------- Footer ---------- */
 
 #footer {
-	display: none;
+	clear: both;
+	margin: 0 auto;
+	padding: 30px 0;
+	width: 1024px;
 }
 
 /* ---------- Application ---------- */
@@ -419,28 +354,6 @@ a:active {
 }
 
 /* Sidebar */
-
-.portlet-blogs .portlet-content .portlet-body,
-.portlet-calendar .portlet-content .portlet-body,
-.portlet-message-boards .portlet-content .portlet-body,
-.portlet-wiki .portlet-content .portlet-body {
-	margin-left: 250px;
-	position: relative;
-}
-
-.sidebar {
-	background: #F0F5F7;
-	border: 1px solid #B0BAFF;
-	clear: none;
-	font-size: 11px;
-	left: -250px;
-	margin: 0;
-	overflow: hidden;
-	padding: 12px;
-	position: absolute;
-	top: 0;
-	width: 210px;
-}
 
 .aui-dialog .sidebar {
 	display: none;
@@ -1119,41 +1032,6 @@ table.calendar {
 	margin-bottom: 0;
 }
 
-/* Navigation */
-
-.portlet-navigation .nav-menu {
-	margin-bottom: 1em;
-}
-
-.portlet-navigation .nav-menu ul {
-	margin: 0;
-	padding: 0;
-}
-
-.portlet-navigation .nav-menu li {
-	font-weight: bold;
-	list-style: none;
-	margin: 4px;
-}
-
-.portlet-navigation .nav-menu a {
-	display: block;
-	padding: 3px 10px;
-}
-
-.portlet-navigation .nav-menu a:hover,
-.portlet-navigation .nav-menu a.selected {
-	background: #E8EFF4;
-}
-
-.portlet-navigation .control-container {
-	margin-bottom: 10px;
-}
-
-.portlet-navigation .nav-menu li.add-page input {
-	margin-left: 10px;
-}
-
 /* Recent Documents */
 
 .portlet-recent-documents td {
@@ -1271,4 +1149,16 @@ table.calendar {
 
 .portlet-wiki .portlet-body h4 {
 	font-size: 1em;
+}
+
+.controls-hidden {
+	.delete-tab {
+		display:none;
+	}
+}
+
+.controls-visible {
+	.portlet .portlet-topper .portlet-topper-toolbar {
+		display: block;
+	}
 }
