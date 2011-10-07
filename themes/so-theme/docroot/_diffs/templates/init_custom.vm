@@ -12,7 +12,7 @@ This file allows you to override and define new Velocity variables.
 	#set ($logo = "${logo} company-logo")
 #end
 
-
+#set ($userProfileURL = $community_default_public_url)
 #set ($navClass = "")
 
 #if ($is_signed_in)
