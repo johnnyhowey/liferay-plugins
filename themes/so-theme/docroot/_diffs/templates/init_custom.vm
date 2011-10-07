@@ -1,0 +1,26 @@
+#*
+This file allows you to override and define new Velocity variables.
+*#
+
+#set ($useThemeLogo = ($company.getLogoId() == 0) && !$layout.layoutSet.isLogo())
+
+#set ($logo = "logo")
+
+#if ($useThemeLogo)
+	#set ($logo = "${logo} theme-logo")
+#else
+	#set ($logo = "${logo} company-logo")
+#end
+
+#set ($userProfileURL = $community_default_public_url)
+#set ($navClass = "")
+
+#if ($is_signed_in)
+	#set ($navClass = "sort-pages modify-pages")
+#end
+
+#set ($userPage = $page_group.isUser() && ($page_group.getClassPK() == $user_id))
+
+#if ($page_group.isUser())
+	#set($css_class = $css_class + " user-group")
+#end

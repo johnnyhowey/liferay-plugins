@@ -291,12 +291,12 @@ String twitter = contact2.getTwitterSn();
 	</div>
 </c:if>
 
+<div style="clear: both;"><!-- --></div>
+
 <c:if test="<%= showComments && Validator.isNotNull(user2.getComments()) %>">
 	<div class="section lfr-user-comments">
 		<h3><liferay-ui:message key="comments" /></h3>
 
-		<%= user2.getComments() %>
+		<span><%= user2.getComments() %></span>
 	</div>
 </c:if>
-
-<div style="clear: both;"><!-- --></div>
