@@ -13,24 +13,164 @@
  * details.
  */
 --%>
-
+<!--  -->
 <%@ include file="/css_init.jsp" %>
 
-.lfr-menu-list .disabled .taglib-icon {
-	color: #999;
+.contacts-portlet .contact-group-filter  {
+	font-size: 14px;
+	padding: 5px 8px;
+
+	select {
+		height: 24px;
+	}
 }
+
+.contacts-portlet .contacts-search {
+
+	.contacts-search-content {
+		padding: 5px;
+	}
+
+	.search-input {
+		vertical-align: top;
+	}
+}
+
+.contacts-portlet {
+
+	.aui-column-content, .aui-column-content-center {
+		padding: 0;
+	}
+
+	.contacts-result {
+		height: 500px;
+		overflow-y: scroll;
+
+		.lfr-contact-grid-item {
+			cursor: pointer;
+			display: block;
+			height: 35px;
+			overflow: hidden;
+			padding: 5px;
+			white-space: nowrap;
+
+			.clear {
+				clear: both;
+			}
+
+			.lfr-contact-thumb {
+				float: left;
+			}
+
+			.lfr-contact-thumb img {
+				width: 35px;
+			}
+
+			.lfr-contact-info {
+				margin-left: 40px;
+				font-size: 1em;
+
+				.lfr-contact-name {
+					font-weight: bold;
+				}
+
+				.lfr-contact-extra {
+					color: #777;
+				}
+			}
+		}
+
+		.lfr-contact-grid-item:hover {
+			background-color: #E8EFF4;
+		}
+
+		.more-results {
+			background-color: #E8EFF4;
+			border: 1px solid #CCC;
+			margin: 5px;
+			padding: 2px;
+			text-align: center;
+		}
+
+
+		.empty {
+			background: url(<%= themeImagesPath %>/messages/alert.png) no-repeat 0 50%;
+			margin: 5px;
+			padding-left: 25px;
+		}
+
+		.lastNameAnchor {
+			background: #E8EFF4;
+			border-top: 1px solid #CCC;
+			border-bottom: 1px solid #CCC;
+			margin: 5px 0;
+		}
+
+		.lastNameAnchor a {
+			font-weight: bold;
+			margin: 0 5px;
+		}
+	}
+
+	.contact-summary {
+		padding: 5px;
+
+		.lfr-contact-grid-item {
+			display: block;
+			white-space: nowrap;
+
+			.clear {
+				clear: both;
+			}
+
+			.lfr-contact-thumb {
+				float: left;
+			}
+
+			.lfr-contact-thumb img {
+				width: 80px;
+			}
+
+			.lfr-contact-info {
+				font-size: 1.4em;
+				margin-left: 85px;
+
+
+				.lfr-contact-name {
+					font-size: 1.2em;
+					font-weight: bold;
+				}
+
+				.lfr-contact-extra {
+					color: #777;
+				}
+			}
+		}
+
+		.lfr-asset-metadata {
+			margin-bottom: 5px;
+		}
+
+		.contact-action-content {
+			background-color: #E8EFF4;
+			font-size: 1em;
+			margin-bottom: 5px;
+			padding: 5px 0;
+
+			span {
+				padding:0 5px 0 0;
+			}
+		}
+	}
+
+}
+
+
+
+
 
 .lfr-user-profile-preferences {
 	margin-left: 20px;
-}
-
-.contacts-portlet .contact-search {
-	float: right;
-	margin: 0 0 .5em .5em;
-}
-
-.contacts-portlet .lfr-asset-column-details .lfr-asset-requests {
-	background: url(<%= themeImagesPath %>/common/add_user.png) no-repeat 0 50%;
 }
 
 .contacts-portlet .export-group {
@@ -137,16 +277,8 @@
 	background: url(<%= themeImagesPath %>/common/deactivate.png) no-repeat;
 }
 
-.contacts-portlet .lfr-asset-data {
-	margin-bottom: 1.5em;
-}
-
 .contacts-portlet .lfr-asset-metadata .lfr-asset-coworker {
 	background: url(<%= themeImagesPath %>/social/coworker.png) no-repeat;
-}
-
-.contacts-portlet .lfr-asset-metadata .lfr-asset-friend {
-	background: url(<%= themeImagesPath %>/social/friend.png) no-repeat;
 }
 
 .contacts-portlet .lfr-asset-metadata .lfr-asset-follower {
@@ -169,11 +301,16 @@
 	width: 45%;
 }
 
+.contacts-portlet .lfr-user-comments {
+	float: none;
+	width: 100%;
+}
+
 .contacts-portlet .section h3 {
 	color: #555;
 	background: no-repeat 2px 50%;
 	border-bottom: 1px dotted #CCC;
-	font-size: 1.2em;
+	font-size: 1em;
 	margin-top: 0;
 	padding: 2px 0 2px 25px;
 }
@@ -239,14 +376,6 @@
 .contacts-portlet .members-container {
 	clear: both;
 	margin: 1em 0;
-}
-
-.contacts-portlet .letter-anchors {
-	border-bottom: 1px solid #999;
-	clear: both;
-	font-size: 1.2em;
-	margin-bottom: 1em;
-	padding-left: 5px;
 }
 
 .contacts-portlet .lfr-members-grid-item {

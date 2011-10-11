@@ -10,6 +10,7 @@
 		<control-panel-entry-category>my</control-panel-entry-category>
 		<control-panel-entry-weight>3.0</control-panel-entry-weight>
 		<header-portlet-css>/contacts_center/css/main.jsp</header-portlet-css>
+		<header-portlet-javascript>/contacts_center/js/main.js</header-portlet-javascript>
 		<css-class-wrapper>contacts-portlet</css-class-wrapper>
 		<add-default-resource>true</add-default-resource>
 	</portlet>
