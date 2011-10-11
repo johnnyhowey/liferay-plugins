@@ -1,12 +1,10 @@
-@import url(color_schemes/collaboration.css);
-
-@import url(color_schemes/website.css);
-
 @import "compass";
 
 $header: #8F0920;
 $link: #2571AD;
 $border-color: #C7D0DA;
+
+@import url(color_schemes/collaboration.css);
 
 /* ---------- Base ---------- */
 
@@ -159,8 +157,6 @@ a:hover {
 	margin: 0 auto;
 	width: 1024px;
 	#main-content {
-		border: 1px solid $border-color;
-		border-width: 0 1px 1px 0;
 		float: left;
 		position: relative;
 		width: 823px;
@@ -197,6 +193,10 @@ a:hover {
 .portlet {
 	border-bottom: 1px solid $border-color;
 	position: relative;
+	
+	.portlet-content {
+		padding: 0 10px 10px;
+	}
 
 	.portlet-topper {
 		color: $header;
@@ -219,13 +219,30 @@ a:hover {
 /* ---------- Footer ---------- */
 
 #footer {
+	border-top: 1px solid $border-color;
 	clear: both;
 	margin: 0 auto;
 	padding: 30px 0;
 	width: 1024px;
 }
 
-/* ---------- Application ---------- */
+/* ----- Forms ----- */
+
+input[type=text], textarea {
+	box-shadow: 0 1px 3px #c9c9c9 inset;
+	@include border-radius(5px);
+}
+
+input[type=text], textarea {
+	border: 1px solid $border-color;
+	background: #FFF;
+	padding: 6px 5px;
+}
+
+#page-search input[type=text], .aui-search-bar input[type=text], .so-search-bar input.search-field {
+	background: #FFF url(../images/custom/so-search-icon.png) right 0 no-repeat;
+	padding-right: 25px;
+}
 
 /* Autocomplete */
 
@@ -282,16 +299,10 @@ a:hover {
 .taglib-header {
 	border: none;
 	margin: 0;
-}
 
-.taglib-header h1.header-title {
-	border: none;
-	color: #8F0920;
-	font-size: 2em;
-	font-weight: bold;
-	line-height: 1em;
-	margin: 0 0 .5em;
-	padding: 0;
+	.header-back-to a {
+		padding: 5px 10px;	
+	}
 }
 
 /* Messages */
@@ -399,34 +410,6 @@ a:hover {
 	padding-left: .3em;
 }
 
-/* List */
-
-.results-grid {
-	border: 1px solid #CCC;
-	padding: 0;
-}
-
-.results-grid .results-row.hover td {
-	background: #E9E9FD;
-}
-
-.results-header {
-	background: #7F80A4;
-}
-
-.results-header th,
-.results-header td {
-	color: #FFF;
-}
-
-.results-row td {
-	background: #FFF;
-}
-
-.results-row.alt td {
-	background: #F0F5F7;
-}
-
 /* Taglib */
 
 .taglib-icon .taglib-text {
@@ -501,47 +484,6 @@ a:hover {
 }
 
 /* Blogs */
-
-.portlet-blogs .portlet-toolbar .aui-search-bar {
-	display: none;
-}
-
-.portlet-blogs .entry-footer {
-	background: #E8EFF4;
-	border-top: 1px solid #B0BAFF;
-	padding: 15px;
-}
-
-.portlet-blogs .entry-title {
-	font-size: 2.1em;
-	line-height: 1.1em;
-}
-
-.portlet-blogs .entry-title a {
-	color: #7F80A4;
-}
-
-.portlet-blogs .entry-date,
-.portlet-blogs .entry-author {
-	color: #555;
-	font-size: 1.1em;
-}
-
-.portlet-blogs .entry-body {
-	font-family: "Times New Roman", Times, serif;
-	font-size: 1.2em;
-	margin: 1em 0;
-}
-
-.portlet-blogs .edit-actions {
-	float: right;
-	margin: 0;
-	padding: .5em;
-}
-
-.portlet-blogs .sidebar .recent-entries-list span {
-	display: block;
-}
 
 /* Bookmarks */
 
@@ -1160,5 +1102,88 @@ table.calendar {
 .controls-visible {
 	.portlet .portlet-topper .portlet-topper-toolbar {
 		display: block;
+	}
+}
+
+.portlet-blogs {
+	.portlet-borderless-container {
+		.portlet-body {
+			padding: 10px;
+		}
+	}
+
+	.search-form {
+		background: #F4F4F4;
+		float: none;
+		padding: 5px;
+		margin: -10px -10px 10px -9px;
+
+		.aui-search-bar {
+			float: right;
+		}
+	}
+
+	.entry {
+		position: relative;
+	}
+
+	.entry-title h2 {
+		font-size: 1.5em;
+		font-weight: normal;
+		line-height: 1em;
+	}
+
+	.entry-title h2, .entry-date {
+		margin: 0 0 .5em;
+	}
+
+	.lfr-meta-actions {
+		margin: 0;
+		padding: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+
+	.separator {
+		
+	}
+}
+
+.portlet-recent-bloggers {
+	.portlet-content {
+		padding: 0 1px;
+	}
+
+	.results-grid {
+		border: 0;
+
+		.results-row td {
+			border: 0;
+			padding: 5px;
+		}
+		
+		.taglib-user-display {
+			padding: 0;
+
+			.user-details {
+				font-size: .9em;
+				line-height: 1em;
+				margin-top: 0;
+
+				div {
+					display: inline;
+				}
+			}
+		}
+
+		.user-profile-image {
+			line-height: 0;
+			margin-right: 5px;
+
+			img {
+				width: 40px;
+			}
+		}
 	}
 }
