@@ -119,12 +119,32 @@ public class LayoutUtil {
 			if (portletId.startsWith("1_WAR_wysiwygportlet")) {
 				updatePortletTitle(layout, portletId, "Welcome");
 			}
-			else if (portletId.equals("2_WAR_microblogsportlet")) {
+			else if (portletId.contains("_WAR_contactsportlet")) {
 				removePortletBorder(layout, portletId);
 			}
-			else if (portletId.startsWith("71_INSTANCE_")) {
+			else if (portletId.contains("1_WAR_tasksportlet")) {
 				removePortletBorder(layout, portletId);
-				configureNavigation(layout, portletId);
+			}
+			else if (portletId.contains("1_WAR_privatemessagingportlet")) {
+				removePortletBorder(layout, portletId);
+			}
+			else if (portletId.contains("_WAR_microblogsportlet")) {
+				removePortletBorder(layout, portletId);
+			}
+			else if (portletId.equals("33")) {
+				removePortletBorder(layout, portletId);
+			}
+			else if (portletId.equals("8")) {
+				removePortletBorder(layout, portletId);
+			}
+			else if (portletId.equals("20")) {
+				removePortletBorder(layout, portletId);
+			}
+			else if (portletId.equals("19")) {
+				removePortletBorder(layout, portletId);
+			}
+			else if (portletId.equals("36")) {
+				removePortletBorder(layout, portletId);
 			}
 		}
 	}
@@ -175,19 +195,6 @@ public class LayoutUtil {
 		};
 
 		portletSetup.setValues("ranks", ranks);
-
-		portletSetup.store();
-	}
-
-	public static void configureNavigation(Layout layout, String portletId)
-		throws Exception {
-
-		PortletPreferences portletSetup =
-			PortletPreferencesFactoryUtil.getLayoutPortletSetup(
-				layout, portletId);
-
-		portletSetup.setValue("displayStyle", "from-level-0");
-		portletSetup.setValue("bulletStyle", StringPool.BLANK);
 
 		portletSetup.store();
 	}

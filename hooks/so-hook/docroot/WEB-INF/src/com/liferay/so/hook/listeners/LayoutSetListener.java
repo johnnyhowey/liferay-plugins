@@ -71,71 +71,69 @@ public class LayoutSetListener extends BaseModelListener<LayoutSet> {
 		}
 	}
 
-	protected void addApplications(Group group, long parentLayoutId)
-		throws Exception {
-
-		for (String portletId : PortletPropsValues.USER_APPLICATIONS) {
-			Portlet portlet = PortletLocalServiceUtil.getPortletById(
-				group.getCompanyId(), portletId);
-
-			if ((portlet == null) || portlet.isUndeployedPortlet()) {
-				continue;
-			}
-
-			Layout layout = LayoutUtil.addLayout(
-				group, true, parentLayoutId, portlet.getDisplayName(),
-				PortletPropsValues.USER_NEW_LAYOUT_TEMPLATE);
-
-			LayoutTypePortlet layoutTypePortlet =
-				(LayoutTypePortlet)layout.getLayoutType();
-
-			String[] commonPortletIds = PortletProps.getArray(
-				PortletPropsKeys.USER_LAYOUT_PORTLETS + "column-1",
-				new Filter("/home"));
-
-			String portletIds = StringPool.BLANK;
-
-			for (String commonPortletId : commonPortletIds) {
-				portletIds = StringUtil.add(portletIds, commonPortletId);
-			}
-
-			layoutTypePortlet.setPortletIds("column-1", portletIds);
-			layoutTypePortlet.setPortletIds("column-2", portletId);
-
-			LayoutLocalServiceUtil.updateLayout(
-				layout.getGroupId(), layout.isPrivateLayout(),
-				layout.getLayoutId(), layout.getTypeSettings());
-
-			LayoutUtil.addResources(layout, portletId);
-
-			for (String commonPortletId : commonPortletIds) {
-				LayoutUtil.addResources(layout, commonPortletId);
-
-				if (commonPortletId.startsWith("71_INSTANCE_")) {
-					LayoutUtil.removePortletBorder(layout, commonPortletId);
-					LayoutUtil.configureNavigation(layout, commonPortletId);
-				}
-			}
-
-			LayoutUtil.updatePermissions(layout, false);
-		}
-	}
-
 	protected void addPrivateUserLayouts(Group group) throws Exception {
 		LayoutSetLocalServiceUtil.updateLookAndFeel(
 			group.getGroupId(), true, "so_WAR_sotheme", "01", StringPool.BLANK,
 			false);
 
+		// Home
+
 		Layout layout = LayoutUtil.addLayout(
 			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Home",
-			PortletPropsValues.USER_NEW_LAYOUT_TEMPLATE);
+			"2_columns_iii");
 
 		LayoutUtil.addPortlets(
 			group, layout, "/home", PortletPropsKeys.USER_LAYOUT_PORTLETS);
 
 		LayoutUtil.updatePermissions(layout, false);
 
-		addApplications(group, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
+		// Contacts Center
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Contacts Center", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/contacts-center",
+			PortletPropsKeys.USER_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		// Microblogs
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Microblogs", "2_columns_iii");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/microblogs",
+			PortletPropsKeys.USER_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		// Messages
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Messages", "2_columns_iii");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/messages",
+			PortletPropsKeys.USER_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		// Tasks
+
+		layout = LayoutUtil.addLayout(
+			group, true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Tasks", "2_columns_iii");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/tasks",
+			PortletPropsKeys.USER_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
 	}
 
 	protected void addPublicUserLayouts(Group group) throws Exception {
@@ -145,7 +143,7 @@ public class LayoutSetListener extends BaseModelListener<LayoutSet> {
 
 		Layout layout = LayoutUtil.addLayout(
 			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Profile",
-			PortletPropsValues.USER_NEW_LAYOUT_TEMPLATE);
+			"2_columns_iii");
 
 		LayoutUtil.addPortlets(
 			group, layout, "/profile", PortletPropsKeys.USER_LAYOUT_PORTLETS);
