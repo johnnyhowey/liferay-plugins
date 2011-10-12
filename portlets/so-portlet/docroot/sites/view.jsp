@@ -66,16 +66,15 @@ pageContext.setAttribute("portletURL", portletURL);
 	</aui:select>
 </div>
 
-<div class="search">
+<div class="aui-search-bar search">
 	<input class="search-input" id="<portlet:namespace />name" name="<portlet:namespace />name" size="30" type="text" value="<%= HtmlUtil.escape(name) %>" />
-
-	<input src="<%= themeDisplay.getPathThemeImages() %>/common/search.png" type="image" value='<liferay-ui:message key="search" />' />
 </div>
 
 <div class="site-list-container">
 
 	<%
-	boolean hideNotice = GetterUtil.getBoolean(preferences.getValue("hide-notice", StringPool.BLANK), false);
+	//boolean hideNotice = GetterUtil.getBoolean(preferences.getValue("hide-notice", StringPool.BLANK), false);
+	boolean hideNotice = true;
 	%>
 
 	<c:if test="<%= !hideNotice %>">
