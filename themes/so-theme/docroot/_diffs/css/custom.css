@@ -3,6 +3,9 @@
 $header: #8F0920;
 $link: #2571AD;
 $border-color: #C7D0DA;
+$fixed-width: 980px;
+$navigation-width: 200px;
+$content-width: ($fixed-width - $navigation-width) - 2px;
 
 @import url(color_schemes/collaboration.css);
 
@@ -50,7 +53,7 @@ a:hover {
 	#heading {
 		margin: 0 auto;
 		position: relative;
-		width: 1024px;
+		width: $fixed-width;
 	}
 
 	.company-title {
@@ -102,12 +105,16 @@ a:hover {
 	}
 }
 
+/* ---------- Sidebar ---------- */
+
+#so-sidebar {
+	float: left;
+	width: $navigation-width;
+}
+
 /* ---------- Navigation ---------- */
 
 #navigation {
-	float: left;
-	width: 200px;
-
 	ul, li {
 		list-style: none;
 		margin: 0;
@@ -137,7 +144,7 @@ a:hover {
 
 		}
 
-		a:hover, &.selected a  {
+		a:hover, &.selected {
 			background: #F4F4F4;
 			text-decoration: none;
 		}
@@ -146,6 +153,11 @@ a:hover {
 			color: $header;
 			font-weight: bold;
 		}
+
+		&.selected {
+			margin-right: -10px;
+			background: #F4F4F4;
+		}
 	}
 
 	.child-menu {
@@ -153,17 +165,30 @@ a:hover {
 	}
 }
 
+/* ---------- Portal tool tips ---------- */
+
+.portal-tool-tip {
+	font-size: 1.2em;
+}
+
+.controls-visible .portlet-borderless-container {
+	min-height: 20px;
+}
+
+/* ---------- Layout ---------- */
+
 #content {
 	margin: 0 auto;
-	width: 1024px;
-	#main-content {
+	width: $fixed-width;
+	#so-context {
+		border: 1px solid $border-color;
+		border-width: 0 1px 1px 0;
 		float: left;
-		position: relative;
-		width: 823px;
-		min-height: 500px;
+		width: $content-width;
 	}
 
 	.portlet-layout {
+		position: relative;
 		.portlet-column:before {
 			content: "";
 			border-right: 1px solid $border-color;
@@ -178,21 +203,13 @@ a:hover {
 	}
 }
 
-/* ---------- Portal tool tips ---------- */
-
-.portal-tool-tip {
-	font-size: 1.2em;
-}
-
-.controls-visible .portlet-borderless-container {
-	min-height: 20px;
-}
 
 /* ---------- Portlets ---------- */
 
 .portlet {
 	border-bottom: 1px solid $border-color;
 	position: relative;
+	margin-bottom: -1px;
 	
 	.portlet-content {
 		padding: 0 10px 10px;
@@ -213,17 +230,53 @@ a:hover {
 	}
 }
 
-/* ---------- Layout ---------- */
+/* ---------- Profile ---------- */
 
+#so-sidebar .profile-image {
+	line-height: 0;
+	margin-bottom: -10px;
+	min-width: 200px;
+}
+
+.profile-header {
+	padding: 10px;
+	border: 1px solid $border-color;
+	border-width: 0 0 1px 1px;
+
+	h1 {
+		color: $header;
+		margin: 0 0 5px;
+		padding: 0;
+	}
+
+	.user-job-title, .user-email-address {
+		color: #777;
+		display: block;
+		font-size: 14px;
+		font-weight: bold;
+		line-height: 1em;
+		margin: 0 0 5px;
+	}
+
+	.user-email-address {
+		font-size: 12px;
+		font-weight: normal;
+	}
+}
+
+.profile-page {
+	.contacts-portlet .portlet-title, .contacts-portlet .lfr-contact-grid-item {
+		display: none;
+	}
+}
 
 /* ---------- Footer ---------- */
 
 #footer {
-	border-top: 1px solid $border-color;
 	clear: both;
 	margin: 0 auto;
 	padding: 30px 0;
-	width: 1024px;
+	width: $fixed-width;
 }
 
 /* ----- Forms ----- */
@@ -242,6 +295,14 @@ input[type=text], textarea {
 #page-search input[type=text], .aui-search-bar input[type=text], .so-search-bar input.search-field {
 	background: #FFF url(../images/custom/so-search-icon.png) right 0 no-repeat;
 	padding-right: 25px;
+}
+
+input[type=text]:hover {
+	border-color: $link;
+}
+
+input[type=text]:active {
+	border-color: $link;
 }
 
 /* Autocomplete */
@@ -1185,5 +1246,12 @@ table.calendar {
 				width: 40px;
 			}
 		}
+	}
+}
+
+.private-page .contacts-portlet {
+	.lfr-app-column-view {
+		border-width: 1px 0 0;
+		margin-left: 1px;
 	}
 }

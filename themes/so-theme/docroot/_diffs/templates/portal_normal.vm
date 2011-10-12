@@ -30,11 +30,13 @@ $theme.include($body_top_include)
 				</a>
 			</div>
 
-			<div class="community-title">
-				<a href="$community_default_url" title="#language("go-to") $community_name">
-					<span>$community_name</span>
-				</a>
-			</div>
+			#if (!$is_profile_page)
+				<div class="community-title">
+					<a href="$community_default_url" title="#language("go-to") $community_name">
+						<span>$community_name</span>
+					</a>
+				</div>
+			#end
 
 			<h3 class="page-title">
 				<span>$the_title</span>
@@ -52,27 +54,44 @@ $theme.include($body_top_include)
 		#end
 	</header>
 	<div id="content">
-		#if ($has_navigation || ($page_group.isUser() && ($page_group.getClassPK() == $user_id)))
-			#parse ("$full_templates_path/navigation.vm")
-		#end
+		<div id="so-sidebar">
+			#if ($is_profile_page)
+				<img src="$currentUser.getPortraitURL($themeDisplay)" alt="" class="profile-image">
+			#end
+			#if ($has_navigation || $userPage)
+				#parse ("$full_templates_path/navigation.vm")
+			#end
 
-##		<nav class="site-breadcrumbs" id="breadcrumbs">
-##			<h1>
-##				<span>#language("breadcrumbs")</span>
-##			</h1>
-##
-##			#breadcrumbs()
-##		</nav>
+			#if ($is_profile_page || $userPage)
+				#parse ("$full_templates_path/sidebar_portlets.vm")
+			#end
+		</div>
 
-		#if ($selectable)
-			$theme.include($content_include)
-		#else
-			$portletDisplay.recycle()
+		<div id="so-context">
+			#if ($is_profile_page)
+				<div class="profile-header">
+					<h1 class="user-name">$currentUserName</h1>
+					
+					#if ($currentUser.getJobTitle() != "")
+						<span class="user-job-title">$currentUser.getJobTitle()</span>
+					#end
 
-			$portletDisplay.setTitle($the_title)
+					#if ($currentUser.getEmailAddress != "")
+						<span class="user-email-address"><a href="mailto:$currentUser.getEmailAddress()">$currentUser.getEmailAddress()</a></span>
+					#end
+				</div>
+			#end
 
-			$theme.wrapPortlet("portlet.vm", $content_include)
-		#end
+			#if ($selectable)
+				$theme.include($content_include)
+			#else
+				$portletDisplay.recycle()
+
+				$portletDisplay.setTitle($the_title)
+
+				$theme.wrapPortlet("portlet.vm", $content_include)
+			#end
+		</div>
 	</div>
 
 	<footer id="footer" role="contentinfo">

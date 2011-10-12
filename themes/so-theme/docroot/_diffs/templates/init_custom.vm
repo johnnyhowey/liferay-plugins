@@ -2,6 +2,9 @@
 This file allows you to override and define new Velocity variables.
 *#
 
+#set ($scopeGroup = $theme_display.getScopeGroup())
+#set ($classPK = $scopeGroup.getClassPK())
+
 #set ($useThemeLogo = ($company.getLogoId() == 0) && !$layout.layoutSet.isLogo())
 
 #set ($logo = "logo")
@@ -13,6 +16,7 @@ This file allows you to override and define new Velocity variables.
 #end
 
 #set ($userProfileURL = $community_default_public_url)
+
 #set ($navClass = "")
 
 #if ($is_signed_in)
@@ -21,6 +25,23 @@ This file allows you to override and define new Velocity variables.
 
 #set ($userPage = $page_group.isUser() && ($page_group.getClassPK() == $user_id))
 
+#set ($is_profile_page = $page_group.isUser() && !$layout.getPrivateLayout())
+
+#set ($userLocalService= $serviceLocator.findService("com.liferay.portal.service.UserLocalService"))
+
+#set ($currentUser = $userLocalService.getUserById($classPK))
+
+#set ($currentUserName = $currentUser.getFirstName() + " " + $currentUser.getLastName())
+
 #if ($page_group.isUser())
 	#set($css_class = $css_class + " user-group")
+#end
+
+#if ($is_profile_page)
+	#set ($the_title = $currentUserName)
+	#set ($css_class = $css_class + " profile-page")
+#end
+
+#if ($userPage)
+	#set ($community_name = $languageUtil.get($locale, "my-private-pages"))
 #end
