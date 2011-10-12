@@ -20,12 +20,9 @@
 User user2 = null;
 
 user2 = (User)request.getAttribute("view_user.jsp-user");
-
 %>
 
 <c:if test="<%= user.getUserId() != user2.getUserId() %>">
-
-
 	<liferay-ui:icon
 		image="view"
 		label="<%= true %>"
@@ -236,7 +233,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 						{
 							on: {
 								success: function(event, id, obj) {
-									var contactSummary = A.one('.contacts-portlet .contact-summary');
+									var contactSummary = A.one('.contacts-portlet .contacts-summary');
 
 									if (!contactSummary.io) {
 										contactSummary.plug(

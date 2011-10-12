@@ -28,11 +28,15 @@
 .contacts-portlet .contacts-search {
 
 	.contacts-search-content {
-		padding: 5px;
-	}
+		height: 28px;
+		padding: 5px 0;
+		position: relative;
 
-	.search-input {
-		vertical-align: top;
+		.search-input {
+			left: 5px;
+			position: absolute;
+			right: 5px;
+		}
 	}
 }
 
@@ -103,7 +107,7 @@
 			background: #E8EFF4;
 			border-top: 1px solid #CCC;
 			border-bottom: 1px solid #CCC;
-			margin: 5px 0;
+			margin-bottom: 5px;
 		}
 
 		.lastNameAnchor a {
@@ -112,8 +116,12 @@
 		}
 	}
 
-	.contact-summary {
+	.contacts-home {
 		padding: 5px;
+	}
+
+	.contacts-summary {
+		padding: 10px;
 
 		.lfr-contact-grid-item {
 			display: block;
@@ -160,6 +168,19 @@
 			span {
 				padding:0 5px 0 0;
 			}
+		}
+	}
+
+	.contacts-center-home {
+		padding: 10px;
+
+		.contacts-count {
+			font-weight: bold;
+			margin: 5px 0;
+		}
+
+		.contacts-center-introduction {
+			margin: 5px 0;
 		}
 	}
 

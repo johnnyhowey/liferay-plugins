@@ -43,12 +43,12 @@ portletURL.setWindowState(WindowState.NORMAL);
 	<aui:select inlineField="true" label="filter" name="socialRelationType">
 		<aui:option label="all" selected='<%= socialRelationType == 0 %>' value="all" />
 		<aui:option label="coworkers" selected='<%= socialRelationType ==  SocialRelationConstants.TYPE_BI_COWORKER %>' value="<%= SocialRelationConstants.TYPE_BI_COWORKER %>" />
-		<aui:option label="following" selected='<%= socialRelationType == SocialRelationConstants.TYPE_UNI_FOLLOWER%>' value="<%= SocialRelationConstants.TYPE_UNI_FOLLOWER %>" />
+		<aui:option label="following" selected='<%= socialRelationType == SocialRelationConstants.TYPE_UNI_FOLLOWER %>' value="<%= SocialRelationConstants.TYPE_UNI_FOLLOWER %>" />
 	</aui:select>
 </aui:layout>
 
 <aui:layout cssClass="contacts-result-container lfr-app-column-view">
-	<aui:column columnWidth="25" first="<%= true %>">
+	<aui:column columnWidth="30" first="<%= true %>">
 
 		<aui:layout cssClass="contacts-search aui-search-bar">
 			<input class="search-input" id="<portlet:namespace />name" name="<portlet:namespace />name" size="30" type="text" value="<%= HtmlUtil.escape(name) %>" />
@@ -57,7 +57,6 @@ portletURL.setWindowState(WindowState.NORMAL);
 		<aui:layout cssClass="contacts-result">
 
 			<%
-
 			String lastNameAnchor = StringPool.SPACE;
 
 			for (User user2 : result) {
@@ -108,8 +107,36 @@ portletURL.setWindowState(WindowState.NORMAL);
 			</c:if>
 		</aui:layout>
 	</aui:column>
-	<aui:column columnWidth="75" cssClass="contact-summary-container">
-		<liferay-util:include page="/contacts_center/view_user.jsp" servletContext="<%= application %>" />
+	<aui:column columnWidth="70" cssClass="contacts-summary-container">
+		<aui:layout cssClass="contacts-center-home">
+			<liferay-ui:header
+				title="contacts-center"
+			/>
+
+			<%
+			int allUsersCount = UserLocalServiceUtil.getUsersCount();
+			int coworkerUsersCount = UserLocalServiceUtil.getSocialUsersCount(themeDisplay.getUserId(), SocialRelationConstants.TYPE_BI_COWORKER);
+			int followingUsersCount = UserLocalServiceUtil.getSocialUsersCount(themeDisplay.getUserId(), SocialRelationConstants.TYPE_UNI_FOLLOWER);
+			%>
+
+			<c:if test="<%= (coworkerUsersCount <= 0) && (followingUsersCount <= 0) %>">
+				<aui:layout cssClass="contacts-center-introduction">
+					<liferay-ui:message key="contact-center-allowss-you-to-search-view-and-establish-social-relations-with-other-users" />
+				</aui:layout>
+			</c:if>
+
+			<aui:layout cssClass="contacts-count all">
+				<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(allUsersCount) %>" key="view-all-x-users" /></a>
+			</aui:layout>
+
+			<aui:layout cssClass="contacts-count coworkers">
+				<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(coworkerUsersCount) %>" key="you-have-x-coworkers" /></a>
+			</aui:layout>
+
+			<aui:layout cssClass="contacts-count followings">
+				<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(followingUsersCount) %>" key="you-are-following-x-people" /></a>
+			</aui:layout>
+		</aui:layout>
 	</aui:column>
 </aui:layout>
 
@@ -145,7 +172,7 @@ contactsResult.delegate(
 	'click',
 	function(event) {
 		var uri = event.currentTarget.getAttribute('data-user-url');
-		var contactSummary = A.one('.contacts-portlet .contacts-result-container .contact-summary-container-content');
+		var contactSummary = A.one('.contacts-portlet .contacts-result-container .contacts-summary-container-content');
 
 		if (!contactSummary.io) {
 			contactSummary.plug(
@@ -192,4 +219,41 @@ contactsResult.delegate(
 	},
 	'.more-results a'
 );
+
+var viewCoworkers = A.one('.contacts-portlet .contacts-center-home .coworkers');
+
+viewCoworkers.on(
+	'click',
+	function(event) {
+		contactFilterSelect.set('value', '<%= SocialRelationConstants.TYPE_BI_COWORKER %>');
+
+		Liferay.Contacts.updateContacts(searchInput.get('value'), contactFilterSelect.get('value'));
+	},
+	'a'
+);
+
+var viewFollowings = A.one('.contacts-portlet .contacts-center-home .followings');
+
+viewFollowings.on(
+	'click',
+	function(event) {
+		contactFilterSelect.set('value', '<%= SocialRelationConstants.TYPE_UNI_FOLLOWER %>');
+
+		Liferay.Contacts.updateContacts(searchInput.get('value'), contactFilterSelect.get('value'));
+	},
+	'a'
+);
+
+var viewAll = A.one('.contacts-portlet .contacts-center-home .all');
+
+viewAll.on(
+	'click',
+	function(event) {
+		contactFilterSelect.set('value', 'all');
+
+		Liferay.Contacts.updateContacts(searchInput.get('value'), contactFilterSelect.get('value'));
+	},
+	'a'
+);
+
 </aui:script>

@@ -34,13 +34,11 @@ if (user2 != null) {
 	user2 = user2.toEscapedModel();
 
 	request.setAttribute("view_user.jsp-user", user2);
-
-	request.setAttribute("view_user.jsp-viewUser", Boolean.TRUE.toString());
 }
 %>
 
 <c:if test="<%= user2 != null %>">
-	<div class="contact-summary">
+	<div class="contacts-summary">
 		<aui:layout cssClass="lfr-contact-grid-item">
 			<div class="lfr-contact-thumb">
 				<a href=""><img alt="<%= HtmlUtil.escape(user2.getFullName()) %>" src="<%= user2.getPortraitURL(themeDisplay) %>" /></a>
@@ -153,4 +151,3 @@ if (user2 != null) {
 		</aui:layout>
 	</div>
 </c:if>
-
