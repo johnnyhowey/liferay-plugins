@@ -20,18 +20,7 @@
 User user2 = null;
 
 user2 = (User)request.getAttribute("view_user.jsp-user");
-%>
 
-<c:if test="<%= user.getUserId() != user2.getUserId() %>">
-	<liferay-ui:icon
-		image="view"
-		label="<%= true %>"
-		message="view-profile"
-		url="<%= user2.getDisplayURL(themeDisplay) %>"
-	/>
-</c:if>
-
-<%
 boolean viewRelationActions = true;
 
 if (SocialRelationLocalServiceUtil.hasRelation(user2.getUserId(), themeDisplay.getUserId(), SocialRelationConstants.TYPE_UNI_ENEMY)) {

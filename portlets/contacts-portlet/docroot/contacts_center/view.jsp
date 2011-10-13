@@ -119,16 +119,6 @@ portletURL.setWindowState(WindowState.NORMAL);
 			int followingUsersCount = UserLocalServiceUtil.getSocialUsersCount(themeDisplay.getUserId(), SocialRelationConstants.TYPE_UNI_FOLLOWER);
 			%>
 
-			<c:if test="<%= (coworkerUsersCount <= 0) && (followingUsersCount <= 0) %>">
-				<aui:layout cssClass="contacts-center-introduction">
-					<liferay-ui:message key="contact-center-allowss-you-to-search-view-and-establish-social-relations-with-other-users" />
-				</aui:layout>
-			</c:if>
-
-			<aui:layout cssClass="contacts-count all">
-				<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(allUsersCount) %>" key="view-all-x-users" /></a>
-			</aui:layout>
-
 			<aui:layout cssClass="contacts-count coworkers">
 				<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(coworkerUsersCount) %>" key="you-have-x-coworkers" /></a>
 			</aui:layout>
@@ -136,6 +126,16 @@ portletURL.setWindowState(WindowState.NORMAL);
 			<aui:layout cssClass="contacts-count followings">
 				<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(followingUsersCount) %>" key="you-are-following-x-people" /></a>
 			</aui:layout>
+
+			<aui:layout cssClass="contacts-count all">
+				<a href="javascript:;"><liferay-ui:message arguments="<%= String.valueOf(allUsersCount) %>" key="view-all-x-users" /></a>
+			</aui:layout>
+
+			<c:if test="<%= (coworkerUsersCount <= 0) && (followingUsersCount <= 0) %>">
+				<aui:layout cssClass="contacts-center-introduction">
+					<liferay-ui:message key="contacts-center-allowss-you-to-search-view-and-establish-social-relations-with-other-users" />
+				</aui:layout>
+			</c:if>
 		</aui:layout>
 	</aui:column>
 </aui:layout>

@@ -41,12 +41,12 @@ if (user2 != null) {
 	<div class="contacts-summary">
 		<aui:layout cssClass="lfr-contact-grid-item">
 			<div class="lfr-contact-thumb">
-				<a href=""><img alt="<%= HtmlUtil.escape(user2.getFullName()) %>" src="<%= user2.getPortraitURL(themeDisplay) %>" /></a>
+				<a href="<%= user2.getDisplayURL(themeDisplay) %>"><img alt="<%= HtmlUtil.escape(user2.getFullName()) %>" src="<%= user2.getPortraitURL(themeDisplay) %>" /></a>
 			</div>
 
 			<div class="lfr-contact-info">
 				<div class="lfr-contact-name">
-					<a href=""><%= HtmlUtil.escape(user2.getFullName()) %></a>
+					<a href="<%= user2.getDisplayURL(themeDisplay) %>"><%= HtmlUtil.escape(user2.getFullName()) %></a>
 				</div>
 
 				<div class="lfr-contact-job-title">
