@@ -26,6 +26,8 @@
 }
 
 .contacts-portlet .contacts-search {
+	float: left;
+	width: 30%;
 
 	.contacts-search-content {
 		height: 28px;

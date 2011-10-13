@@ -39,8 +39,12 @@ portletURL.setWindowState(WindowState.NORMAL);
 
 <form action="<%= portletURL.toString() %>" method="post" name="<portlet:namespace />fm">
 
+<aui:layout cssClass="contacts-search aui-search-bar">
+	<input class="search-input" id="<portlet:namespace />name" name="<portlet:namespace />name" size="30" type="text" value="<%= HtmlUtil.escape(name) %>" />
+</aui:layout>
+
 <aui:layout cssClass="contact-group-filter">
-	<aui:select inlineField="true" label="filter" name="socialRelationType">
+	<aui:select inlineField="true" label="" name="socialRelationType">
 		<aui:option label="all" selected='<%= socialRelationType == 0 %>' value="all" />
 		<aui:option label="coworkers" selected='<%= socialRelationType ==  SocialRelationConstants.TYPE_BI_COWORKER %>' value="<%= SocialRelationConstants.TYPE_BI_COWORKER %>" />
 		<aui:option label="following" selected='<%= socialRelationType == SocialRelationConstants.TYPE_UNI_FOLLOWER %>' value="<%= SocialRelationConstants.TYPE_UNI_FOLLOWER %>" />
@@ -50,9 +54,7 @@ portletURL.setWindowState(WindowState.NORMAL);
 <aui:layout cssClass="contacts-result-container lfr-app-column-view">
 	<aui:column columnWidth="30" first="<%= true %>">
 
-		<aui:layout cssClass="contacts-search aui-search-bar">
-			<input class="search-input" id="<portlet:namespace />name" name="<portlet:namespace />name" size="30" type="text" value="<%= HtmlUtil.escape(name) %>" />
-		</aui:layout>
+
 
 		<aui:layout cssClass="contacts-result">
 
