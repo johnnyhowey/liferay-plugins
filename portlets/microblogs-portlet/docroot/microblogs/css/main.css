@@ -54,13 +54,20 @@
 	width: 100%;
 }
 
+.microblogs-portlet .microblogs-status-container .microblogs-entry {
+	margin-bottom: 0;
+	width: 98%;
+}
+
 .aui-dialog.microblogs-portlet .microblogs-entry {
 	margin-top: 10px;
 }
 
-.microblogs-portlet .microblogs-container {
+.microblogs-portlet .microblogs-container,
+.microblogs-portlet .microblogs-status-container {
 	margin-top: 10px;
 }
+
 
 .microblogs-portlet .microblogs-countdown {
 	color: #C8C9CA;
@@ -72,6 +79,10 @@
 .microblogs-portlet .microblogs-entry .user-name {
 	font-size: 12px;
 	font-weight: bold;
+}
+
+.microblogs-portlet .microblogs-status-container .user-name {
+	display: none;
 }
 
 .microblogs-portlet .microblogs-entry .small {
@@ -115,12 +126,16 @@
 	text-decoration: none;
 }
 
+.microblogs-portlet .microblogs-status-container .thumbnail {
+	display: none;
+}
+
 .microblogs-portlet .entry-bubble,
 .microblogs-portlet .my-entry-bubble {
 	-moz-border-radius: 5px;
 	-webkit-border-radius: 5px;
-	background: #DDE1E6;
-	border-color: #C8C9CA;
+	background: #FFF;
+	border-color: #CCC;
 	border-radius: 5px;
 	border-style: solid;
 	border-width: 1px 1px 3px 3px;
@@ -131,17 +146,18 @@
 	position: relative;
 }
 
-.microblogs-portlet .my-entry-bubble {
-	background: #DFF4FF;
-	border-color: #A7CEDF;
-	margin-left: 65px;
-	position: relative;
+.microblogs-portlet .microblogs-status-container .entry-bubble,
+.microblogs-portlet .microblogs-status-container .my-entry-bubble {
+	margin-left: 10px;
 }
 
+
 .microblogs-portlet .entry-bubble:before,
-.microblogs-portlet .entry-bubble:after {
+.microblogs-portlet .entry-bubble:after,
+.microblogs-portlet .my-entry-bubble:before,
+.microblogs-portlet .my-entry-bubble:after {
 	border: 12px solid transparent;
-	border-right-color: #C8C9CA;
+	border-right-color: #CCC;
 	border-left: 0;
 	content: "";
 	left: -13px;
@@ -149,9 +165,10 @@
 	top: 16px;
 }
 
-.microblogs-portlet .entry-bubble:after {
+.microblogs-portlet .entry-bubble:after,
+.microblogs-portlet .my-entry-bubble:after {
 	border: 10px solid transparent;
-	border-right-color: #DDE1E6;
+	border-right-color: #FFF;
 	left: -20px;
 }
 
@@ -161,23 +178,6 @@
 	margin-bottom: 3px;
 	position: relative;
 	margin-left: 10px;
-}
-
-.microblogs-portlet .my-entry-bubble:before,
-.microblogs-portlet .my-entry-bubble:after {
-	border: 12px solid transparent;
-	border-right-color: #A7CEDF;
-	border-left: 0;
-	content: "";
-	left: -13px;
-	position: absolute;
-	top: 16px;
-}
-
-.microblogs-portlet .my-entry-bubble:after {
-	border: 10px solid transparent;
-	border-right-color: #DFF4FF;
-	left: -20px;
 }
 
 .microblogs-portlet .aui-tabview-list {

@@ -101,6 +101,8 @@ public class MicroblogsEntryFinderImpl
 			qPos.add(userId);
 			qPos.add(userId);
 			qPos.add(userId);
+			qPos.add(MicroblogsEntryConstants.TYPE_REPLY);
+
 
 			Iterator<Long> itr = q.list().iterator();
 
@@ -141,6 +143,7 @@ public class MicroblogsEntryFinderImpl
 			qPos.add(MicroblogsEntryConstants.TYPE_EVERYONE);
 			qPos.add(userId);
 			qPos.add(microblogsEntryUserId);
+			qPos.add(MicroblogsEntryConstants.TYPE_REPLY);
 
 			Iterator<Long> itr = q.list().iterator();
 
@@ -212,7 +215,7 @@ public class MicroblogsEntryFinderImpl
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil.get(COUNT_BY_U_MU);
+			String sql = CustomSQLUtil.get(COUNT_BY_U_T_MU);
 
 			SQLQuery q = session.createSQLQuery(sql);
 
@@ -268,6 +271,7 @@ public class MicroblogsEntryFinderImpl
 			qPos.add(userId);
 			qPos.add(userId);
 			qPos.add(userId);
+			qPos.add(MicroblogsEntryConstants.TYPE_REPLY);
 
 			return (List<MicroblogsEntry>)QueryUtil.list(
 				q, getDialect(), start, end);
@@ -300,6 +304,7 @@ public class MicroblogsEntryFinderImpl
 			qPos.add(MicroblogsEntryConstants.TYPE_EVERYONE);
 			qPos.add(userId);
 			qPos.add(microblogsEntryUserId);
+			qPos.add(MicroblogsEntryConstants.TYPE_REPLY);
 
 			return (List<MicroblogsEntry>)QueryUtil.list(
 				q, getDialect(), start, end);
@@ -356,7 +361,7 @@ public class MicroblogsEntryFinderImpl
 		try {
 			session = openSession();
 
-			String sql = CustomSQLUtil.get(FIND_BY_U_MU);
+			String sql = CustomSQLUtil.get(FIND_BY_U_T_MU);
 
 			SQLQuery q = session.createSQLQuery(sql);
 
