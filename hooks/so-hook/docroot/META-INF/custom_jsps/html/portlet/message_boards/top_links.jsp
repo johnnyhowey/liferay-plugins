@@ -1,3 +1,4 @@
+<%--
 /**
  * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
  *
@@ -14,33 +15,4 @@
  * You should have received a copy of the GNU General Public License along with
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
-
-package com.liferay.so.util;
-
-/**
- * @author Ryan Park
- */
-public interface PortletPropsKeys {
-
-	public static final String SITE_AUTO_CREATE_TEAM_NAMES =
-		"site.auto.create.team.names";
-
-	public static final String SITE_PROTOTYPE_LAYOUT_TEMPLATE =
-		"site.prototype.layout.template";
-
-	public static final String SITE_PROTOTYPE_PORTLETS =
-		"site.prototype.portlets.";
-
-	public static final String USER_PRIVATE_LAYOUT_PORTLETS =
-		"user.private.layout.portlets.";
-
-	public static final String USER_PUBLIC_LAYOUT_PORTLETS =
-		"user.public.layout.portlets.";
-
-	public static final String USER_NEW_LAYOUT_PORTLETS  =
-		"user.new.layout.portlets.";
-
-	public static final String USER_NEW_LAYOUT_TEMPLATE =
-		"user.new.layout.template";
-
-}
+--%>

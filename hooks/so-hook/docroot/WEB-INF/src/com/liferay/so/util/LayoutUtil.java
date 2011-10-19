@@ -121,6 +121,7 @@ public class LayoutUtil {
 			}
 			else if (portletId.contains("_WAR_contactsportlet")) {
 				removePortletBorder(layout, portletId);
+				configureProfile(layout, portletId);
 			}
 			else if (portletId.contains("1_WAR_tasksportlet")) {
 				removePortletBorder(layout, portletId);
@@ -145,6 +146,9 @@ public class LayoutUtil {
 			}
 			else if (portletId.equals("36")) {
 				removePortletBorder(layout, portletId);
+			}
+			else if (portletId.equals("29")) {
+				updatePortletTitle(layout, portletId, "Sites");
 			}
 		}
 	}
@@ -195,6 +199,26 @@ public class LayoutUtil {
 		};
 
 		portletSetup.setValues("ranks", ranks);
+
+		portletSetup.store();
+	}
+
+	public static void configureProfile(Layout layout, String portletId)
+		throws Exception {
+
+		PortletPreferences portletSetup =
+			PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+				layout, portletId);
+
+		if (portletId.equals("2_WAR_contactsportlet_INSTANCE_abcd")) {
+			portletSetup.setValue("showUsersInformation", "false");
+			portletSetup.setValue("showUsersIcon", "false");
+		}
+
+		if (portletId.equals("2_WAR_contactsportlet_INSTANCE_efgh")) {
+			portletSetup.setValue("showSimpleUserInformation", "false");
+			portletSetup.setValue("showSocialActions", "false");
+		}
 
 		portletSetup.store();
 	}

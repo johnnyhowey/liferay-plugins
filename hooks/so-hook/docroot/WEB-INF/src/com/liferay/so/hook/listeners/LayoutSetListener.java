@@ -83,7 +83,8 @@ public class LayoutSetListener extends BaseModelListener<LayoutSet> {
 			"2_columns_iii");
 
 		LayoutUtil.addPortlets(
-			group, layout, "/home", PortletPropsKeys.USER_LAYOUT_PORTLETS);
+			group, layout, "/home",
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
 
 		LayoutUtil.updatePermissions(layout, false);
 
@@ -95,7 +96,7 @@ public class LayoutSetListener extends BaseModelListener<LayoutSet> {
 
 		LayoutUtil.addPortlets(
 			group, layout, "/contacts-center",
-			PortletPropsKeys.USER_LAYOUT_PORTLETS);
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
 
 		LayoutUtil.updatePermissions(layout, true);
 
@@ -107,7 +108,7 @@ public class LayoutSetListener extends BaseModelListener<LayoutSet> {
 
 		LayoutUtil.addPortlets(
 			group, layout, "/microblogs",
-			PortletPropsKeys.USER_LAYOUT_PORTLETS);
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
 
 		LayoutUtil.updatePermissions(layout, true);
 
@@ -119,7 +120,7 @@ public class LayoutSetListener extends BaseModelListener<LayoutSet> {
 
 		LayoutUtil.addPortlets(
 			group, layout, "/messages",
-			PortletPropsKeys.USER_LAYOUT_PORTLETS);
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
 
 		LayoutUtil.updatePermissions(layout, true);
 
@@ -131,7 +132,7 @@ public class LayoutSetListener extends BaseModelListener<LayoutSet> {
 
 		LayoutUtil.addPortlets(
 			group, layout, "/tasks",
-			PortletPropsKeys.USER_LAYOUT_PORTLETS);
+			PortletPropsKeys.USER_PRIVATE_LAYOUT_PORTLETS);
 
 		LayoutUtil.updatePermissions(layout, true);
 	}
@@ -143,10 +144,35 @@ public class LayoutSetListener extends BaseModelListener<LayoutSet> {
 
 		Layout layout = LayoutUtil.addLayout(
 			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, "Profile",
-			"2_columns_iii");
+			"1_2_columns_ii");
 
 		LayoutUtil.addPortlets(
-			group, layout, "/profile", PortletPropsKeys.USER_LAYOUT_PORTLETS);
+			group, layout, "/profile",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		// Contacts
+
+		layout = LayoutUtil.addLayout(
+			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Contacts", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/contacts",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
+
+		LayoutUtil.updatePermissions(layout, true);
+
+		// Microblogs
+
+		layout = LayoutUtil.addLayout(
+			group, false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+			"Microblogs", "1_column");
+
+		LayoutUtil.addPortlets(
+			group, layout, "/microblogs",
+			PortletPropsKeys.USER_PUBLIC_LAYOUT_PORTLETS);
 
 		LayoutUtil.updatePermissions(layout, true);
 	}
