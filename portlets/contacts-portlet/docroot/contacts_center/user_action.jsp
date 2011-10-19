@@ -209,7 +209,7 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 			<portlet:param name="userId" value="<%= String.valueOf(user2.getUserId()) %>" />
 		</liferay-portlet:renderURL>
 
-		var contactAction = A.one('.contacts-portlet .contact-action-content');
+		var contactAction = A.one('.contacts-portlet .contacts-action-content');
 
 		if (contactAction) {
 			contactAction.delegate(
@@ -222,10 +222,10 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 						{
 							on: {
 								success: function(event, id, obj) {
-									var contactSummary = A.one('.contacts-portlet .contacts-summary');
+									var contactProfile = A.one('.contacts-portlet .contacts-container-content');
 
-									if (!contactSummary.io) {
-										contactSummary.plug(
+									if (!contactProfile.io) {
+										contactProfile.plug(
 											A.Plugin.IO,
 											{
 												autoLoad: false
@@ -233,9 +233,9 @@ else if (SocialRelationLocalServiceUtil.hasRelation(themeDisplay.getUserId(), us
 										);
 									}
 
-									contactSummary.io.set('uri', '<%= viewSummaryURL %>');
+									contactProfile.io.set('uri', '<%= viewSummaryURL %>');
 
-									contactSummary.io.start();
+									contactProfile.io.start();
 								}
 							}
 						}

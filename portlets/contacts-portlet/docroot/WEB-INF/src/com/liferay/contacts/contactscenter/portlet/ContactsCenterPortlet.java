@@ -26,6 +26,8 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -170,14 +172,25 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
+		Group group = themeDisplay.getScopeGroup();
+		Layout layout = themeDisplay.getLayout();
+
 		LinkedHashMap<String, Object> params = null;
 
-		if (socialRelationType != 0) {
+		if (group.isUser() && layout.isPublicLayout()) {
 			params = new LinkedHashMap<String, Object>();
 			params.put(
-				"socialRelationType",
-				new Long[] {themeDisplay.getUserId(),
-				new Long(socialRelationType)});
+				"socialRelation",
+				new Long[] {group.getClassPK()});
+		}
+		else {
+			if (socialRelationType != 0) {
+				params = new LinkedHashMap<String, Object>();
+				params.put(
+					"socialRelationType",
+					new Long[] {themeDisplay.getUserId(),
+					new Long(socialRelationType)});
+			}
 		}
 
 		List<User> users = UserLocalServiceUtil.search(

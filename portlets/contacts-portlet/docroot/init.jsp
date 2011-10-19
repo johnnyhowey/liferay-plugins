@@ -44,6 +44,7 @@
 <%@ page import="com.liferay.portal.model.Contact" %>
 <%@ page import="com.liferay.portal.model.EmailAddress" %>
 <%@ page import="com.liferay.portal.model.Group" %>
+<%@ page import="com.liferay.portal.model.Layout" %>
 <%@ page import="com.liferay.portal.model.Phone" %>
 <%@ page import="com.liferay.portal.model.Portlet" %>
 <%@ page import="com.liferay.portal.model.User" %>
@@ -51,6 +52,7 @@
 <%@ page import="com.liferay.portal.security.permission.ActionKeys" %>
 <%@ page import="com.liferay.portal.service.AddressServiceUtil" %>
 <%@ page import="com.liferay.portal.service.EmailAddressServiceUtil" %>
+<%@ page import="com.liferay.portal.service.LayoutLocalServiceUtil" %>
 <%@ page import="com.liferay.portal.service.PhoneServiceUtil" %>
 <%@ page import="com.liferay.portal.service.PortletLocalServiceUtil" %>
 <%@ page import="com.liferay.portal.service.UserLocalServiceUtil" %>
@@ -61,6 +63,7 @@
 <%@ page import="com.liferay.portal.util.comparator.UserLastNameComparator" %>
 <%@ page import="com.liferay.portal.util.comparator.UserLoginDateComparator" %>
 <%@ page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %>
+<%@ page import="com.liferay.portlet.PortletURLFactoryUtil" %>
 <%@ page import="com.liferay.portlet.social.model.SocialRelationConstants" %>
 <%@ page import="com.liferay.portlet.social.model.SocialRequestConstants" %>
 <%@ page import="com.liferay.portlet.social.service.SocialActivityLocalServiceUtil" %>
@@ -73,6 +76,7 @@
 <%@ page import="java.util.Set" %>
 
 <%@ page import="javax.portlet.PortletPreferences" %>
+<%@ page import="javax.portlet.PortletRequest" %>
 <%@ page import="javax.portlet.PortletURL" %>
 <%@ page import="javax.portlet.WindowState" %>
 
@@ -98,6 +102,9 @@ int usersPerSection = PrefsParamUtil.getInteger(preferences, request, "usersPerS
 int maxResultCount = 100;
 
 boolean showUsersInformation = PrefsParamUtil.getBoolean(preferences, request, "showUsersInformation", true);
+boolean showSimpleUserInformation = PrefsParamUtil.getBoolean(preferences, request, "showSimpleUserInformation", true);
+boolean showSocialActions = PrefsParamUtil.getBoolean(preferences, request, "showSocialActions", true);
+boolean showUsersIcon = PrefsParamUtil.getBoolean(preferences, request, "showUsersIcon", true);
 
 boolean showAdditionalEmailAddresses = PrefsParamUtil.getBoolean(preferences, request, "showAdditionalEmailAddresses", true);
 boolean showAddresses = PrefsParamUtil.getBoolean(preferences, request, "showAddresses", true);
