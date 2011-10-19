@@ -68,20 +68,6 @@ $theme.include($body_top_include)
 		</div>
 
 		<div id="so-context">
-			#if ($is_profile_page)
-				<div class="profile-header">
-					<h1 class="user-name">$currentUserName</h1>
-					
-					#if ($currentUser.getJobTitle() != "")
-						<span class="user-job-title">$currentUser.getJobTitle()</span>
-					#end
-
-					#if ($currentUser.getEmailAddress != "")
-						<span class="user-email-address"><a href="mailto:$currentUser.getEmailAddress()">$currentUser.getEmailAddress()</a></span>
-					#end
-				</div>
-			#end
-
 			#if ($selectable)
 				$theme.include($content_include)
 			#else

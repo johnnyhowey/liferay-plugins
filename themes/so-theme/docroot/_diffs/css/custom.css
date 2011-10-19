@@ -265,7 +265,7 @@ a:hover {
 }
 
 .profile-page {
-	.contacts-portlet .portlet-title, .contacts-portlet .lfr-contact-grid-item {
+	.contacts-portlet .portlet-title {
 		display: none;
 	}
 }
