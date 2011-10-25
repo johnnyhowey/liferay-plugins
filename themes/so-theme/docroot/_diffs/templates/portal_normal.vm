@@ -19,6 +19,8 @@ $theme.include($body_top_include)
 	#dockbar()
 #end
 
+$theme.isCompanyAvailable
+
 <div id="wrapper">
 	<a href="#main-content" id="skip-to-content">#language("skip-to-content")</a>
 
@@ -30,7 +32,7 @@ $theme.include($body_top_include)
 				</a>
 			</div>
 
-			#if (!$is_profile_page)
+			#if (!$is_user_owned)
 				<div class="community-title">
 					<a href="$community_default_url" title="#language("go-to") $community_name">
 						<span>$community_name</span>
@@ -55,14 +57,23 @@ $theme.include($body_top_include)
 	</header>
 	<div id="content">
 		<div id="so-sidebar">
-			#if ($is_profile_page)
-				<img src="$currentUser.getPortraitURL($themeDisplay)" alt="" class="profile-image">
+			#if ($is_user_owned)
+			<div class="$user_detail_class">
+				<div class="profile-image">
+					<a href="$current_user_profile_url"><img src="$profile_portrait_url" alt="" class="profile-image"></a>
+				</div>
+
+				#if (!$is_profile_page)
+					<a href="$current_user_profile_url" class="profile-name">$currentUserName</a>
+				#end
+			</div>
 			#end
-			#if ($has_navigation || $userPage)
+
+			#if ($has_navigation)
 				#parse ("$full_templates_path/navigation.vm")
 			#end
 
-			#if ($is_profile_page || $userPage)
+			#if ($is_user_owned)
 				#parse ("$full_templates_path/sidebar_portlets.vm")
 			#end
 		</div>

@@ -12,7 +12,7 @@ $content-width: ($fixed-width - $navigation-width) - 2px;
 /* ---------- Base ---------- */
 
 body {
-	color: #403638;
+	color: #666;
 	font: 12px/1.5em 'Helvetica', Arial, sans-serif;
 }
 
@@ -35,14 +35,20 @@ a:hover {
 	position: static;
 }
 
-#skip-to-content {
-	display: none;
+#skip-to-content, #navigation h1 {
+	clip: rect(0 0 0 0);
+	position: absolute;
+	text-indent: -9999em;
 }
 
-#banner:after {
+#banner:after, .so-portlet-activities .activity-item:after {
 	content: "";
 	clear: both;
 	display: block;
+}
+
+.lfr-has-sidebar #main-content {
+	padding-left: 0;
 }
 
 /* ---------- Heading ---------- */
@@ -105,13 +111,6 @@ a:hover {
 	}
 }
 
-/* ---------- Sidebar ---------- */
-
-#so-sidebar {
-	float: left;
-	width: $navigation-width;
-}
-
 /* ---------- Navigation ---------- */
 
 #navigation {
@@ -121,20 +120,8 @@ a:hover {
 		padding: 0;
 	}
 
-	h1, ul {
-		padding: 10px;
-	}
-
-	h1 {
-		color: #8E9AA8;
-		font-size: 1em;
-		margin: 0;
-		padding-bottom: 0;
-	}
-
 	ul {
-		padding-top: 0;
-		margin-left: 5px;
+		padding-right: 10px;
 	}
 
 	li {
@@ -165,6 +152,78 @@ a:hover {
 	}
 }
 
+/* ---------- Sidebar ---------- */
+
+#so-sidebar {
+	border-right: 1px solid $border-color;
+	float: left;
+	margin-right: -1px;
+	width: $navigation-width;
+
+	.user-dashboard-detail {
+		display: table-cell;
+		line-height: 0;
+		padding: 10px 0;
+
+		.profile-image, .profile-name {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.profile-image {
+			overflow: hidden;
+			height: 45px;
+			width: 45px;
+			margin-right: 2px;
+
+			img {
+				min-width: 45px;
+				min-height: 45px;
+			}
+		}
+
+		.profile-name {
+			font-weight: bold;
+		}
+	}
+
+	.user-profile-detail .profile-image {
+		line-height: 0;
+
+		img {
+			min-width: 200px;
+			max-width: 200px;
+		}
+	}
+
+	hr {
+		border-top: 1px solid $border-color;
+		border-width: 1px 0 0;
+		margin: 3px 0;
+	}
+
+	h3 {
+		color: #8E9AA8;
+		font-size: 1em;
+		margin: 0;
+		padding: 0 7px;
+	}
+
+	.portlet-topper {
+		display: none;
+	}
+
+	.portlet {
+		border-bottom-width: 0;
+	}
+
+	.so-portlet-sites {
+		.search .search-input {
+			width: 143px;
+		}
+	}
+}
+
 /* ---------- Portal tool tips ---------- */
 
 .portal-tool-tip {
@@ -180,15 +239,26 @@ a:hover {
 #content {
 	margin: 0 auto;
 	width: $fixed-width;
+
 	#so-context {
 		border: 1px solid $border-color;
 		border-width: 0 1px 1px 0;
 		float: left;
+		position: relative;
 		width: $content-width;
 	}
 
 	.portlet-layout {
-		position: relative;
+		.portlet-column-only {
+			background: #FFF;
+			position: relative;
+			z-index: 2;
+
+			.portlet-column-content {
+				border-bottom: 1px solid $border-color;
+			}
+		}
+
 		.portlet-column:before {
 			content: "";
 			border-right: 1px solid $border-color;
@@ -201,8 +271,11 @@ a:hover {
 			padding: 0;
 		}
 	}
-}
 
+	#columns-1 .portlet-column-only .portlet-column-content {
+		border-bottom-width: 0;
+	}
+}
 
 /* ---------- Portlets ---------- */
 
@@ -232,12 +305,6 @@ a:hover {
 
 /* ---------- Profile ---------- */
 
-#so-sidebar .profile-image {
-	line-height: 0;
-	margin-bottom: -10px;
-	min-width: 200px;
-}
-
 .profile-header {
 	padding: 10px;
 	border: 1px solid $border-color;
@@ -265,9 +332,21 @@ a:hover {
 }
 
 .profile-page {
-	.contacts-portlet .portlet-title {
-		display: none;
+
+	.portlet-msg-info {
+		background-color: #FFF;
+		border-color: #e7e7e7;
+		margin: 5px 10px;
 	}
+}
+
+.portlet-msg,
+.portlet-msg-info,
+.portlet-msg-error,
+.portlet-msg-alert,
+.portlet-msg-success {
+	border-radius: 4px;
+	margin: 4px;
 }
 
 /* ---------- Footer ---------- */
@@ -281,30 +360,38 @@ a:hover {
 
 /* ----- Forms ----- */
 
-input[type=text], textarea {
-	box-shadow: 0 1px 3px #c9c9c9 inset;
-	@include border-radius(5px);
-}
-
-input[type=text], textarea {
-	border: 1px solid $border-color;
-	background: #FFF;
-	padding: 6px 5px;
-}
-
-#page-search input[type=text], .aui-search-bar input[type=text], .so-search-bar input.search-field {
-	background: #FFF url(../images/custom/so-search-icon.png) right 0 no-repeat;
+#page-search input[type=text], .aui-search-bar input[type=text], .so-search-bar input.search-field{
+	background-image: url(../images/custom/so-search-icon.png);
+	background-position: right 0;
+	background-repeat: no-repeat;
 	padding-right: 25px;
 }
 
-input[type=text]:hover {
-	border-color: $link;
+input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
+	box-shadow: 0 1px 3px #c9c9c9 inset;
+	@include border-radius(5px);
+
+	input[type=text] {
+		box-shadow: none;
+		@include border-radius(0);
+	}
 }
 
-input[type=text]:active {
-	border-color: $link;
-}
+input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
+	border: 1px solid $border-color;
+	background: #FFF;
+	padding: 6px 5px;
 
+	&:hover, &:active, &:focus {
+		background-color: #FFFFF6;
+		border-color: $link;
+	}
+
+	input[type=text] {
+		background: transparent;
+		border-width: 0;
+	}
+}
 /* Autocomplete */
 
 .ui-autocomplete-even {
@@ -795,19 +882,6 @@ table.calendar {
 	background: #7F80A4;
 }
 
-/* Contacts Center: Profile */
-
-.contacts-portlet h1.header-title {
-	margin: 0;
-}
-
-.contacts-portlet .group-members-content {
-	background: #EFEFEF;
-	border: 1px solid #999;
-	margin-right: 1em;
-	padding: 1em;
-}
-
 /* Dockbar */
 
 .user-group .add-content-menu .add-page{
@@ -1123,36 +1197,7 @@ table.calendar {
 	background-color: #FFD8B2;
 }
 
-/* Today's Events */
-
-.todays-events-portlet h2 {
-	font-size: 13px;
-}
-
-.todays-events-portlet .event {
-	font-size: 11px;
-}
-
-/* Wikis */
-
-.portlet-wiki h1.header-title {
-	border-bottom: none;
-	font-size: 2.5em;
-	line-height: 1em;
-}
-
-.portlet-wiki .portlet-body h2 {
-	font-weight: bold;
-}
-
-.portlet-wiki .portlet-body h3 {
-	border-bottom: none;
-	font-size: 1.2em;
-}
-
-.portlet-wiki .portlet-body h4 {
-	font-size: 1em;
-}
+/* ----- Portlet Styling ----- */
 
 .controls-hidden {
 	.delete-tab {
@@ -1165,6 +1210,8 @@ table.calendar {
 		display: block;
 	}
 }
+
+/* ----- Blogs ----- */
 
 .portlet-blogs {
 	.portlet-borderless-container {
@@ -1211,6 +1258,8 @@ table.calendar {
 	}
 }
 
+/* ----- Recent Bloggers ----- */
+
 .portlet-recent-bloggers {
 	.portlet-content {
 		padding: 0 1px;
@@ -1249,9 +1298,87 @@ table.calendar {
 	}
 }
 
-.private-page .contacts-portlet {
+/* ----- Contacts Portlet ----- */
+
+.contacts-portlet {
+	.contacts-profile {
+		border-bottom: 1px solid $border-color;
+		margin-bottom: -1px;
+
+		.lfr-contact-name a {
+			color: $header;
+		}
+	}
+
 	.lfr-app-column-view {
 		border-width: 1px 0 0;
 		margin-left: 1px;
+	}
+}
+
+.profile-page .contacts-portlet {
+	.contacts-profile, .lfr-contact-grid-item {
+		border-bottom-width: 0;
+	}
+}
+
+.portlet-column-only .contacts-portlet .contacts-profile {
+	border-bottom-width: 1px;
+}
+
+/* ----- Microblogs Portlet ----- */
+
+.microblogs-portlet {
+	.portlet-body {
+	}
+}
+
+/* ----- Activities Portlet ----- */
+
+.profile-page .so-portlet-activities {
+	.portlet-title {
+		color: #666;
+		font-size: 1.5em;
+		font-weight: normal;
+		margin-top: .25em;
+		text-align: right;
+		width: 115px;
+	}
+
+	.portrait-social-activities {
+		h3 {
+			font-size: 1em;
+			margin: .5em 0 1em;
+			text-align: right;
+			width: 110px;
+		}
+	}
+
+	.activity-item {
+		border-bottom: 1px solid #E7E7E7;
+		padding-bottom: 1em;
+	}
+
+	.user-portrait {
+		left: 65px;
+
+		.icon {
+			left: -4px;
+			bottom: -4px;
+		}
+	}
+
+	.user-portrait,
+	.user-portrait .avatar {
+		height: 45px;
+		width: 45px;
+	}
+	
+	.user-portrait .avatar img {
+		max-width: 45px;
+	}
+
+	.activity-data {
+		margin-left: 120px;
 	}
 }
