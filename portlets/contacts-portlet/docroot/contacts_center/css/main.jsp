@@ -16,6 +16,9 @@
 <!--  -->
 <%@ include file="/css_init.jsp" %>
 
+$border-color: #ebebeb;
+$section-header-bg: #CCE6F7;
+
 .contacts-portlet .contact-group-filter  {
 	font-size: 14px;
 	padding: 5px 8px;
@@ -55,8 +58,6 @@
 	.contacts-result {
 		height: 500px;
 		overflow-y: scroll;
-
-
 
 		.lfr-contact-grid-item {
 			cursor: pointer;
@@ -108,15 +109,14 @@
 		}
 
 		.lastNameAnchor {
-			background: #E8EFF4;
-			border-top: 1px solid #CCC;
-			border-bottom: 1px solid #CCC;
-			margin-bottom: 5px;
+			background: $section-header-bg;
+			border-bottom: 1px solid $border-color;
+			padding: 1px 5px;
 		}
 
 		.lastNameAnchor a {
+			font-size: .95em;
 			font-weight: bold;
-			margin: 0 5px;
 		}
 	}
 
@@ -138,7 +138,6 @@
 
 			.lfr-contact-info {
 				margin-left: 40px;
-				font-size: 1em;
 
 				.lfr-contact-name {
 					font-weight: bold;
@@ -159,11 +158,8 @@
 		margin: 0px;
 	}
 
-	.contacts-profile {
-		padding: 10px;
-	}
-
 	.lfr-contact-grid-item {
+		border-bottom: 1px solid $border-color;
 		display: block;
 		white-space: nowrap;
 
@@ -172,19 +168,17 @@
 		}
 
 		.lfr-contact-thumb img {
-			width: 80px;
+			width: 100px;
 		}
 
 		.lfr-contact-info {
-			font-size: 1.4em;
-			margin-left: 85px;
+			margin-left: 100px;
 
 			&.no-icon {
 				margin-left: 0;
 			}
 
 			.lfr-contact-name {
-				font-size: 1.2em;
 				font-weight: bold;
 			}
 
@@ -194,14 +188,63 @@
 		}
 	}
 
+	.contacts-profile {
+		padding: 10px 10px 5px;
+		position: relative;
+
+		.lfr-contact-grid-item {
+			border-bottom-width: 0;
+			display: inline-block;
+		}
+
+		.lfr-contact-name a {
+			font-size: 2em;
+		}
+
+		.lfr-contact-job-title {
+			color: #777;
+			font-size: 1.25em;
+			font-weight: bold;
+		}
+
+		.social-relations {
+			position: absolute;
+			right: 0;
+			text-align: right;
+			top: 30px;
+			width: auto;
+
+			.lfr-asset-metadata {
+				display: none;
+			}
+		}
+	}
+
+	.contacts-result-container-content {
+		.contacts-profile {
+			.lfr-contact-info {
+				padding: 8px;
+			}
+
+			.lfr-contact-name a {
+			}
+
+			.social-relations {
+				background: $section-header-bg;
+				position: static;
+				padding: 5px;
+				left: 0;
+				top: 0;
+				margin: 5px -10px -5px;
+			}
+		}
+	}
+
 	.lfr-asset-metadata {
 		margin-bottom: 5px;
 	}
 
 	.contacts-action-content {
-		font-size: 1em;
-		margin-bottom: 5px;
-		padding: 5px 0;
 
 		span {
 			padding:0 5px 0 0;
@@ -214,20 +257,30 @@
 	}
 
 	.section {
-		border-bottom: 1px solid #CCC;
+		border-bottom: 1px solid #E7E7E7;
+		clear: both;
+		padding: 10px;
+		zoom: 1;
+
+		&:after {
+			content: "";
+			display: block;
+			clear: both;
+		}
 	}
 
 	.section h3 {
-		color: #888;
+		color: #B4BEC8;
 		float: left;
 		font-size: 1em;
-		margin-top: 0;
+		margin: 0;
 		text-align: right;
 		width: 100px;
 	}
 
 	.section ul {
-		margin-left: 105px;
+		margin: 0 0 0 105px;
+		padding: 0;
 	}
 
 	.property-type {
@@ -235,9 +288,8 @@
 	}
 
 	.user-information-title {
-		color: #E96825;
-		font-size: 18px;
-		font-weight: bold;
+		color: #666;
+		font-size: 1.5em;
 		text-align: right;
 		width: 110px;
 	}
