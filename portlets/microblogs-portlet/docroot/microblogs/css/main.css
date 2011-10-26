@@ -12,181 +12,88 @@
  * details.
  */
 
-.microblogs-portlet .action-container {
-	margin-left: 15px;
-	visibility: hidden;
-}
+.microblogs-portlet {
+	.taglib-header {
+		display: none;
+	}
 
-.microblogs-portlet .control-container {
-	float: right;
-}
+	.microblogs-entry-form {
+		border-bottom: 1px solid #C7D0DA;
+		padding: 10px 11px;
+		position: relative;
 
-.ie6 .microblogs-portlet .action-container {
-	visibility: visible;
-}
+		.aui-field-text {
+			display: block;
+			padding: 0 5px;
+		}
 
-.microblogs-portlet .taglib-header,
-.aui-dialog.microblogs-portlet .taglib-header {
-	border-bottom: none;
-	margin: 0;
-}
+		.aui-field-text textarea {
+			margin: 0 -5px;
+			width: 100%;
+			height: 1.25em;
+		}
 
-.microblogs-portlet .aui-field-input-text {
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	height: 18px;
-	margin: 10px 0 5px;
-	min-width: 400px;
-	width: 99%;
-}
+		.aui-field-text-focused textarea {
+			height: auto;
+		}
 
-.aui-dialog.microblogs-portlet .aui-field-input-text {
-	height: 60px;
-}
+		.aui-button-holder {
+			margin: 5px 0 0;
+		}
+		
+		.aui-field-select {
+			display: inline-block;
+		}
 
-.microblogs-portlet .microblogs-entry:hover .action-container {
-	visibility: visible;
-}
+		.button-holder-right {
+			float: right;
+			line-height: 1em;
+		}
 
-.microblogs-portlet .microblogs-entry {
-	margin-bottom: 10px;
-	width: 100%;
-}
+		&:after {
+			content: "";
+			clear: both;
+			display: block;
+		}
+	}
 
-.microblogs-portlet .microblogs-status-container .microblogs-entry {
-	margin-bottom: 0;
-	width: 98%;
-}
+	.microblogs-entry {
+		border-bottom: 1px solid #C7D0DA;
+		margin: 0 25px;
+		padding: 1em 0 .5em;
 
-.aui-dialog.microblogs-portlet .microblogs-entry {
-	margin-top: 10px;
-}
+		&:after {
+			content: "";
+			clear: both;
+			display: block;
+		}
+	}
 
-.microblogs-portlet .microblogs-container,
-.microblogs-portlet .microblogs-status-container {
-	margin-top: 10px;
-}
+	.thumbnail {
+		float: left;
+		height: 45px;
+		overflow: hidden;
+		width: 45px;
+		margin-right: 2px;
 
+		img {
+			max-width: 45px;
+		}
+	}
 
-.microblogs-portlet .microblogs-countdown {
-	color: #C8C9CA;
-	font-size: 20px;
-	margin-right: 5px;
-	vertical-align: bottom;
-}
+	.my-entry-bubble, .entry-bubble {
+		margin-left: 55px;
 
-.microblogs-portlet .microblogs-entry .user-name {
-	font-size: 12px;
-	font-weight: bold;
-}
+		.user-name {
+			font-weight: bold;
+		}
 
-.microblogs-portlet .microblogs-status-container .user-name {
-	display: none;
-}
+		.footer .action-container {
+			display: none;	
+		}
 
-.microblogs-portlet .microblogs-entry .small {
-	color: #4F4F4F;
-	font-size: 10px;
-}
-
-.microblogs-portlet .microblogs-entry .content {
-	font-size: 12px;
-}
-
-.microblogs-portlet .microblogs-entry .footer {
-	color: #4F4F4F;
-	font-size: 10px;
-	height: 15px;
-	margin-top: 5px;
-}
-
-.microblogs-portlet .microblogs-entry .footer span {
-	margin-right: 2px;
-}
-
-.microblogs-portlet .aui-button-holder {
-	width: 100%;
-}
-
-.microblogs-portlet .aui-button-holder .aui-field-select,
-.microblogs-portlet .thumbnail {
-	float: left;
-}
-
-.microblogs-portlet .aui-button-holder .button-holder-right {
-	float: right;
-}
-
-.microblogs-portlet .thumbnail img {
-	width: 50px;
-}
-
-.microblogs-portlet .thumbnail a {
-	text-decoration: none;
-}
-
-.microblogs-portlet .microblogs-status-container .thumbnail {
-	display: none;
-}
-
-.microblogs-portlet .entry-bubble,
-.microblogs-portlet .my-entry-bubble {
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	background: #FFF;
-	border-color: #CCC;
-	border-radius: 5px;
-	border-style: solid;
-	border-width: 1px 1px 3px 3px;
-	color: #000;
-	margin-left: 65px;
-	padding: 3px;
-	padding-left: 5px;
-	position: relative;
-}
-
-.microblogs-portlet .microblogs-status-container .entry-bubble,
-.microblogs-portlet .microblogs-status-container .my-entry-bubble {
-	margin-left: 10px;
-}
-
-
-.microblogs-portlet .entry-bubble:before,
-.microblogs-portlet .entry-bubble:after,
-.microblogs-portlet .my-entry-bubble:before,
-.microblogs-portlet .my-entry-bubble:after {
-	border: 12px solid transparent;
-	border-right-color: #CCC;
-	border-left: 0;
-	content: "";
-	left: -13px;
-	position: absolute;
-	top: 16px;
-}
-
-.microblogs-portlet .entry-bubble:after,
-.microblogs-portlet .my-entry-bubble:after {
-	border: 10px solid transparent;
-	border-right-color: #FFF;
-	left: -20px;
-}
-
-.microblogs-portlet .entry-bubble div,
-.microblogs-portlet .my-entry-bubble div {
-	left: -7px;
-	margin-bottom: 3px;
-	position: relative;
-	margin-left: 10px;
-}
-
-.microblogs-portlet .aui-tabview-list {
-	margin-top: 5px;
-}
-
-.microblogs-portlet .microblogs-reply-icon {
-	float: right;
-	font-size: 10px;
-	font-weight: normal;
-	margin: 5px -3px;
+		&:hover .footer .action-container {
+			display: inline;
+		}
+	}
 }
