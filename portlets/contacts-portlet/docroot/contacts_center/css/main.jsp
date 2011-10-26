@@ -235,7 +235,7 @@ $section-header-bg: #CCE6F7;
 				padding: 5px;
 				left: 0;
 				top: 0;
-				margin: 5px -10px -5px;
+				margin: 5px -10px 10px;
 			}
 		}
 	}

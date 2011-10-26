@@ -106,40 +106,59 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 				<%
 				String content = microblogsEntry.getContent();
 
-				Pattern pattern = Pattern.compile("[#|@]\\S*");
+				Pattern pattern = Pattern.compile("\\#\\S*");
 
 				Matcher matcher = pattern.matcher(content);
-
-				PortletURL viewURL = renderResponse.createRenderURL();
-
-				viewURL.setWindowState(LiferayWindowState.NORMAL);
-
-				viewURL.setParameter("jspPage", "/microblogs/view.jsp");
 
 				while (matcher.find()) {
 					String result = matcher.group();
 
 					String assetTagName = result.substring(1);
 
-					if (result.startsWith("#")) {
-						viewURL.setParameter("assetTagName", assetTagName);
-						viewURL.setParameter("tabs1", assetTagName);
+					PortletURL viewURL = renderResponse.createRenderURL();
 
-						content = StringUtil.replace(content, result, "<a href=\"" + viewURL + "\">" + assetTagName + "</a>");
-					}
-					else if (result.startsWith("@")) {
-						try {
-							User taggedUser = UserLocalServiceUtil.getUserByScreenName(microblogsEntry.getCompanyId(), assetTagName);
+					viewURL.setWindowState(LiferayWindowState.NORMAL);
 
-							assetTagName = PortalUtil.getUserName(taggedUser.getUserId(), assetTagName);
+					viewURL.setParameter("jspPage", "/microblogs/view.jsp");
+					viewURL.setParameter("assetTagName", assetTagName);
+					viewURL.setParameter("tabs1", assetTagName);
 
-							content = StringUtil.replace(content, result, "<a href=\"" + taggedUser.getDisplayURL(themeDisplay) + "\">" + assetTagName + "</a>");
-						}
-						catch (NoSuchUserException nsue) {
-							viewURL.setParameter("receiverUserId", String.valueOf(0));
-						}
-					}
+					content = StringUtil.replace(content, result, "<a href=\"" + viewURL + "\">" + assetTagName + "</a>");
 				}
+
+				pattern = Pattern.compile("\\[\\@\\S*\\]");
+
+				matcher = pattern.matcher(content);
+
+				while (matcher.find()) {
+					String result = matcher.group();
+
+					String assetTagName = result.replace("[@", StringPool.BLANK);
+
+					assetTagName = assetTagName.replace("]", StringPool.BLANK);
+
+					PortletURL viewURL = renderResponse.createRenderURL();
+
+					viewURL.setWindowState(LiferayWindowState.NORMAL);
+
+					viewURL.setParameter("jspPage", "/microblogs/view.jsp");
+					viewURL.setParameter("assetTagName", assetTagName);
+					viewURL.setParameter("tabs1", assetTagName);
+
+					try {
+						User taggedUser = UserLocalServiceUtil.getUserByScreenName(microblogsEntry.getCompanyId(), assetTagName);
+
+						assetTagName = PortalUtil.getUserName(taggedUser.getUserId(), assetTagName);
+
+						viewURL.setParameter("receiverUserId", String.valueOf(taggedUser.getUserId()));
+					}
+					catch (NoSuchUserException nsue) {
+						viewURL.setParameter("receiverUserId", String.valueOf(0));
+					}
+
+					content = StringUtil.replace(content, result, "<a href=\"" + viewURL + "\">" + assetTagName + "</a>");
+				}
+
 				%>
 
 				<span>

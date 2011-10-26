@@ -47,60 +47,67 @@ public class MicroblogsEntryLocalServiceImpl
 
 		// Microblogs entry
 
-		User user = userPersistence.findByPrimaryKey(userId);
+		try {
+			User user = userPersistence.findByPrimaryKey(userId);
 
-		if (receiverUserId == 0) {
-			receiverUserId = userId;
+			if (receiverUserId == 0) {
+				receiverUserId = userId;
+			}
+
+			Date now = new Date();
+
+			validate(type, receiverMicroblogsEntryId);
+
+			long microblogsEntryId = counterLocalService.increment();
+
+			MicroblogsEntry microblogsEntry = microblogsEntryPersistence.create(
+				microblogsEntryId);
+
+			microblogsEntry.setCompanyId(user.getCompanyId());
+			microblogsEntry.setUserId(user.getUserId());
+			microblogsEntry.setUserName(user.getFullName());
+			microblogsEntry.setCreateDate(now);
+			microblogsEntry.setModifiedDate(now);
+			microblogsEntry.setContent(content);
+			microblogsEntry.setType(type);
+			microblogsEntry.setReceiverUserId(receiverUserId);
+			microblogsEntry.setReceiverMicroblogsEntryId(receiverMicroblogsEntryId);
+			microblogsEntry.setSocialRelationType(socialRelationType);
+
+			microblogsEntryPersistence.update(microblogsEntry, false);
+
+			// Resources
+
+			resourceLocalService.addModelResources(microblogsEntry, serviceContext);
+
+			// Asset
+
+			updateAsset(
+				microblogsEntry, serviceContext.getAssetCategoryIds(),
+				serviceContext.getAssetTagNames());
+
+			// Social
+
+			int actitivtyKey = MicroblogsActivityKeys.ADD_ENTRY;
+
+			if (type == MicroblogsEntryConstants.TYPE_REPLY) {
+				actitivtyKey = MicroblogsActivityKeys.REPLY_ENTRY;
+			}
+			else if (type == MicroblogsEntryConstants.TYPE_REPOST) {
+				actitivtyKey =  MicroblogsActivityKeys.REPOST_ENTRY;
+			}
+
+			SocialActivityLocalServiceUtil.addActivity(
+				userId, 0, MicroblogsEntry.class.getName(), microblogsEntryId,
+				actitivtyKey, StringPool.BLANK, receiverUserId);
+
+			return microblogsEntry;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		Date now = new Date();
-
-		validate(type, receiverMicroblogsEntryId);
-
-		long microblogsEntryId = counterLocalService.increment();
-
-		MicroblogsEntry microblogsEntry = microblogsEntryPersistence.create(
-			microblogsEntryId);
-
-		microblogsEntry.setCompanyId(user.getCompanyId());
-		microblogsEntry.setUserId(user.getUserId());
-		microblogsEntry.setUserName(user.getFullName());
-		microblogsEntry.setCreateDate(now);
-		microblogsEntry.setModifiedDate(now);
-		microblogsEntry.setContent(content);
-		microblogsEntry.setType(type);
-		microblogsEntry.setReceiverUserId(receiverUserId);
-		microblogsEntry.setReceiverMicroblogsEntryId(receiverMicroblogsEntryId);
-		microblogsEntry.setSocialRelationType(socialRelationType);
-
-		microblogsEntryPersistence.update(microblogsEntry, false);
-
-		// Resources
-
-		resourceLocalService.addModelResources(microblogsEntry, serviceContext);
-
-		// Asset
-
-		updateAsset(
-			microblogsEntry, serviceContext.getAssetCategoryIds(),
-			serviceContext.getAssetTagNames());
-
-		// Social
-
-		int actitivtyKey = MicroblogsActivityKeys.ADD_ENTRY;
-
-		if (type == MicroblogsEntryConstants.TYPE_REPLY) {
-			actitivtyKey = MicroblogsActivityKeys.REPLY_ENTRY;
-		}
-		else if (type == MicroblogsEntryConstants.TYPE_REPOST) {
-			actitivtyKey =  MicroblogsActivityKeys.REPOST_ENTRY;
-		}
-
-		SocialActivityLocalServiceUtil.addActivity(
-			userId, 0, MicroblogsEntry.class.getName(), microblogsEntryId,
-			actitivtyKey, StringPool.BLANK, receiverUserId);
-
-		return microblogsEntry;
+		return null;
 	}
 
 	@Override
