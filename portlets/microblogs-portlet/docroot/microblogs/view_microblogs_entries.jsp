@@ -53,7 +53,7 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 			<a href="<%= userDisplayURL %>"><img alt="<%= userFullName %>" src="<%= userPortaitURL %>" /></a>
 		</span>
 
-		<div class="<%= (themeDisplay.getUserId() == microblogsEntry.getUserId()) ? "my-entry-bubble" : "entry-bubble" %> ">
+		<div class="microblogs-entry-content">
 			<div class="user-name">
 				<span><a href="<%= userDisplayURL %>"><%= userFullName %></a></span>
 

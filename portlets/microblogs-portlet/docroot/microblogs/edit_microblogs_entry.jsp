@@ -60,7 +60,7 @@ if ((microblogsEntry != null) && (reply || repost)) {
 	}
 }
 
-String header = "whats-happening";
+String header = StringPool.BLANK;
 String highlighterDivClass = "highlighter-content";
 String formName = "dialogFm";
 
@@ -85,9 +85,9 @@ else {
 header = LanguageUtil.format(pageContext, header, receiverUserFullName);
 %>
 
-<liferay-ui:header title="<%= header %>" />
-
 <c:if test="<%= reply || repost %>">
+	<liferay-ui:header title="<%= header %>" />
+
 	<c:choose>
 		<c:when test="<%= microblogsEntry == null %>">
 			<div class="portlet-msg-error">
@@ -120,7 +120,7 @@ header = LanguageUtil.format(pageContext, header, receiverUserFullName);
 
 <portlet:actionURL name="updateMicroblogsEntry" var="updateMicroblogsEntryURL" />
 
-<aui:form action="<%= updateMicroblogsEntryURL %>" name="<%= formName %>">
+<aui:form action="<%= updateMicroblogsEntryURL %>" cssClass="microblogs-entry-form" name="<%= formName %>">
 	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 	<aui:input name="microblogsEntryId" type="hidden" value="<%= (repost || reply) ? 0 : microblogsEntryId %>" />
 	<aui:input name="receiverUserId" type="hidden" value="<%= receiverUserId %>" />
@@ -143,12 +143,12 @@ header = LanguageUtil.format(pageContext, header, receiverUserFullName);
 
 	<c:if test="<%= !repost %>">
 		<div class="autocomplete" id="<portlet:namespace />autocomplete">
-			<div id="<portlet:namespace />autocompleteContent"></div>
+			<div id="<portlet:namespace />autocompleteContent"><div class="<portlet:namespace />autocompleteContentText">Update your status...</div></div>
 
 			<div class="<%= highlighterDivClass %>" id="<portlet:namespace />highlighterContent"> </div>
 		</div>
 
-		<aui:input label="" name="content" type="hidden" />
+		<aui:input label="" name="content" type="hidden" value="Update your status ..." />
 	</c:if>
 
 	<aui:button-row cssClass='<%= view ? "aui-helper-hidden" : StringPool.BLANK %>'>
@@ -419,6 +419,7 @@ header = LanguageUtil.format(pageContext, header, receiverUserFullName);
 		<c:choose>
 			<c:when test="<%= !reply && !edit %>">
 				var autocomplete = A.one('#<portlet:namespace/>autocomplete');
+				var autocompleteContentText = autocomplete.one('.<portlet:namespace />autocompleteContentText');
 
 				autocomplete.on(
 					'click',
@@ -426,11 +427,14 @@ header = LanguageUtil.format(pageContext, header, receiverUserFullName);
 						var contentInput = A.one('#<portlet:namespace/>contentInput');
 						var highlighterContent = A.one('#<portlet:namespace/>highlighterContent');
 
+						autocompleteContentText.addClass('aui-helper-hidden');
+
 						if (!contentInput) {
 							highlighterContent.removeClass('textbox');
 
 							createTextarea('#<portlet:namespace />autocompleteContent');
 						}
+
 					}
 				);
 			</c:when>
