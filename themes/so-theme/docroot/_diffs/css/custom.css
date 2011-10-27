@@ -358,26 +358,26 @@ a:hover {
 	width: $fixed-width;
 }
 
-/* ----- Forms ----- */
+/* ---------- Forms ---------- */
 
-#page-search input[type=text], .aui-search-bar input[type=text], .so-search-bar input.search-field{
+#page-search input[type=text], .aui-search-bar input[type=text], .so-search-bar input.search-field {
 	background-image: url(../images/custom/so-search-icon.png);
 	background-position: right 0;
 	background-repeat: no-repeat;
 	padding-right: 25px;
 }
 
-input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
-	box-shadow: 0 1px 3px #c9c9c9 inset;
+input[type=text], textarea, input[type=password], .microblogs-portlet .autocomplete {
+	@include box-shadow(0 1px 3px #C9C9C9 inset);
 	@include border-radius(5px);
 
 	input[type=text] {
-		box-shadow: none;
+		@include box-shadow(none);
 		@include border-radius(0);
 	}
 }
 
-input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
+input[type=text], textarea, input[type=password], .microblogs-portlet .autocomplete {
 	border: 1px solid $border-color;
 	background: #FFF;
 	padding: 6px 5px;
@@ -392,7 +392,8 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 		border-width: 0;
 	}
 }
-/* Autocomplete */
+
+/* ---------- Autocomplete ---------- */
 
 .ui-autocomplete-even {
 	background: #FFF;
@@ -415,13 +416,13 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	padding: 5px;
 }
 
-/* Detail column */
+/* ---------- Detail column ---------- */
 
 .detail-column {
 	display: none;
 }
 
-/* Dynamic Uploader */
+/* ---------- Dynamic Uploader ---------- */
 
 .lfr-upload-container {
 	width: 475px;
@@ -432,7 +433,7 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	padding-left: 5px;
 }
 
-/* Forms */
+/* ---------- Forms ---------- */
 
 .lfr-label {
 	color: #999;
@@ -442,7 +443,7 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	vertical-align: top;
 }
 
-/* Headings */
+/* ---------- Headings ---------- */
 
 .taglib-header {
 	border: none;
@@ -453,7 +454,7 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	}
 }
 
-/* Messages */
+/* ---------- Messages ---------- */
 
 .portlet-msg-info {
 	margin-top: 0;
@@ -464,14 +465,14 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	height: 1px;
 }
 
-/* Panel */
+/* ---------- Panel ---------- */
 
 .aui-panel-hd-text {
 	font-size: 12px;
 	font-weight: bold;
 }
 
-/* Ratings */
+/* ---------- Ratings ---------- */
 
 .ie6 .taglib-ratings.stars {
 	width: 100%;
@@ -481,7 +482,7 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	width: 110px;
 }
 
-/* Search Iterator */
+/* ---------- Search Iterator ---------- */
 
 .taglib-search-iterator .result-title img {
 	margin-right: .5em;
@@ -512,7 +513,7 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	text-indent: -9999em;
 }
 
-/* Sidebar */
+/* ---------- Sidebar ---------- */
 
 .aui-dialog .sidebar {
 	display: none;
@@ -558,7 +559,7 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	padding-left: .3em;
 }
 
-/* Taglib */
+/* ---------- Taglib ---------- */
 
 .taglib-icon .taglib-text {
 	text-decoration: none;
@@ -566,7 +567,7 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 
 /* ---------- Portlet ---------- */
 
-/* Activities */
+/* ---------- Activities ---------- */
 
 .so-portlet-activities .taglib-page-iterator {
 	margin-top: 1em;
@@ -625,15 +626,15 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	font-weight: bold;
 }
 
-/* Asset Publisher */
+/* ---------- Asset Publisher ---------- */
 
 .ie6 .portlet-asset-publisher .asset-metadata {
 	display: none;
 }
 
-/* Blogs */
+/* ---------- Blogs ---------- */
 
-/* Bookmarks */
+/* ---------- Bookmarks ---------- */
 
 .portlet-bookmarks .control-wrapper {
 	text-align: right;
@@ -649,7 +650,7 @@ input[type=text], textarea, input[type=password], .aui-textboxlistentry-holder {
 	padding-right: 16px;
 }
 
-/* Calendar */
+/* ---------- Calendar ---------- */
 
 .portlet-calendar h1.title {
 	border-bottom: none;
@@ -882,13 +883,13 @@ table.calendar {
 	background: #7F80A4;
 }
 
-/* Dockbar */
+/* ---------- Dockbar ---------- */
 
 .user-group .add-content-menu .add-page{
 	display: none;
 }
 
-/* Document Library */
+/* ---------- Document Library ---------- */
 
 .portlet-document-library .folder-title {
 	margin-bottom: 0;
@@ -1072,7 +1073,7 @@ table.calendar {
 	height: 17px;
 }
 
-/* Message Boards */
+/* ---------- Message Boards ---------- */
 
 .portlet-message-boards .category-current {
 	font-weight: bold;
@@ -1103,13 +1104,7 @@ table.calendar {
 	font-size: 1em;
 }
 
-/* Microblogs */
-
-.microblogs-portlet .taglib-header h1.header-title {
-	margin-bottom: 0;
-}
-
-/* Recent Documents */
+/* ---------- Recent Documents ---------- */
 
 .portlet-recent-documents td {
 	font-size: 11px;
@@ -1119,7 +1114,7 @@ table.calendar {
 	padding: 0 5px 8px 0;
 }
 
-/* RSS */
+/* ---------- RSS ---------- */
 
 .portlet-rss .feed-entry-title {
 	font-size: 11px;
@@ -1134,13 +1129,13 @@ table.calendar {
 	font-weight: bold;
 }
 
-/* Search */
+/* ---------- Search ---------- */
 
 .portlet-search .entry-title {
 	font-size: 1em;
 }
 
-/* SO: Sites */
+/* ---------- SO: Sites ---------- */
 
 .so-portlet-sites .site-list-container span {
 	display: block;
@@ -1191,13 +1186,13 @@ table.calendar {
 	}
 }
 
-/* TMS: Tasks */
+/* ---------- TMS: Tasks ---------- */
 
 .tms-portlet-tasks .progress {
 	background-color: #FFD8B2;
 }
 
-/* ----- Portlet Styling ----- */
+/* ---------- Portlet Styling ---------- */
 
 .controls-hidden {
 	.delete-tab {
@@ -1211,7 +1206,7 @@ table.calendar {
 	}
 }
 
-/* ----- Blogs ----- */
+/* ---------- Blogs ---------- */
 
 .portlet-blogs {
 	.portlet-borderless-container {
@@ -1258,7 +1253,7 @@ table.calendar {
 	}
 }
 
-/* ----- Recent Bloggers ----- */
+/* ---------- Recent Bloggers ---------- */
 
 .portlet-recent-bloggers {
 	.portlet-content {
@@ -1298,7 +1293,7 @@ table.calendar {
 	}
 }
 
-/* ----- Contacts Portlet ----- */
+/* ---------- Contacts Portlet ---------- */
 
 .contacts-portlet {
 	.contacts-profile {
@@ -1326,14 +1321,78 @@ table.calendar {
 	border-bottom-width: 1px;
 }
 
-/* ----- Microblogs Portlet ----- */
+/* ---------- Microblogs Portlet ---------- */
 
 .microblogs-portlet {
-	.portlet-body {
+	.microblogs-entry-form textarea {
+		@include box-shadow(none);
+	}
+
+	.yui3-aclist-hidden {
+		z-index: 4;
+	}
+
+	.microblogs-countdown {
+		@include border-radius(3px);
+		font-size: .9em;
 	}
 }
 
-/* ----- Activities Portlet ----- */
+.user-group .microblogs-status-container {
+	position: relative;
+	top: -6px;
+
+	.microblogs-entry {
+		@include border-radius(5px);
+		@include box-shadow(0 3px 2px #DDD);
+
+		border: 1px solid #C7D0DA;
+		padding: 8px 10px;
+		margin: 10px;
+	}
+
+	.microblogs-entry-content {
+		margin-left: 0;
+	}
+
+	.user-name, .thumbnail {
+		display: none;
+	}
+
+	&:after, &:before {
+		border: 8px solid #C7D0DA;
+		border-color: transparent transparent #C7D0DA;
+		content: "";
+		display: block;
+		position: absolute;
+		left: 30px;
+		margin: 0;
+		top: -16px;
+	}
+
+	&:after {
+		border-color: transparent transparent #FFF;
+		top: -15px;
+	}
+}
+
+.profile-page .microblogs-status-container {
+	top: 0;
+
+	&:after, &:before {
+		border-color: transparent #C7D0DA transparent transparent;
+		left: -5px;
+		margin: -8px 0 0;
+		top: 50%;
+	}
+
+	&:after {
+		border-color: transparent #FFF transparent transparent;
+		left: -4px;
+	}
+}
+
+/* ---------- Activities Portlet ---------- */
 
 .profile-page .so-portlet-activities {
 	.portlet-title {

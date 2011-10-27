@@ -47,7 +47,7 @@ This file allows you to override and define new Velocity variables.
 
 #set ($current_user_profile_url = $theme_display.getURLPortal() + $theme_display.getPathFriendlyURLPublic() + "/" + $currentUser.getScreenName())
 
-#set ($user_detail_class = "user-dashboard-detail")
+#set ($user_detail_class = "so-user-detail")
 
 #if ($page_group.isUser())
 	#set ($css_class = $css_class + " user-group")

@@ -19,8 +19,6 @@ $theme.include($body_top_include)
 	#dockbar()
 #end
 
-$theme.isCompanyAvailable
-
 <div id="wrapper">
 	<a href="#main-content" id="skip-to-content">#language("skip-to-content")</a>
 
