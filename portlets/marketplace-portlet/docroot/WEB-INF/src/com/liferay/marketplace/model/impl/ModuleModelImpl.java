@@ -75,8 +75,8 @@ public class ModuleModelImpl extends BaseModelImpl<Module>
 				"value.object.column.bitmask.enabled.com.liferay.marketplace.model.Module"),
 			true);
 	public static long APPID_COLUMN_BITMASK = 1L;
-	public static long UUID_COLUMN_BITMASK = 2L;
-	public static long CONTEXTNAME_COLUMN_BITMASK = 4L;
+	public static long CONTEXTNAME_COLUMN_BITMASK = 2L;
+	public static long UUID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.marketplace.model.Module"));
 
@@ -185,18 +185,13 @@ public class ModuleModelImpl extends BaseModelImpl<Module>
 
 	@Override
 	public Module toEscapedModel() {
-		if (isEscapedModel()) {
-			return (Module)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (Module)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (Module)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -284,7 +279,7 @@ public class ModuleModelImpl extends BaseModelImpl<Module>
 
 		moduleModelImpl._originalContextName = moduleModelImpl._contextName;
 
-		_columnBitmask = 0;
+		moduleModelImpl._columnBitmask = 0;
 	}
 
 	@Override

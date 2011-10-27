@@ -153,6 +153,9 @@ public class CalendarEventPersistenceImpl extends BasePersistenceImpl<CalendarEv
 						CalendarEventImpl.class, calendarEvent.getPrimaryKey()) == null) {
 				cacheResult(calendarEvent);
 			}
+			else {
+				calendarEvent.resetOriginalValues();
+			}
 		}
 	}
 
@@ -369,6 +372,12 @@ public class CalendarEventPersistenceImpl extends BasePersistenceImpl<CalendarEv
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
 					args);
+
+				args = new Object[] { calendarEventModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 			}
 		}
 
@@ -386,12 +395,13 @@ public class CalendarEventPersistenceImpl extends BasePersistenceImpl<CalendarEv
 		else {
 			if ((calendarEventModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
+				Object[] args = new Object[] {
 						calendarEventModelImpl.getOriginalUuid(),
-						Long.valueOf(
-							calendarEventModelImpl.getOriginalGroupId())
-					});
+						Long.valueOf(calendarEventModelImpl.getOriginalGroupId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 					new Object[] {

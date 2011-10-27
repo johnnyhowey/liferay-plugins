@@ -95,9 +95,9 @@ public class KaleoTaskInstanceTokenModelImpl extends BaseModelImpl<KaleoTaskInst
 				"value.object.column.bitmask.enabled.com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken"),
 			true);
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
-	public static long KALEOINSTANCEID_COLUMN_BITMASK = 2L;
-	public static long KALEOTASKID_COLUMN_BITMASK = 4L;
-	public static long KALEODEFINITIONID_COLUMN_BITMASK = 8L;
+	public static long KALEODEFINITIONID_COLUMN_BITMASK = 2L;
+	public static long KALEOINSTANCEID_COLUMN_BITMASK = 4L;
+	public static long KALEOTASKID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken"));
 
@@ -375,18 +375,13 @@ public class KaleoTaskInstanceTokenModelImpl extends BaseModelImpl<KaleoTaskInst
 
 	@Override
 	public KaleoTaskInstanceToken toEscapedModel() {
-		if (isEscapedModel()) {
-			return (KaleoTaskInstanceToken)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (KaleoTaskInstanceToken)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (KaleoTaskInstanceToken)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -503,7 +498,7 @@ public class KaleoTaskInstanceTokenModelImpl extends BaseModelImpl<KaleoTaskInst
 
 		kaleoTaskInstanceTokenModelImpl._setOriginalKaleoTaskId = false;
 
-		_columnBitmask = 0;
+		kaleoTaskInstanceTokenModelImpl._columnBitmask = 0;
 	}
 
 	@Override

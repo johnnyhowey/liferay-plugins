@@ -87,8 +87,8 @@ public class MeetupsRegistrationModelImpl extends BaseModelImpl<MeetupsRegistrat
 				"value.object.column.bitmask.enabled.com.liferay.socialnetworking.model.MeetupsRegistration"),
 			true);
 	public static long MEETUPSENTRYID_COLUMN_BITMASK = 1L;
-	public static long USERID_COLUMN_BITMASK = 2L;
-	public static long STATUS_COLUMN_BITMASK = 4L;
+	public static long STATUS_COLUMN_BITMASK = 2L;
+	public static long USERID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.socialnetworking.model.MeetupsRegistration"));
 
@@ -251,18 +251,13 @@ public class MeetupsRegistrationModelImpl extends BaseModelImpl<MeetupsRegistrat
 
 	@Override
 	public MeetupsRegistration toEscapedModel() {
-		if (isEscapedModel()) {
-			return (MeetupsRegistration)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (MeetupsRegistration)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (MeetupsRegistration)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -360,7 +355,7 @@ public class MeetupsRegistrationModelImpl extends BaseModelImpl<MeetupsRegistrat
 
 		meetupsRegistrationModelImpl._setOriginalStatus = false;
 
-		_columnBitmask = 0;
+		meetupsRegistrationModelImpl._columnBitmask = 0;
 	}
 
 	@Override

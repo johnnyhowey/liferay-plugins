@@ -45,20 +45,23 @@ if (user2 != null) {
 		}
 	%>
 
-		<div class="project">
-			<h3 class="project-title"><%= projectsEntry.getTitle() %></h3>
+		<h3><%= projectsEntry.getTitle() %>:</h3>
 
-			<div class="project-date">
-				<%= startDate %> - <%= endDate %>
-			</div>
-
-			<div class="project-description">
-				<%= projectsEntry.getDescription() %>
-			</div>
-		</div>
-
+		<ul class="property-list">
+			<li>
+				<span class="property-type">
+					<%= startDate %> - <%= endDate %>
+				</span>
+			</li>
+			<li>
+				<span class="property">
+					<%= projectsEntry.getDescription() %>
+				</span>
+			</li>
+		</ul>
 	<%
 	}
 	%>
+
 
 </c:if>

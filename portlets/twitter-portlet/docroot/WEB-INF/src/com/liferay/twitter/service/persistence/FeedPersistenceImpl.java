@@ -143,6 +143,9 @@ public class FeedPersistenceImpl extends BasePersistenceImpl<Feed>
 						FeedImpl.class, feed.getPrimaryKey()) == null) {
 				cacheResult(feed);
 			}
+			else {
+				feed.resetOriginalValues();
+			}
 		}
 	}
 
@@ -367,11 +370,13 @@ public class FeedPersistenceImpl extends BasePersistenceImpl<Feed>
 		else {
 			if ((feedModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_C_TWUI.getColumnBitmask()) != 0) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_TWUI,
-					new Object[] {
+				Object[] args = new Object[] {
 						Long.valueOf(feedModelImpl.getOriginalCompanyId()),
 						Long.valueOf(feedModelImpl.getOriginalTwitterUserId())
-					});
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_TWUI, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_TWUI, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_TWUI,
 					new Object[] {
@@ -382,12 +387,14 @@ public class FeedPersistenceImpl extends BasePersistenceImpl<Feed>
 
 			if ((feedModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_C_TSN.getColumnBitmask()) != 0) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_TSN,
-					new Object[] {
+				Object[] args = new Object[] {
 						Long.valueOf(feedModelImpl.getOriginalCompanyId()),
 						
-					feedModelImpl.getOriginalTwitterScreenName()
-					});
+						feedModelImpl.getOriginalTwitterScreenName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_TSN, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_TSN, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_TSN,
 					new Object[] {

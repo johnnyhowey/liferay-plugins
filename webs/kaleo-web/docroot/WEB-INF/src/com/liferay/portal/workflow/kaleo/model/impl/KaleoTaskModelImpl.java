@@ -87,8 +87,8 @@ public class KaleoTaskModelImpl extends BaseModelImpl<KaleoTask>
 				"value.object.column.bitmask.enabled.com.liferay.portal.workflow.kaleo.model.KaleoTask"),
 			true);
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
-	public static long KALEONODEID_COLUMN_BITMASK = 2L;
-	public static long KALEODEFINITIONID_COLUMN_BITMASK = 4L;
+	public static long KALEODEFINITIONID_COLUMN_BITMASK = 2L;
+	public static long KALEONODEID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoTask"));
 
@@ -272,18 +272,13 @@ public class KaleoTaskModelImpl extends BaseModelImpl<KaleoTask>
 
 	@Override
 	public KaleoTask toEscapedModel() {
-		if (isEscapedModel()) {
-			return (KaleoTask)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (KaleoTask)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (KaleoTask)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -388,7 +383,7 @@ public class KaleoTaskModelImpl extends BaseModelImpl<KaleoTask>
 
 		kaleoTaskModelImpl._setOriginalKaleoNodeId = false;
 
-		_columnBitmask = 0;
+		kaleoTaskModelImpl._columnBitmask = 0;
 	}
 
 	@Override

@@ -162,6 +162,9 @@ public class AppPersistenceImpl extends BasePersistenceImpl<App>
 						AppImpl.class, app.getPrimaryKey()) == null) {
 				cacheResult(app);
 			}
+			else {
+				app.resetOriginalValues();
+			}
 		}
 	}
 
@@ -364,6 +367,12 @@ public class AppPersistenceImpl extends BasePersistenceImpl<App>
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
 					args);
+
+				args = new Object[] { appModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
 			}
 
 			if ((appModelImpl.getColumnBitmask() &
@@ -371,6 +380,13 @@ public class AppPersistenceImpl extends BasePersistenceImpl<App>
 				Object[] args = new Object[] {
 						Long.valueOf(appModelImpl.getOriginalCompanyId())
 					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] { Long.valueOf(appModelImpl.getCompanyId()) };
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
 					args);
@@ -389,10 +405,14 @@ public class AppPersistenceImpl extends BasePersistenceImpl<App>
 		else {
 			if ((appModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_REMOTEAPPID.getColumnBitmask()) != 0) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_REMOTEAPPID,
-					new Object[] {
+				Object[] args = new Object[] {
 						Long.valueOf(appModelImpl.getOriginalRemoteAppId())
-					});
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_REMOTEAPPID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_REMOTEAPPID,
+					args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_REMOTEAPPID,
 					new Object[] { Long.valueOf(app.getRemoteAppId()) }, app);

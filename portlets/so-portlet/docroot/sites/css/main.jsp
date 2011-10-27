@@ -21,16 +21,12 @@
 
 .so-portlet-sites {
 	ul.site-list {
-		background: #E8EFF4;
-		border: 1px solid #C8C9CA;
 		list-style: none;
 		margin: 1em 0;
 
 		li {
 			background: url(<%= PortalUtil.getPathContext() %>/html/icons/sites_admin.png) no-repeat 10px 3px;
-			border: 1px solid #E8EFF4;
-			margin: 4px;
-			padding: 3px 10px 3px 30px;
+			padding: 3px 0 3px 30px;
 
 			span {
 				display: block;
@@ -60,15 +56,10 @@
 				background: url(<%= request.getContextPath() %>/sites/images/star.png) no-repeat 0 50%;
 				float: right;
 			}
-
-			.name {
-				font-weight: bold;
-			}
 		}
 
 		li:hover {
-			background-color: #FFF;
-			border: 1px solid #C8C9CA;
+			background-color: #F4F4F4;
 		}
 
 		li.empty {
@@ -106,19 +97,22 @@
 	}
 
 	.sites-tabs {
-		float: left;
+		display: none;
 
 		select {
 			padding: 5px 1px;
 		}
 	}
+
 	.search {
-		float: right;
-		margin-bottom:10px;
+		height: 28px;
+		padding: 5px 0;
+		position: relative;
 
 		.search-input {
-			vertical-align: top;
-			width: 150px;
+			left: 5px;
+			position: absolute;
+			right: 5px;
 		}
 	}
 

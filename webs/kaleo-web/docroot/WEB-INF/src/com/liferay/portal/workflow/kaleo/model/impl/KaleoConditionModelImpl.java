@@ -87,8 +87,8 @@ public class KaleoConditionModelImpl extends BaseModelImpl<KaleoCondition>
 				"value.object.column.bitmask.enabled.com.liferay.portal.workflow.kaleo.model.KaleoCondition"),
 			true);
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
-	public static long KALEONODEID_COLUMN_BITMASK = 2L;
-	public static long KALEODEFINITIONID_COLUMN_BITMASK = 4L;
+	public static long KALEODEFINITIONID_COLUMN_BITMASK = 2L;
+	public static long KALEONODEID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoCondition"));
 
@@ -272,18 +272,13 @@ public class KaleoConditionModelImpl extends BaseModelImpl<KaleoCondition>
 
 	@Override
 	public KaleoCondition toEscapedModel() {
-		if (isEscapedModel()) {
-			return (KaleoCondition)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (KaleoCondition)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (KaleoCondition)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -388,7 +383,7 @@ public class KaleoConditionModelImpl extends BaseModelImpl<KaleoCondition>
 
 		kaleoConditionModelImpl._setOriginalKaleoNodeId = false;
 
-		_columnBitmask = 0;
+		kaleoConditionModelImpl._columnBitmask = 0;
 	}
 
 	@Override

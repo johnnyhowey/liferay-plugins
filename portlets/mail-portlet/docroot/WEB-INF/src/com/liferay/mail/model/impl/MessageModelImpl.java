@@ -97,8 +97,8 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 				"value.object.column.bitmask.enabled.com.liferay.mail.model.Message"),
 			true);
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
-	public static long REMOTEMESSAGEID_COLUMN_BITMASK = 2L;
-	public static long FOLDERID_COLUMN_BITMASK = 4L;
+	public static long FOLDERID_COLUMN_BITMASK = 2L;
+	public static long REMOTEMESSAGEID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.mail.model.Message"));
 
@@ -376,18 +376,13 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 
 	@Override
 	public Message toEscapedModel() {
-		if (isEscapedModel()) {
-			return (Message)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (Message)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (Message)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -492,7 +487,7 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 
 		messageModelImpl._setOriginalRemoteMessageId = false;
 
-		_columnBitmask = 0;
+		messageModelImpl._columnBitmask = 0;
 	}
 
 	@Override

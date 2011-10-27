@@ -16,40 +16,72 @@
 
 <%@ include file="/init.jsp" %>
 
-<iframe id="<portlet:namespace />frame" scrolling="no" src="<%= iFrameURL %>"></iframe>
+<div class="loading-animation">
+	<iframe class="aui-helper-hidden-accessible" id="<portlet:namespace />frame" scrolling="no" src="javascript:;"></iframe>
+</div>
+
+<div class="aui-helper-hidden time-out-message portlet-msg-error">
+	<liferay-ui:message key="could-not-connect-to-the-liferay-marketplace" />
+</div>
 
 <aui:script use="aui-base,aui-io,aui-messaging">
 	var frame = A.one('#<portlet:namespace />frame');
 
-	var processResponse = function(event) {
-		var response = event.responseData;
+	var timeout = setTimeout(
+		function() {
+			frame.ancestor().removeClass('loading-animation');
+			A.one('.time-out-message').show();
+		},
+		30000
+	);
 
-		var cmd = response.cmd;
+	A.receiveMessage(
+		function(event) {
+			var response = event.responseData;
 
-		if (cmd) {
-			A.io.request(
-				'<portlet:actionURL />',
-				{
-					data: response,
-					dataType: 'JSON',
-					method: 'POST',
-					on: {
-						success: function(event, id, obj) {
-							var response = this.get('responseData');
+			if (response.height) {
+				clearTimeout(timeout);
 
-							A.postMessage(response, '<%= iFrameURL %>', frame);
+				frame.removeClass('aui-helper-hidden-accessible');
+				frame.ancestor().removeClass('loading-animation');
+
+				frame.height(response.height + 50);
+			}
+
+			if (response.cmd) {
+				A.io.request(
+					'<portlet:actionURL />',
+					{
+						data: response,
+						dataType: 'JSON',
+						method: 'POST',
+						on: {
+							success: function(event, id, obj) {
+								var response = this.get('responseData');
+
+								A.postMessage(response, '<%= iFrameURL %>', frame);
+							}
 						}
 					}
-				}
+				);
+			}
+		},
+		A.Lang.emptyFnTrue
+	);
+
+	frame.on(
+		'load',
+		function() {
+			A.postMessage(
+				{
+					message: 'success',
+					clientURL: '<%= themeDisplay.getURLPortal() %>'
+				},
+				'<%= iFrameURL %>',
+				frame
 			);
 		}
+	);
 
-		var height = response.height;
-
-		if (height) {
-			frame.height(height + 50);
-		}
-	}
-
-	A.receiveMessage(processResponse, '<%= MarketplaceConstants.MARKETPLACE_DOMAIN %>');
+	frame.attr('src', '<%= iFrameURL %>');
 </aui:script>

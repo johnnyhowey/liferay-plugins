@@ -79,8 +79,8 @@ public class JIRAChangeGroupModelImpl extends BaseModelImpl<JIRAChangeGroup>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.socialcoding.model.JIRAChangeGroup"),
 			true);
-	public static long JIRAUSERID_COLUMN_BITMASK = 1L;
-	public static long JIRAISSUEID_COLUMN_BITMASK = 2L;
+	public static long JIRAISSUEID_COLUMN_BITMASK = 1L;
+	public static long JIRAUSERID_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.socialcoding.model.JIRAChangeGroup"));
 
@@ -176,18 +176,13 @@ public class JIRAChangeGroupModelImpl extends BaseModelImpl<JIRAChangeGroup>
 
 	@Override
 	public JIRAChangeGroup toEscapedModel() {
-		if (isEscapedModel()) {
-			return (JIRAChangeGroup)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (JIRAChangeGroup)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (JIRAChangeGroup)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -274,7 +269,7 @@ public class JIRAChangeGroupModelImpl extends BaseModelImpl<JIRAChangeGroup>
 
 		jiraChangeGroupModelImpl._setOriginalJiraIssueId = false;
 
-		_columnBitmask = 0;
+		jiraChangeGroupModelImpl._columnBitmask = 0;
 	}
 
 	@Override

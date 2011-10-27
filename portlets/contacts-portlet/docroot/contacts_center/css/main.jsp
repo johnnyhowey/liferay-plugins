@@ -13,120 +13,313 @@
  * details.
  */
 --%>
-
+<!--  -->
 <%@ include file="/css_init.jsp" %>
 
-.lfr-menu-list .disabled .taglib-icon {
-	color: #999;
+$border-color: #ebebeb;
+$section-header-bg: #CCE6F7;
+
+.contacts-portlet .contact-group-filter  {
+	font-size: 14px;
+	padding: 5px 8px;
+
+	select {
+		height: 24px;
+	}
+}
+
+.contacts-portlet .contacts-search {
+	float: left;
+	width: 30%;
+
+	.contacts-search-content {
+		height: 28px;
+		padding: 5px 0;
+		position: relative;
+
+		.search-input {
+			left: 5px;
+			position: absolute;
+			right: 5px;
+		}
+	}
+}
+
+.contacts-portlet {
+
+	.clear {
+		clear: both;
+	}
+
+	.aui-column-content, .aui-column-content-center {
+		padding: 0;
+	}
+
+	.contacts-result {
+		height: 500px;
+		overflow-y: scroll;
+
+		.lfr-contact-grid-item {
+			cursor: pointer;
+			display: block;
+			height: 35px;
+			overflow: hidden;
+			padding: 5px;
+			white-space: nowrap;
+
+			.lfr-contact-thumb {
+				float: left;
+			}
+
+			.lfr-contact-thumb img {
+				width: 35px;
+			}
+
+			.lfr-contact-info {
+				margin-left: 40px;
+				font-size: 1em;
+
+				.lfr-contact-name {
+					font-weight: bold;
+				}
+
+				.lfr-contact-extra {
+					color: #777;
+				}
+			}
+		}
+
+		.lfr-contact-grid-item:hover {
+			background-color: #E8EFF4;
+		}
+
+		.more-results {
+			background-color: #E8EFF4;
+			border: 1px solid #CCC;
+			margin: 5px;
+			padding: 2px;
+			text-align: center;
+		}
+
+
+		.empty {
+			background: url(<%= themeImagesPath %>/messages/alert.png) no-repeat 0 50%;
+			margin: 5px;
+			padding-left: 25px;
+		}
+
+		.lastNameAnchor {
+			background: $section-header-bg;
+			border-bottom: 1px solid $border-color;
+			padding: 1px 5px;
+		}
+
+		.lastNameAnchor a {
+			font-size: .95em;
+			font-weight: bold;
+		}
+	}
+
+	.my-contacts {
+		.lfr-contact-grid-item {
+			display: block;
+			height: 35px;
+			overflow: hidden;
+			padding: 5px;
+			white-space: nowrap;
+
+			.lfr-contact-thumb {
+				float: left;
+			}
+
+			.lfr-contact-thumb img {
+				width: 35px;
+			}
+
+			.lfr-contact-info {
+				margin-left: 40px;
+
+				.lfr-contact-name {
+					font-weight: bold;
+				}
+
+				.lfr-contact-extra {
+					color: #777;
+				}
+			}
+		}
+	}
+
+	.contacts-home {
+		padding: 5px;
+	}
+
+	.contacts-center-home h3.header-title{
+		margin: 0px;
+	}
+
+	.lfr-contact-grid-item {
+		border-bottom: 1px solid $border-color;
+		display: block;
+		white-space: nowrap;
+
+		.lfr-contact-thumb {
+			float: left;
+		}
+
+		.lfr-contact-thumb img {
+			width: 100px;
+		}
+
+		.lfr-contact-info {
+			margin-left: 100px;
+
+			&.no-icon {
+				margin-left: 0;
+			}
+
+			.lfr-contact-name {
+				font-weight: bold;
+			}
+
+			.lfr-contact-extra {
+				color: #777;
+			}
+		}
+	}
+
+	.contacts-profile {
+		padding: 10px 10px 5px;
+		position: relative;
+
+		.lfr-contact-grid-item {
+			border-bottom-width: 0;
+			display: inline-block;
+		}
+
+		.lfr-contact-name a {
+			font-size: 2em;
+		}
+
+		.lfr-contact-job-title {
+			color: #777;
+			font-size: 1.25em;
+			font-weight: bold;
+		}
+
+		.social-relations {
+			position: absolute;
+			right: 0;
+			text-align: right;
+			top: 30px;
+			width: auto;
+
+			.lfr-asset-metadata {
+				display: none;
+			}
+		}
+	}
+
+	.contacts-result-container-content {
+		.contacts-profile {
+			.lfr-contact-info {
+				padding: 8px;
+			}
+
+			.lfr-contact-name a {
+			}
+
+			.social-relations {
+				background: $section-header-bg;
+				position: static;
+				padding: 5px;
+				left: 0;
+				top: 0;
+				margin: 5px -10px 10px;
+			}
+		}
+	}
+
+	.lfr-asset-metadata {
+		margin-bottom: 5px;
+	}
+
+	.contacts-action-content {
+
+		span {
+			padding:0 5px 0 0;
+		}
+	}
+
+	.lfr-user-info-container {
+		min-height: 10px;
+		margin-bottom: 10px;
+	}
+
+	.section {
+		border-bottom: 1px solid #E7E7E7;
+		clear: both;
+		padding: 10px;
+		zoom: 1;
+
+		&:after {
+			content: "";
+			display: block;
+			clear: both;
+		}
+	}
+
+	.section h3 {
+		color: #B4BEC8;
+		float: left;
+		font-size: 1em;
+		margin: 0;
+		text-align: right;
+		width: 100px;
+	}
+
+	.section ul {
+		margin: 0 0 0 105px;
+		padding: 0;
+	}
+
+	.property-type {
+		font-weight: bold;
+	}
+
+	.user-information-title {
+		color: #666;
+		font-size: 1.5em;
+		text-align: right;
+		width: 110px;
+	}
+
+	.lfr-user-comments {
+		float: none;
+		width: 100%;
+	}
+
+
+	.contacts-center-home {
+		padding: 10px;
+
+		.contacts-count {
+			font-weight: bold;
+			margin: 5px 0;
+		}
+
+		.contacts-center-introduction {
+			margin: 5px 0;
+		}
+	}
 }
 
 .lfr-user-profile-preferences {
 	margin-left: 20px;
 }
 
-.contacts-portlet .contact-search {
-	float: right;
-	margin: 0 0 .5em .5em;
-}
-
-.contacts-portlet .lfr-asset-column-details .lfr-asset-requests {
-	background: url(<%= themeImagesPath %>/common/add_user.png) no-repeat 0 50%;
-}
-
 .contacts-portlet .export-group {
 	margin-top: 1em;
-}
-
-.contacts-portlet .lfr-user-grid {
-	list-style: none;
-	margin: 0;
-}
-
-.contacts-portlet .lfr-user-grid-item {
-	display: inline-block;
-	height: 50px;
-	margin: 0 5px 5px 0;
-	position: relative;
-	width: 50px;
-}
-
-.contacts-portlet .lfr-user-grid-item.hover {
-	z-index: 99;
-}
-
-.contacts-portlet .lfr-user-grid-item .lfr-user-thumb {
-	background: #C8C9CA;
-	border: 1px solid #C8C9CA;
-	height: 50px;
-	width: 50px;
-}
-
-.contacts-portlet .lfr-user-grid-item a {
-	clip: rect(0 50px 50px 0);
-	position: absolute;
-}
-
-.contacts-portlet .lfr-user-grid-item img {
-	position: relative;
-	width: 50px;
-}
-
-.contacts-portlet .lfr-user-grid-item.hover img {
-	z-index: 100;
-}
-
-.contacts-portlet .lfr-user-grid-item .lfr-user-info {
-	background: #D7F1FF;
-	border: 1px solid #88C5D9;
-	display: none;
-	left: -5px;
-	min-height: 50px;
-	padding: 5px 5px 5px 60px;
-	position: absolute;
-	top: -5px;
-	width: 175px;
-}
-
-.ie .contacts-portlet .lfr-user-grid-item .lfr-user-info {
-	height: 50px;
-}
-
-.contacts-portlet .lfr-user-grid-item.hover .lfr-user-info {
-	display: block;
-}
-
-.contacts-portlet .lfr-user-portrait {
-	float: left;
-	height: 50px;
-	margin: 0 .5em .5em 0;
-	overflow: hidden;
-}
-
-.contacts-portlet .lfr-user-portrait img {
-	width: 50px;
-}
-
-.contacts-portlet .lfr-user-action,
-.contacts-portlet .lfr-user-data {
-	margin-left: 60px;
-}
-
-.contacts-portlet .lfr-user-data-name,
-.contacts-portlet .lfr-user-data-title {
-	font-size: 1.2em;
-}
-
-.contacts-portlet .lfr-user-data-job-title,
-.contacts-portlet .lfr-user-data-title a {
-	font-weight: bold;
-}
-
-.contacts-portlet .lfr-user-data-extra {
-	color: #777;
-}
-
-.contacts-portlet .lfr-user-action-item a {
-	padding: 0 10px 0 20px ;
 }
 
 .contacts-portlet .lfr-user-action-confirm a {
@@ -137,116 +330,28 @@
 	background: url(<%= themeImagesPath %>/common/deactivate.png) no-repeat;
 }
 
-.contacts-portlet .lfr-asset-data {
-	margin-bottom: 1.5em;
-}
-
 .contacts-portlet .lfr-asset-metadata .lfr-asset-coworker {
 	background: url(<%= themeImagesPath %>/social/coworker.png) no-repeat;
-}
-
-.contacts-portlet .lfr-asset-metadata .lfr-asset-friend {
-	background: url(<%= themeImagesPath %>/social/friend.png) no-repeat;
+	padding: 0 20px
 }
 
 .contacts-portlet .lfr-asset-metadata .lfr-asset-follower {
 	background: url(<%= themeImagesPath %>/social/follower.png) no-repeat;
+	padding: 0 20px
 }
 
 .contacts-portlet .lfr-asset-metadata .lfr-asset-following {
 	background: url(<%= themeImagesPath %>/social/following.png) no-repeat;
-}
-
-.contacts-portlet .lfr-asset-data .lfr-user-data-name {
-	color: #777;
-	font-size: 1.5em;
-	font-weight: bold;
-}
-
-.contacts-portlet .section {
-	float: left;
-	margin: 0 1em 1em 0;
-	width: 45%;
-}
-
-.contacts-portlet .section h3 {
-	color: #555;
-	background: no-repeat 2px 50%;
-	border-bottom: 1px dotted #CCC;
-	font-size: 1.2em;
-	margin-top: 0;
-	padding: 2px 0 2px 25px;
-}
-
-.contacts-portlet .lfr-user-phones h3 {
-	background-image: url(<%= themeImagesPath %>/common/telephone.png);
-}
-
-.contacts-portlet .lfr-user-email-addresses h3 {
-	background-image: url(<%= themeImagesPath %>/mail/unread.png);
-}
-
-.contacts-portlet .lfr-user-instant-messenger h3 {
-	background-image: url(<%= themeImagesPath %>/common/conversation.png);
-}
-
-.contacts-portlet .lfr-user-addresses h3 {
-	background-image: url(<%= themeImagesPath %>/dock/home.png);
-}
-
-.contacts-portlet .lfr-user-websites h3 {
-	background-image: url(<%= themeImagesPath %>/common/history.png);
-}
-
-.contacts-portlet .lfr-user-social-network h3 {
-	background-image: url(<%= themeImagesPath %>/common/group.png);
-}
-
-.contacts-portlet .lfr-user-sms h3 {
-	background-image: url(<%= themeImagesPath %>/common/telephone_mobile.png);
-}
-
-.contacts-portlet .lfr-user-comments h3 {
-	background-image: url(<%= themeImagesPath %>/dock/welcome_message.png);
+	padding: 0 20px
 }
 
 .contacts-portlet .property-list li {
 	list-style: none;
-	margin-bottom: 1em;
-}
-
-.contacts-portlet .property-list dt {
-	clear: left;
-	font-weight: bold;
-	min-width: 5em;
-}
-
-.contacts-portlet .property-list dt,
-.contacts-portlet .property-list dd {
-	float: left;
-	line-height: 1.5;
-	margin: 0;
-}
-
-.contacts-portlet .property-list dd {
-	padding-left: 1em;
-}
-
-.contacts-portlet .filter-input {
-	margin-bottom: 1em;
 }
 
 .contacts-portlet .members-container {
 	clear: both;
 	margin: 1em 0;
-}
-
-.contacts-portlet .letter-anchors {
-	border-bottom: 1px solid #999;
-	clear: both;
-	font-size: 1.2em;
-	margin-bottom: 1em;
-	padding-left: 5px;
 }
 
 .contacts-portlet .lfr-members-grid-item {
@@ -289,7 +394,9 @@
 
 .contacts-portlet .edit-profile {
 	cursor: pointer;
-}.contacts-portlet .lfr-panel{
+}
+
+.contacts-portlet .lfr-panel{
 	margin-bottom: 1em;
 }
 

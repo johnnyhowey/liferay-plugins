@@ -93,9 +93,9 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.sampleservicebuilder.model.Foo"),
 			true);
-	public static long GROUPID_COLUMN_BITMASK = 1L;
-	public static long UUID_COLUMN_BITMASK = 2L;
-	public static long FIELD2_COLUMN_BITMASK = 4L;
+	public static long FIELD2_COLUMN_BITMASK = 1L;
+	public static long GROUPID_COLUMN_BITMASK = 2L;
+	public static long UUID_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -356,18 +356,13 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 
 	@Override
 	public Foo toEscapedModel() {
-		if (isEscapedModel()) {
-			return (Foo)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (Foo)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (Foo)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -464,7 +459,7 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 
 		fooModelImpl._setOriginalField2 = false;
 
-		_columnBitmask = 0;
+		fooModelImpl._columnBitmask = 0;
 	}
 
 	@Override

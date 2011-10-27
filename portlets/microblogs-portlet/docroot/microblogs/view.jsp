@@ -26,6 +26,14 @@ long receiverMicroblogsEntryId = ParamUtil.getLong(request, "receiverMicroblogsE
 
 String assetTagName = ParamUtil.getString(request, "assetTagName");
 
+boolean isUserProfilePage = false;
+
+Group group = themeDisplay.getScopeGroup();
+
+if (group.isUser() && layout.isPublicLayout()) {
+	isUserProfilePage = true;
+}
+
 String tabs1Names = "timeline,mentions";
 
 if (!tabs1.equals("mentions") && !tabs1.equals("timeline")) {
@@ -38,22 +46,11 @@ portletURL.setWindowState(WindowState.NORMAL);
 
 portletURL.setParameter("jspPage", "/microblogs/view.jsp");
 portletURL.setParameter("tabs1", tabs1);
+
+
 %>
 
-<c:if test="<%= MicroblogsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.PERMISSIONS) %>">
-	<liferay-security:permissionsURL
-		modelResource="com.liferay.microblogs"
-		modelResourceDescription="<%= HtmlUtil.escape(themeDisplay.getScopeGroupName()) %>"
-		resourcePrimKey="<%= String.valueOf(scopeGroupId) %>"
-		var="permissionsURL"
-	/>
-
-	<div class="control-container">
-		<aui:button href="<%= permissionsURL %>" value="permissions" />
-	</div>
-</c:if>
-
-<c:if test="<%= MicroblogsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_ENTRY) %>">
+<c:if test="<%= MicroblogsPermission.contains(permissionChecker, scopeGroupId, ActionKeys.ADD_ENTRY) && !isUserProfilePage %>">
 	<liferay-util:include page="/microblogs/edit_microblogs_entry.jsp" servletContext="<%= application %>" />
 </c:if>
 
@@ -76,27 +73,21 @@ portletURL.setParameter("tabs1", tabs1);
 	if (tabs1.equals("timeline")) {
 		long microblogsEntryUserId = themeDisplay.getUserId();
 
-		Group group = themeDisplay.getScopeGroup();
-
-		if (group.isUser()) {
+		if (isUserProfilePage) {
 			microblogsEntryUserId = group.getClassPK();
-		}
 
-		if (microblogsEntryUserId == themeDisplay.getUserId()) {
-			results = MicroblogsEntryServiceUtil.getMicroblogsEntries(searchContainer.getStart(), searchContainer.getEnd());
-			total = MicroblogsEntryServiceUtil.getMicroblogsEntriesCount();
-		}
-		else {
 			results = MicroblogsEntryServiceUtil.getUserMicroblogsEntries(microblogsEntryUserId, searchContainer.getStart(), searchContainer.getEnd());
 			total = MicroblogsEntryServiceUtil.getUserMicroblogsEntriesCount(microblogsEntryUserId);
+		}
+		else {
+			results = MicroblogsEntryServiceUtil.getMicroblogsEntries(searchContainer.getStart(), searchContainer.getEnd());
+			total = MicroblogsEntryServiceUtil.getMicroblogsEntriesCount();
 		}
 	}
 	else if (tabs1.equals("mentions")) {
 		receiverUserId = themeDisplay.getUserId();
 
-		Group group = themeDisplay.getScopeGroup();
-
-		if (group.isUser()) {
+		if (isUserProfilePage) {
 			receiverUserId = group.getClassPK();
 		}
 

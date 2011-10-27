@@ -148,6 +148,9 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 						folder.getPrimaryKey()) == null) {
 				cacheResult(folder);
 			}
+			else {
+				folder.resetOriginalValues();
+			}
 		}
 	}
 
@@ -353,6 +356,13 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 					args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACCOUNTID,
 					args);
+
+				args = new Object[] { Long.valueOf(folderModelImpl.getAccountId()) };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ACCOUNTID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ACCOUNTID,
+					args);
 			}
 		}
 
@@ -370,12 +380,14 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 		else {
 			if ((folderModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_A_F.getColumnBitmask()) != 0) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_F,
-					new Object[] {
+				Object[] args = new Object[] {
 						Long.valueOf(folderModelImpl.getOriginalAccountId()),
 						
-					folderModelImpl.getOriginalFullName()
-					});
+						folderModelImpl.getOriginalFullName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_F, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_F, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_F,
 					new Object[] {

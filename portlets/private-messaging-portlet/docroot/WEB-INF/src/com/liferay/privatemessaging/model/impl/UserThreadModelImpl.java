@@ -87,8 +87,8 @@ public class UserThreadModelImpl extends BaseModelImpl<UserThread>
 			true);
 	public static long DELETED_COLUMN_BITMASK = 1L;
 	public static long MBTHREADID_COLUMN_BITMASK = 2L;
-	public static long USERID_COLUMN_BITMASK = 4L;
-	public static long READ_COLUMN_BITMASK = 8L;
+	public static long READ_COLUMN_BITMASK = 4L;
+	public static long USERID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.privatemessaging.model.UserThread"));
 
@@ -261,18 +261,13 @@ public class UserThreadModelImpl extends BaseModelImpl<UserThread>
 
 	@Override
 	public UserThread toEscapedModel() {
-		if (isEscapedModel()) {
-			return (UserThread)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (UserThread)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (UserThread)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -374,7 +369,7 @@ public class UserThreadModelImpl extends BaseModelImpl<UserThread>
 
 		userThreadModelImpl._setOriginalDeleted = false;
 
-		_columnBitmask = 0;
+		userThreadModelImpl._columnBitmask = 0;
 	}
 
 	@Override

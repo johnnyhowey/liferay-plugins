@@ -95,11 +95,11 @@ public class KaleoTimerInstanceTokenModelImpl extends BaseModelImpl<KaleoTimerIn
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken"),
 			true);
-	public static long KALEOINSTANCEID_COLUMN_BITMASK = 1L;
-	public static long KALEOINSTANCETOKENID_COLUMN_BITMASK = 2L;
-	public static long BLOCKING_COLUMN_BITMASK = 4L;
-	public static long KALEOTIMERID_COLUMN_BITMASK = 8L;
-	public static long COMPLETED_COLUMN_BITMASK = 16L;
+	public static long BLOCKING_COLUMN_BITMASK = 1L;
+	public static long COMPLETED_COLUMN_BITMASK = 2L;
+	public static long KALEOINSTANCEID_COLUMN_BITMASK = 4L;
+	public static long KALEOINSTANCETOKENID_COLUMN_BITMASK = 8L;
+	public static long KALEOTIMERID_COLUMN_BITMASK = 16L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken"));
 
@@ -401,18 +401,13 @@ public class KaleoTimerInstanceTokenModelImpl extends BaseModelImpl<KaleoTimerIn
 
 	@Override
 	public KaleoTimerInstanceToken toEscapedModel() {
-		if (isEscapedModel()) {
-			return (KaleoTimerInstanceToken)this;
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (KaleoTimerInstanceToken)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
 		}
-		else {
-			if (_escapedModelProxy == null) {
-				_escapedModelProxy = (KaleoTimerInstanceToken)ProxyUtil.newProxyInstance(_classLoader,
-						_escapedModelProxyInterfaces,
-						new AutoEscapeBeanHandler(this));
-			}
 
-			return _escapedModelProxy;
-		}
+		return _escapedModelProxy;
 	}
 
 	@Override
@@ -534,7 +529,7 @@ public class KaleoTimerInstanceTokenModelImpl extends BaseModelImpl<KaleoTimerIn
 
 		kaleoTimerInstanceTokenModelImpl._setOriginalCompleted = false;
 
-		_columnBitmask = 0;
+		kaleoTimerInstanceTokenModelImpl._columnBitmask = 0;
 	}
 
 	@Override

@@ -144,6 +144,9 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 						AccountImpl.class, account.getPrimaryKey()) == null) {
 				cacheResult(account);
 			}
+			else {
+				account.resetOriginalValues();
+			}
 		}
 	}
 
@@ -344,6 +347,12 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
 					args);
+
+				args = new Object[] { Long.valueOf(accountModelImpl.getUserId()) };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
+					args);
 			}
 		}
 
@@ -361,12 +370,14 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 		else {
 			if ((accountModelImpl.getColumnBitmask() &
 					FINDER_PATH_FETCH_BY_U_A.getColumnBitmask()) != 0) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_A,
-					new Object[] {
+				Object[] args = new Object[] {
 						Long.valueOf(accountModelImpl.getOriginalUserId()),
 						
-					accountModelImpl.getOriginalAddress()
-					});
+						accountModelImpl.getOriginalAddress()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_A, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_A, args);
 
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_A,
 					new Object[] {
