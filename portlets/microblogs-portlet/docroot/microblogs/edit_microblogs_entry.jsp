@@ -139,7 +139,7 @@ else {
 	<aui:model-context bean="<%= microblogsEntry %>" model="<%= MicroblogsEntry.class %>" />
 
 	<c:if test="<%= !repost %>">
-		<div class="autocomplete" id="<portlet:namespace />autocomplete">
+		<div class="autocomplete textarea" id="<portlet:namespace />autocomplete">
 			<div id="<portlet:namespace />autocompleteContent"></div>
 
 			<div class="highlighter-content <%= edit || repost || reply ? StringPool.BLANK : "textbox" %>" id="<portlet:namespace />highlighterContent"></div>
