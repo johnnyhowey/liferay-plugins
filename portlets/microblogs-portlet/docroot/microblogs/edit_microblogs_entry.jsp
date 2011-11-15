@@ -117,7 +117,7 @@ else {
 
 <portlet:actionURL name="updateMicroblogsEntry" var="updateMicroblogsEntryURL" />
 
-<aui:form action="<%= updateMicroblogsEntryURL %>" name="<%= formName %>">
+<aui:form action="<%= updateMicroblogsEntryURL %>" cssClass="microblogs-entry-form" name="<%= formName %>">
 	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 	<aui:input name="microblogsEntryId" type="hidden" value="<%= (repost || reply) ? 0 : microblogsEntryId %>" />
 	<aui:input name="receiverUserId" type="hidden" value="<%= receiverUserId %>" />
@@ -139,7 +139,7 @@ else {
 	<aui:model-context bean="<%= microblogsEntry %>" model="<%= MicroblogsEntry.class %>" />
 
 	<c:if test="<%= !repost %>">
-		<div class="autocomplete" id="<portlet:namespace />autocomplete">
+		<div class="autocomplete textarea" id="<portlet:namespace />autocomplete">
 			<div id="<portlet:namespace />autocompleteContent"></div>
 
 			<div class="highlighter-content <%= edit || repost || reply ? StringPool.BLANK : "textbox" %>" id="<portlet:namespace />highlighterContent"></div>

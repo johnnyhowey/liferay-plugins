@@ -17,7 +17,7 @@
 <%@ include file="/init.jsp" %>
 
 <div class="loading-animation">
-	<iframe class="aui-helper-hidden-accessible" id="<portlet:namespace />frame" scrolling="no" src="javascript:;"></iframe>
+	<iframe class="aui-helper-hidden-accessible" id="<portlet:namespace />frame" scrolling="no" src="<%= iFrameURL %>"></iframe>
 </div>
 
 <div class="aui-helper-hidden time-out-message portlet-msg-error">
@@ -32,7 +32,7 @@
 			frame.ancestor().removeClass('loading-animation');
 			A.one('.time-out-message').show();
 		},
-		30000
+		120000
 	);
 
 	A.receiveMessage(
@@ -49,10 +49,17 @@
 			}
 
 			if (response.panel) {
-				var url = '<liferay-portlet:renderURL doAsGroupId="<%= themeDisplay.getScopeGroupId() %>" portletName="<%= portletId.equals(PortletKeys.STORE) ? PortletKeys.MY_MARKETPLACE : PortletKeys.STORE %>" windowState="<%= WindowState.MAXIMIZED.toString() %>" />';
+				var url = null;
 
-				if (response.appId) {
-					url = Liferay.Util.addParams('appId=' + response.appId, url);
+				if (response.panel === "control-panel") {
+					url = '<%= themeDisplay.getURLControlPanel() %>';
+				}
+				else {
+					url = '<liferay-portlet:renderURL doAsGroupId="<%= themeDisplay.getScopeGroupId() %>" portletName="<%= portletId.equals(PortletKeys.STORE) ? PortletKeys.MY_MARKETPLACE : PortletKeys.STORE %>" windowState="<%= WindowState.MAXIMIZED.toString() %>" />';
+
+					if (response.appId) {
+						url = Liferay.Util.addParams('appId=' + response.appId, url);
+					}
 				}
 
 				window.location = url;
@@ -92,6 +99,4 @@
 			);
 		}
 	);
-
-	frame.attr('src', '<%= iFrameURL %>');
 </aui:script>
