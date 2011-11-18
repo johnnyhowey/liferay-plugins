@@ -19,8 +19,12 @@ $microblogs-border-color: #C7D0DA;
 		display: none;
 	}
 
-	.microblogs-container {
-		padding-bottom: 20px;
+	.aui-tabview-list {
+		margin: 15px 15px auto;
+	}
+
+	.portlet-msg-info {
+		margin: 1em;
 	}
 
 	.microblogs-entry-form {
