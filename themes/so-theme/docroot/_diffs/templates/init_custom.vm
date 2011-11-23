@@ -37,10 +37,6 @@ This file allows you to override and define new Velocity variables.
 
 #if ($currentUser.getPortraitId() == 0)
 	#set ($profile_portrait_url = $images_folder + "/custom/user_profile_male_default.png")
-
-	#if ($currentUser.isFemale())
-		#set ($profile_portrait_url = $images_folder + "/custom/user_profile_female_default.png")
-	#end
 #end
 
 #set ($currentUserName = $currentUser.getFullName())
