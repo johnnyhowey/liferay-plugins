@@ -8,8 +8,12 @@
 >
 	<portlet>
 		<portlet-name>1</portlet-name>
-		<display-name>Today's Events</display-name>
+		<display-name>Events Display</display-name>
 		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
+		<init-param>
+			<name>config-jsp</name>
+			<value>/configuration.jsp</value>
+		</init-param>
 		<init-param>
 			<name>view-jsp</name>
 			<value>/view.jsp</value>
@@ -18,10 +22,11 @@
 		<supports>
 			<mime-type>text/html</mime-type>
 		</supports>
+		<resource-bundle>content.Language</resource-bundle>
 		<portlet-info>
-			<title>Today's Events</title>
-			<short-title>Today's Events</short-title>
-			<keywords>Today's Events</keywords>
+			<title>Events Display</title>
+			<short-title>Events Display</short-title>
+			<keywords>Events Display</keywords>
 		</portlet-info>
 		<security-role-ref>
 			<role-name>administrator</role-name>
