@@ -24,10 +24,6 @@ a:hover {
 	text-decoration: underline;
 }
 
-#wrapper {
-	min-width: 1024px;
-}
-
 .ie6 img {
 	position: static;
 }
@@ -44,7 +40,7 @@ a:focus .opens-new-window-accessible {
 	text-indent: 0;
 }
 
-#banner:after, #footer, .contacts-portlet .members-container:after, .portlet-msg-info:after, .portlet-toolbar:after, .so-portlet-activities .activity-item:after, .taglib-header:after {
+#content:after, #banner:after, #footer, .contacts-portlet .members-container:after, .portlet-msg-info:after, .portlet-toolbar:after, .so-portlet-activities .activity-item:after, .taglib-header:after {
 	clear: both;
 	content: "";
 	display: block;
@@ -94,7 +90,6 @@ a:focus .opens-new-window-accessible {
 #heading, #footer {
 	margin: 0 auto;
 	position: relative;
-	width: $fixed-width;
 }
 
 #page-search, #sign-in {
@@ -129,16 +124,24 @@ a:focus .opens-new-window-accessible {
 	}
 
 	li {
-		margin-bottom: 1px;
-
 		a {
+			border: 1px solid transparent;
+			border-width: 1px 0;
 			display: block;
-			padding: 3px 7px;
+			padding: 7px 14px;
 		}
 
 		a:hover, &.selected {
 			background: #F4F4F4;
 			text-decoration: none;
+		}
+
+		a:hover {
+			border-color: #F4F3F3 transparent #D9D8D8;
+		}
+
+		&.selected {
+			border-left: 2px solid $header;
 		}
 
 		&.selected a {
@@ -157,7 +160,7 @@ a:focus .opens-new-window-accessible {
 .so-user-detail {
 	display: table-cell;
 	line-height: 0;
-	padding: 10px 0;
+	padding: 10px;
 
 	.profile-image, .profile-name {
 		display: inline-block;
@@ -183,9 +186,10 @@ a:focus .opens-new-window-accessible {
 
 #so-sidebar {
 	border-right: 1px solid $border-color;
-	float: left;
-	margin-right: -1px;
-	width: $navigation-width;
+	left: 0;
+	position: absolute;
+	top: 0;
+	width: 200px;
 
 	.portlet-msg, .portlet-msg-info, .portlet-msg-error, .portlet-msg-alert, .portlet-msg-success {
 		margin: 0;
@@ -304,15 +308,13 @@ a:focus .opens-new-window-accessible {
 /* ---------- Layout ---------- */
 
 #content {
-	margin: 0 auto;
-	width: $fixed-width;
+	padding-left: 200px;
+	position: relative;
 
 	#so-context {
 		border: 1px solid $border-color;
-		border-width: 0 1px 1px 0;
-		float: left;
+		border-width: 0 0 1px 0;
 		position: relative;
-		width: $content-width;
 	}
 
 	.portlet-layout {
@@ -443,7 +445,8 @@ a:focus .opens-new-window-accessible {
 /* ---------- Footer ---------- */
 
 #footer {
-	padding: 30px 0;
+	margin-left: 200px;
+	padding: 30px 10px;
 }
 
 /* ---------- Forms ---------- */
