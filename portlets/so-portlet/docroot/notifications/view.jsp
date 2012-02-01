@@ -57,11 +57,11 @@
 					>
 
 						<%
-						JSONObject notificationEventJSON = JSONFactoryUtil.createJSONObject(notificationEvent.getPayload());
+						JSONObject notificationEventJSONObject = JSONFactoryUtil.createJSONObject(notificationEvent.getPayload());
 
-						String portletId = notificationEventJSON.getString("portletId");
+						String portletId = notificationEventJSONObject.getString("portletId");
 
-						long userId = notificationEventJSON.getLong("userId");
+						long userId = notificationEventJSONObject.getLong("userId");
 
 						String userFullName = PortalUtil.getUserName(userId, StringPool.BLANK);
 
@@ -74,10 +74,15 @@
 							userDisplayURL = curUser.getDisplayURL(themeDisplay);
 							userPortaitURL = curUser.getPortraitURL(themeDisplay);
 						}
+
+						int daysBetween = DateUtil.getDaysBetween(new Date(notificationEvent.getTimestamp()), new Date(), timeZone);
 						%>
 
 						<liferay-ui:search-container-column-text name="notifications" valign="top">
 							<c:choose>
+								<c:when test='<%= portletId.equals(PortletKeys.ANNOUNCEMENTS) %>'>
+									<%@ include file="/notifications/view_announcement.jspf" %>
+								</c:when>
 								<c:when test='<%= portletId.equals(PortletKeys.SO_INVITE_MEMBERS) %>'>
 									<%@ include file="/notifications/view_member_request.jspf" %>
 								</c:when>
