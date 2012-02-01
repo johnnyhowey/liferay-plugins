@@ -1,0 +1,61 @@
+/**
+ * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
+ *
+ * This library is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU Lesser General Public License as published by the Free
+ * Software Foundation; either version 2.1 of the License, or (at your option)
+ * any later version.
+ *
+ * This library is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * details.
+ */
+
+.so-portlet-recent-blogs {
+	.asset-actions {
+		float: right;
+		font-size: 11px;
+		font-weight: normal;
+		margin-bottom: 3px;
+		margin-top: 0;
+	}
+
+	.asset-metadata {
+		clear: both;
+		margin-left: 25px;
+		overflow: hidden;
+	}
+
+	.lfr-meta-actions {
+		margin-right: 1em;
+		padding-top: 0;
+	}
+
+	.title-list {
+		.asset-actions {
+			left: 10px;
+			position: relative;
+		}
+
+		.asset-metadata {
+			padding: 0;
+		}
+
+		a {
+			float: left;
+		}
+	}
+
+	li.title-list {
+		clear: both;
+		list-style: none;
+		margin-bottom: 0.15em;
+		margin-right: 8px;
+		padding-bottom: 1px;
+	}
+
+	ul.title-list {
+		margin-left: 0;
+	}
+}
