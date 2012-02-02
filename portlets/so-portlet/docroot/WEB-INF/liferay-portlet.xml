@@ -50,6 +50,7 @@
 	</portlet>
 	<portlet>
 		<portlet-name>8</portlet-name>
+		<configuration-action-class>com.liferay.portal.kernel.portlet.DefaultConfigurationAction</configuration-action-class>
 		<instanceable>true</instanceable>
 		<header-portlet-css>/recent_blogs/css/main.css</header-portlet-css>
 		<css-class-wrapper>so-portlet-recent-blogs</css-class-wrapper>

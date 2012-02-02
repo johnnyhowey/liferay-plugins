@@ -193,6 +193,10 @@
 		<display-name>Recent Blogs</display-name>
 		<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>
 		<init-param>
+			<name>config-template</name>
+			<value>/recent_blogs/configuration.jsp</value>
+		</init-param>
+		<init-param>
 			<name>view-template</name>
 			<value>/recent_blogs/view.jsp</value>
 		</init-param>
@@ -207,6 +211,10 @@
 			<keywords>Recent Blogs</keywords>
 		</portlet-info>
 		<portlet-preferences>
+			<preference>
+				<name>assetLinkBehavior</name>
+				<value>viewInPortlet</value>
+			</preference>
 			<preference>
 				<name>delta</name>
 				<value>20</value>

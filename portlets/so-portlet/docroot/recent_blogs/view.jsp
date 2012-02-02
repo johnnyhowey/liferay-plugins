@@ -17,7 +17,7 @@
  */
 --%>
 
-<%@ include file="/init.jsp" %>
+<%@ include file="/recent_blogs/init.jsp" %>
 
 <%
 long assetEntryId = ParamUtil.getLong(request, "assetEntryId", 0L);
@@ -64,20 +64,6 @@ catch (Exception e) {
 	<c:otherwise>
 
 		<%
-		PortletPreferences preferences = renderRequest.getPreferences();
-
-		String portletResource = ParamUtil.getString(request, "portletResource");
-
-		if (Validator.isNotNull(portletResource)) {
-			preferences = PortletPreferencesFactoryUtil.getPortletSetup(request, portletResource);
-		}
-
-		String orderByColumn1 = GetterUtil.getString(preferences.getValue("orderByColumn1", "modifiedDate"));
-		String orderByColumn2 = GetterUtil.getString(preferences.getValue("orderByColumn2", "title"));
-		String orderByType1 = GetterUtil.getString(preferences.getValue("orderByType1", "DESC"));
-		String orderByType2 = GetterUtil.getString(preferences.getValue("orderByType2", "ASC"));
-		int delta = GetterUtil.getInteger(preferences.getValue("delta", StringPool.BLANK), SearchContainer.DEFAULT_DELTA);
-
 		AssetEntryQuery assetEntryQuery = new AssetEntryQuery();
 
 		assetEntryQuery.setGroupIds(new long[] {themeDisplay.getScopeGroupId()});
