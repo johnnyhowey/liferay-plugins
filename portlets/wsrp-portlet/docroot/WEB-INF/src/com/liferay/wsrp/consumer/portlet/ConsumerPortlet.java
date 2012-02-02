@@ -145,6 +145,7 @@ import oasis.names.tc.wsrp.v2.types.UploadContext;
 import oasis.names.tc.wsrp.v2.types.UserContext;
 import oasis.names.tc.wsrp.v2.types.UserProfile;
 
+import org.apache.axis.client.Stub;
 import org.apache.axis.message.MessageElement;
 
 /**
@@ -467,6 +468,18 @@ public class ConsumerPortlet extends GenericPortlet {
 		return birthday;
 	}
 
+	protected String getCharSet(String contentType) {
+		if (Validator.isNotNull(contentType)) {
+			int x = contentType.lastIndexOf("charset=");
+
+			if (x >= 0) {
+				return contentType.substring(x + 8).trim();
+			}
+		}
+
+		return StringPool.UTF8;
+	}
+
 	protected Contact getContact(User user, String listTypeName)
 		throws Exception {
 
@@ -563,6 +576,13 @@ public class ConsumerPortlet extends GenericPortlet {
 
 			markupResponse = markupService.getMarkup(getMarkup);
 		}
+
+		// There is a memory leak in Axis that caches the entire response
+		// after each call. See LPS-25067.
+
+		Stub stub = (Stub)markupService;
+
+		stub._createCall();
 
 		processMarkupResponse(
 			portletRequest, portletResponse, serviceHolder, markupResponse);
@@ -818,9 +838,7 @@ public class ConsumerPortlet extends GenericPortlet {
 			CookieProtocol cookieProtocol =
 				serviceDescription.getRequiresInitCookie();
 
-			if ((cookie == null) &&
-				(cookieProtocol != null)) {
-
+			if ((cookie == null) && (cookieProtocol != null)) {
 				String cookieProtocolValue = cookieProtocol.getValue();
 
 				if (cookieProtocolValue.equals(CookieProtocol._perGroup) ||
@@ -1803,18 +1821,6 @@ public class ConsumerPortlet extends GenericPortlet {
 		}
 
 		PortletResponseUtil.write(resourceResponse, bytes);
-	}
-
-	protected String getCharSet(String contentType) {
-		if (Validator.isNotNull(contentType)) {
-			int x = contentType.lastIndexOf("charset=");
-
-			if (x >= 0) {
-				return contentType.substring(x + 8).trim();
-			}
-		}
-
-		return StringPool.UTF8;
 	}
 
 	protected String rewriteURL(

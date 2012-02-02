@@ -70,17 +70,6 @@ public class ServiceHandler implements InvocationHandler {
 		_serviceLocator.setMaintainSession(true);
 	}
 
-	public Object invoke(Object proxy, Method method, Object[] args)
-		throws Throwable {
-
-		try {
-			return doInvoke(proxy, method, args);
-		}
-		catch (InvocationTargetException ite) {
-			throw ite.getTargetException();
-		}
-	}
-
 	public Object doInvoke(Object proxy, Method method, Object[] args)
 		throws Exception {
 
@@ -155,6 +144,17 @@ public class ServiceHandler implements InvocationHandler {
 			invocationHandler);
 	}
 
+	public Object invoke(Object proxy, Method method, Object[] args)
+		throws Throwable {
+
+		try {
+			return doInvoke(proxy, method, args);
+		}
+		catch (InvocationTargetException ite) {
+			throw ite.getTargetException();
+		}
+	}
+
 	protected EngineConfiguration getEngineConfiguration(
 		String forwardCookies, String userToken) {
 
@@ -209,9 +209,9 @@ public class ServiceHandler implements InvocationHandler {
 		return service;
 	}
 
-	private static String _OASIS_PACKAGE = "oasis.names.tc.wsrp.";
+	private static final String _OASIS_PACKAGE = "oasis.names.tc.wsrp.";
 
-	private static String _WSRP_PROXY_PACKAGE = "com.liferay.wsrp.proxy.";
+	private static final String _WSRP_PROXY_PACKAGE = "com.liferay.wsrp.proxy.";
 
 	private EngineConfiguration _engineConfiguration;
 	private Service _serviceLocator;

@@ -40,6 +40,17 @@ public class CustomerListModel implements DisposableBean, Renderable {
 		_persistentFacesState = PersistentFacesState.getInstance();
 	}
 
+	public void dispose() throws Exception {
+
+		// http://jira.icefaces.org/browse/ICE-2896
+		// http://jira.icefaces.org/browse/ICE-2904
+
+		OnDemandRenderer onDemandRenderer =
+			getRenderManager().getOnDemandRenderer(_CUSTOMER_RENDER_GROUP);
+
+		onDemandRenderer.remove(this);
+	}
+
 	public List<Customer> getAllCustomers() {
 		List<Customer> allCustomers =
 			(List<Customer>)PortletSessionUtil.getSharedSessionAttribute(
@@ -72,17 +83,6 @@ public class CustomerListModel implements DisposableBean, Renderable {
 		return _persistentFacesState;
 	}
 
-	public void dispose() throws Exception {
-
-		// http://jira.icefaces.org/browse/ICE-2896
-		// http://jira.icefaces.org/browse/ICE-2904
-
-		OnDemandRenderer onDemandRenderer =
-			getRenderManager().getOnDemandRenderer(CUSTOMER_RENDER_GROUP);
-
-		onDemandRenderer.remove(this);
-	}
-
 	public void renderingException(RenderingException e) {
 		_log.error(e, e);
 	}
@@ -95,7 +95,7 @@ public class CustomerListModel implements DisposableBean, Renderable {
 		_renderManager = renderManager;
 
 		OnDemandRenderer onDemandRenderer =
-			getRenderManager().getOnDemandRenderer(CUSTOMER_RENDER_GROUP);
+			getRenderManager().getOnDemandRenderer(_CUSTOMER_RENDER_GROUP);
 
 		onDemandRenderer.add(this);
 	}
@@ -105,22 +105,22 @@ public class CustomerListModel implements DisposableBean, Renderable {
 			PortletSessionUtil.SELECTED_CUSTOMER, customer);
 
 		OnDemandRenderer onDemandRenderer =
-			getRenderManager().getOnDemandRenderer(CUSTOMER_RENDER_GROUP);
+			getRenderManager().getOnDemandRenderer(_CUSTOMER_RENDER_GROUP);
 
 		onDemandRenderer.requestRender();
 	}
 
 	public void valueChangeListener(ValueChangeEvent valueChangeEvent) {
 		OnDemandRenderer onDemandRenderer =
-			getRenderManager().getOnDemandRenderer(CUSTOMER_RENDER_GROUP);
+			getRenderManager().getOnDemandRenderer(_CUSTOMER_RENDER_GROUP);
 
 		onDemandRenderer.requestRender();
 	}
 
-	private static final String CUSTOMER_RENDER_GROUP = "CUSTOMER_RENDER_GROUP";
+	private static final String _CUSTOMER_RENDER_GROUP =
+		"CUSTOMER_RENDER_GROUP";
 
-	private static final Log _log = LogFactoryUtil.getLog(
-		CustomerListModel.class);
+	private static Log _log = LogFactoryUtil.getLog(CustomerListModel.class);
 
 	private CustomerService _customerService;
 	private PersistentFacesState _persistentFacesState;

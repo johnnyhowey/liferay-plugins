@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.search.facet.collector.FacetCollector;
 import com.liferay.portal.kernel.search.facet.config.FacetConfiguration;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
@@ -71,6 +72,19 @@ import org.apache.solr.common.SolrDocumentList;
  */
 public class SolrIndexSearcherImpl implements IndexSearcher {
 
+	public Hits search(SearchContext searchContext, Query query)
+		throws SearchException {
+
+		try {
+			return doSearch(searchContext, query);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new SearchException(e.getMessage());
+		}
+	}
+
 	public Hits search(
 			String searchEngineId, long companyId, Query query, Sort[] sorts,
 			int start, int end)
@@ -100,19 +114,6 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 			}
 
 			return new HitsImpl();
-		}
-	}
-
-	public Hits search(SearchContext searchContext, Query query)
-		throws SearchException {
-
-		try {
-			return doSearch(searchContext, query);
-		}
-		catch (Exception e) {
-			_log.error(e, e);
-
-			throw new SearchException(e.getMessage());
 		}
 	}
 
@@ -338,10 +339,6 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 			long companyId, Query query, Sort[] sorts, int start, int end)
 		throws Exception {
 
-		QueryTranslatorUtil.translateForSolr(query);
-
-		String queryString = query.toString();
-
 		QueryConfig queryConfig = query.getQueryConfig();
 
 		SolrQuery solrQuery = new SolrQuery();
@@ -350,7 +347,21 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 		solrQuery.setHighlightFragsize(queryConfig.getHighlightFragmentSize());
 		solrQuery.setHighlightSnippets(queryConfig.getHighlightSnippetSize());
 		solrQuery.setIncludeScore(queryConfig.isScoreEnabled());
-		solrQuery.setQuery(queryString);
+
+		QueryTranslatorUtil.translateForSolr(query);
+
+		String queryString = query.toString();
+
+		StringBundler sb = new StringBundler(6);
+
+		sb.append(queryString);
+		sb.append(StringPool.SPACE);
+		sb.append(StringPool.PLUS);
+		sb.append(Field.COMPANY_ID);
+		sb.append(StringPool.COLON);
+		sb.append(companyId);
+
+		solrQuery.setQuery(sb.toString());
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS)) {
 			solrQuery.setRows(0);
