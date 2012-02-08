@@ -55,8 +55,8 @@ a:focus .opens-new-window-accessible {
 	width: 960px;
 }
 
-#content {
-	width: 760px;
+#heading, #footer {
+	position: relative;
 }
 
 #footer p {
@@ -99,11 +99,6 @@ a:focus .opens-new-window-accessible {
 	h3.page-title {
 		display: none;
 	}
-}
-
-#heading, #footer {
-	margin: 0 auto;
-	position: relative;
 }
 
 #page-search, #sign-in {
@@ -325,6 +320,7 @@ a:focus .opens-new-window-accessible {
 #content {
 	padding-left: 200px;
 	position: relative;
+	width: 760px;
 
 	#so-context {
 		border: 1px solid $border-color;
