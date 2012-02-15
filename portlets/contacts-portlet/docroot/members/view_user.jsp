@@ -22,7 +22,13 @@ long userId = ParamUtil.getLong(request, "userId");
 User user2 = UserLocalServiceUtil.getUserById(userId);
 
 List<User> users = UserLocalServiceUtil.getSocialUsers(userId, 0, 30, new UserLoginDateComparator());
+
+String backURL = ParamUtil.getString(request, "backURL");
 %>
+
+<aui:button-row>
+	<aui:button cssClass="back-button" href="<%= backURL %>" value="back-to-member-list" />
+</aui:button-row>
 
 <aui:layout>
 	<aui:column columnWidth="<%= 25 %>" cssClass="group-members" first="<%= true %>">
@@ -38,8 +44,6 @@ List<User> users = UserLocalServiceUtil.getSocialUsers(userId, 0, 30, new UserLo
 				</div>
 
 				<%
-				String backURL = ParamUtil.getString(request, "backURL");
-
 				PortletURL viewUserURL = renderResponse.createRenderURL();
 
 				viewUserURL.setParameter("mvcPath", "/members/view_user.jsp");

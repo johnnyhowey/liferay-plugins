@@ -14,6 +14,21 @@ $section-header-bg: #CCE6F7;
 		padding: 0;
 	}
 
+	.back-button {
+		padding-left: 7px;
+
+		.aui-button-input {
+			background-image: url(@theme_image_path@/common/back.png) !important;
+			background-position: 5px center !important;
+			background-repeat: no-repeat !important;
+			padding-left: 25px;
+
+			&:hover {
+				background-color: #EEEEEE;
+			}
+		}
+	}
+
 	.contact-group-filter {
 		background-color: #DCE3EA;
 		border-bottom: 1px solid #C9C9C9;
