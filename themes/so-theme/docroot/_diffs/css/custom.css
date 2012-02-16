@@ -55,8 +55,8 @@ a:focus .opens-new-window-accessible {
 	width: 960px;
 }
 
-#content {
-	width: 760px;
+#heading, #footer {
+	position: relative;
 }
 
 #footer p {
@@ -99,11 +99,6 @@ a:focus .opens-new-window-accessible {
 	h3.page-title {
 		display: none;
 	}
-}
-
-#heading, #footer {
-	margin: 0 auto;
-	position: relative;
 }
 
 #page-search, #sign-in {
@@ -325,6 +320,7 @@ a:focus .opens-new-window-accessible {
 #content {
 	padding-left: 200px;
 	position: relative;
+	width: 760px;
 
 	#so-context {
 		border: 1px solid $border-color;
@@ -558,7 +554,7 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 }
 
 .aui-underlay-content, .aui-dialog-content {
-	@include box-shadow(0 0 9px -3px black, 0 20px 29px -22px rgba(0, 0, 0, 0.6));
+	@include box-shadow(0 0 9px -3px #000, 0 20px 29px -22px rgba(0, 0, 0, 0.6));
 	border-width: 0;
 	background-color: #F9F9F9;
 }
@@ -579,7 +575,7 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 	border-width: 1px;
 }
 
-#toggleFluid {
+#toggleFluid, .so-layout-fluid-ad #toggleFluid {
 	background-image: url(../images/custom/toggle-button-bg.png);
 	background-position: 8px 50%;
 	background-repeat: no-repeat;
@@ -594,6 +590,11 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 
 .so-layout-fluid #toggleFluid {
 	background-position: -50px 50%;
+}
+
+.so-layout-fluid-ad #toggleFluid {
+	@include box-shadow(0 0 9px -3px #000 inset);
+	background-color: #CCC;
 }
 
 /* ---------- Tabs ---------- */
@@ -1028,10 +1029,18 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 		padding: 10px;
 	}
 
+	.portlet-msg-success {
+		@include border-radius(0);
+		border-width: 0;
+	}
+
+	.portlet-msg-success, .search-form {
+		margin: -10px -10px 10px -9px;
+	}
+
 	.search-form {
 		background: #F4F4F4;
 		float: none;
-		margin: -10px -10px 10px -9px;
 		padding: 5px;
 
 		.aui-search-bar {
@@ -1058,9 +1067,6 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 	.lfr-meta-actions {
 		margin: 0;
 		padding: 0;
-		position: absolute;
-		right: 0;
-		top: 0;
 	}
 
 	#_33_fm .aui-fieldset {
@@ -1828,7 +1834,7 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 	}
 }
 
-/* Search */
+/* Faceted Search */
 
 .portlet-search {
 	.portlet-topper {
@@ -1837,8 +1843,15 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 
 	.aui-form fieldset.aui-fieldset {
 		border-bottom: 1px solid $border-color;
+	}
+
+	.aui-form fieldset.aui-fieldset, .lfr-token-list, .taglib-search-iterator-page-iterator-bottom {
 		margin: 0;
 		padding: 5px;
+	}
+
+	.aui-liferaytokenlist {
+		background-color: #E9E8E8;
 	}
 
 	.portlet-content, .menu-content {
@@ -1846,21 +1859,25 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 	}
 
 	.search-layout .search-layout-content .menu .search-facet {
-		padding: 0 10px;
+		padding: 10px;
 	}
 
 	.menu {
 		border-right: 1px solid $border-color;
 	}
 
+	.results-grid {
+		border-width: 0;
+	}
+
 	.result-content {
-		margin-right: 0 -6px 0 -7px;
+		margin: 0 -5px 0 -2px;
 	}
 }
 
 /* Fluid Layout */
 
-body.so-layout-fluid {
+body.so-layout-fluid, body.so-layout-fluid-ad {
 	#content, #footer, #banner #heading {
 		margin: 0 auto;
 		width: auto;
