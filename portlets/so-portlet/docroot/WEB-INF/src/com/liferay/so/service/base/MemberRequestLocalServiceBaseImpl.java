@@ -48,8 +48,11 @@ import com.liferay.portal.service.persistence.UserGroupRolePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 
 import com.liferay.so.model.MemberRequest;
+import com.liferay.so.service.FavoriteSiteLocalService;
 import com.liferay.so.service.MemberRequestLocalService;
 import com.liferay.so.service.ProjectsEntryLocalService;
+import com.liferay.so.service.persistence.FavoriteSiteFinder;
+import com.liferay.so.service.persistence.FavoriteSitePersistence;
 import com.liferay.so.service.persistence.MemberRequestPersistence;
 import com.liferay.so.service.persistence.ProjectsEntryPersistence;
 
@@ -323,6 +326,62 @@ public abstract class MemberRequestLocalServiceBaseImpl
 		}
 
 		return memberRequest;
+	}
+
+	/**
+	 * Returns the favorite site local service.
+	 *
+	 * @return the favorite site local service
+	 */
+	public FavoriteSiteLocalService getFavoriteSiteLocalService() {
+		return favoriteSiteLocalService;
+	}
+
+	/**
+	 * Sets the favorite site local service.
+	 *
+	 * @param favoriteSiteLocalService the favorite site local service
+	 */
+	public void setFavoriteSiteLocalService(
+		FavoriteSiteLocalService favoriteSiteLocalService) {
+		this.favoriteSiteLocalService = favoriteSiteLocalService;
+	}
+
+	/**
+	 * Returns the favorite site persistence.
+	 *
+	 * @return the favorite site persistence
+	 */
+	public FavoriteSitePersistence getFavoriteSitePersistence() {
+		return favoriteSitePersistence;
+	}
+
+	/**
+	 * Sets the favorite site persistence.
+	 *
+	 * @param favoriteSitePersistence the favorite site persistence
+	 */
+	public void setFavoriteSitePersistence(
+		FavoriteSitePersistence favoriteSitePersistence) {
+		this.favoriteSitePersistence = favoriteSitePersistence;
+	}
+
+	/**
+	 * Returns the favorite site finder.
+	 *
+	 * @return the favorite site finder
+	 */
+	public FavoriteSiteFinder getFavoriteSiteFinder() {
+		return favoriteSiteFinder;
+	}
+
+	/**
+	 * Sets the favorite site finder.
+	 *
+	 * @param favoriteSiteFinder the favorite site finder
+	 */
+	public void setFavoriteSiteFinder(FavoriteSiteFinder favoriteSiteFinder) {
+		this.favoriteSiteFinder = favoriteSiteFinder;
 	}
 
 	/**
@@ -754,6 +813,12 @@ public abstract class MemberRequestLocalServiceBaseImpl
 		}
 	}
 
+	@BeanReference(type = FavoriteSiteLocalService.class)
+	protected FavoriteSiteLocalService favoriteSiteLocalService;
+	@BeanReference(type = FavoriteSitePersistence.class)
+	protected FavoriteSitePersistence favoriteSitePersistence;
+	@BeanReference(type = FavoriteSiteFinder.class)
+	protected FavoriteSiteFinder favoriteSiteFinder;
 	@BeanReference(type = MemberRequestLocalService.class)
 	protected MemberRequestLocalService memberRequestLocalService;
 	@BeanReference(type = MemberRequestPersistence.class)
