@@ -558,7 +558,7 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 }
 
 .aui-underlay-content, .aui-dialog-content {
-	@include box-shadow(0 0 9px -3px black, 0 20px 29px -22px rgba(0, 0, 0, 0.6));
+	@include box-shadow(0 0 9px -3px #000, 0 20px 29px -22px rgba(0, 0, 0, 0.6));
 	border-width: 0;
 	background-color: #F9F9F9;
 }
@@ -579,7 +579,7 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 	border-width: 1px;
 }
 
-#toggleFluid {
+#toggleFluid, .so-layout-fluid-ad #toggleFluid {
 	background-image: url(../images/custom/toggle-button-bg.png);
 	background-position: 8px 50%;
 	background-repeat: no-repeat;
@@ -594,6 +594,11 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 
 .so-layout-fluid #toggleFluid {
 	background-position: -50px 50%;
+}
+
+.so-layout-fluid-ad #toggleFluid {
+	@include box-shadow(0 0 9px -3px #000 inset);
+	background-color: #CCC;
 }
 
 /* ---------- Tabs ---------- */
@@ -887,7 +892,7 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 }
 
 .lfr-dockbar-pinned .dockbar {
-	@include box-shadow(0 -8px 9px 4px black, 0 3px 10px -6px rgba(0, 0, 0, .5));
+	@include box-shadow(0 -10px 9px 4px black, 0 -2px 10px -6px rgba(0, 0, 0, 0.5));
 }
 
 /* Message Boards */
@@ -1028,6 +1033,12 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 		padding: 10px;
 	}
 
+	.portlet-msg-success {
+		@include border-radius(0);
+		border-width: 0;
+		margin: -10px -10px 10px;
+	}
+
 	.search-form {
 		background: #F4F4F4;
 		float: none;
@@ -1056,8 +1067,10 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 	}
 
 	.lfr-meta-actions {
+		@include border-radius(4px);
+		background-color: rgba(255, 255, 255, .8);
 		margin: 0;
-		padding: 0;
+		padding: 4px;
 		position: absolute;
 		right: 0;
 		top: 0;
@@ -1164,6 +1177,28 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 				width: 40px;
 			}
 		}
+	}
+}
+
+.portlet-blogs-aggregator {
+	.entry-author, .entry-date {
+		background-image: none;
+		border-right-width: 0;
+		margin-right: 4px;
+		padding: 0;
+	}
+
+	.abstract, .entry-categories, .entry-tags {
+		display: none;
+	}
+
+	.comments {
+		display: inline;
+		margin: .5em 0;
+	}
+
+	.comments a {
+		white-space: nowrap;
 	}
 }
 
@@ -1860,7 +1895,7 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 
 /* Fluid Layout */
 
-body.so-layout-fluid {
+body.so-layout-fluid, body.so-layout-fluid-ad {
 	#content, #footer, #banner #heading {
 		margin: 0 auto;
 		width: auto;
