@@ -14,8 +14,12 @@
 
 package com.liferay.privatemessaging.portlet;
 
+import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
@@ -24,6 +28,7 @@ import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -44,6 +49,9 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.PortletException;
+import javax.portlet.ResourceRequest;
+import javax.portlet.ResourceResponse;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -146,11 +154,84 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws PortalException, SystemException {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		UploadPortletRequest uploadPortletRequest =
 			PortalUtil.getUploadPortletRequest(actionRequest);
+
+		sendPrivateMessage(uploadPortletRequest);
+	}
+
+	@Override
+	public void serveResource(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws PortletException {
+
+		try {
+			String id = resourceRequest.getResourceID();
+
+			if (Validator.isNotNull(id) && id.equals("sendMessage")) {
+				send(resourceRequest, resourceResponse);
+			}
+			else {
+				super.serveResource(resourceRequest, resourceResponse);
+			}
+		}
+		catch(Exception e) {
+		}
+	}
+
+	protected void send(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws Exception{
+
+		UploadPortletRequest uploadPortletRequest =
+			PortalUtil.getUploadPortletRequest(resourceRequest);
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			sendPrivateMessage(uploadPortletRequest);
+
+			String redirect = ParamUtil.getString(resourceRequest, "redirect");
+
+			jsonObject.put("redirect", redirect);
+			jsonObject.put("success", true);
+		}
+		catch (Exception e) {
+			jsonObject.put("success", false);
+
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)resourceRequest.getAttribute(
+					WebKeys.THEME_DISPLAY);
+
+			String message = null;
+
+			if (e instanceof IOException) {
+				message = LanguageUtil.get(
+					themeDisplay.getLocale(), "unable-to-process-attachment");
+			}
+			else if (e instanceof NoSuchUserException) {
+				message = LanguageUtil.format(
+					themeDisplay.getLocale(),
+					"the-following-users-were-not-found-x", e.getMessage());
+			}
+			else {
+				message = LanguageUtil.get(
+					themeDisplay.getLocale(),
+					"your-request-failed-to-complete");
+			}
+
+			jsonObject.put("message", message);
+		}
+
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
+	}
+
+	protected void sendPrivateMessage(UploadPortletRequest uploadPortletRequest)
+		throws SystemException, PortalException {
+
+		ThemeDisplay themeDisplay =
+			(ThemeDisplay)uploadPortletRequest.getAttribute(
+				WebKeys.THEME_DISPLAY);
 
 		long userId = ParamUtil.getLong(uploadPortletRequest, "userId");
 		long mbThreadId = ParamUtil.getLong(uploadPortletRequest, "mbThreadId");
