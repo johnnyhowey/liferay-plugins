@@ -35,10 +35,20 @@ if (mbThreadId != 0) {
 }
 %>
 
+<div id="<portlet:namespace />divMessage"></div>
+
 <portlet:renderURL var="backURL" windowState="<%= WindowState.NORMAL.toString() %>" />
 
+<liferay-portlet:resourceURL id="sendMessage" var="sendPrivateMessageURL">
+	<liferay-portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
+</liferay-portlet:resourceURL>
+
+<%
+String onSubmit = "event.preventDefault(); " + liferayPortletResponse.getNamespace() + "sendPrivateMessage();";
+%>
+
 <aui:layout cssClass="message-body-container">
-	<form enctype="multipart/form-data" method="post" name="<portlet:namespace />fm" onSubmit="<portlet:namespace />sendPrivateMessage(); return false;">
+	<aui:form action="<%= sendPrivateMessageURL %>" enctype="multipart/form-data" method="post" name="fm" onSubmit="<%= onSubmit %>">
 		<aui:input name="redirect" type="hidden" value="<%= backURL %>" />
 		<aui:input name="userId" type="hidden" value="<%= user.getUserId() %>" />
 		<aui:input name="mbThreadId" type="hidden" value="<%= mbThreadId %>" />
@@ -68,7 +78,7 @@ if (mbThreadId != 0) {
 		<aui:button-row>
 			<input type="submit" value="<liferay-ui:message key="send" />" />
 		</aui:button-row>
-	</form>
+	</aui:form>
 </aui:layout>
 
 <aui:script>
@@ -93,14 +103,46 @@ if (mbThreadId != 0) {
 			return false;
 		}
 
-		submitForm(document.<portlet:namespace />fm, '<liferay-portlet:actionURL name="sendMessage"><portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" /></liferay-portlet:actionURL>');
+		var form = A.one('#<portlet:namespace />fm');
+
+		A.io.request(
+			form.get('action'),
+			{
+				form: {
+					id: form,
+					upload: true
+				},
+				on: {
+					complete: function(event, id, obj) {
+						var responseText = obj.responseText;
+
+						var responseData = A.JSON.parse(responseText);
+
+						if (!responseData.success) {
+							var message = A.one('#<portlet:namespace />divMessage');
+
+							if (message && responseData.message) {
+								message.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
+							}
+						}
+						else {
+							var redirect = responseData.redirect;
+
+							if (redirect) {
+								location.href = redirect;
+							}
+						}
+					}
+				}
+			}
+		);
 	}
 </aui:script>
 
 <aui:script use="aui-autocomplete">
 	var autocomplete = new A.AutoComplete(
 		{
-			dataSource: <%= PrivateMessagingUtil.getJSONRecipients(user.getUserId()) %>,
+			dataSource: <%= PrivateMessagingUtil.getJSONRecipients(user) %>,
 			delimChar: ',',
 			typeAhead: true,
 			contentBox: '#<portlet:namespace/>autoCompleteContainer',

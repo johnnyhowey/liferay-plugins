@@ -27,6 +27,8 @@ import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
+import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -86,7 +88,21 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			subject = lastMBMessage.getSubject();
 		}
 
-		List<User> recipients = parseRecipients(userId, to);
+		Object[] result = parseRecipients(userId, to);
+
+		List<String> failedRecipients = (List<String>)result[1];
+
+		if ((failedRecipients != null) && !failedRecipients.isEmpty()) {
+			StringBundler sb = new StringBundler(3);
+			
+			sb.append(StringPool.APOSTROPHE);
+			sb.append(StringUtil.merge(failedRecipients, "', '"));
+			sb.append(StringPool.APOSTROPHE);
+			
+			throw new NoSuchUserException(sb.toString());
+		}
+
+		List<User> recipients = (List<User>)result[0];
 
 		return addPrivateMessage(
 			userId, mbThreadId, parentMBMessageId, recipients, subject, body,
@@ -310,7 +326,7 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		return mbMessage;
 	}
 
-	protected List<User> parseRecipients(long userId, String to)
+	protected Object[] parseRecipients(long userId, String to)
 		throws PortalException, SystemException {
 
 		User user = UserLocalServiceUtil.getUser(userId);
@@ -318,6 +334,8 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 		String[] recipients = StringUtil.split(to);
 
 		List<User> users = new ArrayList<User>();
+
+		List<String> failedRecipients = new ArrayList<String>();
 
 		for (String recipient : recipients) {
 			int x = recipient.indexOf(CharPool.LESS_THAN);
@@ -338,10 +356,11 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 				}
 			}
 			catch (NoSuchUserException nsue) {
+				failedRecipients.add(recipient);
 			}
 		}
 
-		return users;
+		return new Object[] {users, failedRecipients};
 	}
 
 	protected void sendEmail(long mbMessageId, ThemeDisplay themeDisplay)
