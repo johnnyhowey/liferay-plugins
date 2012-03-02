@@ -26,7 +26,9 @@
 
 <%@ page import="com.liferay.contacts.util.ContactsConstants" %><%@
 page import="com.liferay.contacts.util.ContactsExtensionsUtil" %><%@
+page import="com.liferay.contacts.util.ContactsUtil" %><%@
 page import="com.liferay.contacts.util.PortletKeys" %><%@
+page import="com.liferay.contacts.util.ValidatorUtil" %><%@
 page import="com.liferay.contacts.util.WebKeys" %><%@
 page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %><%@
 page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
@@ -113,6 +115,7 @@ int maxResultCount = 200;
 boolean showAdditionalEmailAddresses = PrefsParamUtil.getBoolean(preferences, request, "showAdditionalEmailAddresses", true);
 boolean showAddresses = PrefsParamUtil.getBoolean(preferences, request, "showAddresses", true);
 boolean showComments = PrefsParamUtil.getBoolean(preferences, request, "showComments", true);
+boolean showCompleteYourProfileButtons = PrefsParamUtil.getBoolean(preferences, request, "showCompleteYourProfileButtons", false);
 boolean showIcon = PrefsParamUtil.getBoolean(preferences, request, "showIcon", true);
 boolean showInstantMessenger = PrefsParamUtil.getBoolean(preferences, request, "showInstantMessenger", true);
 boolean showPhones = PrefsParamUtil.getBoolean(preferences, request, "showPhones", true);
