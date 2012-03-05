@@ -432,7 +432,6 @@ portletURL.setWindowState(WindowState.NORMAL);
 					);
 				</c:if>
 
-
 				A.one('.contacts-portlet .contacts-center-home .all').on(
 					'click',
 					function(event) {
