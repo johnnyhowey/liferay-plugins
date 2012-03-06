@@ -34,12 +34,12 @@
 	<if>
 		<antelope:endswith string="${plugin.name}" with="-client" />
 		<then>
-			<property name="plugin.file" value="${project.dir}/dist/${plugin.name}-${lp.version}.${plugin.version}${lp.version.file.suffix}.jar" />
-			<property name="plugin.src.file" value="${project.dir}/dist/${plugin.name}-src-${lp.version}.${plugin.version}${lp.version.file.suffix}.zip" />
+			<property name="plugin.file" value="${project.dir}/dist/${plugin.name}-${lp.version}.${plugin.version}.jar" />
+			<property name="plugin.src.file" value="${project.dir}/dist/${plugin.name}-src-${lp.version}.${plugin.version}.zip" />
 		</then>
 		<else>
-			<property name="plugin.file" value="${project.dir}/dist/${plugin.name}-${lp.version}.${plugin.version}${lp.version.file.suffix}.war" />
-			<property name="plugin.src.file" value="${project.dir}/dist/${plugin.name}-src-${lp.version}.${plugin.version}${lp.version.file.suffix}.zip" />
+			<property name="plugin.file" value="${project.dir}/dist/${plugin.name}-${lp.version}.${plugin.version}.war" />
+			<property name="plugin.src.file" value="${project.dir}/dist/${plugin.name}-src-${lp.version}.${plugin.version}.zip" />
 		</else>
 	</if>
 
@@ -834,15 +834,14 @@ Please find a solution that does not require portal-impl.jar.
 
 		<if>
 			<and>
-				<equals arg1="${plugins.src.zip.enabled}" arg2="true" />
+				<equals arg1="${plugins.src.enabled}" arg2="true" />
+				<available file="${docroot.dir}/WEB-INF/src" />
 			</and>
 			<then>
-				<zip destfile="${plugin.src.file}">
-					<zipfileset
-						dir="${docroot.dir}"
-						prefix="${plugin.name}-src-${lp.version}.${plugin.version}${lp.version.file.suffix}"
-					/>
-				</zip>
+				<zip
+					basedir="${docroot.dir}/WEB-INF/src"
+					destfile="${plugin.src.file}"
+				/>
 			</then>
 		</if>
 	</target>
