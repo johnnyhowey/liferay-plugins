@@ -15,6 +15,7 @@
 package com.liferay.contacts.contactscenter.portlet;
 
 import com.liferay.contacts.util.ContactsUtil;
+import com.liferay.contacts.util.PortletKeys;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -25,7 +26,6 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -36,6 +36,7 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
+import com.liferay.portal.theme.PortletDisplay;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.util.comparator.UserLastNameComparator;
@@ -312,7 +313,11 @@ public class ContactsCenterPortlet extends MVCPortlet {
 				});
 		}
 
-		if (_showOnlySiteMembers) {
+		PortletDisplay portletDisplay = themeDisplay.getPortletDisplay();
+
+		String portletName = portletDisplay.getPortletName();
+
+		if (portletName.equals(PortletKeys.MEMBERS)) {
 			params.put("usersGroups", new Long(group.getGroupId()));
 		}
 
@@ -362,14 +367,6 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		jsonObject.put("users", jsonArray);
 
 		writeJSON(resourceRequest, resourceResponse, jsonObject);
-	}
-
-	@Override
-	public void init() throws PortletException {
-		super.init();
-
-		_showOnlySiteMembers = GetterUtil.getBoolean(
-			getInitParameter("show-only-site-members"), false);
 	}
 
 	@Override
@@ -534,7 +531,5 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			socialRequest.getCompanyId(), socialRequest.getReceiverUserId(),
 			notificationEvent);
 	}
-
-	private boolean _showOnlySiteMembers;
 
 }
