@@ -26,17 +26,14 @@
 
 <%@ page import="com.liferay.contacts.util.ContactsConstants" %><%@
 page import="com.liferay.contacts.util.ContactsExtensionsUtil" %><%@
-page import="com.liferay.contacts.util.ContactsUtil" %><%@
 page import="com.liferay.contacts.util.PortletKeys" %><%@
 page import="com.liferay.contacts.util.WebKeys" %><%@
 page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %><%@
-page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayPortletResponse" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
 page import="com.liferay.portal.kernel.servlet.ServletContextPool" %><%@
-page import="com.liferay.portal.kernel.util.ArrayUtil" %><%@
 page import="com.liferay.portal.kernel.util.CharPool" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
@@ -53,28 +50,17 @@ page import="com.liferay.portal.model.Country" %><%@
 page import="com.liferay.portal.model.EmailAddress" %><%@
 page import="com.liferay.portal.model.Group" %><%@
 page import="com.liferay.portal.model.GroupConstants" %><%@
-page import="com.liferay.portal.model.Organization" %><%@
-page import="com.liferay.portal.model.PasswordPolicy" %><%@
 page import="com.liferay.portal.model.Phone" %><%@
 page import="com.liferay.portal.model.Portlet" %><%@
 page import="com.liferay.portal.model.Region" %><%@
-page import="com.liferay.portal.model.Role" %><%@
-page import="com.liferay.portal.model.RoleConstants" %><%@
 page import="com.liferay.portal.model.User" %><%@
-page import="com.liferay.portal.model.UserGroup" %><%@
-page import="com.liferay.portal.model.UserGroupRole" %><%@
 page import="com.liferay.portal.model.Website" %><%@
 page import="com.liferay.portal.security.permission.ActionKeys" %><%@
 page import="com.liferay.portal.service.AddressServiceUtil" %><%@
 page import="com.liferay.portal.service.EmailAddressServiceUtil" %><%@
 page import="com.liferay.portal.service.GroupLocalServiceUtil" %><%@
-page import="com.liferay.portal.service.OrganizationLocalServiceUtil" %><%@
-page import="com.liferay.portal.service.PasswordPolicyLocalServiceUtil" %><%@
 page import="com.liferay.portal.service.PhoneServiceUtil" %><%@
 page import="com.liferay.portal.service.PortletLocalServiceUtil" %><%@
-page import="com.liferay.portal.service.RoleLocalServiceUtil" %><%@
-page import="com.liferay.portal.service.UserGroupLocalServiceUtil" %><%@
-page import="com.liferay.portal.service.UserGroupRoleLocalServiceUtil" %><%@
 page import="com.liferay.portal.service.UserLocalServiceUtil" %><%@
 page import="com.liferay.portal.service.WebsiteServiceUtil" %><%@
 page import="com.liferay.portal.service.permission.UserPermissionUtil" %><%@
@@ -89,11 +75,9 @@ page import="com.liferay.portlet.social.model.SocialRelationConstants" %><%@
 page import="com.liferay.portlet.social.model.SocialRequestConstants" %><%@
 page import="com.liferay.portlet.social.service.SocialActivityLocalServiceUtil" %><%@
 page import="com.liferay.portlet.social.service.SocialRelationLocalServiceUtil" %><%@
-page import="com.liferay.portlet.social.service.SocialRequestLocalServiceUtil" %><%@
-page import="com.liferay.portlet.usersadmin.util.UsersAdminUtil" %>
+page import="com.liferay.portlet.social.service.SocialRequestLocalServiceUtil" %>
 
 <%@ page import="java.util.ArrayList" %><%@
-page import="java.util.Collections" %><%@
 page import="java.util.LinkedHashMap" %><%@
 page import="java.util.List" %><%@
 page import="java.util.Map" %><%@
@@ -110,6 +94,7 @@ page import="javax.portlet.WindowState" %>
 
 <%
 WindowState windowState = renderRequest.getWindowState();
+
 
 PortletPreferences preferences = renderRequest.getPreferences();
 
@@ -133,6 +118,13 @@ boolean showIcon = PrefsParamUtil.getBoolean(preferences, request, "showIcon", t
 boolean showInstantMessenger = PrefsParamUtil.getBoolean(preferences, request, "showInstantMessenger", true);
 boolean showPhones = PrefsParamUtil.getBoolean(preferences, request, "showPhones", true);
 boolean showRecentActivity = PrefsParamUtil.getBoolean(preferences, request, "showRecentActivity", false);
+
+boolean showOnlySiteMembers = false;
+
+if (portletName.equals(PortletKeys.MEMBERS)) {
+	showOnlySiteMembers = true;
+}
+
 boolean showSites = PrefsParamUtil.getBoolean(preferences, request, "showSites", false);
 boolean showSMS = PrefsParamUtil.getBoolean(preferences, request, "showSMS", true);
 boolean showSocialNetwork = PrefsParamUtil.getBoolean(preferences, request, "showSocialNetwork", true);

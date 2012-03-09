@@ -70,7 +70,7 @@ request.setAttribute("view_user.jsp-user", user2);
 
 				<aui:layout cssClass="contacts-action">
 					<c:choose>
-						<c:when test="<%= portletName.equals(PortletKeys.CONTACTS_CENTER) %>">
+						<c:when test="<%= portletName.equals(PortletKeys.CONTACTS_CENTER) || portletName.equals(PortletKeys.MEMBERS) %>">
 
 							<%
 							boolean blocked = false;
@@ -156,7 +156,7 @@ request.setAttribute("view_user.jsp-user", user2);
 			<div class="user-information" id="<portlet:namespace />userInformation">
 				<aui:layout>
 					<c:if test="<%= showUsersInformation %>">
-						<aui:column cssClass="user-information-column-1" columnWidth="<%= showSites ? 80 : 100 %>">
+						<aui:column columnWidth="<%= showSites ? 80 : 100 %>" cssClass="user-information-column-1">
 							<div class="user-information-title">
 								<liferay-ui:message key="about" />
 							</div>
@@ -198,7 +198,7 @@ request.setAttribute("view_user.jsp-user", user2);
 					</c:if>
 
 					<c:if test="<%= showSites || showTags %>">
-						<aui:column cssClass="user-information-column-2" columnWidth="<%= showUsersInformation ? 20 : 100 %>">
+						<aui:column columnWidth="<%= showUsersInformation ? 20 : 100 %>" cssClass="user-information-column-2">
 							<c:if test="<%= showSites %>">
 
 								<%
@@ -347,11 +347,15 @@ request.setAttribute("view_user.jsp-user", user2);
 			var <portlet:namespace />openDialog = function(event) {
 				var node = event.currentTarget;
 
-				var sectionId = node.getAttribute('data-sectionId');
-
 				var uri = '<portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/contacts_center/edit_user_dialogs.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>';
 
-				uri = Liferay.Util.addParams('curSectionId=' + sectionId, uri) || uri;
+				if (node.getAttribute('data-sectionId')) {
+					uri = Liferay.Util.addParams('curSectionId=' + node.getAttribute('data-sectionId'), uri) || uri;
+				}
+
+				if (node.getAttribute('data-extension')) {
+					uri = Liferay.Util.addParams('extension=' + node.getAttribute('data-extension'), uri) || uri;
+				}
 
 				var dialog = new A.Dialog(
 					{
