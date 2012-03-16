@@ -19,8 +19,10 @@ package com.liferay.so.util;
 
 /**
  * @author Jonathan Lee
+ * @author Eudaldo Alonso
  */
-public class RoleConstants extends com.liferay.portal.model.RoleConstants {
+public class RoleConstants
+	extends com.liferay.portal.model.RoleConstants {
 
 	public static final String SOCIAL_OFFICE_USER = "Social Office User";
 
