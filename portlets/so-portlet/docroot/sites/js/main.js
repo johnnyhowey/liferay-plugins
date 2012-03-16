@@ -33,6 +33,8 @@ AUI().use(
 	'json-parse',
 	'liferay-so-site-list',
 	function(A) {
+		var STR_UNDEFINED = 'undefined';
+
 		Liferay.namespace('SO');
 
 		Liferay.SO.Sites = {
@@ -76,7 +78,7 @@ AUI().use(
 									end: data.end || 0,
 									keywords: data.keywords || '',
 									searchTab: data.searchTab || tabs1,
-									start: data.start || 0,
+									start: data.start || 0
 								}
 							}
 						},
@@ -193,15 +195,26 @@ AUI().use(
 
 				var siteList = new Liferay.SO.SiteList(
 					{
+						inputNode: siteSearchInput,
+						listNode: siteList,
+						minQueryLength: 0,
 						requestTemplate: function(query) {
 							return {
 								keywords: query
 							}
 						},
+						resultTextLocator: function(response) {
+							var result = '';
 
-						inputNode: siteSearchInput,
-						listNode: siteList,
-						minQueryLength: 0,
+							if (typeof response.toString != STR_UNDEFINED) {
+								result = response.toString();
+							}
+							else if (typeof response.responseText != STR_UNDEFINED) {
+								result = response.responseText;
+							}
+
+							return result;
+						},
 						source: instance.createDataSource(siteListURL)
 					}
 				);
