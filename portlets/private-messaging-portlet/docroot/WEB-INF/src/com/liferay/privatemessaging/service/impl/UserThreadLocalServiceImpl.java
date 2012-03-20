@@ -75,6 +75,8 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 
 		long parentMBMessageId = MBMessageConstants.DEFAULT_PARENT_MESSAGE_ID;
 
+		List<User> recipients = null;
+
 		if (mbThreadId != 0) {
 			List<MBMessage> mbMessages =
 				MBMessageLocalServiceUtil.getThreadMessages(
@@ -85,8 +87,13 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			parentMBMessageId = lastMBMessage.getMessageId();
 			subject = lastMBMessage.getSubject();
 		}
+		else {
+			recipients = parseRecipients(userId, to);
 
-		List<User> recipients = parseRecipients(userId, to);
+			if (recipients.isEmpty()) {
+				return null;
+			}
+		}
 
 		return addPrivateMessage(
 			userId, mbThreadId, parentMBMessageId, recipients, subject, body,
@@ -324,17 +331,17 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			int y = recipient.indexOf(CharPool.GREATER_THAN);
 
 			try {
-				if ((x != -1) && (y != -1)) {
-					String screenName = recipient.substring(x + 1, y);
+				String screenName = recipient;
 
-					users.add(
-						UserLocalServiceUtil.getUserByScreenName(
-							user.getCompanyId(), screenName));
+				if ((x != -1) && (y != -1)) {
+					screenName = recipient.substring(x + 1, y);
 				}
-				else {
-					users.add(
-						UserLocalServiceUtil.getUserByScreenName(
-							user.getCompanyId(), recipient));
+
+				User recipientUser = UserLocalServiceUtil.getUserByScreenName(
+					user.getCompanyId(), screenName);
+
+				if (!users.contains(recipientUser)) {
+					users.add(recipientUser);
 				}
 			}
 			catch (NoSuchUserException nsue) {
