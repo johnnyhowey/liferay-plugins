@@ -52,9 +52,7 @@ import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.model.Website;
-import com.liferay.portal.service.EmailAddressServiceUtil;
 import com.liferay.portal.service.ServiceContext;
-import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
 import com.liferay.portal.theme.PortletDisplay;
@@ -773,14 +771,11 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		int birthdayMonth = cal.get(Calendar.MONTH);
 		int birthdayYear = cal.get(Calendar.YEAR);
 
-		List<UserGroupRole> userGroupRoles =
-			UserGroupRoleLocalServiceUtil.getUserGroupRoles(user.getUserId());
-
-		List<EmailAddress> emailAddresses =
-			EmailAddressServiceUtil.getEmailAddresses(
-				Contact.class.getName(), user.getContactId());
-
-		List<AnnouncementsDelivery> deliveries =
+		List<UserGroupRole> userGroupRoles = UsersAdminUtil.getUserGroupRoles(
+			actionRequest);
+		List<EmailAddress> emailAddresses = UsersAdminUtil.getEmailAddresses(
+			actionRequest);
+		List<AnnouncementsDelivery> announcementsDeliveries =
 			AnnouncementsDeliveryLocalServiceUtil.getUserDeliveries(
 				user.getUserId());
 
@@ -798,7 +793,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			ymSn, user.getJobTitle(), user.getGroupIds(),
 			user.getOrganizationIds(), user.getRoleIds(), userGroupRoles,
 			user.getUserGroupIds(), user.getAddresses(), emailAddresses,
-			user.getPhones(), user.getWebsites(), deliveries,
+			user.getPhones(), user.getWebsites(), announcementsDeliveries,
 			new ServiceContext());
 	}
 

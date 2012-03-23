@@ -238,18 +238,16 @@ request.setAttribute("view_user.jsp-user", user2);
 										<c:when test="<%= !results.isEmpty() %>">
 
 											<%
-											for (Group currGroup : results) {
-												PortletURL groupURL = renderResponse.createActionURL();
-
-												groupURL.setWindowState(WindowState.NORMAL);
-
-												groupURL.setParameter("struts_action", "/sites_admin/page");
-												groupURL.setParameter("redirect", currentURL);
-												groupURL.setParameter("groupId", String.valueOf(group.getGroupId()));
-												groupURL.setParameter("privateLayout", Boolean.FALSE.toString());
+											for (Group curGroup : results) {
 											%>
 
-											<li class="user-information-sites"><a href="<%= groupURL %>"><%= currGroup.getDescriptiveName(locale) %></a></li>
+												<liferay-portlet:actionURL portletName="<%= PortletKeys.SITE_REDIRECTOR %>" var="siteURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
+													<portlet:param name="struts_action" value="/my_sites/view" />
+													<portlet:param name="groupId" value="<%= String.valueOf(curGroup.getGroupId()) %>" />
+													<portlet:param name="privateLayout" value="<%= Boolean.FALSE.toString() %>" />
+												</liferay-portlet:actionURL>
+
+												<li class="user-information-sites"><a href="<%= siteURL %>"><%= curGroup.getDescriptiveName(locale) %></a></li>
 
 											<%
 											}
