@@ -24,7 +24,9 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-<%@ page import="com.liferay.contacts.util.ContactsConstants" %><%@
+<%@ page import="com.liferay.contacts.model.Entry" %><%@
+page import="com.liferay.contacts.service.EntryLocalServiceUtil" %><%@
+page import="com.liferay.contacts.util.ContactsConstants" %><%@
 page import="com.liferay.contacts.util.ContactsExtensionsUtil" %><%@
 page import="com.liferay.contacts.util.PortletKeys" %><%@
 page import="com.liferay.contacts.util.WebKeys" %><%@
