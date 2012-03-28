@@ -39,7 +39,7 @@ if (selUser != null) {
 	%>
 
 	<div id="<portlet:namespace />updateUserDialog">
-		<aui:form action="" method="post" name="fm" onSubmit="<%= taglibOnSubmit %>">
+		<aui:form action="" method="post" name="editDialogForm" onSubmit="<%= taglibOnSubmit %>">
 			<aui:input name="<%= Constants.CMD %>" type="hidden" value="updateFieldGroup" />
 			<aui:input name="redirect" type="hidden"  value="<%= redirect %>" />
 			<aui:input name="fieldGroup" type="hidden"  value="<%= curSectionId %>" />
@@ -86,7 +86,7 @@ if (selUser != null) {
 		var <portlet:namespace />saveForm = function() {
 			var A = AUI();
 
-			var form = A.one('#<portlet:namespace />fm');
+			var form = A.one('#<portlet:namespace />editDialogForm');
 
 			Liferay.fire(
 				'saveAutoFields',
