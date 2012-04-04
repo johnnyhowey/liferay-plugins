@@ -266,14 +266,26 @@ public class EntryLocalServiceUtil {
 	}
 
 	public static java.util.List<com.liferay.contacts.model.Entry> getEntries(
-		long compayId, long userId)
+		long companyId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getEntries(compayId, userId);
+		return getService().getEntries(companyId, userId);
 	}
 
-	public static int getEntriesCount(long compayId, long userId)
+	public static java.util.List<com.liferay.contacts.model.Entry> getEntries(
+		long companyId, long userId, java.lang.String keywords, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getEntries(companyId, userId, keywords, start, end);
+	}
+
+	public static int getEntriesCount(long companyId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getEntriesCount(compayId, userId);
+		return getService().getEntriesCount(companyId, userId);
+	}
+
+	public static int getEntriesCount(long companyId, long userId,
+		java.lang.String keywords)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().getEntriesCount(companyId, userId, keywords);
 	}
 
 	public static java.util.List<java.lang.Object> getUserAndEntries(

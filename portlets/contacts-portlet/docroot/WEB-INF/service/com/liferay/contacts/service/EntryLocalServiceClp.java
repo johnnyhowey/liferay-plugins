@@ -92,18 +92,26 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		_getEntriesMethodKey18 = new MethodKey(_classLoaderProxy.getClassName(),
 				"getEntries", long.class, long.class);
 
-		_getEntriesCountMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
+		_getEntriesMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
+				"getEntries", long.class, long.class, java.lang.String.class,
+				int.class, int.class);
+
+		_getEntriesCountMethodKey20 = new MethodKey(_classLoaderProxy.getClassName(),
 				"getEntriesCount", long.class, long.class);
 
-		_getUserAndEntriesMethodKey20 = new MethodKey(_classLoaderProxy.getClassName(),
+		_getEntriesCountMethodKey21 = new MethodKey(_classLoaderProxy.getClassName(),
+				"getEntriesCount", long.class, long.class,
+				java.lang.String.class);
+
+		_getUserAndEntriesMethodKey22 = new MethodKey(_classLoaderProxy.getClassName(),
 				"getUserAndEntries", long.class, long.class,
 				java.lang.String.class, int.class, int.class);
 
-		_getUserAndEntriesCountMethodKey21 = new MethodKey(_classLoaderProxy.getClassName(),
+		_getUserAndEntriesCountMethodKey23 = new MethodKey(_classLoaderProxy.getClassName(),
 				"getUserAndEntriesCount", long.class, long.class,
 				java.lang.String.class);
 
-		_updateEntryMethodKey22 = new MethodKey(_classLoaderProxy.getClassName(),
+		_updateEntryMethodKey24 = new MethodKey(_classLoaderProxy.getClassName(),
 				"updateEntry", long.class, com.liferay.portal.model.User.class,
 				java.lang.String.class, java.lang.String.class,
 				java.lang.String.class);
@@ -607,12 +615,12 @@ public class EntryLocalServiceClp implements EntryLocalService {
 	}
 
 	public java.util.List<com.liferay.contacts.model.Entry> getEntries(
-		long compayId, long userId)
+		long companyId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
 		MethodHandler methodHandler = new MethodHandler(_getEntriesMethodKey18,
-				compayId, userId);
+				companyId, userId);
 
 		try {
 			returnObj = _classLoaderProxy.invoke(methodHandler);
@@ -634,12 +642,69 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (java.util.List<com.liferay.contacts.model.Entry>)ClpSerializer.translateOutput(returnObj);
 	}
 
-	public int getEntriesCount(long compayId, long userId)
+	public java.util.List<com.liferay.contacts.model.Entry> getEntries(
+		long companyId, long userId, java.lang.String keywords, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		MethodHandler methodHandler = new MethodHandler(_getEntriesMethodKey19,
+				companyId, userId, ClpSerializer.translateInput(keywords),
+				start, end);
+
+		try {
+			returnObj = _classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.contacts.model.Entry>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	public int getEntriesCount(long companyId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getEntriesCountMethodKey19,
-				compayId, userId);
+		MethodHandler methodHandler = new MethodHandler(_getEntriesCountMethodKey20,
+				companyId, userId);
+
+		try {
+			returnObj = _classLoaderProxy.invoke(methodHandler);
+		}
+		catch (Throwable t) {
+			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
+				throw (com.liferay.portal.kernel.exception.SystemException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	public int getEntriesCount(long companyId, long userId,
+		java.lang.String keywords)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		Object returnObj = null;
+
+		MethodHandler methodHandler = new MethodHandler(_getEntriesCountMethodKey21,
+				companyId, userId, ClpSerializer.translateInput(keywords));
 
 		try {
 			returnObj = _classLoaderProxy.invoke(methodHandler);
@@ -666,7 +731,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserAndEntriesMethodKey20,
+		MethodHandler methodHandler = new MethodHandler(_getUserAndEntriesMethodKey22,
 				companyId, userId, ClpSerializer.translateInput(keywords),
 				start, end);
 
@@ -695,7 +760,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_getUserAndEntriesCountMethodKey21,
+		MethodHandler methodHandler = new MethodHandler(_getUserAndEntriesCountMethodKey23,
 				companyId, userId, ClpSerializer.translateInput(keywords));
 
 		try {
@@ -725,7 +790,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
 
-		MethodHandler methodHandler = new MethodHandler(_updateEntryMethodKey22,
+		MethodHandler methodHandler = new MethodHandler(_updateEntryMethodKey24,
 				entryId, ClpSerializer.translateInput(user),
 				ClpSerializer.translateInput(fullName),
 				ClpSerializer.translateInput(emailAddress),
@@ -779,8 +844,10 @@ public class EntryLocalServiceClp implements EntryLocalService {
 	private MethodKey _setBeanIdentifierMethodKey16;
 	private MethodKey _addEntryMethodKey17;
 	private MethodKey _getEntriesMethodKey18;
-	private MethodKey _getEntriesCountMethodKey19;
-	private MethodKey _getUserAndEntriesMethodKey20;
-	private MethodKey _getUserAndEntriesCountMethodKey21;
-	private MethodKey _updateEntryMethodKey22;
+	private MethodKey _getEntriesMethodKey19;
+	private MethodKey _getEntriesCountMethodKey20;
+	private MethodKey _getEntriesCountMethodKey21;
+	private MethodKey _getUserAndEntriesMethodKey22;
+	private MethodKey _getUserAndEntriesCountMethodKey23;
+	private MethodKey _updateEntryMethodKey24;
 }

@@ -22,7 +22,15 @@ public interface EntryFinder {
 		java.lang.String keywords)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
+	public int countByC_U_EA_FN(long companyId, long userId,
+		java.lang.String keywords)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
 	public java.util.List<java.lang.Object> findByCompanyId(long companyId,
 		long userId, java.lang.String keywords, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<com.liferay.contacts.model.Entry> findByC_U_EA_FN(
+		long companyId, long userId, java.lang.String keywords, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException;
 }

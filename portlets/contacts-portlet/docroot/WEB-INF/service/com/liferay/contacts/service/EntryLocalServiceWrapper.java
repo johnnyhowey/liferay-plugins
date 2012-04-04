@@ -259,14 +259,27 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	}
 
 	public java.util.List<com.liferay.contacts.model.Entry> getEntries(
-		long compayId, long userId)
+		long companyId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _entryLocalService.getEntries(compayId, userId);
+		return _entryLocalService.getEntries(companyId, userId);
 	}
 
-	public int getEntriesCount(long compayId, long userId)
+	public java.util.List<com.liferay.contacts.model.Entry> getEntries(
+		long companyId, long userId, java.lang.String keywords, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		return _entryLocalService.getEntries(companyId, userId, keywords,
+			start, end);
+	}
+
+	public int getEntriesCount(long companyId, long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return _entryLocalService.getEntriesCount(compayId, userId);
+		return _entryLocalService.getEntriesCount(companyId, userId);
+	}
+
+	public int getEntriesCount(long companyId, long userId,
+		java.lang.String keywords)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _entryLocalService.getEntriesCount(companyId, userId, keywords);
 	}
 
 	public java.util.List<java.lang.Object> getUserAndEntries(long companyId,

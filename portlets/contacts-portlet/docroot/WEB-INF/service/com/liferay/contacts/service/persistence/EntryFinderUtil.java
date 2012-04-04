@@ -27,11 +27,24 @@ public class EntryFinderUtil {
 		return getFinder().countByCompanyId(companyId, userId, keywords);
 	}
 
+	public static int countByC_U_EA_FN(long companyId, long userId,
+		java.lang.String keywords)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder().countByC_U_EA_FN(companyId, userId, keywords);
+	}
+
 	public static java.util.List<java.lang.Object> findByCompanyId(
 		long companyId, long userId, java.lang.String keywords, int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		return getFinder()
 				   .findByCompanyId(companyId, userId, keywords, start, end);
+	}
+
+	public static java.util.List<com.liferay.contacts.model.Entry> findByC_U_EA_FN(
+		long companyId, long userId, java.lang.String keywords, int start,
+		int end) throws com.liferay.portal.kernel.exception.SystemException {
+		return getFinder()
+				   .findByC_U_EA_FN(companyId, userId, keywords, start, end);
 	}
 
 	public static EntryFinder getFinder() {
