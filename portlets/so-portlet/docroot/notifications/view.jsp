@@ -32,7 +32,7 @@
 				<liferay-portlet:renderURL varImpl="iteratorURL" />
 
 				<liferay-ui:search-container
-					deltaConfigurable="<%= true %>"
+					delta="10"
 					emptyResultsMessage="you-have-no-notifications"
 					iteratorURL="<%= iteratorURL %>"
 					rowChecker="<%= new RowChecker(renderResponse) %>"
@@ -40,8 +40,7 @@
 
 					<%
 					List<UserNotificationEvent> userNotificationEvents = UserNotificationEventLocalServiceUtil.getUserNotificationEvents(themeDisplay.getUserId(), searchContainer.getStart(), searchContainer.getEnd());
-
-					int notificationEventsCount = userNotificationEvents.size();
+					int notificationEventsCount = UserNotificationEventLocalServiceUtil.getUserNotificationEventsCount(themeDisplay.getUserId());
 					%>
 
 					<liferay-ui:search-container-results
