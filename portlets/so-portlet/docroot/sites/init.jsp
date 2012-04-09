@@ -20,7 +20,8 @@
 <%@ include file="/init.jsp" %>
 
 <%@ page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil" %><%@
-page import="com.liferay.so.service.FavoriteSiteLocalServiceUtil" %>
+page import="com.liferay.so.service.FavoriteSiteLocalServiceUtil" %><%@
+page import="com.liferay.so.util.SocialOfficeConstants" %>
 
 <%
 PortletPreferences preferences = renderRequest.getPreferences();

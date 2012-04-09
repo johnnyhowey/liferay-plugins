@@ -20,6 +20,9 @@ package com.liferay.calendar.util;
  */
 public class PortletPropsKeys {
 
+	public static final String CALENDAR_COLOR_DEFAULT =
+		"calendar.color.default";
+
 	public static final String CALENDAR_RESOURCE_TYPES =
 		"calendar.resource.types";
 

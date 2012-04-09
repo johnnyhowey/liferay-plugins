@@ -247,7 +247,7 @@ request.setAttribute("view_user.jsp-user", user2);
 													<portlet:param name="privateLayout" value="<%= Boolean.FALSE.toString() %>" />
 												</liferay-portlet:actionURL>
 
-												<li class="user-information-sites"><a href="<%= siteURL %>"><%= curGroup.getDescriptiveName(locale) %></a></li>
+												<li class="user-information-sites"><a href="<%= siteURL %>"><%= HtmlUtil.escape(curGroup.getDescriptiveName(locale)) %></a></li>
 
 											<%
 											}
@@ -274,7 +274,7 @@ request.setAttribute("view_user.jsp-user", user2);
 
 								<c:choose>
 									<c:when test="<%= !assetTags.isEmpty() %>">
-										<div class="field-group" data-sectionId="categorization" data-title="<%= LanguageUtil.get(pageContext, "tags") %>" >
+										<div class="field-group" data-sectionId="categorization" data-title="<%= LanguageUtil.get(pageContext, "tags") %>">
 											<ul class="user-tags">
 
 												<%
