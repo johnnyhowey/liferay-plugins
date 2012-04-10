@@ -32,7 +32,7 @@ if (entryId > 0) {
 
 <liferay-portlet:actionURL name="updateEntry" var="updateEntryURL" />
 
-<aui:form action="<%= updateEntryURL %>" method="post" name="addEntry">
+<aui:form action="<%= updateEntryURL %>" method="post" name="addEntry" onSubmit="event.preventDefault();">
 	<aui:input name="redirect" type="hidden"  value="<%= redirect %>" />
 	<aui:input name="entryId" type="hidden"  value="<%= entryId %>" />
 
@@ -54,11 +54,11 @@ if (entryId > 0) {
 
 	var form = A.one('#<portlet:namespace />addEntry');
 
-	var failureCallback = funciton () {
+	var failureCallback = function() {
 		var errorMessage = A.one('#<portlet:namespace/>errorMessage');
 
 		if (errorMessage) {
-			errorMessage.html('<span class="portlet-msg-error"><liferay-ui:message key="an-error-occurred-while-retrieving-the-users-information" /></span>');
+			errorMessage.html('<span class="portlet-msg-error"><%= HtmlUtil.escapeJS(LanguageUtil.get(pageContext, "an-error-occurred-while-retrieving-the-users-information")) %></span>');
 		}
 	}
 
@@ -84,7 +84,7 @@ if (entryId > 0) {
 							}
 							else {
 								A.io.request(
-									'<liferay-portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/contacts_center/view_resources.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="portalUser" value="0" %>" /></liferay-portlet:renderURL>',
+									'<liferay-portlet:renderURL windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/contacts_center/view_resources.jsp" /><portlet:param name="redirect" value="<%= currentURL %>" /><portlet:param name="portalUser" value="0" /></liferay-portlet:renderURL>',
 									{
 										after: {
 											failure: failureCallback,
@@ -92,7 +92,7 @@ if (entryId > 0) {
 												Liferay.ContactsCenter.renderContent(this.get('responseData'));
 
 												var searchInput = A.one('.contacts-portlet #<portlet:namespace />name');
-												var contactFilterSelect = A.one('.contacts-portlet .contact-group-filter select[name=<portlet:namespace />socialRelationType]');
+												var contactFilterSelect = A.one('.contacts-portlet .contact-group-filter select[name=<portlet:namespace />filterBy]');
 
 												Liferay.ContactsCenter.updateContacts(searchInput.get('value'), contactFilterSelect.get('value'));
 
