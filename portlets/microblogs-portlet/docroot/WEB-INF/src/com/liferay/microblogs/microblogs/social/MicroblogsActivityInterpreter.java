@@ -66,7 +66,7 @@ public class MicroblogsActivityInterpreter
 
 		// Title
 
-		StringBundler sb = new StringBundler(4);
+		StringBundler sb = new StringBundler(5);
 
 		if (activity.getReceiverUserId() > 0) {
 			if (microblogsEntry.getType() ==
@@ -79,7 +79,8 @@ public class MicroblogsActivityInterpreter
 			else if (microblogsEntry.getType() ==
 						MicroblogsEntryConstants.TYPE_REPOST) {
 
-				sb.append(themeDisplay.translate("repost-from"));
+				sb.append(themeDisplay.translate("reposted-from"));
+				sb.append(" ");
 				sb.append(receiverUserName);
 				sb.append(": ");
 			}

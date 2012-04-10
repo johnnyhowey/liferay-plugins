@@ -23,17 +23,26 @@ import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.struts.BaseStrutsPortletAction;
 import com.liferay.portal.kernel.struts.StrutsPortletAction;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.LayoutSetPrototype;
+import com.liferay.portal.model.Role;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.so.model.ProjectsEntry;
 import com.liferay.so.service.ProjectsEntryLocalServiceUtil;
+import com.liferay.so.util.DynamicActionRequest;
+import com.liferay.so.util.LayoutSetPrototypeUtil;
+import com.liferay.so.util.RoleConstants;
 
 import java.util.HashSet;
 import java.util.List;
@@ -42,6 +51,7 @@ import java.util.Set;
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletConfig;
+import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
@@ -66,42 +76,12 @@ public class EditUserAction extends BaseStrutsPortletAction {
 			actionRequest, ActionRequest.ACTION_NAME);
 
 		if (actionName.equals("updateFieldGroup")) {
-			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-
-			try {
-				updateProjectsEntries(actionRequest, actionResponse);
-
-				String redirect = ParamUtil.getString(
-					actionRequest, "redirect");
-
-				jsonObject.put("redirect", redirect);
-				jsonObject.put("success", true);
-			}
-			catch (Exception e) {
-				ThemeDisplay themeDisplay =
-					(ThemeDisplay)actionRequest.getAttribute(
-						WebKeys.THEME_DISPLAY);
-
-				String message = LanguageUtil.get(
-					themeDisplay.getLocale(),
-					"your-request-failed-to-complete");
-
-				jsonObject.put("message", message);
-				jsonObject.put("success", false);
-			}
-
-			HttpServletResponse response = PortalUtil.getHttpServletResponse(
-				actionResponse);
-
-			response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
-
-			ServletResponseUtil.write(response, jsonObject.toString());
+			updateFieldGroup(actionRequest, actionResponse);
 		}
 		else {
-			updateProjectsEntries(actionRequest, actionResponse);
-
-			originalStrutsPortletAction.processAction(
-					portletConfig, actionRequest, actionResponse);
+			updateUser(
+				originalStrutsPortletAction, portletConfig, actionRequest,
+				actionResponse);
 		}
 	}
 
@@ -125,6 +105,49 @@ public class EditUserAction extends BaseStrutsPortletAction {
 
 		originalStrutsPortletAction.serveResource(
 			portletConfig, resourceRequest, resourceResponse);
+	}
+
+	protected long[] getLongArray(PortletRequest portletRequest, String name) {
+		String value = portletRequest.getParameter(name);
+
+		if (value == null) {
+			return null;
+		}
+
+		return StringUtil.split(GetterUtil.getString(value), 0L);
+	}
+
+	protected void updateFieldGroup(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			updateProjectsEntries(actionRequest, actionResponse);
+
+			String redirect = ParamUtil.getString(actionRequest, "redirect");
+
+			jsonObject.put("redirect", redirect);
+			jsonObject.put("success", true);
+		}
+		catch (Exception e) {
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
+			String message = LanguageUtil.get(
+				themeDisplay.getLocale(), "your-request-failed-to-complete");
+
+			jsonObject.put("message", message);
+			jsonObject.put("success", false);
+		}
+
+		HttpServletResponse response = PortalUtil.getHttpServletResponse(
+			actionResponse);
+
+		response.setContentType(ContentTypes.TEXT_JAVASCRIPT);
+
+		ServletResponseUtil.write(response, jsonObject.toString());
 	}
 
 	protected void updateProjectsEntries(
@@ -210,6 +233,83 @@ public class EditUserAction extends BaseStrutsPortletAction {
 					projectsEntry.getProjectsEntryId());
 			}
 		}
+	}
+
+	protected void updateUser(
+			StrutsPortletAction originalStrutsPortletAction,
+			PortletConfig portletConfig, ActionRequest actionRequest,
+			ActionResponse actionResponse)
+		throws Exception {
+
+		updateProjectsEntries(actionRequest, actionResponse);
+
+		DynamicActionRequest dynamicActionRequest =
+			new DynamicActionRequest(actionRequest);
+
+		String cmd = ParamUtil.getString(actionRequest, Constants.CMD);
+
+		if (!cmd.equals(Constants.UPDATE)) {
+			originalStrutsPortletAction.processAction(
+				portletConfig, dynamicActionRequest, actionResponse);
+
+			return;
+		}
+
+		User user = PortalUtil.getSelectedUser(actionRequest);
+
+		Role role = RoleLocalServiceUtil.getRole(
+			user.getCompanyId(), RoleConstants.SOCIAL_OFFICE_USER);
+
+		long[] roleIds = getLongArray(
+			actionRequest, "rolesSearchContainerPrimaryKeys");
+
+		boolean newSocialOfficeUser = ArrayUtil.contains(
+			roleIds, role.getRoleId());
+
+		List<Role> roles = user.getRoles();
+
+		if (newSocialOfficeUser && !roles.contains(role)) {
+			LayoutSetPrototype publicLayoutSetPrototype =
+				LayoutSetPrototypeUtil.fetchLayoutSetPrototype(user, false);
+
+			if (publicLayoutSetPrototype != null) {
+				dynamicActionRequest.setParameter(
+					"publicLayoutSetPrototypeId",
+					String.valueOf(
+						publicLayoutSetPrototype.getLayoutSetPrototypeId()));
+				dynamicActionRequest.setParameter(
+					"publicLayoutSetPrototypeLinkEnabled",
+					Boolean.TRUE.toString());
+			}
+
+			LayoutSetPrototype privateLayoutSetPrototype =
+				LayoutSetPrototypeUtil.fetchLayoutSetPrototype(user, true);
+
+			if (privateLayoutSetPrototype != null) {
+				dynamicActionRequest.setParameter(
+					"privateLayoutSetPrototypeId",
+					String.valueOf(
+						privateLayoutSetPrototype.getLayoutSetPrototypeId()));
+				dynamicActionRequest.setParameter(
+					"privateLayoutSetPrototypeLinkEnabled",
+					Boolean.TRUE.toString());
+			}
+		}
+		else if (!newSocialOfficeUser && roles.contains(role)) {
+			dynamicActionRequest.setParameter(
+				"publicLayoutSetPrototypeId", StringPool.BLANK);
+			dynamicActionRequest.setParameter(
+				"publicLayoutSetPrototypeLinkEnabled",
+				Boolean.FALSE.toString());
+			dynamicActionRequest.setParameter(
+				"privateLayoutSetPrototypeId", StringPool.BLANK);
+			dynamicActionRequest.setParameter(
+				"privateLayoutSetPrototypeLinkEnabled",
+				Boolean.FALSE.toString());
+		}
+
+		originalStrutsPortletAction.processAction(
+			portletConfig, dynamicActionRequest, actionResponse);
 	}
 
 }
