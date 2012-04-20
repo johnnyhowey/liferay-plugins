@@ -12,18 +12,29 @@
  * details.
  */
 
-package com.liferay.portal.workflow.kaleo.runtime.notification;
+package com.liferay.resourcesimporter.util;
 
-import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
+import com.liferay.portal.kernel.exception.PortalException;
 
 /**
- * @author Michael C. Han
+ * @author Brian Wing Shun Chan
  */
-public interface NotificationMessageGenerator {
+public class ImporterException extends PortalException {
 
-	public String generateMessage(
-			String kaleoClassName, long kaleoClassPK, String notificationName,
-			String notificationTemplate, ExecutionContext executionContext)
-		throws Exception;
+	public ImporterException() {
+		super();
+	}
+
+	public ImporterException(String msg) {
+		super(msg);
+	}
+
+	public ImporterException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
+
+	public ImporterException(Throwable cause) {
+		super(cause);
+	}
 
 }

@@ -12,18 +12,31 @@
  * details.
  */
 
-package com.liferay.portal.workflow.kaleo.runtime.notification;
+package com.liferay.resourcesimporter.util;
 
-import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
+import java.io.File;
+
+import java.util.Locale;
+import java.util.Map;
 
 /**
- * @author Michael C. Han
+ * @author Brian Wing Shun Chan
  */
-public interface NotificationMessageGenerator {
+public interface Importer {
 
-	public String generateMessage(
-			String kaleoClassName, long kaleoClassPK, String notificationName,
-			String notificationTemplate, ExecutionContext executionContext)
-		throws Exception;
+	public void afterPropertiesSet() throws Exception;
+
+	public long getGroupId();
+
+	public void importResources() throws Exception;
+
+	public void setCompanyId(long companyId);
+
+	public void setLayoutSetPrototypeNameMap(
+		Map<Locale, String> layoutSetPrototypeNameMap);
+
+	public void setResourcesDir(File resourcesDir);
+
+	public void setServletContextName(String servletContextName);
 
 }
