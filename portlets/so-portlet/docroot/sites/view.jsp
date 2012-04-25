@@ -226,7 +226,7 @@ pageContext.setAttribute("portletURL", portletURL);
 									<portlet:param name="mvcPath" value="/sites/edit_site.jsp" />
 								</liferay-portlet:renderURL>
 
-								Liferay.SO.Sites.displayPopup('<%= addSiteURL %>', '<liferay-ui:message key="add-site" />');
+								Liferay.SO.Sites.displayPopup('<%= addSiteURL %>', '<liferay-ui:message key="add-site-information" />');
 							}
 						}
 					},
