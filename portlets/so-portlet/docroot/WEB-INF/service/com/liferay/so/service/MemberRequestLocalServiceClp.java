@@ -87,16 +87,18 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		_addMemberRequestMethodKey17 = new MethodKey(_classLoaderProxy.getClassName(),
 				"addMemberRequest", long.class, long.class, long.class,
 				java.lang.String.class, long.class, long.class,
+				java.lang.String.class, java.lang.String.class,
 				com.liferay.portal.theme.ThemeDisplay.class);
 
 		_addMemberRequestsMethodKey18 = new MethodKey(_classLoaderProxy.getClassName(),
 				"addMemberRequests", long.class, long.class, long[].class,
-				long.class, long.class,
+				long.class, long.class, java.lang.String.class,
 				com.liferay.portal.theme.ThemeDisplay.class);
 
 		_addMemberRequestsMethodKey19 = new MethodKey(_classLoaderProxy.getClassName(),
 				"addMemberRequests", long.class, long.class,
 				java.lang.String[].class, long.class, long.class,
+				java.lang.String.class,
 				com.liferay.portal.theme.ThemeDisplay.class);
 
 		_getMemberRequestMethodKey20 = new MethodKey(_classLoaderProxy.getClassName(),
@@ -601,7 +603,9 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 	public com.liferay.so.model.MemberRequest addMemberRequest(long userId,
 		long groupId, long receiverUserId,
 		java.lang.String receiverEmailAddress, long invitedRoleId,
-		long invitedTeamId, com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		long invitedTeamId, java.lang.String createAccountURL,
+		java.lang.String loginURL,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -610,6 +614,8 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 				userId, groupId, receiverUserId,
 				ClpSerializer.translateInput(receiverEmailAddress),
 				invitedRoleId, invitedTeamId,
+				ClpSerializer.translateInput(createAccountURL),
+				ClpSerializer.translateInput(loginURL),
 				ClpSerializer.translateInput(themeDisplay));
 
 		try {
@@ -638,12 +644,14 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 
 	public void addMemberRequests(long userId, long groupId,
 		long[] receiverUserIds, long invitedRoleId, long invitedTeamId,
+		java.lang.String loginURL,
 		com.liferay.portal.theme.ThemeDisplay themeDisplay)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		MethodHandler methodHandler = new MethodHandler(_addMemberRequestsMethodKey18,
 				userId, groupId, ClpSerializer.translateInput(receiverUserIds),
 				invitedRoleId, invitedTeamId,
+				ClpSerializer.translateInput(loginURL),
 				ClpSerializer.translateInput(themeDisplay));
 
 		try {
@@ -670,12 +678,14 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 
 	public void addMemberRequests(long userId, long groupId,
 		java.lang.String[] emailAddresses, long invitedRoleId,
-		long invitedTeamId, com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		long invitedTeamId, java.lang.String createAccountURL,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		MethodHandler methodHandler = new MethodHandler(_addMemberRequestsMethodKey19,
 				userId, groupId, ClpSerializer.translateInput(emailAddresses),
 				invitedRoleId, invitedTeamId,
+				ClpSerializer.translateInput(createAccountURL),
 				ClpSerializer.translateInput(themeDisplay));
 
 		try {

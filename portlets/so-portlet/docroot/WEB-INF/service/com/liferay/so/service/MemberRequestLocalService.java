@@ -241,19 +241,23 @@ public interface MemberRequestLocalService extends PersistedModelLocalService {
 	public com.liferay.so.model.MemberRequest addMemberRequest(long userId,
 		long groupId, long receiverUserId,
 		java.lang.String receiverEmailAddress, long invitedRoleId,
-		long invitedTeamId, com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		long invitedTeamId, java.lang.String createAccountURL,
+		java.lang.String loginURL,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public void addMemberRequests(long userId, long groupId,
 		long[] receiverUserIds, long invitedRoleId, long invitedTeamId,
+		java.lang.String loginURL,
 		com.liferay.portal.theme.ThemeDisplay themeDisplay)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
 	public void addMemberRequests(long userId, long groupId,
 		java.lang.String[] emailAddresses, long invitedRoleId,
-		long invitedTeamId, com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		long invitedTeamId, java.lang.String createAccountURL,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
 
