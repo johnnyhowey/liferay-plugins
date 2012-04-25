@@ -504,23 +504,20 @@ public class SitesPortlet extends MVCPortlet {
 
 		String name = ParamUtil.getString(actionRequest, "name");
 		String description = ParamUtil.getString(actionRequest, "description");
-		int type = ParamUtil.getInteger(actionRequest, "type");
+		int membershipType = ParamUtil.getInteger(
+			actionRequest, "membershipType");
+		boolean privateLayout = ParamUtil.getBoolean(
+			actionRequest, "privateLayout");
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			Group.class.getName(), actionRequest);
 
 		Group group = GroupServiceUtil.addGroup(
-			name, description, type, StringPool.BLANK, true, true,
+			name, description, membershipType, StringPool.BLANK, true, true,
 			serviceContext);
 
 		long layoutSetPrototypeId = ParamUtil.getLong(
 			actionRequest, "layoutSetPrototypeId");
-
-		boolean privateLayout = false;
-
-		if (type != GroupConstants.TYPE_SITE_OPEN) {
-			privateLayout = true;
-		}
 
 		long publicLayoutSetPrototypeId = 0;
 		long privateLayoutSetPrototypeId = 0;
