@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
@@ -132,6 +133,8 @@ public class FileSystemImporter extends BaseImporter {
 
 			String content = new String(FileUtil.getBytes(file));
 
+			content = wrapJournalArticleContent(content);
+
 			ServiceContext serviceContext = new ServiceContext();
 
 			serviceContext.setScopeGroupId(groupId);
@@ -224,10 +227,10 @@ public class FileSystemImporter extends BaseImporter {
 
 		String friendlyURL = layoutJSONObject.getString("friendlyURL");
 
-		if (Validator.isNotNull(friendlyURL)) {
-			if (!friendlyURL.startsWith(StringPool.SLASH)) {
-				friendlyURL = StringPool.SLASH + friendlyURL;
-			}
+		if (Validator.isNotNull(friendlyURL) &&
+			!friendlyURL.startsWith(StringPool.SLASH)) {
+
+			friendlyURL = StringPool.SLASH + friendlyURL;
 		}
 
 		Layout layout = LayoutLocalServiceUtil.addLayout(
@@ -256,7 +259,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		JSONArray layoutsJSONArray = layoutJSONObject.getJSONArray("layouts");
 
-		addLayouts(layout.getParentLayoutId(), layoutsJSONArray);
+		addLayouts(layout.getLayoutId(), layoutsJSONArray);
 	}
 
 	protected void addLayoutColumn(
@@ -284,13 +287,14 @@ public class FileSystemImporter extends BaseImporter {
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();
 
-		String portletId = portletJSONObject.getString("portletId");
+		String rootPortletId = portletJSONObject.getString("portletId");
 
-		if (Validator.isNull(portletId)) {
+		if (Validator.isNull(rootPortletId)) {
 			throw new ImporterException("portletId is not specified");
 		}
 
-		layoutTypePortlet.addPortletId(userId, portletId, columnId, -1, false);
+		String portletId = layoutTypePortlet.addPortletId(
+			userId, rootPortletId, columnId, -1, false);
 
 		JSONObject portletPreferencesJSONObject =
 			portletJSONObject.getJSONObject("portletPreferences");
@@ -312,7 +316,7 @@ public class FileSystemImporter extends BaseImporter {
 
 			String value = portletPreferencesJSONObject.getString(key);
 
-			if (portletId.equals(PortletKeys.JOURNAL_CONTENT) &&
+			if (rootPortletId.equals(PortletKeys.JOURNAL_CONTENT) &&
 				key.equals("articleId")) {
 
 				value = getJournalArticleId(value);
@@ -330,7 +334,7 @@ public class FileSystemImporter extends BaseImporter {
 		for (int i = 0; i < columnsJSONArray.length(); i++) {
 			JSONArray columnJSONArray = columnsJSONArray.getJSONArray(i);
 
-			addLayoutColumn(layout, "column-" + i, columnJSONArray);
+			addLayoutColumn(layout, "column-" + (i + 1), columnJSONArray);
 		}
 	}
 
@@ -372,7 +376,7 @@ public class FileSystemImporter extends BaseImporter {
 	protected JSONObject getDefaultPortletJSONObject(String articleId) {
 		JSONObject portletJSONObject = JSONFactoryUtil.createJSONObject();
 
-		portletJSONObject.put("portletId", PortletKeys.JOURNAL);
+		portletJSONObject.put("portletId", PortletKeys.JOURNAL_CONTENT);
 
 		JSONObject portletPreferencesJSONObject =
 			JSONFactoryUtil.createJSONObject();
@@ -450,6 +454,7 @@ public class FileSystemImporter extends BaseImporter {
 				String.valueOf(userId)
 			});
 	}
+
 	protected File[] listFiles(File dir) {
 		File[] files = dir.listFiles();
 
@@ -480,7 +485,7 @@ public class FileSystemImporter extends BaseImporter {
 				themeId = null;
 			}
 		}
-System.out.println("## themeId 1 " + themeId);
+
 		if (Validator.isNull(themeId)) {
 			int pos = servletContextName.indexOf("-theme");
 
@@ -493,7 +498,7 @@ System.out.println("## themeId 1 " + themeId);
 
 				Theme theme = ThemeLocalServiceUtil.fetchTheme(
 					companyId, themeId);
-System.out.println("## themeId 2 " + themeId + " " + theme);
+
 				if (theme == null) {
 					themeId = null;
 				}
@@ -504,6 +509,26 @@ System.out.println("## themeId 2 " + themeId + " " + theme);
 			LayoutSetLocalServiceUtil.updateLookAndFeel(
 				groupId, true, themeId, null, null, false);
 		}
+	}
+
+	protected String wrapJournalArticleContent(String content) {
+		StringBundler sb = new StringBundler(13);
+
+		sb.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+		sb.append("<root available-locales=\"");
+		sb.append(LocaleUtil.getDefault());
+		sb.append("\" default-locale=\"");
+		sb.append(LocaleUtil.getDefault());
+		sb.append("\">");
+		sb.append("<static-content language-id=\"");
+		sb.append(LocaleUtil.getDefault());
+		sb.append("\">");
+		sb.append("<![CDATA[");
+		sb.append(content);
+		sb.append("]]>");
+		sb.append("</static-content></root>");
+
+		return sb.toString();
 	}
 
 	private String _defaultLayoutTemplateId;
