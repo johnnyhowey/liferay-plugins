@@ -15,9 +15,9 @@
 package com.liferay.portal.workflow.kaleo.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
 import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * The utility for the kaleo notification recipient local service. This utility wraps {@link com.liferay.portal.workflow.kaleo.service.impl.KaleoNotificationRecipientLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
@@ -93,6 +93,10 @@ public class KaleoNotificationRecipientLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService()
 				   .deleteKaleoNotificationRecipient(kaleoNotificationRecipient);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -274,6 +278,12 @@ public class KaleoNotificationRecipientLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	public static com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient addKaleoNotificationRecipient(
 		long kaleoDefinitionId, long kaleoNotificationId,
 		com.liferay.portal.workflow.kaleo.definition.Recipient recipient,
@@ -303,24 +313,23 @@ public class KaleoNotificationRecipientLocalServiceUtil {
 		return getService().getKaleoNotificationRecipients(kaleoNotificationId);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static void clearService() {
-		_service = null;
 	}
 
 	public static KaleoNotificationRecipientLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					KaleoNotificationRecipientLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					KaleoNotificationRecipientLocalService.class.getName(),
-					portletClassLoader);
-
-			_service = new KaleoNotificationRecipientLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof KaleoNotificationRecipientLocalService) {
+				_service = (KaleoNotificationRecipientLocalService)invokableLocalService;
+			}
+			else {
+				_service = new KaleoNotificationRecipientLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(KaleoNotificationRecipientLocalServiceUtil.class,
 				"_service");
@@ -330,14 +339,10 @@ public class KaleoNotificationRecipientLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(KaleoNotificationRecipientLocalService service) {
-		MethodCache.remove(KaleoNotificationRecipientLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(KaleoNotificationRecipientLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(KaleoNotificationRecipientLocalService.class);
 	}
 
 	private static KaleoNotificationRecipientLocalService _service;
