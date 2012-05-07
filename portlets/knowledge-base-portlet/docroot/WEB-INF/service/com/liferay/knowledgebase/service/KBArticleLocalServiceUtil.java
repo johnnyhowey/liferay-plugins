@@ -15,9 +15,9 @@
 package com.liferay.knowledgebase.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
 import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * The utility for the k b article local service. This utility wraps {@link com.liferay.knowledgebase.service.impl.KBArticleLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
@@ -91,6 +91,10 @@ public class KBArticleLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().deleteKBArticle(kbArticle);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -280,6 +284,12 @@ public class KBArticleLocalServiceUtil {
 	*/
 	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
 		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	public static void addAttachment(java.lang.String dirName,
@@ -544,23 +554,23 @@ public class KBArticleLocalServiceUtil {
 		getService().updateViewCount(userId, resourcePrimKey, viewCount);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static void clearService() {
-		_service = null;
 	}
 
 	public static KBArticleLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					KBArticleLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					KBArticleLocalService.class.getName(), portletClassLoader);
-
-			_service = new KBArticleLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof KBArticleLocalService) {
+				_service = (KBArticleLocalService)invokableLocalService;
+			}
+			else {
+				_service = new KBArticleLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(KBArticleLocalServiceUtil.class,
 				"_service");
@@ -570,14 +580,10 @@ public class KBArticleLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(KBArticleLocalService service) {
-		MethodCache.remove(KBArticleLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(KBArticleLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(KBArticleLocalService.class);
 	}
 
 	private static KBArticleLocalService _service;
