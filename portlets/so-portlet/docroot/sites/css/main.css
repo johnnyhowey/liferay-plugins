@@ -234,11 +234,11 @@
 	}
 
 	.step {
-		color: #AAAAAA;
+		color: #AAA;
 		display: inline-block;
 		font-weight: bold;
 		margin-left: 5em;
-		text-shadow: 1px 1px 1px #DDDDDD;
+		text-shadow: 1px 1px 1px #DDD;
 
 		span {
 			display: block;

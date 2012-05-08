@@ -41,7 +41,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 	</div>
 
 	<div class="section-container">
-		<div class="section site-information" data-title='<%= LanguageUtil.get(pageContext, "add-site-information")%>' data-step='<%= LanguageUtil.format(pageContext, "step-x-of-x", new Integer[] {1, 3})%>'>
+		<div class="section site-information" data-title='<%= LanguageUtil.get(pageContext, "add-site-information") %>' data-step='<%= LanguageUtil.format(pageContext, "step-x-of-x", new Integer[] {1, 3}) %>'>
 			<aui:fieldset>
 				<aui:input name="name" />
 
@@ -53,7 +53,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 		LayoutSetPrototype defaultLayoutSetPrototype = null;
 		%>
 
-		<div class="section site-settings aui-helper-hidden" data-title='<%= LanguageUtil.get(pageContext, "add-site-settings")%>' data-step='<%= LanguageUtil.format(pageContext, "step-x-of-x", new Integer[] {2, 3})%>'>
+		<div class="section site-settings aui-helper-hidden" data-title='<%= LanguageUtil.get(pageContext, "add-site-settings") %>' data-step='<%= LanguageUtil.format(pageContext, "step-x-of-x", new Integer[] {2, 3}) %>'>
 			<aui:column columnWidth="<%= 50 %>" first="<%= true %>">
 
 				<%
@@ -143,7 +143,7 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 			</aui:column>
 		</div>
 
-		<div class="section site-customization aui-helper-hidden" data-title='<%= LanguageUtil.get(pageContext, "add-site-customization")%>' data-step='<%= LanguageUtil.format(pageContext, "step-x-of-x", new Integer[] {3, 3})%>'>
+		<div class="section site-customization aui-helper-hidden" data-title='<%= LanguageUtil.get(pageContext, "add-site-customization") %>' data-step='<%= LanguageUtil.format(pageContext, "step-x-of-x", new Integer[] {3, 3}) %>'>
 			<div class="tip portlet-msg-info">
 				<liferay-ui:message key="uncheck-the-pages-to-exclude-from-your-site" />
 			</div>
