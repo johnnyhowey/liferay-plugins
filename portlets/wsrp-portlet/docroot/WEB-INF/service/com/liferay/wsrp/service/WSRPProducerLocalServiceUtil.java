@@ -15,9 +15,9 @@
 package com.liferay.wsrp.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
 import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * The utility for the w s r p producer local service. This utility wraps {@link com.liferay.wsrp.service.impl.WSRPProducerLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
@@ -91,6 +91,10 @@ public class WSRPProducerLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return getService().deleteWSRPProducer(wsrpProducer);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -282,6 +286,12 @@ public class WSRPProducerLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	public static com.liferay.wsrp.model.WSRPProducer addWSRPProducer(
 		long userId, long groupId, java.lang.String name,
 		java.lang.String version, java.lang.String portletIds,
@@ -331,23 +341,23 @@ public class WSRPProducerLocalServiceUtil {
 				   .updateWSRPProducer(wsrpProducerId, name, version, portletIds);
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public static void clearService() {
-		_service = null;
 	}
 
 	public static WSRPProducerLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					WSRPProducerLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					WSRPProducerLocalService.class.getName(), portletClassLoader);
-
-			_service = new WSRPProducerLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof WSRPProducerLocalService) {
+				_service = (WSRPProducerLocalService)invokableLocalService;
+			}
+			else {
+				_service = new WSRPProducerLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(WSRPProducerLocalServiceUtil.class,
 				"_service");
@@ -357,14 +367,10 @@ public class WSRPProducerLocalServiceUtil {
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(WSRPProducerLocalService service) {
-		MethodCache.remove(WSRPProducerLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(WSRPProducerLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(WSRPProducerLocalService.class);
 	}
 
 	private static WSRPProducerLocalService _service;
