@@ -126,11 +126,15 @@ public class CalendarPortlet extends MVCPortlet {
 			actionRequest, "defaultCalendar", false);
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
-			CalendarResource.class.getName(), actionRequest);
+			Calendar.class.getName(), actionRequest);
 
 		if (calendarId <= 0) {
+			CalendarResource calendarResource =
+				CalendarResourceServiceUtil.getCalendarResource(
+					calendarResourceId);
+
 			CalendarServiceUtil.addCalendar(
-				serviceContext.getScopeGroupId(), calendarResourceId, nameMap,
+				calendarResource.getGroupId(), calendarResourceId, nameMap,
 				descriptionMap, color, defaultCalendar, serviceContext);
 		}
 		else {

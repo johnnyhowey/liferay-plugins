@@ -19,6 +19,8 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.service.BaseLocalService;
+import com.liferay.portal.service.InvokableLocalService;
 import com.liferay.portal.service.PermissionedModelLocalService;
 
 /**
@@ -36,7 +38,8 @@ import com.liferay.portal.service.PermissionedModelLocalService;
  */
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
-public interface CalendarLocalService extends PermissionedModelLocalService {
+public interface CalendarLocalService extends BaseLocalService,
+	InvokableLocalService, PermissionedModelLocalService {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -86,6 +89,8 @@ public interface CalendarLocalService extends PermissionedModelLocalService {
 		com.liferay.calendar.model.Calendar calendar)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery();
 
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
@@ -251,6 +256,10 @@ public interface CalendarLocalService extends PermissionedModelLocalService {
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable;
+
 	public com.liferay.calendar.model.Calendar addCalendar(long userId,
 		long groupId, long calendarResourceId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
@@ -303,6 +312,11 @@ public interface CalendarLocalService extends PermissionedModelLocalService {
 	public com.liferay.calendar.model.Calendar updateCalendar(long calendarId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int color, com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.calendar.model.Calendar updateColor(long calendarId,
 		int color, com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException;

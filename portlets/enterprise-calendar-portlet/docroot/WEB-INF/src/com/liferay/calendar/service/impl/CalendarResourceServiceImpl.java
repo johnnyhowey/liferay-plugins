@@ -62,14 +62,30 @@ public class CalendarResourceServiceImpl
 			calendarResourceId);
 	}
 
+	public CalendarResource fetchCalendarResource(
+			long classNameId, long classPK)
+		throws PortalException, SystemException {
+
+		CalendarResource calendarResource =
+			calendarResourcePersistence.fetchByC_C(classNameId, classPK);
+
+		if (calendarResource == null) {
+			return null;
+		}
+
+		CalendarResourcePermission.check(
+			getPermissionChecker(), calendarResource, ActionKeys.VIEW);
+
+		return calendarResource;
+	}
+
 	public CalendarResource getCalendarResource(long calendarResourceId)
 		throws PortalException, SystemException {
 
 		CalendarResourcePermission.check(
 			getPermissionChecker(), calendarResourceId, ActionKeys.VIEW);
 
-		return calendarResourceLocalService.getCalendarResource(
-			calendarResourceId);
+		return calendarResourcePersistence.findByPrimaryKey(calendarResourceId);
 	}
 
 	public List<CalendarResource> search(
