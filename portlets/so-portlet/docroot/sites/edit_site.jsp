@@ -105,52 +105,54 @@ portletURL.setParameter("mvcPath", "/sites/edit_site.jsp");
 					<%= defaultLayoutSetPrototype.getDescription() %>
 				</p>
 
-				<aui:column columnWidth="<%= 50 %>" first="<%= true %>">					
-					
-					<span class="included-pages"><liferay-ui:message key="included-pages" /></span>
+				<aui:layout>
+					<aui:column columnWidth="<%= 30 %>" first="<%= true %>">
 
-					<aui:input name="deleteLayoutIds" type="hidden" />
+						<span class="included-pages"><liferay-ui:message key="included-pages" />:</span>
 
-					<div class="delete-layouts-container">
-						<c:if test="<%= defaultLayoutSetPrototype != null %>">
+						<aui:input name="deleteLayoutIds" type="hidden" />
 
-							<%
-							Group layoutSetPrototypeGroup = defaultLayoutSetPrototype.getGroup();
+						<div class="delete-layouts-container">
+							<c:if test="<%= defaultLayoutSetPrototype != null %>">
 
-							List<Layout> prototypeLayouts = LayoutLocalServiceUtil.getLayouts(layoutSetPrototypeGroup.getGroupId(), true, 0);
+								<%
+								Group layoutSetPrototypeGroup = defaultLayoutSetPrototype.getGroup();
 
-							for (Layout prototypeLayout : prototypeLayouts) {
-							%>
+								List<Layout> prototypeLayouts = LayoutLocalServiceUtil.getLayouts(layoutSetPrototypeGroup.getGroupId(), true, 0);
 
-								<div class="page">
-									<input checked data-layoutId="<%= prototypeLayout.getLayoutId() %>" id="layout<%= prototypeLayout.getLayoutId() %>" type="checkbox" />
+								for (Layout prototypeLayout : prototypeLayouts) {
+								%>
 
-									<label for="layout<%= prototypeLayout.getLayoutId() %>"><%= prototypeLayout.getName(locale) %></label>
-								</div>
+									<div class="page">
+										<input checked data-layoutId="<%= prototypeLayout.getLayoutId() %>" id="layout<%= prototypeLayout.getLayoutId() %>" type="checkbox" />
 
-							<%
-							}
-							%>
+										<label for="layout<%= prototypeLayout.getLayoutId() %>"><%= prototypeLayout.getName(locale) %></label>
+									</div>
 
-						</c:if>
-					</div>
-				</aui:column>
-				<aui:column columnWidth="<%= 50 %>">
-					<div class="type-details">
-						<div class="permission">
-							<liferay-ui:message key="permissions" />
+								<%
+								}
+								%>
+
+							</c:if>
 						</div>
+					</aui:column>
+					<aui:column columnWidth="<%= 70 %>">
+						<div class="type-details">
+							<div class="permission">
+								<liferay-ui:message key="permissions" />:
+							</div>
 
-						<div class="message">
-							<liferay-ui:message key="open-site-is-listed-pages-are-public-and-users-are-free-to-join-to-collaborate" />
+							<div class="message">
+								<liferay-ui:message key="open-site-is-listed-pages-are-public-and-users-are-free-to-join-to-collaborate" />
+							</div>
 						</div>
-					</div>
-				</aui:column>
+					</aui:column>
+				</aui:layout>
 			</div>
 		</div>
 	</div>
 
-	<aui:button-row>
+	<aui:button-row cssClass="dialog-footer">
 		<div class="buttons-left">
 			<aui:button disabled="<%= true %>" id="previous" onClick='<%= renderResponse.getNamespace() + "previous()" %>' value="previous" />
 
