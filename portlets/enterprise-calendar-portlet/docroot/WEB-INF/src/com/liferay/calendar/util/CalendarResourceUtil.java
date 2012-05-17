@@ -14,14 +14,28 @@
 
 package com.liferay.calendar.util;
 
+import com.liferay.calendar.model.CalendarResource;
+import com.liferay.calendar.service.CalendarResourceLocalServiceUtil;
+import com.liferay.calendar.service.CalendarResourceServiceUtil;
 import com.liferay.calendar.util.comparator.CalendarResourceCodeComparator;
 import com.liferay.calendar.util.comparator.CalendarResourceNameComparator;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.PortalUtil;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Eduardo Lundgren
@@ -29,21 +43,61 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
  */
 public class CalendarResourceUtil {
 
-	public static long getGlobalResourceUserId(String className, long classPK)
+	public static CalendarResource getCalendarResource(
+			HttpServletRequest request, long classNameId, long classPK)
 		throws PortalException, SystemException {
 
-		long userId = 0;
+		long groupClassNameId = PortalUtil.getClassNameId(Group.class);
 
-		if (className.equals(Group.class.getName())) {
-			Group group = GroupLocalServiceUtil.getGroup(classPK);
-
-			userId = group.getCreatorUserId();
-		}
-		else if (className.equals(User.class.getName())) {
-			userId = classPK;
+		if (classNameId == groupClassNameId) {
+			return CalendarResourceUtil.getGroupCalendarResource(
+				request, classPK);
 		}
 
-		return userId;
+		long userClassNameId = PortalUtil.getClassNameId(User.class);
+
+		if (classNameId == userClassNameId) {
+			return CalendarResourceUtil.getUserCalendarResource(
+				request, classPK);
+		}
+
+		return CalendarResourceServiceUtil.fetchCalendarResource(
+			classNameId, classPK);
+	}
+
+	public static CalendarResource getGroupCalendarResource(
+			HttpServletRequest request, long groupId)
+		throws PortalException, SystemException {
+
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+		if (group.isUser()) {
+			return null;
+		}
+
+		long classNameId = PortalUtil.getClassNameId(Group.class);
+
+		CalendarResource calendarResource =
+			CalendarResourceLocalServiceUtil.fetchCalendarResource(
+				classNameId, groupId);
+
+		if (calendarResource != null) {
+			return calendarResource;
+		}
+
+		Map<Locale, String> nameMap = new HashMap<Locale, String>();
+
+		nameMap.put(LocaleUtil.getDefault(), group.getName());
+
+		Map<Locale, String> descriptionMap = new HashMap<Locale, String>();
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			request);
+
+		return CalendarResourceLocalServiceUtil.addCalendarResource(
+			serviceContext.getUserId(), 0, Group.class.getName(), groupId, null,
+			0, group.getName(), nameMap, descriptionMap, null, true,
+			serviceContext);
 	}
 
 	public static OrderByComparator getOrderByComparator(
@@ -67,14 +121,35 @@ public class CalendarResourceUtil {
 		return orderByComparator;
 	}
 
-	public static boolean isGlobalResource(String className) {
-		if (className.equals(Group.class.getName()) ||
-			className.equals(User.class.getName())) {
+	public static CalendarResource getUserCalendarResource(
+			HttpServletRequest request, long userId)
+		throws PortalException, SystemException {
 
-			return true;
+		long classNameId = PortalUtil.getClassNameId(User.class);
+
+		CalendarResource calendarResource =
+			CalendarResourceLocalServiceUtil.fetchCalendarResource(
+				classNameId, userId);
+
+		if (calendarResource != null) {
+			return calendarResource;
 		}
 
-		return false;
+		User user = UserLocalServiceUtil.getUser(userId);
+
+		Map<Locale, String> nameMap = new HashMap<Locale, String>();
+
+		nameMap.put(LocaleUtil.getDefault(), user.getFullName());
+
+		Map<Locale, String> descriptionMap = new HashMap<Locale, String>();
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			request);
+
+		return CalendarResourceLocalServiceUtil.addCalendarResource(
+			serviceContext.getUserId(), 0, User.class.getName(), userId, null,
+			0, user.getFirstName(), nameMap, descriptionMap, null, true,
+			serviceContext);
 	}
 
 }
