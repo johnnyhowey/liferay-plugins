@@ -84,6 +84,10 @@ public class CalendarLocalServiceWrapper implements CalendarLocalService,
 		return _calendarLocalService.deleteCalendar(calendar);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _calendarLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -271,6 +275,13 @@ public class CalendarLocalServiceWrapper implements CalendarLocalService,
 		_calendarLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _calendarLocalService.invokeMethod(name, parameterTypes,
+			arguments);
+	}
+
 	public com.liferay.calendar.model.Calendar addCalendar(long userId,
 		long groupId, long calendarResourceId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
@@ -347,6 +358,14 @@ public class CalendarLocalServiceWrapper implements CalendarLocalService,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _calendarLocalService.updateCalendar(calendarId, nameMap,
 			descriptionMap, color, serviceContext);
+	}
+
+	public com.liferay.calendar.model.Calendar updateColor(long calendarId,
+		int color, com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _calendarLocalService.updateColor(calendarId, color,
+			serviceContext);
 	}
 
 	public void updateDefaultCalendar(

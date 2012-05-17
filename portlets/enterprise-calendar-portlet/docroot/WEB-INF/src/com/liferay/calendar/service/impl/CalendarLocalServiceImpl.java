@@ -16,6 +16,7 @@ package com.liferay.calendar.service.impl;
 
 import com.liferay.calendar.CalendarNameException;
 import com.liferay.calendar.model.Calendar;
+import com.liferay.calendar.model.CalendarResource;
 import com.liferay.calendar.service.base.CalendarLocalServiceBaseImpl;
 import com.liferay.calendar.util.PortletPropsValues;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -94,8 +95,15 @@ public class CalendarLocalServiceImpl extends CalendarLocalServiceBaseImpl {
 					calendar.equals(calendarResourceCalendar));
 			}
 
-			calendarResourceLocalService.updateDefaultCalendarId(
-				calendarResourceId, calendarId);
+			CalendarResource calendarResource =
+				calendarResourcePersistence.fetchByPrimaryKey(
+					calendarResourceId);
+
+			if (calendarResource != null) {
+				calendarResource.setDefaultCalendarId(calendarId);
+
+				calendarResourcePersistence.update(calendarResource, false);
+			}
 		}
 
 		return calendar;
@@ -129,6 +137,10 @@ public class CalendarLocalServiceImpl extends CalendarLocalServiceBaseImpl {
 		Calendar calendar = calendarPersistence.findByPrimaryKey(calendarId);
 
 		return deleteCalendar(calendar);
+	}
+
+	public Calendar fetchCalendar(long calendarId) throws SystemException {
+		return calendarPersistence.fetchByPrimaryKey(calendarId);
 	}
 
 	@Override
@@ -229,8 +241,11 @@ public class CalendarLocalServiceImpl extends CalendarLocalServiceBaseImpl {
 					calendar.equals(calendarResourceCalendar));
 			}
 
-			calendarResourceLocalService.updateDefaultCalendarId(
-				calendar.getCalendarResourceId(), calendarId);
+			CalendarResource calendarResource = calendar.getCalendarResource();
+
+			calendarResource.setDefaultCalendarId(calendarId);
+
+			calendarResourcePersistence.update(calendarResource, false);
 		}
 
 		return calendar;
@@ -247,6 +262,17 @@ public class CalendarLocalServiceImpl extends CalendarLocalServiceBaseImpl {
 		return updateCalendar(
 			calendarId, nameMap, descriptionMap, color,
 			calendar.isDefaultCalendar(), serviceContext);
+	}
+
+	public Calendar updateColor(
+			long calendarId, int color, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		Calendar calendar = calendarPersistence.findByPrimaryKey(calendarId);
+
+		return updateCalendar(
+			calendarId, calendar.getNameMap(), calendar.getDescriptionMap(),
+			color, calendar.isDefaultCalendar(), serviceContext);
 	}
 
 	public void updateDefaultCalendar(
