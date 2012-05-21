@@ -240,6 +240,10 @@ public class CalendarFinderImpl
 			boolean inlineSQLHelper)
 		throws SystemException {
 
+		if (groupIds == null) {
+			groupIds = new long[0];
+		}
+
 		names = CustomSQLUtil.keywords(names);
 		descriptions = CustomSQLUtil.keywords(descriptions, false);
 
@@ -311,6 +315,10 @@ public class CalendarFinderImpl
 			int start, int end, OrderByComparator orderByComparator,
 			boolean inlineSQLHelper)
 		throws SystemException {
+
+		if (groupIds == null) {
+			groupIds = new long[0];
+		}
 
 		names = CustomSQLUtil.keywords(names);
 		descriptions = CustomSQLUtil.keywords(descriptions, false);
