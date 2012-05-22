@@ -15,9 +15,8 @@
 package com.liferay.twitter.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * The utility for the feed local service. This utility wraps {@link com.liferay.twitter.service.impl.FeedLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
@@ -87,6 +86,10 @@ public class FeedLocalServiceUtil {
 		com.liferay.twitter.model.Feed feed)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().deleteFeed(feed);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -260,6 +263,12 @@ public class FeedLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	public static void updateFeed(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -284,34 +293,27 @@ public class FeedLocalServiceUtil {
 
 	public static FeedLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					FeedLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					FeedLocalService.class.getName(), portletClassLoader);
-
-			_service = new FeedLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof FeedLocalService) {
+				_service = (FeedLocalService)invokableLocalService;
+			}
+			else {
+				_service = new FeedLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(FeedLocalServiceUtil.class,
 				"_service");
-			MethodCache.remove(FeedLocalService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(FeedLocalService service) {
-		MethodCache.remove(FeedLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(FeedLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(FeedLocalService.class);
 	}
 
 	private static FeedLocalService _service;
