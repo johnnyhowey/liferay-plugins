@@ -65,7 +65,7 @@ List<CalEvent> events = (List<CalEvent>)request.getAttribute("view.jsp-events");
 				eventURL.setParameter("struts_action", "/calendar/view");
 				eventURL.setParameter("tabs1", "day");
 				eventURL.setParameter("month", String.valueOf(cal.get(Calendar.MONTH)));
-				eventURL.setParameter("day", String.valueOf(cal.get(Calendar.DATE)));
+				eventURL.setParameter("day", String.valueOf(cal.get(Calendar.DATE) + 1));
 				eventURL.setParameter("year", String.valueOf(cal.get(Calendar.YEAR)));
 
 				eventHREF = eventURL.toString();
