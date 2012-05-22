@@ -87,6 +87,10 @@ public class CalendarResourceLocalServiceWrapper
 		return _calendarResourceLocalService.deleteCalendarResource(calendarResource);
 	}
 
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return _calendarResourceLocalService.dynamicQuery();
+	}
+
 	/**
 	* Performs a dynamic query on the database and returns the matching rows.
 	*
@@ -280,6 +284,13 @@ public class CalendarResourceLocalServiceWrapper
 		_calendarResourceLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _calendarResourceLocalService.invokeMethod(name, parameterTypes,
+			arguments);
+	}
+
 	public com.liferay.calendar.model.CalendarResource addCalendarResource(
 		long userId, long groupId, java.lang.String className, long classPK,
 		java.lang.String classUuid, long defaultCalendarId,
@@ -364,14 +375,6 @@ public class CalendarResourceLocalServiceWrapper
 			com.liferay.portal.kernel.exception.SystemException {
 		return _calendarResourceLocalService.updateCalendarResource(calendarResourceId,
 			code, nameMap, descriptionMap, type, active, serviceContext);
-	}
-
-	public com.liferay.calendar.model.CalendarResource updateDefaultCalendarId(
-		long calendarResourceId, long defaultCalendarId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _calendarResourceLocalService.updateDefaultCalendarId(calendarResourceId,
-			defaultCalendarId);
 	}
 
 	/**
