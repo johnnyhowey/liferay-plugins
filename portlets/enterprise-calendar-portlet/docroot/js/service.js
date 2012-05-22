@@ -5,10 +5,12 @@ Liferay.Service.registerClass(
 	{
 		addCalendar: true,
 		deleteCalendar: true,
+		fetchCalendar: true,
 		getCalendar: true,
 		search: true,
 		searchCount: true,
-		updateCalendar: true
+		updateCalendar: true,
+		updateColor: true
 	}
 );
 
@@ -17,8 +19,11 @@ Liferay.Service.registerClass(
 	{
 		addCalendarBooking: true,
 		deleteCalendarBooking: true,
+		fetchCalendarBooking: true,
 		getCalendarBooking: true,
 		getCalendarBookings: true,
+		getChildCalendarBookings: true,
+		invokeTransition: true,
 		search: true,
 		searchCount: true,
 		updateCalendarBooking: true
@@ -30,6 +35,7 @@ Liferay.Service.registerClass(
 	{
 		addCalendarResource: true,
 		deleteCalendarResource: true,
+		fetchCalendarResource: true,
 		getCalendarResource: true,
 		search: true,
 		searchCount: true,
