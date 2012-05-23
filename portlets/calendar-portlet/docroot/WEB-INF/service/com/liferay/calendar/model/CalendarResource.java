@@ -14,7 +14,7 @@
 
 package com.liferay.calendar.model;
 
-import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.model.PermissionedModel;
 
 /**
  * The extended model interface for the CalendarResource service. Represents a row in the &quot;CalendarResource&quot; database table, with each column mapped to a property of this class.
@@ -25,10 +25,12 @@ import com.liferay.portal.model.PersistedModel;
  * @see com.liferay.calendar.model.impl.CalendarResourceModelImpl
  * @generated
  */
-public interface CalendarResource extends CalendarResourceModel, PersistedModel {
+public interface CalendarResource extends CalendarResourceModel,
+	PermissionedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
 	 * Never modify this interface directly. Add methods to {@link com.liferay.calendar.model.impl.CalendarResourceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public boolean isGlobal();
 }

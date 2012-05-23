@@ -16,7 +16,6 @@ package com.liferay.calendar.model;
 
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.model.AttachedModel;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
@@ -44,8 +43,8 @@ import java.util.Map;
  * @see com.liferay.calendar.model.impl.CalendarBookingModelImpl
  * @generated
  */
-public interface CalendarBookingModel extends AttachedModel,
-	BaseModel<CalendarBooking>, GroupedModel, WorkflowedModel {
+public interface CalendarBookingModel extends BaseModel<CalendarBooking>,
+	GroupedModel, WorkflowedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -196,18 +195,18 @@ public interface CalendarBookingModel extends AttachedModel,
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
-	 * Returns the calendar event ID of this calendar booking.
+	 * Returns the calendar ID of this calendar booking.
 	 *
-	 * @return the calendar event ID of this calendar booking
+	 * @return the calendar ID of this calendar booking
 	 */
-	public long getCalendarEventId();
+	public long getCalendarId();
 
 	/**
-	 * Sets the calendar event ID of this calendar booking.
+	 * Sets the calendar ID of this calendar booking.
 	 *
-	 * @param calendarEventId the calendar event ID of this calendar booking
+	 * @param calendarId the calendar ID of this calendar booking
 	 */
-	public void setCalendarEventId(long calendarEventId);
+	public void setCalendarId(long calendarId);
 
 	/**
 	 * Returns the calendar resource ID of this calendar booking.
@@ -224,41 +223,18 @@ public interface CalendarBookingModel extends AttachedModel,
 	public void setCalendarResourceId(long calendarResourceId);
 
 	/**
-	 * Returns the fully qualified class name of this calendar booking.
+	 * Returns the parent calendar booking ID of this calendar booking.
 	 *
-	 * @return the fully qualified class name of this calendar booking
+	 * @return the parent calendar booking ID of this calendar booking
 	 */
-	public String getClassName();
-
-	public void setClassName(String className);
+	public long getParentCalendarBookingId();
 
 	/**
-	 * Returns the class name ID of this calendar booking.
+	 * Sets the parent calendar booking ID of this calendar booking.
 	 *
-	 * @return the class name ID of this calendar booking
+	 * @param parentCalendarBookingId the parent calendar booking ID of this calendar booking
 	 */
-	public long getClassNameId();
-
-	/**
-	 * Sets the class name ID of this calendar booking.
-	 *
-	 * @param classNameId the class name ID of this calendar booking
-	 */
-	public void setClassNameId(long classNameId);
-
-	/**
-	 * Returns the class p k of this calendar booking.
-	 *
-	 * @return the class p k of this calendar booking
-	 */
-	public long getClassPK();
-
-	/**
-	 * Sets the class p k of this calendar booking.
-	 *
-	 * @param classPK the class p k of this calendar booking
-	 */
-	public void setClassPK(long classPK);
+	public void setParentCalendarBookingId(long parentCalendarBookingId);
 
 	/**
 	 * Returns the title of this calendar booking.
@@ -358,105 +334,6 @@ public interface CalendarBookingModel extends AttachedModel,
 	 * @param defaultLocale the default locale
 	 */
 	public void setTitleMap(Map<Locale, String> titleMap, Locale defaultLocale);
-
-	/**
-	 * Returns the name of this calendar booking.
-	 *
-	 * @return the name of this calendar booking
-	 */
-	public String getName();
-
-	/**
-	 * Returns the localized name of this calendar booking in the language. Uses the default language if no localization exists for the requested language.
-	 *
-	 * @param locale the locale of the language
-	 * @return the localized name of this calendar booking
-	 */
-	@AutoEscape
-	public String getName(Locale locale);
-
-	/**
-	 * Returns the localized name of this calendar booking in the language, optionally using the default language if no localization exists for the requested language.
-	 *
-	 * @param locale the local of the language
-	 * @param useDefault whether to use the default language if no localization exists for the requested language
-	 * @return the localized name of this calendar booking. If <code>useDefault</code> is <code>false</code> and no localization exists for the requested language, an empty string will be returned.
-	 */
-	@AutoEscape
-	public String getName(Locale locale, boolean useDefault);
-
-	/**
-	 * Returns the localized name of this calendar booking in the language. Uses the default language if no localization exists for the requested language.
-	 *
-	 * @param languageId the ID of the language
-	 * @return the localized name of this calendar booking
-	 */
-	@AutoEscape
-	public String getName(String languageId);
-
-	/**
-	 * Returns the localized name of this calendar booking in the language, optionally using the default language if no localization exists for the requested language.
-	 *
-	 * @param languageId the ID of the language
-	 * @param useDefault whether to use the default language if no localization exists for the requested language
-	 * @return the localized name of this calendar booking
-	 */
-	@AutoEscape
-	public String getName(String languageId, boolean useDefault);
-
-	@AutoEscape
-	public String getNameCurrentLanguageId();
-
-	@AutoEscape
-	public String getNameCurrentValue();
-
-	/**
-	 * Returns a map of the locales and localized names of this calendar booking.
-	 *
-	 * @return the locales and localized names of this calendar booking
-	 */
-	public Map<Locale, String> getNameMap();
-
-	/**
-	 * Sets the name of this calendar booking.
-	 *
-	 * @param name the name of this calendar booking
-	 */
-	public void setName(String name);
-
-	/**
-	 * Sets the localized name of this calendar booking in the language.
-	 *
-	 * @param name the localized name of this calendar booking
-	 * @param locale the locale of the language
-	 */
-	public void setName(String name, Locale locale);
-
-	/**
-	 * Sets the localized name of this calendar booking in the language, and sets the default locale.
-	 *
-	 * @param name the localized name of this calendar booking
-	 * @param locale the locale of the language
-	 * @param defaultLocale the default locale
-	 */
-	public void setName(String name, Locale locale, Locale defaultLocale);
-
-	public void setNameCurrentLanguageId(String languageId);
-
-	/**
-	 * Sets the localized names of this calendar booking from the map of locales and localized names.
-	 *
-	 * @param nameMap the locales and localized names of this calendar booking
-	 */
-	public void setNameMap(Map<Locale, String> nameMap);
-
-	/**
-	 * Sets the localized names of this calendar booking from the map of locales and localized names, and sets the default locale.
-	 *
-	 * @param nameMap the locales and localized names of this calendar booking
-	 * @param defaultLocale the default locale
-	 */
-	public void setNameMap(Map<Locale, String> nameMap, Locale defaultLocale);
 
 	/**
 	 * Returns the description of this calendar booking.
@@ -603,32 +480,25 @@ public interface CalendarBookingModel extends AttachedModel,
 	public void setEndDate(Date endDate);
 
 	/**
-	 * Returns the duration hour of this calendar booking.
+	 * Returns the all day of this calendar booking.
 	 *
-	 * @return the duration hour of this calendar booking
+	 * @return the all day of this calendar booking
 	 */
-	public int getDurationHour();
+	public boolean getAllDay();
 
 	/**
-	 * Sets the duration hour of this calendar booking.
+	 * Returns <code>true</code> if this calendar booking is all day.
 	 *
-	 * @param durationHour the duration hour of this calendar booking
+	 * @return <code>true</code> if this calendar booking is all day; <code>false</code> otherwise
 	 */
-	public void setDurationHour(int durationHour);
+	public boolean isAllDay();
 
 	/**
-	 * Returns the duration minute of this calendar booking.
+	 * Sets whether this calendar booking is all day.
 	 *
-	 * @return the duration minute of this calendar booking
+	 * @param allDay the all day of this calendar booking
 	 */
-	public int getDurationMinute();
-
-	/**
-	 * Sets the duration minute of this calendar booking.
-	 *
-	 * @param durationMinute the duration minute of this calendar booking
-	 */
-	public void setDurationMinute(int durationMinute);
+	public void setAllDay(boolean allDay);
 
 	/**
 	 * Returns the recurrence of this calendar booking.
@@ -646,40 +516,32 @@ public interface CalendarBookingModel extends AttachedModel,
 	public void setRecurrence(String recurrence);
 
 	/**
-	 * Returns the type of this calendar booking.
+	 * Returns the first reminder of this calendar booking.
 	 *
-	 * @return the type of this calendar booking
+	 * @return the first reminder of this calendar booking
 	 */
-	@AutoEscape
-	public String getType();
+	public int getFirstReminder();
 
 	/**
-	 * Sets the type of this calendar booking.
+	 * Sets the first reminder of this calendar booking.
 	 *
-	 * @param type the type of this calendar booking
+	 * @param firstReminder the first reminder of this calendar booking
 	 */
-	public void setType(String type);
+	public void setFirstReminder(int firstReminder);
 
 	/**
-	 * Returns the required of this calendar booking.
+	 * Returns the second reminder of this calendar booking.
 	 *
-	 * @return the required of this calendar booking
+	 * @return the second reminder of this calendar booking
 	 */
-	public boolean getRequired();
+	public int getSecondReminder();
 
 	/**
-	 * Returns <code>true</code> if this calendar booking is required.
+	 * Sets the second reminder of this calendar booking.
 	 *
-	 * @return <code>true</code> if this calendar booking is required; <code>false</code> otherwise
+	 * @param secondReminder the second reminder of this calendar booking
 	 */
-	public boolean isRequired();
-
-	/**
-	 * Sets whether this calendar booking is required.
-	 *
-	 * @param required the required of this calendar booking
-	 */
-	public void setRequired(boolean required);
+	public void setSecondReminder(int secondReminder);
 
 	/**
 	 * Returns the status of this calendar booking.

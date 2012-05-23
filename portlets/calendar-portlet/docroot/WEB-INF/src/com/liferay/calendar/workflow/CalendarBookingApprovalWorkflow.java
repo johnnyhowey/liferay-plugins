@@ -24,6 +24,7 @@ import java.util.Map;
 
 /**
  * @author Michael C. Han
+ * @author Eduardo Lundgren
  */
 public interface CalendarBookingApprovalWorkflow {
 

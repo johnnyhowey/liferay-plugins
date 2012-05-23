@@ -35,7 +35,7 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(55);
+		StringBundler sb = new StringBundler(49);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -53,18 +53,14 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
-		sb.append(", calendarEventId=");
-		sb.append(calendarEventId);
+		sb.append(", calendarId=");
+		sb.append(calendarId);
 		sb.append(", calendarResourceId=");
 		sb.append(calendarResourceId);
-		sb.append(", classNameId=");
-		sb.append(classNameId);
-		sb.append(", classPK=");
-		sb.append(classPK);
+		sb.append(", parentCalendarBookingId=");
+		sb.append(parentCalendarBookingId);
 		sb.append(", title=");
 		sb.append(title);
-		sb.append(", name=");
-		sb.append(name);
 		sb.append(", description=");
 		sb.append(description);
 		sb.append(", location=");
@@ -73,16 +69,14 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 		sb.append(startDate);
 		sb.append(", endDate=");
 		sb.append(endDate);
-		sb.append(", durationHour=");
-		sb.append(durationHour);
-		sb.append(", durationMinute=");
-		sb.append(durationMinute);
+		sb.append(", allDay=");
+		sb.append(allDay);
 		sb.append(", recurrence=");
 		sb.append(recurrence);
-		sb.append(", type=");
-		sb.append(type);
-		sb.append(", required=");
-		sb.append(required);
+		sb.append(", firstReminder=");
+		sb.append(firstReminder);
+		sb.append(", secondReminder=");
+		sb.append(secondReminder);
 		sb.append(", status=");
 		sb.append(status);
 		sb.append(", statusByUserId=");
@@ -132,23 +126,15 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 			calendarBookingImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
-		calendarBookingImpl.setCalendarEventId(calendarEventId);
+		calendarBookingImpl.setCalendarId(calendarId);
 		calendarBookingImpl.setCalendarResourceId(calendarResourceId);
-		calendarBookingImpl.setClassNameId(classNameId);
-		calendarBookingImpl.setClassPK(classPK);
+		calendarBookingImpl.setParentCalendarBookingId(parentCalendarBookingId);
 
 		if (title == null) {
 			calendarBookingImpl.setTitle(StringPool.BLANK);
 		}
 		else {
 			calendarBookingImpl.setTitle(title);
-		}
-
-		if (name == null) {
-			calendarBookingImpl.setName(StringPool.BLANK);
-		}
-		else {
-			calendarBookingImpl.setName(name);
 		}
 
 		if (description == null) {
@@ -179,8 +165,7 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 			calendarBookingImpl.setEndDate(new Date(endDate));
 		}
 
-		calendarBookingImpl.setDurationHour(durationHour);
-		calendarBookingImpl.setDurationMinute(durationMinute);
+		calendarBookingImpl.setAllDay(allDay);
 
 		if (recurrence == null) {
 			calendarBookingImpl.setRecurrence(StringPool.BLANK);
@@ -189,14 +174,8 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 			calendarBookingImpl.setRecurrence(recurrence);
 		}
 
-		if (type == null) {
-			calendarBookingImpl.setType(StringPool.BLANK);
-		}
-		else {
-			calendarBookingImpl.setType(type);
-		}
-
-		calendarBookingImpl.setRequired(required);
+		calendarBookingImpl.setFirstReminder(firstReminder);
+		calendarBookingImpl.setSecondReminder(secondReminder);
 		calendarBookingImpl.setStatus(status);
 		calendarBookingImpl.setStatusByUserId(statusByUserId);
 
@@ -227,21 +206,18 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
-	public long calendarEventId;
+	public long calendarId;
 	public long calendarResourceId;
-	public long classNameId;
-	public long classPK;
+	public long parentCalendarBookingId;
 	public String title;
-	public String name;
 	public String description;
 	public String location;
 	public long startDate;
 	public long endDate;
-	public int durationHour;
-	public int durationMinute;
+	public boolean allDay;
 	public String recurrence;
-	public String type;
-	public boolean required;
+	public int firstReminder;
+	public int secondReminder;
 	public int status;
 	public long statusByUserId;
 	public String statusByUserName;
