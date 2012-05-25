@@ -21,12 +21,14 @@ import com.liferay.portal.kernel.bean.IdentifiableBean;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.model.PersistedModel;
+import com.liferay.portal.service.BaseLocalServiceImpl;
 import com.liferay.portal.service.PersistedModelLocalServiceRegistryUtil;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.UserLocalService;
@@ -86,7 +88,7 @@ import javax.sql.DataSource;
  * @see com.liferay.portal.workflow.kaleo.service.KaleoNodeLocalServiceUtil
  * @generated
  */
-public abstract class KaleoNodeLocalServiceBaseImpl
+public abstract class KaleoNodeLocalServiceBaseImpl extends BaseLocalServiceImpl
 	implements KaleoNodeLocalService, IdentifiableBean {
 	/*
 	 * NOTE FOR DEVELOPERS:
@@ -144,6 +146,13 @@ public abstract class KaleoNodeLocalServiceBaseImpl
 	public KaleoNode deleteKaleoNode(KaleoNode kaleoNode)
 		throws SystemException {
 		return kaleoNodePersistence.remove(kaleoNode);
+	}
+
+	public DynamicQuery dynamicQuery() {
+		Class<?> clazz = getClass();
+
+		return DynamicQueryFactoryUtil.forClass(KaleoNode.class,
+			clazz.getClassLoader());
 	}
 
 	/**
@@ -1054,10 +1063,9 @@ public abstract class KaleoNodeLocalServiceBaseImpl
 		_beanIdentifier = beanIdentifier;
 	}
 
-	protected ClassLoader getClassLoader() {
-		Class<?> clazz = getClass();
-
-		return clazz.getClassLoader();
+	public Object invokeMethod(String name, String[] parameterTypes,
+		Object[] arguments) throws Throwable {
+		return _clpInvoker.invokeMethod(name, parameterTypes, arguments);
 	}
 
 	protected Class<?> getModelClass() {
@@ -1166,4 +1174,5 @@ public abstract class KaleoNodeLocalServiceBaseImpl
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
 	private String _beanIdentifier;
+	private KaleoNodeLocalServiceClpInvoker _clpInvoker = new KaleoNodeLocalServiceClpInvoker();
 }

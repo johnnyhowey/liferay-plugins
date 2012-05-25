@@ -35,7 +35,7 @@ public class CalendarResourceCacheModel implements CacheModel<CalendarResource>,
 	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(29);
+		StringBundler sb = new StringBundler(37);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -53,16 +53,24 @@ public class CalendarResourceCacheModel implements CacheModel<CalendarResource>,
 		sb.append(createDate);
 		sb.append(", modifiedDate=");
 		sb.append(modifiedDate);
+		sb.append(", resourceBlockId=");
+		sb.append(resourceBlockId);
 		sb.append(", classNameId=");
 		sb.append(classNameId);
 		sb.append(", classPK=");
 		sb.append(classPK);
 		sb.append(", classUuid=");
 		sb.append(classUuid);
+		sb.append(", defaultCalendarId=");
+		sb.append(defaultCalendarId);
+		sb.append(", code=");
+		sb.append(code);
 		sb.append(", name=");
 		sb.append(name);
 		sb.append(", description=");
 		sb.append(description);
+		sb.append(", type=");
+		sb.append(type);
 		sb.append(", active=");
 		sb.append(active);
 		sb.append("}");
@@ -106,6 +114,7 @@ public class CalendarResourceCacheModel implements CacheModel<CalendarResource>,
 			calendarResourceImpl.setModifiedDate(new Date(modifiedDate));
 		}
 
+		calendarResourceImpl.setResourceBlockId(resourceBlockId);
 		calendarResourceImpl.setClassNameId(classNameId);
 		calendarResourceImpl.setClassPK(classPK);
 
@@ -114,6 +123,15 @@ public class CalendarResourceCacheModel implements CacheModel<CalendarResource>,
 		}
 		else {
 			calendarResourceImpl.setClassUuid(classUuid);
+		}
+
+		calendarResourceImpl.setDefaultCalendarId(defaultCalendarId);
+
+		if (code == null) {
+			calendarResourceImpl.setCode(StringPool.BLANK);
+		}
+		else {
+			calendarResourceImpl.setCode(code);
 		}
 
 		if (name == null) {
@@ -128,6 +146,13 @@ public class CalendarResourceCacheModel implements CacheModel<CalendarResource>,
 		}
 		else {
 			calendarResourceImpl.setDescription(description);
+		}
+
+		if (type == null) {
+			calendarResourceImpl.setType(StringPool.BLANK);
+		}
+		else {
+			calendarResourceImpl.setType(type);
 		}
 
 		calendarResourceImpl.setActive(active);
@@ -145,10 +170,14 @@ public class CalendarResourceCacheModel implements CacheModel<CalendarResource>,
 	public String userName;
 	public long createDate;
 	public long modifiedDate;
+	public long resourceBlockId;
 	public long classNameId;
 	public long classPK;
 	public String classUuid;
+	public long defaultCalendarId;
+	public String code;
 	public String name;
 	public String description;
+	public String type;
 	public boolean active;
 }

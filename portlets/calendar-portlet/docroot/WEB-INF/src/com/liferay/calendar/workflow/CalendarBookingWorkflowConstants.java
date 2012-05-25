@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 /**
  * @author Michael C. Han
+ * @author Eduardo Lundgren
  */
 public class CalendarBookingWorkflowConstants extends WorkflowConstants {
 

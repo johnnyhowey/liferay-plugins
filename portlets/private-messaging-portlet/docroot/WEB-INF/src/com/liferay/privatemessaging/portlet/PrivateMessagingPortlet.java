@@ -21,9 +21,15 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.notifications.Channel;
+import com.liferay.portal.kernel.notifications.ChannelException;
+import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
+import com.liferay.portal.kernel.notifications.NotificationEvent;
+import com.liferay.portal.kernel.notifications.UnknownChannelException;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -31,7 +37,6 @@ import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.CompanyConstants;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -42,6 +47,8 @@ import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.privatemessaging.service.UserThreadLocalServiceUtil;
+import com.liferay.privatemessaging.util.PortletKeys;
+import com.liferay.privatemessaging.util.PortletPropsValues;
 import com.liferay.privatemessaging.util.PrivateMessagingUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
@@ -62,6 +69,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author Scott Lee
+ * @author Eudaldo Alonso
  */
 public class PrivateMessagingPortlet extends MVCPortlet {
 
@@ -78,6 +86,14 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		for (long mbThreadId : mbThreadIds) {
 			UserThreadLocalServiceUtil.deleteUserThread(
 				themeDisplay.getUserId(), mbThreadId);
+
+			try {
+				removeNotification(
+					themeDisplay.getCompanyId(), themeDisplay.getUserId(),
+					mbThreadId);
+			}
+			catch (ChannelException ce) {
+			}
 		}
 	}
 
@@ -219,12 +235,14 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		throws PortletException {
 
 		try {
-			String resourceID = resourceRequest.getResourceID();
+			String resourceID = GetterUtil.getString(
+				resourceRequest.getResourceID());
 
-			if (Validator.isNotNull(resourceID) &&
-				resourceID.equals("checkRecipients")) {
-
+			if (resourceID.equals("checkRecipients")) {
 				checkRecipients(resourceRequest, resourceResponse);
+			}
+			else if (resourceID.equals("getUsers")) {
+				getUsers(resourceRequest, resourceResponse);
 			}
 			else {
 				super.serveResource(resourceRequest, resourceResponse);
@@ -284,6 +302,61 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		}
 
 		writeJSON(resourceRequest, resourceResponse, jsonObject);
+	}
+
+	protected void getUsers(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String keywords = ParamUtil.getString(resourceRequest, "keywords");
+
+		JSONObject jsonObject = PrivateMessagingUtil.getJSONRecipients(
+			themeDisplay.getUserId(),
+			PortletPropsValues.AUTOCOMPLETE_RECIPIENT_TYPE, keywords, 0,
+			PortletPropsValues.AUTOCOMPLETE_RECIPIENT_MAX);
+
+		JSONObject results = JSONFactoryUtil.createJSONObject();
+
+		results.put("results", jsonObject);
+
+		writeJSON(resourceRequest, resourceResponse, results);
+	}
+
+	protected void removeNotification(
+			long companyId, long userId, long mbThreadId)
+		throws ChannelException {
+
+		List<NotificationEvent> notificationEvents = null;
+
+		try {
+			notificationEvents = ChannelHubManagerUtil.getNotificationEvents(
+				companyId, userId, true);
+		}
+		catch (UnknownChannelException e) {
+			Channel channel = ChannelHubManagerUtil.getChannel(
+				companyId, userId, true);
+
+			notificationEvents = channel.getNotificationEvents();
+		}
+
+		for (NotificationEvent notificationEvent : notificationEvents) {
+			JSONObject notificationEventJSONObject =
+				notificationEvent.getPayload();
+
+			String portletId = notificationEventJSONObject.getString(
+				"portletId");
+			long entryId = notificationEventJSONObject.getLong("entryId");
+
+			if (portletId.equals(PortletKeys.PRIVATE_MESSAGING) &&
+				(entryId == mbThreadId)) {
+
+				ChannelHubManagerUtil.deleteUserNotificiationEvent(
+					companyId, userId, notificationEvent.getUuid());
+			}
+		}
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(

@@ -195,6 +195,20 @@ public interface CalendarResourceModel extends AttachedModel,
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
+	 * Returns the resource block ID of this calendar resource.
+	 *
+	 * @return the resource block ID of this calendar resource
+	 */
+	public long getResourceBlockId();
+
+	/**
+	 * Sets the resource block ID of this calendar resource.
+	 *
+	 * @param resourceBlockId the resource block ID of this calendar resource
+	 */
+	public void setResourceBlockId(long resourceBlockId);
+
+	/**
 	 * Returns the fully qualified class name of this calendar resource.
 	 *
 	 * @return the fully qualified class name of this calendar resource
@@ -245,6 +259,35 @@ public interface CalendarResourceModel extends AttachedModel,
 	 * @param classUuid the class uuid of this calendar resource
 	 */
 	public void setClassUuid(String classUuid);
+
+	/**
+	 * Returns the default calendar ID of this calendar resource.
+	 *
+	 * @return the default calendar ID of this calendar resource
+	 */
+	public long getDefaultCalendarId();
+
+	/**
+	 * Sets the default calendar ID of this calendar resource.
+	 *
+	 * @param defaultCalendarId the default calendar ID of this calendar resource
+	 */
+	public void setDefaultCalendarId(long defaultCalendarId);
+
+	/**
+	 * Returns the code of this calendar resource.
+	 *
+	 * @return the code of this calendar resource
+	 */
+	@AutoEscape
+	public String getCode();
+
+	/**
+	 * Sets the code of this calendar resource.
+	 *
+	 * @param code the code of this calendar resource
+	 */
+	public void setCode(String code);
 
 	/**
 	 * Returns the name of this calendar resource.
@@ -445,6 +488,21 @@ public interface CalendarResourceModel extends AttachedModel,
 	 */
 	public void setDescriptionMap(Map<Locale, String> descriptionMap,
 		Locale defaultLocale);
+
+	/**
+	 * Returns the type of this calendar resource.
+	 *
+	 * @return the type of this calendar resource
+	 */
+	@AutoEscape
+	public String getType();
+
+	/**
+	 * Sets the type of this calendar resource.
+	 *
+	 * @param type the type of this calendar resource
+	 */
+	public void setType(String type);
 
 	/**
 	 * Returns the active of this calendar resource.

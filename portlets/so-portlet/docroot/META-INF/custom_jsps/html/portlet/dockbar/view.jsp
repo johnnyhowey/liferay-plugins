@@ -28,6 +28,29 @@
 			<liferay-util:include page="/html/portlet/dockbar/view.portal.jsp" />
 		</liferay-util:buffer>
 
+		<c:if test="<%= (layout != null) && layout.getGroup().isControlPanel() %>">
+
+			<%
+			if (themeDisplay.getRefererPlid() > 0) {
+				Layout refererLayout = LayoutLocalServiceUtil.fetchLayout(themeDisplay.getRefererPlid());
+
+				if (refererLayout != null) {
+					Group refererGroup = refererLayout.getGroup();
+
+					if (refererGroup.isUser() && (refererGroup.getClassPK() == user.getUserId())) {
+						if (refererLayout.isPublicLayout()) {
+							html = html.replaceFirst(LanguageUtil.get(pageContext, "my-public-pages"), LanguageUtil.get(pageContext, "profile"));
+						}
+						else {
+							html = html.replaceFirst(LanguageUtil.get(pageContext, "my-private-pages"), LanguageUtil.get(pageContext, "dashboard"));
+						}
+					}
+				}
+			}
+			%>
+
+		</c:if>
+
 		<%
 		int x = html.indexOf("<li class=\"user-avatar \" id=\"_145_userAvatar\">");
 		int y = html.indexOf("<div class=\"dockbar-messages\"");
@@ -82,7 +105,12 @@
 						<div class="aui-menu-content" id="<portlet:namespace />userMenuContent">
 							<ul>
 								<li class="aui-menu-item first profile">
-									<a href="<%= user.getDisplayURL(themeDisplay) %>">
+
+									<%
+									portletURL.setParameter("privateLayout", Boolean.FALSE.toString());
+									%>
+
+									<a href="<%= portletURL %>">
 										<liferay-ui:icon
 											message="my-profile"
 											src='/html/icons/users_admin.png'
@@ -109,7 +137,7 @@
 									<a href="<%= themeDisplay.getURLSignOut().toString() %>">
 										<liferay-ui:icon
 											message="sign-out"
-											src='<%= themeDisplay.getPathThemeImages() + "/common/sign_out.png" %>'
+											src='<%= themeDisplay.getPathThemeImages() + "/dock/sign_out.png" %>'
 										/>
 
 										<liferay-ui:message key="sign-out" />

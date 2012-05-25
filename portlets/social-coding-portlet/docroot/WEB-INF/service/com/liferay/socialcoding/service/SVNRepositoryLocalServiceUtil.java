@@ -15,9 +15,8 @@
 package com.liferay.socialcoding.service;
 
 import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
-import com.liferay.portal.kernel.util.ClassLoaderProxy;
-import com.liferay.portal.kernel.util.MethodCache;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
+import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * The utility for the s v n repository local service. This utility wraps {@link com.liferay.socialcoding.service.impl.SVNRepositoryLocalServiceImpl} and is the primary access point for service operations in application layer code running on the local server.
@@ -89,6 +88,10 @@ public class SVNRepositoryLocalServiceUtil {
 		com.liferay.socialcoding.model.SVNRepository svnRepository)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return getService().deleteSVNRepository(svnRepository);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		return getService().dynamicQuery();
 	}
 
 	/**
@@ -265,6 +268,12 @@ public class SVNRepositoryLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
 	public static com.liferay.socialcoding.model.SVNRepository getSVNRepository(
 		java.lang.String url)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -284,35 +293,27 @@ public class SVNRepositoryLocalServiceUtil {
 
 	public static SVNRepositoryLocalService getService() {
 		if (_service == null) {
-			Object object = PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
+			InvokableLocalService invokableLocalService = (InvokableLocalService)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
 					SVNRepositoryLocalService.class.getName());
-			ClassLoader portletClassLoader = (ClassLoader)PortletBeanLocatorUtil.locate(ClpSerializer.getServletContextName(),
-					"portletClassLoader");
 
-			ClassLoaderProxy classLoaderProxy = new ClassLoaderProxy(object,
-					SVNRepositoryLocalService.class.getName(),
-					portletClassLoader);
-
-			_service = new SVNRepositoryLocalServiceClp(classLoaderProxy);
-
-			ClpSerializer.setClassLoader(portletClassLoader);
+			if (invokableLocalService instanceof SVNRepositoryLocalService) {
+				_service = (SVNRepositoryLocalService)invokableLocalService;
+			}
+			else {
+				_service = new SVNRepositoryLocalServiceClp(invokableLocalService);
+			}
 
 			ReferenceRegistry.registerReference(SVNRepositoryLocalServiceUtil.class,
 				"_service");
-			MethodCache.remove(SVNRepositoryLocalService.class);
 		}
 
 		return _service;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public void setService(SVNRepositoryLocalService service) {
-		MethodCache.remove(SVNRepositoryLocalService.class);
-
-		_service = service;
-
-		ReferenceRegistry.registerReference(SVNRepositoryLocalServiceUtil.class,
-			"_service");
-		MethodCache.remove(SVNRepositoryLocalService.class);
 	}
 
 	private static SVNRepositoryLocalService _service;
