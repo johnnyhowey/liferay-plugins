@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.TextFormatter;
@@ -129,6 +130,16 @@ public class HotDeployMessageListener extends BaseMessageListener {
 				}
 
 				importer.importResources();
+
+				Message newMessage = new Message();
+
+				newMessage.put("companyId", company.getCompanyId());
+				newMessage.put(
+					"layoutSetPrototypeId", importer.getLayoutSetPrototypeId());
+				newMessage.put("servletContextName", servletContextName);
+
+				MessageBusUtil.sendMessage(
+					"liferay/resources_importer", newMessage);
 			}
 			finally {
 				CompanyThreadLocal.setCompanyId(companyId);

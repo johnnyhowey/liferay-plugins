@@ -35,6 +35,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the Entry service. Represents a row in the &quot;Chat_Entry&quot; database table, with each column mapped to a property of this class.
  *
@@ -110,6 +113,52 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	public String getModelClassName() {
 		return Entry.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("entryId", getEntryId());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("fromUserId", getFromUserId());
+		attributes.put("toUserId", getToUserId());
+		attributes.put("content", getContent());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long entryId = (Long)attributes.get("entryId");
+
+		if (entryId != null) {
+			setEntryId(entryId);
+		}
+
+		Long createDate = (Long)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Long fromUserId = (Long)attributes.get("fromUserId");
+
+		if (fromUserId != null) {
+			setFromUserId(fromUserId);
+		}
+
+		Long toUserId = (Long)attributes.get("toUserId");
+
+		if (toUserId != null) {
+			setToUserId(toUserId);
+		}
+
+		String content = (String)attributes.get("content");
+
+		if (content != null) {
+			setContent(content);
+		}
 	}
 
 	public long getEntryId() {
@@ -236,17 +285,15 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(0,
-					Entry.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(0,
+			Entry.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
 	}
 
 	@Override
@@ -430,7 +477,6 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	private boolean _setOriginalToUserId;
 	private String _content;
 	private String _originalContent;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
 	private Entry _escapedModelProxy;
 }

@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.CalendarUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -52,6 +53,7 @@ import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -131,28 +133,28 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
 			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CALENDAREVENTID =
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CALENDARID =
 		new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
 			CalendarBookingImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByCalendarEventId",
+			"findByCalendarId",
 			new String[] {
 				Long.class.getName(),
 				
 			"java.lang.Integer", "java.lang.Integer",
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDAREVENTID =
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDARID =
 		new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
 			CalendarBookingImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCalendarEventId",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCalendarId",
 			new String[] { Long.class.getName() },
-			CalendarBookingModelImpl.CALENDAREVENTID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_CALENDAREVENTID = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.CALENDARID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_CALENDARID = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByCalendarEventId", new String[] { Long.class.getName() });
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCalendarId",
+			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CALENDARRESOURCEID =
 		new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
@@ -175,27 +177,108 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
 			"countByCalendarResourceId", new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTCALENDARBOOKINGID =
+		new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
 			CalendarBookingImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByC_C",
+			"findByParentCalendarBookingId",
 			new String[] {
-				Long.class.getName(), Long.class.getName(),
+				Long.class.getName(),
 				
 			"java.lang.Integer", "java.lang.Integer",
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTCALENDARBOOKINGID =
+		new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
 			CalendarBookingImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_C",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			CalendarBookingModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			CalendarBookingModelImpl.CLASSPK_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_C = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByParentCalendarBookingId",
+			new String[] { Long.class.getName() },
+			CalendarBookingModelImpl.PARENTCALENDARBOOKINGID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_PARENTCALENDARBOOKINGID = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_C",
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByParentCalendarBookingId",
+			new String[] { Long.class.getName() });
+	public static final FinderPath FINDER_PATH_FETCH_BY_C_P = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
+			CalendarBookingImpl.class, FINDER_CLASS_NAME_ENTITY, "fetchByC_P",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			CalendarBookingModelImpl.CALENDARID_COLUMN_BITMASK |
+			CalendarBookingModelImpl.PARENTCALENDARBOOKINGID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_P = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_P",
 			new String[] { Long.class.getName(), Long.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
+			CalendarBookingImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByC_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
+			CalendarBookingImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			CalendarBookingModelImpl.CALENDARRESOURCEID_COLUMN_BITMASK |
+			CalendarBookingModelImpl.STATUS_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_S = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
+			CalendarBookingImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByP_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
+			CalendarBookingImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			CalendarBookingModelImpl.PARENTCALENDARBOOKINGID_COLUMN_BITMASK |
+			CalendarBookingModelImpl.STATUS_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_P_S = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S_E = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
+			CalendarBookingImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByC_S_E",
+			new String[] {
+				Long.class.getName(), Date.class.getName(), Date.class.getName(),
+				
+			"java.lang.Integer", "java.lang.Integer",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S_E = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
+			CalendarBookingImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_S_E",
+			new String[] {
+				Long.class.getName(), Date.class.getName(), Date.class.getName()
+			},
+			CalendarBookingModelImpl.CALENDARID_COLUMN_BITMASK |
+			CalendarBookingModelImpl.STARTDATE_COLUMN_BITMASK |
+			CalendarBookingModelImpl.ENDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_S_E = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
+			CalendarBookingModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_S_E",
+			new String[] {
+				Long.class.getName(), Date.class.getName(), Date.class.getName()
+			});
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(CalendarBookingModelImpl.ENTITY_CACHE_ENABLED,
 			CalendarBookingModelImpl.FINDER_CACHE_ENABLED,
 			CalendarBookingImpl.class, FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
@@ -222,6 +305,12 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 			new Object[] {
 				calendarBooking.getUuid(),
 				Long.valueOf(calendarBooking.getGroupId())
+			}, calendarBooking);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_P,
+			new Object[] {
+				Long.valueOf(calendarBooking.getCalendarId()),
+				Long.valueOf(calendarBooking.getParentCalendarBookingId())
 			}, calendarBooking);
 
 		calendarBooking.resetOriginalValues();
@@ -302,6 +391,12 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 			new Object[] {
 				calendarBooking.getUuid(),
 				Long.valueOf(calendarBooking.getGroupId())
+			});
+
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
+			new Object[] {
+				Long.valueOf(calendarBooking.getCalendarId()),
+				Long.valueOf(calendarBooking.getParentCalendarBookingId())
 			});
 	}
 
@@ -479,23 +574,23 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 			}
 
 			if ((calendarBookingModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDAREVENTID.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDARID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						Long.valueOf(calendarBookingModelImpl.getOriginalCalendarEventId())
+						Long.valueOf(calendarBookingModelImpl.getOriginalCalendarId())
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CALENDAREVENTID,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CALENDARID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDAREVENTID,
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDARID,
 					args);
 
 				args = new Object[] {
-						Long.valueOf(calendarBookingModelImpl.getCalendarEventId())
+						Long.valueOf(calendarBookingModelImpl.getCalendarId())
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CALENDAREVENTID,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CALENDARID,
 					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDAREVENTID,
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDARID,
 					args);
 			}
 
@@ -521,23 +616,92 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 			}
 
 			if ((calendarBookingModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTCALENDARBOOKINGID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						Long.valueOf(calendarBookingModelImpl.getOriginalClassNameId()),
-						Long.valueOf(calendarBookingModelImpl.getOriginalClassPK())
+						Long.valueOf(calendarBookingModelImpl.getOriginalParentCalendarBookingId())
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PARENTCALENDARBOOKINGID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTCALENDARBOOKINGID,
 					args);
 
 				args = new Object[] {
-						Long.valueOf(calendarBookingModelImpl.getClassNameId()),
-						Long.valueOf(calendarBookingModelImpl.getClassPK())
+						Long.valueOf(calendarBookingModelImpl.getParentCalendarBookingId())
 					};
 
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PARENTCALENDARBOOKINGID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTCALENDARBOOKINGID,
+					args);
+			}
+
+			if ((calendarBookingModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(calendarBookingModelImpl.getOriginalCalendarResourceId()),
+						Integer.valueOf(calendarBookingModelImpl.getOriginalStatus())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(calendarBookingModelImpl.getCalendarResourceId()),
+						Integer.valueOf(calendarBookingModelImpl.getStatus())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S,
+					args);
+			}
+
+			if ((calendarBookingModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(calendarBookingModelImpl.getOriginalParentCalendarBookingId()),
+						Integer.valueOf(calendarBookingModelImpl.getOriginalStatus())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(calendarBookingModelImpl.getParentCalendarBookingId()),
+						Integer.valueOf(calendarBookingModelImpl.getStatus())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S,
+					args);
+			}
+
+			if ((calendarBookingModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S_E.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(calendarBookingModelImpl.getOriginalCalendarId()),
+						
+						calendarBookingModelImpl.getOriginalStartDate(),
+						
+						calendarBookingModelImpl.getOriginalEndDate()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_S_E, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S_E,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(calendarBookingModelImpl.getCalendarId()),
+						
+						calendarBookingModelImpl.getStartDate(),
+						
+						calendarBookingModelImpl.getEndDate()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_S_E, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S_E,
 					args);
 			}
 		}
@@ -551,6 +715,12 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 				new Object[] {
 					calendarBooking.getUuid(),
 					Long.valueOf(calendarBooking.getGroupId())
+				}, calendarBooking);
+
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_P,
+				new Object[] {
+					Long.valueOf(calendarBooking.getCalendarId()),
+					Long.valueOf(calendarBooking.getParentCalendarBookingId())
 				}, calendarBooking);
 		}
 		else {
@@ -568,6 +738,24 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 					new Object[] {
 						calendarBooking.getUuid(),
 						Long.valueOf(calendarBooking.getGroupId())
+					}, calendarBooking);
+			}
+
+			if ((calendarBookingModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_C_P.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(calendarBookingModelImpl.getOriginalCalendarId()),
+						Long.valueOf(calendarBookingModelImpl.getOriginalParentCalendarBookingId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_P, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P, args);
+
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_P,
+					new Object[] {
+						Long.valueOf(calendarBooking.getCalendarId()),
+						Long.valueOf(
+							calendarBooking.getParentCalendarBookingId())
 					}, calendarBooking);
 			}
 		}
@@ -593,21 +781,18 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		calendarBookingImpl.setUserName(calendarBooking.getUserName());
 		calendarBookingImpl.setCreateDate(calendarBooking.getCreateDate());
 		calendarBookingImpl.setModifiedDate(calendarBooking.getModifiedDate());
-		calendarBookingImpl.setCalendarEventId(calendarBooking.getCalendarEventId());
+		calendarBookingImpl.setCalendarId(calendarBooking.getCalendarId());
 		calendarBookingImpl.setCalendarResourceId(calendarBooking.getCalendarResourceId());
-		calendarBookingImpl.setClassNameId(calendarBooking.getClassNameId());
-		calendarBookingImpl.setClassPK(calendarBooking.getClassPK());
+		calendarBookingImpl.setParentCalendarBookingId(calendarBooking.getParentCalendarBookingId());
 		calendarBookingImpl.setTitle(calendarBooking.getTitle());
-		calendarBookingImpl.setName(calendarBooking.getName());
 		calendarBookingImpl.setDescription(calendarBooking.getDescription());
 		calendarBookingImpl.setLocation(calendarBooking.getLocation());
 		calendarBookingImpl.setStartDate(calendarBooking.getStartDate());
 		calendarBookingImpl.setEndDate(calendarBooking.getEndDate());
-		calendarBookingImpl.setDurationHour(calendarBooking.getDurationHour());
-		calendarBookingImpl.setDurationMinute(calendarBooking.getDurationMinute());
+		calendarBookingImpl.setAllDay(calendarBooking.isAllDay());
 		calendarBookingImpl.setRecurrence(calendarBooking.getRecurrence());
-		calendarBookingImpl.setType(calendarBooking.getType());
-		calendarBookingImpl.setRequired(calendarBooking.isRequired());
+		calendarBookingImpl.setFirstReminder(calendarBooking.getFirstReminder());
+		calendarBookingImpl.setSecondReminder(calendarBooking.getSecondReminder());
 		calendarBookingImpl.setStatus(calendarBooking.getStatus());
 		calendarBookingImpl.setStatusByUserId(calendarBooking.getStatusByUserId());
 		calendarBookingImpl.setStatusByUserName(calendarBooking.getStatusByUserName());
@@ -1666,68 +1851,63 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns all the calendar bookings where calendarEventId = &#63;.
+	 * Returns all the calendar bookings where calendarId = &#63;.
 	 *
-	 * @param calendarEventId the calendar event ID
+	 * @param calendarId the calendar ID
 	 * @return the matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<CalendarBooking> findByCalendarEventId(long calendarEventId)
+	public List<CalendarBooking> findByCalendarId(long calendarId)
 		throws SystemException {
-		return findByCalendarEventId(calendarEventId, QueryUtil.ALL_POS,
+		return findByCalendarId(calendarId, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the calendar bookings where calendarEventId = &#63;.
+	 * Returns a range of all the calendar bookings where calendarId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
-	 * @param calendarEventId the calendar event ID
+	 * @param calendarId the calendar ID
 	 * @param start the lower bound of the range of calendar bookings
 	 * @param end the upper bound of the range of calendar bookings (not inclusive)
 	 * @return the range of matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<CalendarBooking> findByCalendarEventId(long calendarEventId,
-		int start, int end) throws SystemException {
-		return findByCalendarEventId(calendarEventId, start, end, null);
+	public List<CalendarBooking> findByCalendarId(long calendarId, int start,
+		int end) throws SystemException {
+		return findByCalendarId(calendarId, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the calendar bookings where calendarEventId = &#63;.
+	 * Returns an ordered range of all the calendar bookings where calendarId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
-	 * @param calendarEventId the calendar event ID
+	 * @param calendarId the calendar ID
 	 * @param start the lower bound of the range of calendar bookings
 	 * @param end the upper bound of the range of calendar bookings (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<CalendarBooking> findByCalendarEventId(long calendarEventId,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
+	public List<CalendarBooking> findByCalendarId(long calendarId, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDAREVENTID;
-			finderArgs = new Object[] { calendarEventId };
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CALENDARID;
+			finderArgs = new Object[] { calendarId };
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_CALENDAREVENTID;
-			finderArgs = new Object[] {
-					calendarEventId,
-					
-					start, end, orderByComparator
-				};
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_CALENDARID;
+			finderArgs = new Object[] { calendarId, start, end, orderByComparator };
 		}
 
 		List<CalendarBooking> list = (List<CalendarBooking>)FinderCacheUtil.getResult(finderPath,
@@ -1735,7 +1915,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 		if ((list != null) && !list.isEmpty()) {
 			for (CalendarBooking calendarBooking : list) {
-				if ((calendarEventId != calendarBooking.getCalendarEventId())) {
+				if ((calendarId != calendarBooking.getCalendarId())) {
 					list = null;
 
 					break;
@@ -1756,7 +1936,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 			query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
 
-			query.append(_FINDER_COLUMN_CALENDAREVENTID_CALENDAREVENTID_2);
+			query.append(_FINDER_COLUMN_CALENDARID_CALENDARID_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -1778,7 +1958,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(calendarEventId);
+				qPos.add(calendarId);
 
 				list = (List<CalendarBooking>)QueryUtil.list(q, getDialect(),
 						start, end);
@@ -1804,31 +1984,31 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the first calendar booking in the ordered set where calendarEventId = &#63;.
+	 * Returns the first calendar booking in the ordered set where calendarId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
-	 * @param calendarEventId the calendar event ID
+	 * @param calendarId the calendar ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching calendar booking
 	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public CalendarBooking findByCalendarEventId_First(long calendarEventId,
+	public CalendarBooking findByCalendarId_First(long calendarId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBookingException, SystemException {
-		List<CalendarBooking> list = findByCalendarEventId(calendarEventId, 0,
-				1, orderByComparator);
+		List<CalendarBooking> list = findByCalendarId(calendarId, 0, 1,
+				orderByComparator);
 
 		if (list.isEmpty()) {
 			StringBundler msg = new StringBundler(4);
 
 			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-			msg.append("calendarEventId=");
-			msg.append(calendarEventId);
+			msg.append("calendarId=");
+			msg.append(calendarId);
 
 			msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -1840,33 +2020,33 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the last calendar booking in the ordered set where calendarEventId = &#63;.
+	 * Returns the last calendar booking in the ordered set where calendarId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
-	 * @param calendarEventId the calendar event ID
+	 * @param calendarId the calendar ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching calendar booking
 	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public CalendarBooking findByCalendarEventId_Last(long calendarEventId,
+	public CalendarBooking findByCalendarId_Last(long calendarId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBookingException, SystemException {
-		int count = countByCalendarEventId(calendarEventId);
+		int count = countByCalendarId(calendarId);
 
-		List<CalendarBooking> list = findByCalendarEventId(calendarEventId,
-				count - 1, count, orderByComparator);
+		List<CalendarBooking> list = findByCalendarId(calendarId, count - 1,
+				count, orderByComparator);
 
 		if (list.isEmpty()) {
 			StringBundler msg = new StringBundler(4);
 
 			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-			msg.append("calendarEventId=");
-			msg.append(calendarEventId);
+			msg.append("calendarId=");
+			msg.append(calendarId);
 
 			msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -1878,21 +2058,21 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the calendar bookings before and after the current calendar booking in the ordered set where calendarEventId = &#63;.
+	 * Returns the calendar bookings before and after the current calendar booking in the ordered set where calendarId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
 	 * @param calendarBookingId the primary key of the current calendar booking
-	 * @param calendarEventId the calendar event ID
+	 * @param calendarId the calendar ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next calendar booking
 	 * @throws com.liferay.calendar.NoSuchBookingException if a calendar booking with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public CalendarBooking[] findByCalendarEventId_PrevAndNext(
-		long calendarBookingId, long calendarEventId,
+	public CalendarBooking[] findByCalendarId_PrevAndNext(
+		long calendarBookingId, long calendarId,
 		OrderByComparator orderByComparator)
 		throws NoSuchBookingException, SystemException {
 		CalendarBooking calendarBooking = findByPrimaryKey(calendarBookingId);
@@ -1904,13 +2084,13 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 			CalendarBooking[] array = new CalendarBookingImpl[3];
 
-			array[0] = getByCalendarEventId_PrevAndNext(session,
-					calendarBooking, calendarEventId, orderByComparator, true);
+			array[0] = getByCalendarId_PrevAndNext(session, calendarBooking,
+					calendarId, orderByComparator, true);
 
 			array[1] = calendarBooking;
 
-			array[2] = getByCalendarEventId_PrevAndNext(session,
-					calendarBooking, calendarEventId, orderByComparator, false);
+			array[2] = getByCalendarId_PrevAndNext(session, calendarBooking,
+					calendarId, orderByComparator, false);
 
 			return array;
 		}
@@ -1922,8 +2102,8 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		}
 	}
 
-	protected CalendarBooking getByCalendarEventId_PrevAndNext(
-		Session session, CalendarBooking calendarBooking, long calendarEventId,
+	protected CalendarBooking getByCalendarId_PrevAndNext(Session session,
+		CalendarBooking calendarBooking, long calendarId,
 		OrderByComparator orderByComparator, boolean previous) {
 		StringBundler query = null;
 
@@ -1937,7 +2117,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 		query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
 
-		query.append(_FINDER_COLUMN_CALENDAREVENTID_CALENDAREVENTID_2);
+		query.append(_FINDER_COLUMN_CALENDARID_CALENDARID_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -2008,7 +2188,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		qPos.add(calendarEventId);
+		qPos.add(calendarId);
 
 		if (orderByComparator != null) {
 			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
@@ -2394,68 +2574,67 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns all the calendar bookings where classNameId = &#63; and classPK = &#63;.
+	 * Returns all the calendar bookings where parentCalendarBookingId = &#63;.
 	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
+	 * @param parentCalendarBookingId the parent calendar booking ID
 	 * @return the matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<CalendarBooking> findByC_C(long classNameId, long classPK)
-		throws SystemException {
-		return findByC_C(classNameId, classPK, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
+	public List<CalendarBooking> findByParentCalendarBookingId(
+		long parentCalendarBookingId) throws SystemException {
+		return findByParentCalendarBookingId(parentCalendarBookingId,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the calendar bookings where classNameId = &#63; and classPK = &#63;.
+	 * Returns a range of all the calendar bookings where parentCalendarBookingId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
+	 * @param parentCalendarBookingId the parent calendar booking ID
 	 * @param start the lower bound of the range of calendar bookings
 	 * @param end the upper bound of the range of calendar bookings (not inclusive)
 	 * @return the range of matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<CalendarBooking> findByC_C(long classNameId, long classPK,
-		int start, int end) throws SystemException {
-		return findByC_C(classNameId, classPK, start, end, null);
+	public List<CalendarBooking> findByParentCalendarBookingId(
+		long parentCalendarBookingId, int start, int end)
+		throws SystemException {
+		return findByParentCalendarBookingId(parentCalendarBookingId, start,
+			end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the calendar bookings where classNameId = &#63; and classPK = &#63;.
+	 * Returns an ordered range of all the calendar bookings where parentCalendarBookingId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
+	 * @param parentCalendarBookingId the parent calendar booking ID
 	 * @param start the lower bound of the range of calendar bookings
 	 * @param end the upper bound of the range of calendar bookings (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	 * @return the ordered range of matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<CalendarBooking> findByC_C(long classNameId, long classPK,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
+	public List<CalendarBooking> findByParentCalendarBookingId(
+		long parentCalendarBookingId, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C;
-			finderArgs = new Object[] { classNameId, classPK };
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PARENTCALENDARBOOKINGID;
+			finderArgs = new Object[] { parentCalendarBookingId };
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C;
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_PARENTCALENDARBOOKINGID;
 			finderArgs = new Object[] {
-					classNameId, classPK,
+					parentCalendarBookingId,
 					
 					start, end, orderByComparator
 				};
@@ -2466,8 +2645,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 		if ((list != null) && !list.isEmpty()) {
 			for (CalendarBooking calendarBooking : list) {
-				if ((classNameId != calendarBooking.getClassNameId()) ||
-						(classPK != calendarBooking.getClassPK())) {
+				if ((parentCalendarBookingId != calendarBooking.getParentCalendarBookingId())) {
 					list = null;
 
 					break;
@@ -2479,18 +2657,16 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 			StringBundler query = null;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(4 +
+				query = new StringBundler(3 +
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(4);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
 
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+			query.append(_FINDER_COLUMN_PARENTCALENDARBOOKINGID_PARENTCALENDARBOOKINGID_2);
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
@@ -2512,9 +2688,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
+				qPos.add(parentCalendarBookingId);
 
 				list = (List<CalendarBooking>)QueryUtil.list(q, getDialect(),
 						start, end);
@@ -2540,35 +2714,31 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the first calendar booking in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 * Returns the first calendar booking in the ordered set where parentCalendarBookingId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
+	 * @param parentCalendarBookingId the parent calendar booking ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the first matching calendar booking
 	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public CalendarBooking findByC_C_First(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+	public CalendarBooking findByParentCalendarBookingId_First(
+		long parentCalendarBookingId, OrderByComparator orderByComparator)
 		throws NoSuchBookingException, SystemException {
-		List<CalendarBooking> list = findByC_C(classNameId, classPK, 0, 1,
-				orderByComparator);
+		List<CalendarBooking> list = findByParentCalendarBookingId(parentCalendarBookingId,
+				0, 1, orderByComparator);
 
 		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
+			StringBundler msg = new StringBundler(4);
 
 			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-			msg.append("classNameId=");
-			msg.append(classNameId);
-
-			msg.append(", classPK=");
-			msg.append(classPK);
+			msg.append("parentCalendarBookingId=");
+			msg.append(parentCalendarBookingId);
 
 			msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -2580,37 +2750,33 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the last calendar booking in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 * Returns the last calendar booking in the ordered set where parentCalendarBookingId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
+	 * @param parentCalendarBookingId the parent calendar booking ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the last matching calendar booking
 	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public CalendarBooking findByC_C_Last(long classNameId, long classPK,
-		OrderByComparator orderByComparator)
+	public CalendarBooking findByParentCalendarBookingId_Last(
+		long parentCalendarBookingId, OrderByComparator orderByComparator)
 		throws NoSuchBookingException, SystemException {
-		int count = countByC_C(classNameId, classPK);
+		int count = countByParentCalendarBookingId(parentCalendarBookingId);
 
-		List<CalendarBooking> list = findByC_C(classNameId, classPK, count - 1,
-				count, orderByComparator);
+		List<CalendarBooking> list = findByParentCalendarBookingId(parentCalendarBookingId,
+				count - 1, count, orderByComparator);
 
 		if (list.isEmpty()) {
-			StringBundler msg = new StringBundler(6);
+			StringBundler msg = new StringBundler(4);
 
 			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
 
-			msg.append("classNameId=");
-			msg.append(classNameId);
-
-			msg.append(", classPK=");
-			msg.append(classPK);
+			msg.append("parentCalendarBookingId=");
+			msg.append(parentCalendarBookingId);
 
 			msg.append(StringPool.CLOSE_CURLY_BRACE);
 
@@ -2622,22 +2788,22 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the calendar bookings before and after the current calendar booking in the ordered set where classNameId = &#63; and classPK = &#63;.
+	 * Returns the calendar bookings before and after the current calendar booking in the ordered set where parentCalendarBookingId = &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
 	 * </p>
 	 *
 	 * @param calendarBookingId the primary key of the current calendar booking
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
+	 * @param parentCalendarBookingId the parent calendar booking ID
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
 	 * @return the previous, current, and next calendar booking
 	 * @throws com.liferay.calendar.NoSuchBookingException if a calendar booking with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
-	public CalendarBooking[] findByC_C_PrevAndNext(long calendarBookingId,
-		long classNameId, long classPK, OrderByComparator orderByComparator)
+	public CalendarBooking[] findByParentCalendarBookingId_PrevAndNext(
+		long calendarBookingId, long parentCalendarBookingId,
+		OrderByComparator orderByComparator)
 		throws NoSuchBookingException, SystemException {
 		CalendarBooking calendarBooking = findByPrimaryKey(calendarBookingId);
 
@@ -2648,13 +2814,15 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 			CalendarBooking[] array = new CalendarBookingImpl[3];
 
-			array[0] = getByC_C_PrevAndNext(session, calendarBooking,
-					classNameId, classPK, orderByComparator, true);
+			array[0] = getByParentCalendarBookingId_PrevAndNext(session,
+					calendarBooking, parentCalendarBookingId,
+					orderByComparator, true);
 
 			array[1] = calendarBooking;
 
-			array[2] = getByC_C_PrevAndNext(session, calendarBooking,
-					classNameId, classPK, orderByComparator, false);
+			array[2] = getByParentCalendarBookingId_PrevAndNext(session,
+					calendarBooking, parentCalendarBookingId,
+					orderByComparator, false);
 
 			return array;
 		}
@@ -2666,9 +2834,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		}
 	}
 
-	protected CalendarBooking getByC_C_PrevAndNext(Session session,
-		CalendarBooking calendarBooking, long classNameId, long classPK,
-		OrderByComparator orderByComparator, boolean previous) {
+	protected CalendarBooking getByParentCalendarBookingId_PrevAndNext(
+		Session session, CalendarBooking calendarBooking,
+		long parentCalendarBookingId, OrderByComparator orderByComparator,
+		boolean previous) {
 		StringBundler query = null;
 
 		if (orderByComparator != null) {
@@ -2681,9 +2850,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 		query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
 
-		query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-		query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+		query.append(_FINDER_COLUMN_PARENTCALENDARBOOKINGID_PARENTCALENDARBOOKINGID_2);
 
 		if (orderByComparator != null) {
 			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
@@ -2754,9 +2921,1361 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		qPos.add(classNameId);
+		qPos.add(parentCalendarBookingId);
 
-		qPos.add(classPK);
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<CalendarBooking> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns the calendar booking where calendarId = &#63; and parentCalendarBookingId = &#63; or throws a {@link com.liferay.calendar.NoSuchBookingException} if it could not be found.
+	 *
+	 * @param calendarId the calendar ID
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @return the matching calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking findByC_P(long calendarId,
+		long parentCalendarBookingId)
+		throws NoSuchBookingException, SystemException {
+		CalendarBooking calendarBooking = fetchByC_P(calendarId,
+				parentCalendarBookingId);
+
+		if (calendarBooking == null) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("calendarId=");
+			msg.append(calendarId);
+
+			msg.append(", parentCalendarBookingId=");
+			msg.append(parentCalendarBookingId);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			if (_log.isWarnEnabled()) {
+				_log.warn(msg.toString());
+			}
+
+			throw new NoSuchBookingException(msg.toString());
+		}
+
+		return calendarBooking;
+	}
+
+	/**
+	 * Returns the calendar booking where calendarId = &#63; and parentCalendarBookingId = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 *
+	 * @param calendarId the calendar ID
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @return the matching calendar booking, or <code>null</code> if a matching calendar booking could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking fetchByC_P(long calendarId,
+		long parentCalendarBookingId) throws SystemException {
+		return fetchByC_P(calendarId, parentCalendarBookingId, true);
+	}
+
+	/**
+	 * Returns the calendar booking where calendarId = &#63; and parentCalendarBookingId = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 *
+	 * @param calendarId the calendar ID
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @param retrieveFromCache whether to use the finder cache
+	 * @return the matching calendar booking, or <code>null</code> if a matching calendar booking could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking fetchByC_P(long calendarId,
+		long parentCalendarBookingId, boolean retrieveFromCache)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { calendarId, parentCalendarBookingId };
+
+		Object result = null;
+
+		if (retrieveFromCache) {
+			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_C_P,
+					finderArgs, this);
+		}
+
+		if (result instanceof CalendarBooking) {
+			CalendarBooking calendarBooking = (CalendarBooking)result;
+
+			if ((calendarId != calendarBooking.getCalendarId()) ||
+					(parentCalendarBookingId != calendarBooking.getParentCalendarBookingId())) {
+				result = null;
+			}
+		}
+
+		if (result == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
+
+			query.append(_FINDER_COLUMN_C_P_CALENDARID_2);
+
+			query.append(_FINDER_COLUMN_C_P_PARENTCALENDARBOOKINGID_2);
+
+			query.append(CalendarBookingModelImpl.ORDER_BY_JPQL);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(calendarId);
+
+				qPos.add(parentCalendarBookingId);
+
+				List<CalendarBooking> list = q.list();
+
+				result = list;
+
+				CalendarBooking calendarBooking = null;
+
+				if (list.isEmpty()) {
+					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_P,
+						finderArgs, list);
+				}
+				else {
+					calendarBooking = list.get(0);
+
+					cacheResult(calendarBooking);
+
+					if ((calendarBooking.getCalendarId() != calendarId) ||
+							(calendarBooking.getParentCalendarBookingId() != parentCalendarBookingId)) {
+						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_C_P,
+							finderArgs, calendarBooking);
+					}
+				}
+
+				return calendarBooking;
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (result == null) {
+					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_C_P,
+						finderArgs);
+				}
+
+				closeSession(session);
+			}
+		}
+		else {
+			if (result instanceof List<?>) {
+				return null;
+			}
+			else {
+				return (CalendarBooking)result;
+			}
+		}
+	}
+
+	/**
+	 * Returns all the calendar bookings where calendarResourceId = &#63; and status = &#63;.
+	 *
+	 * @param calendarResourceId the calendar resource ID
+	 * @param status the status
+	 * @return the matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalendarBooking> findByC_S(long calendarResourceId, int status)
+		throws SystemException {
+		return findByC_S(calendarResourceId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the calendar bookings where calendarResourceId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarResourceId the calendar resource ID
+	 * @param status the status
+	 * @param start the lower bound of the range of calendar bookings
+	 * @param end the upper bound of the range of calendar bookings (not inclusive)
+	 * @return the range of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalendarBooking> findByC_S(long calendarResourceId, int status,
+		int start, int end) throws SystemException {
+		return findByC_S(calendarResourceId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the calendar bookings where calendarResourceId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarResourceId the calendar resource ID
+	 * @param status the status
+	 * @param start the lower bound of the range of calendar bookings
+	 * @param end the upper bound of the range of calendar bookings (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalendarBooking> findByC_S(long calendarResourceId, int status,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S;
+			finderArgs = new Object[] { calendarResourceId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S;
+			finderArgs = new Object[] {
+					calendarResourceId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<CalendarBooking> list = (List<CalendarBooking>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (CalendarBooking calendarBooking : list) {
+				if ((calendarResourceId != calendarBooking.getCalendarResourceId()) ||
+						(status != calendarBooking.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
+
+			query.append(_FINDER_COLUMN_C_S_CALENDARRESOURCEID_2);
+
+			query.append(_FINDER_COLUMN_C_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(CalendarBookingModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(calendarResourceId);
+
+				qPos.add(status);
+
+				list = (List<CalendarBooking>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first calendar booking in the ordered set where calendarResourceId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarResourceId the calendar resource ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking findByC_S_First(long calendarResourceId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchBookingException, SystemException {
+		List<CalendarBooking> list = findByC_S(calendarResourceId, status, 0,
+				1, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("calendarResourceId=");
+			msg.append(calendarResourceId);
+
+			msg.append(", status=");
+			msg.append(status);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchBookingException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the last calendar booking in the ordered set where calendarResourceId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarResourceId the calendar resource ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking findByC_S_Last(long calendarResourceId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchBookingException, SystemException {
+		int count = countByC_S(calendarResourceId, status);
+
+		List<CalendarBooking> list = findByC_S(calendarResourceId, status,
+				count - 1, count, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("calendarResourceId=");
+			msg.append(calendarResourceId);
+
+			msg.append(", status=");
+			msg.append(status);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchBookingException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the calendar bookings before and after the current calendar booking in the ordered set where calendarResourceId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarBookingId the primary key of the current calendar booking
+	 * @param calendarResourceId the calendar resource ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a calendar booking with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking[] findByC_S_PrevAndNext(long calendarBookingId,
+		long calendarResourceId, int status, OrderByComparator orderByComparator)
+		throws NoSuchBookingException, SystemException {
+		CalendarBooking calendarBooking = findByPrimaryKey(calendarBookingId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			CalendarBooking[] array = new CalendarBookingImpl[3];
+
+			array[0] = getByC_S_PrevAndNext(session, calendarBooking,
+					calendarResourceId, status, orderByComparator, true);
+
+			array[1] = calendarBooking;
+
+			array[2] = getByC_S_PrevAndNext(session, calendarBooking,
+					calendarResourceId, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected CalendarBooking getByC_S_PrevAndNext(Session session,
+		CalendarBooking calendarBooking, long calendarResourceId, int status,
+		OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
+
+		query.append(_FINDER_COLUMN_C_S_CALENDARRESOURCEID_2);
+
+		query.append(_FINDER_COLUMN_C_S_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		else {
+			query.append(CalendarBookingModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(calendarResourceId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<CalendarBooking> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the calendar bookings where parentCalendarBookingId = &#63; and status = &#63;.
+	 *
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @param status the status
+	 * @return the matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalendarBooking> findByP_S(long parentCalendarBookingId,
+		int status) throws SystemException {
+		return findByP_S(parentCalendarBookingId, status, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the calendar bookings where parentCalendarBookingId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @param status the status
+	 * @param start the lower bound of the range of calendar bookings
+	 * @param end the upper bound of the range of calendar bookings (not inclusive)
+	 * @return the range of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalendarBooking> findByP_S(long parentCalendarBookingId,
+		int status, int start, int end) throws SystemException {
+		return findByP_S(parentCalendarBookingId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the calendar bookings where parentCalendarBookingId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @param status the status
+	 * @param start the lower bound of the range of calendar bookings
+	 * @param end the upper bound of the range of calendar bookings (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalendarBooking> findByP_S(long parentCalendarBookingId,
+		int status, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S;
+			finderArgs = new Object[] { parentCalendarBookingId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_P_S;
+			finderArgs = new Object[] {
+					parentCalendarBookingId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<CalendarBooking> list = (List<CalendarBooking>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (CalendarBooking calendarBooking : list) {
+				if ((parentCalendarBookingId != calendarBooking.getParentCalendarBookingId()) ||
+						(status != calendarBooking.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
+
+			query.append(_FINDER_COLUMN_P_S_PARENTCALENDARBOOKINGID_2);
+
+			query.append(_FINDER_COLUMN_P_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(CalendarBookingModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentCalendarBookingId);
+
+				qPos.add(status);
+
+				list = (List<CalendarBooking>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first calendar booking in the ordered set where parentCalendarBookingId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking findByP_S_First(long parentCalendarBookingId,
+		int status, OrderByComparator orderByComparator)
+		throws NoSuchBookingException, SystemException {
+		List<CalendarBooking> list = findByP_S(parentCalendarBookingId, status,
+				0, 1, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("parentCalendarBookingId=");
+			msg.append(parentCalendarBookingId);
+
+			msg.append(", status=");
+			msg.append(status);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchBookingException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the last calendar booking in the ordered set where parentCalendarBookingId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking findByP_S_Last(long parentCalendarBookingId,
+		int status, OrderByComparator orderByComparator)
+		throws NoSuchBookingException, SystemException {
+		int count = countByP_S(parentCalendarBookingId, status);
+
+		List<CalendarBooking> list = findByP_S(parentCalendarBookingId, status,
+				count - 1, count, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(6);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("parentCalendarBookingId=");
+			msg.append(parentCalendarBookingId);
+
+			msg.append(", status=");
+			msg.append(status);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchBookingException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the calendar bookings before and after the current calendar booking in the ordered set where parentCalendarBookingId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarBookingId the primary key of the current calendar booking
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a calendar booking with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking[] findByP_S_PrevAndNext(long calendarBookingId,
+		long parentCalendarBookingId, int status,
+		OrderByComparator orderByComparator)
+		throws NoSuchBookingException, SystemException {
+		CalendarBooking calendarBooking = findByPrimaryKey(calendarBookingId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			CalendarBooking[] array = new CalendarBookingImpl[3];
+
+			array[0] = getByP_S_PrevAndNext(session, calendarBooking,
+					parentCalendarBookingId, status, orderByComparator, true);
+
+			array[1] = calendarBooking;
+
+			array[2] = getByP_S_PrevAndNext(session, calendarBooking,
+					parentCalendarBookingId, status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected CalendarBooking getByP_S_PrevAndNext(Session session,
+		CalendarBooking calendarBooking, long parentCalendarBookingId,
+		int status, OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
+
+		query.append(_FINDER_COLUMN_P_S_PARENTCALENDARBOOKINGID_2);
+
+		query.append(_FINDER_COLUMN_P_S_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		else {
+			query.append(CalendarBookingModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(parentCalendarBookingId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<CalendarBooking> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Returns all the calendar bookings where calendarId = &#63; and startDate = &#63; and endDate = &#63;.
+	 *
+	 * @param calendarId the calendar ID
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @return the matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalendarBooking> findByC_S_E(long calendarId, Date startDate,
+		Date endDate) throws SystemException {
+		return findByC_S_E(calendarId, startDate, endDate, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the calendar bookings where calendarId = &#63; and startDate = &#63; and endDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarId the calendar ID
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @param start the lower bound of the range of calendar bookings
+	 * @param end the upper bound of the range of calendar bookings (not inclusive)
+	 * @return the range of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalendarBooking> findByC_S_E(long calendarId, Date startDate,
+		Date endDate, int start, int end) throws SystemException {
+		return findByC_S_E(calendarId, startDate, endDate, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the calendar bookings where calendarId = &#63; and startDate = &#63; and endDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarId the calendar ID
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @param start the lower bound of the range of calendar bookings
+	 * @param end the upper bound of the range of calendar bookings (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<CalendarBooking> findByC_S_E(long calendarId, Date startDate,
+		Date endDate, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S_E;
+			finderArgs = new Object[] { calendarId, startDate, endDate };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S_E;
+			finderArgs = new Object[] {
+					calendarId, startDate, endDate,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<CalendarBooking> list = (List<CalendarBooking>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (CalendarBooking calendarBooking : list) {
+				if ((calendarId != calendarBooking.getCalendarId()) ||
+						!Validator.equals(startDate,
+							calendarBooking.getStartDate()) ||
+						!Validator.equals(endDate, calendarBooking.getEndDate())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
+
+			query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
+
+			query.append(_FINDER_COLUMN_C_S_E_CALENDARID_2);
+
+			if (startDate == null) {
+				query.append(_FINDER_COLUMN_C_S_E_STARTDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_C_S_E_STARTDATE_2);
+			}
+
+			if (endDate == null) {
+				query.append(_FINDER_COLUMN_C_S_E_ENDDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_C_S_E_ENDDATE_2);
+			}
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+
+			else {
+				query.append(CalendarBookingModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(calendarId);
+
+				if (startDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(startDate));
+				}
+
+				if (endDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(endDate));
+				}
+
+				list = (List<CalendarBooking>)QueryUtil.list(q, getDialect(),
+						start, end);
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (list == null) {
+					FinderCacheUtil.removeResult(finderPath, finderArgs);
+				}
+				else {
+					cacheResult(list);
+
+					FinderCacheUtil.putResult(finderPath, finderArgs, list);
+				}
+
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first calendar booking in the ordered set where calendarId = &#63; and startDate = &#63; and endDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarId the calendar ID
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking findByC_S_E_First(long calendarId, Date startDate,
+		Date endDate, OrderByComparator orderByComparator)
+		throws NoSuchBookingException, SystemException {
+		List<CalendarBooking> list = findByC_S_E(calendarId, startDate,
+				endDate, 0, 1, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(8);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("calendarId=");
+			msg.append(calendarId);
+
+			msg.append(", startDate=");
+			msg.append(startDate);
+
+			msg.append(", endDate=");
+			msg.append(endDate);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchBookingException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the last calendar booking in the ordered set where calendarId = &#63; and startDate = &#63; and endDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarId the calendar ID
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a matching calendar booking could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking findByC_S_E_Last(long calendarId, Date startDate,
+		Date endDate, OrderByComparator orderByComparator)
+		throws NoSuchBookingException, SystemException {
+		int count = countByC_S_E(calendarId, startDate, endDate);
+
+		List<CalendarBooking> list = findByC_S_E(calendarId, startDate,
+				endDate, count - 1, count, orderByComparator);
+
+		if (list.isEmpty()) {
+			StringBundler msg = new StringBundler(8);
+
+			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+			msg.append("calendarId=");
+			msg.append(calendarId);
+
+			msg.append(", startDate=");
+			msg.append(startDate);
+
+			msg.append(", endDate=");
+			msg.append(endDate);
+
+			msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+			throw new NoSuchBookingException(msg.toString());
+		}
+		else {
+			return list.get(0);
+		}
+	}
+
+	/**
+	 * Returns the calendar bookings before and after the current calendar booking in the ordered set where calendarId = &#63; and startDate = &#63; and endDate = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * </p>
+	 *
+	 * @param calendarBookingId the primary key of the current calendar booking
+	 * @param calendarId the calendar ID
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next calendar booking
+	 * @throws com.liferay.calendar.NoSuchBookingException if a calendar booking with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking[] findByC_S_E_PrevAndNext(long calendarBookingId,
+		long calendarId, Date startDate, Date endDate,
+		OrderByComparator orderByComparator)
+		throws NoSuchBookingException, SystemException {
+		CalendarBooking calendarBooking = findByPrimaryKey(calendarBookingId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			CalendarBooking[] array = new CalendarBookingImpl[3];
+
+			array[0] = getByC_S_E_PrevAndNext(session, calendarBooking,
+					calendarId, startDate, endDate, orderByComparator, true);
+
+			array[1] = calendarBooking;
+
+			array[2] = getByC_S_E_PrevAndNext(session, calendarBooking,
+					calendarId, startDate, endDate, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected CalendarBooking getByC_S_E_PrevAndNext(Session session,
+		CalendarBooking calendarBooking, long calendarId, Date startDate,
+		Date endDate, OrderByComparator orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_CALENDARBOOKING_WHERE);
+
+		query.append(_FINDER_COLUMN_C_S_E_CALENDARID_2);
+
+		if (startDate == null) {
+			query.append(_FINDER_COLUMN_C_S_E_STARTDATE_1);
+		}
+		else {
+			query.append(_FINDER_COLUMN_C_S_E_STARTDATE_2);
+		}
+
+		if (endDate == null) {
+			query.append(_FINDER_COLUMN_C_S_E_ENDDATE_1);
+		}
+		else {
+			query.append(_FINDER_COLUMN_C_S_E_ENDDATE_2);
+		}
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+
+		else {
+			query.append(CalendarBookingModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(calendarId);
+
+		if (startDate != null) {
+			qPos.add(CalendarUtil.getTimestamp(startDate));
+		}
+
+		if (endDate != null) {
+			qPos.add(CalendarUtil.getTimestamp(endDate));
+		}
 
 		if (orderByComparator != null) {
 			Object[] values = orderByComparator.getOrderByConditionValues(calendarBooking);
@@ -2933,15 +4452,13 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Removes all the calendar bookings where calendarEventId = &#63; from the database.
+	 * Removes all the calendar bookings where calendarId = &#63; from the database.
 	 *
-	 * @param calendarEventId the calendar event ID
+	 * @param calendarId the calendar ID
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void removeByCalendarEventId(long calendarEventId)
-		throws SystemException {
-		for (CalendarBooking calendarBooking : findByCalendarEventId(
-				calendarEventId)) {
+	public void removeByCalendarId(long calendarId) throws SystemException {
+		for (CalendarBooking calendarBooking : findByCalendarId(calendarId)) {
 			remove(calendarBooking);
 		}
 	}
@@ -2961,15 +4478,78 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Removes all the calendar bookings where classNameId = &#63; and classPK = &#63; from the database.
+	 * Removes all the calendar bookings where parentCalendarBookingId = &#63; from the database.
 	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
+	 * @param parentCalendarBookingId the parent calendar booking ID
 	 * @throws SystemException if a system exception occurred
 	 */
-	public void removeByC_C(long classNameId, long classPK)
+	public void removeByParentCalendarBookingId(long parentCalendarBookingId)
 		throws SystemException {
-		for (CalendarBooking calendarBooking : findByC_C(classNameId, classPK)) {
+		for (CalendarBooking calendarBooking : findByParentCalendarBookingId(
+				parentCalendarBookingId)) {
+			remove(calendarBooking);
+		}
+	}
+
+	/**
+	 * Removes the calendar booking where calendarId = &#63; and parentCalendarBookingId = &#63; from the database.
+	 *
+	 * @param calendarId the calendar ID
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @return the calendar booking that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public CalendarBooking removeByC_P(long calendarId,
+		long parentCalendarBookingId)
+		throws NoSuchBookingException, SystemException {
+		CalendarBooking calendarBooking = findByC_P(calendarId,
+				parentCalendarBookingId);
+
+		return remove(calendarBooking);
+	}
+
+	/**
+	 * Removes all the calendar bookings where calendarResourceId = &#63; and status = &#63; from the database.
+	 *
+	 * @param calendarResourceId the calendar resource ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_S(long calendarResourceId, int status)
+		throws SystemException {
+		for (CalendarBooking calendarBooking : findByC_S(calendarResourceId,
+				status)) {
+			remove(calendarBooking);
+		}
+	}
+
+	/**
+	 * Removes all the calendar bookings where parentCalendarBookingId = &#63; and status = &#63; from the database.
+	 *
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByP_S(long parentCalendarBookingId, int status)
+		throws SystemException {
+		for (CalendarBooking calendarBooking : findByP_S(
+				parentCalendarBookingId, status)) {
+			remove(calendarBooking);
+		}
+	}
+
+	/**
+	 * Removes all the calendar bookings where calendarId = &#63; and startDate = &#63; and endDate = &#63; from the database.
+	 *
+	 * @param calendarId the calendar ID
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_S_E(long calendarId, Date startDate, Date endDate)
+		throws SystemException {
+		for (CalendarBooking calendarBooking : findByC_S_E(calendarId,
+				startDate, endDate)) {
 			remove(calendarBooking);
 		}
 	}
@@ -3193,17 +4773,16 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the number of calendar bookings where calendarEventId = &#63;.
+	 * Returns the number of calendar bookings where calendarId = &#63;.
 	 *
-	 * @param calendarEventId the calendar event ID
+	 * @param calendarId the calendar ID
 	 * @return the number of matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public int countByCalendarEventId(long calendarEventId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { calendarEventId };
+	public int countByCalendarId(long calendarId) throws SystemException {
+		Object[] finderArgs = new Object[] { calendarId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_CALENDAREVENTID,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_CALENDARID,
 				finderArgs, this);
 
 		if (count == null) {
@@ -3211,7 +4790,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 			query.append(_SQL_COUNT_CALENDARBOOKING_WHERE);
 
-			query.append(_FINDER_COLUMN_CALENDAREVENTID_CALENDAREVENTID_2);
+			query.append(_FINDER_COLUMN_CALENDARID_CALENDARID_2);
 
 			String sql = query.toString();
 
@@ -3224,7 +4803,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(calendarEventId);
+				qPos.add(calendarId);
 
 				count = (Long)q.uniqueResult();
 			}
@@ -3236,7 +4815,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CALENDAREVENTID,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CALENDARID,
 					finderArgs, count);
 
 				closeSession(session);
@@ -3301,28 +4880,25 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	}
 
 	/**
-	 * Returns the number of calendar bookings where classNameId = &#63; and classPK = &#63;.
+	 * Returns the number of calendar bookings where parentCalendarBookingId = &#63;.
 	 *
-	 * @param classNameId the class name ID
-	 * @param classPK the class p k
+	 * @param parentCalendarBookingId the parent calendar booking ID
 	 * @return the number of matching calendar bookings
 	 * @throws SystemException if a system exception occurred
 	 */
-	public int countByC_C(long classNameId, long classPK)
+	public int countByParentCalendarBookingId(long parentCalendarBookingId)
 		throws SystemException {
-		Object[] finderArgs = new Object[] { classNameId, classPK };
+		Object[] finderArgs = new Object[] { parentCalendarBookingId };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_C,
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_PARENTCALENDARBOOKINGID,
 				finderArgs, this);
 
 		if (count == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(2);
 
 			query.append(_SQL_COUNT_CALENDARBOOKING_WHERE);
 
-			query.append(_FINDER_COLUMN_C_C_CLASSNAMEID_2);
-
-			query.append(_FINDER_COLUMN_C_C_CLASSPK_2);
+			query.append(_FINDER_COLUMN_PARENTCALENDARBOOKINGID_PARENTCALENDARBOOKINGID_2);
 
 			String sql = query.toString();
 
@@ -3335,9 +4911,7 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				qPos.add(classNameId);
-
-				qPos.add(classPK);
+				qPos.add(parentCalendarBookingId);
 
 				count = (Long)q.uniqueResult();
 			}
@@ -3349,8 +4923,263 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 					count = Long.valueOf(0);
 				}
 
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_C, finderArgs,
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PARENTCALENDARBOOKINGID,
+					finderArgs, count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of calendar bookings where calendarId = &#63; and parentCalendarBookingId = &#63;.
+	 *
+	 * @param calendarId the calendar ID
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @return the number of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_P(long calendarId, long parentCalendarBookingId)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { calendarId, parentCalendarBookingId };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_P,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_CALENDARBOOKING_WHERE);
+
+			query.append(_FINDER_COLUMN_C_P_CALENDARID_2);
+
+			query.append(_FINDER_COLUMN_C_P_PARENTCALENDARBOOKINGID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(calendarId);
+
+				qPos.add(parentCalendarBookingId);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_P, finderArgs,
 					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of calendar bookings where calendarResourceId = &#63; and status = &#63;.
+	 *
+	 * @param calendarResourceId the calendar resource ID
+	 * @param status the status
+	 * @return the number of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_S(long calendarResourceId, int status)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { calendarResourceId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_S,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_CALENDARBOOKING_WHERE);
+
+			query.append(_FINDER_COLUMN_C_S_CALENDARRESOURCEID_2);
+
+			query.append(_FINDER_COLUMN_C_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(calendarResourceId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_S, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of calendar bookings where parentCalendarBookingId = &#63; and status = &#63;.
+	 *
+	 * @param parentCalendarBookingId the parent calendar booking ID
+	 * @param status the status
+	 * @return the number of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_S(long parentCalendarBookingId, int status)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { parentCalendarBookingId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_S,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_CALENDARBOOKING_WHERE);
+
+			query.append(_FINDER_COLUMN_P_S_PARENTCALENDARBOOKINGID_2);
+
+			query.append(_FINDER_COLUMN_P_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentCalendarBookingId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_S, finderArgs,
+					count);
+
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of calendar bookings where calendarId = &#63; and startDate = &#63; and endDate = &#63;.
+	 *
+	 * @param calendarId the calendar ID
+	 * @param startDate the start date
+	 * @param endDate the end date
+	 * @return the number of matching calendar bookings
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_S_E(long calendarId, Date startDate, Date endDate)
+		throws SystemException {
+		Object[] finderArgs = new Object[] { calendarId, startDate, endDate };
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_S_E,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_CALENDARBOOKING_WHERE);
+
+			query.append(_FINDER_COLUMN_C_S_E_CALENDARID_2);
+
+			if (startDate == null) {
+				query.append(_FINDER_COLUMN_C_S_E_STARTDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_C_S_E_STARTDATE_2);
+			}
+
+			if (endDate == null) {
+				query.append(_FINDER_COLUMN_C_S_E_ENDDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_C_S_E_ENDDATE_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(calendarId);
+
+				if (startDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(startDate));
+				}
+
+				if (endDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(endDate));
+				}
+
+				count = (Long)q.uniqueResult();
+			}
+			catch (Exception e) {
+				throw processException(e);
+			}
+			finally {
+				if (count == null) {
+					count = Long.valueOf(0);
+				}
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_S_E,
+					finderArgs, count);
 
 				closeSession(session);
 			}
@@ -3428,10 +5257,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
+	@BeanReference(type = CalendarPersistence.class)
+	protected CalendarPersistence calendarPersistence;
 	@BeanReference(type = CalendarBookingPersistence.class)
 	protected CalendarBookingPersistence calendarBookingPersistence;
-	@BeanReference(type = CalendarEventPersistence.class)
-	protected CalendarEventPersistence calendarEventPersistence;
 	@BeanReference(type = CalendarResourcePersistence.class)
 	protected CalendarResourcePersistence calendarResourcePersistence;
 	@BeanReference(type = UserPersistence.class)
@@ -3451,12 +5280,22 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "calendarBooking.uuid = ? AND ";
 	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(calendarBooking.uuid IS NULL OR calendarBooking.uuid = ?) AND ";
 	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "calendarBooking.companyId = ?";
-	private static final String _FINDER_COLUMN_CALENDAREVENTID_CALENDAREVENTID_2 =
-		"calendarBooking.calendarEventId = ?";
+	private static final String _FINDER_COLUMN_CALENDARID_CALENDARID_2 = "calendarBooking.calendarId = ?";
 	private static final String _FINDER_COLUMN_CALENDARRESOURCEID_CALENDARRESOURCEID_2 =
 		"calendarBooking.calendarResourceId = ?";
-	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "calendarBooking.classNameId = ? AND ";
-	private static final String _FINDER_COLUMN_C_C_CLASSPK_2 = "calendarBooking.classPK = ?";
+	private static final String _FINDER_COLUMN_PARENTCALENDARBOOKINGID_PARENTCALENDARBOOKINGID_2 =
+		"calendarBooking.parentCalendarBookingId = ?";
+	private static final String _FINDER_COLUMN_C_P_CALENDARID_2 = "calendarBooking.calendarId = ? AND ";
+	private static final String _FINDER_COLUMN_C_P_PARENTCALENDARBOOKINGID_2 = "calendarBooking.parentCalendarBookingId = ?";
+	private static final String _FINDER_COLUMN_C_S_CALENDARRESOURCEID_2 = "calendarBooking.calendarResourceId = ? AND ";
+	private static final String _FINDER_COLUMN_C_S_STATUS_2 = "calendarBooking.status = ?";
+	private static final String _FINDER_COLUMN_P_S_PARENTCALENDARBOOKINGID_2 = "calendarBooking.parentCalendarBookingId = ? AND ";
+	private static final String _FINDER_COLUMN_P_S_STATUS_2 = "calendarBooking.status = ?";
+	private static final String _FINDER_COLUMN_C_S_E_CALENDARID_2 = "calendarBooking.calendarId = ? AND ";
+	private static final String _FINDER_COLUMN_C_S_E_STARTDATE_1 = "calendarBooking.startDate IS NULL AND ";
+	private static final String _FINDER_COLUMN_C_S_E_STARTDATE_2 = "calendarBooking.startDate = ? AND ";
+	private static final String _FINDER_COLUMN_C_S_E_ENDDATE_1 = "calendarBooking.endDate IS NULL";
+	private static final String _FINDER_COLUMN_C_S_E_ENDDATE_2 = "calendarBooking.endDate = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "calendarBooking.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No CalendarBooking exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No CalendarBooking exists with the key {";

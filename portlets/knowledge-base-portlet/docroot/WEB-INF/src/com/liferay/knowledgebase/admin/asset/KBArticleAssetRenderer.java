@@ -43,6 +43,10 @@ public class KBArticleAssetRenderer extends BaseAssetRenderer {
 		_kbArticle = kbArticle;
 	}
 
+	public String getAssetRendererFactoryClassName() {
+		return KBArticleAssetRendererFactory.CLASS_NAME;
+	}
+
 	public long getClassPK() {
 		return _kbArticle.getClassPK();
 	}
@@ -93,6 +97,10 @@ public class KBArticleAssetRenderer extends BaseAssetRenderer {
 
 	public long getUserId() {
 		return _kbArticle.getUserId();
+	}
+
+	public String getUserName() {
+		return _kbArticle.getUserName();
 	}
 
 	public String getUuid() {
