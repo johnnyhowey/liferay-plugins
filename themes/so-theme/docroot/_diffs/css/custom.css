@@ -1685,7 +1685,7 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 	}
 
 	.version-entry {
-		border-bottom: 1px solid $border-color;
+		border-bottom: 1px solid $gray-light;
 		padding: 10px 4px;
 
 		.version-number, .user-name {
