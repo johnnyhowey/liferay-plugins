@@ -1,30 +1,32 @@
 Liferay.Service.register("Liferay.Service.Calendar", "com.liferay.calendar.service", "calendar-portlet");
 
 Liferay.Service.registerClass(
-	Liferay.Service.Calendar, "CalendarBooking",
+	Liferay.Service.Calendar, "Calendar",
 	{
-		addCalendarBooking: true,
-		deleteCalendarBooking: true,
-		getCalendarBooking: true,
-		getCalendarBookings: true,
-		getCalendarBookingsCount: true,
-		getCalendarEventCalendarBookings: true,
-		getCalendarEventCalendarBookingsCount: true,
-		getCalendarResourceCalendarBookings: true,
-		getCalendarResourceCalendarBookingsCount: true,
+		addCalendar: true,
+		deleteCalendar: true,
+		fetchCalendar: true,
+		getCalendar: true,
 		search: true,
 		searchCount: true,
-		updateCalendarBooking: true
+		updateCalendar: true,
+		updateColor: true
 	}
 );
 
 Liferay.Service.registerClass(
-	Liferay.Service.Calendar, "CalendarEvent",
+	Liferay.Service.Calendar, "CalendarBooking",
 	{
-		addCaledarEvent: true,
-		deleteCalendarEvent: true,
-		getCalendarEvent: true,
-		updateCalendarEvent: true
+		addCalendarBooking: true,
+		deleteCalendarBooking: true,
+		fetchCalendarBooking: true,
+		getCalendarBooking: true,
+		getCalendarBookings: true,
+		getChildCalendarBookings: true,
+		invokeTransition: true,
+		search: true,
+		searchCount: true,
+		updateCalendarBooking: true
 	}
 );
 
@@ -33,9 +35,10 @@ Liferay.Service.registerClass(
 	{
 		addCalendarResource: true,
 		deleteCalendarResource: true,
+		fetchCalendarResource: true,
 		getCalendarResource: true,
-		getGroupCalendarResources: true,
-		getGroupCalendarResourcesCount: true,
+		search: true,
+		searchCount: true,
 		updateCalendarResource: true
 	}
 );

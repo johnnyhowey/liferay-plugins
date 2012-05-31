@@ -1,3 +1,20 @@
+create table Calendar (
+	uuid_ VARCHAR(75) null,
+	calendarId LONG not null primary key,
+	groupId LONG,
+	companyId LONG,
+	userId LONG,
+	userName VARCHAR(75) null,
+	createDate DATE null,
+	modifiedDate DATE null,
+	resourceBlockId LONG,
+	calendarResourceId LONG,
+	name STRING null,
+	description STRING null,
+	color INTEGER,
+	defaultCalendar BOOLEAN
+);
+
 create table CalendarBooking (
 	uuid_ VARCHAR(75) null,
 	calendarBookingId LONG not null primary key,
@@ -7,49 +24,22 @@ create table CalendarBooking (
 	userName VARCHAR(75) null,
 	createDate DATE null,
 	modifiedDate DATE null,
-	calendarEventId LONG,
+	calendarId LONG,
 	calendarResourceId LONG,
-	classNameId LONG,
-	classPK LONG,
+	parentCalendarBookingId LONG,
 	title STRING null,
-	name STRING null,
 	description STRING null,
-	location STRING null,
+	location VARCHAR(75) null,
 	startDate DATE null,
 	endDate DATE null,
-	durationHour INTEGER,
-	durationMinute INTEGER,
+	allDay BOOLEAN,
 	recurrence VARCHAR(75) null,
-	type_ VARCHAR(75) null,
-	required BOOLEAN,
+	firstReminder INTEGER,
+	secondReminder INTEGER,
 	status INTEGER,
 	statusByUserId LONG,
 	statusByUserName VARCHAR(75) null,
 	statusDate DATE null
-);
-
-create table CalendarEvent (
-	uuid_ VARCHAR(75) null,
-	calendarEventId LONG not null primary key,
-	groupId LONG,
-	companyId LONG,
-	userId LONG,
-	userName VARCHAR(75) null,
-	createDate DATE null,
-	modifiedDate DATE null,
-	title STRING null,
-	description STRING null,
-	location STRING null,
-	startDate DATE null,
-	endDate DATE null,
-	durationHour INTEGER,
-	durationMinute INTEGER,
-	allDay BOOLEAN,
-	recurrence VARCHAR(75) null,
-	type_ VARCHAR(75) null,
-	remindBy INTEGER,
-	firstReminder INTEGER,
-	secondReminder INTEGER
 );
 
 create table CalendarResource (
@@ -61,10 +51,14 @@ create table CalendarResource (
 	userName VARCHAR(75) null,
 	createDate DATE null,
 	modifiedDate DATE null,
+	resourceBlockId LONG,
 	classNameId LONG,
 	classPK LONG,
 	classUuid VARCHAR(75) null,
+	defaultCalendarId LONG,
+	code_ VARCHAR(75) null,
 	name STRING null,
 	description STRING null,
+	type_ VARCHAR(75) null,
 	active_ BOOLEAN
 );

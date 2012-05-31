@@ -6,13 +6,10 @@
 		<portlet-name>1</portlet-name>
 		<permissions>
 			<supports>
-				<action-key>ADD_EVENT</action-key>
-				<action-key>ADD_RESOURCE</action-key>
+				<action-key>ACCESS_IN_CONTROL_PANEL</action-key>
 				<action-key>ADD_TO_PAGE</action-key>
 				<action-key>CONFIGURATION</action-key>
 				<action-key>VIEW</action-key>
-				<action-key>VIEW_EVENTS</action-key>
-				<action-key>VIEW_RESOURCES</action-key>
 			</supports>
 			<site-member-defaults>
 				<action-key>VIEW</action-key>
@@ -21,23 +18,45 @@
 				<action-key>VIEW</action-key>
 			</guest-defaults>
 			<guest-unsupported>
-				<action-key>ADD_EVENT</action-key>
-				<action-key>ADD_RESOURCE</action-key>
+				<action-key>ACCESS_IN_CONTROL_PANEL</action-key>
+				<action-key>ADD_TO_PAGE</action-key>
 				<action-key>CONFIGURATION</action-key>
 			</guest-unsupported>
 		</permissions>
 	</portlet-resource>
 	<model-resource>
-		<model-name>com.liferay.calendar.model.CalendarEvent</model-name>
+		<model-name>com.liferay.calendar</model-name>
+		<portlet-ref>
+			<portlet-name>1</portlet-name>
+		</portlet-ref>
+		<permissions>
+			<supports>
+				<action-key>ADD_RESOURCE</action-key>
+				<action-key>PERMISSIONS</action-key>
+			</supports>
+			<site-member-defaults>
+				<action-key>ADD_RESOURCE</action-key>
+			</site-member-defaults>
+			<guest-defaults />
+			<guest-unsupported>
+				<action-key>ADD_RESOURCE</action-key>
+				<action-key>PERMISSIONS</action-key>
+			</guest-unsupported>
+		</permissions>
+	</model-resource>
+	<model-resource>
+		<model-name>com.liferay.calendar.model.Calendar</model-name>
 		<portlet-ref>
 			<portlet-name>1</portlet-name>
 		</portlet-ref>
 		<permissions>
 			<supports>
 				<action-key>DELETE</action-key>
+				<action-key>MANAGE_BOOKINGS</action-key>
 				<action-key>PERMISSIONS</action-key>
 				<action-key>UPDATE</action-key>
 				<action-key>VIEW</action-key>
+				<action-key>VIEW_BOOKING_DETAILS</action-key>
 			</supports>
 			<site-member-defaults>
 				<action-key>VIEW</action-key>
@@ -47,6 +66,7 @@
 			</guest-defaults>
 			<guest-unsupported>
 				<action-key>DELETE</action-key>
+				<action-key>MANAGE_BOOKINGS</action-key>
 				<action-key>PERMISSIONS</action-key>
 				<action-key>UPDATE</action-key>
 			</guest-unsupported>
@@ -59,26 +79,22 @@
 		</portlet-ref>
 		<permissions>
 			<supports>
-				<action-key>ADD_BOOKING</action-key>
+				<action-key>ADD_CALENDAR</action-key>
 				<action-key>DELETE</action-key>
-				<action-key>PERMISSIONS</action-key>
 				<action-key>UPDATE</action-key>
-				<action-key>UPDATE_BOOKINGS</action-key>
 				<action-key>VIEW</action-key>
-				<action-key>VIEW_BOOKINGS</action-key>
 			</supports>
 			<site-member-defaults>
+				<action-key>UPDATE</action-key>
 				<action-key>VIEW</action-key>
 			</site-member-defaults>
 			<guest-defaults>
 				<action-key>VIEW</action-key>
 			</guest-defaults>
 			<guest-unsupported>
-				<action-key>ADD_BOOKING</action-key>
+				<action-key>ADD_CALENDAR</action-key>
 				<action-key>DELETE</action-key>
-				<action-key>PERMISSIONS</action-key>
 				<action-key>UPDATE</action-key>
-				<action-key>UPDATE_BOOKINGS</action-key>
 			</guest-unsupported>
 		</permissions>
 	</model-resource>

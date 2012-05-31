@@ -21,6 +21,7 @@ import com.liferay.calendar.model.CalendarBookingSoap;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
+import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
@@ -43,6 +44,7 @@ import java.sql.Types;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -78,30 +80,27 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 			{ "userName", Types.VARCHAR },
 			{ "createDate", Types.TIMESTAMP },
 			{ "modifiedDate", Types.TIMESTAMP },
-			{ "calendarEventId", Types.BIGINT },
+			{ "calendarId", Types.BIGINT },
 			{ "calendarResourceId", Types.BIGINT },
-			{ "classNameId", Types.BIGINT },
-			{ "classPK", Types.BIGINT },
+			{ "parentCalendarBookingId", Types.BIGINT },
 			{ "title", Types.VARCHAR },
-			{ "name", Types.VARCHAR },
 			{ "description", Types.VARCHAR },
 			{ "location", Types.VARCHAR },
 			{ "startDate", Types.TIMESTAMP },
 			{ "endDate", Types.TIMESTAMP },
-			{ "durationHour", Types.INTEGER },
-			{ "durationMinute", Types.INTEGER },
+			{ "allDay", Types.BOOLEAN },
 			{ "recurrence", Types.VARCHAR },
-			{ "type_", Types.VARCHAR },
-			{ "required", Types.BOOLEAN },
+			{ "firstReminder", Types.INTEGER },
+			{ "secondReminder", Types.INTEGER },
 			{ "status", Types.INTEGER },
 			{ "statusByUserId", Types.BIGINT },
 			{ "statusByUserName", Types.VARCHAR },
 			{ "statusDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table CalendarBooking (uuid_ VARCHAR(75) null,calendarBookingId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,calendarEventId LONG,calendarResourceId LONG,classNameId LONG,classPK LONG,title STRING null,name STRING null,description STRING null,location STRING null,startDate DATE null,endDate DATE null,durationHour INTEGER,durationMinute INTEGER,recurrence VARCHAR(75) null,type_ VARCHAR(75) null,required BOOLEAN,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table CalendarBooking (uuid_ VARCHAR(75) null,calendarBookingId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,calendarId LONG,calendarResourceId LONG,parentCalendarBookingId LONG,title STRING null,description STRING null,location VARCHAR(75) null,startDate DATE null,endDate DATE null,allDay BOOLEAN,recurrence VARCHAR(75) null,firstReminder INTEGER,secondReminder INTEGER,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table CalendarBooking";
-	public static final String ORDER_BY_JPQL = " ORDER BY calendarBooking.title ASC";
-	public static final String ORDER_BY_SQL = " ORDER BY CalendarBooking.title ASC";
+	public static final String ORDER_BY_JPQL = " ORDER BY calendarBooking.startDate ASC, calendarBooking.title ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY CalendarBooking.startDate ASC, CalendarBooking.title ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -114,13 +113,15 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	public static final boolean COLUMN_BITMASK_ENABLED = GetterUtil.getBoolean(com.liferay.util.service.ServiceProps.get(
 				"value.object.column.bitmask.enabled.com.liferay.calendar.model.CalendarBooking"),
 			true);
-	public static long CALENDAREVENTID_COLUMN_BITMASK = 1L;
+	public static long CALENDARID_COLUMN_BITMASK = 1L;
 	public static long CALENDARRESOURCEID_COLUMN_BITMASK = 2L;
-	public static long CLASSNAMEID_COLUMN_BITMASK = 4L;
-	public static long CLASSPK_COLUMN_BITMASK = 8L;
-	public static long COMPANYID_COLUMN_BITMASK = 16L;
-	public static long GROUPID_COLUMN_BITMASK = 32L;
-	public static long UUID_COLUMN_BITMASK = 64L;
+	public static long COMPANYID_COLUMN_BITMASK = 4L;
+	public static long ENDDATE_COLUMN_BITMASK = 8L;
+	public static long GROUPID_COLUMN_BITMASK = 16L;
+	public static long PARENTCALENDARBOOKINGID_COLUMN_BITMASK = 32L;
+	public static long STARTDATE_COLUMN_BITMASK = 64L;
+	public static long STATUS_COLUMN_BITMASK = 128L;
+	public static long UUID_COLUMN_BITMASK = 256L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -139,21 +140,18 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 		model.setUserName(soapModel.getUserName());
 		model.setCreateDate(soapModel.getCreateDate());
 		model.setModifiedDate(soapModel.getModifiedDate());
-		model.setCalendarEventId(soapModel.getCalendarEventId());
+		model.setCalendarId(soapModel.getCalendarId());
 		model.setCalendarResourceId(soapModel.getCalendarResourceId());
-		model.setClassNameId(soapModel.getClassNameId());
-		model.setClassPK(soapModel.getClassPK());
+		model.setParentCalendarBookingId(soapModel.getParentCalendarBookingId());
 		model.setTitle(soapModel.getTitle());
-		model.setName(soapModel.getName());
 		model.setDescription(soapModel.getDescription());
 		model.setLocation(soapModel.getLocation());
 		model.setStartDate(soapModel.getStartDate());
 		model.setEndDate(soapModel.getEndDate());
-		model.setDurationHour(soapModel.getDurationHour());
-		model.setDurationMinute(soapModel.getDurationMinute());
+		model.setAllDay(soapModel.getAllDay());
 		model.setRecurrence(soapModel.getRecurrence());
-		model.setType(soapModel.getType());
-		model.setRequired(soapModel.getRequired());
+		model.setFirstReminder(soapModel.getFirstReminder());
+		model.setSecondReminder(soapModel.getSecondReminder());
 		model.setStatus(soapModel.getStatus());
 		model.setStatusByUserId(soapModel.getStatusByUserId());
 		model.setStatusByUserName(soapModel.getStatusByUserName());
@@ -207,6 +205,186 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 
 	public String getModelClassName() {
 		return CalendarBooking.class.getName();
+	}
+
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("uuid", getUuid());
+		attributes.put("calendarBookingId", getCalendarBookingId());
+		attributes.put("groupId", getGroupId());
+		attributes.put("companyId", getCompanyId());
+		attributes.put("userId", getUserId());
+		attributes.put("userName", getUserName());
+		attributes.put("createDate", getCreateDate());
+		attributes.put("modifiedDate", getModifiedDate());
+		attributes.put("calendarId", getCalendarId());
+		attributes.put("calendarResourceId", getCalendarResourceId());
+		attributes.put("parentCalendarBookingId", getParentCalendarBookingId());
+		attributes.put("title", getTitle());
+		attributes.put("description", getDescription());
+		attributes.put("location", getLocation());
+		attributes.put("startDate", getStartDate());
+		attributes.put("endDate", getEndDate());
+		attributes.put("allDay", getAllDay());
+		attributes.put("recurrence", getRecurrence());
+		attributes.put("firstReminder", getFirstReminder());
+		attributes.put("secondReminder", getSecondReminder());
+		attributes.put("status", getStatus());
+		attributes.put("statusByUserId", getStatusByUserId());
+		attributes.put("statusByUserName", getStatusByUserName());
+		attributes.put("statusDate", getStatusDate());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		String uuid = (String)attributes.get("uuid");
+
+		if (uuid != null) {
+			setUuid(uuid);
+		}
+
+		Long calendarBookingId = (Long)attributes.get("calendarBookingId");
+
+		if (calendarBookingId != null) {
+			setCalendarBookingId(calendarBookingId);
+		}
+
+		Long groupId = (Long)attributes.get("groupId");
+
+		if (groupId != null) {
+			setGroupId(groupId);
+		}
+
+		Long companyId = (Long)attributes.get("companyId");
+
+		if (companyId != null) {
+			setCompanyId(companyId);
+		}
+
+		Long userId = (Long)attributes.get("userId");
+
+		if (userId != null) {
+			setUserId(userId);
+		}
+
+		String userName = (String)attributes.get("userName");
+
+		if (userName != null) {
+			setUserName(userName);
+		}
+
+		Date createDate = (Date)attributes.get("createDate");
+
+		if (createDate != null) {
+			setCreateDate(createDate);
+		}
+
+		Date modifiedDate = (Date)attributes.get("modifiedDate");
+
+		if (modifiedDate != null) {
+			setModifiedDate(modifiedDate);
+		}
+
+		Long calendarId = (Long)attributes.get("calendarId");
+
+		if (calendarId != null) {
+			setCalendarId(calendarId);
+		}
+
+		Long calendarResourceId = (Long)attributes.get("calendarResourceId");
+
+		if (calendarResourceId != null) {
+			setCalendarResourceId(calendarResourceId);
+		}
+
+		Long parentCalendarBookingId = (Long)attributes.get(
+				"parentCalendarBookingId");
+
+		if (parentCalendarBookingId != null) {
+			setParentCalendarBookingId(parentCalendarBookingId);
+		}
+
+		String title = (String)attributes.get("title");
+
+		if (title != null) {
+			setTitle(title);
+		}
+
+		String description = (String)attributes.get("description");
+
+		if (description != null) {
+			setDescription(description);
+		}
+
+		String location = (String)attributes.get("location");
+
+		if (location != null) {
+			setLocation(location);
+		}
+
+		Date startDate = (Date)attributes.get("startDate");
+
+		if (startDate != null) {
+			setStartDate(startDate);
+		}
+
+		Date endDate = (Date)attributes.get("endDate");
+
+		if (endDate != null) {
+			setEndDate(endDate);
+		}
+
+		Boolean allDay = (Boolean)attributes.get("allDay");
+
+		if (allDay != null) {
+			setAllDay(allDay);
+		}
+
+		String recurrence = (String)attributes.get("recurrence");
+
+		if (recurrence != null) {
+			setRecurrence(recurrence);
+		}
+
+		Integer firstReminder = (Integer)attributes.get("firstReminder");
+
+		if (firstReminder != null) {
+			setFirstReminder(firstReminder);
+		}
+
+		Integer secondReminder = (Integer)attributes.get("secondReminder");
+
+		if (secondReminder != null) {
+			setSecondReminder(secondReminder);
+		}
+
+		Integer status = (Integer)attributes.get("status");
+
+		if (status != null) {
+			setStatus(status);
+		}
+
+		Long statusByUserId = (Long)attributes.get("statusByUserId");
+
+		if (statusByUserId != null) {
+			setStatusByUserId(statusByUserId);
+		}
+
+		String statusByUserName = (String)attributes.get("statusByUserName");
+
+		if (statusByUserName != null) {
+			setStatusByUserName(statusByUserName);
+		}
+
+		Date statusDate = (Date)attributes.get("statusDate");
+
+		if (statusDate != null) {
+			setStatusDate(statusDate);
+		}
 	}
 
 	@JSON
@@ -332,24 +510,24 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	}
 
 	@JSON
-	public long getCalendarEventId() {
-		return _calendarEventId;
+	public long getCalendarId() {
+		return _calendarId;
 	}
 
-	public void setCalendarEventId(long calendarEventId) {
-		_columnBitmask |= CALENDAREVENTID_COLUMN_BITMASK;
+	public void setCalendarId(long calendarId) {
+		_columnBitmask |= CALENDARID_COLUMN_BITMASK;
 
-		if (!_setOriginalCalendarEventId) {
-			_setOriginalCalendarEventId = true;
+		if (!_setOriginalCalendarId) {
+			_setOriginalCalendarId = true;
 
-			_originalCalendarEventId = _calendarEventId;
+			_originalCalendarId = _calendarId;
 		}
 
-		_calendarEventId = calendarEventId;
+		_calendarId = calendarId;
 	}
 
-	public long getOriginalCalendarEventId() {
-		return _originalCalendarEventId;
+	public long getOriginalCalendarId() {
+		return _originalCalendarId;
 	}
 
 	@JSON
@@ -373,64 +551,25 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 		return _originalCalendarResourceId;
 	}
 
-	public String getClassName() {
-		if (getClassNameId() <= 0) {
-			return StringPool.BLANK;
-		}
-
-		return PortalUtil.getClassName(getClassNameId());
-	}
-
-	public void setClassName(String className) {
-		long classNameId = 0;
-
-		if (Validator.isNotNull(className)) {
-			classNameId = PortalUtil.getClassNameId(className);
-		}
-
-		setClassNameId(classNameId);
-	}
-
 	@JSON
-	public long getClassNameId() {
-		return _classNameId;
+	public long getParentCalendarBookingId() {
+		return _parentCalendarBookingId;
 	}
 
-	public void setClassNameId(long classNameId) {
-		_columnBitmask |= CLASSNAMEID_COLUMN_BITMASK;
+	public void setParentCalendarBookingId(long parentCalendarBookingId) {
+		_columnBitmask |= PARENTCALENDARBOOKINGID_COLUMN_BITMASK;
 
-		if (!_setOriginalClassNameId) {
-			_setOriginalClassNameId = true;
+		if (!_setOriginalParentCalendarBookingId) {
+			_setOriginalParentCalendarBookingId = true;
 
-			_originalClassNameId = _classNameId;
+			_originalParentCalendarBookingId = _parentCalendarBookingId;
 		}
 
-		_classNameId = classNameId;
+		_parentCalendarBookingId = parentCalendarBookingId;
 	}
 
-	public long getOriginalClassNameId() {
-		return _originalClassNameId;
-	}
-
-	@JSON
-	public long getClassPK() {
-		return _classPK;
-	}
-
-	public void setClassPK(long classPK) {
-		_columnBitmask |= CLASSPK_COLUMN_BITMASK;
-
-		if (!_setOriginalClassPK) {
-			_setOriginalClassPK = true;
-
-			_originalClassPK = _classPK;
-		}
-
-		_classPK = classPK;
-	}
-
-	public long getOriginalClassPK() {
-		return _originalClassPK;
+	public long getOriginalParentCalendarBookingId() {
+		return _originalParentCalendarBookingId;
 	}
 
 	@JSON
@@ -518,91 +657,6 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 
 		setTitle(LocalizationUtil.updateLocalization(titleMap, getTitle(),
 				"Title", LocaleUtil.toLanguageId(defaultLocale)));
-	}
-
-	@JSON
-	public String getName() {
-		if (_name == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _name;
-		}
-	}
-
-	public String getName(Locale locale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getName(languageId);
-	}
-
-	public String getName(Locale locale, boolean useDefault) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-
-		return getName(languageId, useDefault);
-	}
-
-	public String getName(String languageId) {
-		return LocalizationUtil.getLocalization(getName(), languageId);
-	}
-
-	public String getName(String languageId, boolean useDefault) {
-		return LocalizationUtil.getLocalization(getName(), languageId,
-			useDefault);
-	}
-
-	public String getNameCurrentLanguageId() {
-		return _nameCurrentLanguageId;
-	}
-
-	@JSON
-	public String getNameCurrentValue() {
-		Locale locale = getLocale(_nameCurrentLanguageId);
-
-		return getName(locale);
-	}
-
-	public Map<Locale, String> getNameMap() {
-		return LocalizationUtil.getLocalizationMap(getName());
-	}
-
-	public void setName(String name) {
-		_name = name;
-	}
-
-	public void setName(String name, Locale locale) {
-		setName(name, locale, LocaleUtil.getDefault());
-	}
-
-	public void setName(String name, Locale locale, Locale defaultLocale) {
-		String languageId = LocaleUtil.toLanguageId(locale);
-		String defaultLanguageId = LocaleUtil.toLanguageId(defaultLocale);
-
-		if (Validator.isNotNull(name)) {
-			setName(LocalizationUtil.updateLocalization(getName(), "Name",
-					name, languageId, defaultLanguageId));
-		}
-		else {
-			setName(LocalizationUtil.removeLocalization(getName(), "Name",
-					languageId));
-		}
-	}
-
-	public void setNameCurrentLanguageId(String languageId) {
-		_nameCurrentLanguageId = languageId;
-	}
-
-	public void setNameMap(Map<Locale, String> nameMap) {
-		setNameMap(nameMap, LocaleUtil.getDefault());
-	}
-
-	public void setNameMap(Map<Locale, String> nameMap, Locale defaultLocale) {
-		if (nameMap == null) {
-			return;
-		}
-
-		setName(LocalizationUtil.updateLocalization(nameMap, getName(), "Name",
-				LocaleUtil.toLanguageId(defaultLocale)));
 	}
 
 	@JSON
@@ -714,7 +768,17 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	}
 
 	public void setStartDate(Date startDate) {
+		_columnBitmask = -1L;
+
+		if (_originalStartDate == null) {
+			_originalStartDate = _startDate;
+		}
+
 		_startDate = startDate;
+	}
+
+	public Date getOriginalStartDate() {
+		return _originalStartDate;
 	}
 
 	@JSON
@@ -723,25 +787,30 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	}
 
 	public void setEndDate(Date endDate) {
+		_columnBitmask |= ENDDATE_COLUMN_BITMASK;
+
+		if (_originalEndDate == null) {
+			_originalEndDate = _endDate;
+		}
+
 		_endDate = endDate;
 	}
 
-	@JSON
-	public int getDurationHour() {
-		return _durationHour;
-	}
-
-	public void setDurationHour(int durationHour) {
-		_durationHour = durationHour;
+	public Date getOriginalEndDate() {
+		return _originalEndDate;
 	}
 
 	@JSON
-	public int getDurationMinute() {
-		return _durationMinute;
+	public boolean getAllDay() {
+		return _allDay;
 	}
 
-	public void setDurationMinute(int durationMinute) {
-		_durationMinute = durationMinute;
+	public boolean isAllDay() {
+		return _allDay;
+	}
+
+	public void setAllDay(boolean allDay) {
+		_allDay = allDay;
 	}
 
 	@JSON
@@ -759,30 +828,21 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	}
 
 	@JSON
-	public String getType() {
-		if (_type == null) {
-			return StringPool.BLANK;
-		}
-		else {
-			return _type;
-		}
+	public int getFirstReminder() {
+		return _firstReminder;
 	}
 
-	public void setType(String type) {
-		_type = type;
+	public void setFirstReminder(int firstReminder) {
+		_firstReminder = firstReminder;
 	}
 
 	@JSON
-	public boolean getRequired() {
-		return _required;
+	public int getSecondReminder() {
+		return _secondReminder;
 	}
 
-	public boolean isRequired() {
-		return _required;
-	}
-
-	public void setRequired(boolean required) {
-		_required = required;
+	public void setSecondReminder(int secondReminder) {
+		_secondReminder = secondReminder;
 	}
 
 	@JSON
@@ -791,7 +851,19 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	}
 
 	public void setStatus(int status) {
+		_columnBitmask |= STATUS_COLUMN_BITMASK;
+
+		if (!_setOriginalStatus) {
+			_setOriginalStatus = true;
+
+			_originalStatus = _status;
+		}
+
 		_status = status;
+	}
+
+	public int getOriginalStatus() {
+		return _originalStatus;
 	}
 
 	@JSON
@@ -896,17 +968,15 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 
 	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
-					CalendarBooking.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
+			CalendarBooking.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
 	}
 
 	@Override
@@ -921,21 +991,18 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 		calendarBookingImpl.setUserName(getUserName());
 		calendarBookingImpl.setCreateDate(getCreateDate());
 		calendarBookingImpl.setModifiedDate(getModifiedDate());
-		calendarBookingImpl.setCalendarEventId(getCalendarEventId());
+		calendarBookingImpl.setCalendarId(getCalendarId());
 		calendarBookingImpl.setCalendarResourceId(getCalendarResourceId());
-		calendarBookingImpl.setClassNameId(getClassNameId());
-		calendarBookingImpl.setClassPK(getClassPK());
+		calendarBookingImpl.setParentCalendarBookingId(getParentCalendarBookingId());
 		calendarBookingImpl.setTitle(getTitle());
-		calendarBookingImpl.setName(getName());
 		calendarBookingImpl.setDescription(getDescription());
 		calendarBookingImpl.setLocation(getLocation());
 		calendarBookingImpl.setStartDate(getStartDate());
 		calendarBookingImpl.setEndDate(getEndDate());
-		calendarBookingImpl.setDurationHour(getDurationHour());
-		calendarBookingImpl.setDurationMinute(getDurationMinute());
+		calendarBookingImpl.setAllDay(getAllDay());
 		calendarBookingImpl.setRecurrence(getRecurrence());
-		calendarBookingImpl.setType(getType());
-		calendarBookingImpl.setRequired(getRequired());
+		calendarBookingImpl.setFirstReminder(getFirstReminder());
+		calendarBookingImpl.setSecondReminder(getSecondReminder());
 		calendarBookingImpl.setStatus(getStatus());
 		calendarBookingImpl.setStatusByUserId(getStatusByUserId());
 		calendarBookingImpl.setStatusByUserName(getStatusByUserName());
@@ -948,6 +1015,13 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 
 	public int compareTo(CalendarBooking calendarBooking) {
 		int value = 0;
+
+		value = DateUtil.compareTo(getStartDate(),
+				calendarBooking.getStartDate());
+
+		if (value != 0) {
+			return value;
+		}
 
 		value = getTitle().toLowerCase()
 					.compareTo(calendarBooking.getTitle().toLowerCase());
@@ -1003,21 +1077,25 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 
 		calendarBookingModelImpl._setOriginalCompanyId = false;
 
-		calendarBookingModelImpl._originalCalendarEventId = calendarBookingModelImpl._calendarEventId;
+		calendarBookingModelImpl._originalCalendarId = calendarBookingModelImpl._calendarId;
 
-		calendarBookingModelImpl._setOriginalCalendarEventId = false;
+		calendarBookingModelImpl._setOriginalCalendarId = false;
 
 		calendarBookingModelImpl._originalCalendarResourceId = calendarBookingModelImpl._calendarResourceId;
 
 		calendarBookingModelImpl._setOriginalCalendarResourceId = false;
 
-		calendarBookingModelImpl._originalClassNameId = calendarBookingModelImpl._classNameId;
+		calendarBookingModelImpl._originalParentCalendarBookingId = calendarBookingModelImpl._parentCalendarBookingId;
 
-		calendarBookingModelImpl._setOriginalClassNameId = false;
+		calendarBookingModelImpl._setOriginalParentCalendarBookingId = false;
 
-		calendarBookingModelImpl._originalClassPK = calendarBookingModelImpl._classPK;
+		calendarBookingModelImpl._originalStartDate = calendarBookingModelImpl._startDate;
 
-		calendarBookingModelImpl._setOriginalClassPK = false;
+		calendarBookingModelImpl._originalEndDate = calendarBookingModelImpl._endDate;
+
+		calendarBookingModelImpl._originalStatus = calendarBookingModelImpl._status;
+
+		calendarBookingModelImpl._setOriginalStatus = false;
 
 		calendarBookingModelImpl._columnBitmask = 0;
 	}
@@ -1068,13 +1146,11 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 			calendarBookingCacheModel.modifiedDate = Long.MIN_VALUE;
 		}
 
-		calendarBookingCacheModel.calendarEventId = getCalendarEventId();
+		calendarBookingCacheModel.calendarId = getCalendarId();
 
 		calendarBookingCacheModel.calendarResourceId = getCalendarResourceId();
 
-		calendarBookingCacheModel.classNameId = getClassNameId();
-
-		calendarBookingCacheModel.classPK = getClassPK();
+		calendarBookingCacheModel.parentCalendarBookingId = getParentCalendarBookingId();
 
 		calendarBookingCacheModel.title = getTitle();
 
@@ -1082,14 +1158,6 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 
 		if ((title != null) && (title.length() == 0)) {
 			calendarBookingCacheModel.title = null;
-		}
-
-		calendarBookingCacheModel.name = getName();
-
-		String name = calendarBookingCacheModel.name;
-
-		if ((name != null) && (name.length() == 0)) {
-			calendarBookingCacheModel.name = null;
 		}
 
 		calendarBookingCacheModel.description = getDescription();
@@ -1126,9 +1194,7 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 			calendarBookingCacheModel.endDate = Long.MIN_VALUE;
 		}
 
-		calendarBookingCacheModel.durationHour = getDurationHour();
-
-		calendarBookingCacheModel.durationMinute = getDurationMinute();
+		calendarBookingCacheModel.allDay = getAllDay();
 
 		calendarBookingCacheModel.recurrence = getRecurrence();
 
@@ -1138,15 +1204,9 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 			calendarBookingCacheModel.recurrence = null;
 		}
 
-		calendarBookingCacheModel.type = getType();
+		calendarBookingCacheModel.firstReminder = getFirstReminder();
 
-		String type = calendarBookingCacheModel.type;
-
-		if ((type != null) && (type.length() == 0)) {
-			calendarBookingCacheModel.type = null;
-		}
-
-		calendarBookingCacheModel.required = getRequired();
+		calendarBookingCacheModel.secondReminder = getSecondReminder();
 
 		calendarBookingCacheModel.status = getStatus();
 
@@ -1174,7 +1234,7 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(55);
+		StringBundler sb = new StringBundler(49);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -1192,18 +1252,14 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 		sb.append(getCreateDate());
 		sb.append(", modifiedDate=");
 		sb.append(getModifiedDate());
-		sb.append(", calendarEventId=");
-		sb.append(getCalendarEventId());
+		sb.append(", calendarId=");
+		sb.append(getCalendarId());
 		sb.append(", calendarResourceId=");
 		sb.append(getCalendarResourceId());
-		sb.append(", classNameId=");
-		sb.append(getClassNameId());
-		sb.append(", classPK=");
-		sb.append(getClassPK());
+		sb.append(", parentCalendarBookingId=");
+		sb.append(getParentCalendarBookingId());
 		sb.append(", title=");
 		sb.append(getTitle());
-		sb.append(", name=");
-		sb.append(getName());
 		sb.append(", description=");
 		sb.append(getDescription());
 		sb.append(", location=");
@@ -1212,16 +1268,14 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 		sb.append(getStartDate());
 		sb.append(", endDate=");
 		sb.append(getEndDate());
-		sb.append(", durationHour=");
-		sb.append(getDurationHour());
-		sb.append(", durationMinute=");
-		sb.append(getDurationMinute());
+		sb.append(", allDay=");
+		sb.append(getAllDay());
 		sb.append(", recurrence=");
 		sb.append(getRecurrence());
-		sb.append(", type=");
-		sb.append(getType());
-		sb.append(", required=");
-		sb.append(getRequired());
+		sb.append(", firstReminder=");
+		sb.append(getFirstReminder());
+		sb.append(", secondReminder=");
+		sb.append(getSecondReminder());
 		sb.append(", status=");
 		sb.append(getStatus());
 		sb.append(", statusByUserId=");
@@ -1236,7 +1290,7 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(85);
+		StringBundler sb = new StringBundler(76);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.calendar.model.CalendarBooking");
@@ -1275,28 +1329,20 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 		sb.append(getModifiedDate());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>calendarEventId</column-name><column-value><![CDATA[");
-		sb.append(getCalendarEventId());
+			"<column><column-name>calendarId</column-name><column-value><![CDATA[");
+		sb.append(getCalendarId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>calendarResourceId</column-name><column-value><![CDATA[");
 		sb.append(getCalendarResourceId());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>classNameId</column-name><column-value><![CDATA[");
-		sb.append(getClassNameId());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>classPK</column-name><column-value><![CDATA[");
-		sb.append(getClassPK());
+			"<column><column-name>parentCalendarBookingId</column-name><column-value><![CDATA[");
+		sb.append(getParentCalendarBookingId());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>title</column-name><column-value><![CDATA[");
 		sb.append(getTitle());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>name</column-name><column-value><![CDATA[");
-		sb.append(getName());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>description</column-name><column-value><![CDATA[");
@@ -1315,24 +1361,20 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 		sb.append(getEndDate());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>durationHour</column-name><column-value><![CDATA[");
-		sb.append(getDurationHour());
-		sb.append("]]></column-value></column>");
-		sb.append(
-			"<column><column-name>durationMinute</column-name><column-value><![CDATA[");
-		sb.append(getDurationMinute());
+			"<column><column-name>allDay</column-name><column-value><![CDATA[");
+		sb.append(getAllDay());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>recurrence</column-name><column-value><![CDATA[");
 		sb.append(getRecurrence());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>type</column-name><column-value><![CDATA[");
-		sb.append(getType());
+			"<column><column-name>firstReminder</column-name><column-value><![CDATA[");
+		sb.append(getFirstReminder());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>required</column-name><column-value><![CDATA[");
-		sb.append(getRequired());
+			"<column><column-name>secondReminder</column-name><column-value><![CDATA[");
+		sb.append(getSecondReminder());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>status</column-name><column-value><![CDATA[");
@@ -1374,38 +1416,35 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
-	private long _calendarEventId;
-	private long _originalCalendarEventId;
-	private boolean _setOriginalCalendarEventId;
+	private long _calendarId;
+	private long _originalCalendarId;
+	private boolean _setOriginalCalendarId;
 	private long _calendarResourceId;
 	private long _originalCalendarResourceId;
 	private boolean _setOriginalCalendarResourceId;
-	private long _classNameId;
-	private long _originalClassNameId;
-	private boolean _setOriginalClassNameId;
-	private long _classPK;
-	private long _originalClassPK;
-	private boolean _setOriginalClassPK;
+	private long _parentCalendarBookingId;
+	private long _originalParentCalendarBookingId;
+	private boolean _setOriginalParentCalendarBookingId;
 	private String _title;
 	private String _titleCurrentLanguageId;
-	private String _name;
-	private String _nameCurrentLanguageId;
 	private String _description;
 	private String _descriptionCurrentLanguageId;
 	private String _location;
 	private Date _startDate;
+	private Date _originalStartDate;
 	private Date _endDate;
-	private int _durationHour;
-	private int _durationMinute;
+	private Date _originalEndDate;
+	private boolean _allDay;
 	private String _recurrence;
-	private String _type;
-	private boolean _required;
+	private int _firstReminder;
+	private int _secondReminder;
 	private int _status;
+	private int _originalStatus;
+	private boolean _setOriginalStatus;
 	private long _statusByUserId;
 	private String _statusByUserUuid;
 	private String _statusByUserName;
 	private Date _statusDate;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
 	private CalendarBooking _escapedModelProxy;
 }

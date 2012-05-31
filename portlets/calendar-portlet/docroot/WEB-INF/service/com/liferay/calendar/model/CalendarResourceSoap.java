@@ -39,11 +39,15 @@ public class CalendarResourceSoap implements Serializable {
 		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
+		soapModel.setResourceBlockId(model.getResourceBlockId());
 		soapModel.setClassNameId(model.getClassNameId());
 		soapModel.setClassPK(model.getClassPK());
 		soapModel.setClassUuid(model.getClassUuid());
+		soapModel.setDefaultCalendarId(model.getDefaultCalendarId());
+		soapModel.setCode(model.getCode());
 		soapModel.setName(model.getName());
 		soapModel.setDescription(model.getDescription());
+		soapModel.setType(model.getType());
 		soapModel.setActive(model.getActive());
 
 		return soapModel;
@@ -163,6 +167,14 @@ public class CalendarResourceSoap implements Serializable {
 		_modifiedDate = modifiedDate;
 	}
 
+	public long getResourceBlockId() {
+		return _resourceBlockId;
+	}
+
+	public void setResourceBlockId(long resourceBlockId) {
+		_resourceBlockId = resourceBlockId;
+	}
+
 	public long getClassNameId() {
 		return _classNameId;
 	}
@@ -187,6 +199,22 @@ public class CalendarResourceSoap implements Serializable {
 		_classUuid = classUuid;
 	}
 
+	public long getDefaultCalendarId() {
+		return _defaultCalendarId;
+	}
+
+	public void setDefaultCalendarId(long defaultCalendarId) {
+		_defaultCalendarId = defaultCalendarId;
+	}
+
+	public String getCode() {
+		return _code;
+	}
+
+	public void setCode(String code) {
+		_code = code;
+	}
+
 	public String getName() {
 		return _name;
 	}
@@ -201,6 +229,14 @@ public class CalendarResourceSoap implements Serializable {
 
 	public void setDescription(String description) {
 		_description = description;
+	}
+
+	public String getType() {
+		return _type;
+	}
+
+	public void setType(String type) {
+		_type = type;
 	}
 
 	public boolean getActive() {
@@ -223,10 +259,14 @@ public class CalendarResourceSoap implements Serializable {
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
+	private long _resourceBlockId;
 	private long _classNameId;
 	private long _classPK;
 	private String _classUuid;
+	private long _defaultCalendarId;
+	private String _code;
 	private String _name;
 	private String _description;
+	private String _type;
 	private boolean _active;
 }

@@ -33,6 +33,9 @@ import java.io.Serializable;
 
 import java.sql.Types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The base model implementation for the Bar service. Represents a row in the &quot;TT_Bar&quot; database table, with each column mapped to a property of this class.
  *
@@ -104,6 +107,31 @@ public class BarModelImpl extends BaseModelImpl<Bar> implements BarModel {
 		return Bar.class.getName();
 	}
 
+	@Override
+	public Map<String, Object> getModelAttributes() {
+		Map<String, Object> attributes = new HashMap<String, Object>();
+
+		attributes.put("barId", getBarId());
+		attributes.put("text", getText());
+
+		return attributes;
+	}
+
+	@Override
+	public void setModelAttributes(Map<String, Object> attributes) {
+		Long barId = (Long)attributes.get("barId");
+
+		if (barId != null) {
+			setBarId(barId);
+		}
+
+		String text = (String)attributes.get("text");
+
+		if (text != null) {
+			setText(text);
+		}
+	}
+
 	public long getBarId() {
 		return _barId;
 	}
@@ -152,17 +180,15 @@ public class BarModelImpl extends BaseModelImpl<Bar> implements BarModel {
 
 	@Override
 	public ExpandoBridge getExpandoBridge() {
-		if (_expandoBridge == null) {
-			_expandoBridge = ExpandoBridgeFactoryUtil.getExpandoBridge(0,
-					Bar.class.getName(), getPrimaryKey());
-		}
-
-		return _expandoBridge;
+		return ExpandoBridgeFactoryUtil.getExpandoBridge(0,
+			Bar.class.getName(), getPrimaryKey());
 	}
 
 	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext) {
-		getExpandoBridge().setAttributes(serviceContext);
+		ExpandoBridge expandoBridge = getExpandoBridge();
+
+		expandoBridge.setAttributes(serviceContext);
 	}
 
 	@Override
@@ -286,7 +312,6 @@ public class BarModelImpl extends BaseModelImpl<Bar> implements BarModel {
 	private long _barId;
 	private String _text;
 	private String _originalText;
-	private transient ExpandoBridge _expandoBridge;
 	private long _columnBitmask;
 	private Bar _escapedModelProxy;
 }
