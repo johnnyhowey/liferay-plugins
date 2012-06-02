@@ -642,57 +642,58 @@ request.setAttribute("view_file_entry.jsp-fileEntry", fileEntry);
 							for (int i = 0; i < fileVersions.size(); i++) {
 								FileVersion curFileVersion = (FileVersion)fileVersions.get(i);
 							%>
-								<div class="version">
-									<span class="version-number"><%= String.valueOf(curFileVersion.getVersion()) %></span>
-									<span class="user-name"><liferay-ui:message key="by" />: <%= curFileVersion.getUserName() %></span>
-									<span class="modified-date"><liferay-ui:message key="on" />: <%= dateFormatDateTime.format(curFileVersion.getCreateDate()) %></span>
-									<span class="size"><liferay-ui:message key="size" />: <%= TextFormatter.formatKB(curFileVersion.getSize(), locale) + "k" %></span>
-								</div>
-								<div class="version-description">
-									<span><%= curFileVersion.getDescription() %></span>
-								</div>
-
-								<liferay-ui:icon
-									image="download"
-									label="<%= true %>"
-									url="<%= DLUtil.getPreviewURL(fileEntry, curFileVersion, themeDisplay, StringPool.BLANK) %>"
-								/>
-
-								<portlet:renderURL var="viewFileVersionURL">
-									<portlet:param name="struts_action" value="/document_library/view_file_entry" />
-									<portlet:param name="redirect" value="<%= redirect %>" />
-									<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
-									<portlet:param name="version" value="<%= curFileVersion.getVersion() %>" />
-								</portlet:renderURL>
-
-								<liferay-ui:icon
-									image="view"
-									label="<%= true %>"
-									url="<%= viewFileVersionURL %>"
-								/>
-
-								<c:if test="<%= showActions && (i != 0) && (fileVersion.getStatus() == WorkflowConstants.STATUS_APPROVED) && DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) && (!fileEntry.isCheckedOut() || fileEntry.hasLock()) %>">
-									<portlet:renderURL var="redirectURL">
-										<portlet:param name="struts_action" value="/document_library/view" />
-										<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
-									</portlet:renderURL>
-
-									<portlet:actionURL var="revertURL">
-										<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
-										<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.REVERT %>" />
-										<portlet:param name="redirect" value="<%= (fileVersions.size() == 1) ? redirectURL : currentURL %>" />
-										<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
-										<portlet:param name="version" value="<%= String.valueOf(fileVersion.getVersion()) %>" />
-									</portlet:actionURL>
+								<div class="version-entry">
+									<div class="version">
+										<span class="version-number"><%= String.valueOf(curFileVersion.getVersion()) %></span>
+										<span class="user-name"><liferay-ui:message key="by" />: <%= curFileVersion.getUserName() %></span>
+										<span class="modified-date"><liferay-ui:message key="on" />: <%= dateFormatDateTime.format(curFileVersion.getCreateDate()) %></span>
+										<span class="size"><liferay-ui:message key="size" />: <%= TextFormatter.formatKB(curFileVersion.getSize(), locale) + "k" %></span>
+									</div>
+									<div class="version-description">
+										<%= curFileVersion.getDescription() %>
+									</div>
 
 									<liferay-ui:icon
-										image="undo"
+										image="download"
 										label="<%= true %>"
-										message="revert"
-										url="<%= revertURL %>"
+										url="<%= DLUtil.getPreviewURL(fileEntry, curFileVersion, themeDisplay, StringPool.BLANK) %>"
 									/>
-								</c:if>
 
+									<portlet:renderURL var="viewFileVersionURL">
+										<portlet:param name="struts_action" value="/document_library/view_file_entry" />
+										<portlet:param name="redirect" value="<%= redirect %>" />
+										<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+										<portlet:param name="version" value="<%= curFileVersion.getVersion() %>" />
+									</portlet:renderURL>
+
+									<liferay-ui:icon
+										image="view"
+										label="<%= true %>"
+										url="<%= viewFileVersionURL %>"
+									/>
+
+									<c:if test="<%= showActions && (i != 0) && (fileVersion.getStatus() == WorkflowConstants.STATUS_APPROVED) && DLFileEntryPermission.contains(permissionChecker, fileEntry, ActionKeys.UPDATE) && (!fileEntry.isCheckedOut() || fileEntry.hasLock()) %>">
+										<portlet:renderURL var="redirectURL">
+											<portlet:param name="struts_action" value="/document_library/view" />
+											<portlet:param name="folderId" value="<%= String.valueOf(fileEntry.getFolderId()) %>" />
+										</portlet:renderURL>
+
+										<portlet:actionURL var="revertURL">
+											<portlet:param name="struts_action" value="/document_library/edit_file_entry" />
+											<portlet:param name="<%= Constants.CMD %>" value="<%= Constants.REVERT %>" />
+											<portlet:param name="redirect" value="<%= (fileVersions.size() == 1) ? redirectURL : currentURL %>" />
+											<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
+											<portlet:param name="version" value="<%= String.valueOf(fileVersion.getVersion()) %>" />
+										</portlet:actionURL>
+
+										<liferay-ui:icon
+											image="undo"
+											label="<%= true %>"
+											message="revert"
+											url="<%= revertURL %>"
+										/>
+									</c:if>
+								</div>
 							<%
 							}
 							%>
