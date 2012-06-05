@@ -814,6 +814,35 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 	display: none;
 }
 
+/* Breadcrumb */
+
+.so-breadcrumbs .breadcrumbs-horizontal {
+	margin: 0px;
+
+	li {
+		background: url(@theme_image_path@/common/breadcrumbs_so.png) no-repeat scroll 100% 50% transparent;
+		max-width: 50%;
+		padding: 10px 20px 10px 5px;
+
+		a {
+			color: #34404F;
+			font-weight: bold;
+
+			&:hover {
+				text-decoration: none;
+			}
+		}
+
+		&.first {
+			padding-left: 10px;
+		}
+
+		&.last {
+			background-image: none;
+		}
+	}
+}
+
 /* Bookmarks */
 
 .portlet-bookmarks {
