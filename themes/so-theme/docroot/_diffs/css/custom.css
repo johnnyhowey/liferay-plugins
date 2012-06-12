@@ -98,7 +98,7 @@ a:focus .opens-new-window-accessible {
 		float: left;
 		font-size: 2.2em;
 		font-weight: bold;
-		line-height: 1.5em;
+		line-height: 1em;
 		overflow: hidden;
 		padding: 22px 20px 0;
 		text-overflow: ellipsis;
@@ -106,6 +106,13 @@ a:focus .opens-new-window-accessible {
 
 		a {
 			color: $red;
+		}
+	}
+
+	.member-button {
+		a {
+			color: #2571AD;
+			font-size: 0.4em;
 		}
 	}
 
@@ -341,11 +348,6 @@ a:focus .opens-new-window-accessible {
 		.aui-toolbar {
 			white-space: normal;
 		}
-	}
-
-	#socialOfficeMembership {
-		padding: 4px 10px;
-		text-align: right;
 	}
 }
 
@@ -1611,6 +1613,21 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 
 	.document-container {
 		min-height: 400px;
+	}
+
+	.breadcrumbs-horizontal li {
+		background: url(@theme_image_path@/arrows/05_right.png) no-repeat scroll 100% 50% transparent;
+		margin-right: 5px;
+		max-width: 50%;
+		padding-right: 15px;
+	}
+
+	.breadcrumbs-horizontal .last {
+		margin-top: 0.2em;
+	}
+
+	.breadcrumbs .last {
+		background-image: none;
 	}
 
 	.aui-column-content-first, .aui-column-content-last, .search-button-container .aui-column:before, .search-button-container .aui-column-content, .search-button-container .aui-column-content-center {
