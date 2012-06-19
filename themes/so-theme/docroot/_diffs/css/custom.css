@@ -98,7 +98,7 @@ a:focus .opens-new-window-accessible {
 		float: left;
 		font-size: 2.2em;
 		font-weight: bold;
-		line-height: 1.5em;
+		line-height: 1em;
 		overflow: hidden;
 		padding: 22px 20px 0;
 		text-overflow: ellipsis;
@@ -106,6 +106,13 @@ a:focus .opens-new-window-accessible {
 
 		a {
 			color: $red;
+		}
+	}
+
+	.member-button {
+		a {
+			color: #2571AD;
+			font-size: 0.4em;
 		}
 	}
 
@@ -342,11 +349,6 @@ a:focus .opens-new-window-accessible {
 			white-space: normal;
 		}
 	}
-
-	#socialOfficeMembership {
-		padding: 4px 10px;
-		text-align: right;
-	}
 }
 
 /* ---------- Portal tool tips ---------- */
@@ -558,6 +560,15 @@ button, input[type=submit], input[type=button], input[type=reset], .aui-panel-hd
 	select {
 		padding: 4px 5px;
 	}
+}
+
+.aui-buttonitem-content {
+	line-height: 1.5em;
+	padding: 3px 2px;
+}
+
+.firefox .aui-buttonitem-content {
+	padding: 3px 0;
 }
 
 .aui-panel-hd button, .aui-panel-hd .aui-button, .aui-panel-hd .aui-state-default, .aui-textboxlistentry-holder .aui-field-input-text, .microblogs-portlet .autocomplete input[type=text] {
@@ -1613,6 +1624,21 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 		min-height: 400px;
 	}
 
+	.breadcrumbs-horizontal li {
+		background: url(@theme_image_path@/arrows/05_right.png) no-repeat scroll 100% 50% transparent;
+		margin-right: 5px;
+		max-width: 50%;
+		padding-right: 15px;
+	}
+
+	.breadcrumbs-horizontal .last {
+		margin-top: 0.2em;
+	}
+
+	.breadcrumbs .last {
+		background-image: none;
+	}
+
 	.aui-column-content-first, .aui-column-content-last, .search-button-container .aui-column:before, .search-button-container .aui-column-content, .search-button-container .aui-column-content-center {
 		padding: 0;
 	}
@@ -1993,10 +2019,6 @@ input[type=submit], input[type=button], input[type=reset], .aui-state-hover, .co
 			background: #EEE;
 		}
 	}
-}
-
-.aui-dialog-iframe-popup .results-header {
-	display: table-row;
 }
 
 /* Faceted Search */

@@ -35,6 +35,10 @@ $toolbar-bg: #DCE3EA;
 			}
 		}
 
+		.contact-group-filter-select select {
+			width: 170px;
+		}
+
 		.contact-group-filter-content {
 			padding: 5px 0 1px 5px;
 		}
@@ -210,7 +214,7 @@ $toolbar-bg: #DCE3EA;
 	}
 
 	.personal-contact-list .contacts-result-content {
-		top: 0;
+		top: 38px;
 	}
 
 	.my-contacts {
@@ -311,7 +315,7 @@ $toolbar-bg: #DCE3EA;
 	}
 
 	.search-column {
-		width: 250px;
+		width: 240px;
 	}
 
 	.section {
@@ -349,7 +353,7 @@ $toolbar-bg: #DCE3EA;
 			float: left;
 			padding-left: 10px;
 			padding-top: 5px;
-			width: 70%;
+			width: 67%;
 
 			.aui-icon-remove-coworker {
 				background-image: url(@theme_image_path@/social/remove_coworker.png);
@@ -381,6 +385,10 @@ $toolbar-bg: #DCE3EA;
 
 			.aui-icon-follow {
 				background-image: url(@theme_image_path@/social/follow.png);
+			}
+
+			.aui-icon-send-email {
+				background-image: url(@theme_image_path@/mail/compose.png);
 			}
 
 			.aui-icon-unblock {
