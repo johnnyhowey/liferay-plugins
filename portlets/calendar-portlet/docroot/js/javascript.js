@@ -56,19 +56,19 @@
 							calendarId: schedulerEvent.get('calendarId'),
 							childCalendarIds: '',
 							descriptionMap: instance.getLocalizationMap(schedulerEvent.get('description')),
-							endDate: CalendarUtil.toUTCTimeZone(schedulerEvent.get('endDate')).getTime(),
+							endDate: instance.toUTCTimeZone(schedulerEvent.get('endDate')).getTime(),
 							firstReminder: 0,
 							location: schedulerEvent.get('location'),
 							parentCalendarBookingId: schedulerEvent.get('parentCalendarBookingId'),
 							recurrence: schedulerEvent.get('repeat'),
 							secondReminder: 0,
-							startDate: CalendarUtil.toUTCTimeZone(schedulerEvent.get('startDate')).getTime(),
+							startDate: instance.toUTCTimeZone(schedulerEvent.get('startDate')).getTime(),
 							titleMap: instance.getLocalizationMap(schedulerEvent.get('content'))
 						}
 					},
 					{
 						failure: function() {
-							CalendarUtil.destroyEvent(schedulerEvent);
+							instance.destroyEvent(schedulerEvent);
 						},
 
 						start: function() {
@@ -80,19 +80,10 @@
 
 							if (data) {
 								if (data.exception) {
-									CalendarUtil.destroyEvent(schedulerEvent);
+									instance.destroyEvent(schedulerEvent);
 								}
 								else {
-									schedulerEvent.set('calendarBookingId', data.calendarBookingId);
-									schedulerEvent.set('calendarResourceId', data.calendarResourceId);
-									schedulerEvent.set('parentCalendarBookingId', data.parentCalendarBookingId);
-									schedulerEvent.set('status', data.status);
-
-									var calendar = CalendarUtil.visibleCalendars[schedulerEvent.get('calendarId')];
-
-									if (calendar) {
-										calendar.addEvent(schedulerEvent);
-									}
+									instance.setEventAttrs(schedulerEvent, data);
 								}
 							}
 						}
@@ -117,7 +108,7 @@
 				return events;
 			},
 
-			createCalendarListAutoComplete: function(resourceURL, calendarList, input) {
+			createCalendarsAutoComplete: function(resourceURL, input, afterSelectFn) {
 				var instance = this;
 
 				input.plug(
@@ -125,14 +116,10 @@
 					{
 						activateFirstItem: true,
 						after: {
-							select: function(event) {
-								calendarList.add(event.result.raw);
-
-								input.val(STR_BLANK);
-							}
+							select: afterSelectFn
 						},
 						maxResults: 20,
-						requestTemplate: '&' + Liferay.CalendarUtil.PORTLET_NAMESPACE + 'keywords={query}',
+						requestTemplate: '&' + instance.PORTLET_NAMESPACE + 'keywords={query}',
 						resultFilters: function(query, results) {
 							return A.Array.filter(
 								results,
@@ -190,6 +177,17 @@
 				scheduler.syncEventsUI();
 			},
 
+			getCalendarJSONById: function(calendarJSONArray, calendarId) {
+				var instance = this;
+
+				return A.Array.find(
+					calendarJSONArray,
+					function(item, index, collection) {
+						return item.calendarId === calendarId;
+					}
+				);
+			},
+
 			getDataSource: function() {
 				var instance = this;
 
@@ -229,7 +227,7 @@
 			getEvents: function(startDate, endDate, status, success, failure) {
 				var instance = this;
 
-				var calendarIds = A.Object.keys(CalendarUtil.visibleCalendars);
+				var calendarIds = A.Object.keys(instance.visibleCalendars);
 
 				instance.invoke(
 					{
@@ -268,17 +266,20 @@
 			getStatusLabel: function(statusId) {
 				var status = String.valueOf(statusId);
 
-				if (Liferay.Workflow.STATUS_APPROVED === statusId) {
+				if (CalendarWorkflow.STATUS_APPROVED === statusId) {
 					status = Liferay.Language.get('accepted');
 				}
-				else if (Liferay.Workflow.STATUS_DRAFT === statusId) {
+				else if (CalendarWorkflow.STATUS_DENIED === statusId) {
+					status = Liferay.Language.get('declined');
+				}
+				else if (CalendarWorkflow.STATUS_DRAFT === statusId) {
 					status = Liferay.Language.get('draft');
 				}
-				else if (Liferay.Workflow.STATUS_PENDING === statusId) {
-					status = Liferay.Language.get('pending');
+				else if (CalendarWorkflow.STATUS_MAYBE === statusId) {
+					status = Liferay.Language.get('maybe');
 				}
-				else if (Liferay.Workflow.STATUS_DENIED === statusId) {
-					status = Liferay.Language.get('declined');
+				else if (CalendarWorkflow.STATUS_PENDING === statusId) {
+					status = Liferay.Language.get('pending');
 				}
 
 				return status;
@@ -315,7 +316,7 @@
 								}
 							}
 						},
-						request: '?cmd=' + A.JSON.stringify(service)
+						request: '?p_auth=' + Liferay.authToken + '&cmd=' + A.JSON.stringify(service)
 					}
 				);
 			},
@@ -329,7 +330,7 @@
 					{
 						'/calendar-portlet/calendarbooking/invoke-transition': {
 							calendarBookingId: schedulerEvent.get('calendarBookingId'),
-							transitionName: CalendarUtil.getStatusLabel(status).toLowerCase(),
+							transitionName: instance.getStatusLabel(status).toLowerCase(),
 							userId: USER_ID
 						}
 					},
@@ -357,6 +358,34 @@
 				var instance = this;
 
 				A.oneNS(instance.PORTLET_NAMESPACE, '#message').html(msg);
+			},
+
+			setEventAttrs: function(schedulerEvent, data) {
+				var instance = this;
+
+				var newCalendarId = data.calendarId;
+
+				var oldCalendarId = schedulerEvent.get('calendarId');
+
+				schedulerEvent.set('calendarBookingId', data.calendarBookingId);
+				schedulerEvent.set('calendarResourceId', data.calendarResourceId);
+				schedulerEvent.set('parentCalendarBookingId', data.parentCalendarBookingId);
+
+				schedulerEvent.set('status', data.status);
+
+				var oldCalendar = instance.visibleCalendars[oldCalendarId];
+
+				if (oldCalendar) {
+					oldCalendar.removeEvent(schedulerEvent);
+				}
+
+				var newCalendar = instance.visibleCalendars[newCalendarId];
+
+				if (newCalendar) {
+					newCalendar.addEvent(schedulerEvent);
+				}
+
+				schedulerEvent.set('calendarId', newCalendarId);
 			},
 
 			syncVisibleCalendarsMap: function() {
@@ -391,10 +420,10 @@
 						calendarId: calendarBooking.calendarId,
 						content: calendarBooking.titleCurrentValue,
 						description: calendarBooking.descriptionCurrentValue,
-						endDate: CalendarUtil.toUserTimeZone(calendarBooking.endDate),
+						endDate: instance.toUserTimeZone(calendarBooking.endDate),
 						location: calendarBooking.location,
 						parentCalendarBookingId: calendarBooking.parentCalendarBookingId,
-						startDate: CalendarUtil.toUserTimeZone(calendarBooking.startDate),
+						startDate: instance.toUserTimeZone(calendarBooking.startDate),
 						status: calendarBooking.status
 					}
 				);
@@ -430,12 +459,12 @@
 							calendarBookingId: schedulerEvent.get('calendarBookingId'),
 							calendarId: schedulerEvent.get('calendarId'),
 							descriptionMap: instance.getLocalizationMap(schedulerEvent.get('description')),
-							endDate: CalendarUtil.toUTCTimeZone(schedulerEvent.get('endDate')).getTime(),
+							endDate: instance.toUTCTimeZone(schedulerEvent.get('endDate')).getTime(),
 							firstReminder: 0,
 							location: schedulerEvent.get('location'),
 							recurrence: schedulerEvent.get('repeat'),
 							secondReminder: 0,
-							startDate: CalendarUtil.toUTCTimeZone(schedulerEvent.get('startDate')).getTime(),
+							startDate: instance.toUTCTimeZone(schedulerEvent.get('startDate')).getTime(),
 							status: schedulerEvent.get('status'),
 							titleMap: instance.getLocalizationMap(schedulerEvent.get('content')),
 							userId: USER_ID
@@ -453,6 +482,9 @@
 								if (data.exception) {
 									return;
 								}
+								else {
+									instance.setEventAttrs(schedulerEvent, data);
+								}
 							}
 						}
 					}
@@ -461,6 +493,14 @@
 		};
 
 		Liferay.CalendarUtil = CalendarUtil;
+
+		var CalendarWorkflow = {
+			STATUS_MAYBE: 8
+		};
+
+		A.mix(CalendarWorkflow, Workflow);
+
+		Liferay.CalendarWorkflow = CalendarWorkflow;
 
 		var Scheduler = A.Component.create(
 			{
@@ -521,7 +561,7 @@
 						CalendarUtil.getEvents(
 							startDate,
 							endDate,
-							[Workflow.STATUS_APPROVED, Workflow.STATUS_PENDING],
+							[CalendarWorkflow.STATUS_APPROVED, CalendarWorkflow.STATUS_MAYBE, CalendarWorkflow.STATUS_PENDING],
 							A.bind(instance.loadCalendarBookingsJSON, instance)
 						);
 					},
@@ -701,8 +741,9 @@
 
 						var node = instance.get('node');
 
-						node.toggleClass('calendar-portlet-event-pending', (val === Workflow.STATUS_PENDING));
-						node.toggleClass('calendar-portlet-event-approved', (val === Workflow.STATUS_APPROVED));
+						node.toggleClass('calendar-portlet-event-approved', (val === CalendarWorkflow.STATUS_APPROVED));
+						node.toggleClass('calendar-portlet-event-maybe', (val === CalendarWorkflow.STATUS_MAYBE));
+						node.toggleClass('calendar-portlet-event-pending', (val === CalendarWorkflow.STATUS_PENDING));
 					}
 				}
 			}
@@ -730,7 +771,7 @@
 
 					status: {
 						setter: toNumber,
-						value: Liferay.Workflow.STATUS_DRAFT
+						value: CalendarWorkflow.STATUS_DRAFT
 					},
 
 					toolbar: {
@@ -790,23 +831,33 @@
 						return false;
 					},
 
-					_handleAcceptEvent: function(event) {
+					_handleEventAcceptResponse: function(event) {
 						var instance = this;
 
 						var schedulerEvent = instance.get('event');
 
 						if (schedulerEvent) {
-							CalendarUtil.invokeTransition(schedulerEvent, Liferay.Workflow.STATUS_APPROVED);
+							CalendarUtil.invokeTransition(schedulerEvent, CalendarWorkflow.STATUS_APPROVED);
 						}
 					},
 
-					_handleDeclineEvent: function(event) {
+					_handleEventDeclineResponse: function(event) {
 						var instance = this;
 
 						var schedulerEvent = instance.get('event');
 
 						if (schedulerEvent) {
-							CalendarUtil.invokeTransition(schedulerEvent, Liferay.Workflow.STATUS_DENIED);
+							CalendarUtil.invokeTransition(schedulerEvent, CalendarWorkflow.STATUS_DENIED);
+						}
+					},
+
+					_handleEventMaybeResponse: function(event) {
+						var instance = this;
+
+						var schedulerEvent = instance.get('event');
+
+						if (schedulerEvent) {
+							CalendarUtil.invokeTransition(schedulerEvent, CalendarWorkflow.STATUS_MAYBE);
 						}
 					},
 
@@ -929,7 +980,7 @@
 
 						toolbar.add(
 							{
-								handler: A.bind(instance._handleAcceptEvent, instance),
+								handler: A.bind(instance._handleEventAcceptResponse, instance),
 								icon: 'circle-check',
 								id: 'acceptBtn',
 								label: Liferay.Language.get('accept')
@@ -938,7 +989,16 @@
 
 						toolbar.add(
 							{
-								handler: A.bind(instance._handleDeclineEvent, instance),
+								handler: A.bind(instance._handleEventMaybeResponse, instance),
+								icon: 'help',
+								id: 'maybeBtn',
+								label: Liferay.Language.get('maybe')
+							}
+						);
+
+						toolbar.add(
+							{
+								handler: A.bind(instance._handleEventDeclineResponse, instance),
 								icon: 'circle-close',
 								id: 'declineBtn',
 								label: Liferay.Language.get('decline')
@@ -950,6 +1010,7 @@
 							toolbar.remove('declineBtn');
 							toolbar.remove('deleteBtn');
 							toolbar.remove('editDetailsBtn');
+							toolbar.remove('maybeBtn');
 							toolbar.remove('saveBtn');
 						}
 
@@ -957,12 +1018,17 @@
 							toolbar.remove('deleteBtn');
 						}
 
-						if (status === Liferay.Workflow.STATUS_DRAFT) {
+						if (status === CalendarWorkflow.STATUS_DRAFT) {
 							toolbar.remove('declineBtn');
+							toolbar.remove('maybeBtn');
 						}
 
-						if (status === Liferay.Workflow.STATUS_APPROVED ||
-							status === Liferay.Workflow.STATUS_DRAFT) {
+						if (status === CalendarWorkflow.STATUS_MAYBE) {
+							toolbar.remove('maybeBtn');
+						}
+
+						if (status === CalendarWorkflow.STATUS_APPROVED ||
+							status === CalendarWorkflow.STATUS_DRAFT) {
 
 							toolbar.remove('acceptBtn');
 						}
@@ -1052,14 +1118,23 @@
 
 						Calendar.superclass._afterColorChange.apply(instance, arguments);
 
-						CalendarUtil.invoke(
-							{
-								'/calendar-portlet/calendar/update-color': {
-									calendarId: instance.get('calendarId'),
-									color: parseInt(event.newVal.substr(1), 16)
+						var calendarId = instance.get('calendarId');
+
+						var color = event.newVal;
+
+						if (instance.get('permissions.UPDATE')) {
+							CalendarUtil.invoke(
+								{
+									'/calendar-portlet/calendar/update-color': {
+										calendarId: calendarId,
+										color: parseInt(color.substr(1), 16)
+									}
 								}
-							}
-						);
+							);
+						}
+						else {
+							Liferay.Store('calendar-portlet-calendar-' + calendarId + '-color', color);
+						}
 					}
 				}
 			}
