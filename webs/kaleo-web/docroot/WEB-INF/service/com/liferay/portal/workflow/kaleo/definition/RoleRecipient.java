@@ -70,7 +70,13 @@ public class RoleRecipient extends Recipient {
 
 	@Override
 	public int hashCode() {
-		return _roleName.hashCode();
+		if (Validator.isNotNull(_roleName)) {
+			return _roleName.hashCode();
+		}
+
+		String roleIdString = String.valueOf(_roleId);
+
+		return roleIdString.hashCode();
 	}
 
 	public boolean isAutoCreate() {
