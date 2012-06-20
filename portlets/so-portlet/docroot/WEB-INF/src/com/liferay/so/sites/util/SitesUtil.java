@@ -17,13 +17,16 @@
 
 package com.liferay.so.sites.util;
 
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.GroupConstants;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.util.comparator.GroupNameComparator;
 import com.liferay.so.service.FavoriteSiteLocalServiceUtil;
+import com.liferay.so.util.PortletPropsValues;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -69,11 +72,11 @@ public class SitesUtil {
 
 	public static List<Group> getVisibleSites(
 		long companyId, long userId, String keywords, boolean usersSites,
-		int maxResultSize) {
+		int start, int end) {
 
 		try {
 			return doGetVisibleSites(
-				companyId, userId, keywords, usersSites, maxResultSize);
+				companyId, userId, keywords, usersSites, start, end);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -98,10 +101,10 @@ public class SitesUtil {
 
 	protected static List<Group> doGetVisibleSites(
 			long companyId, long userId, String keywords, boolean usersSites,
-			int maxResultSize)
+			int start, int end)
 		throws Exception {
 
-		List<Group> groups = new ArrayList<Group>(maxResultSize);
+		List<Group> groups = new ArrayList<Group>();
 
 		LinkedHashMap<String, Object> params =
 			new LinkedHashMap<String, Object>();
@@ -111,14 +114,11 @@ public class SitesUtil {
 		params.put("usersGroups", userId);
 
 		List<Group> usersGroups = GroupLocalServiceUtil.search(
-			companyId, keywords, null, params, 0, maxResultSize,
+			companyId, keywords, null, params, 0,
+			end + PortletPropsValues.SITES_SEARCH_LIMIT,
 			new GroupNameComparator(true));
 
 		groups.addAll(usersGroups);
-
-		if (usersSites || (groups.size() >= maxResultSize)) {
-			return groups;
-		}
 
 		params.clear();
 
@@ -132,17 +132,30 @@ public class SitesUtil {
 		params.put("types", types);
 
 		List<Group> visibleGroup = GroupLocalServiceUtil.search(
-			companyId, keywords, null, params, 0, maxResultSize,
+			companyId, keywords, null, params, 0,
+			end + PortletPropsValues.SITES_SEARCH_LIMIT,
 			new GroupNameComparator(true));
 
 		for (Group group : visibleGroup) {
 			if (!usersGroups.contains(group)) {
 				groups.add(group);
 			}
+		}
 
-			if (groups.size() > maxResultSize) {
-				break;
+		ListUtil.sort(groups, new GroupNameComparator(true));
+
+		int groupsCount = groups.size();
+
+		if ((end != QueryUtil.ALL_POS) && (start != QueryUtil.ALL_POS)) {
+			if (end > groupsCount) {
+				end = groupsCount;
 			}
+
+			if (start > groupsCount) {
+				start = groupsCount;
+			}
+
+			groups = groups.subList(start, end);
 		}
 
 		return groups;

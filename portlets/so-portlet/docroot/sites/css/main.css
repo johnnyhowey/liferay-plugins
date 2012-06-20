@@ -186,6 +186,10 @@
 		margin: 10px 0;
 	}
 
+	.sites-tabs .aui-field {
+		margin: 0;
+	}
+
 	.buttons-left {
 		float: left;
 	}
