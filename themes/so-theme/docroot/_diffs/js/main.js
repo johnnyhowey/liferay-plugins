@@ -47,5 +47,7 @@ AUI().ready(
 				}
 			);
 		}
+
+		Liferay._editControlsState =  "hidden";
 	}
 );
