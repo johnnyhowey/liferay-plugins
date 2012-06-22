@@ -229,7 +229,14 @@ public class PrivateMessagingUtil {
 				continue;
 			}
 
-			User user = UserLocalServiceUtil.getUser(mbMessage.getUserId());
+			User user = UserLocalServiceUtil.fetchUser(mbMessage.getUserId());
+
+			if (user == null) {
+				user = UserLocalServiceUtil.createUser(mbMessage.getUserId());
+
+				user.setFirstName(mbMessage.getUserName());
+				user.setStatus(WorkflowConstants.STATUS_INACTIVE);
+			}
 
 			if (!users.contains(user)) {
 				users.add(user);
@@ -246,7 +253,14 @@ public class PrivateMessagingUtil {
 				continue;
 			}
 
-			User user = UserLocalServiceUtil.getUser(userThread.getUserId());
+			User user = UserLocalServiceUtil.fetchUser(userThread.getUserId());
+
+			if (user == null) {
+				user = UserLocalServiceUtil.createUser(userThread.getUserId());
+
+				user.setFirstName(userThread.getUserName());
+				user.setStatus(WorkflowConstants.STATUS_INACTIVE);
+			}
 
 			if (!users.contains(user)) {
 				users.add(user);

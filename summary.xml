@@ -13,7 +13,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>hooks/default-web-content-hook/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -38,7 +38,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -62,7 +62,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -86,7 +86,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -110,7 +110,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -134,7 +134,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -158,7 +158,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -166,31 +166,6 @@
 			<public>true</public>
 			<standalone-app>true</standalone-app>
 			<supported>false</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>sevencogs-hook</artifact-id>
-		<name>7Cogs</name>
-		<type>hook</type>
-		<tags></tags>
-		<short-description>This hook contains custom configuration used for Liferay's demo website.</short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<releng>
-			<bundle>false</bundle>
-			<category></category>
-			<compatibility></compatibility>
-			<demo-url></demo-url>
-			<icon>hooks/sevencogs-hook/docroot/WEB-INF/releng/icons/90x90.png</icon>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -207,7 +182,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -231,7 +206,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -257,7 +232,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -283,7 +258,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -309,7 +284,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -335,7 +310,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -361,7 +336,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -385,7 +360,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -409,7 +384,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -433,7 +408,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -445,7 +420,7 @@
 	</plugin>
 	<plugin>
 		<artifact-id>calendar-portlet</artifact-id>
-		<name>Calendar</name>
+		<name>Enterprise Calendar</name>
 		<type>portlet</type>
 		<tags></tags>
 		<short-description></short-description>
@@ -457,7 +432,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -481,7 +456,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility>6.1.1,6.1.11</compatibility>
+			<compatibility>6.2.06.1.1,6.1.11</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/chat-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
@@ -508,7 +483,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -532,7 +507,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/ddl-form-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
@@ -557,7 +532,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -565,30 +540,6 @@
 			<public>true</public>
 			<standalone-app>true</standalone-app>
 			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>enterprise-calendar-portlet</artifact-id>
-		<name>Enterprise Calendar</name>
-		<type>portlet</type>
-		<tags></tags>
-		<short-description></short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<releng>
-			<bundle>false</bundle>
-			<category></category>
-			<compatibility></compatibility>
-			<demo-url></demo-url>
-			<labs>true</labs>
-			<marketplace>false</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -605,7 +556,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -629,7 +580,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/flash-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -654,7 +605,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/google-adsense-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -679,7 +630,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/google-maps-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
@@ -704,7 +655,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -728,7 +679,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/ip-geocoder-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -753,7 +704,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -777,7 +728,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/knowledge-base-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
@@ -802,7 +753,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -826,7 +777,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/mail-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -851,7 +802,7 @@
 		<releng>
 			<bundle>true</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -875,7 +826,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -899,7 +850,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -923,7 +874,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -947,7 +898,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/opensocial-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
@@ -972,7 +923,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -996,7 +947,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -1020,7 +971,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1044,7 +995,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -1068,7 +1019,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1092,7 +1043,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1116,7 +1067,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1140,7 +1091,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1164,7 +1115,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1188,7 +1139,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1212,7 +1163,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1236,7 +1187,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1260,7 +1211,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1284,7 +1235,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1308,7 +1259,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1332,7 +1283,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1356,7 +1307,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1380,7 +1331,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1404,7 +1355,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1428,7 +1379,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1452,7 +1403,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1476,7 +1427,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1500,7 +1451,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1524,7 +1475,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1548,7 +1499,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1572,7 +1523,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1596,7 +1547,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1620,7 +1571,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1644,7 +1595,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1668,7 +1619,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1692,7 +1643,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1716,7 +1667,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1740,7 +1691,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1764,7 +1715,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1788,7 +1739,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1812,7 +1763,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1836,7 +1787,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1860,7 +1811,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -1884,7 +1835,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -1908,7 +1859,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -1932,7 +1883,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/social-networking-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -1957,7 +1908,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/stocks-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -1982,7 +1933,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2006,7 +1957,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -2030,7 +1981,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2054,7 +2005,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2078,7 +2029,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2102,7 +2053,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2126,7 +2077,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2150,7 +2101,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2174,7 +2125,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2198,7 +2149,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2222,7 +2173,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2246,7 +2197,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2270,7 +2221,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2294,7 +2245,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2318,13 +2269,37 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
 			<parent-app></parent-app>
 			<public>true</public>
 			<standalone-app>true</standalone-app>
+			<supported>false</supported>
+		</releng>
+	</plugin>
+	<plugin>
+		<artifact-id>test-pacl-portlet</artifact-id>
+		<name>Test Portal Access Control List</name>
+		<type>portlet</type>
+		<tags>test</tags>
+		<short-description></short-description>
+		<long-description></long-description>
+		<change-log></change-log>
+		<page-url>http://www.liferay.com</page-url>
+		<author>Liferay, Inc.</author>
+		<licenses>LGPL</licenses>
+		<releng>
+			<bundle>false</bundle>
+			<category></category>
+			<compatibility></compatibility>
+			<demo-url></demo-url>
+			<labs>true</labs>
+			<marketplace>false</marketplace>
+			<parent-app></parent-app>
+			<public>true</public>
+			<standalone-app>false</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2342,7 +2317,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2366,7 +2341,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2390,7 +2365,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -2414,7 +2389,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/twitter-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -2439,7 +2414,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/vimeo-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -2464,7 +2439,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/weather-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -2489,7 +2464,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/web-form-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -2514,7 +2489,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -2538,7 +2513,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/wiki-navigation-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -2563,7 +2538,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/wsrp-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
@@ -2588,7 +2563,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -2612,7 +2587,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>portlets/youtube-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -2637,7 +2612,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2661,7 +2636,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2685,7 +2660,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2709,7 +2684,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2733,7 +2708,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2757,7 +2732,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2781,7 +2756,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2805,7 +2780,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2829,7 +2804,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2853,7 +2828,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2877,7 +2852,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2901,7 +2876,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2925,7 +2900,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2949,7 +2924,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2973,7 +2948,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -2997,7 +2972,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3021,7 +2996,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3045,7 +3020,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3069,7 +3044,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3093,7 +3068,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3117,7 +3092,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3144,7 +3119,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3171,7 +3146,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3195,7 +3170,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3222,7 +3197,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3246,7 +3221,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3254,31 +3229,6 @@
 			<public>true</public>
 			<standalone-app>true</standalone-app>
 			<supported>false</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>sevencogs-theme</artifact-id>
-		<name>7Cogs</name>
-		<type>theme</type>
-		<tags></tags>
-		<short-description></short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<releng>
-			<bundle>false</bundle>
-			<category></category>
-			<compatibility></compatibility>
-			<demo-url></demo-url>
-			<icon>themes/sevencogs-theme/docroot/WEB-INF/releng/icons/90x90.png</icon>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -3295,7 +3245,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
@@ -3319,7 +3269,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3343,7 +3293,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3367,7 +3317,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3391,7 +3341,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3413,9 +3363,9 @@
 		<author>Liferay, Inc.</author>
 		<licenses>LGPL</licenses>
 		<releng>
-			<bundle>false</bundle>
+			<bundle>true</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -3439,7 +3389,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3463,7 +3413,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3487,7 +3437,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3511,7 +3461,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
@@ -3535,7 +3485,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>webs/cas-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -3560,7 +3510,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -3584,7 +3534,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>webs/kaleo-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -3607,9 +3557,9 @@
 		<author>Liferay, Inc.</author>
 		<licenses>LGPL</licenses>
 		<releng>
-			<bundle>false</bundle>
+			<bundle>true</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -3633,7 +3583,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>webs/server-manager-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -3658,7 +3608,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>webs/solr-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
@@ -3683,7 +3633,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
@@ -3707,7 +3657,7 @@
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
-			<compatibility></compatibility>
+			<compatibility>6.2.0</compatibility>
 			<demo-url></demo-url>
 			<icon>webs/wurfl-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>

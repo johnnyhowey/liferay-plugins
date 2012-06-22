@@ -20,6 +20,7 @@ import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.service.KBArticleLocalService;
 import com.liferay.knowledgebase.service.KBArticleService;
 import com.liferay.knowledgebase.service.KBCommentLocalService;
+import com.liferay.knowledgebase.service.KBCommentService;
 import com.liferay.knowledgebase.service.KBTemplateLocalService;
 import com.liferay.knowledgebase.service.KBTemplateService;
 import com.liferay.knowledgebase.service.persistence.KBArticlePersistence;
@@ -42,6 +43,7 @@ import com.liferay.portal.service.PortletPreferencesLocalService;
 import com.liferay.portal.service.PortletPreferencesService;
 import com.liferay.portal.service.ResourceLocalService;
 import com.liferay.portal.service.SubscriptionLocalService;
+import com.liferay.portal.service.TicketLocalService;
 import com.liferay.portal.service.UserLocalService;
 import com.liferay.portal.service.UserService;
 import com.liferay.portal.service.WorkflowInstanceLinkLocalService;
@@ -50,6 +52,7 @@ import com.liferay.portal.service.persistence.GroupPersistence;
 import com.liferay.portal.service.persistence.LayoutPersistence;
 import com.liferay.portal.service.persistence.PortletPreferencesPersistence;
 import com.liferay.portal.service.persistence.SubscriptionPersistence;
+import com.liferay.portal.service.persistence.TicketPersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.WorkflowInstanceLinkPersistence;
 
@@ -156,6 +159,24 @@ public abstract class KBArticleServiceBaseImpl extends BaseServiceImpl
 	public void setKBCommentLocalService(
 		KBCommentLocalService kbCommentLocalService) {
 		this.kbCommentLocalService = kbCommentLocalService;
+	}
+
+	/**
+	 * Returns the k b comment remote service.
+	 *
+	 * @return the k b comment remote service
+	 */
+	public KBCommentService getKBCommentService() {
+		return kbCommentService;
+	}
+
+	/**
+	 * Sets the k b comment remote service.
+	 *
+	 * @param kbCommentService the k b comment remote service
+	 */
+	public void setKBCommentService(KBCommentService kbCommentService) {
+		this.kbCommentService = kbCommentService;
 	}
 
 	/**
@@ -528,6 +549,42 @@ public abstract class KBArticleServiceBaseImpl extends BaseServiceImpl
 	}
 
 	/**
+	 * Returns the ticket local service.
+	 *
+	 * @return the ticket local service
+	 */
+	public TicketLocalService getTicketLocalService() {
+		return ticketLocalService;
+	}
+
+	/**
+	 * Sets the ticket local service.
+	 *
+	 * @param ticketLocalService the ticket local service
+	 */
+	public void setTicketLocalService(TicketLocalService ticketLocalService) {
+		this.ticketLocalService = ticketLocalService;
+	}
+
+	/**
+	 * Returns the ticket persistence.
+	 *
+	 * @return the ticket persistence
+	 */
+	public TicketPersistence getTicketPersistence() {
+		return ticketPersistence;
+	}
+
+	/**
+	 * Sets the ticket persistence.
+	 *
+	 * @param ticketPersistence the ticket persistence
+	 */
+	public void setTicketPersistence(TicketPersistence ticketPersistence) {
+		this.ticketPersistence = ticketPersistence;
+	}
+
+	/**
 	 * Returns the user local service.
 	 *
 	 * @return the user local service
@@ -815,6 +872,8 @@ public abstract class KBArticleServiceBaseImpl extends BaseServiceImpl
 	protected KBArticlePersistence kbArticlePersistence;
 	@BeanReference(type = KBCommentLocalService.class)
 	protected KBCommentLocalService kbCommentLocalService;
+	@BeanReference(type = KBCommentService.class)
+	protected KBCommentService kbCommentService;
 	@BeanReference(type = KBCommentPersistence.class)
 	protected KBCommentPersistence kbCommentPersistence;
 	@BeanReference(type = KBTemplateLocalService.class)
@@ -855,6 +914,10 @@ public abstract class KBArticleServiceBaseImpl extends BaseServiceImpl
 	protected SubscriptionLocalService subscriptionLocalService;
 	@BeanReference(type = SubscriptionPersistence.class)
 	protected SubscriptionPersistence subscriptionPersistence;
+	@BeanReference(type = TicketLocalService.class)
+	protected TicketLocalService ticketLocalService;
+	@BeanReference(type = TicketPersistence.class)
+	protected TicketPersistence ticketPersistence;
 	@BeanReference(type = UserLocalService.class)
 	protected UserLocalService userLocalService;
 	@BeanReference(type = UserService.class)
