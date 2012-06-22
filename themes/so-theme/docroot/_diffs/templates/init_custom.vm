@@ -1,9 +1,18 @@
+#set ($membership_request_local_service = $serviceLocator.findService("com.liferay.portal.service.MembershipRequestLocalService"))
 #set ($user_local_service = $serviceLocator.findService("com.liferay.portal.service.UserLocalService"))
 
 #set ($logo = "logo")
 
 #set ($user_profile_url = $community_default_public_url)
+#set ($user_dashboard_url = $site_default_url)
 #set ($user_dashboard_portlet_url = $site_default_url)
+#set ($colorSchemeId = $theme_display.getColorSchemeId())
+
+#set ($login_screen = false)
+
+#if ($colorSchemeId == "login_screen")
+	#set ($login_screen = true)
+#end
 
 #if (($company.getLogoId() == 0) && !$layout.layoutSet.isLogo())
 	#set ($site_logo = $images_folder + "/custom/so_logo.png")
