@@ -1182,7 +1182,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	margin: 0px;
 
 	li {
-		background: url(@theme_image_path@/common/breadcrumbs_so.png) no-repeat scroll 100% 50% transparent;
+		background: url(../images/custom/so_breadcrumbs.png) no-repeat scroll 100% 50% transparent;
 		max-width: 50%;
 
 		a {
@@ -1433,7 +1433,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	}
 
 	.breadcrumbs-horizontal li {
-		background: url(@theme_image_path@/arrows/05_right.png) no-repeat scroll 100% 50% transparent;
+		background: url(../images/arrows/05_right.png) no-repeat scroll 100% 50% transparent;
 		margin-right: 5px;
 		max-width: 50%;
 		padding-right: 15px;
