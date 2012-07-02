@@ -58,6 +58,8 @@ public class KaleoActionLocalServiceImpl
 		kaleoAction.setExecutionType(action.getExecutionType().getValue());
 		kaleoAction.setScript(action.getScript());
 		kaleoAction.setScriptLanguage(action.getScriptLanguage().getValue());
+		kaleoAction.setScriptRequiredContexts(
+			action.getScriptRequiredContexts());
 		kaleoAction.setPriority(action.getPriority());
 
 		kaleoActionPersistence.update(kaleoAction, false);

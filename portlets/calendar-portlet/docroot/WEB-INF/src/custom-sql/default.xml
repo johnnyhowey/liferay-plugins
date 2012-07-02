@@ -25,6 +25,19 @@
 				)
 		]]>
 	</sql>
+	<sql id="com.liferay.calendar.service.persistence.CalendarBookingFinder.findByFutureReminders">
+		<![CDATA[
+			SELECT
+				{CalendarBooking.*}
+			FROM
+				CalendarBooking
+			WHERE
+				(startDate >= ?) AND
+				(firstReminder > 0) AND
+				(secondReminder > 0) AND
+				(status = 0)
+		]]>
+	</sql>
 	<sql id="com.liferay.calendar.service.persistence.CalendarBookingFinder.findByC_G_C_C_P_T_D_L_S_E_S">
 		<![CDATA[
 			SELECT
