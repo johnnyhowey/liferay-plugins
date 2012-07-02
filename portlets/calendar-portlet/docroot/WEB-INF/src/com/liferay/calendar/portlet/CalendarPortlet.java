@@ -14,12 +14,14 @@
 
 package com.liferay.calendar.portlet;
 
+import com.liferay.calendar.CalendarResourceCodeException;
 import com.liferay.calendar.DuplicateCalendarResourceException;
 import com.liferay.calendar.NoSuchResourceException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.model.CalendarBookingConstants;
 import com.liferay.calendar.model.CalendarResource;
+import com.liferay.calendar.notification.NotificationTemplateContextFactory;
 import com.liferay.calendar.service.CalendarBookingServiceUtil;
 import com.liferay.calendar.service.CalendarLocalServiceUtil;
 import com.liferay.calendar.service.CalendarResourceServiceUtil;
@@ -42,6 +44,7 @@ import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.TimeZoneUtil;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.Group;
@@ -98,6 +101,13 @@ public class CalendarPortlet extends MVCPortlet {
 			actionRequest, "calendarResourceId");
 
 		CalendarResourceServiceUtil.deleteCalendarResource(calendarResourceId);
+	}
+
+	@Override
+	public void init() throws PortletException {
+		super.init();
+
+		NotificationTemplateContextFactory.setPortletConfig(getPortletConfig());
 	}
 
 	@Override
@@ -257,6 +267,9 @@ public class CalendarPortlet extends MVCPortlet {
 		String recurrence = ParamUtil.getString(actionRequest, "recurrence");
 		int status = ParamUtil.getInteger(actionRequest, "status");
 
+		long[] reminders = getReminders(actionRequest);
+		String[] remindersType = getRemindersType(actionRequest);
+
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			CalendarBooking.class.getName(), actionRequest);
 
@@ -266,13 +279,15 @@ public class CalendarPortlet extends MVCPortlet {
 				CalendarBookingConstants.PARENT_CALENDAR_BOOKING_ID_DEFAULT,
 				titleMap, descriptionMap, location,
 				startDateJCalendar.getTime(), endDateJCalendar.getTime(),
-				allDay, recurrence, 0, 0, serviceContext);
+				allDay, recurrence, reminders[0], remindersType[0],
+				reminders[1], remindersType[1], serviceContext);
 		}
 		else {
 			CalendarBookingServiceUtil.updateCalendarBooking(
 				calendarBookingId, calendarId, childCalendarIds, titleMap,
 				descriptionMap, location, startDateJCalendar.getTime(),
-				endDateJCalendar.getTime(), allDay, recurrence, 0, 0, status,
+				endDateJCalendar.getTime(), allDay, recurrence, reminders[0],
+				remindersType[0], reminders[1], remindersType[1], status,
 				serviceContext);
 		}
 	}
@@ -305,8 +320,8 @@ public class CalendarPortlet extends MVCPortlet {
 		}
 		else {
 			CalendarResourceServiceUtil.updateCalendarResource(
-				calendarResourceId, defaultCalendarId, code, nameMap,
-				descriptionMap, type, active, serviceContext);
+				calendarResourceId, defaultCalendarId, nameMap, descriptionMap,
+				type, active, serviceContext);
 		}
 	}
 
@@ -422,9 +437,37 @@ public class CalendarPortlet extends MVCPortlet {
 			year, month, day, hour, minute, 0, 0, timezone);
 	}
 
+	protected long[] getReminders(PortletRequest portletRequest) {
+		long firstReminder = ParamUtil.getInteger(
+			portletRequest, "reminderValue0");
+		long firstReminderDuration = ParamUtil.getInteger(
+			portletRequest, "reminderDuration0");
+		long secondReminder = ParamUtil.getInteger(
+			portletRequest, "reminderValue1");
+		long secondReminderDuration = ParamUtil.getInteger(
+			portletRequest, "reminderDuration1");
+
+		return new long[] {
+			firstReminder * firstReminderDuration * Time.SECOND,
+			secondReminder * secondReminderDuration * Time.SECOND
+		};
+	}
+
+	protected String[] getRemindersType(PortletRequest portletRequest) {
+		String firstReminderType = ParamUtil.getString(
+			portletRequest, "reminderType0");
+		String secondReminderType = ParamUtil.getString(
+			portletRequest, "reminderType1");
+
+		return new String[] {
+			firstReminderType, secondReminderType
+		};
+	}
+
 	@Override
 	protected boolean isSessionErrorException(Throwable cause) {
-		if (cause instanceof DuplicateCalendarResourceException ||
+		if (cause instanceof CalendarResourceCodeException ||
+			cause instanceof DuplicateCalendarResourceException ||
 			cause instanceof PrincipalException) {
 
 			return true;
