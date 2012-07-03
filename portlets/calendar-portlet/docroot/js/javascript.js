@@ -1,17 +1,26 @@
 (function() {
-	var STR_BLANK = '';
-	var STR_DASH = '-';
-	var STR_SPACE = ' ';
+	var Workflow = Liferay.Workflow;
 
 	var toNumber = function(val) {
 		return parseInt(val, 10) || 0;
 	};
 
-	var Workflow = Liferay.Workflow;
+	var STR_BLANK = '';
+
+	var STR_COMMA = ',';
+
+	var STR_COMMA_SPACE = ', ';
+
+	var STR_DASH = '-';
+
+	var STR_SPACE = ' ';
 
 	var COMPANY_GROUP_ID = toNumber(themeDisplay.getCompanyGroupId());
+
 	var COMPANY_ID = toNumber(themeDisplay.getCompanyId());
+
 	var GROUP_ID = toNumber(themeDisplay.getScopeGroupId());
+
 	var USER_ID = toNumber(themeDisplay.getUserId());
 
 	AUI.add(
@@ -23,6 +32,7 @@
 		var isArray = Lang.isArray;
 		var isBoolean = Lang.isBoolean;
 		var isDate = Lang.isDate;
+		var isFunction = Lang.isFunction;
 		var isObject = Lang.isObject;
 		var isString = Lang.isString;
 
@@ -38,7 +48,44 @@
 			return jsonObj;
 		};
 
+		var Time = {
+			DAY: 86400000,
+			HOUR: 3600000,
+			MINUTE: 60000,
+			SECOND: 1000,
+			WEEK: 604800000,
+
+			TIME_DESC: ['weeks', 'days', 'hours', 'minutes'],
+
+			getDescription: function(milliseconds) {
+				var instance = this;
+
+				var desc = 'minutes';
+				var value = 0;
+
+				if (milliseconds > 0) {
+					A.Array.some(
+						[ Time.WEEK, Time.DAY, Time.HOUR, Time.MINUTE ],
+						function(item, index, collection) {
+							value = milliseconds/item;
+							desc = Time.TIME_DESC[index];
+
+							return (milliseconds % item === 0);
+						}
+					);
+				}
+
+				return {
+					desc: desc,
+					value: value
+				};
+			}
+		};
+
+		Liferay.Time = Time;
+
 		var CalendarUtil = {
+			NOTIFICATION_DEFAULT_TYPE: 'email',
 			PORTLET_NAMESPACE: STR_BLANK,
 			USER_TIMEZONE_OFFSET: 0,
 
@@ -57,11 +104,13 @@
 							childCalendarIds: '',
 							descriptionMap: instance.getLocalizationMap(schedulerEvent.get('description')),
 							endDate: instance.toUTCTimeZone(schedulerEvent.get('endDate')).getTime(),
-							firstReminder: 0,
+							firstReminder: schedulerEvent.get('firstReminder'),
+							firstReminderType: schedulerEvent.get('firstReminderType'),
 							location: schedulerEvent.get('location'),
 							parentCalendarBookingId: schedulerEvent.get('parentCalendarBookingId'),
 							recurrence: schedulerEvent.get('repeat'),
-							secondReminder: 0,
+							secondReminder: schedulerEvent.get('secondReminder'),
+							secondReminderType: schedulerEvent.get('secondReminderType'),
 							startDate: instance.toUTCTimeZone(schedulerEvent.get('startDate')).getTime(),
 							titleMap: instance.getLocalizationMap(schedulerEvent.get('content'))
 						}
@@ -89,23 +138,6 @@
 						}
 					}
 				);
-			},
-
-			collectCalendarEvents: function(calendarBookings, calendarId) {
-				var instance = this;
-
-				var events = [];
-
-				A.Array.each(
-					calendarBookings,
-					function(item, index, collection) {
-						if (calendarId === item.calendarId) {
-							events[index] = instance.toSchedulerEvent(item);
-						}
-					}
-				);
-
-				return events;
 			},
 
 			createCalendarsAutoComplete: function(resourceURL, input, afterSelectFn) {
@@ -175,6 +207,23 @@
 
 				scheduler.removeEvent(schedulerEvent);
 				scheduler.syncEventsUI();
+			},
+
+			filterJSONArray: function(jsonArray, property, value) {
+				var instance = this;
+
+				var events = [];
+
+				A.Array.each(
+					jsonArray,
+					function(item, index, collection) {
+						if (value === item[property]) {
+							events.push(instance.toSchedulerEvent(item));
+						}
+					}
+				);
+
+				return events;
 			},
 
 			getCalendarJSONById: function(calendarJSONArray, calendarId) {
@@ -460,10 +509,12 @@
 							calendarId: schedulerEvent.get('calendarId'),
 							descriptionMap: instance.getLocalizationMap(schedulerEvent.get('description')),
 							endDate: instance.toUTCTimeZone(schedulerEvent.get('endDate')).getTime(),
-							firstReminder: 0,
+							firstReminder: schedulerEvent.get('firstReminder'),
+							firstReminderType: schedulerEvent.get('firstReminderType'),
 							location: schedulerEvent.get('location'),
 							recurrence: schedulerEvent.get('repeat'),
-							secondReminder: 0,
+							secondReminder: schedulerEvent.get('secondReminder'),
+							secondReminderType: schedulerEvent.get('secondReminderType'),
 							startDate: instance.toUTCTimeZone(schedulerEvent.get('startDate')).getTime(),
 							status: schedulerEvent.get('status'),
 							titleMap: instance.getLocalizationMap(schedulerEvent.get('content')),
@@ -514,6 +565,10 @@
 						}
 					},
 
+					filterCalendarBookings: {
+						validator: isFunction
+					},
+
 					portletNamespace: {
 						value: '',
 						validator: isString
@@ -550,6 +605,8 @@
 					loadCalendarBookings: function() {
 						var instance = this;
 
+						var filterCalendarBookings = instance.get('filterCalendarBookings');
+
 						CalendarUtil.message(Liferay.Language.get('loading') + '...');
 
 						var currentDate = instance.get('currentDate');
@@ -562,7 +619,13 @@
 							startDate,
 							endDate,
 							[CalendarWorkflow.STATUS_APPROVED, CalendarWorkflow.STATUS_MAYBE, CalendarWorkflow.STATUS_PENDING],
-							A.bind(instance.loadCalendarBookingsJSON, instance)
+							function(calendarBookings) {
+								if (filterCalendarBookings) {
+									calendarBookings = A.Array.filter(calendarBookings, filterCalendarBookings);
+								}
+
+								instance.loadCalendarBookingsJSON(calendarBookings);
+							}
 						);
 					},
 
@@ -574,7 +637,7 @@
 						A.each(
 							visibleCalendarsMap,
 							function(item, index, collection) {
-								var events = CalendarUtil.collectCalendarEvents(calendarBookings, toNumber(index, collection));
+								var events = CalendarUtil.filterJSONArray(calendarBookings, 'calendarId', toNumber(index));
 
 								item.set('events', events);
 							}
@@ -582,7 +645,9 @@
 
 						instance.set('events', A.Object.values(visibleCalendarsMap));
 
-						instance.syncEventsUI();
+						if (instance.get('rendered')) {
+							instance.syncEventsUI();
+						}
 
 						CalendarUtil.message('');
 					},
@@ -653,6 +718,21 @@
 						value: STR_BLANK
 					},
 
+					editingEvent: {
+						validator: isBoolean,
+						value: false
+					},
+
+					firstReminder: {
+						setter: toNumber,
+						value: 3600000
+					},
+
+					firstReminderType: {
+						validator: isString,
+						value: CalendarUtil.NOTIFICATION_DEFAULT_TYPE
+					},
+
 					loading: {
 						validator: isBoolean,
 						value: false
@@ -666,6 +746,16 @@
 					parentCalendarBookingId: {
 						setter: toNumber,
 						value: 0
+					},
+
+					secondReminder: {
+						setter: toNumber,
+						value: 0
+					},
+
+					secondReminderType: {
+						validator: isString,
+						value: CalendarUtil.NOTIFICATION_DEFAULT_TYPE
 					},
 
 					status: {
@@ -703,7 +793,7 @@
 						var node = instance.get('node');
 						var scheduler = instance.get('scheduler');
 
-						if (scheduler) {
+						if (scheduler && !instance.get('editingEvent')) {
 							var activeViewName = scheduler.get('activeView').get('name');
 
 							if ((activeViewName === 'month') && !instance.get('allDay')) {

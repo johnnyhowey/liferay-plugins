@@ -83,8 +83,10 @@
 		<column name="endDate" type="Date" />
 		<column name="allDay" type="boolean" />
 		<column name="recurrence" type="String" />
-		<column name="firstReminder" type="int" />
-		<column name="secondReminder" type="int" />
+		<column name="firstReminder" type="long" />
+		<column name="firstReminderType" type="String" />
+		<column name="secondReminder" type="long" />
+		<column name="secondReminderType" type="String" />
 		<column name="status" type="int" />
 		<column name="statusByUserId" type="long" />
 		<column name="statusByUserName" type="String" />
@@ -176,6 +178,10 @@
 		<finder name="Active" return-type="Collection">
 			<finder-column name="active" />
 		</finder>
+		<finder name="G_C" return-type="Collection">
+			<finder-column name="groupId" arrayable-operator="OR" />
+			<finder-column name="code" />
+		</finder>
 		<finder name="G_A" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="active" />
@@ -183,11 +189,6 @@
 		<finder name="C_C" return-type="CalendarResource" unique="true">
 			<finder-column name="classNameId" />
 			<finder-column name="classPK" />
-		</finder>
-		<finder name="G_C_A" return-type="Collection">
-			<finder-column name="groupId" arrayable-operator="OR" />
-			<finder-column name="code" comparator="LIKE" />
-			<finder-column name="active" />
 		</finder>
 		<finder name="G_N_A" return-type="Collection">
 			<finder-column name="groupId" arrayable-operator="OR" />
@@ -211,6 +212,7 @@
 		<exception>CalendarBookingStartDate</exception>
 		<exception>CalendarBookingTitle</exception>
 		<exception>CalendarName</exception>
+		<exception>CalendarResourceCode</exception>
 		<exception>DuplicateCalendarResource</exception>
 	</exceptions>
 </service-builder>
