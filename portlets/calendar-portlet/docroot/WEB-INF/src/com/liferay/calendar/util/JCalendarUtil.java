@@ -43,8 +43,7 @@ public class JCalendarUtil {
 	}
 
 	public static Calendar getJCalendar(Date date, TimeZone timeZone) {
-		Calendar jCalendar = CalendarFactoryUtil.getCalendar(
-			TimeZone.getTimeZone(StringPool.UTC));
+		Calendar jCalendar = CalendarFactoryUtil.getCalendar(_utcTimeZone);
 
 		jCalendar.setTime(date);
 
@@ -68,6 +67,14 @@ public class JCalendarUtil {
 		return jCalendar;
 	}
 
+	public static Calendar getJCalendar(long time) {
+		Calendar jCalendar = CalendarFactoryUtil.getCalendar(_utcTimeZone);
+
+		jCalendar.setTimeInMillis(time);
+
+		return jCalendar;
+	}
+
 	public static Calendar getJCalendar(long time, TimeZone timeZone) {
 		return getJCalendar(new Date(time), timeZone);
 	}
@@ -75,5 +82,7 @@ public class JCalendarUtil {
 	public static int getTimeZoneOffset(TimeZone timeZone) {
 		return timeZone.getOffset(System.currentTimeMillis());
 	}
+
+	private static TimeZone _utcTimeZone = TimeZone.getTimeZone(StringPool.UTC);
 
 }

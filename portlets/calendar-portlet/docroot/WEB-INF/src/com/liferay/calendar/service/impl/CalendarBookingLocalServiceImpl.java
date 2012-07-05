@@ -18,9 +18,11 @@ import com.liferay.calendar.CalendarBookingDurationException;
 import com.liferay.calendar.CalendarBookingTitleException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
-import com.liferay.calendar.service.CalendarBookingLocalServiceUtil;
+import com.liferay.calendar.notification.NotificationType;
 import com.liferay.calendar.service.base.CalendarBookingLocalServiceBaseImpl;
 import com.liferay.calendar.util.JCalendarUtil;
+import com.liferay.calendar.util.NotificationUtil;
+import com.liferay.calendar.util.PortletPropsValues;
 import com.liferay.calendar.workflow.CalendarBookingApprovalWorkflow;
 import com.liferay.calendar.workflow.CalendarBookingWorkflowConstants;
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -36,7 +38,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 /**
  * @author Eduardo Lundgren
@@ -48,9 +49,10 @@ public class CalendarBookingLocalServiceImpl
 	public CalendarBooking addCalendarBooking(
 			long userId, long calendarId, long[] childCalendarIds,
 			long parentCalendarBookingId, Map<Locale, String> titleMap,
-			Map<Locale, String> descriptionMap, String location, Date startDate,
-			Date endDate, boolean allDay, String recurrence, int firstReminder,
-			int secondReminder, ServiceContext serviceContext)
+			Map<Locale, String> descriptionMap, String location, long startDate,
+			long endDate, boolean allDay, String recurrence, long firstReminder,
+			String firstReminderType, long secondReminder,
+			String secondReminderType, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Calendar booking
@@ -58,23 +60,10 @@ public class CalendarBookingLocalServiceImpl
 		User user = userPersistence.findByPrimaryKey(userId);
 		Calendar calendar = calendarPersistence.findByPrimaryKey(calendarId);
 
-		TimeZone timeZone = user.getTimeZone();
-
-		if (parentCalendarBookingId > 0) {
-			CalendarBooking parentCalendarBooking =
-				CalendarBookingLocalServiceUtil.getCalendarBooking(
-					parentCalendarBookingId);
-
-			User creatorUser = userPersistence.findByPrimaryKey(
-				parentCalendarBooking.getUserId());
-
-			timeZone = creatorUser.getTimeZone();
-		}
-
 		java.util.Calendar startDateJCalendar = JCalendarUtil.getJCalendar(
-			startDate, timeZone);
+			startDate);
 		java.util.Calendar endDateJCalendar = JCalendarUtil.getJCalendar(
-			endDate, timeZone);
+			endDate);
 
 		if (allDay) {
 			startDateJCalendar = toMidnightJCalendar(startDateJCalendar);
@@ -82,7 +71,7 @@ public class CalendarBookingLocalServiceImpl
 		}
 
 		if (firstReminder < secondReminder) {
-			int originalSecondReminder = secondReminder;
+			long originalSecondReminder = secondReminder;
 
 			secondReminder = firstReminder;
 			firstReminder = originalSecondReminder;
@@ -117,12 +106,14 @@ public class CalendarBookingLocalServiceImpl
 		calendarBooking.setTitleMap(titleMap);
 		calendarBooking.setDescriptionMap(descriptionMap);
 		calendarBooking.setLocation(location);
-		calendarBooking.setStartDate(startDateJCalendar.getTime());
-		calendarBooking.setEndDate(endDateJCalendar.getTime());
+		calendarBooking.setStartDate(startDateJCalendar.getTimeInMillis());
+		calendarBooking.setEndDate(endDateJCalendar.getTimeInMillis());
 		calendarBooking.setAllDay(allDay);
 		calendarBooking.setRecurrence(recurrence);
 		calendarBooking.setFirstReminder(firstReminder);
+		calendarBooking.setFirstReminderType(firstReminderType);
 		calendarBooking.setSecondReminder(secondReminder);
+		calendarBooking.setSecondReminderType(secondReminderType);
 
 		int status = CalendarBookingWorkflowConstants.STATUS_PENDING;
 
@@ -145,6 +136,31 @@ public class CalendarBookingLocalServiceImpl
 			userId, calendarBookingId, serviceContext);
 
 		return calendarBooking;
+	}
+
+	public void checkCalendarBookings()
+		throws PortalException, SystemException {
+
+		Date now = new Date();
+
+		List<CalendarBooking> calendarBookings =
+			calendarBookingFinder.findByFutureReminders(now.getTime());
+
+		for (CalendarBooking calendarBooking : calendarBookings) {
+			try {
+				NotificationUtil.notifyCalendarBookingReminders(
+					calendarBooking);
+			}
+			catch (PortalException pe) {
+				throw pe;
+			}
+			catch (SystemException se) {
+				throw se;
+			}
+			catch (Exception e) {
+				throw new SystemException(e);
+			}
+		}
 	}
 
 	@Override
@@ -213,7 +229,7 @@ public class CalendarBookingLocalServiceImpl
 	}
 
 	public List<CalendarBooking> getCalendarBookings(
-			long calendarId, Date startDate, Date endDate)
+			long calendarId, long startDate, long endDate)
 		throws SystemException {
 
 		return calendarBookingPersistence.findByC_S_E(
@@ -247,7 +263,7 @@ public class CalendarBookingLocalServiceImpl
 	public List<CalendarBooking> search(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String keywords, Date startDate, Date endDate, int[] statuses,
+			String keywords, long startDate, long endDate, int[] statuses,
 			int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
 
@@ -260,8 +276,8 @@ public class CalendarBookingLocalServiceImpl
 	public List<CalendarBooking> search(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String title, String description, String location, Date startDate,
-			Date endDate, int[] statuses, boolean andOperator, int start,
+			String title, String description, String location, long startDate,
+			long endDate, int[] statuses, boolean andOperator, int start,
 			int end, OrderByComparator orderByComparator)
 		throws SystemException {
 
@@ -274,7 +290,7 @@ public class CalendarBookingLocalServiceImpl
 	public int searchCount(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String keywords, Date startDate, Date endDate, int[] statuses)
+			String keywords, long startDate, long endDate, int[] statuses)
 		throws SystemException {
 
 		return calendarBookingFinder.countByKeywords(
@@ -285,8 +301,8 @@ public class CalendarBookingLocalServiceImpl
 	public int searchCount(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String title, String description, String location, Date startDate,
-			Date endDate, int[] statuses, boolean andOperator)
+			String title, String description, String location, long startDate,
+			long endDate, int[] statuses, boolean andOperator)
 		throws SystemException {
 
 		return calendarBookingFinder.countByC_G_C_C_P_T_D_L_S_E_S(
@@ -298,9 +314,11 @@ public class CalendarBookingLocalServiceImpl
 	public CalendarBooking updateCalendarBooking(
 			long userId, long calendarBookingId, long calendarId,
 			long[] childCalendarIds, Map<Locale, String> titleMap,
-			Map<Locale, String> descriptionMap, String location, Date startDate,
-			Date endDate, boolean allDay, String recurrence, int firstReminder,
-			int secondReminder, int status, ServiceContext serviceContext)
+			Map<Locale, String> descriptionMap, String location, long startDate,
+			long endDate, boolean allDay, String recurrence, long firstReminder,
+			String firstReminderType, long secondReminder,
+			String secondReminderType, int status,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Calendar booking
@@ -310,9 +328,9 @@ public class CalendarBookingLocalServiceImpl
 			calendarBookingPersistence.findByPrimaryKey(calendarBookingId);
 
 		java.util.Calendar startDateJCalendar = JCalendarUtil.getJCalendar(
-			startDate, user.getTimeZone());
+			startDate);
 		java.util.Calendar endDateJCalendar = JCalendarUtil.getJCalendar(
-			endDate, user.getTimeZone());
+			endDate);
 
 		if (allDay) {
 			startDateJCalendar = toMidnightJCalendar(startDateJCalendar);
@@ -320,7 +338,7 @@ public class CalendarBookingLocalServiceImpl
 		}
 
 		if (firstReminder < secondReminder) {
-			int originalSecondReminder = secondReminder;
+			long originalSecondReminder = secondReminder;
 
 			secondReminder = firstReminder;
 			firstReminder = originalSecondReminder;
@@ -336,12 +354,14 @@ public class CalendarBookingLocalServiceImpl
 		calendarBooking.setTitleMap(titleMap);
 		calendarBooking.setDescriptionMap(descriptionMap);
 		calendarBooking.setLocation(location);
-		calendarBooking.setStartDate(startDateJCalendar.getTime());
-		calendarBooking.setEndDate(endDateJCalendar.getTime());
+		calendarBooking.setStartDate(startDateJCalendar.getTimeInMillis());
+		calendarBooking.setEndDate(endDateJCalendar.getTimeInMillis());
 		calendarBooking.setAllDay(allDay);
 		calendarBooking.setRecurrence(recurrence);
 		calendarBooking.setFirstReminder(firstReminder);
+		calendarBooking.setFirstReminderType(firstReminderType);
 		calendarBooking.setSecondReminder(secondReminder);
+		calendarBooking.setSecondReminderType(secondReminderType);
 
 		calendarBookingPersistence.update(calendarBooking, false);
 
@@ -360,9 +380,10 @@ public class CalendarBookingLocalServiceImpl
 	public CalendarBooking updateCalendarBooking(
 			long userId, long calendarBookingId, long calendarId,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			String location, Date startDate, Date endDate, boolean allDay,
-			String recurrence, int firstReminder, int secondReminder,
-			int status, ServiceContext serviceContext)
+			String location, long startDate, long endDate, boolean allDay,
+			String recurrence, long firstReminder, String firstReminderType,
+			long secondReminder, String secondReminderType, int status,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		CalendarBooking calendarBooking =
@@ -390,7 +411,8 @@ public class CalendarBookingLocalServiceImpl
 		return updateCalendarBooking(
 			userId, calendarBookingId, calendarId, childCalendarIds, titleMap,
 			descriptionMap, location, startDate, endDate, allDay, recurrence,
-			firstReminder, secondReminder, status, serviceContext);
+			firstReminder, firstReminderType, secondReminder,
+			secondReminderType, status, serviceContext);
 	}
 
 	public CalendarBooking updateStatus(
@@ -447,17 +469,28 @@ public class CalendarBookingLocalServiceImpl
 				continue;
 			}
 
-			addCalendarBooking(
+			CalendarBooking childCalendarBooking = addCalendarBooking(
 				calendarBooking.getUserId(), calendarId, new long[0],
 				calendarBooking.getCalendarBookingId(),
 				calendarBooking.getTitleMap(),
 				calendarBooking.getDescriptionMap(),
-				calendarBooking.getLocation(),
-				calendarBooking.getUTCStartDate(),
-				calendarBooking.getUTCEndDate(), calendarBooking.getAllDay(),
+				calendarBooking.getLocation(), calendarBooking.getStartDate(),
+				calendarBooking.getEndDate(), calendarBooking.getAllDay(),
 				calendarBooking.getRecurrence(),
 				calendarBooking.getFirstReminder(),
-				calendarBooking.getSecondReminder(), serviceContext);
+				calendarBooking.getFirstReminderType(),
+				calendarBooking.getSecondReminder(),
+				calendarBooking.getSecondReminderType(), serviceContext);
+
+			try {
+				NotificationType notificationType = NotificationType.parse(
+					PortletPropsValues.CALENDAR_NOTIFICATION_DEFAULT_TYPE);
+
+				NotificationUtil.notifyCalendarBookingInvites(
+					childCalendarBooking, notificationType);
+			}
+			catch (Exception e) {
+			}
 		}
 	}
 

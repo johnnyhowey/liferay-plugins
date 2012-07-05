@@ -25,9 +25,16 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-<%@ page import="com.liferay.calendar.model.Calendar" %><%@
+<%@ page import="com.liferay.calendar.CalendarResourceCodeException" %><%@
+page import="com.liferay.calendar.DuplicateCalendarResourceException" %><%@
+page import="com.liferay.calendar.model.Calendar" %><%@
 page import="com.liferay.calendar.model.CalendarBooking" %><%@
 page import="com.liferay.calendar.model.CalendarResource" %><%@
+page import="com.liferay.calendar.notification.NotificationTemplateType" %><%@
+page import="com.liferay.calendar.notification.NotificationType" %><%@
+page import="com.liferay.calendar.recurrence.Frequency" %><%@
+page import="com.liferay.calendar.recurrence.Recurrence" %><%@
+page import="com.liferay.calendar.recurrence.Weekday" %><%@
 page import="com.liferay.calendar.search.CalendarResourceDisplayTerms" %><%@
 page import="com.liferay.calendar.search.CalendarResourceSearch" %><%@
 page import="com.liferay.calendar.search.CalendarResourceSearchTerms" %><%@
@@ -44,6 +51,8 @@ page import="com.liferay.calendar.util.CalendarResourceUtil" %><%@
 page import="com.liferay.calendar.util.CalendarUtil" %><%@
 page import="com.liferay.calendar.util.ColorUtil" %><%@
 page import="com.liferay.calendar.util.JCalendarUtil" %><%@
+page import="com.liferay.calendar.util.NotificationUtil" %><%@
+page import="com.liferay.calendar.util.PortletPropsKeys" %><%@
 page import="com.liferay.calendar.util.PortletPropsValues" %><%@
 page import="com.liferay.calendar.util.WebKeys" %><%@
 page import="com.liferay.calendar.util.comparator.CalendarNameComparator" %><%@
@@ -62,8 +71,10 @@ page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.HttpUtil" %><%@
 page import="com.liferay.portal.kernel.util.OrderByComparator" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
+page import="com.liferay.portal.kernel.util.PrefsParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
+page import="com.liferay.portal.kernel.util.UnicodeFormatter" %><%@
 page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.kernel.workflow.WorkflowConstants" %><%@
 page import="com.liferay.portal.model.Group" %><%@

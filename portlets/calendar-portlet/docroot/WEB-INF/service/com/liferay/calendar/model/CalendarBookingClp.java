@@ -18,7 +18,6 @@ import com.liferay.calendar.service.CalendarBookingLocalServiceUtil;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.DateUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
@@ -70,6 +69,7 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -92,7 +92,9 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		attributes.put("allDay", getAllDay());
 		attributes.put("recurrence", getRecurrence());
 		attributes.put("firstReminder", getFirstReminder());
+		attributes.put("firstReminderType", getFirstReminderType());
 		attributes.put("secondReminder", getSecondReminder());
+		attributes.put("secondReminderType", getSecondReminderType());
 		attributes.put("status", getStatus());
 		attributes.put("statusByUserId", getStatusByUserId());
 		attributes.put("statusByUserName", getStatusByUserName());
@@ -101,6 +103,7 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		String uuid = (String)attributes.get("uuid");
 
@@ -187,13 +190,13 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 			setLocation(location);
 		}
 
-		Date startDate = (Date)attributes.get("startDate");
+		Long startDate = (Long)attributes.get("startDate");
 
 		if (startDate != null) {
 			setStartDate(startDate);
 		}
 
-		Date endDate = (Date)attributes.get("endDate");
+		Long endDate = (Long)attributes.get("endDate");
 
 		if (endDate != null) {
 			setEndDate(endDate);
@@ -211,16 +214,28 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 			setRecurrence(recurrence);
 		}
 
-		Integer firstReminder = (Integer)attributes.get("firstReminder");
+		Long firstReminder = (Long)attributes.get("firstReminder");
 
 		if (firstReminder != null) {
 			setFirstReminder(firstReminder);
 		}
 
-		Integer secondReminder = (Integer)attributes.get("secondReminder");
+		String firstReminderType = (String)attributes.get("firstReminderType");
+
+		if (firstReminderType != null) {
+			setFirstReminderType(firstReminderType);
+		}
+
+		Long secondReminder = (Long)attributes.get("secondReminder");
 
 		if (secondReminder != null) {
 			setSecondReminder(secondReminder);
+		}
+
+		String secondReminderType = (String)attributes.get("secondReminderType");
+
+		if (secondReminderType != null) {
+			setSecondReminderType(secondReminderType);
 		}
 
 		Integer status = (Integer)attributes.get("status");
@@ -546,19 +561,19 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		_location = location;
 	}
 
-	public Date getStartDate() {
+	public long getStartDate() {
 		return _startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(long startDate) {
 		_startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public long getEndDate() {
 		return _endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(long endDate) {
 		_endDate = endDate;
 	}
 
@@ -582,20 +597,36 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		_recurrence = recurrence;
 	}
 
-	public int getFirstReminder() {
+	public long getFirstReminder() {
 		return _firstReminder;
 	}
 
-	public void setFirstReminder(int firstReminder) {
+	public void setFirstReminder(long firstReminder) {
 		_firstReminder = firstReminder;
 	}
 
-	public int getSecondReminder() {
+	public String getFirstReminderType() {
+		return _firstReminderType;
+	}
+
+	public void setFirstReminderType(String firstReminderType) {
+		_firstReminderType = firstReminderType;
+	}
+
+	public long getSecondReminder() {
 		return _secondReminder;
 	}
 
-	public void setSecondReminder(int secondReminder) {
+	public void setSecondReminder(long secondReminder) {
 		_secondReminder = secondReminder;
+	}
+
+	public String getSecondReminderType() {
+		return _secondReminderType;
+	}
+
+	public void setSecondReminderType(String secondReminderType) {
+		_secondReminderType = secondReminderType;
 	}
 
 	public int getStatus() {
@@ -639,19 +670,23 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		_statusDate = statusDate;
 	}
 
-	public java.util.Date getUTCStartDate() {
-		throw new UnsupportedOperationException();
-	}
-
-	public java.util.Date getUTCEndDate() {
-		throw new UnsupportedOperationException();
-	}
-
 	public com.liferay.calendar.model.CalendarBooking getParentCalendarBooking() {
 		throw new UnsupportedOperationException();
 	}
 
+	public boolean isRecurring() {
+		throw new UnsupportedOperationException();
+	}
+
 	public com.liferay.calendar.model.Calendar getCalendar() {
+		throw new UnsupportedOperationException();
+	}
+
+	public com.liferay.calendar.notification.NotificationType getSecondReminderNotificationType() {
+		throw new UnsupportedOperationException();
+	}
+
+	public com.liferay.calendar.recurrence.Recurrence getRecurrenceObj() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -660,6 +695,10 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	}
 
 	public boolean isMasterBooking() {
+		throw new UnsupportedOperationException();
+	}
+
+	public com.liferay.calendar.notification.NotificationType getFirstReminderNotificationType() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -672,6 +711,15 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 
 	public boolean isApproved() {
 		if (getStatus() == WorkflowConstants.STATUS_APPROVED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isDenied() {
+		if (getStatus() == WorkflowConstants.STATUS_DENIED) {
 			return true;
 		}
 		else {
@@ -697,6 +745,24 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		}
 	}
 
+	public boolean isInactive() {
+		if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isIncomplete() {
+		if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public boolean isInTrash() {
 		if (getStatus() == WorkflowConstants.STATUS_IN_TRASH) {
 			return true;
@@ -708,6 +774,15 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 
 	public boolean isPending() {
 		if (getStatus() == WorkflowConstants.STATUS_PENDING) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isScheduled() {
+		if (getStatus() == WorkflowConstants.STATUS_SCHEDULED) {
 			return true;
 		}
 		else {
@@ -763,7 +838,9 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		clone.setAllDay(getAllDay());
 		clone.setRecurrence(getRecurrence());
 		clone.setFirstReminder(getFirstReminder());
+		clone.setFirstReminderType(getFirstReminderType());
 		clone.setSecondReminder(getSecondReminder());
+		clone.setSecondReminderType(getSecondReminderType());
 		clone.setStatus(getStatus());
 		clone.setStatusByUserId(getStatusByUserId());
 		clone.setStatusByUserName(getStatusByUserName());
@@ -775,8 +852,15 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	public int compareTo(CalendarBooking calendarBooking) {
 		int value = 0;
 
-		value = DateUtil.compareTo(getStartDate(),
-				calendarBooking.getStartDate());
+		if (getStartDate() < calendarBooking.getStartDate()) {
+			value = -1;
+		}
+		else if (getStartDate() > calendarBooking.getStartDate()) {
+			value = 1;
+		}
+		else {
+			value = 0;
+		}
 
 		if (value != 0) {
 			return value;
@@ -824,7 +908,7 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(49);
+		StringBundler sb = new StringBundler(53);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -864,8 +948,12 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		sb.append(getRecurrence());
 		sb.append(", firstReminder=");
 		sb.append(getFirstReminder());
+		sb.append(", firstReminderType=");
+		sb.append(getFirstReminderType());
 		sb.append(", secondReminder=");
 		sb.append(getSecondReminder());
+		sb.append(", secondReminderType=");
+		sb.append(getSecondReminderType());
 		sb.append(", status=");
 		sb.append(getStatus());
 		sb.append(", statusByUserId=");
@@ -880,7 +968,7 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(76);
+		StringBundler sb = new StringBundler(82);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.calendar.model.CalendarBooking");
@@ -963,8 +1051,16 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		sb.append(getFirstReminder());
 		sb.append("]]></column-value></column>");
 		sb.append(
+			"<column><column-name>firstReminderType</column-name><column-value><![CDATA[");
+		sb.append(getFirstReminderType());
+		sb.append("]]></column-value></column>");
+		sb.append(
 			"<column><column-name>secondReminder</column-name><column-value><![CDATA[");
 		sb.append(getSecondReminder());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>secondReminderType</column-name><column-value><![CDATA[");
+		sb.append(getSecondReminderType());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>status</column-name><column-value><![CDATA[");
@@ -1005,12 +1101,14 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	private String _description;
 	private String _descriptionCurrentLanguageId;
 	private String _location;
-	private Date _startDate;
-	private Date _endDate;
+	private long _startDate;
+	private long _endDate;
 	private boolean _allDay;
 	private String _recurrence;
-	private int _firstReminder;
-	private int _secondReminder;
+	private long _firstReminder;
+	private String _firstReminderType;
+	private long _secondReminder;
+	private String _secondReminderType;
 	private int _status;
 	private long _statusByUserId;
 	private String _statusByUserUuid;

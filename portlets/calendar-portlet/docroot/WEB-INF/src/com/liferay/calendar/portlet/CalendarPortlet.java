@@ -14,12 +14,18 @@
 
 package com.liferay.calendar.portlet;
 
+import com.liferay.calendar.CalendarResourceCodeException;
 import com.liferay.calendar.DuplicateCalendarResourceException;
 import com.liferay.calendar.NoSuchResourceException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.model.CalendarBookingConstants;
 import com.liferay.calendar.model.CalendarResource;
+import com.liferay.calendar.notification.NotificationTemplateContextFactory;
+import com.liferay.calendar.recurrence.Frequency;
+import com.liferay.calendar.recurrence.Recurrence;
+import com.liferay.calendar.recurrence.RecurrenceSerializer;
+import com.liferay.calendar.recurrence.Weekday;
 import com.liferay.calendar.service.CalendarBookingServiceUtil;
 import com.liferay.calendar.service.CalendarLocalServiceUtil;
 import com.liferay.calendar.service.CalendarResourceServiceUtil;
@@ -38,11 +44,12 @@ import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.TimeZoneUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
@@ -60,10 +67,10 @@ import com.liferay.util.dao.orm.CustomSQLUtil;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -78,6 +85,7 @@ import javax.portlet.ResourceResponse;
  * @author Eduardo Lundgren
  * @author Fabio Pezzutto
  * @author Andrea Di Giorgi
+ * @author Marcellus Tavares
  */
 public class CalendarPortlet extends MVCPortlet {
 
@@ -98,6 +106,13 @@ public class CalendarPortlet extends MVCPortlet {
 			actionRequest, "calendarResourceId");
 
 		CalendarResourceServiceUtil.deleteCalendarResource(calendarResourceId);
+	}
+
+	@Override
+	public void init() throws PortletException {
+		super.init();
+
+		NotificationTemplateContextFactory.setPortletConfig(getPortletConfig());
 	}
 
 	@Override
@@ -254,8 +269,11 @@ public class CalendarPortlet extends MVCPortlet {
 		java.util.Calendar endDateJCalendar = getJCalendar(
 			actionRequest, "endDate");
 		boolean allDay = ParamUtil.getBoolean(actionRequest, "allDay");
-		String recurrence = ParamUtil.getString(actionRequest, "recurrence");
+		String recurrence = getRecurrence(actionRequest);
 		int status = ParamUtil.getInteger(actionRequest, "status");
+
+		long[] reminders = getReminders(actionRequest);
+		String[] remindersType = getRemindersType(actionRequest);
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			CalendarBooking.class.getName(), actionRequest);
@@ -265,15 +283,18 @@ public class CalendarPortlet extends MVCPortlet {
 				calendarId, childCalendarIds,
 				CalendarBookingConstants.PARENT_CALENDAR_BOOKING_ID_DEFAULT,
 				titleMap, descriptionMap, location,
-				startDateJCalendar.getTime(), endDateJCalendar.getTime(),
-				allDay, recurrence, 0, 0, serviceContext);
+				startDateJCalendar.getTimeInMillis(),
+				endDateJCalendar.getTimeInMillis(), allDay, recurrence,
+				reminders[0], remindersType[0], reminders[1], remindersType[1],
+				serviceContext);
 		}
 		else {
 			CalendarBookingServiceUtil.updateCalendarBooking(
 				calendarBookingId, calendarId, childCalendarIds, titleMap,
-				descriptionMap, location, startDateJCalendar.getTime(),
-				endDateJCalendar.getTime(), allDay, recurrence, 0, 0, status,
-				serviceContext);
+				descriptionMap, location, startDateJCalendar.getTimeInMillis(),
+				endDateJCalendar.getTimeInMillis(), allDay, recurrence,
+				reminders[0], remindersType[0], reminders[1], remindersType[1],
+				status, serviceContext);
 		}
 	}
 
@@ -305,8 +326,8 @@ public class CalendarPortlet extends MVCPortlet {
 		}
 		else {
 			CalendarResourceServiceUtil.updateCalendarResource(
-				calendarResourceId, defaultCalendarId, code, nameMap,
-				descriptionMap, type, active, serviceContext);
+				calendarResourceId, defaultCalendarId, nameMap, descriptionMap,
+				type, active, serviceContext);
 		}
 	}
 
@@ -404,6 +425,9 @@ public class CalendarPortlet extends MVCPortlet {
 	protected java.util.Calendar getJCalendar(
 		PortletRequest portletRequest, String name) {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		int month = ParamUtil.getInteger(portletRequest, name + "Month");
 		int day = ParamUtil.getInteger(portletRequest, name + "Day");
 		int year = ParamUtil.getInteger(portletRequest, name + "Year");
@@ -416,15 +440,106 @@ public class CalendarPortlet extends MVCPortlet {
 			hour += 12;
 		}
 
-		TimeZone timezone = TimeZoneUtil.getTimeZone(StringPool.UTC);
-
 		return JCalendarUtil.getJCalendar(
-			year, month, day, hour, minute, 0, 0, timezone);
+			year, month, day, hour, minute, 0, 0, themeDisplay.getTimeZone());
+	}
+
+	protected String getRecurrence(ActionRequest actionRequest) {
+		boolean repeat = ParamUtil.getBoolean(actionRequest, "repeat");
+
+		if (!repeat) {
+			return null;
+		}
+
+		Recurrence recurrence = new Recurrence();
+
+		int count = 0;
+
+		String ends = ParamUtil.getString(actionRequest, "ends");
+
+		if (ends.equals("after")) {
+			count = ParamUtil.getInteger(actionRequest, "count");
+		}
+
+		recurrence.setCount(count);
+
+		Frequency frequency = Frequency.parse(
+			ParamUtil.getString(actionRequest, "frequency"));
+
+		recurrence.setFrequency(frequency);
+
+		int interval = ParamUtil.getInteger(actionRequest, "interval");
+
+		recurrence.setInterval(interval);
+
+		java.util.Calendar untilJCalendar = null;
+
+		if (ends.equals("on")) {
+			int untilDateDay = ParamUtil.getInteger(
+				actionRequest, "untilDateDay");
+			int untilDateMonth = ParamUtil.getInteger(
+				actionRequest, "untilDateMonth");
+			int untilDateYear = ParamUtil.getInteger(
+				actionRequest, "untilDateYear");
+
+			untilJCalendar = CalendarFactoryUtil.getCalendar();
+
+			untilJCalendar.set(java.util.Calendar.DATE, untilDateDay);
+			untilJCalendar.set(java.util.Calendar.MONTH, untilDateMonth);
+			untilJCalendar.set(java.util.Calendar.YEAR, untilDateYear);
+		}
+
+		recurrence.setUntil(untilJCalendar);
+
+		List<Weekday> weekdays = new ArrayList<Weekday>();
+
+		if (frequency == Frequency.WEEKLY) {
+			for (Weekday weekday : Weekday.values()) {
+				boolean checked = ParamUtil.getBoolean(
+					actionRequest, weekday.getValue());
+
+				if (checked) {
+					weekdays.add(weekday);
+				}
+			}
+		}
+
+		recurrence.setWeekdays(weekdays);
+
+		return RecurrenceSerializer.serialize(recurrence);
+	}
+
+	protected long[] getReminders(PortletRequest portletRequest) {
+		long firstReminder = ParamUtil.getInteger(
+			portletRequest, "reminderValue0");
+		long firstReminderDuration = ParamUtil.getInteger(
+			portletRequest, "reminderDuration0");
+		long secondReminder = ParamUtil.getInteger(
+			portletRequest, "reminderValue1");
+		long secondReminderDuration = ParamUtil.getInteger(
+			portletRequest, "reminderDuration1");
+
+		return new long[] {
+			firstReminder * firstReminderDuration * Time.SECOND,
+			secondReminder * secondReminderDuration * Time.SECOND
+		};
+	}
+
+	protected String[] getRemindersType(PortletRequest portletRequest) {
+		String firstReminderType = ParamUtil.getString(
+			portletRequest, "reminderType0");
+		String secondReminderType = ParamUtil.getString(
+			portletRequest, "reminderType1");
+
+		return new String[] {
+			firstReminderType, secondReminderType
+		};
 	}
 
 	@Override
 	protected boolean isSessionErrorException(Throwable cause) {
-		if (cause instanceof DuplicateCalendarResourceException ||
+		if (cause instanceof CalendarResourceCodeException ||
+			cause instanceof DuplicateCalendarResourceException ||
 			cause instanceof PrincipalException) {
 
 			return true;
