@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.bi.rules.RulesResourceRetriever;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.resource.StringResourceRetriever;
-import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.util.RulesContextBuilder;
@@ -38,7 +37,7 @@ public class DRLScriptingTaskAssignmentSelector
 
 	public Collection<KaleoTaskAssignment> calculateTaskAssignments(
 			KaleoTaskAssignment kaleoTaskAssignment,
-			ExecutionContext executionContext)
+			ExecutionContext executionContext, ClassLoader... classLoaders)
 		throws PortalException, SystemException {
 
 		List<Fact<?>> facts = RulesContextBuilder.buildRulesContext(
@@ -53,8 +52,7 @@ public class DRLScriptingTaskAssignmentSelector
 		Query query = Query.createStandardQuery();
 
 		Map<String, ?> results = RulesEngineUtil.execute(
-			rulesResourceRetriever, facts, query,
-			PortalClassLoaderUtil.getClassLoader());
+			rulesResourceRetriever, facts, query, classLoaders);
 
 		return getKaleoTaskAssignments(results);
 	}
