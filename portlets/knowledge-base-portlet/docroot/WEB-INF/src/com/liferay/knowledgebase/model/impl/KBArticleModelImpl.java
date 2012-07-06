@@ -127,6 +127,10 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	 * @return the normal model instance
 	 */
 	public static KBArticle toModel(KBArticleSoap soapModel) {
+		if (soapModel == null) {
+			return null;
+		}
+
 		KBArticle model = new KBArticleImpl();
 
 		model.setUuid(soapModel.getUuid());
@@ -164,6 +168,10 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	 * @return the normal model instances
 	 */
 	public static List<KBArticle> toModels(KBArticleSoap[] soapModels) {
+		if (soapModels == null) {
+			return null;
+		}
+
 		List<KBArticle> models = new ArrayList<KBArticle>(soapModels.length);
 
 		for (KBArticleSoap soapModel : soapModels) {
@@ -795,9 +803,17 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 		}
 	}
 
+	public boolean isDenied() {
+		if (getStatus() == WorkflowConstants.STATUS_DENIED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
 	public boolean isDraft() {
-		if ((getStatus() == WorkflowConstants.STATUS_DRAFT) ||
-				(getStatus() == WorkflowConstants.STATUS_DRAFT_FROM_APPROVED)) {
+		if (getStatus() == WorkflowConstants.STATUS_DRAFT) {
 			return true;
 		}
 		else {
@@ -807,6 +823,24 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 
 	public boolean isExpired() {
 		if (getStatus() == WorkflowConstants.STATUS_EXPIRED) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isInactive() {
+		if (getStatus() == WorkflowConstants.STATUS_INACTIVE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isIncomplete() {
+		if (getStatus() == WorkflowConstants.STATUS_INCOMPLETE) {
 			return true;
 		}
 		else {
@@ -825,6 +859,15 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 
 	public boolean isPending() {
 		if (getStatus() == WorkflowConstants.STATUS_PENDING) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public boolean isScheduled() {
+		if (getStatus() == WorkflowConstants.STATUS_SCHEDULED) {
 			return true;
 		}
 		else {

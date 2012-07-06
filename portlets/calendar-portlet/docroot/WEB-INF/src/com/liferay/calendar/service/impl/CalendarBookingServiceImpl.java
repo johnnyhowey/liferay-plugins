@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceContext;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -43,9 +42,10 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public CalendarBooking addCalendarBooking(
 			long calendarId, long[] childCalendarIds,
 			long parentCalendarBookingId, Map<Locale, String> titleMap,
-			Map<Locale, String> descriptionMap, String location, Date startDate,
-			Date endDate, boolean allDay, String recurrence, int firstReminder,
-			int secondReminder, ServiceContext serviceContext)
+			Map<Locale, String> descriptionMap, String location, long startDate,
+			long endDate, boolean allDay, String recurrence, long firstReminder,
+			String firstReminderType, long secondReminder,
+			String secondReminderType, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		CalendarPermission.check(
@@ -54,7 +54,8 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 		return calendarBookingLocalService.addCalendarBooking(
 			getUserId(), calendarId, childCalendarIds, parentCalendarBookingId,
 			titleMap, descriptionMap, location, startDate, endDate, allDay,
-			recurrence, firstReminder, secondReminder, serviceContext);
+			recurrence, firstReminder, firstReminderType, secondReminder,
+			secondReminderType, serviceContext);
 	}
 
 	public CalendarBooking deleteCalendarBooking(long calendarBookingId)
@@ -105,7 +106,7 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	}
 
 	public List<CalendarBooking> getCalendarBookings(
-			long calendarId, Date startDate, Date endDate)
+			long calendarId, long startDate, long endDate)
 		throws PortalException, SystemException {
 
 		List<CalendarBooking> calendarBookings =
@@ -168,7 +169,7 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public List<CalendarBooking> search(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String keywords, Date startDate, Date endDate, int[] statuses,
+			String keywords, long startDate, long endDate, int[] statuses,
 			int start, int end, OrderByComparator orderByComparator)
 		throws SystemException, PortalException {
 
@@ -184,8 +185,8 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public List<CalendarBooking> search(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String title, String description, String location, Date startDate,
-			Date endDate, int[] statuses, boolean andOperator, int start,
+			String title, String description, String location, long startDate,
+			long endDate, int[] statuses, boolean andOperator, int start,
 			int end, OrderByComparator orderByComparator)
 		throws PortalException, SystemException {
 
@@ -202,7 +203,7 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public int searchCount(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String keywords, Date startDate, Date endDate, int[] statuses)
+			String keywords, long startDate, long endDate, int[] statuses)
 		throws PortalException, SystemException {
 
 		List<CalendarBooking> calendarBookings = search(
@@ -216,8 +217,8 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public int searchCount(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String title, String description, String location, Date startDate,
-			Date endDate, int[] statuses, boolean andOperator)
+			String title, String description, String location, long startDate,
+			long endDate, int[] statuses, boolean andOperator)
 		throws PortalException, SystemException {
 
 		List<CalendarBooking> calendarBookings = search(
@@ -232,9 +233,10 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public CalendarBooking updateCalendarBooking(
 			long calendarBookingId, long calendarId, long[] childCalendarIds,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			String location, Date startDate, Date endDate, boolean allDay,
-			String recurrence, int firstReminder, int secondReminder,
-			int status, ServiceContext serviceContext)
+			String location, long startDate, long endDate, boolean allDay,
+			String recurrence, long firstReminder, String firstReminderType,
+			long secondReminder, String secondReminderType, int status,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		CalendarPermission.check(
@@ -243,15 +245,17 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 		return calendarBookingLocalService.updateCalendarBooking(
 			getUserId(), calendarBookingId, calendarId, childCalendarIds,
 			titleMap, descriptionMap, location, startDate, endDate, allDay,
-			recurrence, firstReminder, secondReminder, status, serviceContext);
+			recurrence, firstReminder, firstReminderType, secondReminder,
+			secondReminderType, status, serviceContext);
 	}
 
 	public CalendarBooking updateCalendarBooking(
 			long calendarBookingId, long calendarId,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			String location, Date startDate, Date endDate, boolean allDay,
-			String recurrence, int firstReminder, int secondReminder,
-			int status, ServiceContext serviceContext)
+			String location, long startDate, long endDate, boolean allDay,
+			String recurrence, long firstReminder, String firstReminderType,
+			long secondReminder, String secondReminderType, int status,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		CalendarPermission.check(
@@ -260,7 +264,8 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 		return calendarBookingLocalService.updateCalendarBooking(
 			getUserId(), calendarBookingId, calendarId, titleMap,
 			descriptionMap, location, startDate, endDate, allDay, recurrence,
-			firstReminder, secondReminder, status, serviceContext);
+			firstReminder, firstReminderType, secondReminder,
+			secondReminderType, status, serviceContext);
 	}
 
 	protected CalendarBooking filterCalendarBooking(

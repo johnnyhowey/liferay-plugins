@@ -23,7 +23,7 @@ public class Action {
 
 	public Action(
 		String name, String description, String executionType, String script,
-		String scriptLanguage, int priority) {
+		String scriptLanguage, String scriptRequiredContexts, int priority) {
 
 		_name = name;
 		_description = description;
@@ -37,6 +37,7 @@ public class Action {
 
 		_script = script;
 		_scriptLanguage = ScriptLanguage.parse(scriptLanguage);
+		_scriptRequiredContexts = scriptRequiredContexts;
 		_priority = priority;
 	}
 
@@ -83,6 +84,10 @@ public class Action {
 		return _scriptLanguage;
 	}
 
+	public String getScriptRequiredContexts() {
+		return _scriptRequiredContexts;
+	}
+
 	@Override
 	public int hashCode() {
 		return _name.hashCode();
@@ -94,5 +99,6 @@ public class Action {
 	private int _priority;
 	private String _script;
 	private ScriptLanguage _scriptLanguage;
+	private String _scriptRequiredContexts;
 
 }
