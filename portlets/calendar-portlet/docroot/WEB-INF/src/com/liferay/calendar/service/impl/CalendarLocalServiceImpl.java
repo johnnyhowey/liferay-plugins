@@ -139,6 +139,7 @@ public class CalendarLocalServiceImpl extends CalendarLocalServiceBaseImpl {
 		return deleteCalendar(calendar);
 	}
 
+	@Override
 	public Calendar fetchCalendar(long calendarId) throws SystemException {
 		return calendarPersistence.fetchByPrimaryKey(calendarId);
 	}

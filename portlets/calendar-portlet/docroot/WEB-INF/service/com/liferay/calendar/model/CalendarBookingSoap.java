@@ -50,7 +50,9 @@ public class CalendarBookingSoap implements Serializable {
 		soapModel.setAllDay(model.getAllDay());
 		soapModel.setRecurrence(model.getRecurrence());
 		soapModel.setFirstReminder(model.getFirstReminder());
+		soapModel.setFirstReminderType(model.getFirstReminderType());
 		soapModel.setSecondReminder(model.getSecondReminder());
+		soapModel.setSecondReminderType(model.getSecondReminderType());
 		soapModel.setStatus(model.getStatus());
 		soapModel.setStatusByUserId(model.getStatusByUserId());
 		soapModel.setStatusByUserName(model.getStatusByUserName());
@@ -221,19 +223,19 @@ public class CalendarBookingSoap implements Serializable {
 		_location = location;
 	}
 
-	public Date getStartDate() {
+	public long getStartDate() {
 		return _startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(long startDate) {
 		_startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public long getEndDate() {
 		return _endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(long endDate) {
 		_endDate = endDate;
 	}
 
@@ -257,20 +259,36 @@ public class CalendarBookingSoap implements Serializable {
 		_recurrence = recurrence;
 	}
 
-	public int getFirstReminder() {
+	public long getFirstReminder() {
 		return _firstReminder;
 	}
 
-	public void setFirstReminder(int firstReminder) {
+	public void setFirstReminder(long firstReminder) {
 		_firstReminder = firstReminder;
 	}
 
-	public int getSecondReminder() {
+	public String getFirstReminderType() {
+		return _firstReminderType;
+	}
+
+	public void setFirstReminderType(String firstReminderType) {
+		_firstReminderType = firstReminderType;
+	}
+
+	public long getSecondReminder() {
 		return _secondReminder;
 	}
 
-	public void setSecondReminder(int secondReminder) {
+	public void setSecondReminder(long secondReminder) {
 		_secondReminder = secondReminder;
+	}
+
+	public String getSecondReminderType() {
+		return _secondReminderType;
+	}
+
+	public void setSecondReminderType(String secondReminderType) {
+		_secondReminderType = secondReminderType;
 	}
 
 	public int getStatus() {
@@ -319,12 +337,14 @@ public class CalendarBookingSoap implements Serializable {
 	private String _title;
 	private String _description;
 	private String _location;
-	private Date _startDate;
-	private Date _endDate;
+	private long _startDate;
+	private long _endDate;
 	private boolean _allDay;
 	private String _recurrence;
-	private int _firstReminder;
-	private int _secondReminder;
+	private long _firstReminder;
+	private String _firstReminderType;
+	private long _secondReminder;
+	private String _secondReminderType;
 	private int _status;
 	private long _statusByUserId;
 	private String _statusByUserName;

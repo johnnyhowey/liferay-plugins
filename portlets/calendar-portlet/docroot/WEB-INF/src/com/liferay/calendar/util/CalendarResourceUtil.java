@@ -96,8 +96,7 @@ public class CalendarResourceUtil {
 
 		return CalendarResourceLocalServiceUtil.addCalendarResource(
 			serviceContext.getUserId(), 0, Group.class.getName(), groupId, null,
-			0, group.getName(), nameMap, descriptionMap, null, true,
-			serviceContext);
+			0, null, nameMap, descriptionMap, null, true, serviceContext);
 	}
 
 	public static OrderByComparator getOrderByComparator(
@@ -122,7 +121,7 @@ public class CalendarResourceUtil {
 	}
 
 	public static CalendarResource getUserCalendarResource(
-			PortletRequest portletRequest, long userId)
+			long userId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		long classNameId = PortalUtil.getClassNameId(User.class);
@@ -143,13 +142,19 @@ public class CalendarResourceUtil {
 
 		Map<Locale, String> descriptionMap = new HashMap<Locale, String>();
 
+		return CalendarResourceLocalServiceUtil.addCalendarResource(
+			serviceContext.getUserId(), 0, User.class.getName(), userId, null,
+			0, null, nameMap, descriptionMap, null, true, serviceContext);
+	}
+
+	public static CalendarResource getUserCalendarResource(
+			PortletRequest portletRequest, long userId)
+		throws PortalException, SystemException {
+
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
 			portletRequest);
 
-		return CalendarResourceLocalServiceUtil.addCalendarResource(
-			serviceContext.getUserId(), 0, User.class.getName(), userId, null,
-			0, user.getFirstName(), nameMap, descriptionMap, null, true,
-			serviceContext);
+		return getUserCalendarResource(userId, serviceContext);
 	}
 
 }
