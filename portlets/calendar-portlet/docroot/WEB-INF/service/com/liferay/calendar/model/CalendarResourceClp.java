@@ -69,6 +69,7 @@ public class CalendarResourceClp extends BaseModelImpl<CalendarResource>
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
 
+	@Override
 	public Map<String, Object> getModelAttributes() {
 		Map<String, Object> attributes = new HashMap<String, Object>();
 
@@ -94,6 +95,7 @@ public class CalendarResourceClp extends BaseModelImpl<CalendarResource>
 		return attributes;
 	}
 
+	@Override
 	public void setModelAttributes(Map<String, Object> attributes) {
 		String uuid = (String)attributes.get("uuid");
 
@@ -554,6 +556,14 @@ public class CalendarResourceClp extends BaseModelImpl<CalendarResource>
 
 	public void setActive(boolean active) {
 		_active = active;
+	}
+
+	public boolean isUser() {
+		throw new UnsupportedOperationException();
+	}
+
+	public boolean isGroup() {
+		throw new UnsupportedOperationException();
 	}
 
 	public boolean isGlobal() {
