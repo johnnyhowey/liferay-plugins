@@ -65,7 +65,9 @@ public class CalendarBookingWrapper implements CalendarBooking,
 		attributes.put("allDay", getAllDay());
 		attributes.put("recurrence", getRecurrence());
 		attributes.put("firstReminder", getFirstReminder());
+		attributes.put("firstReminderType", getFirstReminderType());
 		attributes.put("secondReminder", getSecondReminder());
+		attributes.put("secondReminderType", getSecondReminderType());
 		attributes.put("status", getStatus());
 		attributes.put("statusByUserId", getStatusByUserId());
 		attributes.put("statusByUserName", getStatusByUserName());
@@ -160,13 +162,13 @@ public class CalendarBookingWrapper implements CalendarBooking,
 			setLocation(location);
 		}
 
-		Date startDate = (Date)attributes.get("startDate");
+		Long startDate = (Long)attributes.get("startDate");
 
 		if (startDate != null) {
 			setStartDate(startDate);
 		}
 
-		Date endDate = (Date)attributes.get("endDate");
+		Long endDate = (Long)attributes.get("endDate");
 
 		if (endDate != null) {
 			setEndDate(endDate);
@@ -184,16 +186,28 @@ public class CalendarBookingWrapper implements CalendarBooking,
 			setRecurrence(recurrence);
 		}
 
-		Integer firstReminder = (Integer)attributes.get("firstReminder");
+		Long firstReminder = (Long)attributes.get("firstReminder");
 
 		if (firstReminder != null) {
 			setFirstReminder(firstReminder);
 		}
 
-		Integer secondReminder = (Integer)attributes.get("secondReminder");
+		String firstReminderType = (String)attributes.get("firstReminderType");
+
+		if (firstReminderType != null) {
+			setFirstReminderType(firstReminderType);
+		}
+
+		Long secondReminder = (Long)attributes.get("secondReminder");
 
 		if (secondReminder != null) {
 			setSecondReminder(secondReminder);
+		}
+
+		String secondReminderType = (String)attributes.get("secondReminderType");
+
+		if (secondReminderType != null) {
+			setSecondReminderType(secondReminderType);
 		}
 
 		Integer status = (Integer)attributes.get("status");
@@ -734,7 +748,7 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	*
 	* @return the start date of this calendar booking
 	*/
-	public java.util.Date getStartDate() {
+	public long getStartDate() {
 		return _calendarBooking.getStartDate();
 	}
 
@@ -743,7 +757,7 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	*
 	* @param startDate the start date of this calendar booking
 	*/
-	public void setStartDate(java.util.Date startDate) {
+	public void setStartDate(long startDate) {
 		_calendarBooking.setStartDate(startDate);
 	}
 
@@ -752,7 +766,7 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	*
 	* @return the end date of this calendar booking
 	*/
-	public java.util.Date getEndDate() {
+	public long getEndDate() {
 		return _calendarBooking.getEndDate();
 	}
 
@@ -761,7 +775,7 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	*
 	* @param endDate the end date of this calendar booking
 	*/
-	public void setEndDate(java.util.Date endDate) {
+	public void setEndDate(long endDate) {
 		_calendarBooking.setEndDate(endDate);
 	}
 
@@ -815,7 +829,7 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	*
 	* @return the first reminder of this calendar booking
 	*/
-	public int getFirstReminder() {
+	public long getFirstReminder() {
 		return _calendarBooking.getFirstReminder();
 	}
 
@@ -824,8 +838,26 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	*
 	* @param firstReminder the first reminder of this calendar booking
 	*/
-	public void setFirstReminder(int firstReminder) {
+	public void setFirstReminder(long firstReminder) {
 		_calendarBooking.setFirstReminder(firstReminder);
+	}
+
+	/**
+	* Returns the first reminder type of this calendar booking.
+	*
+	* @return the first reminder type of this calendar booking
+	*/
+	public java.lang.String getFirstReminderType() {
+		return _calendarBooking.getFirstReminderType();
+	}
+
+	/**
+	* Sets the first reminder type of this calendar booking.
+	*
+	* @param firstReminderType the first reminder type of this calendar booking
+	*/
+	public void setFirstReminderType(java.lang.String firstReminderType) {
+		_calendarBooking.setFirstReminderType(firstReminderType);
 	}
 
 	/**
@@ -833,7 +865,7 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	*
 	* @return the second reminder of this calendar booking
 	*/
-	public int getSecondReminder() {
+	public long getSecondReminder() {
 		return _calendarBooking.getSecondReminder();
 	}
 
@@ -842,8 +874,26 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	*
 	* @param secondReminder the second reminder of this calendar booking
 	*/
-	public void setSecondReminder(int secondReminder) {
+	public void setSecondReminder(long secondReminder) {
 		_calendarBooking.setSecondReminder(secondReminder);
+	}
+
+	/**
+	* Returns the second reminder type of this calendar booking.
+	*
+	* @return the second reminder type of this calendar booking
+	*/
+	public java.lang.String getSecondReminderType() {
+		return _calendarBooking.getSecondReminderType();
+	}
+
+	/**
+	* Sets the second reminder type of this calendar booking.
+	*
+	* @param secondReminderType the second reminder type of this calendar booking
+	*/
+	public void setSecondReminderType(java.lang.String secondReminderType) {
+		_calendarBooking.setSecondReminderType(secondReminderType);
 	}
 
 	/**
@@ -955,6 +1005,15 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	}
 
 	/**
+	* Returns <code>true</code> if this calendar booking is denied.
+	*
+	* @return <code>true</code> if this calendar booking is denied; <code>false</code> otherwise
+	*/
+	public boolean isDenied() {
+		return _calendarBooking.isDenied();
+	}
+
+	/**
 	* Returns <code>true</code> if this calendar booking is a draft.
 	*
 	* @return <code>true</code> if this calendar booking is a draft; <code>false</code> otherwise
@@ -973,6 +1032,24 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	}
 
 	/**
+	* Returns <code>true</code> if this calendar booking is inactive.
+	*
+	* @return <code>true</code> if this calendar booking is inactive; <code>false</code> otherwise
+	*/
+	public boolean isInactive() {
+		return _calendarBooking.isInactive();
+	}
+
+	/**
+	* Returns <code>true</code> if this calendar booking is incomplete.
+	*
+	* @return <code>true</code> if this calendar booking is incomplete; <code>false</code> otherwise
+	*/
+	public boolean isIncomplete() {
+		return _calendarBooking.isIncomplete();
+	}
+
+	/**
 	* Returns <code>true</code> if this calendar booking is in the Recycle Bin.
 	*
 	* @return <code>true</code> if this calendar booking is in the Recycle Bin; <code>false</code> otherwise
@@ -988,6 +1065,15 @@ public class CalendarBookingWrapper implements CalendarBooking,
 	*/
 	public boolean isPending() {
 		return _calendarBooking.isPending();
+	}
+
+	/**
+	* Returns <code>true</code> if this calendar booking is scheduled.
+	*
+	* @return <code>true</code> if this calendar booking is scheduled; <code>false</code> otherwise
+	*/
+	public boolean isScheduled() {
+		return _calendarBooking.isScheduled();
 	}
 
 	public boolean isNew() {
@@ -1076,26 +1162,39 @@ public class CalendarBookingWrapper implements CalendarBooking,
 		return _calendarBooking.getCalendarResource();
 	}
 
+	public java.util.List<com.liferay.calendar.model.CalendarBooking> getChildCalendarBookings()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _calendarBooking.getChildCalendarBookings();
+	}
+
+	public long getDuration() {
+		return _calendarBooking.getDuration();
+	}
+
+	public com.liferay.calendar.notification.NotificationType getFirstReminderNotificationType() {
+		return _calendarBooking.getFirstReminderNotificationType();
+	}
+
 	public com.liferay.calendar.model.CalendarBooking getParentCalendarBooking()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _calendarBooking.getParentCalendarBooking();
 	}
 
-	public java.util.Date getUTCEndDate()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _calendarBooking.getUTCEndDate();
+	public com.liferay.calendar.recurrence.Recurrence getRecurrenceObj() {
+		return _calendarBooking.getRecurrenceObj();
 	}
 
-	public java.util.Date getUTCStartDate()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _calendarBooking.getUTCStartDate();
+	public com.liferay.calendar.notification.NotificationType getSecondReminderNotificationType() {
+		return _calendarBooking.getSecondReminderNotificationType();
 	}
 
 	public boolean isMasterBooking() {
 		return _calendarBooking.isMasterBooking();
+	}
+
+	public boolean isRecurring() {
+		return _calendarBooking.isRecurring();
 	}
 
 	/**

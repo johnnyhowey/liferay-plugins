@@ -18,11 +18,21 @@
 					(description LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
 					(lower(location) LIKE ? [$AND_OR_NULL_CHECK$])
 				) AND
+				[$DATE_RANGE$]
 				[$STATUS$]
-				(
-					(startDate <= ? [$AND_OR_NULL_CHECK$]) AND
-					(endDate >= ? [$AND_OR_NULL_CHECK$])
-				)
+		]]>
+	</sql>
+	<sql id="com.liferay.calendar.service.persistence.CalendarBookingFinder.findByFutureReminders">
+		<![CDATA[
+			SELECT
+				{CalendarBooking.*}
+			FROM
+				CalendarBooking
+			WHERE
+				(startDate >= ?) AND
+				(firstReminder > 0) AND
+				(secondReminder > 0) AND
+				(status = 0)
 		]]>
 	</sql>
 	<sql id="com.liferay.calendar.service.persistence.CalendarBookingFinder.findByC_G_C_C_P_T_D_L_S_E_S">
@@ -42,11 +52,8 @@
 					(description LIKE ? [$AND_OR_NULL_CHECK$]) [$AND_OR_CONNECTOR$]
 					(lower(location) LIKE ? [$AND_OR_NULL_CHECK$])
 				) AND
+				[$DATE_RANGE$]
 				[$STATUS$]
-				(
-					(startDate >= ? [$AND_OR_NULL_CHECK$]) AND
-					(endDate <= ? [$AND_OR_NULL_CHECK$])
-				)
 				[$ORDER_BY$]
 		]]>
 	</sql>

@@ -16,9 +16,13 @@ package com.liferay.portal.workflow.kaleo.runtime.action;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.workflow.kaleo.definition.ExecutionType;
 import com.liferay.portal.workflow.kaleo.model.KaleoAction;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
+import com.liferay.portal.workflow.kaleo.runtime.util.ClassLoaderUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoActionLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoLogLocalServiceUtil;
 
@@ -44,13 +48,24 @@ public class ActionExecutorUtil {
 			String comment = _COMMENT_ACTION_SUCCESS;
 
 			try {
+				String[] scriptRequiredContexts = StringUtil.split(
+					kaleoAction.getScriptRequiredContexts());
+
+				ClassLoader[] classLoaders = ClassLoaderUtil.getClassLoaders(
+					scriptRequiredContexts);
+
 				ActionExecutor actionExecutor =
 					ActionExecutorFactory.getActionExecutor(
 						kaleoAction.getScriptLanguage());
 
-				actionExecutor.execute(kaleoAction, executionContext);
+				actionExecutor.execute(
+					kaleoAction, executionContext, classLoaders);
 			}
 			catch (Exception e) {
+				if (_log.isDebugEnabled()) {
+					_log.debug(e, e);
+				}
+
 				comment = e.getMessage();
 			}
 			finally {
@@ -64,5 +79,7 @@ public class ActionExecutorUtil {
 
 	private static final String _COMMENT_ACTION_SUCCESS =
 		"Action completed successfully.";
+
+	private static Log _log = LogFactoryUtil.getLog(ActionExecutorUtil.class);
 
 }

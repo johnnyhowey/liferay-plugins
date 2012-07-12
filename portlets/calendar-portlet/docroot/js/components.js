@@ -1,9 +1,19 @@
 (function() {
 	var STR_BLANK = '';
+
+	var STR_COMMA = ',';
+
 	var STR_DASH = '-';
+
 	var STR_DOT = '.';
+
 	var STR_PLUS = '+';
+
 	var STR_SPACE = ' ';
+
+	var toNumber = function(val) {
+		return parseInt(val, 10) || 0;
+	};
 
 	AUI.add(
 		'liferay-calendar-simple-menu',
@@ -17,7 +27,9 @@
 			var owns = A.Object.owns;
 
 			var CSS_SIMPLE_MENU_ITEM = getClassName('simple-menu', 'item');
+
 			var CSS_SIMPLE_MENU_ITEM_HIDDEN = getClassName('simple-menu', 'item', 'hidden');
+
 			var CSS_SIMPLE_MENU_SEPARATOR = getClassName('simple-menu', 'separator');
 
 			var TPL_SIMPLE_MENU_ITEM = '<li class="{cssClass}" data-id="{id}">{caption}</li>';
@@ -184,7 +196,7 @@
 
 			Liferay.SimpleMenu = SimpleMenu;
 		},
-		'' ,
+		'',
 		{
 			requires: ['aui-base', 'aui-template', 'widget-position', 'widget-position-align', 'widget-position-constrain', 'widget-stack', 'widget-stdmod']
 		}
@@ -202,14 +214,21 @@
 			var	getClassName = A.getClassName;
 
 			var STR_CALENDAR_LIST = 'calendar-list';
+
 			var STR_ITEM = 'item';
 
 			var CSS_CALENDAR_LIST_EMPTY_MESSAGE = getClassName(STR_CALENDAR_LIST, 'empty', 'message');
+
 			var CSS_CALENDAR_LIST_ITEM = getClassName(STR_CALENDAR_LIST, STR_ITEM);
+
 			var CSS_CALENDAR_LIST_ITEM_ACTIVE = getClassName(STR_CALENDAR_LIST, STR_ITEM, 'active');
+
 			var CSS_CALENDAR_LIST_ITEM_ARROW = getClassName(STR_CALENDAR_LIST, STR_ITEM, 'arrow');
+
 			var CSS_CALENDAR_LIST_ITEM_COLOR = getClassName(STR_CALENDAR_LIST, STR_ITEM, 'color');
+
 			var CSS_CALENDAR_LIST_ITEM_HOVER = getClassName(STR_CALENDAR_LIST, STR_ITEM, 'hover');
+
 			var CSS_CALENDAR_LIST_ITEM_LABEL = getClassName(STR_CALENDAR_LIST, STR_ITEM, 'label');
 
 			var TPL_CALENDAR_LIST_EMPTY_MESSAGE = '<div class="' + CSS_CALENDAR_LIST_EMPTY_MESSAGE + '">{message}</div>';
@@ -226,8 +245,6 @@
 
 			var CalendarList = A.Component.create(
 				{
-					NAME: 'calendar-list',
-
 					ATTRS: {
 						calendars: {
 							setter: '_setCalendars',
@@ -247,6 +264,8 @@
 							}
 						}
 					},
+
+					NAME: 'calendar-list',
 
 					UI_ATTRS: ['calendars'],
 
@@ -306,7 +325,7 @@
 						},
 
 						clear: function() {
-							var instance= this;
+							var instance = this;
 
 							instance.set('calendars', []);
 						},
@@ -570,11 +589,12 @@
 			var	getClassName = A.getClassName;
 
 			var	CSS_SIMPLE_COLOR_PICKER_ITEM = getClassName('simple-color-picker', 'item');
+
 			var	CSS_SIMPLE_COLOR_PICKER_ITEM_SELECTED = getClassName('simple-color-picker', 'item', 'selected');
 
 			var TPL_SIMPLE_COLOR_PICKER_ITEM = new A.Template(
 				'<tpl for="pallete">',
-					'<div class="', CSS_SIMPLE_COLOR_PICKER_ITEM, '" style="background-color: {.}', '; border-color:', '{.};','"></div>',
+					'<div class="', CSS_SIMPLE_COLOR_PICKER_ITEM, '" style="background-color: {.}', '; border-color:', '{.};', '"></div>',
 				'</tpl>'
 			);
 
@@ -673,6 +693,301 @@
 		'',
 		{
 			requires: ['aui-base', 'aui-template']
+		}
+	);
+
+	AUI.add(
+		'liferay-calendar-reminders',
+		function(A) {
+			var Lang = A.Lang;
+
+			var TPL_REMINDER_SECTION = '<div class="calendar-portlet-reminder-section">' +
+				'<input class="calendar-portlet-reminder-check" name="{portletNamespace}reminder{i}" type="checkbox" <tpl if="!disabled">checked="checked"</tpl> /> ' +
+				'<input name="{portletNamespace}reminderValue{i}" type="text" size="5" value="{time.value}" <tpl if="disabled">disabled="disabled"</tpl> /> ' +
+				'<select name="{portletNamespace}reminderDuration{i}" <tpl if="disabled">disabled="disabled"</tpl>>' +
+					'<option value="60" <tpl if="time.desc == \'minutes\'">selected="selected"</tpl>>{minutes}</option>' +
+					'<option value="3600" <tpl if="time.desc == \'hours\'">selected="selected"</tpl>>{hours}</option>' +
+					'<option value="86400" <tpl if="time.desc == \'days\'">selected="selected"</tpl>>{days}</option>' +
+					'<option value="604800" <tpl if="time.desc == \'weeks\'">selected="selected"</tpl>>{weeks}</option>' +
+				'</select>' +
+				'<select name="{portletNamespace}reminderType{i}" <tpl if="disabled">disabled="disabled"</tpl>>' +
+					'<option value="email">{email}</option>' +
+				'</select>' +
+			'</div>';
+
+			var Reminders = A.Component.create(
+				{
+					ATTRS: {
+						portletNamespace: {
+							value: ''
+						},
+
+						strings: {
+							value: {
+								email: Liferay.Language.get('email'),
+								minutes: Liferay.Language.get('minutes'),
+								hours: Liferay.Language.get('hours'),
+								days: Liferay.Language.get('days'),
+								weeks: Liferay.Language.get('weeks')
+							}
+						},
+
+						values: {
+							value: [
+								{
+									interval: 10,
+									type: Liferay.CalendarUtil.NOTIFICATION_DEFAULT_TYPE
+								},
+								{
+									interval: 60,
+									type: Liferay.CalendarUtil.NOTIFICATION_DEFAULT_TYPE
+								}
+							],
+							validator: Lang.isArray
+						}
+					},
+
+					NAME: 'reminders',
+
+					UI_ATTRS: ['values'],
+
+					prototype: {
+						initializer: function() {
+							var instance = this;
+
+							instance.tplReminder = new A.Template(TPL_REMINDER_SECTION);
+						},
+
+						bindUI: function() {
+							var instance = this;
+
+							var boundingBox = instance.get('boundingBox');
+
+							boundingBox.delegate('change', instance._onChangeCheckbox, '.calendar-portlet-reminder-check', instance);
+						},
+
+						_onChangeCheckbox: function(event) {
+							var instance = this;
+
+							var target = event.target;
+							var checked = target.get('checked');
+							var elements = target.siblings('input[type=text],select');
+
+							elements.set('disabled', !checked);
+
+							if (checked) {
+								elements.first().selectText();
+							}
+						},
+
+						_uiSetValues: function(val) {
+							var instance = this;
+
+							var boundingBox = instance.get('boundingBox');
+							var portletNamespace = instance.get('portletNamespace');
+							var strings = instance.get('strings');
+
+							var buffer = [];
+
+							var tplReminder = instance.tplReminder;
+
+							for (var i = 0; i < val.length; i++) {
+								var value = val[i];
+
+								buffer.push(
+									tplReminder.parse(
+										A.merge(
+											strings,
+											{
+												disabled: !value.interval,
+												i: i,
+												portletNamespace: portletNamespace,
+												time: Liferay.Time.getDescription(value.interval)
+											}
+										)
+									)
+								);
+							}
+
+							boundingBox.setContent(buffer.join(STR_BLANK));
+						}
+					}
+				}
+			);
+
+			Liferay.Reminders = Reminders;
+		},
+		'',
+		{
+			requires: ['aui-base']
+		}
+	);
+
+	AUI.add(
+		'liferay-calendar-date-picker-util',
+		function(A) {
+			Liferay.DatePickerUtil = {
+				linkToSchedulerEvent: function(datePickerContainer, schedulerEvent, dateAttr) {
+					var instance = this;
+
+					var selects = A.one(datePickerContainer).all('select');
+
+					selects.on(
+						'change',
+						function(event) {
+							var currentTarget = event.currentTarget;
+
+							var date = schedulerEvent.get(dateAttr);
+							var selectedSetter = selects.indexOf(currentTarget);
+
+							var setters = [date.setMonth, date.setDate, date.setFullYear, date.setHours, date.setMinutes, date.setHours];
+
+							var value = toNumber(currentTarget.val());
+
+							if ((selectedSetter === 3) && (date.getHours() > 12)) {
+								value += 12;
+							}
+
+							if (selectedSetter === 5) {
+								value = date.getHours() + ((value === 1) ? 12 : -12);
+							}
+
+							setters[selectedSetter].call(date, value);
+
+							schedulerEvent.set(dateAttr, date);
+
+							schedulerEvent.get('scheduler').syncEventsUI();
+						}
+					);
+				},
+
+				syncUI: function(form, fieldName, date) {
+					var instance = this;
+
+					var amPmNode = form.one('select[name$=' + fieldName + 'AmPm]');
+					var hourNode = form.one('select[name$=' + fieldName + 'Hour]');
+					var minuteNode = form.one('select[name$=' + fieldName + 'Minute]');
+
+					var datePicker = Liferay.component(Liferay.CalendarUtil.PORTLET_NAMESPACE + fieldName + 'datePicker');
+
+					if (datePicker) {
+						datePicker.calendar.set('dates', [date]);
+
+						datePicker.syncUI();
+					}
+
+					var hours = date.getHours();
+					var minutes = date.getMinutes();
+
+					var amPm = (hours < 12) ? 0 : 1;
+
+					if (amPm === 1) {
+						hours -= 12;
+
+						if (hours === 12) {
+							hours = 0;
+						}
+					}
+
+					amPmNode.val(amPm);
+					hourNode.val(hours);
+					minuteNode.val(minutes);
+				}
+			};
+		},
+		'',
+		{
+			requires: ['aui-base']
+		}
+	);
+
+	AUI.add(
+		'liferay-calendar-recurrence-util',
+		function(A) {
+			Liferay.RecurrenceUtil = {
+				FREQUENCY: {
+					DAILY: 'DAILY',
+					WEEKLY: 'WEEKLY',
+					MONTHLY: 'MONTHLY',
+					YEARLY: 'YEARLY'
+				},
+
+				INTERVAL_LABELS: {
+					DAILY: Liferay.Language.get('days'),
+					WEEKLY: Liferay.Language.get('weeks'),
+					MONTHLY: Liferay.Language.get('months'),
+					YEARLY: Liferay.Language.get('years')
+				},
+
+				MONTH_LABELS: [
+					Liferay.Language.get('january'),
+					Liferay.Language.get('frebruary'),
+					Liferay.Language.get('march'),
+					Liferay.Language.get('april'),
+					Liferay.Language.get('may'),
+					Liferay.Language.get('june'),
+					Liferay.Language.get('july'),
+					Liferay.Language.get('august'),
+					Liferay.Language.get('september'),
+					Liferay.Language.get('october'),
+					Liferay.Language.get('november'),
+					Liferay.Language.get('december')
+				],
+
+				getSummary: function(recurrence) {
+					var instance = this;
+
+					var template = [];
+
+					if (recurrence.interval == 1) {
+						template.push(recurrence.frequency);
+					}
+					else {
+						template.push(Liferay.Language.get('every'), ' {interval} {intervalLabel}');
+					}
+
+					if ((recurrence.frequency == instance.FREQUENCY.WEEKLY) && (recurrence.weekdays.length > 0)) {
+						template.push(STR_SPACE, Liferay.Language.get('on'), ' {weekDays}');
+					}
+
+					if (recurrence.count && (recurrence.endValue === 'after')) {
+						template.push(', {count} ', Liferay.Language.get('times'));
+					}
+					else if (recurrence.untilDate && (recurrence.endValue === 'on')) {
+						var untilDate = recurrence.untilDate;
+
+						template.push(
+							STR_COMMA,
+							STR_SPACE,
+							Liferay.Language.get('until'),
+							A.Lang.sub(
+								' {month} {date}, {year}',
+								{
+									date: untilDate.getDate(),
+									month: instance.MONTH_LABELS[untilDate.getMonth()],
+									year: untilDate.getFullYear()
+								}
+							)
+						);
+					}
+
+					var summary = A.Lang.sub(
+						template.join(STR_BLANK),
+						{
+							count: recurrence.count,
+							interval: recurrence.interval,
+							intervalLabel: instance.INTERVAL_LABELS[recurrence.frequency],
+							weekDays: recurrence.weekdays.join(', ')
+						}
+					);
+
+					return A.Lang.String.capitalize(summary);
+				}
+			};
+		},
+		'',
+		{
+			requires: ['aui-base']
 		}
 	);
 }());
