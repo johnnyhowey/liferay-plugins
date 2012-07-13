@@ -56,6 +56,37 @@ public class EntryServiceWrapper implements EntryService,
 	}
 
 	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use {@link com.liferay.contacts.service.EntryServiceUtil} to access the entry remote service.
+	*/
+	public com.liferay.contacts.model.Entry addEntry(long userId,
+		java.lang.String fullName, java.lang.String emailAddress,
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _entryService.addEntry(userId, fullName, emailAddress, comments,
+			serviceContext);
+	}
+
+	public void deleteEntry(long entryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		_entryService.deleteEntry(entryId);
+	}
+
+	public com.liferay.contacts.model.Entry updateEntry(long entryId,
+		java.lang.String fullName, java.lang.String emailAddress,
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _entryService.updateEntry(entryId, fullName, emailAddress,
+			comments, serviceContext);
+	}
+
+	/**
 	 * @deprecated Renamed to {@link #getWrappedService}
 	 */
 	public EntryService getWrappedEntryService() {

@@ -62,6 +62,39 @@ public class EntryServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use {@link com.liferay.contacts.service.EntryServiceUtil} to access the entry remote service.
+	*/
+	public static com.liferay.contacts.model.Entry addEntry(long userId,
+		java.lang.String fullName, java.lang.String emailAddress,
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .addEntry(userId, fullName, emailAddress, comments,
+			serviceContext);
+	}
+
+	public static void deleteEntry(long entryId)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		getService().deleteEntry(entryId);
+	}
+
+	public static com.liferay.contacts.model.Entry updateEntry(long entryId,
+		java.lang.String fullName, java.lang.String emailAddress,
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getService()
+				   .updateEntry(entryId, fullName, emailAddress, comments,
+			serviceContext);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

@@ -14,6 +14,13 @@
 
 package com.liferay.contacts.service.http;
 
+import com.liferay.contacts.service.EntryServiceUtil;
+
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import java.rmi.RemoteException;
+
 /**
  * <p>
  * This class provides a SOAP utility for the
@@ -58,4 +65,57 @@ package com.liferay.contacts.service.http;
  * @generated
  */
 public class EntryServiceSoap {
+	/**
+	* NOTE FOR DEVELOPERS:
+	*
+	* Never reference this interface directly. Always use {@link com.liferay.contacts.service.EntryServiceUtil} to access the entry remote service.
+	*/
+	public static com.liferay.contacts.model.EntrySoap addEntry(long userId,
+		java.lang.String fullName, java.lang.String emailAddress,
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
+		try {
+			com.liferay.contacts.model.Entry returnValue = EntryServiceUtil.addEntry(userId,
+					fullName, emailAddress, comments, serviceContext);
+
+			return com.liferay.contacts.model.EntrySoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static void deleteEntry(long entryId) throws RemoteException {
+		try {
+			EntryServiceUtil.deleteEntry(entryId);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.liferay.contacts.model.EntrySoap updateEntry(
+		long entryId, java.lang.String fullName, java.lang.String emailAddress,
+		java.lang.String comments,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws RemoteException {
+		try {
+			com.liferay.contacts.model.Entry returnValue = EntryServiceUtil.updateEntry(entryId,
+					fullName, emailAddress, comments, serviceContext);
+
+			return com.liferay.contacts.model.EntrySoap.toSoapModel(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(EntryServiceSoap.class);
 }
