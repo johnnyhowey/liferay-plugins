@@ -28,7 +28,6 @@ import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.service.ServiceContext;
 
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -43,9 +42,10 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public CalendarBooking addCalendarBooking(
 			long calendarId, long[] childCalendarIds,
 			long parentCalendarBookingId, Map<Locale, String> titleMap,
-			Map<Locale, String> descriptionMap, String location, Date startDate,
-			Date endDate, boolean allDay, String recurrence, int firstReminder,
-			int secondReminder, ServiceContext serviceContext)
+			Map<Locale, String> descriptionMap, String location, long startDate,
+			long endDate, boolean allDay, String recurrence, long firstReminder,
+			String firstReminderType, long secondReminder,
+			String secondReminderType, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		CalendarPermission.check(
@@ -54,7 +54,8 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 		return calendarBookingLocalService.addCalendarBooking(
 			getUserId(), calendarId, childCalendarIds, parentCalendarBookingId,
 			titleMap, descriptionMap, location, startDate, endDate, allDay,
-			recurrence, firstReminder, secondReminder, serviceContext);
+			recurrence, firstReminder, firstReminderType, secondReminder,
+			secondReminderType, serviceContext);
 	}
 
 	public CalendarBooking deleteCalendarBooking(long calendarBookingId)
@@ -105,7 +106,7 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	}
 
 	public List<CalendarBooking> getCalendarBookings(
-			long calendarId, Date startDate, Date endDate)
+			long calendarId, long startDate, long endDate)
 		throws PortalException, SystemException {
 
 		List<CalendarBooking> calendarBookings =
@@ -168,15 +169,16 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public List<CalendarBooking> search(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String keywords, Date startDate, Date endDate, int[] statuses,
-			int start, int end, OrderByComparator orderByComparator)
-		throws SystemException, PortalException {
+			String keywords, long startDate, long endDate, boolean recurring,
+			int[] statuses, int start, int end,
+			OrderByComparator orderByComparator)
+		throws PortalException, SystemException {
 
 		List<CalendarBooking> calendarBookings =
-			calendarBookingFinder.findByKeywords(
+			calendarBookingLocalService.search(
 				companyId, groupIds, calendarIds, calendarResourceIds,
-				parentCalendarBookingId, keywords, startDate, endDate, statuses,
-				start, end, orderByComparator);
+				parentCalendarBookingId, keywords, startDate, endDate,
+				recurring, statuses, start, end, orderByComparator);
 
 		return filterCalendarBookings(calendarBookings, ActionKeys.VIEW);
 	}
@@ -184,17 +186,18 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public List<CalendarBooking> search(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String title, String description, String location, Date startDate,
-			Date endDate, int[] statuses, boolean andOperator, int start,
-			int end, OrderByComparator orderByComparator)
+			String title, String description, String location, long startDate,
+			long endDate, boolean recurring, int[] statuses,
+			boolean andOperator, int start, int end,
+			OrderByComparator orderByComparator)
 		throws PortalException, SystemException {
 
 		List<CalendarBooking> calendarBookings =
-			calendarBookingFinder.findByC_G_C_C_P_T_D_L_S_E_S(
+			calendarBookingLocalService.search(
 				companyId, groupIds, calendarIds, calendarResourceIds,
 				parentCalendarBookingId, title, description, location,
-				startDate, endDate, statuses, andOperator, start, end,
-				orderByComparator);
+				startDate, endDate, recurring, statuses, andOperator, start,
+				end, orderByComparator);
 
 		return filterCalendarBookings(calendarBookings, ActionKeys.VIEW);
 	}
@@ -202,13 +205,14 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public int searchCount(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String keywords, Date startDate, Date endDate, int[] statuses)
+			String keywords, long startDate, long endDate, boolean recurring,
+			int[] statuses)
 		throws PortalException, SystemException {
 
 		List<CalendarBooking> calendarBookings = search(
 			companyId, groupIds, calendarIds, calendarResourceIds,
-			parentCalendarBookingId, keywords, startDate, endDate, statuses,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, (OrderByComparator)null);
+			parentCalendarBookingId, keywords, startDate, endDate, recurring,
+			statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
 		return calendarBookings.size();
 	}
@@ -216,25 +220,27 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 	public int searchCount(
 			long companyId, long[] groupIds, long[] calendarIds,
 			long[] calendarResourceIds, long parentCalendarBookingId,
-			String title, String description, String location, Date startDate,
-			Date endDate, int[] statuses, boolean andOperator)
+			String title, String description, String location, long startDate,
+			long endDate, boolean recurring, int[] statuses,
+			boolean andOperator)
 		throws PortalException, SystemException {
 
 		List<CalendarBooking> calendarBookings = search(
 			companyId, groupIds, calendarIds, calendarResourceIds,
 			parentCalendarBookingId, title, description, location, startDate,
-			endDate, statuses, andOperator, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, (OrderByComparator)null);
+			endDate, recurring, statuses, andOperator, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 
-			return calendarBookings.size();
+		return calendarBookings.size();
 	}
 
 	public CalendarBooking updateCalendarBooking(
 			long calendarBookingId, long calendarId, long[] childCalendarIds,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			String location, Date startDate, Date endDate, boolean allDay,
-			String recurrence, int firstReminder, int secondReminder,
-			int status, ServiceContext serviceContext)
+			String location, long startDate, long endDate, boolean allDay,
+			String recurrence, long firstReminder, String firstReminderType,
+			long secondReminder, String secondReminderType, int status,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		CalendarPermission.check(
@@ -243,15 +249,17 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 		return calendarBookingLocalService.updateCalendarBooking(
 			getUserId(), calendarBookingId, calendarId, childCalendarIds,
 			titleMap, descriptionMap, location, startDate, endDate, allDay,
-			recurrence, firstReminder, secondReminder, status, serviceContext);
+			recurrence, firstReminder, firstReminderType, secondReminder,
+			secondReminderType, status, serviceContext);
 	}
 
 	public CalendarBooking updateCalendarBooking(
 			long calendarBookingId, long calendarId,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			String location, Date startDate, Date endDate, boolean allDay,
-			String recurrence, int firstReminder, int secondReminder,
-			int status, ServiceContext serviceContext)
+			String location, long startDate, long endDate, boolean allDay,
+			String recurrence, long firstReminder, String firstReminderType,
+			long secondReminder, String secondReminderType, int status,
+			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		CalendarPermission.check(
@@ -260,7 +268,8 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 		return calendarBookingLocalService.updateCalendarBooking(
 			getUserId(), calendarBookingId, calendarId, titleMap,
 			descriptionMap, location, startDate, endDate, allDay, recurrence,
-			firstReminder, secondReminder, status, serviceContext);
+			firstReminder, firstReminderType, secondReminder,
+			secondReminderType, status, serviceContext);
 	}
 
 	protected CalendarBooking filterCalendarBooking(

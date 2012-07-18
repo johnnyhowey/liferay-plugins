@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
 <workflow-definition
-	xmlns="urn:liferay.com:liferay-workflow_6.1.0"
+	xmlns="urn:liferay.com:liferay-workflow_6.2.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="urn:liferay.com:liferay-workflow_6.1.0 http://www.liferay.com/dtd/liferay-workflow-definition_6_2_0.xsd"
+	xsi:schemaLocation="urn:liferay.com:liferay-workflow_6.2.0 http://www.liferay.com/dtd/liferay-workflow-definition_6_2_0.xsd"
 >
 	<name>Category Specific Approval</name>
 	<description>A single approver can approve a workflow content.</description>
@@ -11,7 +11,7 @@
 	<state>
 		<name>created</name>
 		<metadata>
-			<![CDATA[{"xy":[58,39]}]]>
+			<![CDATA[{"transitions":{"Determine Branch":{"xy":[-40,6]}},"xy":[60,45]}]]>
 		</metadata>
 		<initial>true</initial>
 		<transitions>
@@ -85,7 +85,7 @@
 	<task>
 		<name>update</name>
 		<metadata>
-			<![CDATA[{"xy":[673,33]}]]>
+			<![CDATA[{"xy":[670,30]}]]>
 		</metadata>
 		<actions>
 			<notification>
@@ -191,7 +191,7 @@
 	<task>
 		<name>legal-review</name>
 		<metadata>
-			<![CDATA[{"xy":[218,281]}]]>
+			<![CDATA[{"xy":[228,280]}]]>
 		</metadata>
 		<actions>
 			<notification>
@@ -254,15 +254,17 @@
 	<state>
 		<name>approved</name>
 		<metadata>
-			<![CDATA[{"xy":[697,316]}]]>
+			<![CDATA[
+				{"xy":[680,295]}
+			]]>
 		</metadata>
 		<actions>
 			<action>
 				<name>approve</name>
 				<script>
 					<![CDATA[
-						import com.liferay.portal.kernel.workflow.WorkflowConstants;
 						import com.liferay.portal.kernel.workflow.WorkflowStatusManagerUtil;
+						import com.liferay.portal.kernel.workflow.WorkflowConstants;
 
 						WorkflowStatusManagerUtil.updateStatus(WorkflowConstants.toStatus("approved"), workflowContext);
 					]]>

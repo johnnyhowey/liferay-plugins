@@ -1,0 +1,19 @@
+{
+	"layouts": [
+		{
+			"columns": [
+				[
+					{
+						"portletId": "58"
+					}
+				]
+			],
+			"friendlyURL": "/so/login",
+			"name": "Welcome",
+			"show_breadcrumbs": "false",
+			"show_page_title": "false",
+			"title": "Welcome"
+		}
+	],
+	"layoutTemplateId": "1_column"
+}

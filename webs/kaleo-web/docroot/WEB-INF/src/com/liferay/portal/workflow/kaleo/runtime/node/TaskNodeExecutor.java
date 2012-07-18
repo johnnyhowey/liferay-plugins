@@ -16,6 +16,7 @@ package com.liferay.portal.workflow.kaleo.runtime.node;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
@@ -42,6 +43,7 @@ import com.liferay.portal.workflow.kaleo.runtime.assignment.TaskAssignmentSelect
 import com.liferay.portal.workflow.kaleo.runtime.calendar.DueDateCalculator;
 import com.liferay.portal.workflow.kaleo.runtime.graph.PathElement;
 import com.liferay.portal.workflow.kaleo.runtime.notification.NotificationUtil;
+import com.liferay.portal.workflow.kaleo.runtime.util.ClassLoaderUtil;
 
 import java.io.Serializable;
 
@@ -100,7 +102,7 @@ public class TaskNodeExecutor extends BaseNodeExecutor {
 			ServiceContext serviceContext,
 			KaleoInstanceToken kaleoInstanceToken, KaleoTask kaleoTask,
 			Date dueDate)
-		throws SystemException, PortalException {
+		throws PortalException, SystemException {
 		Collection<KaleoTaskAssignment> configuredKaleoTaskAssignments =
 			kaleoTask.getKaleoTaskAssignments();
 
@@ -110,9 +112,17 @@ public class TaskNodeExecutor extends BaseNodeExecutor {
 		for (KaleoTaskAssignment configuredKaleoTaskAssignment :
 				configuredKaleoTaskAssignments) {
 
+			String[] assigneeScriptRequiredContexts = StringUtil.split(
+				configuredKaleoTaskAssignment.
+					getAssigneeScriptRequiredContexts());
+
+			ClassLoader[] classLoaders = ClassLoaderUtil.getClassLoaders(
+				assigneeScriptRequiredContexts);
+
 			Collection<KaleoTaskAssignment> calculatedKaleoTaskAssignments =
 				_taskAssignmentSelector.calculateTaskAssignments(
-					configuredKaleoTaskAssignment, executionContext);
+					configuredKaleoTaskAssignment, executionContext,
+					classLoaders);
 
 			kaleoTaskAssignments.addAll(calculatedKaleoTaskAssignments);
 		}
@@ -226,7 +236,7 @@ public class TaskNodeExecutor extends BaseNodeExecutor {
 			getOrganizationKaleoTaskAssignments(
 				Collection<KaleoTaskAssignment> kaleoTaskAssignments,
 				ExecutionContext executionContext)
-		throws SystemException, PortalException {
+		throws PortalException, SystemException {
 
 		long userId = executionContext.getKaleoInstanceToken().getUserId();
 

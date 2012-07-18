@@ -101,13 +101,13 @@ public class InviteMembersPortlet extends MVCPortlet {
 		String createAccountURL = PortalUtil.getCreateAccountURL(
 			PortalUtil.getHttpServletRequest(actionRequest), themeDisplay);
 
-		serviceContext.setAttribute("createAccountURL", createAccountURL);
-
 		createAccountURL = HttpUtil.addParameter(
 			createAccountURL, "redirect", portletURL.toString());
 
-		String loginURL = themeDisplay.getPortalURL() +
-			themeDisplay.getURLSignIn();
+		serviceContext.setAttribute("createAccountURL", createAccountURL);
+
+		String loginURL =
+			themeDisplay.getPortalURL() + themeDisplay.getURLSignIn();
 
 		loginURL = HttpUtil.addParameter(
 			loginURL, "redirect", portletURL.toString());

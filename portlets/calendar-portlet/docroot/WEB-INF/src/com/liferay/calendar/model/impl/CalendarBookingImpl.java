@@ -17,19 +17,17 @@ package com.liferay.calendar.model.impl;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.model.CalendarResource;
+import com.liferay.calendar.notification.NotificationType;
+import com.liferay.calendar.recurrence.Recurrence;
+import com.liferay.calendar.recurrence.RecurrenceSerializer;
 import com.liferay.calendar.service.CalendarBookingLocalServiceUtil;
 import com.liferay.calendar.service.CalendarLocalServiceUtil;
 import com.liferay.calendar.service.CalendarResourceLocalServiceUtil;
-import com.liferay.calendar.util.JCalendarUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.CalendarFactoryUtil;
-import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.TimeZoneUtil;
-import com.liferay.portal.model.User;
-import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.kernel.util.Validator;
 
-import java.util.Date;
+import java.util.List;
 
 /**
  * @author Eduardo Lundgren
@@ -50,6 +48,21 @@ public class CalendarBookingImpl extends CalendarBookingBaseImpl {
 			getCalendarResourceId());
 	}
 
+	public List<CalendarBooking> getChildCalendarBookings()
+		throws SystemException {
+
+		return CalendarBookingLocalServiceUtil.getChildCalendarBookings(
+			getCalendarBookingId());
+	}
+
+	public long getDuration() {
+		return getEndDate() - getStartDate();
+	}
+
+	public NotificationType getFirstReminderNotificationType() {
+		return NotificationType.parse(getFirstReminderType());
+	}
+
 	public CalendarBooking getParentCalendarBooking()
 		throws PortalException, SystemException {
 
@@ -57,12 +70,16 @@ public class CalendarBookingImpl extends CalendarBookingBaseImpl {
 			getParentCalendarBookingId());
 	}
 
-	public Date getUTCEndDate() throws PortalException, SystemException {
-		return getUTCDate(getEndDate());
+	public Recurrence getRecurrenceObj() {
+		if ((_recurrenceObj == null) && isRecurring()) {
+			_recurrenceObj = RecurrenceSerializer.deserialize(getRecurrence());
+		}
+
+		return _recurrenceObj;
 	}
 
-	public Date getUTCStartDate() throws PortalException, SystemException {
-		return getUTCDate(getStartDate());
+	public NotificationType getSecondReminderNotificationType() {
+		return NotificationType.parse(getSecondReminderType());
 	}
 
 	public boolean isMasterBooking() {
@@ -73,20 +90,14 @@ public class CalendarBookingImpl extends CalendarBookingBaseImpl {
 		return false;
 	}
 
-	protected Date getUTCDate(Date date)
-		throws PortalException, SystemException {
+	public boolean isRecurring() {
+		if (Validator.isNotNull(getRecurrence())) {
+			return true;
+		}
 
-		User user = UserLocalServiceUtil.getUser(getUserId());
-
-		java.util.Calendar userJCalendar = CalendarFactoryUtil.getCalendar(
-			user.getTimeZone());
-
-		userJCalendar.setTime(date);
-
-		java.util.Calendar utcUserJCalendar = JCalendarUtil.getJCalendar(
-			userJCalendar, TimeZoneUtil.getTimeZone(StringPool.UTC));
-
-		return utcUserJCalendar.getTime();
+		return false;
 	}
+
+	private Recurrence _recurrenceObj;
 
 }

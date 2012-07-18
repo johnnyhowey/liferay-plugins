@@ -25,9 +25,16 @@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %><%@
 taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-<%@ page import="com.liferay.calendar.model.Calendar" %><%@
+<%@ page import="com.liferay.calendar.CalendarResourceCodeException" %><%@
+page import="com.liferay.calendar.DuplicateCalendarResourceException" %><%@
+page import="com.liferay.calendar.model.Calendar" %><%@
 page import="com.liferay.calendar.model.CalendarBooking" %><%@
 page import="com.liferay.calendar.model.CalendarResource" %><%@
+page import="com.liferay.calendar.notification.NotificationTemplateType" %><%@
+page import="com.liferay.calendar.notification.NotificationType" %><%@
+page import="com.liferay.calendar.recurrence.Frequency" %><%@
+page import="com.liferay.calendar.recurrence.Recurrence" %><%@
+page import="com.liferay.calendar.recurrence.Weekday" %><%@
 page import="com.liferay.calendar.search.CalendarResourceDisplayTerms" %><%@
 page import="com.liferay.calendar.search.CalendarResourceSearch" %><%@
 page import="com.liferay.calendar.search.CalendarResourceSearchTerms" %><%@
@@ -44,6 +51,8 @@ page import="com.liferay.calendar.util.CalendarResourceUtil" %><%@
 page import="com.liferay.calendar.util.CalendarUtil" %><%@
 page import="com.liferay.calendar.util.ColorUtil" %><%@
 page import="com.liferay.calendar.util.JCalendarUtil" %><%@
+page import="com.liferay.calendar.util.NotificationUtil" %><%@
+page import="com.liferay.calendar.util.PortletPropsKeys" %><%@
 page import="com.liferay.calendar.util.PortletPropsValues" %><%@
 page import="com.liferay.calendar.util.WebKeys" %><%@
 page import="com.liferay.calendar.util.comparator.CalendarNameComparator" %><%@
@@ -62,8 +71,11 @@ page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.HttpUtil" %><%@
 page import="com.liferay.portal.kernel.util.OrderByComparator" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
+page import="com.liferay.portal.kernel.util.PrefsParamUtil" %><%@
+page import="com.liferay.portal.kernel.util.StringBundler" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
 page import="com.liferay.portal.kernel.util.StringUtil" %><%@
+page import="com.liferay.portal.kernel.util.UnicodeFormatter" %><%@
 page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.kernel.workflow.WorkflowConstants" %><%@
 page import="com.liferay.portal.model.Group" %><%@
@@ -110,11 +122,19 @@ if (themeDisplay.isSignedIn()) {
 	}
 }
 
-String dayViewHeaderDateFormat = preferences.getValue("dayViewHeaderDateFormat", "%d %A");
-String navigationHeaderDateFormat = preferences.getValue("navigationHeaderDateFormat", "%A - %d %b %Y");
+int defaultDuration = GetterUtil.getInteger(preferences.getValue("defaultDuration", null), 60);
+String defaultView = preferences.getValue("defaultView", "week");
 boolean isoTimeFormat = GetterUtil.getBoolean(preferences.getValue("isoTimeFormat", null));
+String timeZoneId = preferences.getValue("timeZoneId", user.getTimeZoneId());
+boolean usePortalTimeZone = GetterUtil.getBoolean(preferences.getValue("usePortalTimeZone", null));
+int weekStartsOn = GetterUtil.getInteger(preferences.getValue("weekStartsOn", null), 0);
 
+if (usePortalTimeZone) {
+	timeZoneId = user.getTimeZoneId();
+}
+
+TimeZone userTimeZone = TimeZone.getTimeZone(timeZoneId);
 TimeZone utcTimeZone = TimeZone.getTimeZone(StringPool.UTC);
 
-java.util.Calendar now = CalendarFactoryUtil.getCalendar(timeZone);
+java.util.Calendar now = CalendarFactoryUtil.getCalendar(userTimeZone);
 %>

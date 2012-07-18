@@ -186,6 +186,7 @@
 			<arg value="service.spring.shard.data.source.file=${basedir}/docroot/WEB-INF/src/META-INF/shard-data-source-spring.xml" />
 			<arg value="service.api.dir=${basedir}/docroot/WEB-INF/service" />
 			<arg value="service.impl.dir=${basedir}/docroot/WEB-INF/src" />
+			<arg value="service.json.file=${basedir}/docroot/js/service.js" />
 			<arg value="service.sql.dir=${basedir}/docroot/WEB-INF/sql" />
 			<arg value="service.sql.file=tables.sql" />
 			<arg value="service.sql.indexes.file=indexes.sql" />
@@ -319,6 +320,37 @@
 				<delete dir="${tstamp.value}" />
 			</sequential>
 		</for>
+	</target>
+
+	<target name="build-xsd">
+		<tstamp>
+			<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+		</tstamp>
+
+		<mkdir dir="${tstamp.value}" />
+
+		<path id="plugin-lib.classpath">
+			<fileset dir="${app.server.lib.portal.dir}" includes="xbean.jar" />
+			<fileset dir="docroot/WEB-INF/lib" includes="*.jar" />
+			<pathelement location="docroot/WEB-INF/classes" />
+		</path>
+
+		<taskdef classname="org.apache.xmlbeans.impl.tool.XMLBean" classpathref="portal.classpath" name="xmlbean" />
+
+		<xmlbean
+			classgendir="${tstamp.value}"
+			classpathref="plugin-lib.classpath"
+			srcgendir="${tstamp.value}"
+		>
+			<fileset dir="docroot/WEB-INF/xsd" includes="**/*.*" />
+		</xmlbean>
+
+		<zip
+			basedir="${tstamp.value}"
+			destfile="docroot/WEB-INF/lib/${plugin.name}-xbean.jar"
+		/>
+
+		<delete dir="${tstamp.value}" />
 	</target>
 
 	<target name="clean" description="clean">
@@ -743,7 +775,7 @@ Please find a solution that does not require portal-impl.jar.
 			<path>
 				<fileset
 					dir="."
-					includes="docroot/WEB-INF/wsdl/*.wsdl"
+					includes="docroot/WEB-INF/wsdl/*.wsdl,docroot/WEB-INF/wsdl/**/*.wsdl"
 				/>
 			</path>
 			<sequential>
@@ -755,6 +787,29 @@ Please find a solution that does not require portal-impl.jar.
 				>
 					<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
 					<jvmarg value="-Dxml.formatter.file=@{wsdl.full.path}" />
+					<jvmarg value="-Dxml.formatter.strip.comments=true" />
+				</java>
+			</sequential>
+		</for>
+	</target>
+
+	<target name="format-xsd">
+		<for param="xsd.full.path">
+			<path>
+				<fileset
+					dir="."
+					includes="docroot/WEB-INF/xsd/*.xsd,docroot/WEB-INF/xsd/**/*.xsd"
+				/>
+			</path>
+			<sequential>
+				<java
+					classname="com.liferay.portal.tools.XMLFormatter"
+					classpathref="portal.classpath"
+					fork="true"
+					newenvironment="true"
+				>
+					<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
+					<jvmarg value="-Dxml.formatter.file=@{xsd.full.path}" />
 					<jvmarg value="-Dxml.formatter.strip.comments=true" />
 				</java>
 			</sequential>
@@ -800,6 +855,7 @@ Please find a solution that does not require portal-impl.jar.
 			src="${zip.file.name}"
 		>
 			<patternset
+				excludes="${zip.excludes}"
 				includes="${zip.includes}"
 			/>
 		</unzip>

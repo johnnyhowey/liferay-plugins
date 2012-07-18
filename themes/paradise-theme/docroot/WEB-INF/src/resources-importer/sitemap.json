@@ -1,0 +1,85 @@
+{
+	"layouts": [
+		{
+			"columns": [
+				[
+					"Home Content.html"
+				],
+				[
+					"Home Carousel.xml"
+				]
+			],
+			"friendlyURL": "/home",
+			"name": "Home"
+		},
+		{
+			"columns": [
+				[
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Welcome.html",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "true",
+							"portletSetupUseCustomTitle": "true",
+							"portletSetupTitle_en_US": "Welcome"
+						}
+					}
+				],
+				[
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Luxurious Suites.html",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "true",
+							"portletSetupUseCustomTitle": "true",
+							"portletSetupTitle_en_US": "Luxurious Suites"
+						}
+					}
+				],
+				[
+					{
+						"portletId": "56",
+						"portletPreferences": {
+							"articleId": "Every Room Has.html",
+							"groupId": "${groupId}",
+							"portletSetupShowBorders": "true",
+							"portletSetupUseCustomTitle": "true",
+							"portletSetupTitle_en_US": "Every Room Has:"
+						}
+					}
+				],
+				[
+					"Starting At.html"
+				],
+				[
+					"Image Gallery.html"
+				],
+				[
+					"Reserve Your Own Luxury Suite.html"
+				]
+			],
+			"friendlyURL": "/reservations",
+			"layoutTemplateId": "3-3-3-columns",
+			"name": "Reservations"
+		},
+		{
+			"friendlyURL": "/rooms",
+			"name": "Rooms"
+		},
+		{
+			"friendlyURL": "/restaurant-bar",
+			"name": "Restaurant & Bar"
+		},
+		{
+			"friendlyURL": "/about-us",
+			"name": "About Us"
+		},
+		{
+			"friendlyURL": "/contact-us",
+			"name": "Contact Us"
+		}
+	],
+	"layoutTemplateId": "2_columns_ii"
+}

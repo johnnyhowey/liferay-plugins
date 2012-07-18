@@ -1,0 +1,11 @@
+<div id="social">
+	<ul>
+		#foreach($social in $socials.siblings)
+			<li>
+				<a class="tint ${social.data.toLowerCase()}" href="${social.link.data}" target="_blank">
+					<img alt="${social.data}" height="30px" src="${social.icon.data}" title="${social.data}" width="27px" />
+				</a>
+			</li>
+		#end
+	</ul>
+</div>

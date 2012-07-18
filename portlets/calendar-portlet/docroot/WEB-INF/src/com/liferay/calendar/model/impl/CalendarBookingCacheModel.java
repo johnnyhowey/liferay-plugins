@@ -35,7 +35,7 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 	Serializable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(49);
+		StringBundler sb = new StringBundler(53);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -75,8 +75,12 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 		sb.append(recurrence);
 		sb.append(", firstReminder=");
 		sb.append(firstReminder);
+		sb.append(", firstReminderType=");
+		sb.append(firstReminderType);
 		sb.append(", secondReminder=");
 		sb.append(secondReminder);
+		sb.append(", secondReminderType=");
+		sb.append(secondReminderType);
 		sb.append(", status=");
 		sb.append(status);
 		sb.append(", statusByUserId=");
@@ -151,20 +155,8 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 			calendarBookingImpl.setLocation(location);
 		}
 
-		if (startDate == Long.MIN_VALUE) {
-			calendarBookingImpl.setStartDate(null);
-		}
-		else {
-			calendarBookingImpl.setStartDate(new Date(startDate));
-		}
-
-		if (endDate == Long.MIN_VALUE) {
-			calendarBookingImpl.setEndDate(null);
-		}
-		else {
-			calendarBookingImpl.setEndDate(new Date(endDate));
-		}
-
+		calendarBookingImpl.setStartDate(startDate);
+		calendarBookingImpl.setEndDate(endDate);
 		calendarBookingImpl.setAllDay(allDay);
 
 		if (recurrence == null) {
@@ -175,7 +167,23 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 		}
 
 		calendarBookingImpl.setFirstReminder(firstReminder);
+
+		if (firstReminderType == null) {
+			calendarBookingImpl.setFirstReminderType(StringPool.BLANK);
+		}
+		else {
+			calendarBookingImpl.setFirstReminderType(firstReminderType);
+		}
+
 		calendarBookingImpl.setSecondReminder(secondReminder);
+
+		if (secondReminderType == null) {
+			calendarBookingImpl.setSecondReminderType(StringPool.BLANK);
+		}
+		else {
+			calendarBookingImpl.setSecondReminderType(secondReminderType);
+		}
+
 		calendarBookingImpl.setStatus(status);
 		calendarBookingImpl.setStatusByUserId(statusByUserId);
 
@@ -216,8 +224,10 @@ public class CalendarBookingCacheModel implements CacheModel<CalendarBooking>,
 	public long endDate;
 	public boolean allDay;
 	public String recurrence;
-	public int firstReminder;
-	public int secondReminder;
+	public long firstReminder;
+	public String firstReminderType;
+	public long secondReminder;
+	public String secondReminderType;
 	public int status;
 	public long statusByUserId;
 	public String statusByUserName;
