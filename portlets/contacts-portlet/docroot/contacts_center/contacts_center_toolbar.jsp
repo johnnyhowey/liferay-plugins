@@ -73,7 +73,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		{
 			handler: function(event) {
-				<portlet:namespace />relationAction(event, '<portlet:actionURL name="requestSocialRelation"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_BI_CONNECTION) %>" /></portlet:actionURL>');
+				<portlet:namespace />relationAction(event, '<portlet:actionURL name="requestSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_BI_CONNECTION) %>" /></portlet:actionURL>');
 			},
 			icon: 'add-coworker',
 			id: '<portlet:namespace />addConnectionButton',
@@ -85,7 +85,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		{
 			handler: function(event) {
-				<portlet:namespace />relationAction(event, '<portlet:actionURL name="deleteSocialRelation"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_BI_CONNECTION) %>" /></portlet:actionURL>');
+				<portlet:namespace />relationAction(event, '<portlet:actionURL name="deleteSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_BI_CONNECTION) %>" /></portlet:actionURL>');
 			},
 			icon: 'remove-coworker',
 			id: '<portlet:namespace />removeConnectionButton',
@@ -97,7 +97,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		{
 			handler: function(event) {
-				<portlet:namespace />relationAction(event, '<portlet:actionURL name="addSocialRelation"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_FOLLOWER) %>" /></portlet:actionURL>');
+				<portlet:namespace />relationAction(event, '<portlet:actionURL name="addSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_FOLLOWER) %>" /></portlet:actionURL>');
 			},
 			icon: 'follow',
 			id: '<portlet:namespace />followButton',
@@ -109,7 +109,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		{
 			handler: function(event) {
-				<portlet:namespace />relationAction(event, '<portlet:actionURL name="deleteSocialRelation"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_FOLLOWER) %>" /></portlet:actionURL>');
+				<portlet:namespace />relationAction(event, '<portlet:actionURL name="deleteSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_FOLLOWER) %>" /></portlet:actionURL>');
 			},
 			icon: 'unfollow',
 			id: '<portlet:namespace />unfollowButton',
@@ -121,7 +121,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		{
 			handler: function(event) {
-				<portlet:namespace />relationAction(event, '<portlet:actionURL name="addSocialRelation"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_ENEMY) %>" /></portlet:actionURL>');
+				<portlet:namespace />relationAction(event, '<portlet:actionURL name="addSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_ENEMY) %>" /></portlet:actionURL>');
 			},
 			icon: 'block',
 			id: '<portlet:namespace />blockButton',
@@ -133,7 +133,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		{
 			handler: function(event) {
-				<portlet:namespace />relationAction(event, '<portlet:actionURL name="deleteSocialRelation"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_ENEMY) %>" /></portlet:actionURL>');
+				<portlet:namespace />relationAction(event, '<portlet:actionURL name="deleteSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_ENEMY) %>" /></portlet:actionURL>');
 			},
 			icon: 'unblock',
 			id: '<portlet:namespace />unblockButton',
