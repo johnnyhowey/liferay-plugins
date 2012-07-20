@@ -15,11 +15,6 @@
 --%>
 
 <aui:select changesContext="<%= submitOnChange %>" name="distributionScope" onChange='<%= submitOnChange ? renderResponse.getNamespace() + "selectDistributionScope(this.value);" : "" %>' showEmptyOption="<%= true %>">
-
-	<%
-	Group scopeGroup = themeDisplay.getScopeGroup();
-	%>
-
 	<c:choose>
 		<c:when test="<%= !scopeGroup.isUser() && GroupPermissionUtil.contains(permissionChecker, scopeGroup.getGroupId(), ActionKeys.MANAGE_ANNOUNCEMENTS) %>">
 			<aui:option label="<%= scopeGroup.getDescriptiveName(locale) %>" selected="<%= true %>" value="<%= PortalUtil.getClassNameId(Group.class) + StringPool.COMMA + scopeGroup.getGroupId() %>" />

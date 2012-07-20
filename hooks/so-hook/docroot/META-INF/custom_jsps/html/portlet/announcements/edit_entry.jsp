@@ -24,6 +24,8 @@ AnnouncementsEntry entry = (AnnouncementsEntry)request.getAttribute(WebKeys.ANNO
 long entryId = BeanParamUtil.getLong(entry, request, "entryId");
 
 String content = BeanParamUtil.getString(entry, request, "content");
+
+Group scopeGroup = themeDisplay.getScopeGroup();
 %>
 
 <aui:form method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveEntry();" %>'>

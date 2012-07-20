@@ -35,6 +35,8 @@ portletURL.setParameter("tabs1", tabs1);
 	<liferay-util:include page="/html/portlet/announcements/tabs1.jsp" />
 </c:if>
 
+<h3 class="announcement-heading"><liferay-ui:message key="announcements" /></h3>
+
 <c:choose>
 	<c:when test="<%= entryId > 0 %>">
 

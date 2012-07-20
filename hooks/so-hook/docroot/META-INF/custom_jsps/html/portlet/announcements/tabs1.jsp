@@ -21,15 +21,17 @@ String tabs1 = ParamUtil.getString(request, "tabs1", "entries");
 %>
 
 <c:if test="<%= PortletPermissionUtil.contains(permissionChecker, plid, PortletKeys.ANNOUNCEMENTS, ActionKeys.ADD_ENTRY) %>">
-	<div class="edit-controls">
-		<c:choose>
-			<c:when test='<%= tabs1.equals("entries") %>'>
-				<input type="button" value='<liferay-ui:message key="add-entry" />' onClick="location.href = '<portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/edit_entry" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>'" />
-				<input type="button" value='<liferay-ui:message key="manage-entries" />' onClick="location.href = '<portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="tabs1" value="manage-entries" /></portlet:renderURL>'" />
-			</c:when>
-			<c:when test='<%= tabs1.equals("manage-entries") %>'>
-				<input type="button" value='<liferay-ui:message key="entries" />' onClick="location.href = '<portlet:renderURL windowState="<%= WindowState.NORMAL.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>'" />
-			</c:when>
-		</c:choose>
+	<div class="controls">
+		<div class="controls-content">
+			<c:choose>
+				<c:when test='<%= tabs1.equals("entries") %>'>
+					<input type="button" value='<liferay-ui:message key="add-entry" />' onClick="location.href = '<portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/edit_entry" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>'" />
+					<input type="button" value='<liferay-ui:message key="manage-entries" />' onClick="location.href = '<portlet:renderURL windowState="<%= WindowState.MAXIMIZED.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="tabs1" value="manage-entries" /></portlet:renderURL>'" />
+				</c:when>
+				<c:when test='<%= tabs1.equals("manage-entries") %>'>
+					<input type="button" value='<liferay-ui:message key="entries" />' onClick="location.href = '<portlet:renderURL windowState="<%= WindowState.NORMAL.toString() %>"><portlet:param name="struts_action" value="/announcements/view" /><portlet:param name="redirect" value="<%= currentURL %>" /></portlet:renderURL>'" />
+				</c:when>
+			</c:choose>
+		</div>
 	</div>
 </c:if>
