@@ -312,7 +312,7 @@ a:focus .opens-new-window-accessible {
 
 	.profile-name {
 		font-weight: bold;
-		line-height: 1em;
+		line-height: 1.25em;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		width: 128px;
@@ -969,6 +969,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	a.group {
 		color: $red;
 	}
+
+	.taglib-page-iterator {
+		word-break: break-all;
+	}
 }
 
 .profile-page .so-portlet-activities {
@@ -1170,7 +1174,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		}
 	}
 
-	.results-header {
+	#_28_bookmarksEntriesSearchContainer .results-header {
 		display: none;
 	}
 }
@@ -1182,13 +1186,15 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	margin: 0px;
 
 	li {
-		background: url(@theme_image_path@/common/breadcrumbs_so.png) no-repeat scroll 100% 50% transparent;
+		background: url(../images/custom/so_breadcrumbs.png) no-repeat scroll 100% 50% transparent;
 		max-width: 50%;
 
 		a {
+			border-bottom: 1px solid $gray;
 			color: #34404F;
 			display: inline-block;
 			font-weight: bold;
+			margin-bottom: -1px;
 			padding: 7px 20px 7px 5px;
 
 			&:hover {
@@ -1249,10 +1255,12 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 
 	.date-selector, .event-selector {
 		float: left;
+		margin: 4px 10px;
 	}
 
 	.day-grid {
 		border-top: 1px solid #CCC;
+		clear: both;
 
 		.hour, .half-hour {
 			border-bottom: 1px dotted #EEE;
@@ -1270,6 +1278,17 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 			background: #EEE;
 			border: 1px solid #CCC;
 		}
+	}
+
+	p {
+		word-wrap: break-word;
+	}
+}
+
+.portlet-column-content-only {
+	.portlet-calendar .aui-column-content {
+		max-width: 550px;
+		padding: 10px;
 	}
 }
 
@@ -1353,6 +1372,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 
 	.contacts-profile .lfr-contact-grid-item {
 		padding-top: 20px;
+	}
+
+	.contacts-profile .user-information-column-1 {
+		float: none;
 	}
 
 	.social-relations {
@@ -1499,28 +1522,8 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		min-width: 200px;
 	}
 
-	.version-history .results-grid {
-		overflow: visible;
-
-		table {
-			background: #FFF;
-			position: relative;
-			width: 100%;
-			z-index: 1;
-
-			td, th {
-				overflow: hidden;
-				padding: 5px 5px;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-
-			&:hover td, th {
-				overflow: visible;
-				text-overflow: visible;
-				white-space: normal;
-			}
-		}
+	.version-history .results-grid .lfr-actions .lfr-trigger strong {
+		min-width: 16px;
 	}
 
 	.document-display-style.display-icon {
@@ -1721,8 +1724,8 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		padding: 0;
 	}
 
-	.threads-panel .lfr-actions.show-arrow.direction-left {
-		.lfr-trigger {
+	.message-boards-panels, .results-grid {
+		.lfr-actions.show-arrow.direction-left .lfr-trigger {
 			padding: 0;
 
 			strong {

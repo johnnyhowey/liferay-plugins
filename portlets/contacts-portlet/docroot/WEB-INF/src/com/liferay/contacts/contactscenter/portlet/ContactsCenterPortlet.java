@@ -1,15 +1,18 @@
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This file is part of Liferay Social Office. Liferay Social Office is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * Liferay Social Office is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 
 package com.liferay.contacts.contactscenter.portlet;
@@ -45,7 +48,6 @@ import com.liferay.portal.kernel.bean.BeanParamUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
@@ -53,7 +55,6 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
-import com.liferay.portal.kernel.util.JavaConstants;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -95,7 +96,6 @@ import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
-import javax.portlet.PortletConfig;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
@@ -505,6 +505,9 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			jsonObject.put("success", true);
 		}
 		catch (Exception e) {
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
 			String message = "your-request-failed-to-complete";
 
 			if (e instanceof AddressCityException) {
@@ -986,17 +989,6 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		ChannelHubManagerUtil.sendNotificationEvent(
 			socialRequest.getCompanyId(), socialRequest.getReceiverUserId(),
 			notificationEvent);
-	}
-
-	protected String translate(PortletRequest portletRequest, String key) {
-		PortletConfig portletConfig =
-			(PortletConfig)portletRequest.getAttribute(
-				JavaConstants.JAVAX_PORTLET_CONFIG);
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		return LanguageUtil.get(portletConfig, themeDisplay.getLocale(), key);
 	}
 
 	protected void updateAdditionalEmailAddresses(ActionRequest actionRequest)
