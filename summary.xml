@@ -15,21 +15,47 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>hooks/default-web-content-hook/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>mongodb-hook</artifact-id>
-		<name>MongoDB</name>
+		<name>MongoDB Expando Adapter</name>
 		<type>hook</type>
 		<tags>db, expando, ha, json, nosql, redundancy, sql</tags>
-		<short-description>This hook uses MongoDB to persist custom attributes.</short-description>
+		<short-description></short-description>
+		<long-description>This app replaces the backend storage system used for Liferay's "Expando" service framework to use MongoDB instead of the default SQL database used by the rest of Liferay. Many features in Liferay make use of Expandos (such as Document Data Lists and Custom User Attributes). If you need high performance in these areas, consider using MongoDB. MongoDB is an open source, document-oriented NoSQL database. MongoDB focuses on four main things: flexibility, power, speed, and ease of use. MongoDB stores data in JSON documents and contains built-in redundancy and high availability features. For more detail on MongoDB, visit http://mongodb.org. There are multiple portlets included in this app. For details about how to use the Knowledge Base, Consult the "Knowledge Base" section of the Liferay User Guide. The Liferay User Guide can be found at http://liferay.com/documentation. This app installs as a Liferay service.</long-description>
+		<change-log></change-log>
+		<page-url>http://www.liferay.com</page-url>
+		<author>Liferay, Inc.</author>
+		<licenses>LGPL</licenses>
+		<liferay-versions>6.2.0</liferay-versions>
+		<releng>
+			<bundle>false</bundle>
+			<category>Utility</category>
+			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>hooks/mongodb-hook/docroot/WEB-INF/releng/icons/90x90.png</icon>
+			<labs>true</labs>
+			<marketplace>true</marketplace>
+			<public>true</public>
+			<screenshot>hooks/mongodb-hook/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>hooks/mongodb-hook/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>hooks/mongodb-hook/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<supported>false</supported>
+		</releng>
+	</plugin>
+	<plugin>
+		<artifact-id>private-plugin-installer-hook</artifact-id>
+		<name>Private Plugin Installer</name>
+		<type>hook</type>
+		<tags></tags>
+		<short-description></short-description>
 		<long-description></long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
@@ -40,11 +66,10 @@
 			<bundle>false</bundle>
 			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -64,11 +89,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -88,11 +112,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -112,11 +135,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -136,11 +158,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -160,11 +181,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -182,14 +202,13 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Productivity</category>
+			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
-			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>false</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -198,7 +217,7 @@
 		<type>hook</type>
 		<tags>bookmarks, social, social bookmarks</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app adds additional social bookmarks to Liferay's built-in set of Social Bookmarks. These bookmarks can be used by custom apps, and are also used by Liferay's built-in apps such as its Blogs portlet. Social Bookmarks allow users to easily post a reference to Liferay content on their favorite social networking website. In addition, some websites offer counters that can immediately show users how many people have bookmarked a particular piece of user-generated content.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -208,21 +227,24 @@
 			<bundle>false</bundle>
 			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>hooks/social-bookmarks-hook/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>hooks/social-bookmarks-hook/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>hooks/social-bookmarks-hook/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>hooks/social-bookmarks-hook/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>1-2-1-columns-layouttpl</artifact-id>
-		<name>1-2-1 Columns Template</name>
+		<name>1-2-1 Columns Layout</name>
 		<type>layouttpl</type>
 		<tags>layout, template, ui</tags>
-		<short-description>This plugin is a 1-2-1 columns layout template.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation. This layout will appear in your Page Layouts once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -230,49 +252,25 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Utility</category>
+			<category>Templates</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>layouttpl/1-2-1-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>1-2-1-columns-layouttpl</artifact-id>
-		<name>1-2-1 Columns Templates</name>
-		<type>layouttpl</type>
-		<tags></tags>
-		<short-description>
-		This plugin is a 1-2-1 columns layout template.
-	</short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0+</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category>Utility</category>
-			<demo-url></demo-url>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>layouttpl/1-2-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>layouttpl/1-2-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>1-3-1-columns-layouttpl</artifact-id>
-		<name>1-3-1 Columns Template</name>
+		<name>1-3-1 Columns Layout</name>
 		<type>layouttpl</type>
 		<tags>layout, template, ui</tags>
-		<short-description>This plugin is a 1-3-1 columns layout template.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation. This layout will appear in your Page Layouts once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -280,49 +278,25 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Utility</category>
+			<category>Templates</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>layouttpl/1-3-1-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>1-3-1-columns-layouttpl</artifact-id>
-		<name>1-3-1 Columns Templates</name>
-		<type>layouttpl</type>
-		<tags></tags>
-		<short-description>
-		This plugin is a 1-3-1 columns layout template.
-	</short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0+</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category>Utility</category>
-			<demo-url></demo-url>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>layouttpl/1-3-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>layouttpl/1-3-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>1-3-2-columns-layouttpl</artifact-id>
-		<name>1-3-2 Columns Template</name>
+		<name>1-3-2 Columns Layout</name>
 		<type>layouttpl</type>
 		<tags>layout, template, ui</tags>
-		<short-description>This plugin is a 1-3-2 columns layout template.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation. This layout will appear in your Page Layouts once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -330,49 +304,25 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Utility</category>
+			<category>Templates</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>layouttpl/1-3-2-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>1-3-2-columns-layouttpl</artifact-id>
-		<name>1-3-2 Columns Templates</name>
-		<type>layouttpl</type>
-		<tags></tags>
-		<short-description>
-		This plugin is a 1-3-2 columns layout template.
-	</short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0+</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category>Utility</category>
-			<demo-url></demo-url>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>layouttpl/1-3-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>layouttpl/1-3-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>2-1-2-columns-layouttpl</artifact-id>
-		<name>2-1-2 Columns Template</name>
+		<name>2-1-2 Columns Layout</name>
 		<type>layouttpl</type>
 		<tags>layout, template, ui</tags>
-		<short-description>This plugin is a 2-1-2 columns layout template.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation. This layout will appear in your Page Layouts once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -380,49 +330,25 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Utility</category>
+			<category>Templates</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>layouttpl/2-1-2-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>2-1-2-columns-layouttpl</artifact-id>
-		<name>2-1-2 Columns Templates</name>
-		<type>layouttpl</type>
-		<tags></tags>
-		<short-description>
-		This plugin is a 2-1-2 columns layout template.
-	</short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0+</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category>Utility</category>
-			<demo-url></demo-url>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>layouttpl/2-1-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>layouttpl/2-1-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>3-2-3-columns-layouttpl</artifact-id>
-		<name>3-2-3 Columns Template</name>
+		<name>3-2-3 Columns Layout</name>
 		<type>layouttpl</type>
 		<tags>layout, template, ui</tags>
-		<short-description>This plugin is a 3-2-3 columns layout template.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation. This layout will appear in your Page Layouts once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -430,40 +356,16 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Utility</category>
+			<category>Templates</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>layouttpl/3-2-3-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>3-2-3-columns-layouttpl</artifact-id>
-		<name>3-2-3 Columns Templates</name>
-		<type>layouttpl</type>
-		<tags></tags>
-		<short-description>
-		This plugin is a 3-2-3 columns layout template.
-	</short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0+</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category>Utility</category>
-			<demo-url></demo-url>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>layouttpl/3-2-3-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>layouttpl/3-2-3-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -482,11 +384,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -506,11 +407,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -530,11 +430,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -554,11 +453,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -568,7 +466,7 @@
 		<type>portlet</type>
 		<tags>chat, friends, im, social</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>Liferay's Chat portlet provides a convenient way of allowing users to send each other instant messages when they are logged into a Liferay site. It appears as at the bottom of every page, and displays who is logged on, their statuses, and any chats the logged-in user has open. Users can also set audio alerts, and engage in multiple chats. Consult the “Chat” section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation. This app may appear at the bottom of the page.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -576,15 +474,16 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Communication</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/chat-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/chat-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/chat-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -597,27 +496,26 @@
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
+		<licenses>AGPL</licenses>
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Productivity</category>
+			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
-			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>ddl-form-portlet</artifact-id>
-		<name>Dynamic Data List Forms</name>
+		<name>Dynamic Data List Form</name>
 		<type>portlet</type>
 		<tags>ddl, dynamic data list, form, user form</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>A Dynamic Data List (DDL) is a user-defined collection of records, similar to a spreadsheet. The records in a Dynamic Data List are composed of various field types such as text, date, integer, check box, etc. These can be published as workflow-enabled forms that capture user information in different ways such as an RSVP, for tasks tracking, or for managing issues. This Dynamic Data List Form app allows you to display dynamic forms to users, allowing them to enter information in predefined lists. This app can also be configured to use a template to display the list in different ways depending on whether the user is viewing the entire list, or the details of a specific list record. Consult the “Dynamic Data Lists in Liferay�? section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -625,15 +523,17 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Productivity</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/ddl-form-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/ddl-form-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/ddl-form-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>portlets/ddl-form-portlet/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -642,7 +542,7 @@
 		<type>portlet</type>
 		<tags>bookmarks, digg, news, social</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app integrates with Digg, a social news website (http://digg.com). The app provides additional configuration, allowing users to select the types of news streams they wish to view, and configure various parameters (result limits, polling frequency, and others) to optimally retrieve and show news and social links from Digg. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -652,12 +552,13 @@
 			<bundle>false</bundle>
 			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>portlets/digg-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/digg-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -670,18 +571,17 @@
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
+		<licenses>AGPL</licenses>
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Productivity</category>
+			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
-			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -690,7 +590,7 @@
 		<type>portlet</type>
 		<tags>documents and media, flash, social, video</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This Flash app allows easy publishing of Adobe Flash content into Liferay. The Flash source file can be specified through a URL so it's possible to publish videos, presentation, games, from a remote website, or directly from Liferay's Documents and Media Gallery. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -698,15 +598,16 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/flash-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/flash-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/flash-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -714,8 +615,8 @@
 		<name>Google AdSense</name>
 		<type>portlet</type>
 		<tags>adsense, advertising, banners, google</tags>
-		<short-description>This plugin allows easy integration with Google AdSense.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>Google AdSense is a free, simple way for website publishers of all sizes to earn money by displaying targeted Google ads on their websites. AdSense also lets you provide Google search to your site users, while earning money by displaying Google ads on the search results pages. This app automatically displays Google Ads based on your AdSense account information and configuration. Options allow you to select your publisher and channel from which ads are served. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -723,14 +624,15 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/google-adsense-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
+			<screenshot>portlets/google-adsense-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/google-adsense-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -739,8 +641,8 @@
 		<name>Google Maps</name>
 		<type>portlet</type>
 		<tags>google, google maps, maps, social</tags>
-		<short-description>This plugin allows easy integration with Google Maps.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>This app allows you to place a customized Google Map on a Liferay page, with configuration options to change how the map is displayed. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -748,15 +650,16 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Productivity</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/google-maps-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
-			<labs>false</labs>
+			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/google-maps-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/google-maps-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -775,11 +678,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -788,8 +690,8 @@
 		<name>IP Geocoder</name>
 		<type>portlet</type>
 		<tags>geocoding, geoip, ip, ip geocoder, social, whois</tags>
-		<short-description>This plugin shows geocode IPs.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>This IP Geocoder app locates your geological position, often in conjunction with other apps, such as the Google Maps app. This app utilizes Max Mind's GeoIP City Database. IP geolocation can be performed by associating a geographic location with the Internet Protocol (IP) address of the user with a physical address. Geolocation usually works by automatically looking up an IP address on a WHOIS service and retrieving the registrant's physical address. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -797,14 +699,15 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/ip-geocoder-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
-			<marketplace>false</marketplace>
-			<parent-app></parent-app>
+			<marketplace>true</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
+			<screenshot>portlets/ip-geocoder-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/ip-geocoder-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -824,11 +727,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -838,7 +740,7 @@
 		<type>portlet</type>
 		<tags>faq, knowledge, knowledge base</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>Liferay's Knowledge Base app provides a means for creating and organizing articles within a site. The knowledge base is perfect for creating and organizing information more formally than in a wiki. For example, it can be used to organize and display professional product documentation. It's easy to set up the knowledge base with a workflow that requires articles to be approved before they are published. Additionally, it allows administrators to create article templates. Templates can be used to insure that certain kinds of articles possess a common structure and include certain kinds of information. Knowledge base articles can be categorized to make them easy to find. They can also be organized hierarchically to form complete books or guides. There are multiple portlets included in this app. For details about how to use the Knowledge Base, Consult the "Knowledge Base" section of the Liferay User Guide. The Liferay User Guide can be found at http://liferay.com/documentation. This app will appear in your Application menu and Control Panel once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -846,15 +748,18 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Productivity</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/knowledge-base-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
-			<labs>false</labs>
+			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<screenshot>portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/4.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -873,11 +778,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -887,7 +791,7 @@
 		<type>portlet</type>
 		<tags>collaboration, email, imap, mail, pop, social</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app enables your users to interact with their email using an easy to use, ubiquitous web interface. If your mail system supports the IMAP protocol, you can use this app to integrate your users' mail with the rest of your web site. You can also connect this app to a mail account provided by Google. The Mail app is a great way to integrate a familiar service with other the collaboration features that Liferay provides. This app will appear in your Application menu and Control Panel once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -895,15 +799,16 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Productivity</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/mail-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/mail-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/mail-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -922,12 +827,11 @@
 			<bundle>true</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -940,18 +844,17 @@
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
+		<licenses>AGPL</licenses>
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Productivity</category>
+			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
-			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -960,7 +863,7 @@
 		<type>portlet</type>
 		<tags>blog, feed, forum, message board, social, subscriptions, wiki</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app allows users to manage their subscriptions. Users can subscribe to various assets in Liferay, such as subscribing to a blog post, the comments of a wiki page, a message board category (or specific thread), and a host of other items. The purpose of subscriptions is to be notified when something happens related to the item you've subscribed to. For example, if you are subscribed to a message board category, you are notified when a new post or reply occurs within that category. The method of notification is configurable, but is usually in the form of an email sent to all users who have subscribed. There are multiple items that one can subscribe to in Liferay. For details about subscriptions, Consult the "Liferay Collaboration Suite" section of the Liferay User Guide. The Liferay User Guide can be found at http://liferay.com/documentation. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -970,12 +873,13 @@
 			<bundle>false</bundle>
 			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>portlets/my-subscriptions-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/my-subscriptions-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -984,7 +888,7 @@
 		<type>portlet</type>
 		<tags>gadget, netvibes, social, widget</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>Netvibes is a personalized dashboard publishing platform for the Web that includes digital life management, widget distribution services and brand observation rooms. This app acts as a "container" for Netvibes widgets, such that they can be "hosted" on Liferay and placed on individual pages within a Liferay site. This app allows you to select from the thousands of existing NetVibes widgets to display on your Liferay sites. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -994,21 +898,23 @@
 			<bundle>false</bundle>
 			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>portlets/netvibes-widget-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/netvibes-widget-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/netvibes-widget-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>opensocial-portlet</artifact-id>
-		<name>OpenSocial</name>
+		<name>OpenSocial Gadget</name>
 		<type>portlet</type>
 		<tags>gadget, opensocial, social, widget</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>OpenSocial is a framework designed for creating applications, called gadgets that function on any social networking site that supports them. There are many existing gadgets available, and anyone can create their own gadgets. With this app, you can integrate any OpenSocial gadget directly into a Liferay page, and you can easily manage which gadgets are currently in use or available. You can also create your own OpenSocial Gadget using the Liferay's OpenSocial development environment. Gadgets can be integrated into your portal like a portlet to be added or removed by users as desired. The OpenSocial Gadget portlet also allows you to change the permissions for who can view or edit the portlet, as well as options to share the contents of the portlet, just like you can with any other Liferay portlet. For more details about OpenSocial and Liferay, consult the "OpenSocial Integration" section of the Liferay User Guide. The Liferay User Guide can be found at http://liferay.com/documentation. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -1016,15 +922,18 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Communication</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/opensocial-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<screenshot>portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/4.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -1037,18 +946,17 @@
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
+		<licenses>AGPL</licenses>
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Productivity</category>
+			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
-			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>false</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -1067,11 +975,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1091,11 +998,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1115,12 +1021,11 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -1139,11 +1044,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1163,11 +1067,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1187,11 +1090,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1211,11 +1113,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1235,11 +1136,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1259,11 +1159,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1283,11 +1182,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1307,11 +1205,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1331,11 +1228,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1355,11 +1251,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1379,11 +1274,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1403,11 +1297,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1427,11 +1320,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1451,11 +1343,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1475,11 +1366,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1499,11 +1389,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1517,17 +1406,16 @@
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>SpringSource, Inc.</author>
-		<licenses>Apache</licenses>
+		<licenses>LGPL</licenses>
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1547,11 +1435,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1571,11 +1458,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1595,11 +1481,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1619,11 +1504,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1643,11 +1527,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1667,11 +1550,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1681,7 +1563,7 @@
 		<type>portlet</type>
 		<tags>collaboration, communication, office, so, social, social office, team</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>Liferay Social Office is a dynamic team workspace solution that provides holistic enhancement to the way you and your colleagues work together. By adapting today's most innovative social technologies to the unique needs of productivity and goal-driven enterprise teams, it enables an important shift in how and why communication happens. Key features include, but are not limited to: Documents: Shared document repository with Microsoft Office integration Communication: Team calendars, webmail, task management and contact management Collaboration: Integrated threaded discussions, blogs, and wikis with related content and federated search People: Searchable LinkedIn-style User Profiles with user tagging, user search, friends, and integrated chat</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -1691,12 +1573,16 @@
 			<bundle>false</bundle>
 			<category>Productivity</category>
 			<demo-url></demo-url>
+			<dependent-apps>chat-portlet, contacts-portlet, events-display-portlet, microblogs-portlet, private-messaging-portlet, resources-importer-web, so-hook, so-portlet, so-theme, so-welcome-theme, tasks-portlet, wysiwyg-portlet</dependent-apps>
+			<icon>portlets/so-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
 			<public>true</public>
-			<standalone-app>false</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/so-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/so-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>portlets/so-portlet/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<screenshot>portlets/so-portlet/docroot/WEB-INF/releng/screenshots/4.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -1715,12 +1601,13 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>false</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/social-coding-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/social-coding-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -1729,7 +1616,7 @@
 		<type>portlet</type>
 		<tags>activites, meetups, social, social bookmarks, social networking, summary</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app provides numerous portlets that provide enhanced social networking capabilities for users of Liferay sites, including: The Summary portlet functions differently depending on which kind of page it is added to, but in general it displays an overview of the community that it is placed in. The Wall portlet allows users to post messages on another user's page, similar to Facebook's wall. You must be friends with a user to post on their wall. Wall posts are visible to all users who are a friend of the respected user. The Wall portlet can only be added to a user's personal page. The activities portlet displays portal wide user activity, such as posting on message boards, creating wikis, and adding documents to the document library. The Requests portlet displays pending friends requests, in which you can accept or ignore them. This portlet can only be placed on a user's personal page. The Friends portlet is a social networking portlet for creating friend relationships in Liferay. The Members portlet displays all users who are members of the Community or Organization to which the Members portlet has been added. This is a good way to allow easy access to all members' personal pages. The Meetups portlet allows you to post events for which users can register. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -1737,15 +1624,21 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Communication</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/social-networking-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<screenshot>portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/4.jpg</screenshot>
+			<screenshot>portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/5.jpg</screenshot>
+			<screenshot>portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/6.jpg</screenshot>
+			<screenshot>portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/7.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -1754,7 +1647,7 @@
 		<type>portlet</type>
 		<tags>finance, stocks, ticker</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app provides a way to visualize the real-time stock price for a given set of stock ticker symbols. Users can enter custom lists to be displayed, or the portlet can be configured to be the same list for all users. Clicking on a stock ticker symbol or entering one in will display a detailed graph of historical values for the stock price of the given symbol. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -1762,15 +1655,16 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/stocks-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/stocks-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/stocks-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -1783,17 +1677,16 @@
 		<change-log></change-log>
 		<page-url>https://portlet-repository.dev.java.net/public/Download.html</page-url>
 		<author>Sun Microsystems, Inc.</author>
-		<licenses>CDDL</licenses>
+		<licenses>LGPL</licenses>
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1807,18 +1700,17 @@
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
+		<licenses>AGPL</licenses>
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Productivity</category>
+			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
-			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -1837,11 +1729,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1861,11 +1752,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1885,11 +1775,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1909,11 +1798,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1933,11 +1821,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1957,11 +1844,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -1981,11 +1867,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2005,11 +1890,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2029,11 +1913,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2053,11 +1936,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2077,11 +1959,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2101,11 +1982,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2125,11 +2005,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2149,11 +2028,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2173,11 +2051,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>false</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2197,11 +2074,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2221,11 +2097,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2245,21 +2120,20 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>twitter-portlet</artifact-id>
-		<name>Twitter Integration</name>
+		<name>Twitter</name>
 		<type>portlet</type>
 		<tags>activity, activity stream, social, tweet, twitter</tags>
-		<short-description>This plugin provides integration with Twitter. Every tweet is logged as an activity.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>This app integrates your Twitter timeline into Liferay's Activities framework so that your Tweets show up in your Liferay Activity Stream. Once installed, the app can be added to your private page and configured with your Twitter username. The app will periodically access your tweets through the Twitter API, and import them as Activities. You can view your tweets by adding the Activities portlet onto your personal public or private pages. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2267,15 +2141,15 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Communication</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/twitter-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/twitter-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2284,7 +2158,7 @@
 		<type>portlet</type>
 		<tags>social, video, vimeo</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app makes it easy to embed Vimeo videos into Liferay pages. The size, placement, and user options can be configured to optimize the visual appearance of the video and allow for things like full screen playback. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2292,15 +2166,17 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Communication</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/vimeo-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/vimeo-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/vimeo-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>portlets/vimeo-portlet/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2309,7 +2185,7 @@
 		<type>portlet</type>
 		<tags>utility, weather</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app provides a quick visual indication of weather across a configurable set of locations. Locations can be specified using a textual city name (such as "Los Angeles, CA" or "China"), or a postal code (such as 32701 in the U.S.). Links to a summary screen at weather.com are provided for each location. Temperature readings can be configured for Celsius or Fahrenheit. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2317,15 +2193,15 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/weather-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/weather-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2334,7 +2210,7 @@
 		<type>portlet</type>
 		<tags>csv, database, email, forms, web form</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>The web forms portlet is a tool that allows a web administrator to define a form to be published in the website. Users visiting the website can then fill the form which is then sent to a configured email address or saved (to file or to database). The title, introductory description of the form, email address, and many other options shown to the users are configurable through the portlet's configuration screen. It is possible to have multiple forms on the same page or spread across multiple pages. Saving options also include the ability to save as an external CSV (Comma-Separated Values) file, or save the values to a custom Database table for further processing. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2342,15 +2218,17 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Productivity</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/web-form-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
-			<labs>true</labs>
+			<labs>false</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/web-form-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/web-form-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>portlets/web-form-portlet/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2369,11 +2247,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2383,7 +2260,7 @@
 		<type>portlet</type>
 		<tags>navigation, wiki, wiki display</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app provides additional ways to visualize the structure of wiki contents. It provides two different views into a wiki, including a "Page" view and a "Tree" view. The Page View visually lays out the structure of a single wiki page, allowing users to quickly access different sections of a specific wiki page based on the header levels and other authoring capabilities of a wiki page. Each section is individual collapsible. The Tree View presents a hierarchical, expandable and collapsible view of the entire set of Wiki pages. Pages are shown below their "Parent" pages, and the depth of this view can be controlled through the configuration screen of the portlet. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2391,15 +2268,16 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/wiki-navigation-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/wiki-navigation-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/wiki-navigation-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2408,7 +2286,7 @@
 		<type>portlet</type>
 		<tags>portlet, wsrp</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>The Web Services for Remote Portlets (WSRP) specification defines a web service interface for accessing and interacting with interactive presentation-oriented web services in the form of portlets. Using this app, Liferay acts as a WSRP Producer, hosting portlets that will be consumed by other portal servers acting as WSRP Consumers. Liferay can also act as a WSRP Consumer, and host remote instances of portlets that exist on other portal servers that can act as a WSRP Producer. For details on how to use this app, visit http://www.liferay.com/community/wiki/-/wiki/Main/WSRP. This app will appear in your Control Panel once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2416,15 +2294,18 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/wsrp-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<screenshot>portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/4.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2443,12 +2324,12 @@
 			<bundle>false</bundle>
 			<category>Collaboration</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
 			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/wysiwyg-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2457,7 +2338,7 @@
 		<type>portlet</type>
 		<tags>social, video, youtube</tags>
 		<short-description></short-description>
-		<long-description></long-description>
+		<long-description>This app makes it easy to embed Youtube videos into Liferay pages. The size, placement, and user options can be configured to optimize the visual appearance of the video and allow for things like full screen playback. This app will appear in your Application menu once installed.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2465,87 +2346,16 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Communication</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>portlets/youtube-portlet/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>lithe-theme</artifact-id>
-		<name>Lithe</name>
-		<type>theme</type>
-		<tags></tags>
-		<short-description></short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category></category>
-			<demo-url></demo-url>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>modern-indigo-theme</artifact-id>
-		<name>Modern Indigo</name>
-		<type>theme</type>
-		<tags></tags>
-		<short-description></short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category></category>
-			<demo-url></demo-url>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>paradise-theme</artifact-id>
-		<name>Paradise</name>
-		<type>theme</type>
-		<tags></tags>
-		<short-description></short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category></category>
-			<demo-url></demo-url>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>portlets/youtube-portlet/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>portlets/youtube-portlet/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2553,25 +2363,21 @@
 		<name>Sample HTML4</name>
 		<type>theme</type>
 		<tags></tags>
-		<short-description>
-		This is a sample HTML4 theme with configuration set in
-		liferay-look-and-feel.xml.
-	</short-description>
+		<short-description></short-description>
 		<long-description></long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
 		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0+</liferay-versions>
+		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2580,25 +2386,21 @@
 		<name>Sample Styled Advanced</name>
 		<type>theme</type>
 		<tags></tags>
-		<short-description>
-		This is a sample styled theme with advanced configuration set in
-		liferay-look-and-feel.xml.
-	</short-description>
+		<short-description></short-description>
 		<long-description></long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
 		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0+</liferay-versions>
+		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2618,11 +2420,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2631,25 +2432,21 @@
 		<name>Sample Unstyled</name>
 		<type>theme</type>
 		<tags></tags>
-		<short-description>
-		This is a sample unstyled theme with configuration set in
-		liferay-look-and-feel.xml.
-	</short-description>
+		<short-description></short-description>
 		<long-description></long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
 		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0+</liferay-versions>
+		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2669,11 +2466,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2691,14 +2487,13 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Productivity</category>
+			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
-			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>false</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2715,14 +2510,13 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category>Productivity</category>
+			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>false</labs>
-			<marketplace>true</marketplace>
-			<parent-app>Social Office</parent-app>
+			<marketplace>false</marketplace>
 			<public>true</public>
-			<standalone-app>false</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2741,11 +2535,10 @@
 			<bundle>false</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>false</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
@@ -2765,12 +2558,103 @@
 			<bundle>true</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<labs>true</labs>
+			<marketplace>false</marketplace>
+			<public>true</public>
+			<supported>false</supported>
+		</releng>
+	</plugin>
+	<plugin>
+		<artifact-id>zoe-brochure-theme</artifact-id>
+		<name>Zoe Brochure</name>
+		<type>theme</type>
+		<tags></tags>
+		<short-description></short-description>
+		<long-description></long-description>
+		<change-log></change-log>
+		<page-url>http://www.liferay.com</page-url>
+		<author>Liferay, Inc.</author>
+		<licenses>LGPL</licenses>
+		<liferay-versions>6.2.0</liferay-versions>
+		<releng>
+			<bundle>false</bundle>
+			<category></category>
+			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<supported>false</supported>
+		</releng>
+	</plugin>
+	<plugin>
+		<artifact-id>zoe-healthcare-theme</artifact-id>
+		<name>Zoe Healthcare</name>
+		<type>theme</type>
+		<tags></tags>
+		<short-description></short-description>
+		<long-description></long-description>
+		<change-log></change-log>
+		<page-url>http://www.liferay.com</page-url>
+		<author>Liferay, Inc.</author>
+		<licenses>LGPL</licenses>
+		<liferay-versions>6.2.0</liferay-versions>
+		<releng>
+			<bundle>false</bundle>
+			<category></category>
+			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<labs>true</labs>
+			<marketplace>true</marketplace>
+			<public>true</public>
+			<supported>false</supported>
+		</releng>
+	</plugin>
+	<plugin>
+		<artifact-id>zoe-resort-theme</artifact-id>
+		<name>Zoe Resort</name>
+		<type>theme</type>
+		<tags></tags>
+		<short-description></short-description>
+		<long-description></long-description>
+		<change-log></change-log>
+		<page-url>http://www.liferay.com</page-url>
+		<author>Liferay, Inc.</author>
+		<licenses>LGPL</licenses>
+		<liferay-versions>6.2.0</liferay-versions>
+		<releng>
+			<bundle>false</bundle>
+			<category></category>
+			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<labs>true</labs>
+			<marketplace>true</marketplace>
+			<public>true</public>
+			<supported>false</supported>
+		</releng>
+	</plugin>
+	<plugin>
+		<artifact-id>zoe-tech-theme</artifact-id>
+		<name>Zoe Tech</name>
+		<type>theme</type>
+		<tags></tags>
+		<short-description></short-description>
+		<long-description></long-description>
+		<change-log></change-log>
+		<page-url>http://www.liferay.com</page-url>
+		<author>Liferay, Inc.</author>
+		<licenses>LGPL</licenses>
+		<liferay-versions>6.2.0</liferay-versions>
+		<releng>
+			<bundle>false</bundle>
+			<category></category>
+			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<labs>true</labs>
+			<marketplace>true</marketplace>
+			<public>true</public>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2778,33 +2662,34 @@
 		<name>Central Authentication Service</name>
 		<type>web</type>
 		<tags>authentication, cas, login, sso</tags>
-		<short-description>This is the Central Authentication Service plugin.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>The Central Authentication Service (CAS) is a single sign-on protocol for the web that permits a user to access multiple applications while providing their credentials (such as user id and password) only once. It also allows web applications to authenticate users without gaining access to a user's security credentials, such as a password. This app provides integration between Liferay and a CAS implementation, such that users can achieve Single Sign-On when visiting a Liferay site. Consult the "Managing Portal Settings" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation. This app will install to your application server or servlet container.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
-		<licenses>BSD</licenses>
+		<licenses>LGPL</licenses>
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Security</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>webs/cas-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>webs/cas-web/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>webs/cas-web/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>deployment-helper-web</artifact-id>
-		<name>Deployment Helper</name>
+		<name>Cluster Deployment Helper</name>
 		<type>web</type>
 		<tags>cluster, deployment, enterprise, ha, high availability, replication</tags>
-		<short-description>This plugin helps deploy other plugins within a cluster using the native application server deployment mechanisms.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>Liferay Portal is designed to power the simplest to most complex web sites, easily scaling to the size you need. Liferay works well in clusters of multiple machines (horizontal cluster) or in clusters of multiple VMs on a single machine (vertical cluster), or any mixture of the two. Once you have Liferay installed in more than one application server node, there are several optimizations that need to be made. When deploying apps to a Liferay cluster, each cluster must receive a copy of the app before the app's functionality will work across the cluster. This app helps deploy other apps within a cluster using the native application server deployment mechanisms. This app installs as a Liferay service.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2814,12 +2699,14 @@
 			<bundle>false</bundle>
 			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>webs/deployment-helper-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>webs/deployment-helper-web/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>webs/deployment-helper-web/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2827,8 +2714,8 @@
 		<name>Kaleo Workflow</name>
 		<type>web</type>
 		<tags>bi, business intelligence, designer, kaleo, workflow</tags>
-		<short-description>This plugin uses Kaleo as the workflow engine.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>This app provides the Kaleo Workflow engine, for use with Liferay Portal. In Greek, Kaleo means "called ones," which is appropriate for a workflow engine that calls users to participate in a process that has been designed for them. Kaleo workflow allows a user to define any number of simple to complex business processes/workflows, deploy them, and manage them through a portal interface. Those processes have knowledge of users, groups, and roles. You don't have to write a single line of code to accomplish this: all you have to do is create a single XML document. And if you're a Liferay EE customer, you get a graphical workflow designer, which gives you a point and click interface to create workflows. Simple workflows can be managed using the default configuration and GUI tools, while more complex workflows can be created to meet the workflow management needs of almost any portal. Consult the "Workflow" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation. This app installs as a Liferay service.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2836,15 +2723,17 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Productivity</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>webs/kaleo-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
-			<labs>true</labs>
+			<labs>false</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>webs/kaleo-web/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>webs/kaleo-web/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>webs/kaleo-web/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
@@ -2863,71 +2752,20 @@
 			<bundle>true</bundle>
 			<category></category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
 			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>server-manager-web</artifact-id>
-		<name>Server Manager</name>
+		<name>Remote IDE Connector</name>
 		<type>web</type>
 		<tags>debug, developer, eclipse, ide, liferay developer studio, remote, server</tags>
-		<short-description>This plugin allows remote management of Liferay plugins.</short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category></category>
-			<demo-url></demo-url>
-			<icon>webs/server-manager-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>solr-web</artifact-id>
-		<name>Solr Search Engine</name>
-		<type>web</type>
-		<tags>apache, lucene, search, seo, solr</tags>
-		<short-description>This plugin uses Solr as the search engine.</short-description>
-		<long-description></long-description>
-		<change-log></change-log>
-		<page-url>http://www.liferay.com</page-url>
-		<author>Liferay, Inc.</author>
-		<licenses>LGPL</licenses>
-		<liferay-versions>6.2.0</liferay-versions>
-		<releng>
-			<bundle>false</bundle>
-			<category></category>
-			<demo-url></demo-url>
-			<icon>webs/solr-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
-			<labs>true</labs>
-			<marketplace>true</marketplace>
-			<parent-app></parent-app>
-			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
-		</releng>
-	</plugin>
-	<plugin>
-		<artifact-id>theme-loader-web</artifact-id>
-		<name>Theme Loader</name>
-		<type>web</type>
-		<tags>theme, utility</tags>
-		<short-description>This is the Theme Loader plugin.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>This app provides remote development and deployment support from Liferay IDE. With this app, you can build Liferay projects in Liferay IDE or Liferay Developer Studio, and deploy the projects to a remote host that has this app installed. Liferay IDE is an extension for the Eclipse platform that supports development of app projects for the Liferay Portal platform. It is available as a set of Eclipse apps installable from an update-site. The latest version supports developing 5 Liferay app types: portlets, hooks, layout templates, themes, and EXT-style plug-ins. Liferay IDE requires the Eclipse Java EE developer package using either Galileo or Helios versions. For details on using Liferay IDE or Developer Studio, visit the "Liferay IDE" chapter of the Liferay User Guide, located at http://liferay.com/documentation. This app installs as a Liferay service.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2937,21 +2775,80 @@
 			<bundle>false</bundle>
 			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>webs/server-manager-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>webs/server-manager-web/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>webs/server-manager-web/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>webs/server-manager-web/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<screenshot>webs/server-manager-web/docroot/WEB-INF/releng/screenshots/4.jpg</screenshot>
+			<supported>false</supported>
+		</releng>
+	</plugin>
+	<plugin>
+		<artifact-id>solr-web</artifact-id>
+		<name>Solr Search Engine</name>
+		<type>web</type>
+		<tags>apache, lucene, search, seo, solr</tags>
+		<short-description></short-description>
+		<long-description>This app provides integration with Apache Solr, the popular open source enterprise search platform from the Apache Lucene project. Its major features include powerful full-text search, hit highlighting, faceted search, dynamic clustering, database integration, rich document (e.g., Word, PDF) handling, and geospatial search. Solr is highly scalable, providing distributed search and index replication, and it powers the search and navigation features of many of the world's largest internet sites. With this integration, your Liferay Portal will use Solr for indexing and searching. This app installs as a Liferay service.</long-description>
+		<change-log></change-log>
+		<page-url>http://www.liferay.com</page-url>
+		<author>Liferay, Inc.</author>
+		<licenses>LGPL</licenses>
+		<liferay-versions>6.2.0</liferay-versions>
+		<releng>
+			<bundle>false</bundle>
+			<category>Utility</category>
+			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>webs/solr-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
+			<labs>true</labs>
+			<marketplace>true</marketplace>
+			<public>true</public>
+			<screenshot>webs/solr-web/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>webs/solr-web/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>webs/solr-web/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<supported>false</supported>
+		</releng>
+	</plugin>
+	<plugin>
+		<artifact-id>theme-loader-web</artifact-id>
+		<name>Theme Loader</name>
+		<type>web</type>
+		<tags>theme, utility</tags>
+		<short-description>This is the Theme Loader plugin.</short-description>
+		<long-description>A theme loader is required to allow the LAR export and import mechanism to hot deploy themes at runtime even if the underlying application server does not support hot deploy. This app installs as a Liferay service.</long-description>
+		<change-log></change-log>
+		<page-url>http://www.liferay.com</page-url>
+		<author>Liferay, Inc.</author>
+		<licenses>LGPL</licenses>
+		<liferay-versions>6.2.0</liferay-versions>
+		<releng>
+			<bundle>false</bundle>
+			<category>Utility</category>
+			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
+			<icon>webs/theme-loader-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
+			<labs>true</labs>
+			<marketplace>true</marketplace>
+			<public>true</public>
+			<screenshot>webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<screenshot>webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/4.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<plugin>
 		<artifact-id>wurfl-web</artifact-id>
-		<name>WURFL Device Recognition Provider</name>
+		<name>Device Recognition Provider</name>
 		<type>web</type>
 		<tags>android, device, ios, mobile, tablet, rules</tags>
-		<short-description>This plugin uses WURFL for device detection. See http://wurfl.sourceforge.net.</short-description>
-		<long-description></long-description>
+		<short-description></short-description>
+		<long-description>This app enables Liferay to detect which mobile device or operating system is being used for any given request and alters the layout/rendering of pages based on the detected device. Once installed, you can define new mobile device rules and apply them to sites and individual pages. The proportion of mobile devices users browsing the web has been steadily increasing so it's important to be able to handle different kinds of devices appropriately. For instance, you can configure the look and feel of Liferay pages accessed by smart phone or tablet users differently than those accessed by PC users. Both sites and individual pages can be configured with any number of rule groups designed to describe a group of devices. It can contain one or more rules that describe a category of devices, such as all android devices or all iOS tablets. Rule groups can be prioritized to determine which one will be applied to a given page request. You can define as many rules as you need to classify all the devices you want to take actions on. This app installs as a Liferay service.</long-description>
 		<change-log></change-log>
 		<page-url>http://www.liferay.com</page-url>
 		<author>Liferay, Inc.</author>
@@ -2959,23 +2856,22 @@
 		<liferay-versions>6.2.0</liferay-versions>
 		<releng>
 			<bundle>false</bundle>
-			<category></category>
+			<category>Utility</category>
 			<demo-url></demo-url>
+			<dependent-apps></dependent-apps>
 			<icon>webs/wurfl-web/docroot/WEB-INF/releng/icons/90x90.png</icon>
 			<labs>true</labs>
 			<marketplace>true</marketplace>
-			<parent-app></parent-app>
 			<public>true</public>
-			<standalone-app>true</standalone-app>
-			<supported>true</supported>
+			<screenshot>webs/wurfl-web/docroot/WEB-INF/releng/screenshots/1.jpg</screenshot>
+			<screenshot>webs/wurfl-web/docroot/WEB-INF/releng/screenshots/2.jpg</screenshot>
+			<screenshot>webs/wurfl-web/docroot/WEB-INF/releng/screenshots/3.jpg</screenshot>
+			<supported>false</supported>
 		</releng>
 	</plugin>
 	<author>Liferay, Inc.</author>
 	<author>SpringSource, Inc.</author>
 	<author>Sun Microsystems, Inc.</author>
 	<license>AGPL</license>
-	<license>Apache</license>
-	<license>BSD</license>
-	<license>CDDL</license>
 	<license>LGPL</license>
 </plugins-summary>

@@ -30,10 +30,6 @@ a:focus .opens-new-window-accessible {
 	text-indent: 0;
 }
 
-.ie6 img {
-	position: static;
-}
-
 input[type=password], input[type=text], textarea, .aui-field-select select, .aui-textboxlistentry-holder {
 	background: #FFF;
 	border: 1px solid $gray-dark;
@@ -259,6 +255,22 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .ed
 
 /* ---------- Extras ---------- */
 
+html.ie, .ie body, .ie #loginPage {
+	height: 100%;
+}
+
+.ie #loginPage .login-holder .portlet {
+	border: 1px solid $gray;
+}
+
+.ie6 img {
+	position: static;
+}
+
+.ie9 #loginPage .portlet {
+	border-collapse: separate;
+}
+
 input[type=password], input[type=text], textarea, .aui-field-select select {
 	@include border-radius(5px);
 }
@@ -285,11 +297,9 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .lf
 	@include box-shadow(0 0 9px -3px #000, 0 20px 29px -22px rgba(0, 0, 0, 0.6));
 }
 
-
 #loginPage .portlet, #loginPage .portlet-login .navigation {
 	@include border-radius(4px);
 }
-
 
 .aui-panel-hd button, .aui-panel-hd .aui-button, .aui-panel-hd .aui-state-default, .aui-tab-content, .aui-textboxlistentry-holder .aui-field-input-text, .aui-toolbar-item, .aui-toolbar .aui-toolbar-item {
 	@include border-radius(0);
