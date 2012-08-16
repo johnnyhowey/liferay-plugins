@@ -1,0 +1,17 @@
+<div id="social">
+	<ul>
+		#foreach($social in $socials.siblings)
+			<li>
+				#if ($social.link.data != "")
+					<a class="tint $social.data.toLowerCase()" href="$social.link.data" target="_blank">
+				#end
+
+				<img alt="$social.data" height="30" src="$social.icon.data" title="$social.data" width="27" />
+
+				#if ($social.link.data != "")
+					</a>
+				#end
+			</li>
+		#end
+	</ul>
+</div>

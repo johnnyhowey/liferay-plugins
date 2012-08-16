@@ -14,6 +14,7 @@
 
 package com.liferay.wsrp.util;
 
+import com.liferay.portal.kernel.servlet.NonSerializableObjectHandler;
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -106,17 +107,23 @@ public class WSRPConsumerManagerFactory {
 			_wsrpConsumerManagers;
 
 		if (session != null) {
-			wsrpConsumerManagers =
-				(Map<String, WSRPConsumerManager>)
-					session.getAttribute(WebKeys.WSRP_CONSUMER_MANAGERS);
+			NonSerializableObjectHandler nonSerializableObjectHandler =
+				(NonSerializableObjectHandler)session.getAttribute(
+					WebKeys.WSRP_CONSUMER_MANAGERS);
 
-			if (wsrpConsumerManagers == null) {
-				wsrpConsumerManagers =
-					new ConcurrentHashMap<String, WSRPConsumerManager>();
+			if (nonSerializableObjectHandler == null) {
+				nonSerializableObjectHandler =
+					new NonSerializableObjectHandler(
+						new ConcurrentHashMap<String, WSRPConsumerManager>());
 
 				session.setAttribute(
-					WebKeys.WSRP_CONSUMER_MANAGERS, wsrpConsumerManagers);
+					WebKeys.WSRP_CONSUMER_MANAGERS,
+					nonSerializableObjectHandler);
 			}
+
+			wsrpConsumerManagers =
+				(Map<String, WSRPConsumerManager>)
+					nonSerializableObjectHandler.getValue();
 		}
 
 		WSRPConsumerManager wsrpConsumerManager = wsrpConsumerManagers.get(url);
