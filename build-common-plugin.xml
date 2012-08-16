@@ -43,6 +43,56 @@
 		</else>
 	</if>
 
+	<macrodef name="classpath-to-jar">
+		<attribute name="classpathref" />
+		<attribute name="jarfile" />
+
+		<sequential>
+
+			<!--
+			Windows chokes if the classpath is longer than 32 kb. But the
+			workaround only works for Ant 1.8 and above. See LPS-29085.
+			-->
+
+			<if>
+				<and>
+					<not>
+						<contains string="${ant.version}" substring="1.6" />
+					</not>
+					<not>
+						<contains string="${ant.version}" substring="1.7" />
+					</not>
+				</and>
+				<then>
+					<manifestclasspath
+						jarfile="@{jarfile}"
+						maxParentLevels="99"
+						property="manifest.classpath"
+					>
+						<classpath refid="@{classpathref}" />
+					</manifestclasspath>
+
+					<manifest file="@{jarfile}.manifest">
+						<attribute name="Class-Path" value="${manifest.classpath}" />
+					</manifest>
+
+					<jar
+						destfile="@{jarfile}"
+						manifest="@{jarfile}.manifest"
+					/>
+
+					<delete file="@{jarfile}.manifest" />
+
+					<var name="manifest.classpath" unset="true" />
+
+					<path id="@{classpathref}">
+						<fileset file="@{jarfile}" />
+					</path>
+				</then>
+			</if>
+		</sequential>
+	</macrodef>
+
 	<target name="all">
 		<antcall target="clean" />
 		<antcall target="deploy" />
@@ -152,6 +202,16 @@
 		</path>
 
 		<if>
+			<os family="windows" />
+			<then>
+				<classpath-to-jar
+					classpathref="service.classpath"
+					jarfile="build-service-classpath.jar"
+				/>
+			</then>
+		</if>
+
+		<if>
 			<not>
 				<isset property="service.input.file" />
 			</not>
@@ -199,6 +259,13 @@
 			<arg value="service.target.entity.name=${service.target.entity.name}" />
 		</java>
 
+		<if>
+			<os family="windows" />
+			<then>
+				<delete file="build-service-classpath.jar" />
+			</then>
+		</if>
+
 		<echo>${service.test.output}</echo>
 
 		<if>
@@ -241,6 +308,16 @@
 			<pathelement location="docroot/WEB-INF/classes" />
 		</path>
 
+		<if>
+			<os family="windows" />
+			<then>
+				<classpath-to-jar
+					classpathref="wsdd.classpath"
+					jarfile="build-wsdd-classpath.jar"
+				/>
+			</then>
+		</if>
+
 		<java
 			classname="com.liferay.portal.tools.WSDDBuilder"
 			classpathref="wsdd.classpath"
@@ -255,6 +332,13 @@
 			<arg value="wsdd.service.namespace=Plugin" />
 			<arg value="wsdd.output.path=docroot/WEB-INF/src/" />
 		</java>
+
+		<if>
+			<os family="windows" />
+			<then>
+				<delete file="build-wsdd-classpath.jar" />
+			</then>
+		</if>
 	</target>
 
 	<target name="build-wsdl">
@@ -448,6 +532,7 @@
 
 		<copy todir="docroot/WEB-INF/lib">
 			<fileset dir="${app.server.lib.portal.dir}" includes="${plugin.jars}" />
+			<fileset dir="${project.dir}/lib" includes="portal-compat-client.jar" />
 		</copy>
 
 		<if>

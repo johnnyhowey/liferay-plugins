@@ -1,0 +1,31 @@
+<div id="quoteBox">
+	#if ($title.data != "")
+		<h3>
+			$title.data
+		</h3>
+	#end
+
+	<div id="quoteBoxContainer">
+		#set ($count = 0)
+
+		#foreach ($quote-item in $quote.siblings)
+			<div class="quote-item quote-item-${count}">
+				#if ($quote-item.data != "")
+					<q class="quote">
+						<span class="first">&quot;</span>
+							$quote-item.data
+						<span class="last">&quot;</span>
+					</q>
+				#end
+
+				#if ($quote-item.author.data != "")
+					<div class="author">
+						- $quote-item.author.data
+					</div>
+				#end
+			</div>
+
+			#set ($count = $count + 1)
+		#end
+	</div>
+</div>
