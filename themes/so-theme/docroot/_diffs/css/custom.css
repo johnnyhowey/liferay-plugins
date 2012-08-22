@@ -1545,6 +1545,18 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	.aui-fieldset-content, .lfr-dynamic-uploader {
 		padding: 10px;
 	}
+
+	table .lfr-actions {
+		.lfr-trigger strong {
+			min-width: 0;
+			width: auto;
+		}
+
+		&.show-arrow.direction-down .lfr-trigger strong a {
+			background-position: 100% -3px;
+			padding: 2px 10px;
+		}
+	}
 }
 
 .portlet-document-library, .portlet-document-library-display {
@@ -1558,6 +1570,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 
 	.taglib-ratings.stars .aui-rating-content, .taglib-ratings.stars .liferay-rating-score {
 		min-width: 200px;
+	}
+
+	table.taglib-search-iterator {
+		table-layout: auto;
 	}
 
 	.version-history .results-grid .lfr-actions .lfr-trigger strong {
