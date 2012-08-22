@@ -38,9 +38,8 @@ a:focus .opens-new-window-accessible {
 	}
 }
 
-#content {
-	padding-left: 200px;
-	position: relative;
+#page-search {
+	display: inline-block;
 }
 
 #navigation {
@@ -49,6 +48,11 @@ a:focus .opens-new-window-accessible {
 		margin: 0;
 		padding: 0;
 	}
+}
+
+#content {
+	padding-left: 200px;
+	position: relative;
 }
 
 #so-sidebar .search input[type=image], .aui-dialog .sidebar {
@@ -99,4 +103,8 @@ a:focus .opens-new-window-accessible {
 			min-width: 200px;
 		}
 	}
+}
+
+#footer p {
+	padding-left: 210px;
 }
