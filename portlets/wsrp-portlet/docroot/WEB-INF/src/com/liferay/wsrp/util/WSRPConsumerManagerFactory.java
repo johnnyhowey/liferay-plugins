@@ -15,6 +15,7 @@
 package com.liferay.wsrp.util;
 
 import com.liferay.portal.kernel.util.AutoResetThreadLocal;
+import com.liferay.portal.kernel.util.TransientValue;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.wsrp.model.WSRPConsumer;
@@ -106,17 +107,20 @@ public class WSRPConsumerManagerFactory {
 			_wsrpConsumerManagers;
 
 		if (session != null) {
-			wsrpConsumerManagers =
-				(Map<String, WSRPConsumerManager>)
+			TransientValue<Map<String, WSRPConsumerManager>> transientValue =
+				(TransientValue<Map<String, WSRPConsumerManager>>)
 					session.getAttribute(WebKeys.WSRP_CONSUMER_MANAGERS);
 
-			if (wsrpConsumerManagers == null) {
-				wsrpConsumerManagers =
-					new ConcurrentHashMap<String, WSRPConsumerManager>();
+			if (transientValue == null) {
+				transientValue =
+					new TransientValue<Map<String, WSRPConsumerManager>>(
+						new ConcurrentHashMap<String, WSRPConsumerManager>());
 
 				session.setAttribute(
-					WebKeys.WSRP_CONSUMER_MANAGERS, wsrpConsumerManagers);
+					WebKeys.WSRP_CONSUMER_MANAGERS, transientValue);
 			}
+
+			wsrpConsumerManagers = transientValue.getValue();
 		}
 
 		WSRPConsumerManager wsrpConsumerManager = wsrpConsumerManagers.get(url);
