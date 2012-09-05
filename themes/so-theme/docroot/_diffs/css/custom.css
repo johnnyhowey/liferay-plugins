@@ -1482,7 +1482,6 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 
 	.document-library-breadcrumb {
 		border-bottom-width: 0;
-		padding: 0;
 	}
 
 	.breadcrumbs .last {
@@ -1493,7 +1492,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		margin-top: 0.2em;
 	}
 
-	.aui-column-content-first, .aui-column-content-last, .search-button-container .aui-column:before, .search-button-container .aui-column-content, .search-button-container .aui-column-content-center {
+	.aui-column-content-first, .aui-column-content-last, .document-library-breadcrumb, .search-button-container .aui-column:before, .search-button-container .aui-column-content, .search-button-container .aui-column-content-center {
 		padding: 0;
 	}
 
@@ -1546,7 +1545,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		padding: 10px;
 	}
 
-	table .lfr-actions {
+	table.taglib-search-iterator .lfr-actions {
 		.lfr-trigger strong {
 			min-width: 0;
 			width: auto;
