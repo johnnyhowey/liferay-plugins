@@ -40,6 +40,7 @@ import com.liferay.calendar.util.CalendarUtil;
 import com.liferay.calendar.util.JCalendarUtil;
 import com.liferay.calendar.util.WebKeys;
 import com.liferay.calendar.util.comparator.CalendarResourceNameComparator;
+import com.liferay.calendar.workflow.CalendarBookingWorkflowConstants;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -155,7 +156,10 @@ public class CalendarPortlet extends MVCPortlet {
 		try {
 			String resourceID = resourceRequest.getResourceID();
 
-			if (resourceID.equals("calendarResources")) {
+			if (resourceID.equals("calendarRenderingRules")) {
+				serveCalendarRenderingRules(resourceRequest, resourceResponse);
+			}
+			else if (resourceID.equals("calendarResources")) {
 				serveCalendarResources(resourceRequest, resourceResponse);
 			}
 			else if (resourceID.equals("exportCalendar")) {
@@ -280,13 +284,18 @@ public class CalendarPortlet extends MVCPortlet {
 		if (calendarResourceId <= 0) {
 			CalendarResourceServiceUtil.addCalendarResource(
 				serviceContext.getScopeGroupId(), null, 0,
-				PortalUUIDUtil.generate(), defaultCalendarId, code, nameMap,
-				descriptionMap, type, active, serviceContext);
+				PortalUUIDUtil.generate(), code, nameMap, descriptionMap, type,
+				active, serviceContext);
 		}
 		else {
 			CalendarResourceServiceUtil.updateCalendarResource(
-				calendarResourceId, defaultCalendarId, nameMap, descriptionMap,
-				type, active, serviceContext);
+				calendarResourceId, nameMap, descriptionMap, type, active,
+				serviceContext);
+
+			if (defaultCalendarId > 0) {
+				CalendarLocalServiceUtil.updateCalendar(
+					defaultCalendarId, true);
+			}
 		}
 	}
 
@@ -448,7 +457,7 @@ public class CalendarPortlet extends MVCPortlet {
 			untilJCalendar.set(java.util.Calendar.YEAR, untilDateYear);
 		}
 
-		recurrence.setUntil(untilJCalendar);
+		recurrence.setUntilJCalendar(untilJCalendar);
 
 		List<Weekday> weekdays = new ArrayList<Weekday>();
 
@@ -505,6 +514,30 @@ public class CalendarPortlet extends MVCPortlet {
 		}
 
 		return false;
+	}
+
+	protected void serveCalendarRenderingRules(
+		ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long[] calendarIds = ParamUtil.getLongValues(
+			resourceRequest, "calendarIds");
+		int[] statuses = {
+			CalendarBookingWorkflowConstants.STATUS_APPROVED,
+			CalendarBookingWorkflowConstants.STATUS_MAYBE,
+			CalendarBookingWorkflowConstants.STATUS_PENDING
+		};
+		long startDate = ParamUtil.getLong(resourceRequest, "startDate");
+		long endDate = ParamUtil.getLong(resourceRequest, "endDate");
+		String ruleName = ParamUtil.getString(resourceRequest, "ruleName");
+
+		JSONObject jsonObject = CalendarUtil.getCalendarRenderingRules(
+			themeDisplay, calendarIds, statuses, startDate, endDate, ruleName);
+
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
 	}
 
 	protected void serveCalendarResources(

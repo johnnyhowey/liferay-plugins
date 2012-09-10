@@ -36,10 +36,16 @@
 			<hint-collection name="TEXTAREA" />
 		</field>
 		<field name="location" type="String" />
-		<field name="startDate" type="long" />
-		<field name="endDate" type="long" />
+		<field name="startDate" type="long">
+			<hint name="type">Date</hint>
+		</field>
+		<field name="endDate" type="long">
+			<hint name="type">Date</hint>
+		</field>
 		<field name="allDay" type="boolean" />
-		<field name="recurrence" type="String" />
+		<field name="recurrence" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
 		<field name="firstReminder" type="long" />
 		<field name="firstReminderType" type="String" />
 		<field name="secondReminder" type="long" />
@@ -62,7 +68,6 @@
 		<field name="classNameId" type="long" />
 		<field name="classPK" type="long" />
 		<field name="classUuid" type="String" />
-		<field name="defaultCalendarId" type="long" />
 		<field name="code" type="String" />
 		<field name="name" type="String" localized="true" />
 		<field name="description" type="String" localized="true">
