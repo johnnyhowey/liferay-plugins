@@ -40,6 +40,7 @@ import com.liferay.calendar.util.CalendarUtil;
 import com.liferay.calendar.util.JCalendarUtil;
 import com.liferay.calendar.util.WebKeys;
 import com.liferay.calendar.util.comparator.CalendarResourceNameComparator;
+import com.liferay.calendar.workflow.CalendarBookingWorkflowConstants;
 import com.liferay.portal.kernel.dao.search.SearchContainer;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -81,10 +82,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
@@ -155,7 +158,10 @@ public class CalendarPortlet extends MVCPortlet {
 		try {
 			String resourceID = resourceRequest.getResourceID();
 
-			if (resourceID.equals("calendarResources")) {
+			if (resourceID.equals("calendarRenderingRules")) {
+				serveCalendarRenderingRules(resourceRequest, resourceResponse);
+			}
+			else if (resourceID.equals("calendarResources")) {
 				serveCalendarResources(resourceRequest, resourceResponse);
 			}
 			else if (resourceID.equals("exportCalendar")) {
@@ -280,13 +286,18 @@ public class CalendarPortlet extends MVCPortlet {
 		if (calendarResourceId <= 0) {
 			CalendarResourceServiceUtil.addCalendarResource(
 				serviceContext.getScopeGroupId(), null, 0,
-				PortalUUIDUtil.generate(), defaultCalendarId, code, nameMap,
-				descriptionMap, type, active, serviceContext);
+				PortalUUIDUtil.generate(), code, nameMap, descriptionMap, type,
+				active, serviceContext);
 		}
 		else {
 			CalendarResourceServiceUtil.updateCalendarResource(
-				calendarResourceId, defaultCalendarId, nameMap, descriptionMap,
-				type, active, serviceContext);
+				calendarResourceId, nameMap, descriptionMap, type, active,
+				serviceContext);
+
+			if (defaultCalendarId > 0) {
+				CalendarLocalServiceUtil.updateCalendar(
+					defaultCalendarId, true);
+			}
 		}
 	}
 
@@ -384,9 +395,6 @@ public class CalendarPortlet extends MVCPortlet {
 	protected java.util.Calendar getJCalendar(
 		PortletRequest portletRequest, String name) {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		int month = ParamUtil.getInteger(portletRequest, name + "Month");
 		int day = ParamUtil.getInteger(portletRequest, name + "Day");
 		int year = ParamUtil.getInteger(portletRequest, name + "Year");
@@ -400,7 +408,7 @@ public class CalendarPortlet extends MVCPortlet {
 		}
 
 		return JCalendarUtil.getJCalendar(
-			year, month, day, hour, minute, 0, 0, themeDisplay.getTimeZone());
+			year, month, day, hour, minute, 0, 0, getTimeZone(portletRequest));
 	}
 
 	protected String getRecurrence(ActionRequest actionRequest) {
@@ -448,7 +456,7 @@ public class CalendarPortlet extends MVCPortlet {
 			untilJCalendar.set(java.util.Calendar.YEAR, untilDateYear);
 		}
 
-		recurrence.setUntil(untilJCalendar);
+		recurrence.setUntilJCalendar(untilJCalendar);
 
 		List<Weekday> weekdays = new ArrayList<Weekday>();
 
@@ -495,6 +503,24 @@ public class CalendarPortlet extends MVCPortlet {
 		};
 	}
 
+	protected TimeZone getTimeZone(PortletRequest portletRequest) {
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		PortletPreferences preferences = portletRequest.getPreferences();
+
+		User user = themeDisplay.getUser();
+
+		String timeZoneId = preferences.getValue(
+			"timeZoneId", user.getTimeZoneId());
+
+		if (Validator.isNull(timeZoneId)) {
+			timeZoneId = user.getTimeZoneId();
+		}
+
+		return TimeZone.getTimeZone(timeZoneId);
+	}
+
 	@Override
 	protected boolean isSessionErrorException(Throwable cause) {
 		if (cause instanceof CalendarResourceCodeException ||
@@ -505,6 +531,30 @@ public class CalendarPortlet extends MVCPortlet {
 		}
 
 		return false;
+	}
+
+	protected void serveCalendarRenderingRules(
+		ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+			throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long[] calendarIds = ParamUtil.getLongValues(
+			resourceRequest, "calendarIds");
+		int[] statuses = {
+			CalendarBookingWorkflowConstants.STATUS_APPROVED,
+			CalendarBookingWorkflowConstants.STATUS_MAYBE,
+			CalendarBookingWorkflowConstants.STATUS_PENDING
+		};
+		long startDate = ParamUtil.getLong(resourceRequest, "startDate");
+		long endDate = ParamUtil.getLong(resourceRequest, "endDate");
+		String ruleName = ParamUtil.getString(resourceRequest, "ruleName");
+
+		JSONObject jsonObject = CalendarUtil.getCalendarRenderingRules(
+			themeDisplay, calendarIds, statuses, startDate, endDate, ruleName);
+
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
 	}
 
 	protected void serveCalendarResources(
@@ -522,7 +572,11 @@ public class CalendarPortlet extends MVCPortlet {
 
 		List<CalendarResource> calendarResources =
 			CalendarResourceServiceUtil.search(
-				themeDisplay.getCompanyId(), new long[0],
+				themeDisplay.getCompanyId(),
+				new long[] {
+					themeDisplay.getCompanyGroupId(),
+					themeDisplay.getScopeGroupId()
+				},
 				new long[] {classNameId}, keywords, true, true, 0,
 				SearchContainer.DEFAULT_DELTA,
 				new CalendarResourceNameComparator());
