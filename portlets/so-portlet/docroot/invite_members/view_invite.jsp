@@ -57,24 +57,19 @@
 						<%
 						User defaultUser = UserLocalServiceUtil.getDefaultUser(layout.getCompanyId());
 
-						List<User> allCompanyUsers = UserLocalServiceUtil.getCompanyUsers(layout.getCompanyId(),
-																							QueryUtil.ALL_POS,
-																							QueryUtil.ALL_POS);
+						List<User> allCompanyUsers = UserLocalServiceUtil.getCompanyUsers(layout.getCompanyId(), QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
 						List<User> usersInGroupList = UserLocalServiceUtil.getGroupUsers(layout.getGroupId());
-						Set<User> usersInGroup = new HashSet<User>(usersInGroupList);
+						Set<User> usersInGroup = new HashSet<User>(UserLocalServiceUtil.getGroupUsers(layout.getGroupId());
 
 						List<User> inviteUsers = new ArrayList<User>(allCompanyUsers.size() - usersInGroupList.size());
 
 						for (User curUser : allCompanyUsers) {
-							if(!curUser.equals(defaultUser)
-									&& curUser.getStatus() == WorkflowConstants.STATUS_APPROVED
-									&& !usersInGroup.contains(curUser)) {
-
+							if(!curUser.equals(defaultUser) && (curUser.getStatus() == WorkflowConstants.STATUS_APPROVED) && (!usersInGroup.contains(curUser))) {
 								inviteUsers.add(curUser);
 							}
 						}
-							
+
 						Collections.sort(inviteUsers, new UserFirstNameComparator(true));
 
 						if (!inviteUsers.isEmpty()) {
