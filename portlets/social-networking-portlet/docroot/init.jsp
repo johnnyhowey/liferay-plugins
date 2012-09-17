@@ -82,6 +82,7 @@ page import="com.liferay.socialnetworking.model.WallEntry" %><%@
 page import="com.liferay.socialnetworking.service.MeetupsEntryLocalServiceUtil" %><%@
 page import="com.liferay.socialnetworking.service.MeetupsRegistrationLocalServiceUtil" %><%@
 page import="com.liferay.socialnetworking.service.WallEntryLocalServiceUtil" %><%@
+page import="com.liferay.socialnetworking.util.PortletKeys" %><%@
 page import="com.liferay.socialnetworking.util.PortletPropsValues" %><%@
 page import="com.liferay.util.portlet.PortletProps" %>
 
@@ -96,6 +97,7 @@ page import="java.util.List" %>
 <%@ page import="javax.portlet.ActionRequest" %><%@
 page import="javax.portlet.PortletPreferences" %><%@
 page import="javax.portlet.PortletURL" %><%@
+page import="javax.portlet.ResourceURL" %><%@
 page import="javax.portlet.WindowState" %>
 
 <portlet:defineObjects />

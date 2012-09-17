@@ -77,6 +77,7 @@ page import="com.liferay.portal.service.permission.PortalPermissionUtil" %><%@
 page import="com.liferay.portal.util.PortalUtil" %><%@
 page import="com.liferay.portal.util.comparator.ContactFirstNameComparator" %><%@
 page import="com.liferay.portal.util.comparator.RoleNameComparator" %><%@
+page import="com.liferay.portal.util.comparator.UserFirstNameComparator" %><%@
 page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %><%@
 page import="com.liferay.portlet.PortletURLFactoryUtil" %><%@
 page import="com.liferay.portlet.expando.model.ExpandoBridge" %><%@
@@ -102,9 +103,12 @@ page import="com.liferay.so.util.RoleConstants" %>
 
 <%@ page import="java.util.ArrayList" %><%@
 page import="java.util.Calendar" %><%@
+page import="java.util.Collections" %><%@
 page import="java.util.Date" %><%@
+page import="java.util.HashSet" %><%@
 page import="java.util.LinkedHashMap" %><%@
-page import="java.util.List" %>
+page import="java.util.List" %><%@
+page import="java.util.Set" %>
 
 <%@ page import="javax.portlet.PortletMode" %><%@
 page import="javax.portlet.PortletPreferences" %><%@

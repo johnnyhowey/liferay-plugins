@@ -16,6 +16,7 @@
 
 <%
 int count = 0;
+String exceptionDatesString = StringPool.BLANK;
 Frequency frequency = null;
 int interval = 0;
 java.util.Calendar untilJCalendar = startDateJCalendar;
@@ -29,8 +30,8 @@ if (recurrence != null) {
 	frequency = recurrence.getFrequency();
 	interval = recurrence.getInterval();
 
-	if (recurrence.getUntil() != null) {
-		untilJCalendar = recurrence.getUntil();
+	if (recurrence.getUntilJCalendar() != null) {
+		untilJCalendar = recurrence.getUntilJCalendar();
 	}
 
 	weekdays = recurrence.getWeekdays();
@@ -39,13 +40,33 @@ if (recurrence != null) {
 		afterChecked = true;
 	}
 
-	if (recurrence.getUntil() != null) {
+	if (recurrence.getUntilJCalendar() != null) {
 		onChecked = true;
 	}
+
+	StringBundler sb = new StringBundler();
+
+	List<java.util.Calendar> exceptionJCalendars = recurrence.getExceptionJCalendars();
+
+	Iterator<java.util.Calendar> iterator = exceptionJCalendars.iterator();
+
+	while (iterator.hasNext()) {
+		java.util.Calendar exceptionJCalendar = iterator.next();
+
+		sb.append(exceptionJCalendar.getTimeInMillis());
+
+		if (it.hasNext()) {
+			sb.append(StringPool.COMMA);
+		}
+	}
+
+	exceptionDatesString = sb.toString();
 }
 %>
 
 <table class="calendar-portlet-recurrence-container aui-helper-hidden" id="<portlet:namespace />recurrenceContainer">
+	<aui:input name="exceptionDates" type="hidden" value="<%= exceptionDatesString %>" />
+
 	<tbody>
 		<tr>
 			<th class="calendar-portlet-recurrence-title">
@@ -104,7 +125,7 @@ if (recurrence != null) {
 					for (Weekday weekday : Weekday.values()) {
 					%>
 
-						<aui:input checked="<%= weekdays.contains(weekday) %>" data-weekday='<%= LanguageUtil.get(pageContext, "weekday." + weekday.getValue()) %>' label="<%= weekday.getValue() %>" name='<%= weekday.getValue() %>' type="checkbox" />
+						<aui:input checked="<%= weekdays.contains(weekday) %>" data-weekday='<%= LanguageUtil.get(pageContext, "weekday." + weekday.getValue()) %>' label="<%= weekday.getValue() %>" name="<%= weekday.getValue() %>" type="checkbox" />
 
 					<%
 					}

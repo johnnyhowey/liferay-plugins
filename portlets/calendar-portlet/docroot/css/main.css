@@ -274,8 +274,14 @@
 	}
 }
 
-.calendar-portlet-wrapper .aui-scheduler-event-disabled {
-	@include opacity(0.8);
+.calendar-portlet-wrapper {
+	.aui-scheduler-event-all-day .aui-scheduler-event-title {
+		display: none;
+	}
+
+	.aui-scheduler-event-disabled {
+		@include opacity(0.8);
+	}
 }
 
 .calendar-booking-invitations .aui-field-label {
@@ -304,4 +310,28 @@
 
 .calendar-portlet-time-zone-field .aui-field .aui-field-content {
 	margin: 0;
+}
+
+.calendar-portlet-mini-calendar {
+	padding-bottom: 10px;
+}
+
+.calendar-portlet-confirmation-text {
+	padding: 5px;
+}
+
+.yui3-skin-sam .yui3-calendar-day.lfr-busy-day, .yui3-skin-sam .yui3-calendar-prevmonth-day.lfr-busy-day, .yui3-skin-sam .yui3-calendar-nextmonth-day.lfr-busy-day {
+	text-decoration: underline;
+}
+
+.aui-dialog-iframe-popup .calendar-portlet .aui-fieldset {
+	margin-bottom: 2em;
+}
+
+.calendar-booking-invitations {
+	min-height: 110px;
+}
+
+.calendar-booking-reminders {
+	min-height: 52px;
 }

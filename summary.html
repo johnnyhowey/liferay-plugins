@@ -47,6 +47,10 @@
 									sortable: true
 								},
 								{
+									key: 'Support URL',
+									sortable: true
+								},
+								{
 									key: 'Author',
 									sortable: true
 								},
@@ -63,19 +67,15 @@
 									sortable: true
 								},
 								{
+									key: 'Dependent Apps',
+									sortable: true
+								},
+								{
 									key: 'Labs',
 									sortable: true
 								},
 								{
 									key: 'Marketplace',
-									sortable: true
-								},
-								{
-									key: 'Standalone App',
-									sortable: true
-								},
-								{
-									key: 'Parent App',
 									sortable: true
 								},
 								{
@@ -114,6 +114,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -123,6 +124,8 @@
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '<img height="50" src="hooks/default-web-content-hook/docroot/WEB-INF/releng/icons/90x90.png">',
 
@@ -132,18 +135,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'Yes',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -152,20 +150,21 @@
 		
 		{
 			'Artifact ID': 'mongodb-hook',
-			'Name': 'MongoDB',
+			'Name': 'MongoDB Expando Adapter',
 			'Type': 'hook',
 			'Category': 'Utility',
 			'Tags': 'db, expando, ha, json, nosql, redundancy, sql',
 
 			'Short Description':
-				'This hook uses MongoDB to persist custom attributes.',
+				'',
 
 			'Long Description':
-				'',
+				'This app replaces the backend storage system used for Liferay\'s "Expando" service framework to use MongoDB instead of the default SQL database used by the rest of Liferay. Many features in Liferay make use of Expandos (such as Document Data Lists and Custom User Attributes). If you need high performance in these areas, consider using MongoDB. MongoDB is an open source, document-oriented NoSQL database. MongoDB focuses on four main things: flexibility, power, speed, and ease of use. MongoDB stores data in JSON documents and contains built-in redundancy and high availability features. For more detail on MongoDB, visit http://mongodb.org. There are multiple portlets included in this app. For details about how to use the Knowledge Base, Consult the "Knowledge Base" section of the Liferay User Guide. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This app installs as a Liferay service.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -176,7 +175,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="hooks/mongodb-hook/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -184,15 +185,60 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
+		'Public':
+			'Yes',
+
+		'Screenshots': '<nobr><a target="_blank" href="hooks/mongodb-hook/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="hooks/mongodb-hook/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="hooks/mongodb-hook/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="hooks/mongodb-hook/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="hooks/mongodb-hook/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="hooks/mongodb-hook/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
+
+		'Supported':
+			'No'
+	
+		}
+
+		
+			,
+		
+		{
+			'Artifact ID': 'private-plugin-installer-hook',
+			'Name': 'Private Plugin Installer',
+			'Type': 'hook',
+			'Category': 'Utility',
+			'Tags': 'ftp, hot deploy, installer, private, repository, ssh',
+
+			'Short Description':
+				'',
+
+			'Long Description':
+				'The Private Plugin Installer app allows developers and system administrators to hot deploy individual Liferay plugins using the Control Panel. It is a graphical front-end to the underlying Liferay plugin deployment and management mechanism, and eliminates the need to manually copy plugins into the underlying operating system\'s filesystem in order to hot deploy plugins (e.g. using FTP or SSH). It also enables the use of a private plugins repository.<br /><br />This app installs to the Plugins Installation tab in the Control Panel and adds a new sub-tab called "Private Plugins Installation". See the "Plugin Management" section of the Liferay User Guide for more details on setting up a plugin repository.<br /><br />This app will appear in your Control Panel once installed.',
+
+			'Change Log': '',
+			'Page URL': 'http://www.liferay.com',
+			'Demo URL': '',
+			'Support URL': '',
+			'Author': 'Liferay, Inc.',
+			'Licenses': 'LGPL',
+			'Liferay Versions': '6.2.0',
+
+			
+		'Bundle':
+			'No',
+
+		'Compatibility': '',
+
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="hooks/private-plugin-installer-hook/docroot/WEB-INF/releng/icons/90x90.png">',
+
+		'Labs':
+			'Yes',
+
+		'Marketplace':
+			'Yes',
 
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="hooks/private-plugin-installer-hook/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="hooks/private-plugin-installer-hook/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="hooks/private-plugin-installer-hook/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="hooks/private-plugin-installer-hook/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="hooks/private-plugin-installer-hook/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="hooks/private-plugin-installer-hook/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="hooks/private-plugin-installer-hook/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="hooks/private-plugin-installer-hook/docroot/WEB-INF/releng/screenshots/4.jpg"></a></nobr>',
 
 		'Supported':
 			'No'
@@ -218,6 +264,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -228,6 +275,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -236,15 +285,60 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
+		'Supported':
+			'No'
+	
+		}
+
+		
+			,
+		
+		{
+			'Artifact ID': 'sample-authverifier-hook',
+			'Name': 'Sample Authentication Verifier',
+			'Type': 'hook',
+			'Category': '',
+			'Tags': '',
+
+			'Short Description':
+				'',
+
+			'Long Description':
+				'',
+
+			'Change Log': '',
+			'Page URL': 'http://www.liferay.com',
+			'Demo URL': '',
+			'Support URL': '',
+			'Author': 'Liferay, Inc.',
+			'Licenses': 'LGPL',
+			'Liferay Versions': '',
+
+			
+		'Bundle':
+			'No',
+
+		'Compatibility': '',
+
+		'Dependent Apps': '',
+
+		'Icon': '',
+
+		'Labs':
 			'Yes',
+
+		'Marketplace':
+			'No',
+
+		'Public':
+			'Yes',
+
+		'Screenshots': '<nobr></nobr>',
 
 		'Supported':
 			'No'
@@ -270,6 +364,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -280,6 +375,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -288,15 +385,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -322,6 +414,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -332,6 +425,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -340,15 +435,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -374,6 +464,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -384,6 +475,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -392,15 +485,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -426,6 +514,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -436,6 +525,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -444,15 +535,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -466,7 +552,7 @@
 			'Artifact ID': 'so-hook',
 			'Name': 'Social Office',
 			'Type': 'hook',
-			'Category': 'Productivity',
+			'Category': '',
 			'Tags': 'collaboration, communication, office, so, social, social office, team',
 
 			'Short Description':
@@ -478,6 +564,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
@@ -488,26 +575,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'No',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': 'Social Office',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'No',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -525,11 +609,12 @@
 				'',
 
 			'Long Description':
-				'',
+				'This app adds additional social bookmarks to Liferay\'s built-in set of Social Bookmarks. These bookmarks can be used by custom apps, and are also used by Liferay\'s built-in apps such as its Blogs portlet. Social Bookmarks allow users to easily post a reference to Liferay content on their favorite social networking website. In addition, some websites offer counters that can immediately show users how many people have bookmarked a particular piece of user-generated content.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -540,7 +625,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="hooks/social-bookmarks-hook/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -548,18 +635,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="hooks/social-bookmarks-hook/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="hooks/social-bookmarks-hook/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="hooks/social-bookmarks-hook/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="hooks/social-bookmarks-hook/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="hooks/social-bookmarks-hook/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="hooks/social-bookmarks-hook/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -568,20 +650,21 @@
 		
 		{
 			'Artifact ID': '1-2-1-columns-layouttpl',
-			'Name': '1-2-1 Columns Template',
+			'Name': '1-2-1 Columns Layout',
 			'Type': 'layouttpl',
-			'Category': 'Utility',
+			'Category': 'Templates',
 			'Tags': 'layout, template, ui',
 
 			'Short Description':
-				'This plugin is a 1-2-1 columns layout template.',
+				'',
 
 			'Long Description':
-				'',
+				'Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This layout will appear in your Page Layouts once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -592,7 +675,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="layouttpl/1-2-1-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -600,70 +685,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="layouttpl/1-2-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="layouttpl/1-2-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="layouttpl/1-2-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="layouttpl/1-2-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
-	
-		}
-
-		
-			,
-		
-		{
-			'Artifact ID': '1-2-1-columns-layouttpl',
-			'Name': '1-2-1 Columns Templates',
-			'Type': 'layouttpl',
-			'Category': 'Utility',
-			'Tags': '',
-
-			'Short Description':
-				'This plugin is a 1-2-1 columns layout template.',
-
-			'Long Description':
-				'',
-
-			'Change Log': '',
-			'Page URL': 'http://www.liferay.com',
-			'Demo URL': '',
-			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0+',
-
-			
-		'Bundle':
-			'No',
-
-		'Compatibility': '',
-
-		'Icon': '',
-
-		'Labs':
-			'Yes',
-
-		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
-
-		'Public':
-			'Yes',
-
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
-
-		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -672,20 +700,21 @@
 		
 		{
 			'Artifact ID': '1-3-1-columns-layouttpl',
-			'Name': '1-3-1 Columns Template',
+			'Name': '1-3-1 Columns Layout',
 			'Type': 'layouttpl',
-			'Category': 'Utility',
+			'Category': 'Templates',
 			'Tags': 'layout, template, ui',
 
 			'Short Description':
-				'This plugin is a 1-3-1 columns layout template.',
+				'',
 
 			'Long Description':
-				'',
+				'Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This layout will appear in your Page Layouts once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -696,7 +725,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="layouttpl/1-3-1-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -704,70 +735,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="layouttpl/1-3-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="layouttpl/1-3-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="layouttpl/1-3-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="layouttpl/1-3-1-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
-	
-		}
-
-		
-			,
-		
-		{
-			'Artifact ID': '1-3-1-columns-layouttpl',
-			'Name': '1-3-1 Columns Templates',
-			'Type': 'layouttpl',
-			'Category': 'Utility',
-			'Tags': '',
-
-			'Short Description':
-				'This plugin is a 1-3-1 columns layout template.',
-
-			'Long Description':
-				'',
-
-			'Change Log': '',
-			'Page URL': 'http://www.liferay.com',
-			'Demo URL': '',
-			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0+',
-
-			
-		'Bundle':
-			'No',
-
-		'Compatibility': '',
-
-		'Icon': '',
-
-		'Labs':
-			'Yes',
-
-		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
-
-		'Public':
-			'Yes',
-
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
-
-		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -776,20 +750,21 @@
 		
 		{
 			'Artifact ID': '1-3-2-columns-layouttpl',
-			'Name': '1-3-2 Columns Template',
+			'Name': '1-3-2 Columns Layout',
 			'Type': 'layouttpl',
-			'Category': 'Utility',
+			'Category': 'Templates',
 			'Tags': 'layout, template, ui',
 
 			'Short Description':
-				'This plugin is a 1-3-2 columns layout template.',
+				'',
 
 			'Long Description':
-				'',
+				'Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This layout will appear in your Page Layouts once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -800,7 +775,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="layouttpl/1-3-2-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -808,70 +785,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="layouttpl/1-3-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="layouttpl/1-3-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="layouttpl/1-3-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="layouttpl/1-3-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
-	
-		}
-
-		
-			,
-		
-		{
-			'Artifact ID': '1-3-2-columns-layouttpl',
-			'Name': '1-3-2 Columns Templates',
-			'Type': 'layouttpl',
-			'Category': 'Utility',
-			'Tags': '',
-
-			'Short Description':
-				'This plugin is a 1-3-2 columns layout template.',
-
-			'Long Description':
-				'',
-
-			'Change Log': '',
-			'Page URL': 'http://www.liferay.com',
-			'Demo URL': '',
-			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0+',
-
-			
-		'Bundle':
-			'No',
-
-		'Compatibility': '',
-
-		'Icon': '',
-
-		'Labs':
-			'Yes',
-
-		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
-
-		'Public':
-			'Yes',
-
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
-
-		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -880,20 +800,21 @@
 		
 		{
 			'Artifact ID': '2-1-2-columns-layouttpl',
-			'Name': '2-1-2 Columns Template',
+			'Name': '2-1-2 Columns Layout',
 			'Type': 'layouttpl',
-			'Category': 'Utility',
+			'Category': 'Templates',
 			'Tags': 'layout, template, ui',
 
 			'Short Description':
-				'This plugin is a 2-1-2 columns layout template.',
+				'',
 
 			'Long Description':
-				'',
+				'Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This layout will appear in your Page Layouts once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -904,7 +825,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="layouttpl/2-1-2-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -912,70 +835,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="layouttpl/2-1-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="layouttpl/2-1-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="layouttpl/2-1-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="layouttpl/2-1-2-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
-	
-		}
-
-		
-			,
-		
-		{
-			'Artifact ID': '2-1-2-columns-layouttpl',
-			'Name': '2-1-2 Columns Templates',
-			'Type': 'layouttpl',
-			'Category': 'Utility',
-			'Tags': '',
-
-			'Short Description':
-				'This plugin is a 2-1-2 columns layout template.',
-
-			'Long Description':
-				'',
-
-			'Change Log': '',
-			'Page URL': 'http://www.liferay.com',
-			'Demo URL': '',
-			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0+',
-
-			
-		'Bundle':
-			'No',
-
-		'Compatibility': '',
-
-		'Icon': '',
-
-		'Labs':
-			'Yes',
-
-		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
-
-		'Public':
-			'Yes',
-
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
-
-		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -984,20 +850,21 @@
 		
 		{
 			'Artifact ID': '3-2-3-columns-layouttpl',
-			'Name': '3-2-3 Columns Template',
+			'Name': '3-2-3 Columns Layout',
 			'Type': 'layouttpl',
-			'Category': 'Utility',
+			'Category': 'Templates',
 			'Tags': 'layout, template, ui',
 
 			'Short Description':
-				'This plugin is a 3-2-3 columns layout template.',
+				'',
 
 			'Long Description':
-				'',
+				'Layout Templates allow you to choose how portlets will be arranged on a page. They are simple table or CSS-based containers into which portlets can be dropped and sit within the body of the page. Liferay Portal comes with several built-in layout templates, but if you require a more complex page layout you may wish to use this custom layout template. A thumbnail is displayed when the end user clicks Layout Template from the Dock menu. Consult the "Page Creation and Management" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This layout will appear in your Page Layouts once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1008,7 +875,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="layouttpl/3-2-3-columns-layouttpl/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -1016,18 +885,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="layouttpl/3-2-3-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="layouttpl/3-2-3-columns-layouttpl/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="layouttpl/3-2-3-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="layouttpl/3-2-3-columns-layouttpl/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1035,14 +899,14 @@
 			,
 		
 		{
-			'Artifact ID': '3-2-3-columns-layouttpl',
-			'Name': '3-2-3 Columns Templates',
-			'Type': 'layouttpl',
+			'Artifact ID': 'akismet-portlet',
+			'Name': 'Akismet',
+			'Type': 'portlet',
 			'Category': 'Utility',
 			'Tags': '',
 
 			'Short Description':
-				'This plugin is a 3-2-3 columns layout template.',
+				'',
 
 			'Long Description':
 				'',
@@ -1050,15 +914,18 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0+',
+			'Liferay Versions': '6.2.0',
 
 			
 		'Bundle':
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '',
 
@@ -1068,18 +935,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'Yes',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1102,6 +964,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1112,6 +975,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -1120,15 +985,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -1154,6 +1014,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1164,23 +1025,20 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'Yes',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -1206,6 +1064,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1216,23 +1075,20 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'Yes',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -1246,7 +1102,7 @@
 			'Artifact ID': 'calendar-portlet',
 			'Name': 'Enterprise Calendar',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Communication',
 			'Tags': '',
 
 			'Short Description':
@@ -1258,6 +1114,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1268,23 +1125,20 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'Yes',
 
 		'Marketplace':
-			'No',
-
-		'Parent App': '',
+			'Yes',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -1298,18 +1152,19 @@
 			'Artifact ID': 'chat-portlet',
 			'Name': 'Chat',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Communication',
 			'Tags': 'chat, friends, im, social',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'Liferay\'s Chat portlet provides a convenient way of allowing users to send each other instant messages when they are logged into a Liferay site. It appears as at the bottom of every page, and displays who is logged on, their statuses, and any chats the logged-in user has open. Users can also set audio alerts, and engage in multiple chats. Consult the “Chat” section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This app may appear at the bottom of the page.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1320,6 +1175,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/chat-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -1328,18 +1185,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/chat-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/chat-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/chat-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/chat-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1350,7 +1202,7 @@
 			'Artifact ID': 'contacts-portlet',
 			'Name': 'Contacts',
 			'Type': 'portlet',
-			'Category': 'Productivity',
+			'Category': '',
 			'Tags': 'communication, contacts, office, social office, team',
 
 			'Short Description':
@@ -1362,8 +1214,9 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
+			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
 
 			
@@ -1372,26 +1225,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'No',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': 'Social Office',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'Yes',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1400,20 +1250,21 @@
 		
 		{
 			'Artifact ID': 'ddl-form-portlet',
-			'Name': 'Dynamic Data List Forms',
+			'Name': 'Dynamic Data List Form',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Productivity',
 			'Tags': 'ddl, dynamic data list, form, user form',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'A Dynamic Data List (DDL) is a user-defined collection of records, similar to a spreadsheet. The records in a Dynamic Data List are composed of various field types such as text, date, integer, check box, etc. These can be published as workflow-enabled forms that capture user information in different ways such as an RSVP, for tasks tracking, or for managing issues. This Dynamic Data List Form app allows you to display dynamic forms to users, allowing them to enter information in predefined lists.<br /><br />This app can also be configured to use a template to display the list in different ways depending on whether the user is viewing the entire list, or the details of a specific list record. Consult the “Dynamic Data Lists in Liferay�? section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1423,6 +1274,8 @@
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '<img height="50" src="portlets/ddl-form-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
@@ -1432,18 +1285,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/ddl-form-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/ddl-form-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/ddl-form-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/ddl-form-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="portlets/ddl-form-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="portlets/ddl-form-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1461,11 +1309,12 @@
 				'',
 
 			'Long Description':
-				'',
+				'This app integrates with Digg, a social news website (http://digg.com). The app provides additional configuration, allowing users to select the types of news streams they wish to view, and configure various parameters (result limits, polling frequency, and others) to optimally retrieve and show news and social links from Digg.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1476,7 +1325,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="portlets/digg-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -1484,18 +1335,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/digg-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/digg-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1506,7 +1352,7 @@
 			'Artifact ID': 'events-display-portlet',
 			'Name': 'Events Display',
 			'Type': 'portlet',
-			'Category': 'Productivity',
+			'Category': '',
 			'Tags': 'calendar, communication, events, office, social office, team',
 
 			'Short Description':
@@ -1518,8 +1364,9 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
+			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
 
 			
@@ -1528,26 +1375,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'No',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': 'Social Office',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'Yes',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1558,18 +1402,19 @@
 			'Artifact ID': 'flash-portlet',
 			'Name': 'Flash',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'documents and media, flash, social, video',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'This Flash app allows easy publishing of Adobe Flash content into Liferay. The Flash source file can be specified through a URL so it\'s possible to publish videos, presentation, games, from a remote website, or directly from Liferay\'s Documents and Media Gallery.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1580,6 +1425,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/flash-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -1588,18 +1435,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/flash-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/flash-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/flash-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/flash-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1610,18 +1452,19 @@
 			'Artifact ID': 'google-adsense-portlet',
 			'Name': 'Google AdSense',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'adsense, advertising, banners, google',
 
 			'Short Description':
-				'This plugin allows easy integration with Google AdSense.',
+				'',
 
 			'Long Description':
-				'',
+				'Google AdSense is a free, simple way for website publishers of all sizes to earn money by displaying targeted Google ads on their websites. AdSense also lets you provide Google search to your site users, while earning money by displaying Google ads on the search results pages.<br /><br />This app automatically displays Google Ads based on your AdSense account information and configuration. Options allow you to select your publisher and channel from which ads are served.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1632,6 +1475,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/google-adsense-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -1640,15 +1485,10 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/google-adsense-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/google-adsense-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/google-adsense-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/google-adsense-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
 			'No'
@@ -1662,18 +1502,19 @@
 			'Artifact ID': 'google-maps-portlet',
 			'Name': 'Google Maps',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Productivity',
 			'Tags': 'google, google maps, maps, social',
 
 			'Short Description':
-				'This plugin allows easy integration with Google Maps.',
+				'',
 
 			'Long Description':
-				'',
+				'This app allows you to place a customized Google Map on a Liferay page, with configuration options to change how the map is displayed.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1684,26 +1525,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/google-maps-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
-			'No',
+			'Yes',
 
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/google-maps-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/google-maps-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/google-maps-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/google-maps-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1726,6 +1564,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1736,23 +1575,20 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'Yes',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -1766,18 +1602,19 @@
 			'Artifact ID': 'ip-geocoder-portlet',
 			'Name': 'IP Geocoder',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'geocoding, geoip, ip, ip geocoder, social, whois',
 
 			'Short Description':
-				'This plugin shows geocode IPs.',
+				'',
 
 			'Long Description':
-				'',
+				'This IP Geocoder app locates your geological position, often in conjunction with other apps, such as the Google Maps app.<br /><br />This app utilizes Max Mind\'s GeoIP City Database. IP geolocation can be performed by associating a geographic location with the Internet Protocol (IP) address of the user with a physical address. Geolocation usually works by automatically looking up an IP address on a WHOIS service and retrieving the registrant\'s physical address.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1788,23 +1625,20 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/ip-geocoder-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
 
 		'Marketplace':
-			'No',
-
-		'Parent App': '',
+			'Yes',
 
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/ip-geocoder-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/ip-geocoder-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/ip-geocoder-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/ip-geocoder-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
 			'No'
@@ -1830,6 +1664,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1840,6 +1675,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -1848,15 +1685,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -1870,18 +1702,19 @@
 			'Artifact ID': 'knowledge-base-portlet',
 			'Name': 'Knowledge Base',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Productivity',
 			'Tags': 'faq, knowledge, knowledge base',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'Liferay\'s Knowledge Base app provides a means for creating and organizing articles within a site. The knowledge base is perfect for creating and organizing information more formally than in a wiki. For example, it can be used to organize and display professional product documentation. It\'s easy to set up the knowledge base with a workflow that requires articles to be approved before they are published. Additionally, it allows administrators to create article templates. Templates can be used to insure that certain kinds of articles possess a common structure and include certain kinds of information. Knowledge base articles can be categorized to make them easy to find. They can also be organized hierarchically to form complete books or guides. There are multiple portlets included in this app. For details about how to use the Knowledge Base, Consult the "Knowledge Base" section of the Liferay User Guide. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This app will appear in your Application menu and Control Panel once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1892,26 +1725,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/knowledge-base-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
-			'No',
+			'Yes',
 
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="portlets/knowledge-base-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -1934,6 +1764,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1944,6 +1775,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -1952,15 +1785,10 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -1974,18 +1802,19 @@
 			'Artifact ID': 'mail-portlet',
 			'Name': 'Mail',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Productivity',
 			'Tags': 'collaboration, email, imap, mail, pop, social',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'This app enables your users to interact with their email using an easy to use, ubiquitous web interface. If your mail system supports the IMAP protocol, you can use this app to integrate your users\' mail with the rest of your web site. You can also connect this app to a mail account provided by Google. The Mail app is a great way to integrate a familiar service with other the collaboration features that Liferay provides.<br /><br />This app will appear in your Application menu and Control Panel once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -1996,6 +1825,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/mail-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -2004,18 +1835,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/mail-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/mail-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/mail-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/mail-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -2038,6 +1864,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2048,6 +1875,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2056,18 +1885,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'Yes',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -2078,7 +1902,7 @@
 			'Artifact ID': 'microblogs-portlet',
 			'Name': 'Microblogs',
 			'Type': 'portlet',
-			'Category': 'Productivity',
+			'Category': '',
 			'Tags': 'blogs, communication, microblogs, office, social office, team',
 
 			'Short Description':
@@ -2090,8 +1914,9 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
+			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
 
 			
@@ -2100,26 +1925,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'No',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': 'Social Office',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'Yes',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -2137,11 +1959,12 @@
 				'',
 
 			'Long Description':
-				'',
+				'This app allows users to manage their subscriptions. Users can subscribe to various assets in Liferay, such as subscribing to a blog post, the comments of a wiki page, a message board category (or specific thread), and a host of other items. The purpose of subscriptions is to be notified when something happens related to the item you\'ve subscribed to. For example, if you are subscribed to a message board category, you are notified when a new post or reply occurs within that category. The method of notification is configurable, but is usually in the form of an email sent to all users who have subscribed. There are multiple items that one can subscribe to in Liferay. For details about subscriptions, Consult the "Liferay Collaboration Suite" section of the Liferay User Guide. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2152,7 +1975,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="portlets/my-subscriptions-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -2160,18 +1985,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/my-subscriptions-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/my-subscriptions-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -2189,11 +2009,12 @@
 				'',
 
 			'Long Description':
-				'',
+				'Netvibes is a personalized dashboard publishing platform for the Web that includes digital life management, widget distribution services and brand observation rooms.<br /><br />This app acts as a "container" for Netvibes widgets, such that they can be "hosted" on Liferay and placed on individual pages within a Liferay site.<br /><br />This app allows you to select from the thousands of existing NetVibes widgets to display on your Liferay sites.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2204,7 +2025,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="portlets/netvibes-widget-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -2212,18 +2035,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/netvibes-widget-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/netvibes-widget-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/netvibes-widget-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/netvibes-widget-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -2232,20 +2050,21 @@
 		
 		{
 			'Artifact ID': 'opensocial-portlet',
-			'Name': 'OpenSocial',
+			'Name': 'OpenSocial Gadget',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Communication',
 			'Tags': 'gadget, opensocial, social, widget',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'OpenSocial is a framework designed for creating applications, called gadgets that function on any social networking site that supports them. There are many existing gadgets available, and anyone can create their own gadgets. With this app, you can integrate any OpenSocial gadget directly into a Liferay page, and you can easily manage which gadgets are currently in use or available. You can also create your own OpenSocial Gadget using the Liferay\'s OpenSocial development environment. Gadgets can be integrated into your portal like a portlet to be added or removed by users as desired. The OpenSocial Gadget portlet also allows you to change the permissions for who can view or edit the portlet, as well as options to share the contents of the portlet, just like you can with any other Liferay portlet. For more details about OpenSocial and Liferay, consult the "OpenSocial Integration" section of the Liferay User Guide. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2255,6 +2074,8 @@
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '<img height="50" src="portlets/opensocial-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
@@ -2264,18 +2085,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="portlets/opensocial-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -2286,7 +2102,7 @@
 			'Artifact ID': 'private-messaging-portlet',
 			'Name': 'Private Messaging',
 			'Type': 'portlet',
-			'Category': 'Productivity',
+			'Category': '',
 			'Tags': 'communication, messaging, office, private, social office, team',
 
 			'Short Description':
@@ -2298,8 +2114,9 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
+			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
 
 			
@@ -2308,26 +2125,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'No',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': 'Social Office',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'No',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -2350,6 +2164,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2360,23 +2175,20 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'Yes',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2402,6 +2214,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2412,6 +2225,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2420,15 +2235,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2454,6 +2264,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2464,6 +2275,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2472,18 +2285,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'Yes',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -2506,6 +2314,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2516,6 +2325,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2524,15 +2335,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2558,6 +2364,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2568,6 +2375,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2576,15 +2385,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2610,6 +2414,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2620,6 +2425,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2628,15 +2435,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2662,6 +2464,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2672,6 +2475,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2680,15 +2485,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2714,6 +2514,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2724,6 +2525,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2732,15 +2535,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2766,6 +2564,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2776,6 +2575,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2784,15 +2585,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2818,6 +2614,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2828,6 +2625,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2836,15 +2635,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2870,6 +2664,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2880,6 +2675,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2888,15 +2685,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2922,6 +2714,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2932,6 +2725,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2940,15 +2735,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -2974,6 +2764,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -2984,6 +2775,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -2992,15 +2785,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3026,6 +2814,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3036,6 +2825,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3044,15 +2835,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3078,6 +2864,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3088,6 +2875,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3096,15 +2885,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3130,6 +2914,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3140,6 +2925,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3148,15 +2935,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3182,6 +2964,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3192,6 +2975,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3200,15 +2985,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3234,6 +3014,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3244,6 +3025,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3252,15 +3035,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3286,6 +3064,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3296,6 +3075,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3304,15 +3085,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3338,8 +3114,9 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'SpringSource, Inc.',
-			'Licenses': 'Apache',
+			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
 
 			
@@ -3347,6 +3124,8 @@
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '',
 
@@ -3356,15 +3135,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3390,6 +3164,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3400,6 +3175,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3408,15 +3185,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3442,6 +3214,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3452,6 +3225,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3460,15 +3235,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3494,6 +3264,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3504,6 +3275,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3512,15 +3285,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3546,6 +3314,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3556,6 +3325,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3564,15 +3335,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3598,6 +3364,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3608,6 +3375,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3616,15 +3385,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3650,6 +3414,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3660,6 +3425,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -3668,15 +3435,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3697,11 +3459,12 @@
 				'',
 
 			'Long Description':
-				'',
+				'Liferay Social Office is a dynamic team workspace solution that provides holistic enhancement to the way you and your colleagues work together. By adapting today\'s most innovative social technologies to the unique needs of productivity and goal-driven enterprise teams, it enables an important shift in how and why communication happens. Key features include, but are not limited to: Documents: Shared document repository with Microsoft Office integration Communication: Team calendars, webmail, task management and contact management Collaboration: Integrated threaded discussions, blogs, and wikis with related content and federated search People: Searchable LinkedIn-style User Profiles with user tagging, user search, friends, and integrated chat',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
@@ -3712,7 +3475,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': 'chat-portlet, contacts-portlet, events-display-portlet, microblogs-portlet, private-messaging-portlet, resources-importer-web, so-hook, so-portlet, so-theme, so-welcome-theme, tasks-portlet, wysiwyg-portlet',
+
+		'Icon': '<img height="50" src="portlets/so-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'No',
@@ -3720,18 +3485,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': 'Social Office',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'No',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/so-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/so-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/so-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/so-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="portlets/so-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="portlets/so-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="portlets/so-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="portlets/so-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -3754,6 +3514,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3764,26 +3525,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'Yes',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'No',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -3794,18 +3552,19 @@
 			'Artifact ID': 'social-networking-portlet',
 			'Name': 'Social Networking',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Communication',
 			'Tags': 'activites, meetups, social, social bookmarks, social networking, summary',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'This app provides numerous portlets that provide enhanced social networking capabilities for users of Liferay sites, including: The Summary portlet functions differently depending on which kind of page it is added to, but in general it displays an overview of the community that it is placed in. The Wall portlet allows users to post messages on another user\'s page, similar to Facebook\'s wall. You must be friends with a user to post on their wall. Wall posts are visible to all users who are a friend of the respected user. The Wall portlet can only be added to a user\'s personal page. The activities portlet displays portal wide user activity, such as posting on message boards, creating wikis, and adding documents to the document library. The Requests portlet displays pending friends requests, in which you can accept or ignore them. This portlet can only be placed on a user\'s personal page. The Friends portlet is a social networking portlet for creating friend relationships in Liferay. The Members portlet displays all users who are members of the Community or Organization to which the Members portlet has been added. This is a good way to allow easy access to all members\' personal pages. The Meetups portlet allows you to post events for which users can register.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3816,6 +3575,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/social-networking-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -3824,18 +3585,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"></a><a target="_blank" href="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/5.jpg"><img height="50" src="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/5.jpg"></a><a target="_blank" href="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/6.jpg"><img height="50" src="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/6.jpg"></a><a target="_blank" href="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/7.jpg"><img height="50" src="portlets/social-networking-portlet/docroot/WEB-INF/releng/screenshots/7.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -3846,18 +3602,19 @@
 			'Artifact ID': 'stocks-portlet',
 			'Name': 'Stocks',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'finance, stocks, ticker',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'This app provides a way to visualize the real-time stock price for a given set of stock ticker symbols. Users can enter custom lists to be displayed, or the portlet can be configured to be the same list for all users. Clicking on a stock ticker symbol or entering one in will display a detailed graph of historical values for the stock price of the given symbol.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -3868,6 +3625,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/stocks-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -3876,18 +3635,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/stocks-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/stocks-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/stocks-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/stocks-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -3910,8 +3664,9 @@
 			'Change Log': '',
 			'Page URL': 'https://portlet-repository.dev.java.net/public/Download.html',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Sun Microsystems, Inc.',
-			'Licenses': 'CDDL',
+			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
 
 			
@@ -3919,6 +3674,8 @@
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '',
 
@@ -3928,15 +3685,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -3950,7 +3702,7 @@
 			'Artifact ID': 'tasks-portlet',
 			'Name': 'Task Management System',
 			'Type': 'portlet',
-			'Category': 'Productivity',
+			'Category': '',
 			'Tags': 'management system, office, organization, so, social office, task, team',
 
 			'Short Description':
@@ -3962,8 +3714,9 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
+			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
 
 			
@@ -3972,26 +3725,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'No',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': 'Social Office',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'Yes',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -4014,6 +3764,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4024,6 +3775,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4032,15 +3785,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4066,6 +3814,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4076,6 +3825,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4084,15 +3835,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4118,6 +3864,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4128,6 +3875,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4136,15 +3885,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4170,6 +3914,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4180,6 +3925,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4188,15 +3935,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4222,6 +3964,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4232,6 +3975,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4240,15 +3985,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4274,6 +4014,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4284,6 +4025,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4292,15 +4035,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4326,6 +4064,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4336,6 +4075,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4344,15 +4085,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4378,6 +4114,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4388,6 +4125,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4396,15 +4135,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4430,6 +4164,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4440,6 +4175,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4448,15 +4185,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4482,6 +4214,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4492,6 +4225,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4500,15 +4235,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4534,6 +4264,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4544,6 +4275,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4552,15 +4285,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4586,6 +4314,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4596,6 +4325,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4604,15 +4335,60 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
+		'Supported':
+			'No'
+	
+		}
+
+		
+			,
+		
+		{
+			'Artifact ID': 'test-log-portlet',
+			'Name': 'Test Log Portlet',
+			'Type': 'portlet',
+			'Category': '',
+			'Tags': '',
+
+			'Short Description':
+				'',
+
+			'Long Description':
+				'',
+
+			'Change Log': '',
+			'Page URL': 'http://www.liferay.com',
+			'Demo URL': '',
+			'Support URL': '',
+			'Author': 'Liferay, Inc.',
+			'Licenses': 'LGPL',
+			'Liferay Versions': '6.2.0',
+
+			
+		'Bundle':
+			'No',
+
+		'Compatibility': '',
+
+		'Dependent Apps': '',
+
+		'Icon': '',
+
+		'Labs':
 			'Yes',
+
+		'Marketplace':
+			'No',
+
+		'Public':
+			'Yes',
+
+		'Screenshots': '<nobr></nobr>',
 
 		'Supported':
 			'No'
@@ -4638,6 +4414,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4648,6 +4425,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4656,15 +4435,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4690,6 +4464,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4700,6 +4475,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4708,15 +4485,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4742,6 +4514,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4752,6 +4525,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4760,15 +4535,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'No',
 
 		'Supported':
 			'No'
@@ -4794,6 +4564,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4804,6 +4575,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4812,15 +4585,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4846,6 +4614,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4856,6 +4625,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -4864,15 +4635,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4898,6 +4664,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4908,23 +4675,20 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'Yes',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -4936,20 +4700,21 @@
 		
 		{
 			'Artifact ID': 'twitter-portlet',
-			'Name': 'Twitter Integration',
+			'Name': 'Twitter',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Communication',
 			'Tags': 'activity, activity stream, social, tweet, twitter',
 
 			'Short Description':
-				'This plugin provides integration with Twitter. Every tweet is logged as an activity.',
+				'',
 
 			'Long Description':
-				'',
+				'This app integrates your Twitter timeline into Liferay\'s Activities framework so that your Tweets show up in your Liferay Activity Stream. Once installed, the app can be added to your private page and configured with your Twitter username. The app will periodically access your tweets through the Twitter API, and import them as Activities. You can view your tweets by adding the Activities portlet onto your personal public or private pages.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -4960,6 +4725,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/twitter-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -4968,18 +4735,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/twitter-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/twitter-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -4990,18 +4752,19 @@
 			'Artifact ID': 'vimeo-portlet',
 			'Name': 'Vimeo',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Communication',
 			'Tags': 'social, video, vimeo',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'This app makes it easy to embed Vimeo videos into Liferay pages. The size, placement, and user options can be configured to optimize the visual appearance of the video and allow for things like full screen playback.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5012,6 +4775,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/vimeo-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -5020,18 +4785,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/vimeo-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/vimeo-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/vimeo-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/vimeo-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="portlets/vimeo-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="portlets/vimeo-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -5042,18 +4802,19 @@
 			'Artifact ID': 'weather-portlet',
 			'Name': 'Weather',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'utility, weather',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'This app provides a quick visual indication of weather across a configurable set of locations. Locations can be specified using a textual city name (such as "Los Angeles, CA" or "China"), or a postal code (such as 32701 in the U.S.). Links to a summary screen at weather.com are provided for each location. Temperature readings can be configured for Celsius or Fahrenheit.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5064,6 +4825,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/weather-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -5072,18 +4835,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/weather-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/weather-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -5094,18 +4852,19 @@
 			'Artifact ID': 'web-form-portlet',
 			'Name': 'Web Form',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Productivity',
 			'Tags': 'csv, database, email, forms, web form',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'The web forms portlet is a tool that allows a web administrator to define a form to be published in the website. Users visiting the website can then fill the form which is then sent to a configured email address or saved (to file or to database). The title, introductory description of the form, email address, and many other options shown to the users are configurable through the portlet\'s configuration screen. It is possible to have multiple forms on the same page or spread across multiple pages. Saving options also include the ability to save as an external CSV (Comma-Separated Values) file, or save the values to a custom Database table for further processing.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5116,26 +4875,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/web-form-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
-			'Yes',
+			'No',
 
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/web-form-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/web-form-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/web-form-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/web-form-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="portlets/web-form-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="portlets/web-form-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -5158,6 +4914,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5168,23 +4925,20 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'Yes',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -5198,18 +4952,19 @@
 			'Artifact ID': 'wiki-navigation-portlet',
 			'Name': 'Wiki Navigation',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'navigation, wiki, wiki display',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'This app provides additional ways to visualize the structure of wiki contents. It provides two different views into a wiki, including a "Page" view and a "Tree" view. The Page View visually lays out the structure of a single wiki page, allowing users to quickly access different sections of a specific wiki page based on the header levels and other authoring capabilities of a wiki page. Each section is individual collapsible. The Tree View presents a hierarchical, expandable and collapsible view of the entire set of Wiki pages. Pages are shown below their "Parent" pages, and the depth of this view can be controlled through the configuration screen of the portlet.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5220,6 +4975,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/wiki-navigation-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -5228,18 +4985,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/wiki-navigation-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/wiki-navigation-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/wiki-navigation-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/wiki-navigation-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -5250,18 +5002,19 @@
 			'Artifact ID': 'wsrp-portlet',
 			'Name': 'WSRP',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'portlet, wsrp',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'The Web Services for Remote Portlets (WSRP) specification defines a web service interface for accessing and interacting with interactive presentation-oriented web services in the form of portlets. Using this app, Liferay acts as a WSRP Producer, hosting portlets that will be consumed by other portal servers acting as WSRP Consumers. Liferay can also act as a WSRP Consumer, and host remote instances of portlets that exist on other portal servers that can act as a WSRP Producer. For details on how to use this app, visit http://www.liferay.com/community/wiki/-/wiki/Main/WSRP.<br /><br />This app will appear in your Control Panel once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5272,6 +5025,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="portlets/wsrp-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -5280,18 +5035,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="portlets/wsrp-portlet/docroot/WEB-INF/releng/screenshots/4.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -5302,18 +5052,19 @@
 			'Artifact ID': 'wysiwyg-portlet',
 			'Name': 'WYSIWYG',
 			'Type': 'portlet',
-			'Category': 'Collaboration',
+			'Category': 'Utility',
 			'Tags': 'ckeditor, cms, editor, wcm, wysiwyg',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'This app enables content authors to quickly and easily create web content using Liferay\'s built-in WYSIWYG editing capabilities, without the overhead of the full CMS system. Content is associated directly with each instance of this app, and does not have any tracking metadata such as titles, versions, abstracts, or other ancillary information.<br /><br /> Content can be entered into the configuration window and is immediately displayed in the content window of the app. This should only be used when the full capabilities of Liferay\'s CMS system is not needed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5324,7 +5075,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="portlets/wysiwyg-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'No',
@@ -5332,18 +5085,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': 'Social Office',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/wysiwyg-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/wysiwyg-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -5354,18 +5102,19 @@
 			'Artifact ID': 'youtube-portlet',
 			'Name': 'YouTube',
 			'Type': 'portlet',
-			'Category': '',
+			'Category': 'Communication',
 			'Tags': 'social, video, youtube',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'This app makes it easy to embed Youtube videos into Liferay pages. The size, placement, and user options can be configured to optimize the visual appearance of the video and allow for things like full screen playback.<br /><br />This app will appear in your Application menu once installed.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5375,6 +5124,8 @@
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '<img height="50" src="portlets/youtube-portlet/docroot/WEB-INF/releng/icons/90x90.png">',
 
@@ -5384,174 +5135,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="portlets/youtube-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="portlets/youtube-portlet/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="portlets/youtube-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="portlets/youtube-portlet/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
-	
-		}
-
-		
-			,
-		
-		{
-			'Artifact ID': 'lithe-theme',
-			'Name': 'Lithe',
-			'Type': 'theme',
-			'Category': '',
-			'Tags': '',
-
-			'Short Description':
-				'',
-
-			'Long Description':
-				'',
-
-			'Change Log': '',
-			'Page URL': 'http://www.liferay.com',
-			'Demo URL': '',
-			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0',
-
-			
-		'Bundle':
-			'No',
-
-		'Compatibility': '',
-
-		'Icon': '',
-
-		'Labs':
-			'Yes',
-
-		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
-
-		'Public':
-			'Yes',
-
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
-
-		'Supported':
-			'Yes'
-	
-		}
-
-		
-			,
-		
-		{
-			'Artifact ID': 'modern-indigo-theme',
-			'Name': 'Modern Indigo',
-			'Type': 'theme',
-			'Category': '',
-			'Tags': '',
-
-			'Short Description':
-				'',
-
-			'Long Description':
-				'',
-
-			'Change Log': '',
-			'Page URL': 'http://www.liferay.com',
-			'Demo URL': '',
-			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0',
-
-			
-		'Bundle':
-			'No',
-
-		'Compatibility': '',
-
-		'Icon': '',
-
-		'Labs':
-			'Yes',
-
-		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
-
-		'Public':
-			'Yes',
-
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
-
-		'Supported':
-			'Yes'
-	
-		}
-
-		
-			,
-		
-		{
-			'Artifact ID': 'paradise-theme',
-			'Name': 'Paradise',
-			'Type': 'theme',
-			'Category': '',
-			'Tags': '',
-
-			'Short Description':
-				'',
-
-			'Long Description':
-				'',
-
-			'Change Log': '',
-			'Page URL': 'http://www.liferay.com',
-			'Demo URL': '',
-			'Author': 'Liferay, Inc.',
-			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0',
-
-			
-		'Bundle':
-			'No',
-
-		'Compatibility': '',
-
-		'Icon': '',
-
-		'Labs':
-			'Yes',
-
-		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
-
-		'Public':
-			'Yes',
-
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
-
-		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -5566,7 +5156,7 @@
 			'Tags': '',
 
 			'Short Description':
-				'This is a sample HTML4 theme with configuration set in liferay-look-and-feel.xml.',
+				'',
 
 			'Long Description':
 				'',
@@ -5574,15 +5164,18 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0+',
+			'Liferay Versions': '6.2.0',
 
 			
 		'Bundle':
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '',
 
@@ -5592,15 +5185,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -5618,7 +5206,7 @@
 			'Tags': '',
 
 			'Short Description':
-				'This is a sample styled theme with advanced configuration set in liferay-look-and-feel.xml.',
+				'',
 
 			'Long Description':
 				'',
@@ -5626,15 +5214,18 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0+',
+			'Liferay Versions': '6.2.0',
 
 			
 		'Bundle':
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '',
 
@@ -5644,15 +5235,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -5678,6 +5264,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5688,6 +5275,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -5696,15 +5285,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -5722,7 +5306,7 @@
 			'Tags': '',
 
 			'Short Description':
-				'This is a sample unstyled theme with configuration set in liferay-look-and-feel.xml.',
+				'',
 
 			'Long Description':
 				'',
@@ -5730,15 +5314,18 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
-			'Liferay Versions': '6.2.0+',
+			'Liferay Versions': '6.2.0',
 
 			
 		'Bundle':
 			'No',
 
 		'Compatibility': '',
+
+		'Dependent Apps': '',
 
 		'Icon': '',
 
@@ -5748,15 +5335,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -5782,6 +5364,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5792,6 +5375,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -5800,15 +5385,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -5822,7 +5402,7 @@
 			'Artifact ID': 'so-theme',
 			'Name': 'Social Office',
 			'Type': 'theme',
-			'Category': 'Productivity',
+			'Category': '',
 			'Tags': 'collaboration, communication, office, so, social, social office, team',
 
 			'Short Description':
@@ -5834,6 +5414,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
@@ -5844,26 +5425,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'No',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': 'Social Office',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'No',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -5874,7 +5452,7 @@
 			'Artifact ID': 'so-welcome-theme',
 			'Name': 'Social Office Welcome',
 			'Type': 'theme',
-			'Category': 'Productivity',
+			'Category': '',
 			'Tags': 'collaboration, communication, office, so, social, social office, team',
 
 			'Short Description':
@@ -5886,6 +5464,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
@@ -5896,26 +5475,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
 			'No',
 
 		'Marketplace':
-			'Yes',
-
-		'Parent App': 'Social Office',
+			'No',
 
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
 
-		'Standalone App':
-			'No',
-
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -5938,6 +5514,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -5948,6 +5525,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
 
 		'Labs':
@@ -5956,15 +5535,10 @@
 		'Marketplace':
 			'No',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
 		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
 
 		'Supported':
 			'No'
@@ -5990,6 +5564,7 @@
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -6000,7 +5575,59 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '',
+
+		'Labs':
+			'Yes',
+
+		'Marketplace':
+			'No',
+
+		'Public':
+			'Yes',
+
+		'Screenshots': '<nobr></nobr>',
+
+		'Supported':
+			'No'
+	
+		}
+
+		
+			,
+		
+		{
+			'Artifact ID': 'zoe-brochure-theme',
+			'Name': 'Zoe Brochure',
+			'Type': 'theme',
+			'Category': 'Themes',
+			'Tags': 'corporate, custom layout, featured item, image carousel, site template, theme',
+
+			'Short Description':
+				'',
+
+			'Long Description':
+				'Zoe Brochure offers a modern corporate feel to your site and is versatile enough to be used by a wide variety of industries. The theme comes standard with structures and templates that can be customized to present your products and services with visual appeal. This theme also features a 2-1-2 Columns layout, an image carousel, featured content, and featured download button.<br /><br />This layout will appear in your Page Settings, under Available Themes once installed.',
+
+			'Change Log': '',
+			'Page URL': 'http://www.liferay.com',
+			'Demo URL': '',
+			'Support URL': '',
+			'Author': 'Liferay, Inc.',
+			'Licenses': 'LGPL',
+			'Liferay Versions': '6.2.0',
+
+			
+		'Bundle':
+			'No',
+
+		'Compatibility': '',
+
+		'Dependent Apps': '1-3-1-columns-layouttpl, resources-importer-web',
+
+		'Icon': '<img height="50" src="themes/zoe-brochure-theme/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -6008,18 +5635,163 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
+		'Public':
+			'Yes',
+
+		'Screenshots': '<nobr><a target="_blank" href="themes/zoe-brochure-theme/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="themes/zoe-brochure-theme/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="themes/zoe-brochure-theme/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="themes/zoe-brochure-theme/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="themes/zoe-brochure-theme/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="themes/zoe-brochure-theme/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="themes/zoe-brochure-theme/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="themes/zoe-brochure-theme/docroot/WEB-INF/releng/screenshots/4.jpg"></a></nobr>',
+
+		'Supported':
+			'No'
+	
+		}
+
+		
+			,
+		
+		{
+			'Artifact ID': 'zoe-healthcare-theme',
+			'Name': 'Zoe Healthcare',
+			'Type': 'theme',
+			'Category': 'Themes',
+			'Tags': 'contact form, corporate, featured item, footer contact blurb, footer navigation, healthcare, medical, search, theme, webform portlet',
+
+			'Short Description':
+				'',
+
+			'Long Description':
+				'Zoe Healthcare is a preset theme catering to the medical industry. Our theme includes features and templates that can produce custom layouts to outline medical services, chart out available health care plans, and schedule appointments using our form portlet. We utilize a customizable �advanced footer� that includes: a text blurb, footer navigation, footer links, and social networking links. In the advanced footer you are able to replace any section with web content using a uniquely generated article ID.<br /><br />This layout will appear in your Page Settings, under Available Themes once installed.',
+
+			'Change Log': '',
+			'Page URL': 'http://www.liferay.com',
+			'Demo URL': '',
+			'Support URL': '',
+			'Author': 'Liferay, Inc.',
+			'Licenses': 'LGPL',
+			'Liferay Versions': '6.2.0',
+
+			
+		'Bundle':
+			'No',
+
+		'Compatibility': '',
+
+		'Dependent Apps': 'resources-importer-web, web-form-portlet',
+
+		'Icon': '<img height="50" src="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/icons/90x90.png">',
+
+		'Labs':
+			'Yes',
+
+		'Marketplace':
+			'Yes',
 
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/4.jpg"></a><a target="_blank" href="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/5.jpg"><img height="50" src="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/5.jpg"></a><a target="_blank" href="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/6.jpg"><img height="50" src="themes/zoe-healthcare-theme/docroot/WEB-INF/releng/screenshots/6.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
+	
+		}
+
+		
+			,
+		
+		{
+			'Artifact ID': 'zoe-resort-theme',
+			'Name': 'Zoe Resort',
+			'Type': 'theme',
+			'Category': 'Themes',
+			'Tags': 'featured item, footer navigation, footer social links, hotel, image carousel, resort, site template, theme',
+
+			'Short Description':
+				'',
+
+			'Long Description':
+				'Zoe Resort utilizes a clean layout structure and large dedicated image spaces catering to the needs of the hotel and resort industry, with prominent banners throughout. The theme features a 3-3-3 columns layout, an image carousel, breadcrumbs, featured content, and footer social network links. We utilize a customizable �advanced footer� that includes a text blurb, footer navigation, footer links and social networking links. In the advanced footer you are able to replace any section with web content using a uniquely generated article ID.<br /><br />This layout will appear in your Page Settings, under Available Themes once installed.',
+
+			'Change Log': '',
+			'Page URL': 'http://www.liferay.com',
+			'Demo URL': '',
+			'Support URL': '',
+			'Author': 'Liferay, Inc.',
+			'Licenses': 'LGPL',
+			'Liferay Versions': '6.2.0',
+
+			
+		'Bundle':
+			'No',
+
+		'Compatibility': '',
+
+		'Dependent Apps': 'resources-importer-web',
+
+		'Icon': '<img height="50" src="themes/zoe-resort-theme/docroot/WEB-INF/releng/icons/90x90.png">',
+
+		'Labs':
+			'Yes',
+
+		'Marketplace':
+			'Yes',
+
+		'Public':
+			'Yes',
+
+		'Screenshots': '<nobr><a target="_blank" href="themes/zoe-resort-theme/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="themes/zoe-resort-theme/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="themes/zoe-resort-theme/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="themes/zoe-resort-theme/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="themes/zoe-resort-theme/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="themes/zoe-resort-theme/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
+
+		'Supported':
+			'No'
+	
+		}
+
+		
+			,
+		
+		{
+			'Artifact ID': 'zoe-tech-theme',
+			'Name': 'Zoe Tech',
+			'Type': 'theme',
+			'Category': 'Themes',
+			'Tags': 'advanced footer, corporate, custom layout, featured item, footer blurb, search, site template, theme',
+
+			'Short Description':
+				'',
+
+			'Long Description':
+				'This theme provides a clean and professional feel. It allows you to showcase your clients, services, and products using �featured content� on the homepage as well as a special image carousel built for this theme. It features a 1-3-1 Column layout only available for the Zoe Tech theme. We utilize a customizable �advanced footer� that includes: a text blurb, footer navigation, footer links, and social networking links. In the advanced footer you are able to replace any section with web content using a uniquely generated article ID.<br /><br />This layout will appear in your Page Settings, under Available Themes once installed.',
+
+			'Change Log': '',
+			'Page URL': 'http://www.liferay.com',
+			'Demo URL': '',
+			'Support URL': '',
+			'Author': 'Liferay, Inc.',
+			'Licenses': 'LGPL',
+			'Liferay Versions': '6.2.0',
+
+			
+		'Bundle':
+			'No',
+
+		'Compatibility': '',
+
+		'Dependent Apps': '1-3-1-columns-layouttpl, resources-importer-web',
+
+		'Icon': '<img height="50" src="themes/zoe-tech-theme/docroot/WEB-INF/releng/icons/90x90.png">',
+
+		'Labs':
+			'Yes',
+
+		'Marketplace':
+			'Yes',
+
+		'Public':
+			'Yes',
+
+		'Screenshots': '<nobr><a target="_blank" href="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/4.jpg"></a><a target="_blank" href="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/5.jpg"><img height="50" src="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/5.jpg"></a><a target="_blank" href="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/6.jpg"><img height="50" src="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/6.jpg"></a><a target="_blank" href="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/7.jpg"><img height="50" src="themes/zoe-tech-theme/docroot/WEB-INF/releng/screenshots/7.jpg"></a></nobr>',
+
+		'Supported':
+			'No'
 	
 		}
 
@@ -6030,70 +5802,19 @@
 			'Artifact ID': 'cas-web',
 			'Name': 'Central Authentication Service',
 			'Type': 'web',
-			'Category': '',
+			'Category': 'Security',
 			'Tags': 'authentication, cas, login, sso',
 
 			'Short Description':
-				'This is the Central Authentication Service plugin.',
+				'',
 
 			'Long Description':
-				'',
+				'The Central Authentication Service (CAS) is a single sign-on protocol for the web that permits a user to access multiple applications while providing their credentials (such as user id and password) only once. It also allows web applications to authenticate users without gaining access to a user\'s security credentials, such as a password.<br /><br />This app provides integration between Liferay and a CAS implementation, such that users can achieve Single Sign-On when visiting a Liferay site. Consult the "Managing Portal Settings" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This app will install to your application server or servlet container.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
-			'Author': 'Liferay, Inc.',
-			'Licenses': 'BSD',
-			'Liferay Versions': '6.2.0',
-
-			
-		'Bundle':
-			'No',
-
-		'Compatibility': '',
-
-		'Icon': '<img height="50" src="webs/cas-web/docroot/WEB-INF/releng/icons/90x90.png">',
-
-		'Labs':
-			'Yes',
-
-		'Marketplace':
-			'Yes',
-
-		'Parent App': '',
-
-		'Public':
-			'Yes',
-
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
-
-		'Supported':
-			'Yes'
-	
-		}
-
-		
-			,
-		
-		{
-			'Artifact ID': 'deployment-helper-web',
-			'Name': 'Deployment Helper',
-			'Type': 'web',
-			'Category': 'Utility',
-			'Tags': 'cluster, deployment, enterprise, ha, high availability, replication',
-
-			'Short Description':
-				'This plugin helps deploy other plugins within a cluster using the native application server deployment mechanisms.',
-
-			'Long Description':
-				'',
-
-			'Change Log': '',
-			'Page URL': 'http://www.liferay.com',
-			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -6104,7 +5825,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="webs/cas-web/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -6112,18 +5835,63 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
+		'Public':
+			'Yes',
+
+		'Screenshots': '<nobr><a target="_blank" href="webs/cas-web/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="webs/cas-web/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="webs/cas-web/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="webs/cas-web/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
+
+		'Supported':
+			'No'
+	
+		}
+
+		
+			,
+		
+		{
+			'Artifact ID': 'deployment-helper-web',
+			'Name': 'Cluster Deployment Helper',
+			'Type': 'web',
+			'Category': 'Utility',
+			'Tags': 'cluster, deployment, enterprise, ha, high availability, replication',
+
+			'Short Description':
+				'',
+
+			'Long Description':
+				'Liferay Portal is designed to power the simplest to most complex web sites, easily scaling to the size you need. Liferay works well in clusters of multiple machines (horizontal cluster) or in clusters of multiple VMs on a single machine (vertical cluster), or any mixture of the two. Once you have Liferay installed in more than one application server node, there are several optimizations that need to be made. When deploying apps to a Liferay cluster, each cluster must receive a copy of the app before the app\'s functionality will work across the cluster.<br /><br />This app helps deploy other apps within a cluster using the native application server deployment mechanisms.<br /><br />This app installs as a Liferay service.',
+
+			'Change Log': '',
+			'Page URL': 'http://www.liferay.com',
+			'Demo URL': '',
+			'Support URL': '',
+			'Author': 'Liferay, Inc.',
+			'Licenses': 'LGPL',
+			'Liferay Versions': '6.2.0',
+
+			
+		'Bundle':
+			'No',
+
+		'Compatibility': '',
+
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="webs/deployment-helper-web/docroot/WEB-INF/releng/icons/90x90.png">',
+
+		'Labs':
+			'Yes',
+
+		'Marketplace':
+			'Yes',
 
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="webs/deployment-helper-web/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="webs/deployment-helper-web/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="webs/deployment-helper-web/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="webs/deployment-helper-web/docroot/WEB-INF/releng/screenshots/2.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -6134,18 +5902,19 @@
 			'Artifact ID': 'kaleo-web',
 			'Name': 'Kaleo Workflow',
 			'Type': 'web',
-			'Category': '',
+			'Category': 'Productivity',
 			'Tags': 'bi, business intelligence, designer, kaleo, workflow',
 
 			'Short Description':
-				'This plugin uses Kaleo as the workflow engine.',
+				'',
 
 			'Long Description':
-				'',
+				'This app provides the Kaleo Workflow engine, for use with Liferay Portal. In Greek, Kaleo means "called ones," which is appropriate for a workflow engine that calls users to participate in a process that has been designed for them. Kaleo workflow allows a user to define any number of simple to complex business processes/workflows, deploy them, and manage them through a portal interface. Those processes have knowledge of users, groups, and roles. You don\'t have to write a single line of code to accomplish this: all you have to do is create a single XML document. And if you\'re a Liferay EE customer, you get a graphical workflow designer, which gives you a point and click interface to create workflows. Simple workflows can be managed using the default configuration and GUI tools, while more complex workflows can be created to meet the workflow management needs of almost any portal. Consult the "Workflow" section of the Liferay User Guide for details on administering this service. The Liferay User Guide can be found at http://liferay.com/documentation.<br /><br />This app installs as a Liferay service.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -6156,26 +5925,23 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="webs/kaleo-web/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
-			'Yes',
+			'No',
 
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="webs/kaleo-web/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="webs/kaleo-web/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="webs/kaleo-web/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="webs/kaleo-web/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="webs/kaleo-web/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="webs/kaleo-web/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -6186,18 +5952,19 @@
 			'Artifact ID': 'resources-importer-web',
 			'Name': 'Resources Importer',
 			'Type': 'web',
-			'Category': '',
-			'Tags': '',
+			'Category': 'Utility',
+			'Tags': 'configuration, lar, layout, package, theme, web content',
 
 			'Short Description':
 				'',
 
 			'Long Description':
-				'',
+				'The Resources Importer app allows front-end developers to package web content, portlet configurations, and layouts together in a theme without saving it as a compiled .LAR file thereby allowing for greater flexibility in its usage between Liferay Portal versions.<br /><br />This app will automatically create associated content when other plugins are deployed that are configured to make use of the Resource Importer app.<br /><br />This app installs as a Liferay service.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -6208,7 +5975,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="webs/resources-importer-web/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -6216,15 +5985,10 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="webs/resources-importer-web/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="webs/resources-importer-web/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="webs/resources-importer-web/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="webs/resources-importer-web/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="webs/resources-importer-web/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="webs/resources-importer-web/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
 
 		'Supported':
 			'No'
@@ -6236,20 +6000,21 @@
 		
 		{
 			'Artifact ID': 'server-manager-web',
-			'Name': 'Server Manager',
+			'Name': 'Remote IDE Connector',
 			'Type': 'web',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'debug, developer, eclipse, ide, liferay developer studio, remote, server',
 
 			'Short Description':
-				'This plugin allows remote management of Liferay plugins.',
+				'',
 
 			'Long Description':
-				'',
+				'This app provides remote development and deployment support from Liferay IDE. With this app, you can build Liferay projects in Liferay IDE or Liferay Developer Studio, and deploy the projects to a remote host that has this app installed. Liferay IDE is an extension for the Eclipse platform that supports development of app projects for the Liferay Portal platform. It is available as a set of Eclipse apps installable from an update-site. The latest version supports developing 5 Liferay app types: portlets, hooks, layout templates, themes, and EXT-style plug-ins. Liferay IDE requires the Eclipse Java EE developer package using either Galileo or Helios versions. For details on using Liferay IDE or Developer Studio, visit the "Liferay IDE" chapter of the Liferay User Guide, located at http://liferay.com/documentation.<br /><br />This app installs as a Liferay service.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -6260,6 +6025,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="webs/server-manager-web/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -6268,18 +6035,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="webs/server-manager-web/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="webs/server-manager-web/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="webs/server-manager-web/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="webs/server-manager-web/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="webs/server-manager-web/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="webs/server-manager-web/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="webs/server-manager-web/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="webs/server-manager-web/docroot/WEB-INF/releng/screenshots/4.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -6290,18 +6052,19 @@
 			'Artifact ID': 'solr-web',
 			'Name': 'Solr Search Engine',
 			'Type': 'web',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'apache, lucene, search, seo, solr',
 
 			'Short Description':
-				'This plugin uses Solr as the search engine.',
+				'',
 
 			'Long Description':
-				'',
+				'This app provides integration with Apache Solr, the popular open source enterprise search platform from the Apache Lucene project. Its major features include powerful full-text search, hit highlighting, faceted search, dynamic clustering, database integration, rich document (e.g., Word, PDF) handling, and geospatial search. Solr is highly scalable, providing distributed search and index replication, and it powers the search and navigation features of many of the world\'s largest internet sites. With this integration, your Liferay Portal will use Solr for indexing and searching.<br /><br />This app installs as a Liferay service.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -6312,6 +6075,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="webs/solr-web/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -6320,18 +6085,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="webs/solr-web/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="webs/solr-web/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="webs/solr-web/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="webs/solr-web/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="webs/solr-web/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="webs/solr-web/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -6349,11 +6109,12 @@
 				'This is the Theme Loader plugin.',
 
 			'Long Description':
-				'',
+				'A theme loader is required to allow the LAR export and import mechanism to hot deploy themes at runtime even if the underlying application server does not support hot deploy.<br /><br />This app installs as a Liferay service.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'LGPL',
 			'Liferay Versions': '6.2.0',
@@ -6364,7 +6125,9 @@
 
 		'Compatibility': '',
 
-		'Icon': '',
+		'Dependent Apps': '',
+
+		'Icon': '<img height="50" src="webs/theme-loader-web/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
 			'Yes',
@@ -6372,18 +6135,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/3.jpg"></a><a target="_blank" href="webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/4.jpg"><img height="50" src="webs/theme-loader-web/docroot/WEB-INF/releng/screenshots/4.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -6392,20 +6150,21 @@
 		
 		{
 			'Artifact ID': 'wurfl-web',
-			'Name': 'WURFL Device Recognition Provider',
+			'Name': 'Device Recognition Provider',
 			'Type': 'web',
-			'Category': '',
+			'Category': 'Utility',
 			'Tags': 'android, device, ios, mobile, tablet, rules',
 
 			'Short Description':
-				'This plugin uses WURFL for device detection. See http://wurfl.sourceforge.net.',
+				'',
 
 			'Long Description':
-				'',
+				'This app enables Liferay to detect which mobile device or operating system is being used for any given request and alters the layout/rendering of pages based on the detected device. Once installed, you can define new mobile device rules and apply them to sites and individual pages. The proportion of mobile devices users browsing the web has been steadily increasing so it\'s important to be able to handle different kinds of devices appropriately. For instance, you can configure the look and feel of Liferay pages accessed by smart phone or tablet users differently than those accessed by PC users. Both sites and individual pages can be configured with any number of rule groups designed to describe a group of devices. It can contain one or more rules that describe a category of devices, such as all android devices or all iOS tablets. Rule groups can be prioritized to determine which one will be applied to a given page request. You can define as many rules as you need to classify all the devices you want to take actions on.<br /><br />This app installs as a Liferay service.',
 
 			'Change Log': '',
 			'Page URL': 'http://www.liferay.com',
 			'Demo URL': '',
+			'Support URL': '',
 			'Author': 'Liferay, Inc.',
 			'Licenses': 'AGPL',
 			'Liferay Versions': '6.2.0',
@@ -6416,6 +6175,8 @@
 
 		'Compatibility': '',
 
+		'Dependent Apps': '',
+
 		'Icon': '<img height="50" src="webs/wurfl-web/docroot/WEB-INF/releng/icons/90x90.png">',
 
 		'Labs':
@@ -6424,18 +6185,13 @@
 		'Marketplace':
 			'Yes',
 
-		'Parent App': '',
-
 		'Public':
 			'Yes',
 
-		'Screenshots': '<nobr></nobr>',
-
-		'Standalone App':
-			'Yes',
+		'Screenshots': '<nobr><a target="_blank" href="webs/wurfl-web/docroot/WEB-INF/releng/screenshots/1.jpg"><img height="50" src="webs/wurfl-web/docroot/WEB-INF/releng/screenshots/1.jpg"></a><a target="_blank" href="webs/wurfl-web/docroot/WEB-INF/releng/screenshots/2.jpg"><img height="50" src="webs/wurfl-web/docroot/WEB-INF/releng/screenshots/2.jpg"></a><a target="_blank" href="webs/wurfl-web/docroot/WEB-INF/releng/screenshots/3.jpg"><img height="50" src="webs/wurfl-web/docroot/WEB-INF/releng/screenshots/3.jpg"></a></nobr>',
 
 		'Supported':
-			'Yes'
+			'No'
 	
 		}
 
@@ -6503,27 +6259,6 @@
 								
 		{
 			'Licenses': 'AGPL'
-		}
-
-		
-			,
-		
-		{
-			'Licenses': 'Apache'
-		}
-
-		
-			,
-		
-		{
-			'Licenses': 'BSD'
-		}
-
-		
-			,
-		
-		{
-			'Licenses': 'CDDL'
 		}
 
 		
