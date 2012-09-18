@@ -21,7 +21,6 @@ import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
@@ -45,6 +44,7 @@ import com.liferay.util.portlet.PortletProps;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.portlet.PortletPreferences;
 
@@ -52,6 +52,29 @@ import javax.portlet.PortletPreferences;
  * @author Jonathan Lee
  */
 public class LayoutUtil {
+
+	public static Layout addLayout(
+			Group group, boolean privateLayout, long parentLayoutId,
+			Map<Locale, String> nameMap, String friendlyURL,
+			String layoutTemplateId)
+		throws Exception {
+
+		ServiceContext serviceContext = new ServiceContext();
+
+		Layout layout = LayoutLocalServiceUtil.addLayout(
+			group.getCreatorUserId(), group.getGroupId(), privateLayout,
+			parentLayoutId, nameMap, null, null, null, null,
+			LayoutConstants.TYPE_PORTLET, false, friendlyURL, serviceContext);
+
+		LayoutTypePortlet layoutTypePortlet =
+			(LayoutTypePortlet)layout.getLayoutType();
+
+		layoutTypePortlet.setLayoutTemplateId(0, layoutTemplateId, false);
+
+		return LayoutLocalServiceUtil.updateLayout(
+			layout.getGroupId(), layout.isPrivateLayout(), layout.getLayoutId(),
+			layout.getTypeSettings());
+	}
 
 	public static Layout addLayout(
 			Group group, boolean privateLayout, long parentLayoutId,
@@ -98,13 +121,7 @@ public class LayoutUtil {
 				portletIds = PortletProps.getArray(keyPrefix + column, filter);
 			}
 
-			String portlets = StringPool.BLANK;
-
-			for (String portletId : portletIds) {
-				portlets = StringUtil.add(portlets, portletId);
-			}
-
-			layoutTypePortlet.setPortletIds(column, portlets);
+			layoutTypePortlet.addPortletIds(0, portletIds, column, false);
 		}
 
 		LayoutLocalServiceUtil.updateLayout(

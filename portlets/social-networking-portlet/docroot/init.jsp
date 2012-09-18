@@ -58,7 +58,6 @@ page import="com.liferay.portal.service.PortletLocalServiceUtil" %><%@
 page import="com.liferay.portal.service.UserLocalServiceUtil" %><%@
 page import="com.liferay.portal.service.permission.UserPermissionUtil" %><%@
 page import="com.liferay.portal.util.PortalUtil" %><%@
-page import="com.liferay.portal.util.PortletKeys" %><%@
 page import="com.liferay.portal.util.comparator.UserLoginDateComparator" %><%@
 page import="com.liferay.portal.webserver.WebServerServletTokenUtil" %><%@
 page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %><%@
@@ -82,6 +81,7 @@ page import="com.liferay.socialnetworking.model.WallEntry" %><%@
 page import="com.liferay.socialnetworking.service.MeetupsEntryLocalServiceUtil" %><%@
 page import="com.liferay.socialnetworking.service.MeetupsRegistrationLocalServiceUtil" %><%@
 page import="com.liferay.socialnetworking.service.WallEntryLocalServiceUtil" %><%@
+page import="com.liferay.socialnetworking.util.PortletKeys" %><%@
 page import="com.liferay.socialnetworking.util.PortletPropsValues" %><%@
 page import="com.liferay.util.portlet.PortletProps" %>
 
@@ -96,6 +96,7 @@ page import="java.util.List" %>
 <%@ page import="javax.portlet.ActionRequest" %><%@
 page import="javax.portlet.PortletPreferences" %><%@
 page import="javax.portlet.PortletURL" %><%@
+page import="javax.portlet.ResourceURL" %><%@
 page import="javax.portlet.WindowState" %>
 
 <portlet:defineObjects />
