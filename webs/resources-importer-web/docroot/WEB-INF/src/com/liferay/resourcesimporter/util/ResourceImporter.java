@@ -23,27 +23,21 @@ import java.util.Set;
 
 /**
  * @author Raymond Augé
+ * @author Ryan Park
  */
 public class ResourceImporter extends FileSystemImporter {
 
 	@Override
 	public void importResources() throws Exception {
-		addDLFileEntries("/document_library/documents");
-
-		addJournalArticles(
-			StringPool.BLANK, StringPool.BLANK, "/journal/articles");
-
-		addJournalStructures("/journal/structures");
-
-		addJournalTemplates(StringPool.BLANK, "/journal/templates");
-
-		addLayouts("sitemap.json");
+		doImportResources();
 	}
 
 	@Override
-	protected void addDLFileEntries(String fileEntriesDir) throws Exception {
+	protected void addDLFileEntries(String fileEntriesDirName)
+		throws Exception {
+
 		Set<String> resourcePaths = servletContext.getResourcePaths(
-			resourcesDir.concat(fileEntriesDir));
+			resourcesDir.concat(fileEntriesDirName));
 
 		if (resourcePaths == null) {
 			return;
@@ -186,9 +180,23 @@ public class ResourceImporter extends FileSystemImporter {
 	}
 
 	@Override
-	protected void addLayouts(String siteMapName) throws Exception {
+	protected void setupSettings(String settingsName) throws Exception {
+		URL settingsJSONURL = servletContext.getResource(
+			resourcesDir.concat(settingsName));
+
+		if (settingsJSONURL == null) {
+			return;
+		}
+
+		URLConnection urlConnection = settingsJSONURL.openConnection();
+
+		setupSettings(urlConnection.getInputStream());
+	}
+
+	@Override
+	protected void setupSitemap(String sitemapName) throws Exception {
 		URL sitemapJSONURL = servletContext.getResource(
-			resourcesDir.concat(siteMapName));
+			resourcesDir.concat(sitemapName));
 
 		if (sitemapJSONURL == null) {
 			return;
@@ -196,7 +204,7 @@ public class ResourceImporter extends FileSystemImporter {
 
 		URLConnection urlConnection = sitemapJSONURL.openConnection();
 
-		doAddLayouts(urlConnection.getInputStream());
+		setupSitemap(urlConnection.getInputStream());
 	}
 
 }

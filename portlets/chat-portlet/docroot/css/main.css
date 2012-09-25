@@ -6,7 +6,7 @@ html body {
 /* ---------- Bottom Dock ---------- */
 
 .chat-bar {
-	background: url(../images/btm-dock_bg.png);
+	background: #e5e5e5 url(../images/btm-dock_bg.png) repeat-x;
 	border: 1px solid #b5b5b5;
 	border-bottom: none;
 	bottom: 0;
@@ -37,6 +37,10 @@ html body {
 }
 
 .chat-tabs-container {
+}
+
+.chat-bar .trigger-name, .chat-bar .status-message {
+	text-shadow: 1px 1px #fff;
 }
 
 /* ---------- Bottom Dock Tabs ---------- */
@@ -80,16 +84,8 @@ html body {
 	z-index: 30;
 	margin: -2px 0 -1px;
 }
-/*
-.chat-bar div ul li.buddy-list .panel-trigger {
-	border-right: 0;
-}*/
 
 /* ---------- Unread Messages ---------- */
-
-.chat-bar div ul li.waiting .panel-trigger {
-	background-image: url(../images/message_waiting_indicator.gif);
-}
 
 .chat-bar div ul li .panel-trigger .unread {
 	background: url(../images/unread-messages.png);
@@ -210,8 +206,10 @@ html body {
 }
 
 .buddy-list .panel-content div {
-	float: left;
 	font: 12px/24px Arial, Helvetica, sans-serif;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .buddy-list .panel-content .idle div {
@@ -298,6 +296,7 @@ html body {
 	font-weight: bold;
 	height: 24px;
 	line-height: 24px;
+	padding-right: 35px;
 	text-indent: 60px;
 }
 
@@ -371,7 +370,7 @@ html body {
 	color: #fff;
 	display: block;
 	line-height: 11px;
-	padding: 2px 4px 3px;
+	padding: 2px 50px 3px 4px;
 }
 
 .panel-output .incoming .name {
@@ -383,9 +382,10 @@ html body {
 	color: #eee;
 	font-size: 10px;
 	font-style: normal;
+	margin-top: -2em;
 	position: absolute;
 	right: 8px;
-	top: 2px;
+	top: 50%;
 }
 
 .panel-output .incoming .date {
@@ -468,4 +468,10 @@ html body {
 	height: 16px;
 	margin-right: 3px;
 	width: 16px;
+}
+
+/* ---------- Message waiting indicator (only background-color is used) ---------- */
+
+.message-waiting {
+	background-color: #a5d6ef;
 }
