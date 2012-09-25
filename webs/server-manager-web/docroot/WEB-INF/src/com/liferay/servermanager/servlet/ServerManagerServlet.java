@@ -103,6 +103,10 @@ public class ServerManagerServlet extends HttpServlet {
 			HttpServletRequest request, HttpServletResponse response)
 		throws IOException {
 
+		// Get the company ID as a workaround. See LPS-30028.
+
+		PortalUtil.getCompanyId(request);
+
 		if (!isValidUser(request)) {
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
