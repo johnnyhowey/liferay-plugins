@@ -1,0 +1,21 @@
+#if ($title.data != "")
+	<h2>
+		$title.data
+	</h2>
+#end
+
+<ul class="hide-bullets">
+	#foreach ($footer-link in $footer-links.siblings)
+		<li>
+			#if ($footer-link.url-location.data != "")
+				<a href="$footer-link.url-location.data">
+			#end
+
+			$footer-link.data
+
+			#if ($footer-link.url-location.data != "")
+				</a>
+			#end
+		</li>
+	#end
+</ul>

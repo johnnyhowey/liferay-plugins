@@ -1,0 +1,65 @@
+<footer id="footerWrapper" role="contentinfo">
+	<div class="aui-layout-content" id="footerContent">
+		<div class="aui-column aui-column-first aui-w25" id="footerSection1">
+			<div class="aui-column-content aui-column-content-first">
+				#if ($footer_section_1)
+					$footer_section_1
+				#end
+			</div>
+		</div>
+
+		<div class="aui-column aui-w25" id="footerSection2">
+			<div class="aui-column-content">
+				#if ($theme_settings.footer-section-2-article-id)
+					#if ($footer_section_2)
+						$footer_section_2
+					#end
+				#else
+					#if ($theme_settings.footer-nav-title)
+						<h2>
+							<span>$theme_settings.footer-nav-title</span>
+						</h2>
+					#end
+
+					<ul>
+						#foreach ($nav_item in $nav_items)
+							#set ($nav_item_class = "item-" + $velocityCount)
+
+							#if ($velocityCount == 1)
+								#set ($nav_item_class = $nav_item_class + " first")
+							#elseif (!$velocityHasNext)
+								#set ($nav_item_class = $nav_item_class + " last")
+							#end
+
+							#if ($nav_item.isSelected())
+								#set ($nav_item_class = $nav_item_class + " selected")
+							#end
+
+							<li class="$nav_item_class">
+								<a href="$nav_item.getURL()" $nav_item.getTarget()>
+									<span>$nav_item.icon() $nav_item.getName()</span>
+								</a>
+							</li>
+						#end
+					</ul>
+				#end
+			</div>
+		</div>
+
+		<div class="aui-column aui-w25" id="footerSection3">
+			<div class="aui-column-content">
+				#if ($footer_section_3)
+					$footer_section_3
+				#end
+			</div>
+		</div>
+
+		<div class="aui-column aui-column-last aui-w25" id="footerSection4">
+			<div class="aui-column-content aui-column-content-last">
+				#if ($footer_section_4)
+					$footer_section_4
+				#end
+			</div>
+		</div>
+	</div>
+</footer>

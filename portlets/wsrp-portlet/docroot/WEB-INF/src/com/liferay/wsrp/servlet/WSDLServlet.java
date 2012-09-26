@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.Http;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -31,6 +32,8 @@ import com.liferay.wsrp.util.Constants;
 
 import java.io.IOException;
 
+import java.util.Set;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +43,18 @@ import javax.servlet.http.HttpServletResponse;
  * @author Brian Wing Shun Chan
  */
 public class WSDLServlet extends HttpServlet {
+
+	public WSDLServlet() {
+		_paths = SetUtil.fromArray(
+				new String[] {
+					"/wsrp-1.0-bindings.wsdl", "/wsrp-1.0-interfaces.wsdl",
+					"/wsrp-1.0-service.wsdl", "/wsrp-1.0-types.xsd",
+					"/wsrp-2.0-bindings.wsdl", "/wsrp-2.0-extra.xsd",
+					"/wsrp-2.0-interfaces.wsdl", "/wsrp-2.0-service.wsdl",
+					"/wsrp-2.0-types.xsd"
+				}
+			);
+	}
 
 	@Override
 	public void service(
@@ -68,13 +83,11 @@ public class WSDLServlet extends HttpServlet {
 
 		ServletContext servletContext = getServletContext();
 
-		for (String curPath : _PATHS) {
-			if (path.equals(curPath)) {
-				String content = StringUtil.read(
-					servletContext.getResourceAsStream("/WEB-INF/wsdl" + path));
+		if (_paths.contains(path)) {
+			String content = StringUtil.read(
+				servletContext.getResourceAsStream("/WEB-INF/wsdl" + path));
 
-				return replaceLocations(request, content);
-			}
+			return replaceLocations(request, content);
 		}
 
 		String url = request.getRequestURL().toString();
@@ -153,14 +166,8 @@ public class WSDLServlet extends HttpServlet {
 			});
 	}
 
-	private static final String[] _PATHS = {
-		"/wsrp-1.0-bindings.wsdl", "/wsrp-1.0-interfaces.wsdl",
-		"/wsrp-1.0-service.wsdl", "/wsrp-1.0-types.xsd",
-		"/wsrp-2.0-bindings.wsdl", "/wsrp-2.0-extra.xsd",
-		"/wsrp-2.0-interfaces.wsdl", "/wsrp-2.0-service.wsdl",
-		"/wsrp-2.0-types.xsd"
-	};
-
 	private static Log _log = LogFactoryUtil.getLog(WSDLServlet.class);
+
+	private static Set<String> _paths;
 
 }
