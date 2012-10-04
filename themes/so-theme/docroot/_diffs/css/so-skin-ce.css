@@ -1813,6 +1813,12 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 	.microblogs-countdown {
 		font-size: .9em;
 	}
+
+	.microblogs-button-input-disabled, .microblogs-button-input-disabled:hover {
+		background: #C10000;
+		border-color: #8A0808;
+		color: #FFF;
+	}
 }
 
 .user-group .microblogs-status-container {
@@ -2247,6 +2253,10 @@ button, input[type=button], input[type=reset], input[type=submit], #toggleFluid,
 
 button, input[type=button], input[type=reset], input[type=submit], #toggleFluid, .aui-button-disabled input[type], .aui-button-disabled input[type]:focus, .aui-button-disabled input[type]:hover, .aui-button-disabled button, .aui-button-disabled button:hover, .aui-button-disabled button:focus, .aui-dialog-hd, .aui-panel-hd, .aui-state-default, .aui-tabview-list, .aui-tab, .aui-tab-content, .contacts-portlet .social-relations a:hover, .edit-controls a:hover, .invite-members, .lfr-actions.lfr-extended, .lfr-header-row .aui-button-input, .lfr-header-row .aui-buttonitem-content, .lfr-header-row .lfr-actions.lfr-extended, .lfr-header-row .lfr-search-combobox, .portlet-blogs .lfr-meta-actions a, .portlet-document-library .select-documents, .portlet-document-library-display .select-documents, .results-header th, .so-layout-fluid-ad #toggleFluid, .tasks-dialog .control a.taglib-icon, .thread-controls a:hover, .top-links-navigation a:hover, .portlet-wiki .top-links-nodes .top-link-node a.node-current {
 	@include box-shadow(0 1px 0 #F4F3F3 inset, 0 -1px 0 #D9D8D8 inset);
+}
+
+.microblogs-portlet .microblogs-button-input-disabled, .microblogs-portlet .microblogs-button-input-disabled:hover, .microblogs-portlet .microblogs-button-input-disabled:active {
+	@include box-shadow(0 1px 0 #DE7777 inset, 0 -1px 0 #B00000 inset);
 }
 
 .aui-dialog-content, .aui-underlay-content {
