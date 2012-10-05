@@ -1814,10 +1814,11 @@ input[type=button], input[type=reset], input[type=submit], .aui-state-hover, .co
 		font-size: .9em;
 	}
 
-	.microblogs-button-input-disabled, .microblogs-button-input-disabled:hover {
+	.microblogs-button-input-disabled .microblogs-button-input, .microblogs-button-input-disabled:hover .microblogs-button-input {
 		background: #C10000;
 		border-color: #8A0808;
 		color: #FFF;
+		opacity: 1;
 	}
 }
 
@@ -2255,7 +2256,7 @@ button, input[type=button], input[type=reset], input[type=submit], #toggleFluid,
 	@include box-shadow(0 1px 0 #F4F3F3 inset, 0 -1px 0 #D9D8D8 inset);
 }
 
-.microblogs-portlet .microblogs-button-input-disabled, .microblogs-portlet .microblogs-button-input-disabled:hover, .microblogs-portlet .microblogs-button-input-disabled:active {
+.microblogs-portlet .microblogs-button-input-disabled .microblogs-button-input, .microblogs-portlet .microblogs-button-input-disabled:hover .microblogs-button-input, .microblogs-portlet .microblogs-button-input-disabled:active .microblogs-button-input {
 	@include box-shadow(0 1px 0 #DE7777 inset, 0 -1px 0 #B00000 inset);
 }
 
