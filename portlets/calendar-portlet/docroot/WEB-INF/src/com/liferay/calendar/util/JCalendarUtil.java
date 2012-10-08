@@ -16,6 +16,7 @@ package com.liferay.calendar.util;
 
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Time;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,26 +29,26 @@ import java.util.TimeZone;
  */
 public class JCalendarUtil {
 
-	public static Date getDate(Date date, TimeZone timeZone) {
-		Calendar jCalendar = getJCalendar(date, timeZone);
+	public static final long DAY = Time.HOUR * 24;
 
-		return jCalendar.getTime();
-	}
+	public static final long HOUR = Time.MINUTE * 60;
 
-	public static Calendar getJCalendar(Calendar jCalendar, TimeZone timeZone) {
-		return getJCalendar(
-			jCalendar.get(Calendar.YEAR), jCalendar.get(Calendar.MONTH),
-			jCalendar.get(Calendar.DATE), jCalendar.get(Calendar.HOUR_OF_DAY),
-			jCalendar.get(Calendar.MINUTE), jCalendar.get(Calendar.SECOND),
-			jCalendar.get(Calendar.MILLISECOND), timeZone);
-	}
+	public static final long MINUTE = Time.SECOND * 60;
 
-	public static Calendar getJCalendar(Date date, TimeZone timeZone) {
-		Calendar jCalendar = CalendarFactoryUtil.getCalendar(_utcTimeZone);
+	public static final long MONTH = Time.DAY * 30;
 
-		jCalendar.setTime(date);
+	public static final long SECOND = 1000;
 
-		return getJCalendar(jCalendar, timeZone);
+	public static long getDaysBetween(
+		Calendar startDateJCalendar, Calendar endDateJCalendar) {
+
+		startDateJCalendar = toMidnightJCalendar(startDateJCalendar);
+		endDateJCalendar = toMidnightJCalendar(endDateJCalendar);
+
+		long startdateTime = startDateJCalendar.getTimeInMillis();
+		long endDateTime = endDateJCalendar.getTimeInMillis();
+
+		return (endDateTime - startdateTime) / DAY;
 	}
 
 	public static Calendar getJCalendar(
@@ -68,19 +69,27 @@ public class JCalendarUtil {
 	}
 
 	public static Calendar getJCalendar(long time) {
-		Calendar jCalendar = CalendarFactoryUtil.getCalendar(_utcTimeZone);
+		return getJCalendar(time, _utcTimeZone);
+	}
+
+	public static Calendar getJCalendar(long time, TimeZone timeZone) {
+		Calendar jCalendar = CalendarFactoryUtil.getCalendar(timeZone);
 
 		jCalendar.setTimeInMillis(time);
 
 		return jCalendar;
 	}
 
-	public static Calendar getJCalendar(long time, TimeZone timeZone) {
-		return getJCalendar(new Date(time), timeZone);
-	}
-
 	public static int getTimeZoneOffset(TimeZone timeZone) {
-		return timeZone.getRawOffset();
+		int offset = timeZone.getRawOffset();
+
+		boolean inDaylightTime = timeZone.inDaylightTime(new Date());
+
+		if (inDaylightTime) {
+			offset += timeZone.getDSTSavings();
+		}
+
+		return offset;
 	}
 
 	public static Calendar toLastHourJCalendar(Calendar jCalendar) {
