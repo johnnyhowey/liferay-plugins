@@ -89,7 +89,7 @@ for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 			<div class="content">
 
 				<%
-				String content = HtmlUtil.escape(microblogsEntry.getContent());
+				String content = microblogsEntry.getContent();
 
 				Pattern pattern = Pattern.compile("\\#\\S*");
 

@@ -101,7 +101,7 @@ if (comment) {
 					</div>
 
 					<div class="content">
-						<span><%= HtmlUtil.escape(microblogsEntry.getContent()) %></span>
+						<span><%= microblogsEntry.getContent() %></span>
 					</div>
 
 					<div class="footer">
@@ -249,7 +249,7 @@ if (comment) {
 			var autocompleteContent = A.one('#<portlet:namespace />autocompleteContent<%= microblogsEntryId %>');
 			var highlighterContent = A.one('#<portlet:namespace/>highlighterContent<%= microblogsEntryId %>');
 
-			var inputValue = '<%= ((microblogsEntry != null) && (edit)) ? StringUtil.replace(HtmlUtil.escape(microblogsEntry.getContent()), "\'", "\\'") : StringPool.BLANK %>';
+			var inputValue = '<%= ((microblogsEntry != null) && (edit)) ? StringUtil.replace(microblogsEntry.getContent(), "\'", "\\'") : StringPool.BLANK %>';
 
 			if ((autocomplete.height() < 45) || (highlighterContent.height() < 45)) {
 				autocomplete.height(45);
