@@ -261,7 +261,7 @@ if (comment) {
 				{
 					autoSize: true,
 					id: '<portlet:namespace />contentInput<%= microblogsEntryId %>',
-					value: inputValue
+					value: Liferay.Util.unescapeHTML(inputValue)
 				}
 			).render(autocompleteContent);
 
