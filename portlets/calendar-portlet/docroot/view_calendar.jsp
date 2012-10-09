@@ -18,7 +18,7 @@
 
 <%
 String activeView = ParamUtil.getString(request, "activeView", defaultView);
-long currentDate = ParamUtil.getLong(request, "currentDate", now.getTimeInMillis());
+long date = ParamUtil.getLong(request, "date", now.getTimeInMillis());
 
 List<Calendar> groupCalendars = null;
 
@@ -51,6 +51,8 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 
 <aui:fieldset cssClass="calendar-portlet-column-parent">
 	<aui:column cssClass="calendar-portlet-column-options">
+		<div class="calendar-portlet-mini-calendar" id="<portlet:namespace />miniCalendarContainer"></div>
+
 		<div id="<portlet:namespace />calendarListContainer">
 			<a class="aui-toggler-header-expanded calendar-portlet-list-header" href="javascript:void(0);">
 				<span class="calendar-portlet-list-arrow"></span>
@@ -95,16 +97,15 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 	<aui:column columnWidth="100">
 		<liferay-util:include page="/scheduler.jsp" servletContext="<%= application %>">
 			<liferay-util:param name="activeView" value="<%= activeView %>" />
-			<liferay-util:param name="currentDate" value="<%= String.valueOf(currentDate) %>" />
+			<liferay-util:param name="date" value="<%= String.valueOf(date) %>" />
 
-			<portlet:renderURL var="editCalendarBookingURL">
+			<portlet:renderURL var="editCalendarBookingURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 				<portlet:param name="jspPage" value="/edit_calendar_booking.jsp" />
-				<portlet:param name="redirect" value="<%= String.valueOf(renderResponse.createRenderURL()) %>" />
 				<portlet:param name="activeView" value="{activeView}" />
 				<portlet:param name="allDay" value="{allDay}" />
 				<portlet:param name="calendarBookingId" value="{calendarBookingId}" />
 				<portlet:param name="calendarId" value="{calendarId}" />
-				<portlet:param name="currentDate" value="{currentDate}" />
+				<portlet:param name="date" value="{date}" />
 				<portlet:param name="endDate" value="{endDate}" />
 				<portlet:param name="startDate" value="{startDate}" />
 				<portlet:param name="titleCurrentValue" value="{titleCurrentValue}" />
@@ -120,12 +121,17 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 <%@ include file="/view_calendar_menus.jspf" %>
 
 <aui:script use="aui-toggler,liferay-calendar-list,liferay-scheduler,liferay-store,json">
+	Liferay.CalendarUtil.USER_CLASS_NAME_ID = <%= PortalUtil.getClassNameId(User.class) %>;
+
+	Liferay.CalendarUtil.INVITEES_URL = '<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="calendarBookingInvitees" />';
+	Liferay.CalendarUtil.RENDERING_RULES_URL = '<liferay-portlet:resourceURL copyCurrentRenderParameters="<%= false %>" id="calendarRenderingRules" />';
+
 	<c:if test="<%= userCalendars != null %>">
 		Liferay.CalendarUtil.DEFAULT_CALENDAR = <%= CalendarUtil.toCalendarJSONObject(themeDisplay, userCalendars.get(0)) %>;
 	</c:if>
 
-	var syncVisibleCalendarsMap = function() {
-		Liferay.CalendarUtil.syncVisibleCalendarsMap(
+	var syncCalendarsMap = function() {
+		Liferay.CalendarUtil.syncCalendarsMap(
 			window.<portlet:namespace />myCalendarList,
 			window.<portlet:namespace />otherCalendarList,
 			window.<portlet:namespace />siteCalendarList
@@ -135,7 +141,12 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 	window.<portlet:namespace />myCalendarList = new Liferay.CalendarList(
 		{
 			after: {
-				calendarsChange: syncVisibleCalendarsMap
+				calendarsChange: syncCalendarsMap,
+				'scheduler-calendar:visibleChange': function(event) {
+					syncCalendarsMap();
+
+					<portlet:namespace />refreshVisibleCalendarRenderingRules();
+				}
 			},
 			boundingBox: '#<portlet:namespace />myCalendarList',
 
@@ -152,13 +163,18 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 		{
 			after: {
 				calendarsChange: function(event) {
-					syncVisibleCalendarsMap();
+					syncCalendarsMap();
 
 					window.<portlet:namespace />scheduler.loadCalendarBookings();
 
 					var calendarIds = A.Array.invoke(event.newVal, 'get', 'calendarId');
 
 					Liferay.Store('otherCalendars', calendarIds.join());
+				},
+				'scheduler-calendar:visibleChange': function(event) {
+					syncCalendarsMap();
+
+					<portlet:namespace />refreshVisibleCalendarRenderingRules();
 				}
 			},
 			boundingBox: '#<portlet:namespace />otherCalendarList',
@@ -175,7 +191,12 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 	window.<portlet:namespace />siteCalendarList = new Liferay.CalendarList(
 		{
 			after: {
-				calendarsChange: syncVisibleCalendarsMap
+				calendarsChange: syncCalendarsMap,
+				'scheduler-calendar:visibleChange': function(event) {
+					syncCalendarsMap();
+
+					<portlet:namespace />refreshVisibleCalendarRenderingRules();
+				}
 			},
 			boundingBox: '#<portlet:namespace />siteCalendarList',
 
@@ -188,7 +209,7 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 		}
 	).render();
 
-	syncVisibleCalendarsMap();
+	syncCalendarsMap();
 
 	<portlet:namespace />scheduler.on(
 		{
@@ -221,9 +242,72 @@ JSONArray otherCalendarsJSONArray = CalendarUtil.toCalendarsJSONArray(themeDispl
 		function(event) {
 			window.<portlet:namespace />otherCalendarList.add(event.result.raw);
 
+			<portlet:namespace />refreshVisibleCalendarRenderingRules();
+
 			addOtherCalendarInput.val('');
 		}
 	);
+</aui:script>
+
+<aui:script use="aui-base">
+	AUI().use('aui-datatype', 'calendar', function(A) {
+		var DateMath = A.DataType.DateMath;
+
+		window.<portlet:namespace />refreshVisibleCalendarRenderingRules = function() {
+			var miniCalendarStartDate = window.<portlet:namespace />miniCalendar.get('date');
+
+			var miniCalendarEndDate = DateMath.add(miniCalendarStartDate, DateMath.MONTH, 1);
+
+			Liferay.CalendarUtil.getCalendarRenderingRules(
+				A.Object.keys(Liferay.CalendarUtil.visibleCalendars),
+				miniCalendarStartDate,
+				miniCalendarEndDate,
+				'busy',
+				function(rulesDefinition) {
+					window.<portlet:namespace />miniCalendar.set(
+						'customRenderer',
+						{
+							filterFunction: function(date, node, rules) {
+								node.addClass('lfr-busy-day');
+							},
+							rules: rulesDefinition
+						}
+					);
+				}
+			);
+		};
+
+		window.<portlet:namespace />miniCalendar = new A.Calendar(
+			{
+				after: {
+					dateChange: <portlet:namespace />refreshVisibleCalendarRenderingRules,
+					dateClick: function(event) {
+						<portlet:namespace />scheduler.setAttrs(
+							{
+								activeView: <portlet:namespace />dayView,
+								date: event.date
+							}
+						);
+					}
+				},
+				date: new Date(<%= String.valueOf(date) %>),
+				locale: 'en'
+			}
+		).render('#<portlet:namespace />miniCalendarContainer');
+
+		<portlet:namespace />refreshVisibleCalendarRenderingRules();
+
+		<portlet:namespace />scheduler.on('eventsChangeBatch', <portlet:namespace />refreshVisibleCalendarRenderingRules);
+
+		<portlet:namespace />scheduler.after(
+			'dateChange',
+			function(event) {
+				<portlet:namespace />miniCalendar._clearSelection();
+
+				<portlet:namespace />miniCalendar.selectDates(<portlet:namespace />scheduler.get('viewDate'));
+			}
+		);
+	});
 </aui:script>
 
 <%!
