@@ -18,6 +18,7 @@ import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.model.CalendarBookingModel;
 import com.liferay.calendar.model.CalendarBookingSoap;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSON;
@@ -98,7 +99,7 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 			{ "statusByUserName", Types.VARCHAR },
 			{ "statusDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table CalendarBooking (uuid_ VARCHAR(75) null,calendarBookingId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,calendarId LONG,calendarResourceId LONG,parentCalendarBookingId LONG,title STRING null,description STRING null,location VARCHAR(75) null,startDate LONG,endDate LONG,allDay BOOLEAN,recurrence VARCHAR(75) null,firstReminder LONG,firstReminderType VARCHAR(75) null,secondReminder LONG,secondReminderType VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table CalendarBooking (uuid_ VARCHAR(75) null,calendarBookingId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,calendarId LONG,calendarResourceId LONG,parentCalendarBookingId LONG,title STRING null,description STRING null,location VARCHAR(75) null,startDate LONG,endDate LONG,allDay BOOLEAN,recurrence STRING null,firstReminder LONG,firstReminderType VARCHAR(75) null,secondReminder LONG,secondReminderType VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table CalendarBooking";
 	public static final String ORDER_BY_JPQL = " ORDER BY calendarBooking.startDate ASC, calendarBooking.title ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY CalendarBooking.startDate ASC, CalendarBooking.title ASC";
@@ -1057,17 +1058,6 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	}
 
 	@Override
-	public CalendarBooking toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (CalendarBooking)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
-		}
-
-		return _escapedModelProxy;
-	}
-
-	@Override
 	public ExpandoBridge getExpandoBridge() {
 		return ExpandoBridgeFactoryUtil.getExpandoBridge(getCompanyId(),
 			CalendarBooking.class.getName(), getPrimaryKey());
@@ -1078,6 +1068,26 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 		ExpandoBridge expandoBridge = getExpandoBridge();
 
 		expandoBridge.setAttributes(serviceContext);
+	}
+
+	@SuppressWarnings("unused")
+	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
+		throws LocaleException {
+		setTitle(getTitle(defaultImportLocale), defaultImportLocale,
+			defaultImportLocale);
+		setDescription(getDescription(defaultImportLocale),
+			defaultImportLocale, defaultImportLocale);
+	}
+
+	@Override
+	public CalendarBooking toEscapedModel() {
+		if (_escapedModelProxy == null) {
+			_escapedModelProxy = (CalendarBooking)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelProxyInterfaces,
+					new AutoEscapeBeanHandler(this));
+		}
+
+		return _escapedModelProxy;
 	}
 
 	@Override

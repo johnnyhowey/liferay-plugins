@@ -7,7 +7,7 @@
  *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
+ * FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more
  * details.
  */
 
@@ -16,6 +16,7 @@ package com.liferay.portal.mobile.device.wurfl;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mobile.device.Device;
+import com.liferay.portal.kernel.mobile.device.DeviceCapabilityFilter;
 import com.liferay.portal.kernel.mobile.device.DeviceRecognitionProvider;
 import com.liferay.portal.kernel.mobile.device.KnownDevices;
 import com.liferay.portal.kernel.mobile.device.UnknownDevice;
@@ -53,7 +54,10 @@ public class WURFLDeviceRecognitionProvider
 			Map<String, String> capabilities = wurflDevice.getCapabilities();
 
 			if ((capabilities != null) && !capabilities.isEmpty()) {
-				device = new WURFLDevice(capabilities);
+				device = new WURFLDevice(capabilities, _deviceCapabilityFilter);
+			}
+			else {
+				device = UnknownDevice.getInstance();
 			}
 		}
 
@@ -70,6 +74,12 @@ public class WURFLDeviceRecognitionProvider
 		_knownDevices.reload();
 	}
 
+	public void setDeviceCapabilityFilter(
+		DeviceCapabilityFilter deviceCapabilityFilter) {
+
+		_deviceCapabilityFilter = deviceCapabilityFilter;
+	}
+
 	public void setKnownDevices(KnownDevices knownDevices) {
 		_knownDevices = knownDevices;
 	}
@@ -81,6 +91,7 @@ public class WURFLDeviceRecognitionProvider
 	private static Log _log = LogFactoryUtil.getLog(
 		WURFLDeviceRecognitionProvider.class);
 
+	private DeviceCapabilityFilter _deviceCapabilityFilter;
 	private KnownDevices _knownDevices;
 	private WURFLHolderImpl _wurflHolderImpl;
 
