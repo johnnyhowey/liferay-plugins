@@ -2,15 +2,18 @@
 /**
  * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
  *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
+ * This file is part of Liferay Social Office. Liferay Social Office is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
  *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
+ * Liferay Social Office is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 --%>
 
@@ -52,7 +55,7 @@ if ((microblogsEntry != null) && !edit) {
 
 	receiverUserId = microblogsEntry.getUserId();
 
-	receiverUserFullName = PortalUtil.getUserName(microblogsEntry.getUserId(), microblogsEntry.getUserName());
+	receiverUserFullName = PortalUtil.getUserName(microblogsEntry);
 
 	try {
 		User receiverUser = UserLocalServiceUtil.getUserById(microblogsEntry.getUserId());
@@ -98,7 +101,7 @@ if (comment) {
 					</div>
 
 					<div class="content">
-						<span><%= HtmlUtil.escape(microblogsEntry.getContent()) %><span>
+						<span><%= HtmlUtil.escape(microblogsEntry.getContent()) %></span>
 					</div>
 
 					<div class="footer">
@@ -123,18 +126,18 @@ if (comment) {
 	<aui:input name="receiverUserId" type="hidden" value="<%= receiverUserId %>" />
 	<aui:input name="receiverMicroblogsEntryId" type="hidden" value="<%= microblogsEntryId %>" />
 
+	<aui:model-context bean="<%= microblogsEntry %>" model="<%= MicroblogsEntry.class %>" />
+
 	<c:choose>
 		<c:when test="<%= repost %>">
 			<aui:input name="type" type="hidden" value="<%= MicroblogsEntryConstants.TYPE_REPOST %>" />
 
-			<aui:input name="content" type="hidden" value="<%= microblogsEntry.getContent() %>" />
+			<aui:input name="content" type="hidden" />
 		</c:when>
 		<c:when test="<%= comment %>">
 			<aui:input name="type" type="hidden" value="<%= MicroblogsEntryConstants.TYPE_REPLY %>" />
 		</c:when>
 	</c:choose>
-
-	<aui:model-context bean="<%= microblogsEntry %>" model="<%= MicroblogsEntry.class %>" />
 
 	<c:if test="<%= !repost %>">
 		<c:if test="<%= comment %>">
@@ -186,7 +189,7 @@ if (comment) {
 				<span class="microblogs-countdown">150</span>
 			</c:if>
 
-			<aui:button inputCssClass="microblogs-button-input" name="submit" type="submit" value="post" />
+			<aui:button disabled="true" inputCssClass="microblogs-button-input" name="submit" type="submit" value="post" />
 
 			<c:if test="<%= repost %>">
 				<aui:button onClick="Liferay.Microblogs.closePopup();" type="cancel" />
@@ -227,18 +230,20 @@ if (comment) {
 			var contentInput = event.currentTarget;
 
 			var countdown = form.one('.microblogs-countdown');
-			var submitButton = form.one('.aui-button-input-submit');
+			var submitButton = form.one('.aui-button-submit');
 
 			var remaining = (150 - contentInput.val().length);
 
-			var disabled = ((remaining < 0) || (remaining == 150));
+			var error = (remaining < 0);
+			var disabled = ((remaining == 150) || (contentInput.get('value') == "") || error);
 
 			countdown.html(remaining);
 
-			submitButton.attr('disabled', disabled);
-			submitButton.toggleClass('microblogs-button-input-disabled', disabled);
+			submitButton.one('.microblogs-button-input').attr('disabled', disabled);
+			submitButton.toggleClass('aui-button-disabled', disabled);
 
-			countdown.toggleClass('microblogs-countdown-warned', (remaining < 0));
+			submitButton.toggleClass('microblogs-button-input-disabled', error);
+			countdown.toggleClass('microblogs-countdown-warned', error);
 		};
 
 		var createTextarea = function(divId) {
@@ -246,7 +251,7 @@ if (comment) {
 			var autocompleteContent = A.one('#<portlet:namespace />autocompleteContent<%= microblogsEntryId %>');
 			var highlighterContent = A.one('#<portlet:namespace/>highlighterContent<%= microblogsEntryId %>');
 
-			var inputValue = '<%= ((microblogsEntry != null) && (edit)) ? StringUtil.replace(microblogsEntry.getContent(), "\'", "\\'") : StringPool.BLANK %>';
+			var inputValue = '<%= ((microblogsEntry != null) && (edit)) ? StringUtil.replace(HtmlUtil.escapeJS(microblogsEntry.getContent()), "\'", "\\'") : StringPool.BLANK %>';
 
 			if ((autocomplete.height() < 45) || (highlighterContent.height() < 45)) {
 				autocomplete.height(45);

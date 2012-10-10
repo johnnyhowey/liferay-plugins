@@ -136,13 +136,17 @@ public class AppLocalServiceClpInvoker {
 
 		_methodParameterTypes48 = new String[] { "long" };
 
-		_methodName49 = "uninstallApp";
+		_methodName49 = "processMarketplaceProperties";
 
-		_methodParameterTypes49 = new String[] { "long" };
+		_methodParameterTypes49 = new String[] { "java.util.Properties" };
 
-		_methodName50 = "updateApp";
+		_methodName50 = "uninstallApp";
 
-		_methodParameterTypes50 = new String[] {
+		_methodParameterTypes50 = new String[] { "long" };
+
+		_methodName51 = "updateApp";
+
+		_methodParameterTypes51 = new String[] {
 				"long", "java.lang.String", "java.io.InputStream"
 			};
 	}
@@ -244,6 +248,8 @@ public class AppLocalServiceClpInvoker {
 		if (_methodName39.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes39, parameterTypes)) {
 			AppLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+
+			return null;
 		}
 
 		if (_methodName44.equals(name) &&
@@ -272,15 +278,26 @@ public class AppLocalServiceClpInvoker {
 		if (_methodName48.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			AppLocalServiceUtil.installApp(((Long)arguments[0]).longValue());
+
+			return null;
 		}
 
 		if (_methodName49.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
-			AppLocalServiceUtil.uninstallApp(((Long)arguments[0]).longValue());
+			AppLocalServiceUtil.processMarketplaceProperties((java.util.Properties)arguments[0]);
+
+			return null;
 		}
 
 		if (_methodName50.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+			AppLocalServiceUtil.uninstallApp(((Long)arguments[0]).longValue());
+
+			return null;
+		}
+
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
 			return AppLocalServiceUtil.updateApp(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				(java.io.InputStream)arguments[2]);
@@ -339,4 +356,6 @@ public class AppLocalServiceClpInvoker {
 	private String[] _methodParameterTypes49;
 	private String _methodName50;
 	private String[] _methodParameterTypes50;
+	private String _methodName51;
+	private String[] _methodParameterTypes51;
 }
