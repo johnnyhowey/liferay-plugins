@@ -14,6 +14,7 @@
 
 package com.liferay.calendar.model;
 
+import com.liferay.portal.LocaleException;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.AttachedModel;
@@ -259,20 +260,6 @@ public interface CalendarResourceModel extends AttachedModel,
 	 * @param classUuid the class uuid of this calendar resource
 	 */
 	public void setClassUuid(String classUuid);
-
-	/**
-	 * Returns the default calendar ID of this calendar resource.
-	 *
-	 * @return the default calendar ID of this calendar resource
-	 */
-	public long getDefaultCalendarId();
-
-	/**
-	 * Sets the default calendar ID of this calendar resource.
-	 *
-	 * @param defaultCalendarId the default calendar ID of this calendar resource
-	 */
-	public void setDefaultCalendarId(long defaultCalendarId);
 
 	/**
 	 * Returns the code of this calendar resource.
@@ -542,6 +529,9 @@ public interface CalendarResourceModel extends AttachedModel,
 	public ExpandoBridge getExpandoBridge();
 
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
+
+	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
+		throws LocaleException;
 
 	public Object clone();
 
