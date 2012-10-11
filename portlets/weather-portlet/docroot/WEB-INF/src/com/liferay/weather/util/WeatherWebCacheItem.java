@@ -16,6 +16,7 @@ package com.liferay.weather.util;
 
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.webcache.WebCacheException;
 import com.liferay.portal.kernel.webcache.WebCacheItem;
@@ -26,10 +27,13 @@ import com.liferay.weather.model.Weather;
 
 /**
  * @author Brian Wing Shun Chan
+ * @author Samuel Kong
  */
 public class WeatherWebCacheItem implements WebCacheItem {
 
-	public WeatherWebCacheItem(String zip) {
+	public WeatherWebCacheItem(String apiKey, String zip) {
+		_apiKey = apiKey;
+
 		_zip = zip;
 
 		if (_zip.equals("Frankfurt/Main")) {
@@ -41,29 +45,7 @@ public class WeatherWebCacheItem implements WebCacheItem {
 		Weather weather = null;
 
 		try {
-			String xml = HttpUtil.URLtoString(
-				"http://www.google.com/ig/api?weather=" +
-					HttpUtil.encodeURL(_zip));
-
-			Document doc = SAXReaderUtil.read(xml);
-
-			Element root = doc.getRootElement();
-
-			Element weatherEl = root.element("weather");
-
-			Element currentConditionsEl = weatherEl.element(
-				"current_conditions");
-
-			Element temperatureEl = currentConditionsEl.element("temp_f");
-
-			float temperature = GetterUtil.getFloat(
-				temperatureEl.attributeValue("data"));
-
-			Element iconEl = currentConditionsEl.element("icon");
-
-			String iconURL = "//www.google.com" + iconEl.attributeValue("data");
-
-			weather = new Weather(_zip, iconURL, temperature);
+			weather = doConvert(key);
 		}
 		catch (Exception e) {
 			throw new WebCacheException(_zip);
@@ -76,8 +58,38 @@ public class WeatherWebCacheItem implements WebCacheItem {
 		return _REFRESH_TIME;
 	}
 
-	private static final long _REFRESH_TIME = Time.MINUTE * 20;
+	protected Weather doConvert(String key) throws Exception {
+		StringBundler sb = new StringBundler(5);
 
+		sb.append("http://free.worldweatheronline.com/feed/weather.ashx?key=");
+		sb.append(_apiKey);
+		sb.append("&q=");
+		sb.append(HttpUtil.encodeURL(_zip));
+		sb.append("&format=xml");
+
+		String xml = HttpUtil.URLtoString(sb.toString());
+
+		Document document = SAXReaderUtil.read(xml);
+
+		Element rootElement = document.getRootElement();
+
+		Element currentConditionElement = rootElement.element(
+			"current_condition");
+
+		Element temperatureElement = currentConditionElement.element("temp_F");
+
+		float temperature = GetterUtil.getFloat(temperatureElement.getData());
+
+		Element iconElement = currentConditionElement.element("weatherIconUrl");
+
+		String iconURL = iconElement.getText();
+
+		return new Weather(_zip, iconURL, temperature);
+	}
+
+	private static final long _REFRESH_TIME = Time.MINUTE * 60;
+
+	private String _apiKey;
 	private String _zip;
 
 }

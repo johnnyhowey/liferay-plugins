@@ -30,6 +30,10 @@ public class FooServiceClpInvoker {
 		_methodName31 = "setBeanIdentifier";
 
 		_methodParameterTypes31 = new String[] { "java.lang.String" };
+
+		_methodName36 = "getUser";
+
+		_methodParameterTypes36 = new String[] { "long" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -42,6 +46,13 @@ public class FooServiceClpInvoker {
 		if (_methodName31.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes31, parameterTypes)) {
 			FooServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
+
+			return null;
+		}
+
+		if (_methodName36.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes36, parameterTypes)) {
+			return FooServiceUtil.getUser(((Long)arguments[0]).longValue());
 		}
 
 		throw new UnsupportedOperationException();
@@ -51,4 +62,6 @@ public class FooServiceClpInvoker {
 	private String[] _methodParameterTypes30;
 	private String _methodName31;
 	private String[] _methodParameterTypes31;
+	private String _methodName36;
+	private String[] _methodParameterTypes36;
 }
