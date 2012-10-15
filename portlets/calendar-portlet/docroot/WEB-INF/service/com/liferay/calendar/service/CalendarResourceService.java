@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.jsonwebservice.JSONWebService;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
+import com.liferay.portal.security.ac.AccessControlled;
 import com.liferay.portal.service.BaseService;
 import com.liferay.portal.service.InvokableService;
 
@@ -36,6 +37,7 @@ import com.liferay.portal.service.InvokableService;
  * @see com.liferay.calendar.service.impl.CalendarResourceServiceImpl
  * @generated
  */
+@AccessControlled
 @JSONWebService
 @Transactional(isolation = Isolation.PORTAL, rollbackFor =  {
 	PortalException.class, SystemException.class})
@@ -66,8 +68,7 @@ public interface CalendarResourceService extends BaseService, InvokableService {
 
 	public com.liferay.calendar.model.CalendarResource addCalendarResource(
 		long groupId, java.lang.String className, long classPK,
-		java.lang.String classUuid, long defaultCalendarId,
-		java.lang.String code,
+		java.lang.String classUuid, java.lang.String code,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		java.lang.String type, boolean active,
@@ -122,16 +123,7 @@ public interface CalendarResourceService extends BaseService, InvokableService {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	public com.liferay.calendar.model.CalendarResource updateCalendarResource(
-		long calendarResourceId, long defaultCalendarId,
-		java.util.Map<java.util.Locale, java.lang.String> nameMap,
-		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		java.lang.String type, boolean active,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.calendar.model.CalendarResource updateCalendarResource(
-		long calendarResourceId, java.lang.String code,
+		long calendarResourceId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		java.lang.String type, boolean active,

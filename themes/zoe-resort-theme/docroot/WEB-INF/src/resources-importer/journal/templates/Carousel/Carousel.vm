@@ -1,0 +1,57 @@
+#set ($content_id = $reserved-article-id.data)
+#set ($content_class = "multiple-items-" + $content_id + "-carousel")
+
+<style type="text/css">
+	#${content_class} {
+		height: ${height.data}px;
+		position: relative;
+		width: ${width.data}px;
+	}
+
+	#${content_class} .carousel-item {
+		height: ${height.data}px;
+		overflow: hidden;
+		position: absolute;
+		top: 0;
+		width: ${width.data}px;
+	}
+
+	#if ($controls.data == "")
+		#${content_class} menu {
+			display: none;
+		}
+	#end
+</style>
+
+<div id="$content_class">
+	#foreach ($item in $items.siblings)
+		<div class="carousel-item">
+			#if ($item.url-link.data != "")
+				<a href="${item.url-link.data}">
+			#end
+
+			<img alt="$item.data" src="$item.image.data" title="$item.data" />
+
+			#if ($item.url-link.data != "")
+				</a>
+			#end
+		</div>
+	#end
+</div>
+
+<script type="text/javascript">
+	AUI().ready(
+		'aui-carousel',
+		function(A) {
+			new A.Carousel(
+				{
+					activeIndex: 'rand',
+					contentBox: '#${content_class}',
+					height: ${height.data},
+					intervalTime: ${duration.data},
+					width: ${width.data}
+				}
+			).render();
+		}
+	);
+</script>

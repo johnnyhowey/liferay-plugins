@@ -23,50 +23,36 @@ import java.util.Set;
 
 /**
  * @author Raymond Augé
+ * @author Ryan Park
  */
 public class ResourceImporter extends FileSystemImporter {
 
 	@Override
 	public void importResources() throws Exception {
-		addDLFileEntries("/document_library/documents");
-
-		addJournalArticles(
-			StringPool.BLANK, StringPool.BLANK, "/journal/articles");
-
-		addJournalStructures("/journal/structures");
-
-		addJournalTemplates(StringPool.BLANK, "/journal/templates");
-
-		addLayouts("sitemap.json");
+		doImportResources();
 	}
 
 	@Override
-	protected void addDLFileEntries(String fileEntriesDir) throws Exception {
+	protected void addDLFileEntries(String fileEntriesDirName)
+		throws Exception {
+
 		Set<String> resourcePaths = servletContext.getResourcePaths(
-			resourcesDir.concat(fileEntriesDir));
+			resourcesDir.concat(fileEntriesDirName));
 
 		if (resourcePaths == null) {
 			return;
 		}
 
 		for (String resourcePath : resourcePaths) {
-			URL resourceURL = servletContext.getResource(resourcePath);
-
-			String path = resourceURL.getPath();
-
-			if (path.endsWith(StringPool.SLASH)) {
+			if (resourcePath.endsWith(StringPool.SLASH)) {
 				continue;
 			}
 
-			URLConnection urlConnection = resourceURL.openConnection();
+			String name = getName(resourcePath);
 
-			String name = resourceURL.getFile();
+			URL url = servletContext.getResource(resourcePath);
 
-			int pos = name.lastIndexOf(StringPool.SLASH);
-
-			if (pos != -1) {
-				name = name.substring(pos + 1);
-			}
+			URLConnection urlConnection = url.openConnection();
 
 			doAddDLFileEntries(
 				name, urlConnection.getInputStream(),
@@ -89,23 +75,15 @@ public class ResourceImporter extends FileSystemImporter {
 		}
 
 		for (String resourcePath : resourcePaths) {
-			URL resourceURL = servletContext.getResource(resourcePath);
-
-			String path = resourceURL.getPath();
-
-			if (path.endsWith(StringPool.SLASH)) {
+			if (resourcePath.endsWith(StringPool.SLASH)) {
 				continue;
 			}
 
+			String name = getName(resourcePath);
+
+			URL resourceURL = servletContext.getResource(resourcePath);
+
 			URLConnection urlConnection = resourceURL.openConnection();
-
-			String name = resourceURL.getFile();
-
-			int pos = name.lastIndexOf(StringPool.SLASH);
-
-			if (pos != -1) {
-				name = name.substring(pos + 1);
-			}
 
 			doAddJournalArticles(
 				journalStructureId, journalTemplateId, name,
@@ -115,7 +93,8 @@ public class ResourceImporter extends FileSystemImporter {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	protected void addJournalStructures(String structuresDirName)
+	protected void addJournalStructures(
+			String parentStructureId, String structuresDirName)
 		throws Exception {
 
 		Set<String> resourcePaths = servletContext.getResourcePaths(
@@ -126,25 +105,18 @@ public class ResourceImporter extends FileSystemImporter {
 		}
 
 		for (String resourcePath : resourcePaths) {
-			URL resourceURL = servletContext.getResource(resourcePath);
-
-			String path = resourceURL.getPath();
-
-			if (path.endsWith(StringPool.SLASH)) {
+			if (resourcePath.endsWith(StringPool.SLASH)) {
 				continue;
 			}
 
+			String name = getName(resourcePath);
+
+			URL resourceURL = servletContext.getResource(resourcePath);
+
 			URLConnection urlConnection = resourceURL.openConnection();
 
-			String name = resourceURL.getFile();
-
-			int pos = name.lastIndexOf(StringPool.SLASH);
-
-			if (pos != -1) {
-				name = name.substring(pos + 1);
-			}
-
-			doAddJournalStructures(name, urlConnection.getInputStream());
+			doAddJournalStructures(
+				parentStructureId, name, urlConnection.getInputStream());
 		}
 	}
 
@@ -162,23 +134,15 @@ public class ResourceImporter extends FileSystemImporter {
 		}
 
 		for (String resourcePath : resourcePaths) {
-			URL resourceURL = servletContext.getResource(resourcePath);
-
-			String path = resourceURL.getPath();
-
-			if (path.endsWith(StringPool.SLASH)) {
+			if (resourcePath.endsWith(StringPool.SLASH)) {
 				continue;
 			}
 
+			String name = getName(resourcePath);
+
+			URL resourceURL = servletContext.getResource(resourcePath);
+
 			URLConnection urlConnection = resourceURL.openConnection();
-
-			String name = resourceURL.getFile();
-
-			int pos = name.lastIndexOf(StringPool.SLASH);
-
-			if (pos != -1) {
-				name = name.substring(pos + 1);
-			}
 
 			doAddJournalTemplates(
 				journalStructureId, name, urlConnection.getInputStream());
@@ -186,9 +150,23 @@ public class ResourceImporter extends FileSystemImporter {
 	}
 
 	@Override
-	protected void addLayouts(String siteMapName) throws Exception {
+	protected void setupSettings(String settingsName) throws Exception {
+		URL settingsJSONURL = servletContext.getResource(
+			resourcesDir.concat(settingsName));
+
+		if (settingsJSONURL == null) {
+			return;
+		}
+
+		URLConnection urlConnection = settingsJSONURL.openConnection();
+
+		setupSettings(urlConnection.getInputStream());
+	}
+
+	@Override
+	protected void setupSitemap(String sitemapName) throws Exception {
 		URL sitemapJSONURL = servletContext.getResource(
-			resourcesDir.concat(siteMapName));
+			resourcesDir.concat(sitemapName));
 
 		if (sitemapJSONURL == null) {
 			return;
@@ -196,7 +174,7 @@ public class ResourceImporter extends FileSystemImporter {
 
 		URLConnection urlConnection = sitemapJSONURL.openConnection();
 
-		doAddLayouts(urlConnection.getInputStream());
+		setupSitemap(urlConnection.getInputStream());
 	}
 
 }
