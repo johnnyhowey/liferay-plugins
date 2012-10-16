@@ -32,6 +32,7 @@ import com.liferay.resourcesimporter.util.FileSystemImporter;
 import com.liferay.resourcesimporter.util.Importer;
 import com.liferay.resourcesimporter.util.ImporterException;
 import com.liferay.resourcesimporter.util.LARImporter;
+import com.liferay.resourcesimporter.util.PortletPropsValues;
 import com.liferay.resourcesimporter.util.ResourceImporter;
 
 import java.io.IOException;
@@ -137,7 +138,9 @@ public class HotDeployMessageListener extends BaseMessageListener {
 
 				importer.afterPropertiesSet();
 
-				if (importer.getGroupId() == 0) {
+				if (!PortletPropsValues.DEVELOPER_MODE_ENABLED &&
+					importer.isExisting()) {
+
 					if (_log.isInfoEnabled()) {
 						_log.info(
 							"Group or layout set prototype already exists " +
@@ -147,13 +150,22 @@ public class HotDeployMessageListener extends BaseMessageListener {
 					continue;
 				}
 
+				long startTime = 0;
+
 				if (_log.isInfoEnabled()) {
-					_log.info(
-						"Importing resources from " + servletContextName +
-							" to group " + importer.getGroupId());
+					startTime = System.currentTimeMillis();
 				}
 
 				importer.importResources();
+
+				if (_log.isInfoEnabled()) {
+					long endTime = System.currentTimeMillis() - startTime;
+
+					_log.info(
+						"Importing resources from " + servletContextName +
+							" to group " + importer.getGroupId() + " takes " +
+								endTime + " ms");
+				}
 
 				Message newMessage = new Message();
 

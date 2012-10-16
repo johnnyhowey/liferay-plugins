@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+
+#parse ($init)
+
+<html class="#language ("lang.dir")" dir="#language ("lang.dir")" lang="$w3c_language_id">
+
+<head>
+	<title>$the_title - $company_name</title>
+
+	$theme.include($top_head_include)
+</head>
+
+<body class="$css_class">
+
+<a href="#main-content" id="skip-to-content">#language ("skip-to-content")</a>
+
+$theme.include($body_top_include)
+
+#if ($is_signed_in)
+	#dockbar()
+#end
+
+<div id="wrapper">
+	<header id="banner" role="banner">
+		<div id="heading">
+			<h1 class="site-title">
+				<a class="$logo_css_class" href="$site_default_url" title="#language ("go-to") $site_name">
+					<img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width" />
+				</a>
+
+				#if ($show_site_name)
+					<span class="site-name" title="#language ("go-to") $site_name">
+						$site_name
+					</span>
+				#end
+			</h1>
+
+			<h2 class="page-title">
+				<span>$the_title</span>
+			</h2>
+
+			<div class="page-search">
+				$theme.journalContentSearch()
+			</div>
+		</div>
+
+		#if ($is_signed_in)
+			<span id="loggedInUsername">#language ('welcome'), $user_name</span>
+		#else
+			<a href="$sign_in_url" id="signIn" rel="nofollow">$sign_in_text</a>
+		#end
+
+		#if ($has_navigation || $is_signed_in)
+			#parse ("$full_templates_path/navigation.vm")
+		#end
+	</header>
+
+	<div id="content">
+		<nav class="site-breadcrumbs" id="breadcrumbs">
+			<h1>
+				<span>#language ("breadcrumbs")</span>
+			</h1>
+
+			#breadcrumbs()
+		</nav>
+
+		#if ($selectable)
+			$theme.include($content_include)
+		#else
+			$portletDisplay.recycle()
+
+			$portletDisplay.setTitle($the_title)
+
+			$theme.wrapPortlet("portlet.vm", $content_include)
+		#end
+	</div>
+</div>
+
+#if ($theme_settings.display-footer != "false")
+	<footer id="footer" role="contentinfo">
+		<div id="footerContent">
+			<div class="aui-layout-content">
+				<div class="aui-column aui-column-first aui-w50" id="footerSection1">
+					<div class="aui-column-content aui-column-content-first">
+						#if ($footer_section_1)
+							$footer_section_1
+						#end
+					</div>
+				</div>
+
+				<div class="aui-column aui-w25" id="footerSection2">
+					<div class="aui-column-content">
+						#if ($theme_settings.footer-section-2-article-id)
+							#if ($footer_section_2)
+								$footer_section_2
+							#end
+						#else
+							<div id="footerNavigation">
+								<h3>$theme_settings.footer-nav-title</h3>
+
+								<ul>
+									#foreach ($nav_item in $nav_items)
+										#set ($navItemClass = "item-" + $velocityCount)
+
+										#set ($selected_attr = "")
+
+										#if ($velocityCount == 1)
+											#set ($navItemClass = $navItemClass + " first")
+										#end
+
+										#if (!$velocityHasNext)
+											#set ($navItemClass = $navItemClass + " last")
+										#end
+
+										#if ($nav_item.isSelected())
+											#set ($navItemClass = $navItemClass + " selected")
+
+											#set ($selected_attr = "aria-selected=\"true\"")
+										#end
+
+										<li $selected_attr class="$navItemClass">
+											<a href="$nav_item.getURL()" $nav_item.getTarget()>
+												<span>$nav_item.icon() $nav_item.getName()</span>
+											</a>
+										</li>
+									#end
+								</ul>
+							</div>
+						#end
+					</div>
+				</div>
+
+				<div class="aui-column aui-column-last aui-w25" id="footerSection3">
+					<div class="aui-column-content aui-column-content-last">
+						#if ($footer_section_3)
+							$footer_section_3
+						#end
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+#end
+
+$theme.include($body_bottom_include)
+
+</body>
+
+$theme.include($bottom_include)
+
+</html>

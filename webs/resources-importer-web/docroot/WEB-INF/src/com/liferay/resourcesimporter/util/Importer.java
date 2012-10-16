@@ -30,6 +30,8 @@ public interface Importer {
 
 	public void importResources() throws Exception;
 
+	public boolean isExisting();
+
 	public void setCompanyId(long companyId);
 
 	public void setResourcesDir(String resourcesDir);
