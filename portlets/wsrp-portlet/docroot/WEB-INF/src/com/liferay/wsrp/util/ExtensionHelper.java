@@ -14,24 +14,26 @@
 
 package com.liferay.wsrp.util;
 
+import java.util.List;
+
+import oasis.names.tc.wsrp.v2.types.Extension;
+
+import org.apache.axis.message.MessageElement;
+
 /**
- * @author Brian Wing Shun Chan
+ * @author Michael C. Han
  */
-public class PortletPropsKeys {
+public interface ExtensionHelper {
 
-	public static final String CONSUMER_REQUEST_EXTENSIONS =
-		"consumer.request.extensions";
+	public void addMessageElement(
+		List<MessageElement> messageElements, String name, String value);
 
-	public static final String EXTENSION_HELPER_IMPL = "extension.helper.impl";
+	public Extension[] getExtensions(List<MessageElement> messageElements);
 
-	public static final String PROXY_URL_IPS_ALLOWED = "proxy.url.ips.allowed";
+	public Extension[] getExtensions(String name, String value);
 
-	public static final String SECURE_RESOURCE_URLS_ENABLED =
-		"secure.resource.urls.enabled";
+	public MessageElement[] getMessageElements(Extension[] extensions);
 
-	public static final String SECURE_RESOURCE_URLS_SALT =
-		"secure.resource.urls.salt";
-
-	public static final String SOAP_DEBUG = "soap.debug";
+	public String getNameAttribute(MessageElement messageElement);
 
 }
