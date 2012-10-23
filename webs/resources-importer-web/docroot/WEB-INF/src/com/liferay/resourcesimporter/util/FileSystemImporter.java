@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -272,10 +273,11 @@ public class FileSystemImporter extends BaseImporter {
 			JSONObject portletJSONObject = columnJSONArray.getJSONObject(i);
 
 			if (portletJSONObject == null) {
-				String articleId = getJournalArticleId(
+				String journalArticleId = getJournalId(
 					columnJSONArray.getString(i));
 
-				portletJSONObject = getDefaultPortletJSONObject(articleId);
+				portletJSONObject = getDefaultPortletJSONObject(
+					journalArticleId);
 			}
 
 			addLayoutColumnPortlet(layout, columnId, portletJSONObject);
@@ -321,7 +323,7 @@ public class FileSystemImporter extends BaseImporter {
 			if (rootPortletId.equals(PortletKeys.JOURNAL_CONTENT) &&
 				key.equals("articleId")) {
 
-				value = getJournalArticleId(value);
+				value = getJournalId(value);
 			}
 
 			portletSetup.setValue(key, value);
@@ -359,28 +361,30 @@ public class FileSystemImporter extends BaseImporter {
 	}
 
 	protected void doAddDLFileEntries(
-			String name, InputStream inputStream, long length)
+			String fileName, InputStream inputStream, long length)
 		throws Exception {
 
-		String mimeType = MimeTypesUtil.getContentType(name);
+		String mimeType = MimeTypesUtil.getContentType(fileName);
 
-		setServiceContext(name);
+		String title = FileUtil.stripExtension(fileName);
+
+		setServiceContext(fileName);
 
 		FileEntry fileEntry = DLAppLocalServiceUtil.addFileEntry(
-			userId, groupId, 0, name, mimeType, name, StringPool.BLANK,
+			userId, groupId, 0, fileName, mimeType, title, StringPool.BLANK,
 			StringPool.BLANK, inputStream, length, serviceContext);
 
-		_fileEntries.put(name, fileEntry);
+		_fileEntries.put(fileName, fileEntry);
 	}
 
 	protected void doAddJournalArticles(
-			String journalStructureId, String journalTemplateId, String name,
-			InputStream inputStream)
+			String journalStructureId, String journalTemplateId,
+			String fileName, InputStream inputStream)
 		throws Exception {
 
-		String journalArticleId = getJournalArticleId(name);
+		String journalArticleId = getJournalId(fileName);
 
-		String title = getName(name);
+		String title = FileUtil.stripExtension(fileName);
 
 		Map<Locale, String> titleMap = getNameMap(title);
 
@@ -388,7 +392,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		content = processJournalArticleContent(content);
 
-		setServiceContext(name);
+		setServiceContext(fileName);
 
 		JournalArticle journalArticle =
 			JournalArticleLocalServiceUtil.addArticle(
@@ -407,18 +411,22 @@ public class FileSystemImporter extends BaseImporter {
 	}
 
 	protected void doAddJournalStructures(
-			String parentStructureId, String name, InputStream inputStream)
+			String parentStructureId, String fileName, InputStream inputStream)
 		throws Exception {
+
+		String journalStructureId = getJournalId(fileName);
+
+		String name = FileUtil.stripExtension(fileName);
 
 		Map<Locale, String> nameMap = getNameMap(name);
 
 		String xsd = StringUtil.read(inputStream);
 
-		setServiceContext(name);
+		setServiceContext(fileName);
 
 		JournalStructure journalStructure =
 			JournalStructureLocalServiceUtil.addStructure(
-				userId, groupId, StringPool.BLANK, true, parentStructureId,
+				userId, groupId, journalStructureId, false, parentStructureId,
 				nameMap, null, xsd, serviceContext);
 
 		addJournalTemplates(
@@ -433,18 +441,22 @@ public class FileSystemImporter extends BaseImporter {
 	}
 
 	protected void doAddJournalTemplates(
-			String journalStructureId, String name, InputStream inputStream)
+			String journalStructureId, String fileName, InputStream inputStream)
 		throws Exception {
+
+		String journalTemplateId = getJournalId(fileName);
+
+		String name = FileUtil.stripExtension(fileName);
 
 		Map<Locale, String> nameMap = getNameMap(name);
 
 		String xsl = StringUtil.read(inputStream);
 
-		setServiceContext(name);
+		setServiceContext(fileName);
 
 		JournalTemplate journalTemplate =
 			JournalTemplateLocalServiceUtil.addTemplate(
-				userId, groupId, StringPool.BLANK, true, journalStructureId,
+				userId, groupId, journalTemplateId, false, journalStructureId,
 				nameMap, null, xsl, true, JournalTemplateConstants.LANG_TYPE_VM,
 				false, false, StringPool.BLANK, null, serviceContext);
 
@@ -469,7 +481,7 @@ public class FileSystemImporter extends BaseImporter {
 		setupSitemap("sitemap.json");
 	}
 
-	protected JSONObject getDefaultPortletJSONObject(String articleId) {
+	protected JSONObject getDefaultPortletJSONObject(String journalArticleId) {
 		JSONObject portletJSONObject = JSONFactoryUtil.createJSONObject();
 
 		portletJSONObject.put("portletId", PortletKeys.JOURNAL_CONTENT);
@@ -477,7 +489,7 @@ public class FileSystemImporter extends BaseImporter {
 		JSONObject portletPreferencesJSONObject =
 			JSONFactoryUtil.createJSONObject();
 
-		portletPreferencesJSONObject.put("articleId", articleId);
+		portletPreferencesJSONObject.put("articleId", journalArticleId);
 		portletPreferencesJSONObject.put("groupId", groupId);
 		portletPreferencesJSONObject.put("portletSetupShowBorders", false);
 
@@ -497,13 +509,12 @@ public class FileSystemImporter extends BaseImporter {
 		return new BufferedInputStream(new FileInputStream(file));
 	}
 
-	protected String getJournalArticleId(String fileName) {
-		String journalArticleId = getName(fileName);
+	protected String getJournalId(String fileName) {
+		String id = FileUtil.stripExtension(fileName);
 
-		journalArticleId = journalArticleId.toUpperCase();
+		id = id.toUpperCase();
 
-		return StringUtil.replace(
-			journalArticleId, StringPool.SPACE, StringPool.DASH);
+		return StringUtil.replace(id, StringPool.SPACE, StringPool.DASH);
 	}
 
 	protected String[] getJSONArrayAsStringArray(
@@ -523,6 +534,10 @@ public class FileSystemImporter extends BaseImporter {
 
 		InputStream inputStream = getInputStream(fileName);
 
+		if (inputStream == null) {
+			return null;
+		}
+
 		try {
 			json = StringUtil.read(inputStream);
 		}
@@ -538,17 +553,6 @@ public class FileSystemImporter extends BaseImporter {
 			});
 
 		return JSONFactoryUtil.createJSONObject(json);
-	}
-
-	protected String getName(String fileName) {
-		int x = fileName.lastIndexOf(StringPool.SLASH);
-		int y = fileName.lastIndexOf(StringPool.PERIOD);
-
-		if (y < 0) {
-			y = fileName.length();
-		}
-
-		return fileName.substring(x + 1, y);
 	}
 
 	protected Map<Locale, String> getNameMap(String name) {

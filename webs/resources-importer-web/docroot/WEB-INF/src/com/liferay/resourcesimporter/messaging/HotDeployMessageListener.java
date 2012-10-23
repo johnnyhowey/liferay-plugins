@@ -174,6 +174,11 @@ public class HotDeployMessageListener extends BaseMessageListener {
 				newMessage.put("targetClassName", targetClassName);
 				newMessage.put("targetClassPK", importer.getTargetClassPK());
 
+				if (message.getResponseId() != null) {
+					newMessage.setPayload(servletContextName);
+					newMessage.setResponseId(message.getResponseId());
+				}
+
 				MessageBusUtil.sendMessage(
 					"liferay/resources_importer", newMessage);
 			}
@@ -212,6 +217,9 @@ public class HotDeployMessageListener extends BaseMessageListener {
 					"/WEB-INF/liferay-plugin-package.properties"));
 
 			if (propertiesString != null) {
+				propertiesString = propertiesString.replace(
+					"${context.path}", servletContext.getRealPath("/"));
+
 				properties = PropertiesUtil.load(propertiesString);
 			}
 		}
