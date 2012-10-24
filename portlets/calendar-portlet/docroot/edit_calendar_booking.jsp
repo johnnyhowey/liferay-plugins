@@ -40,7 +40,7 @@ long endDate = ParamUtil.getLong(request, "endDate", defaultEndDateJCalendar.get
 
 java.util.Calendar endDateJCalendar = JCalendarUtil.getJCalendar(endDate, userTimeZone);
 
-boolean allDay = ParamUtil.getBoolean(request, "allDay");
+boolean allDay = BeanParamUtil.getBoolean(calendarBooking, request, "allDay");
 
 if (!allDay) {
 	com.liferay.portal.kernel.util.CalendarUtil.roundByMinutes(startDateJCalendar, 30);
@@ -118,7 +118,7 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 			<aui:input name="endDate" value="<%= endDateJCalendar %>" />
 		</div>
 
-		<aui:input name="allDay" />
+		<aui:input checked="<%= allDay %>" name="allDay" />
 
 		<aui:field-wrapper cssClass="calendar-portlet-recurrence-container" inlineField="<%= true %>" label="">
 			<aui:input checked="<%= recurring %>" name="repeat" type="checkbox" />
@@ -439,12 +439,13 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 
 					syncCalendarsMap();
 
-					scheduler.loadCalendarBookings();
+					scheduler.load();
 				},
 				'scheduler-calendar:visibleChange': syncCalendarsMap
 			},
 			boundingBox: '#<portlet:namespace />calendarListPending',
 			calendars: <%= pendingCalendarsJSONArray %>,
+			scheduler: <portlet:namespace />scheduler,
 			simpleMenu: calendarsMenu,
 			strings: {
 				emptyMessage: '<liferay-ui:message key="no-pending-invites" />'
@@ -462,12 +463,13 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 
 					syncCalendarsMap();
 
-					scheduler.loadCalendarBookings();
+					scheduler.load();
 				},
 				'scheduler-calendar:visibleChange': syncCalendarsMap
 			},
 			boundingBox: '#<portlet:namespace />calendarListAccepted',
 			calendars: <%= acceptedCalendarsJSONArray %>,
+			scheduler: <portlet:namespace />scheduler,
 			simpleMenu: calendarsMenu,
 			strings: {
 				emptyMessage: '<liferay-ui:message key="no-accepted-invites" />'
@@ -485,12 +487,13 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 
 					syncCalendarsMap();
 
-					scheduler.loadCalendarBookings();
+					scheduler.load();
 				},
 				'scheduler-calendar:visibleChange': syncCalendarsMap
 			},
 			boundingBox: '#<portlet:namespace />calendarListDeclined',
 			calendars: <%= declinedCalendarsJSONArray %>,
+			scheduler: <portlet:namespace />scheduler,
 			simpleMenu: calendarsMenu,
 			strings: {
 				emptyMessage: '<liferay-ui:message key="no-declined-invites" />'
@@ -508,12 +511,13 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 
 					syncCalendarsMap();
 
-					scheduler.loadCalendarBookings();
+					scheduler.load();
 				},
 				'scheduler-calendar:visibleChange': syncCalendarsMap
 			},
 			boundingBox: '#<portlet:namespace />calendarListMaybe',
 			calendars: <%= maybeCalendarsJSONArray %>,
+			scheduler: <portlet:namespace />scheduler,
 			simpleMenu: calendarsMenu,
 			strings: {
 				emptyMessage: '<liferay-ui:message key="no-outstanding-invites" />'
@@ -554,13 +558,12 @@ List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.get
 	Liferay.DatePickerUtil.linkToSchedulerEvent('#<portlet:namespace />endDateContainer', window.<portlet:namespace />placeholderSchedulerEvent, 'endDate');
 	Liferay.DatePickerUtil.linkToSchedulerEvent('#<portlet:namespace />startDateContainer', window.<portlet:namespace />placeholderSchedulerEvent, 'startDate');
 
-	scheduler.on(
-		{
-			eventsChange: function(event) {
-				var instance = this;
+	scheduler.after(
+		'*:load',
+		function(event) {
+			scheduler.addEvents(window.<portlet:namespace />placeholderSchedulerEvent);
 
-				event.newVal.push(window.<portlet:namespace />placeholderSchedulerEvent);
-			}
+			scheduler.syncEventsUI();
 		}
 	);
 
