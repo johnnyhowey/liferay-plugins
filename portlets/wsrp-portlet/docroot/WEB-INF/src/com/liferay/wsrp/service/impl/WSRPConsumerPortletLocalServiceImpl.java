@@ -49,7 +49,7 @@ import com.liferay.wsrp.model.WSRPConsumer;
 import com.liferay.wsrp.model.WSRPConsumerPortlet;
 import com.liferay.wsrp.service.ClpSerializer;
 import com.liferay.wsrp.service.base.WSRPConsumerPortletLocalServiceBaseImpl;
-import com.liferay.wsrp.util.ExtensionUtil;
+import com.liferay.wsrp.util.ExtensionHelperUtil;
 import com.liferay.wsrp.util.LocalizedStringUtil;
 import com.liferay.wsrp.util.WSRPConsumerManager;
 import com.liferay.wsrp.util.WSRPConsumerManagerFactory;
@@ -99,7 +99,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 		wsrpConsumerPortlet.setName(name);
 		wsrpConsumerPortlet.setPortletHandle(portletHandle);
 
-		wsrpConsumerPortletPersistence.update(wsrpConsumerPortlet, false);
+		wsrpConsumerPortletPersistence.update(wsrpConsumerPortlet);
 
 		wsrpConsumerPortletLocalService.initWSRPConsumerPortlet(
 			wsrpConsumer.getCompanyId(), wsrpConsumerId, wsrpConsumerPortletId,
@@ -368,7 +368,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 		wsrpConsumerPortlet.setModifiedDate(new Date());
 		wsrpConsumerPortlet.setName(name);
 
-		wsrpConsumerPortletPersistence.update(wsrpConsumerPortlet, false);
+		wsrpConsumerPortletPersistence.update(wsrpConsumerPortlet);
 
 		return wsrpConsumerPortlet;
 	}
@@ -468,8 +468,9 @@ public class WSRPConsumerPortletLocalServiceImpl
 			}
 		}
 
-		MessageElement[] messageElements = ExtensionUtil.getMessageElements(
-			portletDescription.getExtensions());
+		MessageElement[] messageElements =
+			ExtensionHelperUtil.getMessageElements(
+				portletDescription.getExtensions());
 
 		if (messageElements != null) {
 			for (MessageElement messageElement : messageElements) {
@@ -597,7 +598,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 	protected void setExtension(
 		Portlet portlet, MessageElement messageElement) {
 
-		String name = ExtensionUtil.getNameAttribute(messageElement);
+		String name = ExtensionHelperUtil.getNameAttribute(messageElement);
 		String value = messageElement.getValue();
 
 		if (name.equals("css-class-wrapper")) {

@@ -285,8 +285,14 @@ if (comment) {
 				}
 			);
 
+			var contextCountEvent = 'input';
+
+			if (A.UA.ie >= 9) {
+				contextCountEvent = ['input', 'keydown'];
+			}
+
 			contentTextarea.on(
-				'input',
+				contextCountEvent,
 				function(contentTextarea) {
 					updateHighlightDivSize(contentTextarea);
 
