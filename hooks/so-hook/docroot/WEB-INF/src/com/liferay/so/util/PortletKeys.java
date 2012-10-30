@@ -15,19 +15,13 @@
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 
-package com.liferay.so.messaging;
-
-import com.liferay.deploylistener.messaging.BaseDeployListenerMessageListener;
-import com.liferay.portal.kernel.messaging.Message;
+package com.liferay.so.util;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Evan Thibodeau
  */
-public class SODeployListenerMessageListener
-	extends BaseDeployListenerMessageListener {
+public class PortletKeys extends com.liferay.portal.util.PortletKeys {
 
-	@Override
-	public void onBeforeUndeploy(Message message) throws Exception {
-	}
+	public static final String BREADCRUMB = "73";
 
 }
