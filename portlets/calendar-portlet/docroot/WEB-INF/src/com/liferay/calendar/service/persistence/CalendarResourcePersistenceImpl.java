@@ -46,7 +46,6 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -511,7 +510,14 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, calendarResource);
+			if (calendarResource.isCachedModel()) {
+				calendarResource = (CalendarResource)session.get(CalendarResourceImpl.class,
+						calendarResource.getPrimaryKeyObj());
+			}
+
+			if (calendarResource != null) {
+				session.delete(calendarResource);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -520,15 +526,17 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 			closeSession(session);
 		}
 
-		clearCache(calendarResource);
+		if (calendarResource != null) {
+			clearCache(calendarResource);
+		}
 
 		return calendarResource;
 	}
 
 	@Override
 	public CalendarResource updateImpl(
-		com.liferay.calendar.model.CalendarResource calendarResource,
-		boolean merge) throws SystemException {
+		com.liferay.calendar.model.CalendarResource calendarResource)
+		throws SystemException {
 		calendarResource = toUnwrappedModel(calendarResource);
 
 		boolean isNew = calendarResource.isNew();
@@ -546,9 +554,14 @@ public class CalendarResourcePersistenceImpl extends BasePersistenceImpl<Calenda
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, calendarResource, merge);
+			if (calendarResource.isNew()) {
+				session.save(calendarResource);
 
-			calendarResource.setNew(false);
+				calendarResource.setNew(false);
+			}
+			else {
+				session.merge(calendarResource);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
