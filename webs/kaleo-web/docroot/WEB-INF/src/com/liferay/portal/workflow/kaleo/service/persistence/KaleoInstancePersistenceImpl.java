@@ -39,7 +39,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.workflow.kaleo.NoSuchInstanceException;
@@ -342,7 +341,14 @@ public class KaleoInstancePersistenceImpl extends BasePersistenceImpl<KaleoInsta
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, kaleoInstance);
+			if (kaleoInstance.isCachedModel()) {
+				kaleoInstance = (KaleoInstance)session.get(KaleoInstanceImpl.class,
+						kaleoInstance.getPrimaryKeyObj());
+			}
+
+			if (kaleoInstance != null) {
+				session.delete(kaleoInstance);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -351,15 +357,17 @@ public class KaleoInstancePersistenceImpl extends BasePersistenceImpl<KaleoInsta
 			closeSession(session);
 		}
 
-		clearCache(kaleoInstance);
+		if (kaleoInstance != null) {
+			clearCache(kaleoInstance);
+		}
 
 		return kaleoInstance;
 	}
 
 	@Override
 	public KaleoInstance updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoInstance kaleoInstance,
-		boolean merge) throws SystemException {
+		com.liferay.portal.workflow.kaleo.model.KaleoInstance kaleoInstance)
+		throws SystemException {
 		kaleoInstance = toUnwrappedModel(kaleoInstance);
 
 		boolean isNew = kaleoInstance.isNew();
@@ -371,9 +379,14 @@ public class KaleoInstancePersistenceImpl extends BasePersistenceImpl<KaleoInsta
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, kaleoInstance, merge);
+			if (kaleoInstance.isNew()) {
+				session.save(kaleoInstance);
 
-			kaleoInstance.setNew(false);
+				kaleoInstance.setNew(false);
+			}
+			else {
+				session.merge(kaleoInstance);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

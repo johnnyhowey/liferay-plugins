@@ -44,9 +44,11 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
+
+import com.liferay.portlet.asset.service.persistence.AssetEntryPersistence;
+import com.liferay.portlet.asset.service.persistence.AssetLinkPersistence;
 
 import java.io.Serializable;
 
@@ -481,7 +483,14 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, calendarBooking);
+			if (calendarBooking.isCachedModel()) {
+				calendarBooking = (CalendarBooking)session.get(CalendarBookingImpl.class,
+						calendarBooking.getPrimaryKeyObj());
+			}
+
+			if (calendarBooking != null) {
+				session.delete(calendarBooking);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -490,15 +499,17 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 			closeSession(session);
 		}
 
-		clearCache(calendarBooking);
+		if (calendarBooking != null) {
+			clearCache(calendarBooking);
+		}
 
 		return calendarBooking;
 	}
 
 	@Override
 	public CalendarBooking updateImpl(
-		com.liferay.calendar.model.CalendarBooking calendarBooking,
-		boolean merge) throws SystemException {
+		com.liferay.calendar.model.CalendarBooking calendarBooking)
+		throws SystemException {
 		calendarBooking = toUnwrappedModel(calendarBooking);
 
 		boolean isNew = calendarBooking.isNew();
@@ -516,9 +527,14 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, calendarBooking, merge);
+			if (calendarBooking.isNew()) {
+				session.save(calendarBooking);
 
-			calendarBooking.setNew(false);
+				calendarBooking.setNew(false);
+			}
+			else {
+				session.merge(calendarBooking);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -5448,6 +5464,10 @@ public class CalendarBookingPersistenceImpl extends BasePersistenceImpl<Calendar
 	protected CalendarResourcePersistence calendarResourcePersistence;
 	@BeanReference(type = UserPersistence.class)
 	protected UserPersistence userPersistence;
+	@BeanReference(type = AssetEntryPersistence.class)
+	protected AssetEntryPersistence assetEntryPersistence;
+	@BeanReference(type = AssetLinkPersistence.class)
+	protected AssetLinkPersistence assetLinkPersistence;
 	private static final String _SQL_SELECT_CALENDARBOOKING = "SELECT calendarBooking FROM CalendarBooking calendarBooking";
 	private static final String _SQL_SELECT_CALENDARBOOKING_WHERE = "SELECT calendarBooking FROM CalendarBooking calendarBooking WHERE ";
 	private static final String _SQL_COUNT_CALENDARBOOKING = "SELECT COUNT(calendarBooking) FROM CalendarBooking calendarBooking";

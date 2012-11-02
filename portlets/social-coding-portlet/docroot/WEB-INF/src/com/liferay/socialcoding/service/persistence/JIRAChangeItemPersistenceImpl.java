@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -267,7 +266,14 @@ public class JIRAChangeItemPersistenceImpl extends BasePersistenceImpl<JIRAChang
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, jiraChangeItem);
+			if (jiraChangeItem.isCachedModel()) {
+				jiraChangeItem = (JIRAChangeItem)session.get(JIRAChangeItemImpl.class,
+						jiraChangeItem.getPrimaryKeyObj());
+			}
+
+			if (jiraChangeItem != null) {
+				session.delete(jiraChangeItem);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -276,15 +282,17 @@ public class JIRAChangeItemPersistenceImpl extends BasePersistenceImpl<JIRAChang
 			closeSession(session);
 		}
 
-		clearCache(jiraChangeItem);
+		if (jiraChangeItem != null) {
+			clearCache(jiraChangeItem);
+		}
 
 		return jiraChangeItem;
 	}
 
 	@Override
 	public JIRAChangeItem updateImpl(
-		com.liferay.socialcoding.model.JIRAChangeItem jiraChangeItem,
-		boolean merge) throws SystemException {
+		com.liferay.socialcoding.model.JIRAChangeItem jiraChangeItem)
+		throws SystemException {
 		jiraChangeItem = toUnwrappedModel(jiraChangeItem);
 
 		boolean isNew = jiraChangeItem.isNew();
@@ -296,9 +304,14 @@ public class JIRAChangeItemPersistenceImpl extends BasePersistenceImpl<JIRAChang
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, jiraChangeItem, merge);
+			if (jiraChangeItem.isNew()) {
+				session.save(jiraChangeItem);
 
-			jiraChangeItem.setNew(false);
+				jiraChangeItem.setNew(false);
+			}
+			else {
+				session.merge(jiraChangeItem);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
