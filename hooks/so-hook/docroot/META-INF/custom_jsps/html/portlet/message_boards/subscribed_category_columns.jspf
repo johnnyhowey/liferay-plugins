@@ -1,0 +1,88 @@
+<%--
+/**
+ * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ *
+ * This file is part of Liferay Social Office. Liferay Social Office is free
+ * software: you can redistribute it and/or modify it under the terms of the GNU
+ * Affero General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ *
+ * Liferay Social Office is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
+ */
+--%>
+
+<liferay-ui:search-container-column-text
+	name="category"
+>
+
+	<%
+	List<MBCategory> ancestors = curCategory.getAncestors();
+
+	Collections.reverse(ancestors);
+
+	ancestors.add(curCategory);
+
+	StringBundler sb = new StringBundler();
+
+	sb.append("<div class=\"site-breadcrumbs\" id=\"breadcrumbs\">");
+	sb.append("<ul class=\"breadcrumbs breadcrumbs-horizontal lfr-component\">");
+
+	for (MBCategory ancestor : ancestors) {
+		portletURL = PortletURLFactoryUtil.create(request, PortletKeys.MESSAGE_BOARDS, themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
+
+		portletURL.setParameter("struts_action", "/message_boards/view");
+		portletURL.setParameter("mbCategoryId", String.valueOf(ancestor.getCategoryId()));
+
+		sb.append("<li><span>");
+		sb.append("<a href=\"");
+		sb.append(HtmlUtil.escape(portletURL.toString()));
+		sb.append("\">");
+
+		sb.append(ancestor.getName());
+
+		sb.append("</a>");
+		sb.append("</span></li>");
+	}
+
+	sb.append("</ul>");
+	sb.append("</div>");
+
+	if (Validator.isNotNull(curCategory.getDescription())) {
+		sb.append(curCategory.getDescription());
+	}
+
+	String content = sb.toString();
+
+	content = StringUtil.replaceFirst(content, "<li", "<li class=\"first\"");
+	content = StringUtil.replaceLast(content, "<li", "<li class=\"last\"");
+	%>
+
+	<%= content %>
+
+</liferay-ui:search-container-column-text>
+
+<liferay-ui:search-container-column-text
+	href="<%= rowURL %>"
+	name="categories"
+	value="<%= String.valueOf(categoryDisplay.getSubcategoriesCount(curCategory)) %>"
+/>
+
+<liferay-ui:search-container-column-text
+	href="<%= rowURL %>"
+	name="threads"
+	value="<%= String.valueOf(categoryDisplay.getSubcategoriesThreadsCount(curCategory)) %>"
+/>
+
+<liferay-ui:search-container-column-text
+	href="<%= rowURL %>"
+	name="posts"
+	value="<%= String.valueOf(categoryDisplay.getSubcategoriesMessagesCount(curCategory)) %>"
+/>
+
+<%@ include file="/html/portlet/message_boards/subscribed_category_columns_action.jspf" %>
