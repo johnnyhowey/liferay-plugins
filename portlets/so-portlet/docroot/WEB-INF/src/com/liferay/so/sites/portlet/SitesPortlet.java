@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.util.ClassResolverUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.MethodKey;
@@ -78,6 +79,7 @@ import javax.portlet.WindowState;
 /**
  * @author Ryan Park
  * @author Jonathan Lee
+ * @author Evan Thibodeau
  */
 public class SitesPortlet extends MVCPortlet {
 
@@ -336,8 +338,14 @@ public class SitesPortlet extends MVCPortlet {
 				siteAssignmentsPortletURL.setParameter(
 					"removeUserIds", String.valueOf(themeDisplay.getUserId()));
 
-				groupJSONObject.put(
-					"leaveUrl", siteAssignmentsPortletURL.toString());
+				if ((group.getType() != GroupConstants.TYPE_SITE_PRIVATE) ||
+					GroupPermissionUtil.contains(
+						permissionChecker, group.getGroupId(),
+						ActionKeys.ASSIGN_MEMBERS)) {
+
+					groupJSONObject.put(
+						"leaveUrl", siteAssignmentsPortletURL.toString());
+				}
 			}
 
 			if (GroupPermissionUtil.contains(
@@ -596,11 +604,14 @@ public class SitesPortlet extends MVCPortlet {
 
 	private static MethodKey _mergeLayoutSetProtypeLayoutsMethodKey =
 		new MethodKey(
-			_CLASS_NAME, "mergeLayoutSetProtypeLayouts", Group.class,
-			LayoutSet.class);
+			ClassResolverUtil.resolveByPortalClassLoader(
+				"com.liferay.portlet.sites.util.SitesUtil"),
+			"mergeLayoutSetProtypeLayouts", Group.class, LayoutSet.class);
 	private static MethodKey _updateLayoutSetPrototypesMethodKey =
 		new MethodKey(
-			_CLASS_NAME, "updateLayoutSetPrototypesLinks", Group.class,
-			long.class, long.class, boolean.class, boolean.class);
+			ClassResolverUtil.resolveByPortalClassLoader(
+				"com.liferay.portlet.sites.util.SitesUtil"),
+			"updateLayoutSetPrototypesLinks", Group.class, long.class,
+			long.class, boolean.class, boolean.class);
 
 }
