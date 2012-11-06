@@ -44,7 +44,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -282,7 +281,14 @@ public class AkismetDataPersistenceImpl extends BasePersistenceImpl<AkismetData>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, akismetData);
+			if (akismetData.isCachedModel()) {
+				akismetData = (AkismetData)session.get(AkismetDataImpl.class,
+						akismetData.getPrimaryKeyObj());
+			}
+
+			if (akismetData != null) {
+				session.delete(akismetData);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -291,14 +297,16 @@ public class AkismetDataPersistenceImpl extends BasePersistenceImpl<AkismetData>
 			closeSession(session);
 		}
 
-		clearCache(akismetData);
+		if (akismetData != null) {
+			clearCache(akismetData);
+		}
 
 		return akismetData;
 	}
 
 	@Override
 	public AkismetData updateImpl(
-		com.liferay.akismet.model.AkismetData akismetData, boolean merge)
+		com.liferay.akismet.model.AkismetData akismetData)
 		throws SystemException {
 		akismetData = toUnwrappedModel(akismetData);
 
@@ -311,9 +319,14 @@ public class AkismetDataPersistenceImpl extends BasePersistenceImpl<AkismetData>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, akismetData, merge);
+			if (akismetData.isNew()) {
+				session.save(akismetData);
 
-			akismetData.setNew(false);
+				akismetData.setNew(false);
+			}
+			else {
+				session.merge(akismetData);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

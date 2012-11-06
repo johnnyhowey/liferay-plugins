@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.workflow.kaleo.NoSuchTaskException;
@@ -302,7 +301,14 @@ public class KaleoTaskPersistenceImpl extends BasePersistenceImpl<KaleoTask>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, kaleoTask);
+			if (kaleoTask.isCachedModel()) {
+				kaleoTask = (KaleoTask)session.get(KaleoTaskImpl.class,
+						kaleoTask.getPrimaryKeyObj());
+			}
+
+			if (kaleoTask != null) {
+				session.delete(kaleoTask);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -311,15 +317,17 @@ public class KaleoTaskPersistenceImpl extends BasePersistenceImpl<KaleoTask>
 			closeSession(session);
 		}
 
-		clearCache(kaleoTask);
+		if (kaleoTask != null) {
+			clearCache(kaleoTask);
+		}
 
 		return kaleoTask;
 	}
 
 	@Override
 	public KaleoTask updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoTask kaleoTask,
-		boolean merge) throws SystemException {
+		com.liferay.portal.workflow.kaleo.model.KaleoTask kaleoTask)
+		throws SystemException {
 		kaleoTask = toUnwrappedModel(kaleoTask);
 
 		boolean isNew = kaleoTask.isNew();
@@ -331,9 +339,14 @@ public class KaleoTaskPersistenceImpl extends BasePersistenceImpl<KaleoTask>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, kaleoTask, merge);
+			if (kaleoTask.isNew()) {
+				session.save(kaleoTask);
 
-			kaleoTask.setNew(false);
+				kaleoTask.setNew(false);
+			}
+			else {
+				session.merge(kaleoTask);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

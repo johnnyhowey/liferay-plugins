@@ -40,7 +40,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -236,7 +235,13 @@ public class TypePersistenceImpl extends BasePersistenceImpl<Type>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, type);
+			if (type.isCachedModel()) {
+				type = (Type)session.get(TypeImpl.class, type.getPrimaryKeyObj());
+			}
+
+			if (type != null) {
+				session.delete(type);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -245,13 +250,15 @@ public class TypePersistenceImpl extends BasePersistenceImpl<Type>
 			closeSession(session);
 		}
 
-		clearCache(type);
+		if (type != null) {
+			clearCache(type);
+		}
 
 		return type;
 	}
 
 	@Override
-	public Type updateImpl(com.liferay.ams.model.Type type, boolean merge)
+	public Type updateImpl(com.liferay.ams.model.Type type)
 		throws SystemException {
 		type = toUnwrappedModel(type);
 
@@ -262,9 +269,14 @@ public class TypePersistenceImpl extends BasePersistenceImpl<Type>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, type, merge);
+			if (type.isNew()) {
+				session.save(type);
 
-			type.setNew(false);
+				type.setNew(false);
+			}
+			else {
+				session.merge(type);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

@@ -43,7 +43,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -297,7 +296,14 @@ public class OAuthConsumerPersistenceImpl extends BasePersistenceImpl<OAuthConsu
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, oAuthConsumer);
+			if (oAuthConsumer.isCachedModel()) {
+				oAuthConsumer = (OAuthConsumer)session.get(OAuthConsumerImpl.class,
+						oAuthConsumer.getPrimaryKeyObj());
+			}
+
+			if (oAuthConsumer != null) {
+				session.delete(oAuthConsumer);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -306,14 +312,16 @@ public class OAuthConsumerPersistenceImpl extends BasePersistenceImpl<OAuthConsu
 			closeSession(session);
 		}
 
-		clearCache(oAuthConsumer);
+		if (oAuthConsumer != null) {
+			clearCache(oAuthConsumer);
+		}
 
 		return oAuthConsumer;
 	}
 
 	@Override
 	public OAuthConsumer updateImpl(
-		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer, boolean merge)
+		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer)
 		throws SystemException {
 		oAuthConsumer = toUnwrappedModel(oAuthConsumer);
 
@@ -326,9 +334,14 @@ public class OAuthConsumerPersistenceImpl extends BasePersistenceImpl<OAuthConsu
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, oAuthConsumer, merge);
+			if (oAuthConsumer.isNew()) {
+				session.save(oAuthConsumer);
 
-			oAuthConsumer.setNew(false);
+				oAuthConsumer.setNew(false);
+			}
+			else {
+				session.merge(oAuthConsumer);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
