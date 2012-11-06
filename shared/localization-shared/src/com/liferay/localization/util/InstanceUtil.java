@@ -17,14 +17,24 @@ package com.liferay.localization.util;
 import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.search.Indexer;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
+import com.liferay.portal.model.User;
+import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletPreferencesThreadLocal;
+import com.liferay.portlet.expando.DuplicateColumnNameException;
+import com.liferay.portlet.expando.model.ExpandoBridge;
+import com.liferay.portlet.expando.model.ExpandoColumnConstants;
 import com.liferay.util.portlet.PortletProps;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -38,7 +48,8 @@ public class InstanceUtil implements PortletPropsKeys {
 		try {
 			PortletPreferencesThreadLocal.setStrict(false);
 
-			localizeRoleNames(companyId);
+			_localizeRoleNames(companyId);
+			_localizeUsers(companyId);
 		}
 		catch (Exception e) {
 			_log.error(e, e);
@@ -48,7 +59,7 @@ public class InstanceUtil implements PortletPropsKeys {
 		}
 	}
 
-	public static void localizeRoleNames(long companyId) throws Exception {
+	private static void _localizeRoleNames(long companyId) throws Exception {
 		for (String languageId : PortletPropsValues.LANGUAGE_IDS) {
 			_localizeRoleNames(companyId, languageId);
 		}
@@ -154,6 +165,54 @@ public class InstanceUtil implements PortletPropsKeys {
 			RoleLocalServiceUtil.updateRole(
 				role.getRoleId(), name, titleMap, descriptionMap,
 				RoleConstants.TYPE_SITE_LABEL);
+		}
+	}
+
+	private static void _localizeUsers(long companyId) throws Exception {
+		Company company = CompanyLocalServiceUtil.getCompany(companyId);
+
+		ExpandoBridge expandoBridge = company.getExpandoBridge();
+
+		String attributeName =
+			"localizationUpdated_" + PortletPropsValues.COMPANY_DEFAULT_LOCALE;
+
+		boolean localizationUpdated = GetterUtil.getBoolean(
+			expandoBridge.getAttribute(attributeName, false));
+
+		if (localizationUpdated) {
+			return;
+		}
+
+		try {
+			expandoBridge.addAttribute(
+				attributeName, ExpandoColumnConstants.BOOLEAN, Boolean.FALSE,
+				false);
+		}
+		catch (DuplicateColumnNameException dcne) {
+		}
+
+		expandoBridge.setAttribute(attributeName, Boolean.TRUE, false);
+
+		CompanyLocalServiceUtil.updateCompany(company);
+
+		int count = UserLocalServiceUtil.getCompanyUsersCount(companyId);
+
+		int pages = count / Indexer.DEFAULT_INTERVAL;
+
+		for (int i = 0; i <= pages; i++) {
+			int start = (i * Indexer.DEFAULT_INTERVAL);
+			int end = start + Indexer.DEFAULT_INTERVAL;
+
+			List<User> users = UserLocalServiceUtil.getCompanyUsers(
+				companyId, start, end);
+
+			for (User user : users) {
+				user.setLanguageId(PortletPropsValues.COMPANY_DEFAULT_LOCALE);
+				user.setTimeZoneId(
+					PortletPropsValues.COMPANY_DEFAULT_TIME_ZONE);
+
+				UserLocalServiceUtil.updateUser(user);
+			}
 		}
 	}
 

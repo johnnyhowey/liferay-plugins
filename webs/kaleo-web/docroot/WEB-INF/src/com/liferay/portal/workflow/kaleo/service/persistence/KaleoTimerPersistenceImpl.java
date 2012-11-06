@@ -38,7 +38,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.workflow.kaleo.NoSuchTimerException;
@@ -293,7 +292,14 @@ public class KaleoTimerPersistenceImpl extends BasePersistenceImpl<KaleoTimer>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, kaleoTimer);
+			if (kaleoTimer.isCachedModel()) {
+				kaleoTimer = (KaleoTimer)session.get(KaleoTimerImpl.class,
+						kaleoTimer.getPrimaryKeyObj());
+			}
+
+			if (kaleoTimer != null) {
+				session.delete(kaleoTimer);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -302,15 +308,17 @@ public class KaleoTimerPersistenceImpl extends BasePersistenceImpl<KaleoTimer>
 			closeSession(session);
 		}
 
-		clearCache(kaleoTimer);
+		if (kaleoTimer != null) {
+			clearCache(kaleoTimer);
+		}
 
 		return kaleoTimer;
 	}
 
 	@Override
 	public KaleoTimer updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoTimer kaleoTimer,
-		boolean merge) throws SystemException {
+		com.liferay.portal.workflow.kaleo.model.KaleoTimer kaleoTimer)
+		throws SystemException {
 		kaleoTimer = toUnwrappedModel(kaleoTimer);
 
 		boolean isNew = kaleoTimer.isNew();
@@ -322,9 +330,14 @@ public class KaleoTimerPersistenceImpl extends BasePersistenceImpl<KaleoTimer>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, kaleoTimer, merge);
+			if (kaleoTimer.isNew()) {
+				session.save(kaleoTimer);
 
-			kaleoTimer.setNew(false);
+				kaleoTimer.setNew(false);
+			}
+			else {
+				session.merge(kaleoTimer);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

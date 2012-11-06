@@ -46,7 +46,6 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -336,7 +335,14 @@ public class KBTemplatePersistenceImpl extends BasePersistenceImpl<KBTemplate>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, kbTemplate);
+			if (kbTemplate.isCachedModel()) {
+				kbTemplate = (KBTemplate)session.get(KBTemplateImpl.class,
+						kbTemplate.getPrimaryKeyObj());
+			}
+
+			if (kbTemplate != null) {
+				session.delete(kbTemplate);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -345,14 +351,16 @@ public class KBTemplatePersistenceImpl extends BasePersistenceImpl<KBTemplate>
 			closeSession(session);
 		}
 
-		clearCache(kbTemplate);
+		if (kbTemplate != null) {
+			clearCache(kbTemplate);
+		}
 
 		return kbTemplate;
 	}
 
 	@Override
 	public KBTemplate updateImpl(
-		com.liferay.knowledgebase.model.KBTemplate kbTemplate, boolean merge)
+		com.liferay.knowledgebase.model.KBTemplate kbTemplate)
 		throws SystemException {
 		kbTemplate = toUnwrappedModel(kbTemplate);
 
@@ -371,9 +379,14 @@ public class KBTemplatePersistenceImpl extends BasePersistenceImpl<KBTemplate>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, kbTemplate, merge);
+			if (kbTemplate.isNew()) {
+				session.save(kbTemplate);
 
-			kbTemplate.setNew(false);
+				kbTemplate.setNew(false);
+			}
+			else {
+				session.merge(kbTemplate);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -320,7 +319,14 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, meetupsRegistration);
+			if (meetupsRegistration.isCachedModel()) {
+				meetupsRegistration = (MeetupsRegistration)session.get(MeetupsRegistrationImpl.class,
+						meetupsRegistration.getPrimaryKeyObj());
+			}
+
+			if (meetupsRegistration != null) {
+				session.delete(meetupsRegistration);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -329,15 +335,17 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 			closeSession(session);
 		}
 
-		clearCache(meetupsRegistration);
+		if (meetupsRegistration != null) {
+			clearCache(meetupsRegistration);
+		}
 
 		return meetupsRegistration;
 	}
 
 	@Override
 	public MeetupsRegistration updateImpl(
-		com.liferay.socialnetworking.model.MeetupsRegistration meetupsRegistration,
-		boolean merge) throws SystemException {
+		com.liferay.socialnetworking.model.MeetupsRegistration meetupsRegistration)
+		throws SystemException {
 		meetupsRegistration = toUnwrappedModel(meetupsRegistration);
 
 		boolean isNew = meetupsRegistration.isNew();
@@ -349,9 +357,14 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, meetupsRegistration, merge);
+			if (meetupsRegistration.isNew()) {
+				session.save(meetupsRegistration);
 
-			meetupsRegistration.setNew(false);
+				meetupsRegistration.setNew(false);
+			}
+			else {
+				session.merge(meetupsRegistration);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
