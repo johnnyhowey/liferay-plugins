@@ -77,20 +77,20 @@
 				</tr>
 			</tpl>
 
-			<tr class="aui-helper-hidden" id="<portlet:namespace />eventRecorderUsers">
+			<tr <tpl if="!values.editing">class="aui-helper-hidden"</tpl> id="<portlet:namespace />eventRecorderUsers">
 				<td>
 					<liferay-ui:message key="users" />:
 				</td>
 				<td>
-					<label class="calendar-portlet-invitees"></label>
+					<label class="calendar-portlet-invitees"><liferay-ui:message key="loading" /></label>
 				</td>
 			</tr>
-			<tr class="aui-helper-hidden" id="<portlet:namespace />eventRecorderResources">
+			<tr <tpl if="!values.editing">class="aui-helper-hidden"</tpl> id="<portlet:namespace />eventRecorderResources">
 				<td>
 					<liferay-ui:message key="resources" />:
 				</td>
 				<td>
-					<label class="calendar-portlet-invitees"></label>
+					<label class="calendar-portlet-invitees"><liferay-ui:message key="loading" /></label>
 				</td>
 			</tr>
 		</table>

@@ -18,6 +18,7 @@
 package com.liferay.so.service.impl;
 
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -65,6 +66,15 @@ public class MemberRequestLocalServiceImpl
 
 		User user = userLocalService.getUserById(userId);
 
+		try {
+			User receiverUser = userLocalService.getUserByEmailAddress(
+				serviceContext.getCompanyId(), receiverEmailAddress);
+
+			receiverUserId = receiverUser.getUserId();
+		}
+		catch (NoSuchUserException nsue) {
+		}
+
 		Date now = new Date();
 
 		long memberRequestId = counterLocalService.increment();
@@ -84,7 +94,7 @@ public class MemberRequestLocalServiceImpl
 		memberRequest.setInvitedTeamId(invitedTeamId);
 		memberRequest.setStatus(InviteMembersConstants.STATUS_PENDING);
 
-		memberRequestPersistence.update(memberRequest, false);
+		memberRequestPersistence.update(memberRequest);
 
 		// Email
 
@@ -97,7 +107,9 @@ public class MemberRequestLocalServiceImpl
 
 		// Notifications
 
-		sendNotificationEvent(memberRequest);
+		if (receiverUserId > 0) {
+			sendNotificationEvent(memberRequest);
+		}
 
 		return memberRequest;
 	}
@@ -202,7 +214,7 @@ public class MemberRequestLocalServiceImpl
 		memberRequest.setModifiedDate(new Date());
 		memberRequest.setStatus(status);
 
-		memberRequestPersistence.update(memberRequest, false);
+		memberRequestPersistence.update(memberRequest);
 
 		if (status == InviteMembersConstants.STATUS_ACCEPTED) {
 			userLocalService.addGroupUsers(
@@ -236,7 +248,11 @@ public class MemberRequestLocalServiceImpl
 		memberRequest.setModifiedDate(new Date());
 		memberRequest.setReceiverUserId(receiverUserId);
 
-		memberRequestPersistence.update(memberRequest, false);
+		memberRequestPersistence.update(memberRequest);
+
+		if (receiverUserId > 0) {
+			sendNotificationEvent(memberRequest);
+		}
 
 		return memberRequest;
 	}
@@ -300,6 +316,12 @@ public class MemberRequestLocalServiceImpl
 				user.getFullName()
 			});
 
+		String redirectURL = (String)serviceContext.getAttribute("redirectURL");
+
+		if (Validator.isNull(redirectURL)) {
+			redirectURL = serviceContext.getCurrentURL();
+		}
+
 		String createAccountURL = (String)serviceContext.getAttribute(
 			"createAccountURL");
 
@@ -308,7 +330,7 @@ public class MemberRequestLocalServiceImpl
 		}
 
 		createAccountURL = HttpUtil.addParameter(
-			createAccountURL, "key", memberRequest.getKey());
+			createAccountURL, "redirect", redirectURL);
 
 		String loginURL = (String)serviceContext.getAttribute("loginURL");
 
@@ -316,8 +338,10 @@ public class MemberRequestLocalServiceImpl
 			loginURL = serviceContext.getPortalURL();
 		}
 
-		loginURL = HttpUtil.addParameter(
-			loginURL, "key", memberRequest.getKey());
+		loginURL = HttpUtil.addParameter(loginURL, "redirect", redirectURL);
+
+		redirectURL = HttpUtil.addParameter(
+			redirectURL, "key", memberRequest.getKey());
 
 		body = StringUtil.replace(
 			body,
