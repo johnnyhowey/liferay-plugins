@@ -16,6 +16,7 @@ package com.liferay.wsrp.model;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
@@ -23,8 +24,6 @@ import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.wsrp.service.WSRPConsumerLocalServiceUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -79,6 +78,7 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 		attributes.put("registrationPropertiesString",
 			getRegistrationPropertiesString());
 		attributes.put("forwardCookies", getForwardCookies());
+		attributes.put("forwardHeaders", getForwardHeaders());
 
 		return attributes;
 	}
@@ -151,6 +151,12 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 
 		if (forwardCookies != null) {
 			setForwardCookies(forwardCookies);
+		}
+
+		String forwardHeaders = (String)attributes.get("forwardHeaders");
+
+		if (forwardHeaders != null) {
+			setForwardHeaders(forwardHeaders);
 		}
 	}
 
@@ -243,6 +249,14 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 		_forwardCookies = forwardCookies;
 	}
 
+	public String getForwardHeaders() {
+		return _forwardHeaders;
+	}
+
+	public void setForwardHeaders(String forwardHeaders) {
+		_forwardHeaders = forwardHeaders;
+	}
+
 	public void setRegistrationContext(
 		oasis.names.tc.wsrp.v2.types.RegistrationContext registrationContext) {
 		throw new UnsupportedOperationException();
@@ -280,7 +294,7 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 
 	@Override
 	public WSRPConsumer toEscapedModel() {
-		return (WSRPConsumer)Proxy.newProxyInstance(WSRPConsumer.class.getClassLoader(),
+		return (WSRPConsumer)ProxyUtil.newProxyInstance(WSRPConsumer.class.getClassLoader(),
 			new Class[] { WSRPConsumer.class }, new AutoEscapeBeanHandler(this));
 	}
 
@@ -299,6 +313,7 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 		clone.setRegistrationContextString(getRegistrationContextString());
 		clone.setRegistrationPropertiesString(getRegistrationPropertiesString());
 		clone.setForwardCookies(getForwardCookies());
+		clone.setForwardHeaders(getForwardHeaders());
 
 		return clone;
 	}
@@ -347,7 +362,7 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -371,13 +386,15 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 		sb.append(getRegistrationPropertiesString());
 		sb.append(", forwardCookies=");
 		sb.append(getForwardCookies());
+		sb.append(", forwardHeaders=");
+		sb.append(getForwardHeaders());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(40);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.wsrp.model.WSRPConsumer");
@@ -427,6 +444,10 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 			"<column><column-name>forwardCookies</column-name><column-value><![CDATA[");
 		sb.append(getForwardCookies());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>forwardHeaders</column-name><column-value><![CDATA[");
+		sb.append(getForwardHeaders());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -444,5 +465,6 @@ public class WSRPConsumerClp extends BaseModelImpl<WSRPConsumer>
 	private String _registrationContextString;
 	private String _registrationPropertiesString;
 	private String _forwardCookies;
+	private String _forwardHeaders;
 	private BaseModel<?> _wsrpConsumerRemoteModel;
 }

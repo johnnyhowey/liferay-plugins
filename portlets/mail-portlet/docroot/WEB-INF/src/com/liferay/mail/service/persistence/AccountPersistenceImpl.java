@@ -43,7 +43,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -283,7 +282,14 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, account);
+			if (!session.contains(account)) {
+				account = (Account)session.get(AccountImpl.class,
+						account.getPrimaryKeyObj());
+			}
+
+			if (account != null) {
+				session.delete(account);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -292,14 +298,16 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 			closeSession(session);
 		}
 
-		clearCache(account);
+		if (account != null) {
+			clearCache(account);
+		}
 
 		return account;
 	}
 
 	@Override
-	public Account updateImpl(com.liferay.mail.model.Account account,
-		boolean merge) throws SystemException {
+	public Account updateImpl(com.liferay.mail.model.Account account)
+		throws SystemException {
 		account = toUnwrappedModel(account);
 
 		boolean isNew = account.isNew();
@@ -311,9 +319,14 @@ public class AccountPersistenceImpl extends BasePersistenceImpl<Account>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, account, merge);
+			if (account.isNew()) {
+				session.save(account);
 
-			account.setNew(false);
+				account.setNew(false);
+			}
+			else {
+				session.merge(account);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

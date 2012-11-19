@@ -43,7 +43,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -311,7 +310,14 @@ public class OAuthTokenPersistenceImpl extends BasePersistenceImpl<OAuthToken>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, oAuthToken);
+			if (!session.contains(oAuthToken)) {
+				oAuthToken = (OAuthToken)session.get(OAuthTokenImpl.class,
+						oAuthToken.getPrimaryKeyObj());
+			}
+
+			if (oAuthToken != null) {
+				session.delete(oAuthToken);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -320,14 +326,16 @@ public class OAuthTokenPersistenceImpl extends BasePersistenceImpl<OAuthToken>
 			closeSession(session);
 		}
 
-		clearCache(oAuthToken);
+		if (oAuthToken != null) {
+			clearCache(oAuthToken);
+		}
 
 		return oAuthToken;
 	}
 
 	@Override
 	public OAuthToken updateImpl(
-		com.liferay.opensocial.model.OAuthToken oAuthToken, boolean merge)
+		com.liferay.opensocial.model.OAuthToken oAuthToken)
 		throws SystemException {
 		oAuthToken = toUnwrappedModel(oAuthToken);
 
@@ -340,9 +348,14 @@ public class OAuthTokenPersistenceImpl extends BasePersistenceImpl<OAuthToken>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, oAuthToken, merge);
+			if (oAuthToken.isNew()) {
+				session.save(oAuthToken);
 
-			oAuthToken.setNew(false);
+				oAuthToken.setNew(false);
+			}
+			else {
+				session.merge(oAuthToken);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

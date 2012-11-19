@@ -41,7 +41,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.workflow.kaleo.NoSuchTaskInstanceTokenException;
@@ -349,7 +348,14 @@ public class KaleoTaskInstanceTokenPersistenceImpl extends BasePersistenceImpl<K
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, kaleoTaskInstanceToken);
+			if (!session.contains(kaleoTaskInstanceToken)) {
+				kaleoTaskInstanceToken = (KaleoTaskInstanceToken)session.get(KaleoTaskInstanceTokenImpl.class,
+						kaleoTaskInstanceToken.getPrimaryKeyObj());
+			}
+
+			if (kaleoTaskInstanceToken != null) {
+				session.delete(kaleoTaskInstanceToken);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -358,15 +364,17 @@ public class KaleoTaskInstanceTokenPersistenceImpl extends BasePersistenceImpl<K
 			closeSession(session);
 		}
 
-		clearCache(kaleoTaskInstanceToken);
+		if (kaleoTaskInstanceToken != null) {
+			clearCache(kaleoTaskInstanceToken);
+		}
 
 		return kaleoTaskInstanceToken;
 	}
 
 	@Override
 	public KaleoTaskInstanceToken updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken kaleoTaskInstanceToken,
-		boolean merge) throws SystemException {
+		com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken kaleoTaskInstanceToken)
+		throws SystemException {
 		kaleoTaskInstanceToken = toUnwrappedModel(kaleoTaskInstanceToken);
 
 		boolean isNew = kaleoTaskInstanceToken.isNew();
@@ -378,9 +386,14 @@ public class KaleoTaskInstanceTokenPersistenceImpl extends BasePersistenceImpl<K
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, kaleoTaskInstanceToken, merge);
+			if (kaleoTaskInstanceToken.isNew()) {
+				session.save(kaleoTaskInstanceToken);
 
-			kaleoTaskInstanceToken.setNew(false);
+				kaleoTaskInstanceToken.setNew(false);
+			}
+			else {
+				session.merge(kaleoTaskInstanceToken);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

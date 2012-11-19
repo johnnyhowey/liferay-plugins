@@ -35,7 +35,7 @@ try {
 				<portlet:param name="<%= ActionRequest.ACTION_NAME %>" value="saveData" />
 			</portlet:actionURL>
 
-			<aui:form action="<%= saveDataURL %>" cssClass="lfr-dynamic-form" method="post" name="fm">
+			<aui:form action="<%= saveDataURL %>" cssClass="lfr-dynamic-form" enctype="multipart/form-data" method="post" name="fm">
 				<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
 				<aui:input name="recordSetId" type="hidden" value="<%= recordSet.getRecordSetId() %>" />
 				<aui:input name="multipleSubmissions" type="hidden" value="<%= multipleSubmissions %>" />
@@ -58,9 +58,9 @@ try {
 									<%
 									DDMStructure ddmStructure = recordSet.getDDMStructure();
 
-									if (detailDDMTemplateId > 0) {
+									if (formDDMTemplateId > 0) {
 										try {
-											ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(detailDDMTemplateId);
+											ddmTemplate = DDMTemplateLocalServiceUtil.getTemplate(formDDMTemplateId);
 
 											ddmStructure.setXsd(ddmTemplate.getScript());
 										}

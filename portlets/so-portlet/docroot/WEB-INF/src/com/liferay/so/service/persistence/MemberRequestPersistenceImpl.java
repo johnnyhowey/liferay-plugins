@@ -38,7 +38,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.GroupPersistence;
 import com.liferay.portal.service.persistence.LayoutPersistence;
 import com.liferay.portal.service.persistence.UserGroupRolePersistence;
@@ -343,7 +342,14 @@ public class MemberRequestPersistenceImpl extends BasePersistenceImpl<MemberRequ
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, memberRequest);
+			if (!session.contains(memberRequest)) {
+				memberRequest = (MemberRequest)session.get(MemberRequestImpl.class,
+						memberRequest.getPrimaryKeyObj());
+			}
+
+			if (memberRequest != null) {
+				session.delete(memberRequest);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -352,14 +358,16 @@ public class MemberRequestPersistenceImpl extends BasePersistenceImpl<MemberRequ
 			closeSession(session);
 		}
 
-		clearCache(memberRequest);
+		if (memberRequest != null) {
+			clearCache(memberRequest);
+		}
 
 		return memberRequest;
 	}
 
 	@Override
 	public MemberRequest updateImpl(
-		com.liferay.so.model.MemberRequest memberRequest, boolean merge)
+		com.liferay.so.model.MemberRequest memberRequest)
 		throws SystemException {
 		memberRequest = toUnwrappedModel(memberRequest);
 
@@ -372,9 +380,14 @@ public class MemberRequestPersistenceImpl extends BasePersistenceImpl<MemberRequ
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, memberRequest, merge);
+			if (memberRequest.isNew()) {
+				session.save(memberRequest);
 
-			memberRequest.setNew(false);
+				memberRequest.setNew(false);
+			}
+			else {
+				session.merge(memberRequest);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

@@ -44,7 +44,6 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -332,7 +331,14 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, module);
+			if (!session.contains(module)) {
+				module = (Module)session.get(ModuleImpl.class,
+						module.getPrimaryKeyObj());
+			}
+
+			if (module != null) {
+				session.delete(module);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -341,14 +347,16 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 			closeSession(session);
 		}
 
-		clearCache(module);
+		if (module != null) {
+			clearCache(module);
+		}
 
 		return module;
 	}
 
 	@Override
-	public Module updateImpl(com.liferay.marketplace.model.Module module,
-		boolean merge) throws SystemException {
+	public Module updateImpl(com.liferay.marketplace.model.Module module)
+		throws SystemException {
 		module = toUnwrappedModel(module);
 
 		boolean isNew = module.isNew();
@@ -366,9 +374,14 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, module, merge);
+			if (module.isNew()) {
+				session.save(module);
 
-			module.setNew(false);
+				module.setNew(false);
+			}
+			else {
+				session.merge(module);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

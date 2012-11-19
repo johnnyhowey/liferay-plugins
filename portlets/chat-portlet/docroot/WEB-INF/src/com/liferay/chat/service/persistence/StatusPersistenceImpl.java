@@ -42,7 +42,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -319,7 +318,14 @@ public class StatusPersistenceImpl extends BasePersistenceImpl<Status>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, status);
+			if (!session.contains(status)) {
+				status = (Status)session.get(StatusImpl.class,
+						status.getPrimaryKeyObj());
+			}
+
+			if (status != null) {
+				session.delete(status);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -328,13 +334,15 @@ public class StatusPersistenceImpl extends BasePersistenceImpl<Status>
 			closeSession(session);
 		}
 
-		clearCache(status);
+		if (status != null) {
+			clearCache(status);
+		}
 
 		return status;
 	}
 
 	@Override
-	public Status updateImpl(com.liferay.chat.model.Status status, boolean merge)
+	public Status updateImpl(com.liferay.chat.model.Status status)
 		throws SystemException {
 		status = toUnwrappedModel(status);
 
@@ -347,9 +355,14 @@ public class StatusPersistenceImpl extends BasePersistenceImpl<Status>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, status, merge);
+			if (status.isNew()) {
+				session.save(status);
 
-			status.setNew(false);
+				status.setNew(false);
+			}
+			else {
+				session.merge(status);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

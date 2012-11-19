@@ -343,13 +343,12 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 
 	@Override
 	public Feed toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Feed)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Feed)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -560,9 +559,7 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 	}
 
 	private static ClassLoader _classLoader = Feed.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Feed.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Feed.class };
 	private long _feedId;
 	private long _companyId;
 	private long _originalCompanyId;
@@ -580,5 +577,5 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 	private String _originalTwitterScreenName;
 	private long _lastStatusId;
 	private long _columnBitmask;
-	private Feed _escapedModelProxy;
+	private Feed _escapedModel;
 }

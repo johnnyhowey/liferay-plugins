@@ -361,13 +361,12 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 
 	@Override
 	public Definition toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Definition)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Definition)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -614,7 +613,7 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 	}
 
 	private static ClassLoader _classLoader = Definition.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Definition.class
 		};
 	private long _definitionId;
@@ -631,5 +630,5 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 	private Date _orderDate;
 	private int _quantity;
 	private double _price;
-	private Definition _escapedModelProxy;
+	private Definition _escapedModel;
 }
