@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.workflow.kaleo.NoSuchTimerInstanceTokenException;
@@ -354,7 +353,14 @@ public class KaleoTimerInstanceTokenPersistenceImpl extends BasePersistenceImpl<
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, kaleoTimerInstanceToken);
+			if (!session.contains(kaleoTimerInstanceToken)) {
+				kaleoTimerInstanceToken = (KaleoTimerInstanceToken)session.get(KaleoTimerInstanceTokenImpl.class,
+						kaleoTimerInstanceToken.getPrimaryKeyObj());
+			}
+
+			if (kaleoTimerInstanceToken != null) {
+				session.delete(kaleoTimerInstanceToken);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -363,15 +369,17 @@ public class KaleoTimerInstanceTokenPersistenceImpl extends BasePersistenceImpl<
 			closeSession(session);
 		}
 
-		clearCache(kaleoTimerInstanceToken);
+		if (kaleoTimerInstanceToken != null) {
+			clearCache(kaleoTimerInstanceToken);
+		}
 
 		return kaleoTimerInstanceToken;
 	}
 
 	@Override
 	public KaleoTimerInstanceToken updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken kaleoTimerInstanceToken,
-		boolean merge) throws SystemException {
+		com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken kaleoTimerInstanceToken)
+		throws SystemException {
 		kaleoTimerInstanceToken = toUnwrappedModel(kaleoTimerInstanceToken);
 
 		boolean isNew = kaleoTimerInstanceToken.isNew();
@@ -383,9 +391,14 @@ public class KaleoTimerInstanceTokenPersistenceImpl extends BasePersistenceImpl<
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, kaleoTimerInstanceToken, merge);
+			if (kaleoTimerInstanceToken.isNew()) {
+				session.save(kaleoTimerInstanceToken);
 
-			kaleoTimerInstanceToken.setNew(false);
+				kaleoTimerInstanceToken.setNew(false);
+			}
+			else {
+				session.merge(kaleoTimerInstanceToken);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

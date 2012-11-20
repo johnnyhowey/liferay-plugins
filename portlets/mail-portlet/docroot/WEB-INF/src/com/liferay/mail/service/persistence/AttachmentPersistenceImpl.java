@@ -42,7 +42,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -262,7 +261,14 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, attachment);
+			if (!session.contains(attachment)) {
+				attachment = (Attachment)session.get(AttachmentImpl.class,
+						attachment.getPrimaryKeyObj());
+			}
+
+			if (attachment != null) {
+				session.delete(attachment);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -271,14 +277,16 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 			closeSession(session);
 		}
 
-		clearCache(attachment);
+		if (attachment != null) {
+			clearCache(attachment);
+		}
 
 		return attachment;
 	}
 
 	@Override
-	public Attachment updateImpl(com.liferay.mail.model.Attachment attachment,
-		boolean merge) throws SystemException {
+	public Attachment updateImpl(com.liferay.mail.model.Attachment attachment)
+		throws SystemException {
 		attachment = toUnwrappedModel(attachment);
 
 		boolean isNew = attachment.isNew();
@@ -290,9 +298,14 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, attachment, merge);
+			if (attachment.isNew()) {
+				session.save(attachment);
 
-			attachment.setNew(false);
+				attachment.setNew(false);
+			}
+			else {
+				session.merge(attachment);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

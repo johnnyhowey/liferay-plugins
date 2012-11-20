@@ -542,13 +542,12 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 
 	@Override
 	public KaleoAction toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KaleoAction)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KaleoAction)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -895,7 +894,7 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 	}
 
 	private static ClassLoader _classLoader = KaleoAction.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KaleoAction.class
 		};
 	private long _kaleoActionId;
@@ -926,5 +925,5 @@ public class KaleoActionModelImpl extends BaseModelImpl<KaleoAction>
 	private String _scriptRequiredContexts;
 	private int _priority;
 	private long _columnBitmask;
-	private KaleoAction _escapedModelProxy;
+	private KaleoAction _escapedModel;
 }

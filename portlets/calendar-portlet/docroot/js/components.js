@@ -11,10 +11,6 @@
 
 	var STR_SPACE = ' ';
 
-	var toNumber = function(val) {
-		return parseInt(val, 10) || 0;
-	};
-
 	AUI.add(
 		'liferay-calendar-simple-menu',
 		function(A) {
@@ -252,6 +248,9 @@
 							value: []
 						},
 
+						scheduler: {
+						},
+
 						simpleMenu: {
 							setter: '_setSimpleMenu',
 							validator: isObject,
@@ -460,9 +459,11 @@
 
 							var calendar = instance.getCalendarByNode(currentTarget);
 
-							instance._setCalendarColor(calendar, calendar.get('color'));
-
 							currentTarget.addClass(CSS_CALENDAR_LIST_ITEM_HOVER);
+
+							if (!calendar.get('visible')) {
+								instance._setCalendarColor(calendar, calendar.get('color'));
+							}
 						},
 
 						_onHoverOut: function(event) {
@@ -527,14 +528,22 @@
 						_setCalendars: function(val) {
 							var instance = this;
 
+							var scheduler = instance.get('scheduler');
+
 							AArray.each(
 								val,
 								function(item, index, collection) {
+									var calendar = item;
+
 									if (!A.instanceOf(item, Liferay.SchedulerCalendar)) {
-										val[index] = new Liferay.SchedulerCalendar(item);
+										calendar = new Liferay.SchedulerCalendar(item);
+
+										val[index] = calendar;
 									}
 
-									val[index].addTarget(instance);
+									calendar.addTarget(instance);
+
+									calendar.set('scheduler', scheduler);
 								}
 							);
 
@@ -826,6 +835,10 @@
 	AUI.add(
 		'liferay-calendar-date-picker-util',
 		function(A) {
+			var Lang = A.Lang;
+
+			var toInt = Lang.toInt;
+
 			Liferay.DatePickerUtil = {
 				linkToSchedulerEvent: function(datePickerContainer, schedulerEvent, dateAttr) {
 					var instance = this;
@@ -838,11 +851,12 @@
 							var currentTarget = event.currentTarget;
 
 							var date = schedulerEvent.get(dateAttr);
+
 							var selectedSetter = selects.indexOf(currentTarget);
 
 							var setters = [date.setMonth, date.setDate, date.setFullYear, date.setHours, date.setMinutes, date.setHours];
 
-							var value = toNumber(currentTarget.val());
+							var value = toInt(currentTarget.val());
 
 							if ((selectedSetter === 3) && (date.getHours() > 12)) {
 								value += 12;
@@ -853,8 +867,6 @@
 							}
 
 							setters[selectedSetter].call(date, value);
-
-							schedulerEvent.set(dateAttr, date);
 
 							schedulerEvent.get('scheduler').syncEventsUI();
 						}
@@ -871,7 +883,7 @@
 					var datePicker = Liferay.component(Liferay.CalendarUtil.PORTLET_NAMESPACE + fieldName + 'datePicker');
 
 					if (datePicker) {
-						datePicker.calendar.set('dates', [date]);
+						datePicker.calendar.selectDates(date);
 
 						datePicker.syncUI();
 					}

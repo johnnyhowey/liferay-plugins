@@ -416,13 +416,12 @@ public class JIRAIssueModelImpl extends BaseModelImpl<JIRAIssue>
 
 	@Override
 	public JIRAIssue toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (JIRAIssue)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (JIRAIssue)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -686,7 +685,7 @@ public class JIRAIssueModelImpl extends BaseModelImpl<JIRAIssue>
 	}
 
 	private static ClassLoader _classLoader = JIRAIssue.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			JIRAIssue.class
 		};
 	private long _jiraIssueId;
@@ -708,5 +707,5 @@ public class JIRAIssueModelImpl extends BaseModelImpl<JIRAIssue>
 	private String _status;
 	private String _originalStatus;
 	private long _columnBitmask;
-	private JIRAIssue _escapedModelProxy;
+	private JIRAIssue _escapedModel;
 }

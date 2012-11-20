@@ -38,7 +38,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.ClassNamePersistence;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -258,7 +257,13 @@ public class BarPersistenceImpl extends BasePersistenceImpl<Bar>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, bar);
+			if (!session.contains(bar)) {
+				bar = (Bar)session.get(BarImpl.class, bar.getPrimaryKeyObj());
+			}
+
+			if (bar != null) {
+				session.delete(bar);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -267,14 +272,16 @@ public class BarPersistenceImpl extends BasePersistenceImpl<Bar>
 			closeSession(session);
 		}
 
-		clearCache(bar);
+		if (bar != null) {
+			clearCache(bar);
+		}
 
 		return bar;
 	}
 
 	@Override
-	public Bar updateImpl(com.liferay.testtransaction.model.Bar bar,
-		boolean merge) throws SystemException {
+	public Bar updateImpl(com.liferay.testtransaction.model.Bar bar)
+		throws SystemException {
 		bar = toUnwrappedModel(bar);
 
 		boolean isNew = bar.isNew();
@@ -286,9 +293,14 @@ public class BarPersistenceImpl extends BasePersistenceImpl<Bar>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, bar, merge);
+			if (bar.isNew()) {
+				session.save(bar);
 
-			bar.setNew(false);
+				bar.setNew(false);
+			}
+			else {
+				session.merge(bar);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
