@@ -42,7 +42,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.workflow.kaleo.NoSuchNotificationException;
@@ -325,7 +324,14 @@ public class KaleoNotificationPersistenceImpl extends BasePersistenceImpl<KaleoN
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, kaleoNotification);
+			if (!session.contains(kaleoNotification)) {
+				kaleoNotification = (KaleoNotification)session.get(KaleoNotificationImpl.class,
+						kaleoNotification.getPrimaryKeyObj());
+			}
+
+			if (kaleoNotification != null) {
+				session.delete(kaleoNotification);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -334,15 +340,17 @@ public class KaleoNotificationPersistenceImpl extends BasePersistenceImpl<KaleoN
 			closeSession(session);
 		}
 
-		clearCache(kaleoNotification);
+		if (kaleoNotification != null) {
+			clearCache(kaleoNotification);
+		}
 
 		return kaleoNotification;
 	}
 
 	@Override
 	public KaleoNotification updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoNotification kaleoNotification,
-		boolean merge) throws SystemException {
+		com.liferay.portal.workflow.kaleo.model.KaleoNotification kaleoNotification)
+		throws SystemException {
 		kaleoNotification = toUnwrappedModel(kaleoNotification);
 
 		boolean isNew = kaleoNotification.isNew();
@@ -354,9 +362,14 @@ public class KaleoNotificationPersistenceImpl extends BasePersistenceImpl<KaleoN
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, kaleoNotification, merge);
+			if (kaleoNotification.isNew()) {
+				session.save(kaleoNotification);
 
-			kaleoNotification.setNew(false);
+				kaleoNotification.setNew(false);
+			}
+			else {
+				session.merge(kaleoNotification);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

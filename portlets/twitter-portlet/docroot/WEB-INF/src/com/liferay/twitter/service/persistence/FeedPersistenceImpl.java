@@ -38,7 +38,6 @@ import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -291,7 +290,13 @@ public class FeedPersistenceImpl extends BasePersistenceImpl<Feed>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, feed);
+			if (!session.contains(feed)) {
+				feed = (Feed)session.get(FeedImpl.class, feed.getPrimaryKeyObj());
+			}
+
+			if (feed != null) {
+				session.delete(feed);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -300,13 +305,15 @@ public class FeedPersistenceImpl extends BasePersistenceImpl<Feed>
 			closeSession(session);
 		}
 
-		clearCache(feed);
+		if (feed != null) {
+			clearCache(feed);
+		}
 
 		return feed;
 	}
 
 	@Override
-	public Feed updateImpl(com.liferay.twitter.model.Feed feed, boolean merge)
+	public Feed updateImpl(com.liferay.twitter.model.Feed feed)
 		throws SystemException {
 		feed = toUnwrappedModel(feed);
 
@@ -319,9 +326,14 @@ public class FeedPersistenceImpl extends BasePersistenceImpl<Feed>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, feed, merge);
+			if (feed.isNew()) {
+				session.save(feed);
 
-			feed.setNew(false);
+				feed.setNew(false);
+			}
+			else {
+				session.merge(feed);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

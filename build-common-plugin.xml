@@ -551,10 +551,17 @@
 					<then>
 						<ant dir="${project.dir}/shared/@{import.shared.current}" target="jar" inheritAll="false" />
 
-						<copy
-							file="${project.dir}/dist/@{import.shared.current}-${lp.version}.1.jar"
-							tofile="docroot/WEB-INF/lib/@{import.shared.current}.jar"
-						/>
+						<for param="import.shared.full.path">
+							<path>
+								<fileset dir="${project.dir}/dist" includes="@{import.shared.current}-${lp.version}.1*.jar" />
+							</path>
+							<sequential>
+								<copy
+									file="@{import.shared.full.path}"
+									tofile="docroot/WEB-INF/lib/@{import.shared.current}.jar"
+								/>
+							</sequential>
+						</for>
 					</then>
 				</if>
 			</sequential>
@@ -883,6 +890,36 @@ Please find a solution that does not require portal-impl.jar.
 
 						<arg value="${app.server.lib.portal.dir}/util-java.jar" />
 						<arg value="${app.server.lib.portal.dir}/util-taglib.jar" />
+					</java>
+				</then>
+			</elseif>
+			<elseif>
+				<antelope:endswith string="${plugin.name}" with="-web" />
+				<then>
+					<java
+						classname="com.liferay.portal.tools.deploy.WebDeployer"
+						classpathref="portal.classpath"
+						fork="true"
+						newenvironment="true"
+					>
+
+						<!-- Required Arguments -->
+
+						<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
+						<jvmarg value="-Dliferay.lib.portal.dir=${app.server.lib.portal.dir}" />
+						<jvmarg value="-Ddeployer.base.dir=${project.dir}/dist" />
+						<jvmarg value="-Ddeployer.dest.dir=${app.server.deploy.dir}" />
+						<jvmarg value="-Ddeployer.app.server.type=${app.server.type}" />
+						<jvmarg value="-Ddeployer.unpack.war=${auto.deploy.unpack.war}" />
+						<jvmarg value="-Ddeployer.file.pattern=${plugin.name}-*.war" />
+
+						<!-- Optional Arguments -->
+
+						<jvmarg value="-Ddeployer.tomcat.lib.dir=${app.server.tomcat.lib.global.dir}" />
+
+						<!-- Dependent Libraries -->
+
+						<arg value="${app.server.lib.portal.dir}/util-java.jar" />
 					</java>
 				</then>
 			</elseif>

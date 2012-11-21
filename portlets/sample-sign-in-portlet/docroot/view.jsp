@@ -30,12 +30,15 @@
 <%@ page import="com.liferay.portal.UserPasswordException" %>
 <%@ page import="com.liferay.portal.UserScreenNameException" %>
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.ClassResolverUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.Constants" %>
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
+<%@ page import="com.liferay.portal.kernel.util.MethodKey" %>
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.PortalClassInvoker" %>
 <%@ page import="com.liferay.portal.kernel.util.PropsUtil" %>
+<%@ page import="com.liferay.portal.model.Company" %>
 <%@ page import="com.liferay.portal.security.auth.AuthException" %>
 
 <%@ page import="javax.portlet.WindowState" %>
@@ -60,7 +63,8 @@
 	<c:otherwise>
 
 		<%
-		String login = GetterUtil.getString((String)PortalClassInvoker.invoke("com.liferay.portlet.login.util.LoginUtil", "getLogin", request, "login", company, false));
+		MethodKey methodKey = new MethodKey(ClassResolverUtil.resolveByPortalClassLoader("com.liferay.portlet.login.util.LoginUtil"), "getLogin", HttpServletRequest.class, String.class, Company.class);
+		String login = GetterUtil.getString((String)PortalClassInvoker.invoke(false, methodKey, request, "login", company));
 		boolean rememberMe = ParamUtil.getBoolean(request, "rememberMe");
 		%>
 

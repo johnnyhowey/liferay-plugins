@@ -169,7 +169,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticle.setMain(false);
 		kbArticle.setStatus(WorkflowConstants.STATUS_DRAFT);
 
-		kbArticlePersistence.update(kbArticle, false);
+		kbArticlePersistence.update(kbArticle);
 
 		// Resources
 
@@ -675,7 +675,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			kbArticle.setParentResourcePrimKey(parentResourcePrimKey);
 			kbArticle.setPriority(priority);
 
-			kbArticlePersistence.update(kbArticle, false);
+			kbArticlePersistence.update(kbArticle);
 		}
 
 		// Social
@@ -859,12 +859,12 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticle.setMain(false);
 		kbArticle.setStatus(status);
 
-		kbArticlePersistence.update(kbArticle, false);
+		kbArticlePersistence.update(kbArticle);
 
 		if (oldVersion < version) {
 			oldKBArticle.setLatest(false);
 
-			kbArticlePersistence.update(oldKBArticle, false);
+			kbArticlePersistence.update(oldKBArticle);
 		}
 
 		// Resources
@@ -951,7 +951,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			for (KBArticle kbArticle2 : kbArticles2) {
 				kbArticle2.setPriority(priority);
 
-				kbArticlePersistence.update(kbArticle2, false);
+				kbArticlePersistence.update(kbArticle2);
 			}
 		}
 	}
@@ -981,7 +981,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		kbArticle.setStatusByUserName(user.getFullName());
 		kbArticle.setStatusDate(serviceContext.getModifiedDate(now));
 
-		kbArticlePersistence.update(kbArticle, false);
+		kbArticlePersistence.update(kbArticle);
 
 		if (status != WorkflowConstants.STATUS_APPROVED) {
 			return kbArticle;
@@ -993,7 +993,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 			oldKBArticle.setMain(false);
 
-			kbArticlePersistence.update(oldKBArticle, false);
+			kbArticlePersistence.update(oldKBArticle);
 		}
 
 		// Asset
@@ -1065,7 +1065,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		kbArticle.setViewCount(viewCount);
 
-		kbArticlePersistence.update(kbArticle, false);
+		kbArticlePersistence.update(kbArticle);
 
 		if (kbArticle.isApproved() || kbArticle.isFirstVersion()) {
 			return;
@@ -1076,7 +1076,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 
 		kbArticle.setViewCount(viewCount);
 
-		kbArticlePersistence.update(kbArticle, false);
+		kbArticlePersistence.update(kbArticle);
 	}
 
 	protected void addKBArticleAttachments(
@@ -1476,12 +1476,13 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 		subscriptionSender.setBody(body);
 		subscriptionSender.setCompanyId(kbArticle.getCompanyId());
 		subscriptionSender.setContextAttribute(
+			"[$ARTICLE_CONTENT$]", kbArticleContent, false);
+		subscriptionSender.setContextAttribute(
 			"[$ARTICLE_CONTENT_DIFF$]", kbArticleDiffs.get("content"), false);
 		subscriptionSender.setContextAttribute(
+			"[$ARTICLE_TITLE$]", kbArticle.getTitle(), false);
+		subscriptionSender.setContextAttribute(
 			"[$ARTICLE_TITLE_DIFF$]", kbArticleDiffs.get("title"), false);
-		subscriptionSender.setContextAttributes(
-			"[$ARTICLE_CONTENT$]", kbArticleContent, "[$ARTICLE_TITLE$]",
-			kbArticle.getTitle());
 		subscriptionSender.setContextUserPrefix("ARTICLE");
 		subscriptionSender.setFrom(fromAddress, fromName);
 		subscriptionSender.setHtmlFormat(true);
@@ -1566,7 +1567,7 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 			for (KBArticle kbArticle2 : kbArticles2) {
 				kbArticle2.setRootResourcePrimKey(rootResourcePrimKey);
 
-				kbArticlePersistence.update(kbArticle2, false);
+				kbArticlePersistence.update(kbArticle2);
 			}
 		}
 

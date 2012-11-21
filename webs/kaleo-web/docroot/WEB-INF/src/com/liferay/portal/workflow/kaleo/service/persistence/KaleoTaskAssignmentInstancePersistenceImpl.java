@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.workflow.kaleo.NoSuchTaskAssignmentInstanceException;
@@ -349,7 +348,14 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, kaleoTaskAssignmentInstance);
+			if (!session.contains(kaleoTaskAssignmentInstance)) {
+				kaleoTaskAssignmentInstance = (KaleoTaskAssignmentInstance)session.get(KaleoTaskAssignmentInstanceImpl.class,
+						kaleoTaskAssignmentInstance.getPrimaryKeyObj());
+			}
+
+			if (kaleoTaskAssignmentInstance != null) {
+				session.delete(kaleoTaskAssignmentInstance);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -358,15 +364,17 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 			closeSession(session);
 		}
 
-		clearCache(kaleoTaskAssignmentInstance);
+		if (kaleoTaskAssignmentInstance != null) {
+			clearCache(kaleoTaskAssignmentInstance);
+		}
 
 		return kaleoTaskAssignmentInstance;
 	}
 
 	@Override
 	public KaleoTaskAssignmentInstance updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignmentInstance kaleoTaskAssignmentInstance,
-		boolean merge) throws SystemException {
+		com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignmentInstance kaleoTaskAssignmentInstance)
+		throws SystemException {
 		kaleoTaskAssignmentInstance = toUnwrappedModel(kaleoTaskAssignmentInstance);
 
 		boolean isNew = kaleoTaskAssignmentInstance.isNew();
@@ -379,9 +387,14 @@ public class KaleoTaskAssignmentInstancePersistenceImpl
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, kaleoTaskAssignmentInstance, merge);
+			if (kaleoTaskAssignmentInstance.isNew()) {
+				session.save(kaleoTaskAssignmentInstance);
 
-			kaleoTaskAssignmentInstance.setNew(false);
+				kaleoTaskAssignmentInstance.setNew(false);
+			}
+			else {
+				session.merge(kaleoTaskAssignmentInstance);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

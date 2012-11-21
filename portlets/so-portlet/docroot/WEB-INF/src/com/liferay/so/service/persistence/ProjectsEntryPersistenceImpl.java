@@ -37,7 +37,6 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -265,7 +264,14 @@ public class ProjectsEntryPersistenceImpl extends BasePersistenceImpl<ProjectsEn
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, projectsEntry);
+			if (!session.contains(projectsEntry)) {
+				projectsEntry = (ProjectsEntry)session.get(ProjectsEntryImpl.class,
+						projectsEntry.getPrimaryKeyObj());
+			}
+
+			if (projectsEntry != null) {
+				session.delete(projectsEntry);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -274,14 +280,16 @@ public class ProjectsEntryPersistenceImpl extends BasePersistenceImpl<ProjectsEn
 			closeSession(session);
 		}
 
-		clearCache(projectsEntry);
+		if (projectsEntry != null) {
+			clearCache(projectsEntry);
+		}
 
 		return projectsEntry;
 	}
 
 	@Override
 	public ProjectsEntry updateImpl(
-		com.liferay.so.model.ProjectsEntry projectsEntry, boolean merge)
+		com.liferay.so.model.ProjectsEntry projectsEntry)
 		throws SystemException {
 		projectsEntry = toUnwrappedModel(projectsEntry);
 
@@ -294,9 +302,14 @@ public class ProjectsEntryPersistenceImpl extends BasePersistenceImpl<ProjectsEn
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, projectsEntry, merge);
+			if (projectsEntry.isNew()) {
+				session.save(projectsEntry);
 
-			projectsEntry.setNew(false);
+				projectsEntry.setNew(false);
+			}
+			else {
+				session.merge(projectsEntry);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
