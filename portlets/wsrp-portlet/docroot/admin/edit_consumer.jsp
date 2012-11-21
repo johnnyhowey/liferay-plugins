@@ -66,6 +66,23 @@ catch (NoSuchConsumerException nsce) {
 		<liferay-ui:input-field bean="<%= wsrpConsumer %>" field="forwardCookies" model="<%= WSRPConsumer.class %>" />
 	</td>
 </tr>
+<tr>
+	<td>
+		<liferay-ui:message key="forward-headers" />
+	</td>
+	<td>
+		<liferay-ui:input-field bean="<%= wsrpConsumer %>" field="forwardHeaders" model="<%= WSRPConsumer.class %>" />
+	</td>
+</tr>
+<tr>
+	<td>
+		<liferay-ui:message key="markup-character-sets" /><liferay-ui:icon-help message="markup-character-sets-help" />
+
+	</td>
+	<td>
+		<liferay-ui:input-field bean="<%= wsrpConsumer %>" field="markupCharacterSets" model="<%= WSRPConsumer.class %>" />
+	</td>
+</tr>
 </table>
 
 <br />

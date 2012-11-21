@@ -40,7 +40,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
 import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
@@ -239,7 +238,14 @@ public class CheckoutPersistenceImpl extends BasePersistenceImpl<Checkout>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, checkout);
+			if (!session.contains(checkout)) {
+				checkout = (Checkout)session.get(CheckoutImpl.class,
+						checkout.getPrimaryKeyObj());
+			}
+
+			if (checkout != null) {
+				session.delete(checkout);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -248,14 +254,16 @@ public class CheckoutPersistenceImpl extends BasePersistenceImpl<Checkout>
 			closeSession(session);
 		}
 
-		clearCache(checkout);
+		if (checkout != null) {
+			clearCache(checkout);
+		}
 
 		return checkout;
 	}
 
 	@Override
-	public Checkout updateImpl(com.liferay.ams.model.Checkout checkout,
-		boolean merge) throws SystemException {
+	public Checkout updateImpl(com.liferay.ams.model.Checkout checkout)
+		throws SystemException {
 		checkout = toUnwrappedModel(checkout);
 
 		boolean isNew = checkout.isNew();
@@ -265,9 +273,14 @@ public class CheckoutPersistenceImpl extends BasePersistenceImpl<Checkout>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, checkout, merge);
+			if (checkout.isNew()) {
+				session.save(checkout);
 
-			checkout.setNew(false);
+				checkout.setNew(false);
+			}
+			else {
+				session.merge(checkout);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);

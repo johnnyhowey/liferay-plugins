@@ -488,13 +488,12 @@ public class KaleoInstanceTokenModelImpl extends BaseModelImpl<KaleoInstanceToke
 
 	@Override
 	public KaleoInstanceToken toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KaleoInstanceToken)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KaleoInstanceToken)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -796,7 +795,7 @@ public class KaleoInstanceTokenModelImpl extends BaseModelImpl<KaleoInstanceToke
 	}
 
 	private static ClassLoader _classLoader = KaleoInstanceToken.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KaleoInstanceToken.class
 		};
 	private long _kaleoInstanceTokenId;
@@ -826,5 +825,5 @@ public class KaleoInstanceTokenModelImpl extends BaseModelImpl<KaleoInstanceToke
 	private Date _completionDate;
 	private Date _originalCompletionDate;
 	private long _columnBitmask;
-	private KaleoInstanceToken _escapedModelProxy;
+	private KaleoInstanceToken _escapedModel;
 }
