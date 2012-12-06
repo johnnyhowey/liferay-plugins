@@ -181,13 +181,12 @@ public class TypeModelImpl extends BaseModelImpl<Type> implements TypeModel {
 
 	@Override
 	public Type toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Type)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Type)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -309,11 +308,9 @@ public class TypeModelImpl extends BaseModelImpl<Type> implements TypeModel {
 	}
 
 	private static ClassLoader _classLoader = Type.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Type.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Type.class };
 	private long _typeId;
 	private long _groupId;
 	private String _name;
-	private Type _escapedModelProxy;
+	private Type _escapedModel;
 }
