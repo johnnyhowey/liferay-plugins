@@ -71,28 +71,20 @@ public class AdminPortletDataHandlerImpl extends BasePortletDataHandler {
 
 		long companyId = portletDataContext.getCompanyId();
 
-		if (portletDataContext.getBooleanParameter(
-				_NAMESPACE, "wsrp-producers")) {
+		List<WSRPProducer> wsrpProducers =
+			WSRPProducerLocalServiceUtil.getWSRPProducers(
+				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-			List<WSRPProducer> wsrpProducers =
-				WSRPProducerLocalServiceUtil.getWSRPProducers(
-					companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
-			for (WSRPProducer wsrpProducer : wsrpProducers) {
-				WSRPProducerLocalServiceUtil.deleteWSRPProducer(wsrpProducer);
-			}
+		for (WSRPProducer wsrpProducer : wsrpProducers) {
+			WSRPProducerLocalServiceUtil.deleteWSRPProducer(wsrpProducer);
 		}
 
-		if (portletDataContext.getBooleanParameter(
-				_NAMESPACE, "wsrp-consumers")) {
+		List<WSRPConsumer> wsrpConsumers =
+			WSRPConsumerLocalServiceUtil.getWSRPConsumers(
+				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 
-			List<WSRPConsumer> wsrpConsumers =
-				WSRPConsumerLocalServiceUtil.getWSRPConsumers(
-					companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-
-			for (WSRPConsumer wsrpConsumer : wsrpConsumers) {
-				WSRPConsumerLocalServiceUtil.deleteWSRPConsumer(wsrpConsumer);
-			}
+		for (WSRPConsumer wsrpConsumer : wsrpConsumers) {
+			WSRPConsumerLocalServiceUtil.deleteWSRPConsumer(wsrpConsumer);
 		}
 
 		return null;
@@ -308,9 +300,13 @@ public class AdminPortletDataHandlerImpl extends BasePortletDataHandler {
 			importedWSRPConsumer.setWsdl(wsrpConsumer.getWsdl());
 			importedWSRPConsumer.setForwardCookies(
 				wsrpConsumer.getForwardCookies());
+			importedWSRPConsumer.setForwardHeaders(
+				wsrpConsumer.getForwardHeaders());
+			importedWSRPConsumer.setMarkupCharacterSets(
+				wsrpConsumer.getMarkupCharacterSets());
 
 			WSRPConsumerLocalServiceUtil.updateWSRPConsumer(
-				importedWSRPConsumer, false);
+				importedWSRPConsumer);
 		}
 		catch (NoSuchConsumerException nsce) {
 			ServiceContext serviceContext =
@@ -322,7 +318,8 @@ public class AdminPortletDataHandlerImpl extends BasePortletDataHandler {
 			importedWSRPConsumer = WSRPConsumerLocalServiceUtil.addWSRPConsumer(
 				portletDataContext.getCompanyId(), null, wsrpConsumer.getName(),
 				wsrpConsumer.getUrl(), wsrpConsumer.getForwardCookies(),
-				serviceContext);
+				wsrpConsumer.getForwardHeaders(),
+				wsrpConsumer.getMarkupCharacterSets(), serviceContext);
 		}
 
 		return importedWSRPConsumer;
@@ -346,7 +343,7 @@ public class AdminPortletDataHandlerImpl extends BasePortletDataHandler {
 				wsrpConsumerPortlet.getPortletHandle());
 
 			WSRPConsumerPortletLocalServiceUtil.updateWSRPConsumerPortlet(
-				importedWSRPConsumerPortlet, false);
+				importedWSRPConsumerPortlet);
 		}
 		catch (NoSuchConsumerPortletException nscpe) {
 			ServiceContext serviceContext =
@@ -441,7 +438,7 @@ public class AdminPortletDataHandlerImpl extends BasePortletDataHandler {
 			importedWSRPProducer.setPortletIds(wsrpProducer.getPortletIds());
 
 			WSRPProducerLocalServiceUtil.updateWSRPProducer(
-				importedWSRPProducer, false);
+				importedWSRPProducer);
 		}
 		catch (NoSuchProducerException nspe) {
 			ServiceContext serviceContext =
