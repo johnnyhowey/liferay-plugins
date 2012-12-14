@@ -219,6 +219,7 @@ public class CalendarUtil {
 		jsonObject.put("classNameId", calendarResource.getClassNameId());
 		jsonObject.put("classPK", calendarResource.getClassPK());
 		jsonObject.put("global", calendarResource.isGlobal());
+		jsonObject.put("groupId", calendar.getGroupId());
 		jsonObject.put("name", calendar.getName(themeDisplay.getLocale()));
 		jsonObject.put(
 			"permissions",
@@ -255,9 +256,19 @@ public class CalendarUtil {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		jsonObject.put(
+			ActionKeys.DELETE,
+			CalendarPermission.contains(
+				permissionChecker, calendar, ActionKeys.DELETE));
+
+		jsonObject.put(
 			ActionKeys.MANAGE_BOOKINGS,
 			CalendarPermission.contains(
 				permissionChecker, calendar, ActionKeys.MANAGE_BOOKINGS));
+
+		jsonObject.put(
+			ActionKeys.PERMISSIONS,
+			CalendarPermission.contains(
+				permissionChecker, calendar, ActionKeys.PERMISSIONS));
 
 		jsonObject.put(
 			ActionKeys.UPDATE,

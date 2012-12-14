@@ -19,6 +19,7 @@ import com.liferay.calendar.CalendarBookingTitleException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
 import com.liferay.calendar.model.CalendarBookingConstants;
+import com.liferay.calendar.model.CalendarResource;
 import com.liferay.calendar.notification.NotificationType;
 import com.liferay.calendar.recurrence.Recurrence;
 import com.liferay.calendar.recurrence.RecurrenceSerializer;
@@ -30,14 +31,27 @@ import com.liferay.calendar.util.RecurrenceUtil;
 import com.liferay.calendar.workflow.CalendarBookingApprovalWorkflow;
 import com.liferay.calendar.workflow.CalendarBookingWorkflowConstants;
 import com.liferay.portal.kernel.bean.BeanReference;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Property;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ArrayUtil;
+import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.asset.model.AssetEntry;
+import com.liferay.portlet.asset.model.AssetLinkConstants;
 
 import java.util.Date;
 import java.util.List;
@@ -122,6 +136,7 @@ public class CalendarBookingLocalServiceImpl
 		calendarBooking.setFirstReminderType(firstReminderType);
 		calendarBooking.setSecondReminder(secondReminder);
 		calendarBooking.setSecondReminderType(secondReminderType);
+		calendarBooking.setExpandoBridgeAttributes(serviceContext);
 
 		int status = CalendarBookingWorkflowConstants.STATUS_PENDING;
 
@@ -133,10 +148,17 @@ public class CalendarBookingLocalServiceImpl
 
 		calendarBooking.setStatusDate(serviceContext.getModifiedDate(now));
 
-		calendarBookingPersistence.update(calendarBooking, false);
+		calendarBookingPersistence.update(calendarBooking);
 
 		addChildCalendarBookings(
 			calendarBooking, childCalendarIds, serviceContext);
+
+		// Asset
+
+		updateAsset(
+			userId, calendarBooking, serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames(),
+			serviceContext.getAssetLinkEntryIds());
 
 		// Workflow
 
@@ -153,6 +175,11 @@ public class CalendarBookingLocalServiceImpl
 
 		List<CalendarBooking> calendarBookings =
 			calendarBookingFinder.findByFutureReminders(now.getTime());
+
+		long endDate = now.getTime() + Time.MONTH;
+
+		calendarBookings = RecurrenceUtil.expandCalendarBookings(
+			calendarBookings, now.getTime(), endDate, 1);
 
 		for (CalendarBooking calendarBooking : calendarBookings) {
 			try {
@@ -188,6 +215,12 @@ public class CalendarBookingLocalServiceImpl
 		for (CalendarBooking childCalendarBooking : childCalendarBookings) {
 			deleteCalendarBooking(childCalendarBooking);
 		}
+
+		// Asset
+
+		assetEntryLocalService.deleteEntry(
+			CalendarBooking.class.getName(),
+			calendarBooking.getCalendarBookingId());
 
 		return calendarBooking;
 	}
@@ -230,6 +263,10 @@ public class CalendarBookingLocalServiceImpl
 		Recurrence recurrenceObj = calendarBooking.getRecurrenceObj();
 
 		if (allFollowing) {
+			if (recurrenceObj.getCount() > 0) {
+				recurrenceObj.setCount(0);
+			}
+
 			newStartDateJCalendar.add(java.util.Calendar.DATE, -1);
 
 			recurrenceObj.setUntilJCalendar(newStartDateJCalendar);
@@ -241,7 +278,7 @@ public class CalendarBookingLocalServiceImpl
 		calendarBooking.setRecurrence(
 			RecurrenceSerializer.serialize(recurrenceObj));
 
-		calendarBookingPersistence.update(calendarBooking, false);
+		calendarBookingPersistence.update(calendarBooking);
 	}
 
 	public void deleteCalendarBookings(long calendarId)
@@ -286,8 +323,27 @@ public class CalendarBookingLocalServiceImpl
 			long calendarId, long startDate, long endDate)
 		throws SystemException {
 
-		return calendarBookingPersistence.findByC_S_E(
-			calendarId, startDate, endDate);
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
+			CalendarBooking.class, getClassLoader());
+
+		Property property = PropertyFactoryUtil.forName("calendarId");
+
+		dynamicQuery.add(property.eq(calendarId));
+
+		if (startDate >= 0) {
+			Property propertyStartDate = PropertyFactoryUtil.forName(
+				"startDate");
+
+			dynamicQuery.add(propertyStartDate.gt(startDate));
+		}
+
+		if (endDate >= 0) {
+			Property propertyEndDate = PropertyFactoryUtil.forName("endDate");
+
+			dynamicQuery.add(propertyEndDate.gt(endDate));
+		}
+
+		return dynamicQuery(dynamicQuery);
 	}
 
 	public int getCalendarBookingsCount(
@@ -384,6 +440,50 @@ public class CalendarBookingLocalServiceImpl
 			endDate, statuses, andOperator);
 	}
 
+	public void updateAsset(
+			long userId, CalendarBooking calendarBooking,
+			long[] assetCategoryIds, String[] assetTagNames,
+			long[] assetLinkEntryIds)
+		throws PortalException, SystemException {
+
+		long assetGroupId = calendarBooking.getGroupId();
+
+		CalendarResource calendarResource =
+			calendarBooking.getCalendarResource();
+
+		long classNameId = calendarResource.getClassNameId();
+		long groupClassNameId = PortalUtil.getClassNameId(Group.class);
+
+		if (classNameId == groupClassNameId) {
+			Group group = GroupLocalServiceUtil.getGroup(
+				calendarResource.getClassPK());
+
+			assetGroupId = group.getGroupId();
+		}
+
+		boolean visible = false;
+
+		if (calendarBooking.isApproved()) {
+			visible = true;
+		}
+
+		String summary = HtmlUtil.extractText(
+			StringUtil.shorten(calendarBooking.getDescription(), 500));
+
+		AssetEntry assetEntry = assetEntryLocalService.updateEntry(
+			userId, assetGroupId, calendarBooking.getCreateDate(),
+			calendarBooking.getModifiedDate(), CalendarBooking.class.getName(),
+			calendarBooking.getCalendarBookingId(), calendarBooking.getUuid(),
+			0, assetCategoryIds, assetTagNames, visible, null, null, null,
+			ContentTypes.TEXT_HTML, calendarBooking.getTitle(),
+			calendarBooking.getDescription(), summary, null, null, 0, 0, null,
+			false);
+
+		assetLinkLocalService.updateLinks(
+			userId, assetEntry.getEntryId(), assetLinkEntryIds,
+			AssetLinkConstants.TYPE_RELATED);
+	}
+
 	public CalendarBooking updateCalendarBooking(
 			long userId, long calendarBookingId, long calendarId,
 			long[] childCalendarIds, Map<Locale, String> titleMap,
@@ -437,11 +537,19 @@ public class CalendarBookingLocalServiceImpl
 		calendarBooking.setFirstReminderType(firstReminderType);
 		calendarBooking.setSecondReminder(secondReminder);
 		calendarBooking.setSecondReminderType(secondReminderType);
+		calendarBooking.setExpandoBridgeAttributes(serviceContext);
 
-		calendarBookingPersistence.update(calendarBooking, false);
+		calendarBookingPersistence.update(calendarBooking);
 
 		addChildCalendarBookings(
 			calendarBooking, childCalendarIds, serviceContext);
+
+		// Asset
+
+		updateAsset(
+			userId, calendarBooking, serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames(),
+			serviceContext.getAssetLinkEntryIds());
 
 		// Workflow
 
@@ -533,7 +641,7 @@ public class CalendarBookingLocalServiceImpl
 		calendarBooking.setStatusByUserName(user.getFullName());
 		calendarBooking.setStatusDate(serviceContext.getModifiedDate(now));
 
-		calendarBookingPersistence.update(calendarBooking, false);
+		calendarBookingPersistence.update(calendarBooking);
 
 		return calendarBooking;
 	}

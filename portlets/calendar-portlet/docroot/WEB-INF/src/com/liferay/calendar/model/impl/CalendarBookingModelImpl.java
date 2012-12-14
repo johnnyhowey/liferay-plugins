@@ -99,7 +99,7 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 			{ "statusByUserName", Types.VARCHAR },
 			{ "statusDate", Types.TIMESTAMP }
 		};
-	public static final String TABLE_SQL_CREATE = "create table CalendarBooking (uuid_ VARCHAR(75) null,calendarBookingId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,calendarId LONG,calendarResourceId LONG,parentCalendarBookingId LONG,title STRING null,description STRING null,location VARCHAR(75) null,startDate LONG,endDate LONG,allDay BOOLEAN,recurrence STRING null,firstReminder LONG,firstReminderType VARCHAR(75) null,secondReminder LONG,secondReminderType VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
+	public static final String TABLE_SQL_CREATE = "create table CalendarBooking (uuid_ VARCHAR(75) null,calendarBookingId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,calendarId LONG,calendarResourceId LONG,parentCalendarBookingId LONG,title STRING null,description STRING null,location STRING null,startDate LONG,endDate LONG,allDay BOOLEAN,recurrence STRING null,firstReminder LONG,firstReminderType VARCHAR(75) null,secondReminder LONG,secondReminderType VARCHAR(75) null,status INTEGER,statusByUserId LONG,statusByUserName VARCHAR(75) null,statusDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table CalendarBooking";
 	public static final String ORDER_BY_JPQL = " ORDER BY calendarBooking.startDate ASC, calendarBooking.title ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY CalendarBooking.startDate ASC, CalendarBooking.title ASC";
@@ -118,12 +118,12 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	public static long CALENDARID_COLUMN_BITMASK = 1L;
 	public static long CALENDARRESOURCEID_COLUMN_BITMASK = 2L;
 	public static long COMPANYID_COLUMN_BITMASK = 4L;
-	public static long ENDDATE_COLUMN_BITMASK = 8L;
-	public static long GROUPID_COLUMN_BITMASK = 16L;
-	public static long PARENTCALENDARBOOKINGID_COLUMN_BITMASK = 32L;
-	public static long STARTDATE_COLUMN_BITMASK = 64L;
-	public static long STATUS_COLUMN_BITMASK = 128L;
-	public static long UUID_COLUMN_BITMASK = 256L;
+	public static long GROUPID_COLUMN_BITMASK = 8L;
+	public static long PARENTCALENDARBOOKINGID_COLUMN_BITMASK = 16L;
+	public static long STATUS_COLUMN_BITMASK = 32L;
+	public static long UUID_COLUMN_BITMASK = 64L;
+	public static long STARTDATE_COLUMN_BITMASK = 128L;
+	public static long TITLE_COLUMN_BITMASK = 256L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -796,17 +796,7 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	public void setStartDate(long startDate) {
 		_columnBitmask = -1L;
 
-		if (!_setOriginalStartDate) {
-			_setOriginalStartDate = true;
-
-			_originalStartDate = _startDate;
-		}
-
 		_startDate = startDate;
-	}
-
-	public long getOriginalStartDate() {
-		return _originalStartDate;
 	}
 
 	@JSON
@@ -815,19 +805,7 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	}
 
 	public void setEndDate(long endDate) {
-		_columnBitmask |= ENDDATE_COLUMN_BITMASK;
-
-		if (!_setOriginalEndDate) {
-			_setOriginalEndDate = true;
-
-			_originalEndDate = _endDate;
-		}
-
 		_endDate = endDate;
-	}
-
-	public long getOriginalEndDate() {
-		return _originalEndDate;
 	}
 
 	@JSON
@@ -1081,13 +1059,12 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 
 	@Override
 	public CalendarBooking toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (CalendarBooking)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (CalendarBooking)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -1208,14 +1185,6 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 		calendarBookingModelImpl._originalParentCalendarBookingId = calendarBookingModelImpl._parentCalendarBookingId;
 
 		calendarBookingModelImpl._setOriginalParentCalendarBookingId = false;
-
-		calendarBookingModelImpl._originalStartDate = calendarBookingModelImpl._startDate;
-
-		calendarBookingModelImpl._setOriginalStartDate = false;
-
-		calendarBookingModelImpl._originalEndDate = calendarBookingModelImpl._endDate;
-
-		calendarBookingModelImpl._setOriginalEndDate = false;
 
 		calendarBookingModelImpl._originalStatus = calendarBookingModelImpl._status;
 
@@ -1537,7 +1506,7 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	}
 
 	private static ClassLoader _classLoader = CalendarBooking.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			CalendarBooking.class
 		};
 	private String _uuid;
@@ -1569,11 +1538,7 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	private String _descriptionCurrentLanguageId;
 	private String _location;
 	private long _startDate;
-	private long _originalStartDate;
-	private boolean _setOriginalStartDate;
 	private long _endDate;
-	private long _originalEndDate;
-	private boolean _setOriginalEndDate;
 	private boolean _allDay;
 	private String _recurrence;
 	private long _firstReminder;
@@ -1588,5 +1553,5 @@ public class CalendarBookingModelImpl extends BaseModelImpl<CalendarBooking>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private long _columnBitmask;
-	private CalendarBooking _escapedModelProxy;
+	private CalendarBooking _escapedModel;
 }

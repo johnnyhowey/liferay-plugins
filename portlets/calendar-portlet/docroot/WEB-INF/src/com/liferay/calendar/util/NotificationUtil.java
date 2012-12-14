@@ -31,8 +31,10 @@ import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.CamelCaseUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Time;
+import com.liferay.portal.kernel.util.TimeZoneUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
@@ -156,15 +158,12 @@ public class NotificationUtil {
 
 			User user = notificationRecipient.getUser();
 
-			java.util.Calendar now = CalendarFactoryUtil.getCalendar(
-				user.getTimeZone(), user.getLocale());
+			java.util.Calendar nowCalendar = CalendarFactoryUtil.getCalendar(
+				TimeZoneUtil.getTimeZone(StringPool.UTC));
 
-			long nowTime = now.getTimeInMillis();
+			long nowTime = nowCalendar.getTimeInMillis();
 
-			java.util.Calendar startDate = CalendarFactoryUtil.getCalendar(
-				user.getTimeZone(), user.getLocale());
-
-			long startTime = startDate.getTimeInMillis();
+			long startTime = calendarBooking.getStartDate();
 
 			if (nowTime > startTime) {
 				return;
@@ -192,13 +191,15 @@ public class NotificationUtil {
 					calendarBooking.getSecondReminderNotificationType();
 			}
 
-			NotificationSender notificationSender =
-				NotificationSenderFactory.getNotificationSender(
-					notificationType.toString());
+			if (notificationType != null) {
+				NotificationSender notificationSender =
+					NotificationSenderFactory.getNotificationSender(
+						notificationType.toString());
 
-			notificationSender.sendNotification(
-				notificationRecipient, NotificationTemplateType.REMINDER,
-				notificationTemplateContext);
+				notificationSender.sendNotification(
+					notificationRecipient, NotificationTemplateType.REMINDER,
+					notificationTemplateContext);
+			}
 		}
 	}
 
