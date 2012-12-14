@@ -21,6 +21,7 @@
 
 	.controls {
 		@include border-radius(4px);
+
 		background-color: #EEE;
 		border: 1px solid #CCC;
 		border-radius: 4px;
@@ -46,6 +47,14 @@
 
 		.back-button {
 			float: right;
+		}
+	}
+
+	.message-attachments {
+		clear: both;
+
+		li {
+			list-style: none;
 		}
 	}
 
