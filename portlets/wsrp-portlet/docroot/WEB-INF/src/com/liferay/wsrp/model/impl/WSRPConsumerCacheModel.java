@@ -38,7 +38,7 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 	Externalizable {
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -62,6 +62,10 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 		sb.append(registrationPropertiesString);
 		sb.append(", forwardCookies=");
 		sb.append(forwardCookies);
+		sb.append(", forwardHeaders=");
+		sb.append(forwardHeaders);
+		sb.append(", markupCharacterSets=");
+		sb.append(markupCharacterSets);
 		sb.append("}");
 
 		return sb.toString();
@@ -136,6 +140,20 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 			wsrpConsumerImpl.setForwardCookies(forwardCookies);
 		}
 
+		if (forwardHeaders == null) {
+			wsrpConsumerImpl.setForwardHeaders(StringPool.BLANK);
+		}
+		else {
+			wsrpConsumerImpl.setForwardHeaders(forwardHeaders);
+		}
+
+		if (markupCharacterSets == null) {
+			wsrpConsumerImpl.setMarkupCharacterSets(StringPool.BLANK);
+		}
+		else {
+			wsrpConsumerImpl.setMarkupCharacterSets(markupCharacterSets);
+		}
+
 		wsrpConsumerImpl.resetOriginalValues();
 
 		return wsrpConsumerImpl;
@@ -153,6 +171,8 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 		registrationContextString = objectInput.readUTF();
 		registrationPropertiesString = objectInput.readUTF();
 		forwardCookies = objectInput.readUTF();
+		forwardHeaders = objectInput.readUTF();
+		markupCharacterSets = objectInput.readUTF();
 	}
 
 	public void writeExternal(ObjectOutput objectOutput)
@@ -210,6 +230,20 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 		else {
 			objectOutput.writeUTF(forwardCookies);
 		}
+
+		if (forwardHeaders == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(forwardHeaders);
+		}
+
+		if (markupCharacterSets == null) {
+			objectOutput.writeUTF(StringPool.BLANK);
+		}
+		else {
+			objectOutput.writeUTF(markupCharacterSets);
+		}
 	}
 
 	public String uuid;
@@ -223,4 +257,6 @@ public class WSRPConsumerCacheModel implements CacheModel<WSRPConsumer>,
 	public String registrationContextString;
 	public String registrationPropertiesString;
 	public String forwardCookies;
+	public String forwardHeaders;
+	public String markupCharacterSets;
 }
