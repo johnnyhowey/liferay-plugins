@@ -63,6 +63,7 @@ import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
+import org.apache.solr.common.params.FacetParams;
 
 /**
  * @author Bruno Farache
@@ -170,6 +171,18 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 			else {
 				solrQuery.addFacetField(facetConfiguration.getFieldName());
 			}
+
+			String facetSort = FacetParams.FACET_SORT_COUNT;
+
+			String order = facetConfiguration.getOrder();
+
+			if (order.equals("OrderValueAsc")) {
+				facetSort = FacetParams.FACET_SORT_INDEX;
+			}
+
+			solrQuery.add(
+				"f." + facetConfiguration.getFieldName() + ".facet.sort",
+				facetSort);
 		}
 
 		solrQuery.setFacetLimit(-1);
@@ -312,6 +325,8 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 				document.add(field);
 			}
 
+			documents.add(document);
+
 			String snippet = StringPool.BLANK;
 
 			if (queryConfig.isHighlightEnabled()) {
@@ -323,14 +338,12 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 					snippet = getSnippet(
 						solrDocument, queryConfig, queryTerms,
 						queryResponse.getHighlighting(), Field.TITLE);
+				}
 
-					if (Validator.isNull(snippet)) {
-						continue;
-					}
+				if (Validator.isNotNull(snippet)) {
+					snippets.add(snippet);
 				}
 			}
-
-			documents.add(document);
 
 			if (queryConfig.isScoreEnabled()) {
 				float score = GetterUtil.getFloat(
@@ -345,8 +358,6 @@ public class SolrIndexSearcherImpl implements IndexSearcher {
 			else {
 				scores.add(maxScore);
 			}
-
-			snippets.add(snippet);
 
 			subsetTotal++;
 		}

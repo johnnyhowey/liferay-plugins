@@ -56,7 +56,6 @@ public class CalendarResourceLocalServiceImpl
 
 		// Calendar resource
 
-		User user = userPersistence.findByPrimaryKey(userId);
 		long calendarResourceId = counterLocalService.increment();
 
 		if (Validator.isNull(className)) {
@@ -66,17 +65,13 @@ public class CalendarResourceLocalServiceImpl
 
 		long classNameId = PortalUtil.getClassNameId(className);
 
-		long globalUserId = 0;
-
 		if (isGlobalResource(classNameId)) {
-			globalUserId = getGlobalResourceUserId(classNameId, classPK);
+			userId = getGlobalResourceUserId(classNameId, classPK);
 
 			groupId = getGlobalResourceGroupId(serviceContext.getCompanyId());
 		}
 
-		if (globalUserId > 0) {
-			userId = globalUserId;
-		}
+		User user = userPersistence.findByPrimaryKey(userId);
 
 		if (PortletPropsValues.CALENDAR_RESOURCE_FORCE_AUTOGENERATE_CODE ||
 			Validator.isNull(code)) {
@@ -118,7 +113,7 @@ public class CalendarResourceLocalServiceImpl
 		calendarResource.setType(type);
 		calendarResource.setActive(active);
 
-		calendarResourcePersistence.update(calendarResource, false);
+		calendarResourcePersistence.update(calendarResource);
 
 		// Resources
 
@@ -275,7 +270,7 @@ public class CalendarResourceLocalServiceImpl
 		calendarResource.setType(type);
 		calendarResource.setActive(active);
 
-		calendarResourcePersistence.update(calendarResource, false);
+		calendarResourcePersistence.update(calendarResource);
 
 		// Resources
 
