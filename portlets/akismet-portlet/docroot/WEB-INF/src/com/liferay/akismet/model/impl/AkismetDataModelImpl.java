@@ -71,6 +71,8 @@ public class AkismetDataModelImpl extends BaseModelImpl<AkismetData>
 		};
 	public static final String TABLE_SQL_CREATE = "create table Akismet_AkismetData (akismetDataId LONG not null primary key,modifiedDate DATE null,mbMessageId LONG,type_ VARCHAR(75) null,permalink STRING null,referrer STRING null,userAgent STRING null,userIP VARCHAR(75) null,userURL STRING null)";
 	public static final String TABLE_SQL_DROP = "drop table Akismet_AkismetData";
+	public static final String ORDER_BY_JPQL = " ORDER BY akismetData.akismetDataId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Akismet_AkismetData.akismetDataId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -85,6 +87,7 @@ public class AkismetDataModelImpl extends BaseModelImpl<AkismetData>
 			true);
 	public static long MBMESSAGEID_COLUMN_BITMASK = 1L;
 	public static long MODIFIEDDATE_COLUMN_BITMASK = 2L;
+	public static long AKISMETDATAID_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.akismet.model.AkismetData"));
 
@@ -332,13 +335,12 @@ public class AkismetDataModelImpl extends BaseModelImpl<AkismetData>
 
 	@Override
 	public AkismetData toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (AkismetData)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (AkismetData)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -562,7 +564,7 @@ public class AkismetDataModelImpl extends BaseModelImpl<AkismetData>
 	}
 
 	private static ClassLoader _classLoader = AkismetData.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			AkismetData.class
 		};
 	private long _akismetDataId;
@@ -578,5 +580,5 @@ public class AkismetDataModelImpl extends BaseModelImpl<AkismetData>
 	private String _userIP;
 	private String _userURL;
 	private long _columnBitmask;
-	private AkismetData _escapedModelProxy;
+	private AkismetData _escapedModel;
 }

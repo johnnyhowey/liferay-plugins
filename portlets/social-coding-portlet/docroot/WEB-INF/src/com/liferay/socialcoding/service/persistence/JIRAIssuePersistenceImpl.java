@@ -15,7 +15,6 @@
 package com.liferay.socialcoding.service.persistence;
 
 import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -36,11 +35,10 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.socialcoding.NoSuchJIRAIssueException;
@@ -79,224 +77,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_PROJECTID =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByProjectId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PROJECTID =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByProjectId",
-			new String[] { Long.class.getName() },
-			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_PROJECTID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByProjectId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_KEY = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByKey",
-			new String[] { String.class.getName() },
-			JIRAIssueModelImpl.KEY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_KEY = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByKey",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_REPORTERJIRAUSERID =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByReporterJiraUserId",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPORTERJIRAUSERID =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByReporterJiraUserId",
-			new String[] { String.class.getName() },
-			JIRAIssueModelImpl.REPORTERJIRAUSERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByReporterJiraUserId", new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByAssigneeJiraUserId",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByAssigneeJiraUserId",
-			new String[] { String.class.getName() },
-			JIRAIssueModelImpl.ASSIGNEEJIRAUSERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByAssigneeJiraUserId", new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MD_P = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByMD_P",
-			new String[] {
-				Date.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByMD_P",
-			new String[] { Date.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_RJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_RJUI",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_RJUI",
-			new String[] { Long.class.getName(), String.class.getName() },
-			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK |
-			JIRAIssueModelImpl.REPORTERJIRAUSERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_P_RJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_RJUI",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_AJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_AJUI",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_AJUI",
-			new String[] { Long.class.getName(), String.class.getName() },
-			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK |
-			JIRAIssueModelImpl.ASSIGNEEJIRAUSERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_P_AJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_AJUI",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MD_P_RJUI =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByMD_P_RJUI",
-			new String[] {
-				Date.class.getName(), Long.class.getName(),
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_RJUI =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByMD_P_RJUI",
-			new String[] {
-				Date.class.getName(), Long.class.getName(),
-				String.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MD_P_AJUI =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByMD_P_AJUI",
-			new String[] {
-				Date.class.getName(), Long.class.getName(),
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_AJUI =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByMD_P_AJUI",
-			new String[] {
-				Date.class.getName(), Long.class.getName(),
-				String.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_RJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_RJUI_S",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI_S =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_RJUI_S",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				String.class.getName()
-			},
-			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK |
-			JIRAIssueModelImpl.REPORTERJIRAUSERID_COLUMN_BITMASK |
-			JIRAIssueModelImpl.STATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_P_RJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_RJUI_S",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				String.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_AJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_AJUI_S",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI_S =
-		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_AJUI_S",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				String.class.getName()
-			},
-			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK |
-			JIRAIssueModelImpl.ASSIGNEEJIRAUSERID_COLUMN_BITMASK |
-			JIRAIssueModelImpl.STATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_P_AJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_AJUI_S",
-			new String[] {
-				Long.class.getName(), String.class.getName(),
-				String.class.getName()
-			});
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
 			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -306,529 +86,27 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
 			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the j i r a issue in the entity cache if it is enabled.
-	 *
-	 * @param jiraIssue the j i r a issue
-	 */
-	public void cacheResult(JIRAIssue jiraIssue) {
-		EntityCacheUtil.putResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueImpl.class, jiraIssue.getPrimaryKey(), jiraIssue);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-			new Object[] { jiraIssue.getKey() }, jiraIssue);
-
-		jiraIssue.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the j i r a issues in the entity cache if it is enabled.
-	 *
-	 * @param jiraIssues the j i r a issues
-	 */
-	public void cacheResult(List<JIRAIssue> jiraIssues) {
-		for (JIRAIssue jiraIssue : jiraIssues) {
-			if (EntityCacheUtil.getResult(
-						JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-						JIRAIssueImpl.class, jiraIssue.getPrimaryKey()) == null) {
-				cacheResult(jiraIssue);
-			}
-			else {
-				jiraIssue.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all j i r a issues.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(JIRAIssueImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(JIRAIssueImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the j i r a issue.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(JIRAIssue jiraIssue) {
-		EntityCacheUtil.removeResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueImpl.class, jiraIssue.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(jiraIssue);
-	}
-
-	@Override
-	public void clearCache(List<JIRAIssue> jiraIssues) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (JIRAIssue jiraIssue : jiraIssues) {
-			EntityCacheUtil.removeResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-				JIRAIssueImpl.class, jiraIssue.getPrimaryKey());
-
-			clearUniqueFindersCache(jiraIssue);
-		}
-	}
-
-	protected void clearUniqueFindersCache(JIRAIssue jiraIssue) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY,
-			new Object[] { jiraIssue.getKey() });
-	}
-
-	/**
-	 * Creates a new j i r a issue with the primary key. Does not add the j i r a issue to the database.
-	 *
-	 * @param jiraIssueId the primary key for the new j i r a issue
-	 * @return the new j i r a issue
-	 */
-	public JIRAIssue create(long jiraIssueId) {
-		JIRAIssue jiraIssue = new JIRAIssueImpl();
-
-		jiraIssue.setNew(true);
-		jiraIssue.setPrimaryKey(jiraIssueId);
-
-		return jiraIssue;
-	}
-
-	/**
-	 * Removes the j i r a issue with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param jiraIssueId the primary key of the j i r a issue
-	 * @return the j i r a issue that was removed
-	 * @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JIRAIssue remove(long jiraIssueId)
-		throws NoSuchJIRAIssueException, SystemException {
-		return remove(Long.valueOf(jiraIssueId));
-	}
-
-	/**
-	 * Removes the j i r a issue with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the j i r a issue
-	 * @return the j i r a issue that was removed
-	 * @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JIRAIssue remove(Serializable primaryKey)
-		throws NoSuchJIRAIssueException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			JIRAIssue jiraIssue = (JIRAIssue)session.get(JIRAIssueImpl.class,
-					primaryKey);
-
-			if (jiraIssue == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchJIRAIssueException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(jiraIssue);
-		}
-		catch (NoSuchJIRAIssueException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected JIRAIssue removeImpl(JIRAIssue jiraIssue)
-		throws SystemException {
-		jiraIssue = toUnwrappedModel(jiraIssue);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.delete(session, jiraIssue);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		clearCache(jiraIssue);
-
-		return jiraIssue;
-	}
-
-	@Override
-	public JIRAIssue updateImpl(
-		com.liferay.socialcoding.model.JIRAIssue jiraIssue, boolean merge)
-		throws SystemException {
-		jiraIssue = toUnwrappedModel(jiraIssue);
-
-		boolean isNew = jiraIssue.isNew();
-
-		JIRAIssueModelImpl jiraIssueModelImpl = (JIRAIssueModelImpl)jiraIssue;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.update(session, jiraIssue, merge);
-
-			jiraIssue.setNew(false);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !JIRAIssueModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((jiraIssueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PROJECTID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PROJECTID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PROJECTID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getProjectId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PROJECTID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PROJECTID,
-					args);
-			}
-
-			if ((jiraIssueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPORTERJIRAUSERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						jiraIssueModelImpl.getOriginalReporterJiraUserId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPORTERJIRAUSERID,
-					args);
-
-				args = new Object[] { jiraIssueModelImpl.getReporterJiraUserId() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPORTERJIRAUSERID,
-					args);
-			}
-
-			if ((jiraIssueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						jiraIssueModelImpl.getOriginalAssigneeJiraUserId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID,
-					args);
-
-				args = new Object[] { jiraIssueModelImpl.getAssigneeJiraUserId() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID,
-					args);
-			}
-
-			if ((jiraIssueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId()),
-						
-						jiraIssueModelImpl.getOriginalReporterJiraUserId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_RJUI, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getProjectId()),
-						
-						jiraIssueModelImpl.getReporterJiraUserId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_RJUI, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI,
-					args);
-			}
-
-			if ((jiraIssueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId()),
-						
-						jiraIssueModelImpl.getOriginalAssigneeJiraUserId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_AJUI, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getProjectId()),
-						
-						jiraIssueModelImpl.getAssigneeJiraUserId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_AJUI, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI,
-					args);
-			}
-
-			if ((jiraIssueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId()),
-						
-						jiraIssueModelImpl.getOriginalReporterJiraUserId(),
-						
-						jiraIssueModelImpl.getOriginalStatus()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_RJUI_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getProjectId()),
-						
-						jiraIssueModelImpl.getReporterJiraUserId(),
-						
-						jiraIssueModelImpl.getStatus()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_RJUI_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI_S,
-					args);
-			}
-
-			if ((jiraIssueModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId()),
-						
-						jiraIssueModelImpl.getOriginalAssigneeJiraUserId(),
-						
-						jiraIssueModelImpl.getOriginalStatus()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_AJUI_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(jiraIssueModelImpl.getProjectId()),
-						
-						jiraIssueModelImpl.getAssigneeJiraUserId(),
-						
-						jiraIssueModelImpl.getStatus()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_AJUI_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI_S,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-			JIRAIssueImpl.class, jiraIssue.getPrimaryKey(), jiraIssue);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-				new Object[] { jiraIssue.getKey() }, jiraIssue);
-		}
-		else {
-			if ((jiraIssueModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_KEY.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] { jiraIssueModelImpl.getOriginalKey() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KEY, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
-					new Object[] { jiraIssue.getKey() }, jiraIssue);
-			}
-		}
-
-		return jiraIssue;
-	}
-
-	protected JIRAIssue toUnwrappedModel(JIRAIssue jiraIssue) {
-		if (jiraIssue instanceof JIRAIssueImpl) {
-			return jiraIssue;
-		}
-
-		JIRAIssueImpl jiraIssueImpl = new JIRAIssueImpl();
-
-		jiraIssueImpl.setNew(jiraIssue.isNew());
-		jiraIssueImpl.setPrimaryKey(jiraIssue.getPrimaryKey());
-
-		jiraIssueImpl.setJiraIssueId(jiraIssue.getJiraIssueId());
-		jiraIssueImpl.setCreateDate(jiraIssue.getCreateDate());
-		jiraIssueImpl.setModifiedDate(jiraIssue.getModifiedDate());
-		jiraIssueImpl.setProjectId(jiraIssue.getProjectId());
-		jiraIssueImpl.setKey(jiraIssue.getKey());
-		jiraIssueImpl.setSummary(jiraIssue.getSummary());
-		jiraIssueImpl.setDescription(jiraIssue.getDescription());
-		jiraIssueImpl.setReporterJiraUserId(jiraIssue.getReporterJiraUserId());
-		jiraIssueImpl.setAssigneeJiraUserId(jiraIssue.getAssigneeJiraUserId());
-		jiraIssueImpl.setResolution(jiraIssue.getResolution());
-		jiraIssueImpl.setStatus(jiraIssue.getStatus());
-
-		return jiraIssueImpl;
-	}
-
-	/**
-	 * Returns the j i r a issue with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the j i r a issue
-	 * @return the j i r a issue
-	 * @throws com.liferay.portal.NoSuchModelException if a j i r a issue with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JIRAIssue findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the j i r a issue with the primary key or throws a {@link com.liferay.socialcoding.NoSuchJIRAIssueException} if it could not be found.
-	 *
-	 * @param jiraIssueId the primary key of the j i r a issue
-	 * @return the j i r a issue
-	 * @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JIRAIssue findByPrimaryKey(long jiraIssueId)
-		throws NoSuchJIRAIssueException, SystemException {
-		JIRAIssue jiraIssue = fetchByPrimaryKey(jiraIssueId);
-
-		if (jiraIssue == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + jiraIssueId);
-			}
-
-			throw new NoSuchJIRAIssueException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				jiraIssueId);
-		}
-
-		return jiraIssue;
-	}
-
-	/**
-	 * Returns the j i r a issue with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the j i r a issue
-	 * @return the j i r a issue, or <code>null</code> if a j i r a issue with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public JIRAIssue fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the j i r a issue with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param jiraIssueId the primary key of the j i r a issue
-	 * @return the j i r a issue, or <code>null</code> if a j i r a issue with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JIRAIssue fetchByPrimaryKey(long jiraIssueId)
-		throws SystemException {
-		JIRAIssue jiraIssue = (JIRAIssue)EntityCacheUtil.getResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-				JIRAIssueImpl.class, jiraIssueId);
-
-		if (jiraIssue == _nullJIRAIssue) {
-			return null;
-		}
-
-		if (jiraIssue == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				jiraIssue = (JIRAIssue)session.get(JIRAIssueImpl.class,
-						Long.valueOf(jiraIssueId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (jiraIssue != null) {
-					cacheResult(jiraIssue);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
-						JIRAIssueImpl.class, jiraIssueId, _nullJIRAIssue);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return jiraIssue;
-	}
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_PROJECTID =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByProjectId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PROJECTID =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByProjectId",
+			new String[] { Long.class.getName() },
+			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_PROJECTID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByProjectId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the j i r a issues where projectId = &#63;.
@@ -847,7 +125,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where projectId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -865,7 +143,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where projectId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -877,11 +155,13 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 */
 	public List<JIRAIssue> findByProjectId(long projectId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PROJECTID;
 			finderArgs = new Object[] { projectId };
 		}
@@ -922,8 +202,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -940,22 +220,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 
 				qPos.add(projectId);
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1178,7 +465,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -1211,6 +497,82 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the j i r a issues where projectId = &#63; from the database.
+	 *
+	 * @param projectId the project ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByProjectId(long projectId) throws SystemException {
+		for (JIRAIssue jiraIssue : findByProjectId(projectId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(jiraIssue);
+		}
+	}
+
+	/**
+	 * Returns the number of j i r a issues where projectId = &#63;.
+	 *
+	 * @param projectId the project ID
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByProjectId(long projectId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_PROJECTID;
+
+		Object[] finderArgs = new Object[] { projectId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			query.append(_FINDER_COLUMN_PROJECTID_PROJECTID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(projectId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_PROJECTID_PROJECTID_2 = "jiraIssue.projectId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_KEY = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByKey",
+			new String[] { String.class.getName() },
+			JIRAIssueModelImpl.KEY_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_KEY = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByKey",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns the j i r a issue where key = &#63; or throws a {@link com.liferay.socialcoding.NoSuchJIRAIssueException} if it could not be found.
@@ -1299,8 +661,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 
-			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -1318,16 +678,21 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 
 				List<JIRAIssue> list = q.list();
 
-				result = list;
-
-				JIRAIssue jiraIssue = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
 						finderArgs, list);
 				}
 				else {
-					jiraIssue = list.get(0);
+					if ((list.size() > 1) && _log.isWarnEnabled()) {
+						_log.warn(
+							"JIRAIssuePersistenceImpl.fetchByKey(String, boolean) with parameters (" +
+							StringUtil.merge(finderArgs) +
+							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+					}
+
+					JIRAIssue jiraIssue = list.get(0);
+
+					result = jiraIssue;
 
 					cacheResult(jiraIssue);
 
@@ -1337,30 +702,129 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 							finderArgs, jiraIssue);
 					}
 				}
-
-				return jiraIssue;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (JIRAIssue)result;
-			}
+			return (JIRAIssue)result;
 		}
 	}
+
+	/**
+	 * Removes the j i r a issue where key = &#63; from the database.
+	 *
+	 * @param key the key
+	 * @return the j i r a issue that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JIRAIssue removeByKey(String key)
+		throws NoSuchJIRAIssueException, SystemException {
+		JIRAIssue jiraIssue = findByKey(key);
+
+		return remove(jiraIssue);
+	}
+
+	/**
+	 * Returns the number of j i r a issues where key = &#63;.
+	 *
+	 * @param key the key
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByKey(String key) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_KEY;
+
+		Object[] finderArgs = new Object[] { key };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			if (key == null) {
+				query.append(_FINDER_COLUMN_KEY_KEY_1);
+			}
+			else {
+				if (key.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_KEY_KEY_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_KEY_KEY_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (key != null) {
+					qPos.add(key);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_KEY_KEY_1 = "jiraIssue.key IS NULL";
+	private static final String _FINDER_COLUMN_KEY_KEY_2 = "jiraIssue.key = ?";
+	private static final String _FINDER_COLUMN_KEY_KEY_3 = "(jiraIssue.key IS NULL OR jiraIssue.key = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_REPORTERJIRAUSERID =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByReporterJiraUserId",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPORTERJIRAUSERID =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByReporterJiraUserId",
+			new String[] { String.class.getName() },
+			JIRAIssueModelImpl.REPORTERJIRAUSERID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByReporterJiraUserId", new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the j i r a issues where reporterJiraUserId = &#63;.
@@ -1379,7 +843,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where reporterJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param reporterJiraUserId the reporter jira user ID
@@ -1397,7 +861,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where reporterJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param reporterJiraUserId the reporter jira user ID
@@ -1410,11 +874,13 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public List<JIRAIssue> findByReporterJiraUserId(String reporterJiraUserId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPORTERJIRAUSERID;
 			finderArgs = new Object[] { reporterJiraUserId };
 		}
@@ -1470,8 +936,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1490,22 +956,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 					qPos.add(reporterJiraUserId);
 				}
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1740,7 +1213,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -1777,6 +1249,114 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	}
 
 	/**
+	 * Removes all the j i r a issues where reporterJiraUserId = &#63; from the database.
+	 *
+	 * @param reporterJiraUserId the reporter jira user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByReporterJiraUserId(String reporterJiraUserId)
+		throws SystemException {
+		for (JIRAIssue jiraIssue : findByReporterJiraUserId(
+				reporterJiraUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(jiraIssue);
+		}
+	}
+
+	/**
+	 * Returns the number of j i r a issues where reporterJiraUserId = &#63;.
+	 *
+	 * @param reporterJiraUserId the reporter jira user ID
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByReporterJiraUserId(String reporterJiraUserId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID;
+
+		Object[] finderArgs = new Object[] { reporterJiraUserId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			if (reporterJiraUserId == null) {
+				query.append(_FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_1);
+			}
+			else {
+				if (reporterJiraUserId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (reporterJiraUserId != null) {
+					qPos.add(reporterJiraUserId);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_1 =
+		"jiraIssue.reporterJiraUserId IS NULL";
+	private static final String _FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_2 =
+		"jiraIssue.reporterJiraUserId = ?";
+	private static final String _FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_3 =
+		"(jiraIssue.reporterJiraUserId IS NULL OR jiraIssue.reporterJiraUserId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByAssigneeJiraUserId",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByAssigneeJiraUserId",
+			new String[] { String.class.getName() },
+			JIRAIssueModelImpl.ASSIGNEEJIRAUSERID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByAssigneeJiraUserId", new String[] { String.class.getName() });
+
+	/**
 	 * Returns all the j i r a issues where assigneeJiraUserId = &#63;.
 	 *
 	 * @param assigneeJiraUserId the assignee jira user ID
@@ -1793,7 +1373,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where assigneeJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param assigneeJiraUserId the assignee jira user ID
@@ -1811,7 +1391,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where assigneeJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param assigneeJiraUserId the assignee jira user ID
@@ -1824,11 +1404,13 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public List<JIRAIssue> findByAssigneeJiraUserId(String assigneeJiraUserId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID;
 			finderArgs = new Object[] { assigneeJiraUserId };
 		}
@@ -1884,8 +1466,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1904,22 +1486,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 					qPos.add(assigneeJiraUserId);
 				}
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2154,7 +1743,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -2191,6 +1779,105 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	}
 
 	/**
+	 * Removes all the j i r a issues where assigneeJiraUserId = &#63; from the database.
+	 *
+	 * @param assigneeJiraUserId the assignee jira user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByAssigneeJiraUserId(String assigneeJiraUserId)
+		throws SystemException {
+		for (JIRAIssue jiraIssue : findByAssigneeJiraUserId(
+				assigneeJiraUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(jiraIssue);
+		}
+	}
+
+	/**
+	 * Returns the number of j i r a issues where assigneeJiraUserId = &#63;.
+	 *
+	 * @param assigneeJiraUserId the assignee jira user ID
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByAssigneeJiraUserId(String assigneeJiraUserId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID;
+
+		Object[] finderArgs = new Object[] { assigneeJiraUserId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			if (assigneeJiraUserId == null) {
+				query.append(_FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_1);
+			}
+			else {
+				if (assigneeJiraUserId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (assigneeJiraUserId != null) {
+					qPos.add(assigneeJiraUserId);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_1 =
+		"jiraIssue.assigneeJiraUserId IS NULL";
+	private static final String _FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_2 =
+		"jiraIssue.assigneeJiraUserId = ?";
+	private static final String _FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_3 =
+		"(jiraIssue.assigneeJiraUserId IS NULL OR jiraIssue.assigneeJiraUserId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MD_P = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByMD_P",
+			new String[] {
+				Date.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByMD_P",
+			new String[] { Date.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
 	 *
 	 * @param modifiedDate the modified date
@@ -2208,7 +1895,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param modifiedDate the modified date
@@ -2227,7 +1914,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param modifiedDate the modified date
@@ -2241,6 +1928,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public List<JIRAIssue> findByMD_P(Date modifiedDate, long projectId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -2291,8 +1979,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2313,22 +2001,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 
 				qPos.add(projectId);
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2570,7 +2265,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -2609,6 +2303,111 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	}
 
 	/**
+	 * Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; from the database.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param projectId the project ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByMD_P(Date modifiedDate, long projectId)
+		throws SystemException {
+		for (JIRAIssue jiraIssue : findByMD_P(modifiedDate, projectId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(jiraIssue);
+		}
+	}
+
+	/**
+	 * Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param projectId the project ID
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByMD_P(Date modifiedDate, long projectId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P;
+
+		Object[] finderArgs = new Object[] { modifiedDate, projectId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			if (modifiedDate == null) {
+				query.append(_FINDER_COLUMN_MD_P_MODIFIEDDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_MD_P_MODIFIEDDATE_2);
+			}
+
+			query.append(_FINDER_COLUMN_MD_P_PROJECTID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (modifiedDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
+				}
+
+				qPos.add(projectId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_MD_P_MODIFIEDDATE_1 = "jiraIssue.modifiedDate > NULL AND ";
+	private static final String _FINDER_COLUMN_MD_P_MODIFIEDDATE_2 = "jiraIssue.modifiedDate > ? AND ";
+	private static final String _FINDER_COLUMN_MD_P_PROJECTID_2 = "jiraIssue.projectId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_RJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_RJUI",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_RJUI",
+			new String[] { Long.class.getName(), String.class.getName() },
+			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.REPORTERJIRAUSERID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_P_RJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_RJUI",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
 	 *
 	 * @param projectId the project ID
@@ -2626,7 +2425,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -2646,7 +2445,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -2660,11 +2459,13 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public List<JIRAIssue> findByP_RJUI(long projectId,
 		String reporterJiraUserId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI;
 			finderArgs = new Object[] { projectId, reporterJiraUserId };
 		}
@@ -2723,8 +2524,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2745,22 +2546,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 					qPos.add(reporterJiraUserId);
 				}
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3010,7 +2818,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -3049,6 +2856,117 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	}
 
 	/**
+	 * Removes all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; from the database.
+	 *
+	 * @param projectId the project ID
+	 * @param reporterJiraUserId the reporter jira user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByP_RJUI(long projectId, String reporterJiraUserId)
+		throws SystemException {
+		for (JIRAIssue jiraIssue : findByP_RJUI(projectId, reporterJiraUserId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(jiraIssue);
+		}
+	}
+
+	/**
+	 * Returns the number of j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
+	 *
+	 * @param projectId the project ID
+	 * @param reporterJiraUserId the reporter jira user ID
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_RJUI(long projectId, String reporterJiraUserId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_RJUI;
+
+		Object[] finderArgs = new Object[] { projectId, reporterJiraUserId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			query.append(_FINDER_COLUMN_P_RJUI_PROJECTID_2);
+
+			if (reporterJiraUserId == null) {
+				query.append(_FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_1);
+			}
+			else {
+				if (reporterJiraUserId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(projectId);
+
+				if (reporterJiraUserId != null) {
+					qPos.add(reporterJiraUserId);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_P_RJUI_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
+	private static final String _FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_1 = "jiraIssue.reporterJiraUserId IS NULL";
+	private static final String _FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_2 = "jiraIssue.reporterJiraUserId = ?";
+	private static final String _FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_3 = "(jiraIssue.reporterJiraUserId IS NULL OR jiraIssue.reporterJiraUserId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_AJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_AJUI",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_AJUI",
+			new String[] { Long.class.getName(), String.class.getName() },
+			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.ASSIGNEEJIRAUSERID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_P_AJUI = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_AJUI",
+			new String[] { Long.class.getName(), String.class.getName() });
+
+	/**
 	 * Returns all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
 	 *
 	 * @param projectId the project ID
@@ -3066,7 +2984,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -3086,7 +3004,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -3100,11 +3018,13 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public List<JIRAIssue> findByP_AJUI(long projectId,
 		String assigneeJiraUserId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI;
 			finderArgs = new Object[] { projectId, assigneeJiraUserId };
 		}
@@ -3163,8 +3083,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3185,22 +3105,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 					qPos.add(assigneeJiraUserId);
 				}
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3450,7 +3377,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -3489,6 +3415,115 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	}
 
 	/**
+	 * Removes all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; from the database.
+	 *
+	 * @param projectId the project ID
+	 * @param assigneeJiraUserId the assignee jira user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByP_AJUI(long projectId, String assigneeJiraUserId)
+		throws SystemException {
+		for (JIRAIssue jiraIssue : findByP_AJUI(projectId, assigneeJiraUserId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(jiraIssue);
+		}
+	}
+
+	/**
+	 * Returns the number of j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
+	 *
+	 * @param projectId the project ID
+	 * @param assigneeJiraUserId the assignee jira user ID
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_AJUI(long projectId, String assigneeJiraUserId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_AJUI;
+
+		Object[] finderArgs = new Object[] { projectId, assigneeJiraUserId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			query.append(_FINDER_COLUMN_P_AJUI_PROJECTID_2);
+
+			if (assigneeJiraUserId == null) {
+				query.append(_FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_1);
+			}
+			else {
+				if (assigneeJiraUserId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(projectId);
+
+				if (assigneeJiraUserId != null) {
+					qPos.add(assigneeJiraUserId);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_P_AJUI_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
+	private static final String _FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_1 = "jiraIssue.assigneeJiraUserId IS NULL";
+	private static final String _FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_2 = "jiraIssue.assigneeJiraUserId = ?";
+	private static final String _FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_3 = "(jiraIssue.assigneeJiraUserId IS NULL OR jiraIssue.assigneeJiraUserId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MD_P_RJUI =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByMD_P_RJUI",
+			new String[] {
+				Date.class.getName(), Long.class.getName(),
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_RJUI =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByMD_P_RJUI",
+			new String[] {
+				Date.class.getName(), Long.class.getName(),
+				String.class.getName()
+			});
+
+	/**
 	 * Returns all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
 	 *
 	 * @param modifiedDate the modified date
@@ -3507,7 +3542,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param modifiedDate the modified date
@@ -3529,7 +3564,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param modifiedDate the modified date
@@ -3544,6 +3579,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public List<JIRAIssue> findByMD_P_RJUI(Date modifiedDate, long projectId,
 		String reporterJiraUserId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -3608,8 +3644,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3634,22 +3670,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 					qPos.add(reporterJiraUserId);
 				}
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3920,7 +3963,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -3963,6 +4005,132 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	}
 
 	/**
+	 * Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63; from the database.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param projectId the project ID
+	 * @param reporterJiraUserId the reporter jira user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByMD_P_RJUI(Date modifiedDate, long projectId,
+		String reporterJiraUserId) throws SystemException {
+		for (JIRAIssue jiraIssue : findByMD_P_RJUI(modifiedDate, projectId,
+				reporterJiraUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(jiraIssue);
+		}
+	}
+
+	/**
+	 * Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param projectId the project ID
+	 * @param reporterJiraUserId the reporter jira user ID
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByMD_P_RJUI(Date modifiedDate, long projectId,
+		String reporterJiraUserId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_RJUI;
+
+		Object[] finderArgs = new Object[] {
+				modifiedDate, projectId, reporterJiraUserId
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			if (modifiedDate == null) {
+				query.append(_FINDER_COLUMN_MD_P_RJUI_MODIFIEDDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_MD_P_RJUI_MODIFIEDDATE_2);
+			}
+
+			query.append(_FINDER_COLUMN_MD_P_RJUI_PROJECTID_2);
+
+			if (reporterJiraUserId == null) {
+				query.append(_FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_1);
+			}
+			else {
+				if (reporterJiraUserId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (modifiedDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
+				}
+
+				qPos.add(projectId);
+
+				if (reporterJiraUserId != null) {
+					qPos.add(reporterJiraUserId);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_MD_P_RJUI_MODIFIEDDATE_1 = "jiraIssue.modifiedDate > NULL AND ";
+	private static final String _FINDER_COLUMN_MD_P_RJUI_MODIFIEDDATE_2 = "jiraIssue.modifiedDate > ? AND ";
+	private static final String _FINDER_COLUMN_MD_P_RJUI_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
+	private static final String _FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_1 = "jiraIssue.reporterJiraUserId IS NULL";
+	private static final String _FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_2 = "jiraIssue.reporterJiraUserId = ?";
+	private static final String _FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_3 = "(jiraIssue.reporterJiraUserId IS NULL OR jiraIssue.reporterJiraUserId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MD_P_AJUI =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByMD_P_AJUI",
+			new String[] {
+				Date.class.getName(), Long.class.getName(),
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_AJUI =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByMD_P_AJUI",
+			new String[] {
+				Date.class.getName(), Long.class.getName(),
+				String.class.getName()
+			});
+
+	/**
 	 * Returns all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
 	 *
 	 * @param modifiedDate the modified date
@@ -3981,7 +4149,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param modifiedDate the modified date
@@ -4003,7 +4171,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param modifiedDate the modified date
@@ -4018,6 +4186,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public List<JIRAIssue> findByMD_P_AJUI(Date modifiedDate, long projectId,
 		String assigneeJiraUserId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -4082,8 +4251,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4108,22 +4277,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 					qPos.add(assigneeJiraUserId);
 				}
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4394,7 +4570,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -4437,6 +4612,142 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	}
 
 	/**
+	 * Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63; from the database.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param projectId the project ID
+	 * @param assigneeJiraUserId the assignee jira user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByMD_P_AJUI(Date modifiedDate, long projectId,
+		String assigneeJiraUserId) throws SystemException {
+		for (JIRAIssue jiraIssue : findByMD_P_AJUI(modifiedDate, projectId,
+				assigneeJiraUserId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(jiraIssue);
+		}
+	}
+
+	/**
+	 * Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
+	 *
+	 * @param modifiedDate the modified date
+	 * @param projectId the project ID
+	 * @param assigneeJiraUserId the assignee jira user ID
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByMD_P_AJUI(Date modifiedDate, long projectId,
+		String assigneeJiraUserId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_AJUI;
+
+		Object[] finderArgs = new Object[] {
+				modifiedDate, projectId, assigneeJiraUserId
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			if (modifiedDate == null) {
+				query.append(_FINDER_COLUMN_MD_P_AJUI_MODIFIEDDATE_1);
+			}
+			else {
+				query.append(_FINDER_COLUMN_MD_P_AJUI_MODIFIEDDATE_2);
+			}
+
+			query.append(_FINDER_COLUMN_MD_P_AJUI_PROJECTID_2);
+
+			if (assigneeJiraUserId == null) {
+				query.append(_FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_1);
+			}
+			else {
+				if (assigneeJiraUserId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (modifiedDate != null) {
+					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
+				}
+
+				qPos.add(projectId);
+
+				if (assigneeJiraUserId != null) {
+					qPos.add(assigneeJiraUserId);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_MD_P_AJUI_MODIFIEDDATE_1 = "jiraIssue.modifiedDate > NULL AND ";
+	private static final String _FINDER_COLUMN_MD_P_AJUI_MODIFIEDDATE_2 = "jiraIssue.modifiedDate > ? AND ";
+	private static final String _FINDER_COLUMN_MD_P_AJUI_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
+	private static final String _FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_1 = "jiraIssue.assigneeJiraUserId IS NULL";
+	private static final String _FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_2 = "jiraIssue.assigneeJiraUserId = ?";
+	private static final String _FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_3 = "(jiraIssue.assigneeJiraUserId IS NULL OR jiraIssue.assigneeJiraUserId = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_RJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_RJUI_S",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI_S =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_RJUI_S",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName()
+			},
+			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.REPORTERJIRAUSERID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.STATUS_COLUMN_BITMASK |
+			JIRAIssueModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_P_RJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_RJUI_S",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName()
+			});
+
+	/**
 	 * Returns all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
 	 *
 	 * @param projectId the project ID
@@ -4455,7 +4766,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -4477,7 +4788,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -4492,11 +4803,13 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public List<JIRAIssue> findByP_RJUI_S(long projectId,
 		String reporterJiraUserId, String status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI_S;
 			finderArgs = new Object[] { projectId, reporterJiraUserId, status };
 		}
@@ -4568,8 +4881,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4594,22 +4907,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 					qPos.add(status);
 				}
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4884,7 +5204,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -4927,6 +5246,147 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	}
 
 	/**
+	 * Removes all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63; from the database.
+	 *
+	 * @param projectId the project ID
+	 * @param reporterJiraUserId the reporter jira user ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByP_RJUI_S(long projectId, String reporterJiraUserId,
+		String status) throws SystemException {
+		for (JIRAIssue jiraIssue : findByP_RJUI_S(projectId,
+				reporterJiraUserId, status, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(jiraIssue);
+		}
+	}
+
+	/**
+	 * Returns the number of j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
+	 *
+	 * @param projectId the project ID
+	 * @param reporterJiraUserId the reporter jira user ID
+	 * @param status the status
+	 * @return the number of matching j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_RJUI_S(long projectId, String reporterJiraUserId,
+		String status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_RJUI_S;
+
+		Object[] finderArgs = new Object[] { projectId, reporterJiraUserId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
+
+			query.append(_FINDER_COLUMN_P_RJUI_S_PROJECTID_2);
+
+			if (reporterJiraUserId == null) {
+				query.append(_FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_1);
+			}
+			else {
+				if (reporterJiraUserId.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_2);
+				}
+			}
+
+			if (status == null) {
+				query.append(_FINDER_COLUMN_P_RJUI_S_STATUS_1);
+			}
+			else {
+				if (status.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_P_RJUI_S_STATUS_3);
+				}
+				else {
+					query.append(_FINDER_COLUMN_P_RJUI_S_STATUS_2);
+				}
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(projectId);
+
+				if (reporterJiraUserId != null) {
+					qPos.add(reporterJiraUserId);
+				}
+
+				if (status != null) {
+					qPos.add(status);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_P_RJUI_S_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
+	private static final String _FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_1 = "jiraIssue.reporterJiraUserId IS NULL AND ";
+	private static final String _FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_2 = "jiraIssue.reporterJiraUserId = ? AND ";
+	private static final String _FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_3 = "(jiraIssue.reporterJiraUserId IS NULL OR jiraIssue.reporterJiraUserId = ?) AND ";
+	private static final String _FINDER_COLUMN_P_RJUI_S_STATUS_1 = "jiraIssue.status IS NULL";
+	private static final String _FINDER_COLUMN_P_RJUI_S_STATUS_2 = "jiraIssue.status = ?";
+	private static final String _FINDER_COLUMN_P_RJUI_S_STATUS_3 = "(jiraIssue.status IS NULL OR jiraIssue.status = ?)";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_AJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_AJUI_S",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI_S =
+		new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, JIRAIssueImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_AJUI_S",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName()
+			},
+			JIRAIssueModelImpl.PROJECTID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.ASSIGNEEJIRAUSERID_COLUMN_BITMASK |
+			JIRAIssueModelImpl.STATUS_COLUMN_BITMASK |
+			JIRAIssueModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_P_AJUI_S = new FinderPath(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_AJUI_S",
+			new String[] {
+				Long.class.getName(), String.class.getName(),
+				String.class.getName()
+			});
+
+	/**
 	 * Returns all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63;.
 	 *
 	 * @param projectId the project ID
@@ -4945,7 +5405,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns a range of all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -4967,7 +5427,7 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 * Returns an ordered range of all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param projectId the project ID
@@ -4982,11 +5442,13 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public List<JIRAIssue> findByP_AJUI_S(long projectId,
 		String assigneeJiraUserId, String status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI_S;
 			finderArgs = new Object[] { projectId, assigneeJiraUserId, status };
 		}
@@ -5058,8 +5520,8 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5084,22 +5546,29 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 					qPos.add(status);
 				}
 
-				list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5374,7 +5843,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 			}
 		}
-
 		else {
 			query.append(JIRAIssueModelImpl.ORDER_BY_JPQL);
 		}
@@ -5417,263 +5885,6 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	}
 
 	/**
-	 * Returns all the j i r a issues.
-	 *
-	 * @return the j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JIRAIssue> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the j i r a issues.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of j i r a issues
-	 * @param end the upper bound of the range of j i r a issues (not inclusive)
-	 * @return the range of j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JIRAIssue> findAll(int start, int end)
-		throws SystemException {
-		return findAll(start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the j i r a issues.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param start the lower bound of the range of j i r a issues
-	 * @param end the upper bound of the range of j i r a issues (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<JIRAIssue> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
-		}
-
-		List<JIRAIssue> list = (List<JIRAIssue>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
-
-			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_JIRAISSUE);
-
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_JIRAISSUE.concat(JIRAIssueModelImpl.ORDER_BY_JPQL);
-			}
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				if (orderByComparator == null) {
-					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
-							start, end, false);
-
-					Collections.sort(list);
-				}
-				else {
-					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
-							start, end);
-				}
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
-	 * Removes all the j i r a issues where projectId = &#63; from the database.
-	 *
-	 * @param projectId the project ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByProjectId(long projectId) throws SystemException {
-		for (JIRAIssue jiraIssue : findByProjectId(projectId)) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
-	 * Removes the j i r a issue where key = &#63; from the database.
-	 *
-	 * @param key the key
-	 * @return the j i r a issue that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public JIRAIssue removeByKey(String key)
-		throws NoSuchJIRAIssueException, SystemException {
-		JIRAIssue jiraIssue = findByKey(key);
-
-		return remove(jiraIssue);
-	}
-
-	/**
-	 * Removes all the j i r a issues where reporterJiraUserId = &#63; from the database.
-	 *
-	 * @param reporterJiraUserId the reporter jira user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByReporterJiraUserId(String reporterJiraUserId)
-		throws SystemException {
-		for (JIRAIssue jiraIssue : findByReporterJiraUserId(reporterJiraUserId)) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
-	 * Removes all the j i r a issues where assigneeJiraUserId = &#63; from the database.
-	 *
-	 * @param assigneeJiraUserId the assignee jira user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByAssigneeJiraUserId(String assigneeJiraUserId)
-		throws SystemException {
-		for (JIRAIssue jiraIssue : findByAssigneeJiraUserId(assigneeJiraUserId)) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
-	 * Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; from the database.
-	 *
-	 * @param modifiedDate the modified date
-	 * @param projectId the project ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByMD_P(Date modifiedDate, long projectId)
-		throws SystemException {
-		for (JIRAIssue jiraIssue : findByMD_P(modifiedDate, projectId)) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
-	 * Removes all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; from the database.
-	 *
-	 * @param projectId the project ID
-	 * @param reporterJiraUserId the reporter jira user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByP_RJUI(long projectId, String reporterJiraUserId)
-		throws SystemException {
-		for (JIRAIssue jiraIssue : findByP_RJUI(projectId, reporterJiraUserId)) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
-	 * Removes all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; from the database.
-	 *
-	 * @param projectId the project ID
-	 * @param assigneeJiraUserId the assignee jira user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByP_AJUI(long projectId, String assigneeJiraUserId)
-		throws SystemException {
-		for (JIRAIssue jiraIssue : findByP_AJUI(projectId, assigneeJiraUserId)) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
-	 * Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63; from the database.
-	 *
-	 * @param modifiedDate the modified date
-	 * @param projectId the project ID
-	 * @param reporterJiraUserId the reporter jira user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByMD_P_RJUI(Date modifiedDate, long projectId,
-		String reporterJiraUserId) throws SystemException {
-		for (JIRAIssue jiraIssue : findByMD_P_RJUI(modifiedDate, projectId,
-				reporterJiraUserId)) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
-	 * Removes all the j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63; from the database.
-	 *
-	 * @param modifiedDate the modified date
-	 * @param projectId the project ID
-	 * @param assigneeJiraUserId the assignee jira user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByMD_P_AJUI(Date modifiedDate, long projectId,
-		String assigneeJiraUserId) throws SystemException {
-		for (JIRAIssue jiraIssue : findByMD_P_AJUI(modifiedDate, projectId,
-				assigneeJiraUserId)) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
-	 * Removes all the j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63; from the database.
-	 *
-	 * @param projectId the project ID
-	 * @param reporterJiraUserId the reporter jira user ID
-	 * @param status the status
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByP_RJUI_S(long projectId, String reporterJiraUserId,
-		String status) throws SystemException {
-		for (JIRAIssue jiraIssue : findByP_RJUI_S(projectId,
-				reporterJiraUserId, status)) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
 	 * Removes all the j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63; and status = &#63; from the database.
 	 *
 	 * @param projectId the project ID
@@ -5684,736 +5895,10 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public void removeByP_AJUI_S(long projectId, String assigneeJiraUserId,
 		String status) throws SystemException {
 		for (JIRAIssue jiraIssue : findByP_AJUI_S(projectId,
-				assigneeJiraUserId, status)) {
+				assigneeJiraUserId, status, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(jiraIssue);
 		}
-	}
-
-	/**
-	 * Removes all the j i r a issues from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (JIRAIssue jiraIssue : findAll()) {
-			remove(jiraIssue);
-		}
-	}
-
-	/**
-	 * Returns the number of j i r a issues where projectId = &#63;.
-	 *
-	 * @param projectId the project ID
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByProjectId(long projectId) throws SystemException {
-		Object[] finderArgs = new Object[] { projectId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_PROJECTID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			query.append(_FINDER_COLUMN_PROJECTID_PROJECTID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(projectId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_PROJECTID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of j i r a issues where key = &#63;.
-	 *
-	 * @param key the key
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByKey(String key) throws SystemException {
-		Object[] finderArgs = new Object[] { key };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_KEY,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			if (key == null) {
-				query.append(_FINDER_COLUMN_KEY_KEY_1);
-			}
-			else {
-				if (key.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_KEY_KEY_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_KEY_KEY_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (key != null) {
-					qPos.add(key);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KEY, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of j i r a issues where reporterJiraUserId = &#63;.
-	 *
-	 * @param reporterJiraUserId the reporter jira user ID
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByReporterJiraUserId(String reporterJiraUserId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { reporterJiraUserId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			if (reporterJiraUserId == null) {
-				query.append(_FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_1);
-			}
-			else {
-				if (reporterJiraUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (reporterJiraUserId != null) {
-					qPos.add(reporterJiraUserId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of j i r a issues where assigneeJiraUserId = &#63;.
-	 *
-	 * @param assigneeJiraUserId the assignee jira user ID
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByAssigneeJiraUserId(String assigneeJiraUserId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { assigneeJiraUserId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			if (assigneeJiraUserId == null) {
-				query.append(_FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_1);
-			}
-			else {
-				if (assigneeJiraUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (assigneeJiraUserId != null) {
-					qPos.add(assigneeJiraUserId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63;.
-	 *
-	 * @param modifiedDate the modified date
-	 * @param projectId the project ID
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByMD_P(Date modifiedDate, long projectId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { modifiedDate, projectId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			if (modifiedDate == null) {
-				query.append(_FINDER_COLUMN_MD_P_MODIFIEDDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_MD_P_MODIFIEDDATE_2);
-			}
-
-			query.append(_FINDER_COLUMN_MD_P_PROJECTID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (modifiedDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
-				}
-
-				qPos.add(projectId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of j i r a issues where projectId = &#63; and reporterJiraUserId = &#63;.
-	 *
-	 * @param projectId the project ID
-	 * @param reporterJiraUserId the reporter jira user ID
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByP_RJUI(long projectId, String reporterJiraUserId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { projectId, reporterJiraUserId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_RJUI,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			query.append(_FINDER_COLUMN_P_RJUI_PROJECTID_2);
-
-			if (reporterJiraUserId == null) {
-				query.append(_FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_1);
-			}
-			else {
-				if (reporterJiraUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(projectId);
-
-				if (reporterJiraUserId != null) {
-					qPos.add(reporterJiraUserId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_RJUI,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of j i r a issues where projectId = &#63; and assigneeJiraUserId = &#63;.
-	 *
-	 * @param projectId the project ID
-	 * @param assigneeJiraUserId the assignee jira user ID
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByP_AJUI(long projectId, String assigneeJiraUserId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { projectId, assigneeJiraUserId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_AJUI,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			query.append(_FINDER_COLUMN_P_AJUI_PROJECTID_2);
-
-			if (assigneeJiraUserId == null) {
-				query.append(_FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_1);
-			}
-			else {
-				if (assigneeJiraUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(projectId);
-
-				if (assigneeJiraUserId != null) {
-					qPos.add(assigneeJiraUserId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_AJUI,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and reporterJiraUserId = &#63;.
-	 *
-	 * @param modifiedDate the modified date
-	 * @param projectId the project ID
-	 * @param reporterJiraUserId the reporter jira user ID
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByMD_P_RJUI(Date modifiedDate, long projectId,
-		String reporterJiraUserId) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				modifiedDate, projectId, reporterJiraUserId
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_RJUI,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			if (modifiedDate == null) {
-				query.append(_FINDER_COLUMN_MD_P_RJUI_MODIFIEDDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_MD_P_RJUI_MODIFIEDDATE_2);
-			}
-
-			query.append(_FINDER_COLUMN_MD_P_RJUI_PROJECTID_2);
-
-			if (reporterJiraUserId == null) {
-				query.append(_FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_1);
-			}
-			else {
-				if (reporterJiraUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (modifiedDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
-				}
-
-				qPos.add(projectId);
-
-				if (reporterJiraUserId != null) {
-					qPos.add(reporterJiraUserId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_RJUI,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of j i r a issues where modifiedDate &gt; &#63; and projectId = &#63; and assigneeJiraUserId = &#63;.
-	 *
-	 * @param modifiedDate the modified date
-	 * @param projectId the project ID
-	 * @param assigneeJiraUserId the assignee jira user ID
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByMD_P_AJUI(Date modifiedDate, long projectId,
-		String assigneeJiraUserId) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				modifiedDate, projectId, assigneeJiraUserId
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_AJUI,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			if (modifiedDate == null) {
-				query.append(_FINDER_COLUMN_MD_P_AJUI_MODIFIEDDATE_1);
-			}
-			else {
-				query.append(_FINDER_COLUMN_MD_P_AJUI_MODIFIEDDATE_2);
-			}
-
-			query.append(_FINDER_COLUMN_MD_P_AJUI_PROJECTID_2);
-
-			if (assigneeJiraUserId == null) {
-				query.append(_FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_1);
-			}
-			else {
-				if (assigneeJiraUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (modifiedDate != null) {
-					qPos.add(CalendarUtil.getTimestamp(modifiedDate));
-				}
-
-				qPos.add(projectId);
-
-				if (assigneeJiraUserId != null) {
-					qPos.add(assigneeJiraUserId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_MD_P_AJUI,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of j i r a issues where projectId = &#63; and reporterJiraUserId = &#63; and status = &#63;.
-	 *
-	 * @param projectId the project ID
-	 * @param reporterJiraUserId the reporter jira user ID
-	 * @param status the status
-	 * @return the number of matching j i r a issues
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByP_RJUI_S(long projectId, String reporterJiraUserId,
-		String status) throws SystemException {
-		Object[] finderArgs = new Object[] { projectId, reporterJiraUserId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_RJUI_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_JIRAISSUE_WHERE);
-
-			query.append(_FINDER_COLUMN_P_RJUI_S_PROJECTID_2);
-
-			if (reporterJiraUserId == null) {
-				query.append(_FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_1);
-			}
-			else {
-				if (reporterJiraUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_2);
-				}
-			}
-
-			if (status == null) {
-				query.append(_FINDER_COLUMN_P_RJUI_S_STATUS_1);
-			}
-			else {
-				if (status.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_P_RJUI_S_STATUS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_P_RJUI_S_STATUS_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(projectId);
-
-				if (reporterJiraUserId != null) {
-					qPos.add(reporterJiraUserId);
-				}
-
-				if (status != null) {
-					qPos.add(status);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_RJUI_S,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -6427,10 +5912,12 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	 */
 	public int countByP_AJUI_S(long projectId, String assigneeJiraUserId,
 		String status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_AJUI_S;
+
 		Object[] finderArgs = new Object[] { projectId, assigneeJiraUserId, status };
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_AJUI_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(4);
@@ -6485,23 +5972,715 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				}
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_AJUI_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
 
 		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_P_AJUI_S_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
+	private static final String _FINDER_COLUMN_P_AJUI_S_ASSIGNEEJIRAUSERID_1 = "jiraIssue.assigneeJiraUserId IS NULL AND ";
+	private static final String _FINDER_COLUMN_P_AJUI_S_ASSIGNEEJIRAUSERID_2 = "jiraIssue.assigneeJiraUserId = ? AND ";
+	private static final String _FINDER_COLUMN_P_AJUI_S_ASSIGNEEJIRAUSERID_3 = "(jiraIssue.assigneeJiraUserId IS NULL OR jiraIssue.assigneeJiraUserId = ?) AND ";
+	private static final String _FINDER_COLUMN_P_AJUI_S_STATUS_1 = "jiraIssue.status IS NULL";
+	private static final String _FINDER_COLUMN_P_AJUI_S_STATUS_2 = "jiraIssue.status = ?";
+	private static final String _FINDER_COLUMN_P_AJUI_S_STATUS_3 = "(jiraIssue.status IS NULL OR jiraIssue.status = ?)";
+
+	/**
+	 * Caches the j i r a issue in the entity cache if it is enabled.
+	 *
+	 * @param jiraIssue the j i r a issue
+	 */
+	public void cacheResult(JIRAIssue jiraIssue) {
+		EntityCacheUtil.putResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueImpl.class, jiraIssue.getPrimaryKey(), jiraIssue);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY,
+			new Object[] { jiraIssue.getKey() }, jiraIssue);
+
+		jiraIssue.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the j i r a issues in the entity cache if it is enabled.
+	 *
+	 * @param jiraIssues the j i r a issues
+	 */
+	public void cacheResult(List<JIRAIssue> jiraIssues) {
+		for (JIRAIssue jiraIssue : jiraIssues) {
+			if (EntityCacheUtil.getResult(
+						JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+						JIRAIssueImpl.class, jiraIssue.getPrimaryKey()) == null) {
+				cacheResult(jiraIssue);
+			}
+			else {
+				jiraIssue.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all j i r a issues.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(JIRAIssueImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(JIRAIssueImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the j i r a issue.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(JIRAIssue jiraIssue) {
+		EntityCacheUtil.removeResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueImpl.class, jiraIssue.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(jiraIssue);
+	}
+
+	@Override
+	public void clearCache(List<JIRAIssue> jiraIssues) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (JIRAIssue jiraIssue : jiraIssues) {
+			EntityCacheUtil.removeResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+				JIRAIssueImpl.class, jiraIssue.getPrimaryKey());
+
+			clearUniqueFindersCache(jiraIssue);
+		}
+	}
+
+	protected void cacheUniqueFindersCache(JIRAIssue jiraIssue) {
+		if (jiraIssue.isNew()) {
+			Object[] args = new Object[] { jiraIssue.getKey() };
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KEY, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY, args, jiraIssue);
+		}
+		else {
+			JIRAIssueModelImpl jiraIssueModelImpl = (JIRAIssueModelImpl)jiraIssue;
+
+			if ((jiraIssueModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_KEY.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] { jiraIssue.getKey() };
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KEY, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KEY, args,
+					jiraIssue);
+			}
+		}
+	}
+
+	protected void clearUniqueFindersCache(JIRAIssue jiraIssue) {
+		JIRAIssueModelImpl jiraIssueModelImpl = (JIRAIssueModelImpl)jiraIssue;
+
+		Object[] args = new Object[] { jiraIssue.getKey() };
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KEY, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY, args);
+
+		if ((jiraIssueModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_KEY.getColumnBitmask()) != 0) {
+			args = new Object[] { jiraIssueModelImpl.getOriginalKey() };
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KEY, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KEY, args);
+		}
+	}
+
+	/**
+	 * Creates a new j i r a issue with the primary key. Does not add the j i r a issue to the database.
+	 *
+	 * @param jiraIssueId the primary key for the new j i r a issue
+	 * @return the new j i r a issue
+	 */
+	public JIRAIssue create(long jiraIssueId) {
+		JIRAIssue jiraIssue = new JIRAIssueImpl();
+
+		jiraIssue.setNew(true);
+		jiraIssue.setPrimaryKey(jiraIssueId);
+
+		return jiraIssue;
+	}
+
+	/**
+	 * Removes the j i r a issue with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param jiraIssueId the primary key of the j i r a issue
+	 * @return the j i r a issue that was removed
+	 * @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JIRAIssue remove(long jiraIssueId)
+		throws NoSuchJIRAIssueException, SystemException {
+		return remove(Long.valueOf(jiraIssueId));
+	}
+
+	/**
+	 * Removes the j i r a issue with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the j i r a issue
+	 * @return the j i r a issue that was removed
+	 * @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JIRAIssue remove(Serializable primaryKey)
+		throws NoSuchJIRAIssueException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			JIRAIssue jiraIssue = (JIRAIssue)session.get(JIRAIssueImpl.class,
+					primaryKey);
+
+			if (jiraIssue == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchJIRAIssueException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(jiraIssue);
+		}
+		catch (NoSuchJIRAIssueException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected JIRAIssue removeImpl(JIRAIssue jiraIssue)
+		throws SystemException {
+		jiraIssue = toUnwrappedModel(jiraIssue);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(jiraIssue)) {
+				jiraIssue = (JIRAIssue)session.get(JIRAIssueImpl.class,
+						jiraIssue.getPrimaryKeyObj());
+			}
+
+			if (jiraIssue != null) {
+				session.delete(jiraIssue);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (jiraIssue != null) {
+			clearCache(jiraIssue);
+		}
+
+		return jiraIssue;
+	}
+
+	@Override
+	public JIRAIssue updateImpl(
+		com.liferay.socialcoding.model.JIRAIssue jiraIssue)
+		throws SystemException {
+		jiraIssue = toUnwrappedModel(jiraIssue);
+
+		boolean isNew = jiraIssue.isNew();
+
+		JIRAIssueModelImpl jiraIssueModelImpl = (JIRAIssueModelImpl)jiraIssue;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (jiraIssue.isNew()) {
+				session.save(jiraIssue);
+
+				jiraIssue.setNew(false);
+			}
+			else {
+				session.merge(jiraIssue);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !JIRAIssueModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((jiraIssueModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PROJECTID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PROJECTID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PROJECTID,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getProjectId())
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_PROJECTID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_PROJECTID,
+					args);
+			}
+
+			if ((jiraIssueModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPORTERJIRAUSERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						jiraIssueModelImpl.getOriginalReporterJiraUserId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPORTERJIRAUSERID,
+					args);
+
+				args = new Object[] { jiraIssueModelImpl.getReporterJiraUserId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_REPORTERJIRAUSERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_REPORTERJIRAUSERID,
+					args);
+			}
+
+			if ((jiraIssueModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						jiraIssueModelImpl.getOriginalAssigneeJiraUserId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID,
+					args);
+
+				args = new Object[] { jiraIssueModelImpl.getAssigneeJiraUserId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ASSIGNEEJIRAUSERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEJIRAUSERID,
+					args);
+			}
+
+			if ((jiraIssueModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId()),
+						
+						jiraIssueModelImpl.getOriginalReporterJiraUserId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_RJUI, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getProjectId()),
+						
+						jiraIssueModelImpl.getReporterJiraUserId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_RJUI, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI,
+					args);
+			}
+
+			if ((jiraIssueModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId()),
+						
+						jiraIssueModelImpl.getOriginalAssigneeJiraUserId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_AJUI, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getProjectId()),
+						
+						jiraIssueModelImpl.getAssigneeJiraUserId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_AJUI, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI,
+					args);
+			}
+
+			if ((jiraIssueModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId()),
+						
+						jiraIssueModelImpl.getOriginalReporterJiraUserId(),
+						
+						jiraIssueModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_RJUI_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI_S,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getProjectId()),
+						
+						jiraIssueModelImpl.getReporterJiraUserId(),
+						
+						jiraIssueModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_RJUI_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_RJUI_S,
+					args);
+			}
+
+			if ((jiraIssueModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getOriginalProjectId()),
+						
+						jiraIssueModelImpl.getOriginalAssigneeJiraUserId(),
+						
+						jiraIssueModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_AJUI_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI_S,
+					args);
+
+				args = new Object[] {
+						Long.valueOf(jiraIssueModelImpl.getProjectId()),
+						
+						jiraIssueModelImpl.getAssigneeJiraUserId(),
+						
+						jiraIssueModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_AJUI_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_AJUI_S,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+			JIRAIssueImpl.class, jiraIssue.getPrimaryKey(), jiraIssue);
+
+		clearUniqueFindersCache(jiraIssue);
+		cacheUniqueFindersCache(jiraIssue);
+
+		return jiraIssue;
+	}
+
+	protected JIRAIssue toUnwrappedModel(JIRAIssue jiraIssue) {
+		if (jiraIssue instanceof JIRAIssueImpl) {
+			return jiraIssue;
+		}
+
+		JIRAIssueImpl jiraIssueImpl = new JIRAIssueImpl();
+
+		jiraIssueImpl.setNew(jiraIssue.isNew());
+		jiraIssueImpl.setPrimaryKey(jiraIssue.getPrimaryKey());
+
+		jiraIssueImpl.setJiraIssueId(jiraIssue.getJiraIssueId());
+		jiraIssueImpl.setCreateDate(jiraIssue.getCreateDate());
+		jiraIssueImpl.setModifiedDate(jiraIssue.getModifiedDate());
+		jiraIssueImpl.setProjectId(jiraIssue.getProjectId());
+		jiraIssueImpl.setKey(jiraIssue.getKey());
+		jiraIssueImpl.setSummary(jiraIssue.getSummary());
+		jiraIssueImpl.setDescription(jiraIssue.getDescription());
+		jiraIssueImpl.setReporterJiraUserId(jiraIssue.getReporterJiraUserId());
+		jiraIssueImpl.setAssigneeJiraUserId(jiraIssue.getAssigneeJiraUserId());
+		jiraIssueImpl.setResolution(jiraIssue.getResolution());
+		jiraIssueImpl.setStatus(jiraIssue.getStatus());
+
+		return jiraIssueImpl;
+	}
+
+	/**
+	 * Returns the j i r a issue with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the j i r a issue
+	 * @return the j i r a issue
+	 * @throws com.liferay.portal.NoSuchModelException if a j i r a issue with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JIRAIssue findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the j i r a issue with the primary key or throws a {@link com.liferay.socialcoding.NoSuchJIRAIssueException} if it could not be found.
+	 *
+	 * @param jiraIssueId the primary key of the j i r a issue
+	 * @return the j i r a issue
+	 * @throws com.liferay.socialcoding.NoSuchJIRAIssueException if a j i r a issue with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JIRAIssue findByPrimaryKey(long jiraIssueId)
+		throws NoSuchJIRAIssueException, SystemException {
+		JIRAIssue jiraIssue = fetchByPrimaryKey(jiraIssueId);
+
+		if (jiraIssue == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + jiraIssueId);
+			}
+
+			throw new NoSuchJIRAIssueException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				jiraIssueId);
+		}
+
+		return jiraIssue;
+	}
+
+	/**
+	 * Returns the j i r a issue with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the j i r a issue
+	 * @return the j i r a issue, or <code>null</code> if a j i r a issue with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public JIRAIssue fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the j i r a issue with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param jiraIssueId the primary key of the j i r a issue
+	 * @return the j i r a issue, or <code>null</code> if a j i r a issue with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public JIRAIssue fetchByPrimaryKey(long jiraIssueId)
+		throws SystemException {
+		JIRAIssue jiraIssue = (JIRAIssue)EntityCacheUtil.getResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+				JIRAIssueImpl.class, jiraIssueId);
+
+		if (jiraIssue == _nullJIRAIssue) {
+			return null;
+		}
+
+		if (jiraIssue == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				jiraIssue = (JIRAIssue)session.get(JIRAIssueImpl.class,
+						Long.valueOf(jiraIssueId));
+
+				if (jiraIssue != null) {
+					cacheResult(jiraIssue);
+				}
+				else {
+					EntityCacheUtil.putResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+						JIRAIssueImpl.class, jiraIssueId, _nullJIRAIssue);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(JIRAIssueModelImpl.ENTITY_CACHE_ENABLED,
+					JIRAIssueImpl.class, jiraIssueId);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return jiraIssue;
+	}
+
+	/**
+	 * Returns all the j i r a issues.
+	 *
+	 * @return the j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JIRAIssue> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the j i r a issues.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of j i r a issues
+	 * @param end the upper bound of the range of j i r a issues (not inclusive)
+	 * @return the range of j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JIRAIssue> findAll(int start, int end)
+		throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the j i r a issues.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.JIRAIssueModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of j i r a issues
+	 * @param end the upper bound of the range of j i r a issues (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of j i r a issues
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<JIRAIssue> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<JIRAIssue> list = (List<JIRAIssue>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_JIRAISSUE);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_JIRAISSUE;
+
+				if (pagination) {
+					sql = sql.concat(JIRAIssueModelImpl.ORDER_BY_JPQL);
+				}
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (!pagination) {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<JIRAIssue>(list);
+				}
+				else {
+					list = (List<JIRAIssue>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the j i r a issues from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (JIRAIssue jiraIssue : findAll()) {
+			remove(jiraIssue);
+		}
 	}
 
 	/**
@@ -6523,18 +6702,17 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 				Query q = session.createQuery(_SQL_COUNT_JIRAISSUE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -6570,80 +6748,14 @@ public class JIRAIssuePersistenceImpl extends BasePersistenceImpl<JIRAIssue>
 	public void destroy() {
 		EntityCacheUtil.removeCache(JIRAIssueImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = JIRAActionPersistence.class)
-	protected JIRAActionPersistence jiraActionPersistence;
-	@BeanReference(type = JIRAChangeGroupPersistence.class)
-	protected JIRAChangeGroupPersistence jiraChangeGroupPersistence;
-	@BeanReference(type = JIRAChangeItemPersistence.class)
-	protected JIRAChangeItemPersistence jiraChangeItemPersistence;
-	@BeanReference(type = JIRAIssuePersistence.class)
-	protected JIRAIssuePersistence jiraIssuePersistence;
-	@BeanReference(type = SVNRepositoryPersistence.class)
-	protected SVNRepositoryPersistence svnRepositoryPersistence;
-	@BeanReference(type = SVNRevisionPersistence.class)
-	protected SVNRevisionPersistence svnRevisionPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_JIRAISSUE = "SELECT jiraIssue FROM JIRAIssue jiraIssue";
 	private static final String _SQL_SELECT_JIRAISSUE_WHERE = "SELECT jiraIssue FROM JIRAIssue jiraIssue WHERE ";
 	private static final String _SQL_COUNT_JIRAISSUE = "SELECT COUNT(jiraIssue) FROM JIRAIssue jiraIssue";
 	private static final String _SQL_COUNT_JIRAISSUE_WHERE = "SELECT COUNT(jiraIssue) FROM JIRAIssue jiraIssue WHERE ";
-	private static final String _FINDER_COLUMN_PROJECTID_PROJECTID_2 = "jiraIssue.projectId = ?";
-	private static final String _FINDER_COLUMN_KEY_KEY_1 = "jiraIssue.key IS NULL";
-	private static final String _FINDER_COLUMN_KEY_KEY_2 = "jiraIssue.key = ?";
-	private static final String _FINDER_COLUMN_KEY_KEY_3 = "(jiraIssue.key IS NULL OR jiraIssue.key = ?)";
-	private static final String _FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_1 =
-		"jiraIssue.reporterJiraUserId IS NULL";
-	private static final String _FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_2 =
-		"jiraIssue.reporterJiraUserId = ?";
-	private static final String _FINDER_COLUMN_REPORTERJIRAUSERID_REPORTERJIRAUSERID_3 =
-		"(jiraIssue.reporterJiraUserId IS NULL OR jiraIssue.reporterJiraUserId = ?)";
-	private static final String _FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_1 =
-		"jiraIssue.assigneeJiraUserId IS NULL";
-	private static final String _FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_2 =
-		"jiraIssue.assigneeJiraUserId = ?";
-	private static final String _FINDER_COLUMN_ASSIGNEEJIRAUSERID_ASSIGNEEJIRAUSERID_3 =
-		"(jiraIssue.assigneeJiraUserId IS NULL OR jiraIssue.assigneeJiraUserId = ?)";
-	private static final String _FINDER_COLUMN_MD_P_MODIFIEDDATE_1 = "jiraIssue.modifiedDate > NULL AND ";
-	private static final String _FINDER_COLUMN_MD_P_MODIFIEDDATE_2 = "jiraIssue.modifiedDate > ? AND ";
-	private static final String _FINDER_COLUMN_MD_P_PROJECTID_2 = "jiraIssue.projectId = ?";
-	private static final String _FINDER_COLUMN_P_RJUI_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
-	private static final String _FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_1 = "jiraIssue.reporterJiraUserId IS NULL";
-	private static final String _FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_2 = "jiraIssue.reporterJiraUserId = ?";
-	private static final String _FINDER_COLUMN_P_RJUI_REPORTERJIRAUSERID_3 = "(jiraIssue.reporterJiraUserId IS NULL OR jiraIssue.reporterJiraUserId = ?)";
-	private static final String _FINDER_COLUMN_P_AJUI_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
-	private static final String _FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_1 = "jiraIssue.assigneeJiraUserId IS NULL";
-	private static final String _FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_2 = "jiraIssue.assigneeJiraUserId = ?";
-	private static final String _FINDER_COLUMN_P_AJUI_ASSIGNEEJIRAUSERID_3 = "(jiraIssue.assigneeJiraUserId IS NULL OR jiraIssue.assigneeJiraUserId = ?)";
-	private static final String _FINDER_COLUMN_MD_P_RJUI_MODIFIEDDATE_1 = "jiraIssue.modifiedDate > NULL AND ";
-	private static final String _FINDER_COLUMN_MD_P_RJUI_MODIFIEDDATE_2 = "jiraIssue.modifiedDate > ? AND ";
-	private static final String _FINDER_COLUMN_MD_P_RJUI_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
-	private static final String _FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_1 = "jiraIssue.reporterJiraUserId IS NULL";
-	private static final String _FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_2 = "jiraIssue.reporterJiraUserId = ?";
-	private static final String _FINDER_COLUMN_MD_P_RJUI_REPORTERJIRAUSERID_3 = "(jiraIssue.reporterJiraUserId IS NULL OR jiraIssue.reporterJiraUserId = ?)";
-	private static final String _FINDER_COLUMN_MD_P_AJUI_MODIFIEDDATE_1 = "jiraIssue.modifiedDate > NULL AND ";
-	private static final String _FINDER_COLUMN_MD_P_AJUI_MODIFIEDDATE_2 = "jiraIssue.modifiedDate > ? AND ";
-	private static final String _FINDER_COLUMN_MD_P_AJUI_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
-	private static final String _FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_1 = "jiraIssue.assigneeJiraUserId IS NULL";
-	private static final String _FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_2 = "jiraIssue.assigneeJiraUserId = ?";
-	private static final String _FINDER_COLUMN_MD_P_AJUI_ASSIGNEEJIRAUSERID_3 = "(jiraIssue.assigneeJiraUserId IS NULL OR jiraIssue.assigneeJiraUserId = ?)";
-	private static final String _FINDER_COLUMN_P_RJUI_S_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
-	private static final String _FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_1 = "jiraIssue.reporterJiraUserId IS NULL AND ";
-	private static final String _FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_2 = "jiraIssue.reporterJiraUserId = ? AND ";
-	private static final String _FINDER_COLUMN_P_RJUI_S_REPORTERJIRAUSERID_3 = "(jiraIssue.reporterJiraUserId IS NULL OR jiraIssue.reporterJiraUserId = ?) AND ";
-	private static final String _FINDER_COLUMN_P_RJUI_S_STATUS_1 = "jiraIssue.status IS NULL";
-	private static final String _FINDER_COLUMN_P_RJUI_S_STATUS_2 = "jiraIssue.status = ?";
-	private static final String _FINDER_COLUMN_P_RJUI_S_STATUS_3 = "(jiraIssue.status IS NULL OR jiraIssue.status = ?)";
-	private static final String _FINDER_COLUMN_P_AJUI_S_PROJECTID_2 = "jiraIssue.projectId = ? AND ";
-	private static final String _FINDER_COLUMN_P_AJUI_S_ASSIGNEEJIRAUSERID_1 = "jiraIssue.assigneeJiraUserId IS NULL AND ";
-	private static final String _FINDER_COLUMN_P_AJUI_S_ASSIGNEEJIRAUSERID_2 = "jiraIssue.assigneeJiraUserId = ? AND ";
-	private static final String _FINDER_COLUMN_P_AJUI_S_ASSIGNEEJIRAUSERID_3 = "(jiraIssue.assigneeJiraUserId IS NULL OR jiraIssue.assigneeJiraUserId = ?) AND ";
-	private static final String _FINDER_COLUMN_P_AJUI_S_STATUS_1 = "jiraIssue.status IS NULL";
-	private static final String _FINDER_COLUMN_P_AJUI_S_STATUS_2 = "jiraIssue.status = ?";
-	private static final String _FINDER_COLUMN_P_AJUI_S_STATUS_3 = "(jiraIssue.status IS NULL OR jiraIssue.status = ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "jiraIssue.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No JIRAIssue exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No JIRAIssue exists with the key {";
