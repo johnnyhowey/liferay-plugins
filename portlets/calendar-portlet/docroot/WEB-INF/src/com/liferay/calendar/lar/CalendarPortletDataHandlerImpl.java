@@ -493,8 +493,8 @@ public class CalendarPortletDataHandlerImpl extends BasePortletDataHandler {
 						parentCalendarBookingId, calendarBooking.getTitleMap(),
 						calendarBooking.getDescriptionMap(),
 						calendarBooking.getLocation(),
-						calendarBooking.getStartDate(),
-						calendarBooking.getEndDate(),
+						calendarBooking.getStartTime(),
+						calendarBooking.getEndTime(),
 						calendarBooking.getAllDay(),
 						calendarBooking.getRecurrence(),
 						calendarBooking.getFirstReminder(),
@@ -510,8 +510,8 @@ public class CalendarPortletDataHandlerImpl extends BasePortletDataHandler {
 						calendarId, new long[0], calendarBooking.getTitleMap(),
 						calendarBooking.getDescriptionMap(),
 						calendarBooking.getLocation(),
-						calendarBooking.getStartDate(),
-						calendarBooking.getEndDate(),
+						calendarBooking.getStartTime(),
+						calendarBooking.getEndTime(),
 						calendarBooking.getAllDay(),
 						calendarBooking.getRecurrence(),
 						calendarBooking.getFirstReminder(),
@@ -528,8 +528,8 @@ public class CalendarPortletDataHandlerImpl extends BasePortletDataHandler {
 					calendarBooking.getTitleMap(),
 					calendarBooking.getDescriptionMap(),
 					calendarBooking.getLocation(),
-					calendarBooking.getStartDate(),
-					calendarBooking.getEndDate(), calendarBooking.getAllDay(),
+					calendarBooking.getStartTime(),
+					calendarBooking.getEndTime(), calendarBooking.getAllDay(),
 					calendarBooking.getRecurrence(),
 					calendarBooking.getFirstReminder(),
 					calendarBooking.getFirstReminderType(),
@@ -581,8 +581,7 @@ public class CalendarPortletDataHandlerImpl extends BasePortletDataHandler {
 						calendarResource.getCode(),
 						calendarResource.getNameMap(),
 						calendarResource.getDescriptionMap(),
-						calendarResource.getType(),
-						calendarResource.getActive(), serviceContext);
+						calendarResource.isActive(), serviceContext);
 			}
 			else {
 				importedCalendarResource =
@@ -590,8 +589,7 @@ public class CalendarPortletDataHandlerImpl extends BasePortletDataHandler {
 						existingCalendarResource.getCalendarResourceId(),
 						calendarResource.getNameMap(),
 						calendarResource.getDescriptionMap(),
-						calendarResource.getType(),
-						calendarResource.getActive(), serviceContext);
+						calendarResource.isActive(), serviceContext);
 			}
 		}
 		else {
@@ -602,8 +600,7 @@ public class CalendarPortletDataHandlerImpl extends BasePortletDataHandler {
 					calendarResource.getClassUuid(), calendarResource.getCode(),
 					calendarResource.getNameMap(),
 					calendarResource.getDescriptionMap(),
-					calendarResource.getType(), calendarResource.getActive(),
-					serviceContext);
+					calendarResource.isActive(), serviceContext);
 		}
 
 		portletDataContext.importClassedModel(
