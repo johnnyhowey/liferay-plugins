@@ -87,7 +87,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		tasksEntry.setDueDate(dueDate);
 		tasksEntry.setStatus(TasksEntryConstants.STATUS_OPEN);
 
-		tasksEntryPersistence.update(tasksEntry, false);
+		tasksEntryPersistence.update(tasksEntry);
 
 		// Resources
 
@@ -324,7 +324,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 
 		tasksEntry.setStatus(status);
 
-		tasksEntryPersistence.update(tasksEntry, false);
+		tasksEntryPersistence.update(tasksEntry);
 
 		// Asset
 
@@ -386,7 +386,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 
 		tasksEntry.setStatus(status);
 
-		tasksEntryPersistence.update(tasksEntry, false);
+		tasksEntryPersistence.update(tasksEntry);
 
 		// Notifications
 
@@ -429,6 +429,10 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		notificationEventJSONObject.put("userId", serviceContext.getUserId());
 
 		for (long receiverUserId : receiverUserIds) {
+			if (receiverUserId == 0) {
+				continue;
+			}
+
 			String title = StringPool.BLANK;
 
 			if (oldStatus == TasksEntryConstants.STATUS_ALL) {
