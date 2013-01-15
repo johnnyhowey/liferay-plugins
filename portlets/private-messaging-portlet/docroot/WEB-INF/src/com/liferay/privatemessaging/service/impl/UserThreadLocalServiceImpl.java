@@ -37,6 +37,7 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
@@ -374,6 +375,10 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 
 		long plid = PortalUtil.getPlidFromPortletId(
 			group.getGroupId(), true, PortletKeys.PRIVATE_MESSAGING);
+
+		if (plid == LayoutConstants.DEFAULT_PLID) {
+			return null;
+		}
 
 		Layout layout = LayoutLocalServiceUtil.getLayout(plid);
 
