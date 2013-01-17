@@ -61,15 +61,14 @@ to = sb.toString() + to;
 
 <div id="<portlet:namespace />messageContainer"></div>
 
-<portlet:renderURL var="backURL" windowState="<%= WindowState.NORMAL.toString() %>" />
+<portlet:renderURL var="redirectURL" windowState="<%= WindowState.NORMAL.toString() %>" />
 
 <liferay-portlet:actionURL name="sendMessage" var="sendMessageURL">
-	<portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
+	<portlet:param name="redirect" value="<%= redirectURL %>" />
 </liferay-portlet:actionURL>
 
 <aui:layout cssClass="message-body-container">
 	<aui:form action="<%= sendMessageURL %>" enctype="multipart/form-data" method="post" name="fm" onSubmit="event.preventDefault();">
-		<aui:input name="redirect" type="hidden" value="<%= backURL %>" />
 		<aui:input name="userId" type="hidden" value="<%= user.getUserId() %>" />
 		<aui:input name="mbThreadId" type="hidden" value="<%= mbThreadId %>" />
 
@@ -151,22 +150,15 @@ to = sb.toString() + to;
 			A.io.request(
 				'<liferay-portlet:resourceURL id="checkData"><liferay-portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" /></liferay-portlet:resourceURL>',
 				{
-					dataType: 'json',
-					form: {
-						id: form.getDOM(),
-						upload: true
-					},
-					on: {
-						complete: function(event, id, xhr) {
-							var responseText = xhr.responseText;
+					after: {
+						success: function(event, id, obj) {
+							var responseData = this.get('responseData');
 
-							var data = A.JSON.parse(responseText);
-
-							if (data.success) {
+							if (responseData.success) {
 								submitForm(document.<portlet:namespace />fm);
 							}
 							else {
-								<portlet:namespace />showMessage('<span class="portlet-msg-error">' + data.message + '</span>');
+								<portlet:namespace />showMessage('<span class="portlet-msg-error">' + responseData.message + '</span>');
 
 								loadingMask.hide();
 							}
@@ -176,6 +168,10 @@ to = sb.toString() + to;
 
 							loadingMask.hide();
 						}
+					},
+					dataType: 'json',
+					form: {
+						id: form.getDOM()
 					}
 				}
 			);
