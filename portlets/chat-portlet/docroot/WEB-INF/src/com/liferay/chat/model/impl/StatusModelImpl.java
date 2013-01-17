@@ -71,6 +71,8 @@ public class StatusModelImpl extends BaseModelImpl<Status>
 		};
 	public static final String TABLE_SQL_CREATE = "create table Chat_Status (statusId LONG not null primary key,userId LONG,modifiedDate LONG,online_ BOOLEAN,awake BOOLEAN,activePanelId VARCHAR(75) null,message STRING null,playSound BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table Chat_Status";
+	public static final String ORDER_BY_JPQL = " ORDER BY status.statusId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Chat_Status.statusId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -86,6 +88,7 @@ public class StatusModelImpl extends BaseModelImpl<Status>
 	public static long MODIFIEDDATE_COLUMN_BITMASK = 1L;
 	public static long ONLINE_COLUMN_BITMASK = 2L;
 	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long STATUSID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.chat.model.Status"));
 
@@ -101,7 +104,7 @@ public class StatusModelImpl extends BaseModelImpl<Status>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_statusId);
+		return _statusId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -332,13 +335,12 @@ public class StatusModelImpl extends BaseModelImpl<Status>
 
 	@Override
 	public Status toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Status)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Status)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -528,9 +530,7 @@ public class StatusModelImpl extends BaseModelImpl<Status>
 	}
 
 	private static ClassLoader _classLoader = Status.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Status.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Status.class };
 	private long _statusId;
 	private long _userId;
 	private String _userUuid;
@@ -547,5 +547,5 @@ public class StatusModelImpl extends BaseModelImpl<Status>
 	private String _message;
 	private boolean _playSound;
 	private long _columnBitmask;
-	private Status _escapedModelProxy;
+	private Status _escapedModel;
 }

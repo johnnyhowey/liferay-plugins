@@ -40,11 +40,10 @@ if ((tasksEntry != null) && (tasksEntry.getDueDate() != null)) {
 }
 %>
 
-<portlet:actionURL name="updateTasksEntry" var="updateTasksEntryURL">
-	<portlet:param name="mvcPath" value="/tasks/edit_task.jsp" />
-</portlet:actionURL>
+<portlet:actionURL name="updateTasksEntry" var="updateTasksEntryURL" />
 
 <aui:form action="<%= updateTasksEntryURL %>" method="post" name="fm1" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "saveForm();" %>'>
+	<aui:input name="mvcPath" type="hidden" value="/tasks/edit_task.jsp" />
 	<aui:input name="tasksEntryId" type="hidden" value="<%= tasksEntryId %>" />
 	<aui:input name="userId" type="hidden" value="<%= user.getUserId() %>" />
 	<aui:input name="resolverUserId" type="hidden" value="<%= user.getUserId() %>" />
@@ -54,7 +53,9 @@ if ((tasksEntry != null) && (tasksEntry.getDueDate() != null)) {
 	<aui:model-context bean="<%= tasksEntry %>" model="<%= TasksEntry.class %>" />
 
 	<aui:fieldset>
-		<aui:input cssClass="input-task-description" label="description" name="title" />
+		<aui:input cssClass="input-task-description" label="description" name="title">
+			<aui:validator name="required" />
+		</aui:input>
 
 		<aui:select label="assignee" name="assigneeUserId">
 			<c:choose>
@@ -64,12 +65,12 @@ if ((tasksEntry != null) && (tasksEntry.getDueDate() != null)) {
 					<optgroup label="<liferay-ui:message key="contacts" />">
 				</c:when>
 				<c:otherwise>
-					<aui:option label="" selected="<%= (assigneeUserId == 0) %>" value="0" />
+					<aui:option label="unassigned" selected="<%= (assigneeUserId == 0) %>" value="0" />
 
 					<aui:option label="<%= HtmlUtil.escape(user.getFullName()) %>" selected="<%= (assigneeUserId == user.getUserId()) %>" value="<%= user.getUserId() %>" />
 
 					<c:if test="<%= (tasksEntry != null) && (assigneeUserId > 0) && (assigneeUserId != user.getUserId()) %>">
-						<aui:option label="<%= PortalUtil.getUserName(assigneeUserId, tasksEntry.getAssigneeFullName()) %>" selected="<%= true %>" value="<%= assigneeUserId %>" />
+						<aui:option label="<%= PortalUtil.getUserName(assigneeUserId, tasksEntry.getAssigneeFullName()) %>" selected="<%= true %>" />
 					</c:if>
 
 					<optgroup label="<liferay-ui:message key="members" />">
