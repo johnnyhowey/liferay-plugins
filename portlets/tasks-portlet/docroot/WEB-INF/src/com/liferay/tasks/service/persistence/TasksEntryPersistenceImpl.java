@@ -14,6 +14,7 @@
 
 package com.liferay.tasks.service.persistence;
 
+import com.liferay.portal.NoSuchModelException;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -5154,7 +5155,7 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 	 */
 	public TasksEntry remove(long tasksEntryId)
 		throws NoSuchTasksEntryException, SystemException {
-		return remove((Serializable)tasksEntryId);
+		return remove(Long.valueOf(tasksEntryId));
 	}
 
 	/**
@@ -5271,14 +5272,16 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 			if ((tasksEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						tasksEntryModelImpl.getOriginalGroupId()
+						Long.valueOf(tasksEntryModelImpl.getOriginalGroupId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
 					args);
 
-				args = new Object[] { tasksEntryModelImpl.getGroupId() };
+				args = new Object[] {
+						Long.valueOf(tasksEntryModelImpl.getGroupId())
+					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_GROUPID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_GROUPID,
@@ -5288,14 +5291,16 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 			if ((tasksEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						tasksEntryModelImpl.getOriginalUserId()
+						Long.valueOf(tasksEntryModelImpl.getOriginalUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
 					args);
 
-				args = new Object[] { tasksEntryModelImpl.getUserId() };
+				args = new Object[] {
+						Long.valueOf(tasksEntryModelImpl.getUserId())
+					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_USERID, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_USERID,
@@ -5305,7 +5310,7 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 			if ((tasksEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEUSERID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						tasksEntryModelImpl.getOriginalAssigneeUserId()
+						Long.valueOf(tasksEntryModelImpl.getOriginalAssigneeUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ASSIGNEEUSERID,
@@ -5313,7 +5318,9 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ASSIGNEEUSERID,
 					args);
 
-				args = new Object[] { tasksEntryModelImpl.getAssigneeUserId() };
+				args = new Object[] {
+						Long.valueOf(tasksEntryModelImpl.getAssigneeUserId())
+					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ASSIGNEEUSERID,
 					args);
@@ -5324,7 +5331,7 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 			if ((tasksEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOLVERUSERID.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						tasksEntryModelImpl.getOriginalResolverUserId()
+						Long.valueOf(tasksEntryModelImpl.getOriginalResolverUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOLVERUSERID,
@@ -5332,7 +5339,9 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOLVERUSERID,
 					args);
 
-				args = new Object[] { tasksEntryModelImpl.getResolverUserId() };
+				args = new Object[] {
+						Long.valueOf(tasksEntryModelImpl.getResolverUserId())
+					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOLVERUSERID,
 					args);
@@ -5343,8 +5352,8 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 			if ((tasksEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_U.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						tasksEntryModelImpl.getOriginalGroupId(),
-						tasksEntryModelImpl.getOriginalUserId()
+						Long.valueOf(tasksEntryModelImpl.getOriginalGroupId()),
+						Long.valueOf(tasksEntryModelImpl.getOriginalUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
@@ -5352,8 +5361,8 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 					args);
 
 				args = new Object[] {
-						tasksEntryModelImpl.getGroupId(),
-						tasksEntryModelImpl.getUserId()
+						Long.valueOf(tasksEntryModelImpl.getGroupId()),
+						Long.valueOf(tasksEntryModelImpl.getUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_U, args);
@@ -5364,8 +5373,8 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 			if ((tasksEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_A.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						tasksEntryModelImpl.getOriginalGroupId(),
-						tasksEntryModelImpl.getOriginalAssigneeUserId()
+						Long.valueOf(tasksEntryModelImpl.getOriginalGroupId()),
+						Long.valueOf(tasksEntryModelImpl.getOriginalAssigneeUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_A, args);
@@ -5373,8 +5382,8 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 					args);
 
 				args = new Object[] {
-						tasksEntryModelImpl.getGroupId(),
-						tasksEntryModelImpl.getAssigneeUserId()
+						Long.valueOf(tasksEntryModelImpl.getGroupId()),
+						Long.valueOf(tasksEntryModelImpl.getAssigneeUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_A, args);
@@ -5385,8 +5394,8 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 			if ((tasksEntryModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_R.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
-						tasksEntryModelImpl.getOriginalGroupId(),
-						tasksEntryModelImpl.getOriginalResolverUserId()
+						Long.valueOf(tasksEntryModelImpl.getOriginalGroupId()),
+						Long.valueOf(tasksEntryModelImpl.getOriginalResolverUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
@@ -5394,8 +5403,8 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 					args);
 
 				args = new Object[] {
-						tasksEntryModelImpl.getGroupId(),
-						tasksEntryModelImpl.getResolverUserId()
+						Long.valueOf(tasksEntryModelImpl.getGroupId()),
+						Long.valueOf(tasksEntryModelImpl.getResolverUserId())
 					};
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_R, args);
@@ -5443,24 +5452,13 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 	 *
 	 * @param primaryKey the primary key of the tasks entry
 	 * @return the tasks entry
-	 * @throws com.liferay.tasks.NoSuchTasksEntryException if a tasks entry with the primary key could not be found
+	 * @throws com.liferay.portal.NoSuchModelException if a tasks entry with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public TasksEntry findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchTasksEntryException, SystemException {
-		TasksEntry tasksEntry = fetchByPrimaryKey(primaryKey);
-
-		if (tasksEntry == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-			}
-
-			throw new NoSuchTasksEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				primaryKey);
-		}
-
-		return tasksEntry;
+		throws NoSuchModelException, SystemException {
+		return findByPrimaryKey(((Long)primaryKey).longValue());
 	}
 
 	/**
@@ -5473,7 +5471,18 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 	 */
 	public TasksEntry findByPrimaryKey(long tasksEntryId)
 		throws NoSuchTasksEntryException, SystemException {
-		return findByPrimaryKey((Serializable)tasksEntryId);
+		TasksEntry tasksEntry = fetchByPrimaryKey(tasksEntryId);
+
+		if (tasksEntry == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + tasksEntryId);
+			}
+
+			throw new NoSuchTasksEntryException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				tasksEntryId);
+		}
+
+		return tasksEntry;
 	}
 
 	/**
@@ -5486,8 +5495,20 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 	@Override
 	public TasksEntry fetchByPrimaryKey(Serializable primaryKey)
 		throws SystemException {
+		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+	}
+
+	/**
+	 * Returns the tasks entry with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param tasksEntryId the primary key of the tasks entry
+	 * @return the tasks entry, or <code>null</code> if a tasks entry with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public TasksEntry fetchByPrimaryKey(long tasksEntryId)
+		throws SystemException {
 		TasksEntry tasksEntry = (TasksEntry)EntityCacheUtil.getResult(TasksEntryModelImpl.ENTITY_CACHE_ENABLED,
-				TasksEntryImpl.class, primaryKey);
+				TasksEntryImpl.class, tasksEntryId);
 
 		if (tasksEntry == _nullTasksEntry) {
 			return null;
@@ -5500,19 +5521,19 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 				session = openSession();
 
 				tasksEntry = (TasksEntry)session.get(TasksEntryImpl.class,
-						primaryKey);
+						Long.valueOf(tasksEntryId));
 
 				if (tasksEntry != null) {
 					cacheResult(tasksEntry);
 				}
 				else {
 					EntityCacheUtil.putResult(TasksEntryModelImpl.ENTITY_CACHE_ENABLED,
-						TasksEntryImpl.class, primaryKey, _nullTasksEntry);
+						TasksEntryImpl.class, tasksEntryId, _nullTasksEntry);
 				}
 			}
 			catch (Exception e) {
 				EntityCacheUtil.removeResult(TasksEntryModelImpl.ENTITY_CACHE_ENABLED,
-					TasksEntryImpl.class, primaryKey);
+					TasksEntryImpl.class, tasksEntryId);
 
 				throw processException(e);
 			}
@@ -5522,18 +5543,6 @@ public class TasksEntryPersistenceImpl extends BasePersistenceImpl<TasksEntry>
 		}
 
 		return tasksEntry;
-	}
-
-	/**
-	 * Returns the tasks entry with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param tasksEntryId the primary key of the tasks entry
-	 * @return the tasks entry, or <code>null</code> if a tasks entry with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public TasksEntry fetchByPrimaryKey(long tasksEntryId)
-		throws SystemException {
-		return fetchByPrimaryKey((Serializable)tasksEntryId);
 	}
 
 	/**

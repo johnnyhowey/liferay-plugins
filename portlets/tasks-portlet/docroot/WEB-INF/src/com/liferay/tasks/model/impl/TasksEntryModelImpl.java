@@ -172,7 +172,7 @@ public class TasksEntryModelImpl extends BaseModelImpl<TasksEntry>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return _tasksEntryId;
+		return new Long(_tasksEntryId);
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
