@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -34,6 +35,7 @@ import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.tasks.TasksEntryDueDateException;
+import com.liferay.tasks.TasksEntryTitleException;
 import com.liferay.tasks.model.TasksEntry;
 import com.liferay.tasks.model.TasksEntryConstants;
 import com.liferay.tasks.service.base.TasksEntryLocalServiceBaseImpl;
@@ -62,6 +64,8 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		long groupId = serviceContext.getScopeGroupId();
 		Date now = new Date();
 
+		validate(title);
+
 		Date dueDate = null;
 
 		if (!neverDue) {
@@ -87,7 +91,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		tasksEntry.setDueDate(dueDate);
 		tasksEntry.setStatus(TasksEntryConstants.STATUS_OPEN);
 
-		tasksEntryPersistence.update(tasksEntry, false);
+		tasksEntryPersistence.update(tasksEntry);
 
 		// Resources
 
@@ -295,6 +299,8 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 
 		User user = UserLocalServiceUtil.getUserById(tasksEntry.getUserId());
 
+		validate(title);
+
 		Date dueDate = null;
 
 		if (!neverDue) {
@@ -324,7 +330,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 
 		tasksEntry.setStatus(status);
 
-		tasksEntryPersistence.update(tasksEntry, false);
+		tasksEntryPersistence.update(tasksEntry);
 
 		// Asset
 
@@ -386,7 +392,7 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 
 		tasksEntry.setStatus(status);
 
-		tasksEntryPersistence.update(tasksEntry, false);
+		tasksEntryPersistence.update(tasksEntry);
 
 		// Notifications
 
@@ -429,6 +435,10 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 		notificationEventJSONObject.put("userId", serviceContext.getUserId());
 
 		for (long receiverUserId : receiverUserIds) {
+			if (receiverUserId == 0) {
+				continue;
+			}
+
 			String title = StringPool.BLANK;
 
 			if (oldStatus == TasksEntryConstants.STATUS_ALL) {
@@ -463,6 +473,12 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 
 			ChannelHubManagerUtil.sendNotificationEvent(
 				tasksEntry.getCompanyId(), receiverUserId, notificationEvent);
+		}
+	}
+
+	protected void validate(String title) throws PortalException {
+		if (Validator.isNull(title)) {
+			throw new TasksEntryTitleException();
 		}
 	}
 
