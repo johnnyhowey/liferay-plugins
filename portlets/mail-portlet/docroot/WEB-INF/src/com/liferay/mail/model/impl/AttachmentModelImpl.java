@@ -72,6 +72,8 @@ public class AttachmentModelImpl extends BaseModelImpl<Attachment>
 		};
 	public static final String TABLE_SQL_CREATE = "create table Mail_Attachment (attachmentId LONG not null primary key,companyId LONG,userId LONG,accountId LONG,folderId LONG,messageId LONG,contentPath VARCHAR(75) null,fileName VARCHAR(75) null,size_ LONG)";
 	public static final String TABLE_SQL_DROP = "drop table Mail_Attachment";
+	public static final String ORDER_BY_JPQL = " ORDER BY attachment.attachmentId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Mail_Attachment.attachmentId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -85,6 +87,7 @@ public class AttachmentModelImpl extends BaseModelImpl<Attachment>
 				"value.object.column.bitmask.enabled.com.liferay.mail.model.Attachment"),
 			true);
 	public static long MESSAGEID_COLUMN_BITMASK = 1L;
+	public static long ATTACHMENTID_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.mail.model.Attachment"));
 
@@ -100,7 +103,7 @@ public class AttachmentModelImpl extends BaseModelImpl<Attachment>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_attachmentId);
+		return _attachmentId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -310,13 +313,12 @@ public class AttachmentModelImpl extends BaseModelImpl<Attachment>
 
 	@Override
 	public Attachment toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Attachment)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Attachment)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -507,7 +509,7 @@ public class AttachmentModelImpl extends BaseModelImpl<Attachment>
 	}
 
 	private static ClassLoader _classLoader = Attachment.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Attachment.class
 		};
 	private long _attachmentId;
@@ -523,5 +525,5 @@ public class AttachmentModelImpl extends BaseModelImpl<Attachment>
 	private String _fileName;
 	private long _size;
 	private long _columnBitmask;
-	private Attachment _escapedModelProxy;
+	private Attachment _escapedModel;
 }
