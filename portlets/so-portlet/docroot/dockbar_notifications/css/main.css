@@ -1,31 +1,16 @@
-/**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- */
-
 @import "compass";
 
 .so-portlet-dockbar-notifications .menu-button {
 	background-image: none;
 	padding: 5px;
-}
 
-.so-portlet-dockbar-notifications .menu-button .notification-count {
-	@include border-radius(4px);
-	background-color: #2C2F34;
-	color: #FFF;
-	display: block;
-	padding: 0 5px;
-	text-shadow: none;
+	.notification-count {
+		background-color: #2C2F34;
+		color: #FFF;
+		display: block;
+		padding: 0 5px;
+		text-shadow: none;
+	}
 }
 
 .menu-button-active .so-portlet-dockbar-notifications .menu-button .notification-count {
@@ -86,7 +71,7 @@
 		}
 	}
 
-	.user-notification-event-footer, .user-notification-event-content {
+	.user-notification-event-content, .user-notification-event-footer {
 		&:after {
 			clear: both;
 			content: "";
@@ -101,8 +86,8 @@
 		padding: 0;
 
 		.dismiss-notifications, .view-all {
-			float: left;
 			display: block;
+			float: left;
 			width: 50%;
 
 			a {
@@ -137,4 +122,10 @@
 			background-image: url(@theme_image_path@/common/deactivate.png);
 		}
 	}
+}
+
+/* ---------- Extras ---------- */
+
+.so-portlet-dockbar-notifications .menu-button .notification-count {
+	@include border-radius(4px);
 }
