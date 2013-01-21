@@ -97,6 +97,7 @@ public class KBTemplateModelImpl extends BaseModelImpl<KBTemplate>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long GROUPID_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long MODIFIEDDATE_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -160,7 +161,7 @@ public class KBTemplateModelImpl extends BaseModelImpl<KBTemplate>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kbTemplateId);
+		return _kbTemplateId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -427,13 +428,12 @@ public class KBTemplateModelImpl extends BaseModelImpl<KBTemplate>
 
 	@Override
 	public KBTemplate toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KBTemplate)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KBTemplate)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -666,7 +666,7 @@ public class KBTemplateModelImpl extends BaseModelImpl<KBTemplate>
 	}
 
 	private static ClassLoader _classLoader = KBTemplate.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KBTemplate.class
 		};
 	private String _uuid;
@@ -686,5 +686,5 @@ public class KBTemplateModelImpl extends BaseModelImpl<KBTemplate>
 	private String _title;
 	private String _content;
 	private long _columnBitmask;
-	private KBTemplate _escapedModelProxy;
+	private KBTemplate _escapedModel;
 }
