@@ -92,6 +92,7 @@ public class KaleoConditionModelImpl extends BaseModelImpl<KaleoCondition>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long KALEODEFINITIONID_COLUMN_BITMASK = 2L;
 	public static long KALEONODEID_COLUMN_BITMASK = 4L;
+	public static long KALEOCONDITIONID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoCondition"));
 
@@ -107,7 +108,7 @@ public class KaleoConditionModelImpl extends BaseModelImpl<KaleoCondition>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kaleoConditionId);
+		return _kaleoConditionId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -399,13 +400,12 @@ public class KaleoConditionModelImpl extends BaseModelImpl<KaleoCondition>
 
 	@Override
 	public KaleoCondition toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KaleoCondition)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KaleoCondition)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -664,7 +664,7 @@ public class KaleoConditionModelImpl extends BaseModelImpl<KaleoCondition>
 	}
 
 	private static ClassLoader _classLoader = KaleoCondition.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KaleoCondition.class
 		};
 	private long _kaleoConditionId;
@@ -687,5 +687,5 @@ public class KaleoConditionModelImpl extends BaseModelImpl<KaleoCondition>
 	private String _scriptLanguage;
 	private String _scriptRequiredContexts;
 	private long _columnBitmask;
-	private KaleoCondition _escapedModelProxy;
+	private KaleoCondition _escapedModel;
 }

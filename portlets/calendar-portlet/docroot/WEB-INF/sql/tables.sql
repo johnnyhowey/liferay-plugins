@@ -29,9 +29,9 @@ create table CalendarBooking (
 	parentCalendarBookingId LONG,
 	title STRING null,
 	description STRING null,
-	location VARCHAR(75) null,
-	startDate LONG,
-	endDate LONG,
+	location STRING null,
+	startTime LONG,
+	endTime LONG,
 	allDay BOOLEAN,
 	recurrence STRING null,
 	firstReminder LONG,
@@ -60,6 +60,5 @@ create table CalendarResource (
 	code_ VARCHAR(75) null,
 	name STRING null,
 	description STRING null,
-	type_ VARCHAR(75) null,
 	active_ BOOLEAN
 );
