@@ -19,22 +19,31 @@ package com.liferay.so.hook.upgrade.v2_0_2;
 
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+import com.liferay.portal.kernel.util.ClassResolverUtil;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.PortalClassInvoker;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.LayoutConstants;
 import com.liferay.portal.model.LayoutSet;
+import com.liferay.portal.model.LayoutTypePortlet;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portlet.PortletPreferencesFactoryUtil;
 import com.liferay.so.util.LayoutSetPrototypeUtil;
 import com.liferay.so.util.SocialOfficeConstants;
 import com.liferay.so.util.SocialOfficeUtil;
 
 import java.util.List;
 
+import javax.portlet.PortletPreferences;
+
 /**
  * @author Jonathan Lee
+ * @author Josef Sustacek
  */
 public class UpgradeGroup extends UpgradeProcess {
 
@@ -59,6 +68,9 @@ public class UpgradeGroup extends UpgradeProcess {
 				continue;
 			}
 
+			PortletPreferences portletPreferences = getPortletPreferences(
+				group.getGroupId(), privateLayout);
+
 			LayoutLocalServiceUtil.deleteLayouts(
 				group.getGroupId(), privateLayout, new ServiceContext());
 
@@ -70,18 +82,68 @@ public class UpgradeGroup extends UpgradeProcess {
 				group.getGroupId(), privateLayout);
 
 			PortalClassInvoker.invoke(
-				true, _mergeLayoutSetProtypeLayoutsMethodKey, group, layoutSet);
+				true, _mergeLayoutSetPrototypeLayoutsMethodKey, group,
+				layoutSet);
+
+			updatePortletPreferences(
+				group.getGroupId(), privateLayout, portletPreferences);
 
 			SocialOfficeUtil.enableSocialOffice(group);
 		}
 	}
 
-	private static final String _CLASS_NAME =
-		"com.liferay.portlet.sites.util.SitesUtil";
+	protected PortletPreferences getPortletPreferences(
+			long groupId, boolean privateLayout)
+		throws Exception {
 
-	private static MethodKey _mergeLayoutSetProtypeLayoutsMethodKey =
+		Layout layout = LayoutLocalServiceUtil.fetchFirstLayout(
+			groupId, privateLayout, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
+
+		if (layout.getLayoutType() instanceof LayoutTypePortlet) {
+			try {
+				return PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+					layout, _OLD_WELCOME_PORTLET_ID);
+			}
+			catch (Exception e) {
+			}
+		}
+
+		return null;
+	}
+
+	protected void updatePortletPreferences(
+			long groupId, boolean privateLayout,
+			PortletPreferences portletPreferences)
+		throws Exception {
+
+		if (portletPreferences == null) {
+			return;
+		}
+
+		Layout layout = LayoutLocalServiceUtil.fetchFirstLayout(
+			groupId, privateLayout, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID);
+
+		PortletPreferences newPortletPreferences =
+			PortletPreferencesFactoryUtil.getLayoutPortletSetup(
+				layout, _NEW_WELCOME_PORTLET_ID);
+
+		newPortletPreferences.setValue(
+			"message",
+			portletPreferences.getValue("message", StringPool.BLANK));
+
+		newPortletPreferences.store();
+	}
+
+	private static final String _NEW_WELCOME_PORTLET_ID =
+		"1_WAR_wysiwygportlet_INSTANCE_abcd";
+
+	private static final String _OLD_WELCOME_PORTLET_ID =
+		"1_WAR_wysiwygportlet";
+
+	private static MethodKey _mergeLayoutSetPrototypeLayoutsMethodKey =
 		new MethodKey(
-			_CLASS_NAME, "mergeLayoutSetProtypeLayouts", Group.class,
-			LayoutSet.class);
+			ClassResolverUtil.resolveByPortalClassLoader(
+				"com.liferay.portlet.sites.util.SitesUtil"),
+			"mergeLayoutSetPrototypeLayouts", Group.class, LayoutSet.class);
 
 }
