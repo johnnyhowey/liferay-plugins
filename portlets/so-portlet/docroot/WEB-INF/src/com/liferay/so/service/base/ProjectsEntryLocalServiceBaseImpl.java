@@ -39,11 +39,13 @@ import com.liferay.so.model.ProjectsEntry;
 import com.liferay.so.service.FavoriteSiteLocalService;
 import com.liferay.so.service.MemberRequestLocalService;
 import com.liferay.so.service.ProjectsEntryLocalService;
+import com.liferay.so.service.SocialActivityGroupingLocalService;
 import com.liferay.so.service.SocialOfficeService;
 import com.liferay.so.service.persistence.FavoriteSiteFinder;
 import com.liferay.so.service.persistence.FavoriteSitePersistence;
 import com.liferay.so.service.persistence.MemberRequestPersistence;
 import com.liferay.so.service.persistence.ProjectsEntryPersistence;
+import com.liferay.so.service.persistence.SocialActivityGroupingPersistence;
 
 import java.io.Serializable;
 
@@ -84,7 +86,7 @@ public abstract class ProjectsEntryLocalServiceBaseImpl
 		throws SystemException {
 		projectsEntry.setNew(true);
 
-		return projectsEntryPersistence.update(projectsEntry, false);
+		return projectsEntryPersistence.update(projectsEntry);
 	}
 
 	/**
@@ -148,7 +150,7 @@ public abstract class ProjectsEntryLocalServiceBaseImpl
 	 * Performs a dynamic query on the database and returns a range of the matching rows.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.so.model.impl.ProjectsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param dynamicQuery the dynamic query
@@ -168,7 +170,7 @@ public abstract class ProjectsEntryLocalServiceBaseImpl
 	 * Performs a dynamic query on the database and returns an ordered range of the matching rows.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.so.model.impl.ProjectsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param dynamicQuery the dynamic query
@@ -224,7 +226,7 @@ public abstract class ProjectsEntryLocalServiceBaseImpl
 	 * Returns a range of all the projects entries.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.so.model.impl.ProjectsEntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of projects entries
@@ -257,23 +259,7 @@ public abstract class ProjectsEntryLocalServiceBaseImpl
 	@Indexable(type = IndexableType.REINDEX)
 	public ProjectsEntry updateProjectsEntry(ProjectsEntry projectsEntry)
 		throws SystemException {
-		return updateProjectsEntry(projectsEntry, true);
-	}
-
-	/**
-	 * Updates the projects entry in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	 *
-	 * @param projectsEntry the projects entry
-	 * @param merge whether to merge the projects entry with the current session. See {@link com.liferay.portal.service.persistence.BatchSession#update(com.liferay.portal.kernel.dao.orm.Session, com.liferay.portal.model.BaseModel, boolean)} for an explanation.
-	 * @return the projects entry that was updated
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Indexable(type = IndexableType.REINDEX)
-	public ProjectsEntry updateProjectsEntry(ProjectsEntry projectsEntry,
-		boolean merge) throws SystemException {
-		projectsEntry.setNew(false);
-
-		return projectsEntryPersistence.update(projectsEntry, merge);
+		return projectsEntryPersistence.update(projectsEntry);
 	}
 
 	/**
@@ -406,6 +392,44 @@ public abstract class ProjectsEntryLocalServiceBaseImpl
 	public void setProjectsEntryPersistence(
 		ProjectsEntryPersistence projectsEntryPersistence) {
 		this.projectsEntryPersistence = projectsEntryPersistence;
+	}
+
+	/**
+	 * Returns the social activity grouping local service.
+	 *
+	 * @return the social activity grouping local service
+	 */
+	public SocialActivityGroupingLocalService getSocialActivityGroupingLocalService() {
+		return socialActivityGroupingLocalService;
+	}
+
+	/**
+	 * Sets the social activity grouping local service.
+	 *
+	 * @param socialActivityGroupingLocalService the social activity grouping local service
+	 */
+	public void setSocialActivityGroupingLocalService(
+		SocialActivityGroupingLocalService socialActivityGroupingLocalService) {
+		this.socialActivityGroupingLocalService = socialActivityGroupingLocalService;
+	}
+
+	/**
+	 * Returns the social activity grouping persistence.
+	 *
+	 * @return the social activity grouping persistence
+	 */
+	public SocialActivityGroupingPersistence getSocialActivityGroupingPersistence() {
+		return socialActivityGroupingPersistence;
+	}
+
+	/**
+	 * Sets the social activity grouping persistence.
+	 *
+	 * @param socialActivityGroupingPersistence the social activity grouping persistence
+	 */
+	public void setSocialActivityGroupingPersistence(
+		SocialActivityGroupingPersistence socialActivityGroupingPersistence) {
+		this.socialActivityGroupingPersistence = socialActivityGroupingPersistence;
 	}
 
 	/**
@@ -610,6 +634,10 @@ public abstract class ProjectsEntryLocalServiceBaseImpl
 	protected ProjectsEntryLocalService projectsEntryLocalService;
 	@BeanReference(type = ProjectsEntryPersistence.class)
 	protected ProjectsEntryPersistence projectsEntryPersistence;
+	@BeanReference(type = SocialActivityGroupingLocalService.class)
+	protected SocialActivityGroupingLocalService socialActivityGroupingLocalService;
+	@BeanReference(type = SocialActivityGroupingPersistence.class)
+	protected SocialActivityGroupingPersistence socialActivityGroupingPersistence;
 	@BeanReference(type = SocialOfficeService.class)
 	protected SocialOfficeService socialOfficeService;
 	@BeanReference(type = CounterLocalService.class)

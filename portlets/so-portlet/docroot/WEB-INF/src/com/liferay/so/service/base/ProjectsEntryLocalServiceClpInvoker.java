@@ -98,38 +98,32 @@ public class ProjectsEntryLocalServiceClpInvoker {
 				"com.liferay.so.model.ProjectsEntry"
 			};
 
-		_methodName15 = "updateProjectsEntry";
+		_methodName47 = "getBeanIdentifier";
 
-		_methodParameterTypes15 = new String[] {
-				"com.liferay.so.model.ProjectsEntry", "boolean"
-			};
+		_methodParameterTypes47 = new String[] {  };
 
-		_methodName44 = "getBeanIdentifier";
+		_methodName48 = "setBeanIdentifier";
 
-		_methodParameterTypes44 = new String[] {  };
+		_methodParameterTypes48 = new String[] { "java.lang.String" };
 
-		_methodName45 = "setBeanIdentifier";
+		_methodName53 = "addProjectsEntry";
 
-		_methodParameterTypes45 = new String[] { "java.lang.String" };
-
-		_methodName50 = "addProjectsEntry";
-
-		_methodParameterTypes50 = new String[] {
+		_methodParameterTypes53 = new String[] {
 				"long", "java.lang.String", "java.lang.String", "int", "int",
 				"int", "int", "int", "int", "boolean", "java.lang.String"
 			};
 
-		_methodName51 = "getUserProjectsEntries";
+		_methodName54 = "getUserProjectsEntries";
 
-		_methodParameterTypes51 = new String[] { "long" };
+		_methodParameterTypes54 = new String[] { "long" };
 
-		_methodName52 = "getUserProjectsEntriesCount";
+		_methodName55 = "getUserProjectsEntriesCount";
 
-		_methodParameterTypes52 = new String[] { "long" };
+		_methodParameterTypes55 = new String[] { "long" };
 
-		_methodName53 = "updateProjectsEntry";
+		_methodName56 = "updateProjectsEntry";
 
-		_methodParameterTypes53 = new String[] {
+		_methodParameterTypes56 = new String[] {
 				"long", "java.lang.String", "java.lang.String", "int", "int",
 				"int", "int", "int", "int", "boolean", "java.lang.String"
 			};
@@ -218,26 +212,20 @@ public class ProjectsEntryLocalServiceClpInvoker {
 			return ProjectsEntryLocalServiceUtil.updateProjectsEntry((com.liferay.so.model.ProjectsEntry)arguments[0]);
 		}
 
-		if (_methodName15.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes15, parameterTypes)) {
-			return ProjectsEntryLocalServiceUtil.updateProjectsEntry((com.liferay.so.model.ProjectsEntry)arguments[0],
-				((Boolean)arguments[1]).booleanValue());
-		}
-
-		if (_methodName44.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
+		if (_methodName47.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes47, parameterTypes)) {
 			return ProjectsEntryLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName45.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes45, parameterTypes)) {
+		if (_methodName48.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes48, parameterTypes)) {
 			ProjectsEntryLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
 		}
 
-		if (_methodName50.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+		if (_methodName53.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
 			return ProjectsEntryLocalServiceUtil.addProjectsEntry(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				((Integer)arguments[3]).intValue(),
@@ -250,18 +238,18 @@ public class ProjectsEntryLocalServiceClpInvoker {
 				(java.lang.String)arguments[10]);
 		}
 
-		if (_methodName51.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
 			return ProjectsEntryLocalServiceUtil.getUserProjectsEntries(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName52.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
 			return ProjectsEntryLocalServiceUtil.getUserProjectsEntriesCount(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName53.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
+		if (_methodName56.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
 			return ProjectsEntryLocalServiceUtil.updateProjectsEntry(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1], (java.lang.String)arguments[2],
 				((Integer)arguments[3]).intValue(),
@@ -307,18 +295,16 @@ public class ProjectsEntryLocalServiceClpInvoker {
 	private String[] _methodParameterTypes13;
 	private String _methodName14;
 	private String[] _methodParameterTypes14;
-	private String _methodName15;
-	private String[] _methodParameterTypes15;
-	private String _methodName44;
-	private String[] _methodParameterTypes44;
-	private String _methodName45;
-	private String[] _methodParameterTypes45;
-	private String _methodName50;
-	private String[] _methodParameterTypes50;
-	private String _methodName51;
-	private String[] _methodParameterTypes51;
-	private String _methodName52;
-	private String[] _methodParameterTypes52;
+	private String _methodName47;
+	private String[] _methodParameterTypes47;
+	private String _methodName48;
+	private String[] _methodParameterTypes48;
 	private String _methodName53;
 	private String[] _methodParameterTypes53;
+	private String _methodName54;
+	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
+	private String _methodName56;
+	private String[] _methodParameterTypes56;
 }

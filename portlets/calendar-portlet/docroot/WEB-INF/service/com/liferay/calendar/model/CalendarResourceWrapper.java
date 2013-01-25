@@ -61,7 +61,6 @@ public class CalendarResourceWrapper implements CalendarResource,
 		attributes.put("code", getCode());
 		attributes.put("name", getName());
 		attributes.put("description", getDescription());
-		attributes.put("type", getType());
 		attributes.put("active", getActive());
 
 		return attributes;
@@ -156,12 +155,6 @@ public class CalendarResourceWrapper implements CalendarResource,
 
 		if (description != null) {
 			setDescription(description);
-		}
-
-		String type = (String)attributes.get("type");
-
-		if (type != null) {
-			setType(type);
 		}
 
 		Boolean active = (Boolean)attributes.get("active");
@@ -711,24 +704,6 @@ public class CalendarResourceWrapper implements CalendarResource,
 	}
 
 	/**
-	* Returns the type of this calendar resource.
-	*
-	* @return the type of this calendar resource
-	*/
-	public java.lang.String getType() {
-		return _calendarResource.getType();
-	}
-
-	/**
-	* Sets the type of this calendar resource.
-	*
-	* @param type the type of this calendar resource
-	*/
-	public void setType(java.lang.String type) {
-		_calendarResource.setType(type);
-	}
-
-	/**
 	* Returns the active of this calendar resource.
 	*
 	* @return the active of this calendar resource
@@ -819,6 +794,10 @@ public class CalendarResourceWrapper implements CalendarResource,
 
 	public com.liferay.calendar.model.CalendarResource toEscapedModel() {
 		return new CalendarResourceWrapper(_calendarResource.toEscapedModel());
+	}
+
+	public com.liferay.calendar.model.CalendarResource toUnescapedModel() {
+		return new CalendarResourceWrapper(_calendarResource.toUnescapedModel());
 	}
 
 	@Override
