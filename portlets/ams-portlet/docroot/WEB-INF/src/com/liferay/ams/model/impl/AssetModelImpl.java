@@ -73,6 +73,8 @@ public class AssetModelImpl extends BaseModelImpl<Asset> implements AssetModel {
 		};
 	public static final String TABLE_SQL_CREATE = "create table AMS_Asset (assetId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,definitionId LONG,serialNumber VARCHAR(75) null,inactiveDate DATE null,active_ BOOLEAN)";
 	public static final String TABLE_SQL_DROP = "drop table AMS_Asset";
+	public static final String ORDER_BY_JPQL = " ORDER BY asset.assetId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY AMS_Asset.assetId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -98,7 +100,7 @@ public class AssetModelImpl extends BaseModelImpl<Asset> implements AssetModel {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_assetId);
+		return _assetId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -311,13 +313,12 @@ public class AssetModelImpl extends BaseModelImpl<Asset> implements AssetModel {
 
 	@Override
 	public Asset toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Asset)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Asset)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -531,9 +532,7 @@ public class AssetModelImpl extends BaseModelImpl<Asset> implements AssetModel {
 	}
 
 	private static ClassLoader _classLoader = Asset.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Asset.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Asset.class };
 	private long _assetId;
 	private long _companyId;
 	private long _userId;
@@ -545,5 +544,5 @@ public class AssetModelImpl extends BaseModelImpl<Asset> implements AssetModel {
 	private String _serialNumber;
 	private Date _inactiveDate;
 	private boolean _active;
-	private Asset _escapedModelProxy;
+	private Asset _escapedModel;
 }
