@@ -101,6 +101,7 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long FOLDERID_COLUMN_BITMASK = 2L;
 	public static long REMOTEMESSAGEID_COLUMN_BITMASK = 4L;
+	public static long SENTDATE_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.mail.model.Message"));
 
@@ -116,7 +117,7 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_messageId);
+		return _messageId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -537,13 +538,12 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 
 	@Override
 	public Message toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Message)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Message)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -893,7 +893,7 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 	}
 
 	private static ClassLoader _classLoader = Message.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Message.class
 		};
 	private long _messageId;
@@ -923,5 +923,5 @@ public class MessageModelImpl extends BaseModelImpl<Message>
 	private long _originalRemoteMessageId;
 	private boolean _setOriginalRemoteMessageId;
 	private long _columnBitmask;
-	private Message _escapedModelProxy;
+	private Message _escapedModel;
 }
