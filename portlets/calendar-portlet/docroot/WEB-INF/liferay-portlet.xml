@@ -14,13 +14,16 @@
 				</simple>
 			</trigger>
 		</scheduler-entry>
-		<portlet-data-handler-class>com.liferay.calendar.lar.CalendarPortletDataHandlerImpl</portlet-data-handler-class>
+		<portlet-data-handler-class>com.liferay.calendar.lar.CalendarPortletDataHandler</portlet-data-handler-class>
+		<asset-renderer-factory>com.liferay.calendar.asset.CalendarBookingAssetRendererFactory</asset-renderer-factory>
+		<custom-attributes-display>com.liferay.calendar.CalendarCustomAttributesDisplay</custom-attributes-display>
 		<preferences-unique-per-layout>false</preferences-unique-per-layout>
 		<preferences-owned-by-group>true</preferences-owned-by-group>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<header-portlet-javascript>/js/components.js</header-portlet-javascript>
 		<header-portlet-javascript>/js/javascript.js</header-portlet-javascript>
 		<css-class-wrapper>calendar-portlet</css-class-wrapper>
+		<add-default-resource>true</add-default-resource>
 	</portlet>
 	<role-mapper>
 		<role-name>administrator</role-name>

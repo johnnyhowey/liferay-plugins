@@ -40,7 +40,6 @@ import com.liferay.util.mail.InternetAddressUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import java.util.ArrayList;
@@ -873,7 +872,7 @@ public class IMAPAccessor {
 		throws MailException {
 
 		int pageCount =
-			(int)(Math.ceil(messageCount / (double) messagesPerPage));
+			(int)(Math.ceil(messageCount / (double)messagesPerPage));
 
 		if (messageCount == 0) {
 			return new int[] {0, 0};
@@ -972,10 +971,7 @@ public class IMAPAccessor {
 		String fileName = part.getFileName();
 		Object content = part.getContent();
 
-		if (content instanceof InputStream) {
-			return;
-		}
-		else if (content instanceof Multipart) {
+		if (content instanceof Multipart) {
 			Multipart multipart = (Multipart)content;
 
 			for (int i = 0; i < multipart.getCount(); i++) {
