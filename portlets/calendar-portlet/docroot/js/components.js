@@ -11,9 +11,9 @@
 
 	var STR_SPACE = ' ';
 
-	var toNumber = function(val) {
-		return parseInt(val, 10) || 0;
-	};
+	var TPL_SPAN = '<span>';
+
+	var TPL_SPAN_CLOSE = '</span>';
 
 	AUI.add(
 		'liferay-calendar-simple-menu',
@@ -150,6 +150,10 @@
 										cssClass += STR_SPACE + CSS_SIMPLE_MENU_ITEM_HIDDEN;
 									}
 
+									if (item.cssClass) {
+										cssClass += STR_SPACE + item.cssClass;
+									}
+
 									var li = A.Node.create(
 										Lang.sub(
 											TPL_SIMPLE_MENU_ITEM,
@@ -250,6 +254,9 @@
 							setter: '_setCalendars',
 							validator: isArray,
 							value: []
+						},
+
+						scheduler: {
 						},
 
 						simpleMenu: {
@@ -460,9 +467,11 @@
 
 							var calendar = instance.getCalendarByNode(currentTarget);
 
-							instance._setCalendarColor(calendar, calendar.get('color'));
-
 							currentTarget.addClass(CSS_CALENDAR_LIST_ITEM_HOVER);
+
+							if (!calendar.get('visible')) {
+								instance._setCalendarColor(calendar, calendar.get('color'));
+							}
 						},
 
 						_onHoverOut: function(event) {
@@ -527,14 +536,22 @@
 						_setCalendars: function(val) {
 							var instance = this;
 
+							var scheduler = instance.get('scheduler');
+
 							AArray.each(
 								val,
 								function(item, index, collection) {
+									var calendar = item;
+
 									if (!A.instanceOf(item, Liferay.SchedulerCalendar)) {
-										val[index] = new Liferay.SchedulerCalendar(item);
+										calendar = new Liferay.SchedulerCalendar(item);
+
+										val[index] = calendar;
 									}
 
-									val[index].addTarget(instance);
+									calendar.addTarget(instance);
+
+									calendar.set('scheduler', scheduler);
 								}
 							);
 
@@ -550,6 +567,7 @@
 										points: [ A.WidgetPositionAlign.TL, A.WidgetPositionAlign.BL ]
 									},
 									bubbleTargets: [ instance ],
+									constrain: true,
 									host: instance,
 									items: [],
 									plugins: [ A.Plugin.OverlayAutohide ],
@@ -826,6 +844,10 @@
 	AUI.add(
 		'liferay-calendar-date-picker-util',
 		function(A) {
+			var Lang = A.Lang;
+
+			var toInt = Lang.toInt;
+
 			Liferay.DatePickerUtil = {
 				linkToSchedulerEvent: function(datePickerContainer, schedulerEvent, dateAttr) {
 					var instance = this;
@@ -838,11 +860,12 @@
 							var currentTarget = event.currentTarget;
 
 							var date = schedulerEvent.get(dateAttr);
+
 							var selectedSetter = selects.indexOf(currentTarget);
 
 							var setters = [date.setMonth, date.setDate, date.setFullYear, date.setHours, date.setMinutes, date.setHours];
 
-							var value = toNumber(currentTarget.val());
+							var value = toInt(currentTarget.val());
 
 							if ((selectedSetter === 3) && (date.getHours() > 12)) {
 								value += 12;
@@ -853,8 +876,6 @@
 							}
 
 							setters[selectedSetter].call(date, value);
-
-							schedulerEvent.set(dateAttr, date);
 
 							schedulerEvent.get('scheduler').syncEventsUI();
 						}
@@ -871,7 +892,8 @@
 					var datePicker = Liferay.component(Liferay.CalendarUtil.PORTLET_NAMESPACE + fieldName + 'datePicker');
 
 					if (datePicker) {
-						datePicker.calendar.set('dates', [date]);
+						datePicker.calendar.deselectDates();
+						datePicker.calendar.selectDates(date);
 
 						datePicker.syncUI();
 					}
@@ -921,7 +943,7 @@
 
 				MONTH_LABELS: [
 					Liferay.Language.get('january'),
-					Liferay.Language.get('frebruary'),
+					Liferay.Language.get('february'),
 					Liferay.Language.get('march'),
 					Liferay.Language.get('april'),
 					Liferay.Language.get('may'),
@@ -957,7 +979,7 @@
 					}
 
 					if ((recurrence.frequency == instance.FREQUENCY.WEEKLY) && (recurrence.weekdays.length > 0)) {
-						template.push(STR_SPACE, Liferay.Language.get('on'), ' {weekDays}');
+						template.push(STR_SPACE, TPL_SPAN, Liferay.Language.get('on'), TPL_SPAN_CLOSE, ' {weekDays}');
 					}
 
 					if (recurrence.count && (recurrence.endValue === 'after')) {
@@ -969,7 +991,9 @@
 						template.push(
 							STR_COMMA,
 							STR_SPACE,
+							TPL_SPAN,
 							Liferay.Language.get('until'),
+							TPL_SPAN_CLOSE,
 							A.Lang.sub(
 								' {month} {date}, {year}',
 								{

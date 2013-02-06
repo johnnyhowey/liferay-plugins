@@ -61,7 +61,8 @@ page import="com.liferay.portal.util.PortletListerFactoryUtil" %><%@
 page import="com.liferay.portlet.PortletPreferencesFactoryUtil" %><%@
 page import="com.liferay.portlet.expando.service.ExpandoValueServiceUtil" %>
 
-<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Locale" %><%@
+page import="java.util.Map" %>
 
 <%@ page import="javax.portlet.PortletPreferences" %><%@
 page import="javax.portlet.PortletURL" %>

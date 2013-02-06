@@ -33,7 +33,6 @@ import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
-import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 
 import java.io.IOException;
 
@@ -43,6 +42,7 @@ import java.util.Map;
 
 /**
  * @author Amos Fong
+ * @author Peter Shin
  */
 public class AkismetUtil {
 
@@ -132,29 +132,6 @@ public class AkismetUtil {
 		return false;
 	}
 
-	public static void submitHam(long mbMessageId)
-		throws PortalException, SystemException {
-
-		AkismetData akismetData =
-			AkismetDataLocalServiceUtil.fetchMBMessageAkismetData(mbMessageId);
-
-		if (akismetData == null) {
-			return;
-		}
-
-		MBMessage message = MBMessageLocalServiceUtil.getMBMessage(mbMessageId);
-
-		User user = UserLocalServiceUtil.getUser(message.getUserId());
-
-		String content = message.getSubject() + "\n\n" + message.getBody();
-
-		submitHam(
-			message.getCompanyId(), akismetData.getUserIP(),
-			akismetData.getUserAgent(), akismetData.getReferrer(),
-			akismetData.getPermalink(), akismetData.getType(),
-			user.getFullName(), user.getEmailAddress(), content);
-	}
-
 	public static void submitHam(
 			long companyId, String ipAddress, String userAgent, String referrer,
 			String permalink, String commentType, String userName,
@@ -186,24 +163,22 @@ public class AkismetUtil {
 		}
 	}
 
-	public static void submitSpam(long mbMessageId)
+	public static void submitHam(MBMessage mbMessage)
 		throws PortalException, SystemException {
 
-		AkismetData akismetData =
-			AkismetDataLocalServiceUtil.fetchMBMessageAkismetData(mbMessageId);
+		AkismetData akismetData = AkismetDataLocalServiceUtil.fetchAkismetData(
+			MBMessage.class.getName(), mbMessage.getMessageId());
 
 		if (akismetData == null) {
 			return;
 		}
 
-		MBMessage message = MBMessageLocalServiceUtil.getMBMessage(mbMessageId);
+		User user = UserLocalServiceUtil.getUser(mbMessage.getUserId());
 
-		User user = UserLocalServiceUtil.getUser(message.getUserId());
+		String content = mbMessage.getSubject() + "\n\n" + mbMessage.getBody();
 
-		String content = message.getSubject() + "\n\n" + message.getBody();
-
-		submitSpam(
-			message.getCompanyId(), akismetData.getUserIP(),
+		submitHam(
+			mbMessage.getCompanyId(), akismetData.getUserIP(),
 			akismetData.getUserAgent(), akismetData.getReferrer(),
 			akismetData.getPermalink(), akismetData.getType(),
 			user.getFullName(), user.getEmailAddress(), content);
@@ -238,6 +213,27 @@ public class AkismetUtil {
 		if (Validator.isNull(response)) {
 			_log.error("There was an issue submitting message as spam");
 		}
+	}
+
+	public static void submitSpam(MBMessage mbMessage)
+		throws PortalException, SystemException {
+
+		AkismetData akismetData = AkismetDataLocalServiceUtil.fetchAkismetData(
+			MBMessage.class.getName(), mbMessage.getMessageId());
+
+		if (akismetData == null) {
+			return;
+		}
+
+		User user = UserLocalServiceUtil.getUser(mbMessage.getUserId());
+
+		String content = mbMessage.getSubject() + "\n\n" + mbMessage.getBody();
+
+		submitSpam(
+			mbMessage.getCompanyId(), akismetData.getUserIP(),
+			akismetData.getUserAgent(), akismetData.getReferrer(),
+			akismetData.getPermalink(), akismetData.getType(),
+			user.getFullName(), user.getEmailAddress(), content);
 	}
 
 	public static boolean verifyApiKey(long companyId, String apiKey)
