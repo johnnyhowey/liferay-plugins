@@ -73,4 +73,6 @@ Format dateFormatDateTime = FastDateFormatFactoryUtil.getSimpleDateFormat("MMMMM
 
 <%!
 public static final boolean LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED = GetterUtil.getBoolean(PropsUtil.get(PropsKeys.LAYOUT_USER_PUBLIC_LAYOUTS_ENABLED));
+
+public static final int SEARCH_CONTAINER_PAGE_DEFAULT_DELTA = GetterUtil.getInteger(PropsUtil.get(PropsKeys.SEARCH_CONTAINER_PAGE_DEFAULT_DELTA));
 %>
