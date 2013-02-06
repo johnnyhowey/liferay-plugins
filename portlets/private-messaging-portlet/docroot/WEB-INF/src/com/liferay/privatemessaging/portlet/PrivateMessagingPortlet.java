@@ -67,6 +67,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.lang.reflect.Constructor;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -186,9 +188,6 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		UploadPortletRequest uploadPortletRequest =
 			PortalUtil.getUploadPortletRequest(actionRequest);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		long userId = ParamUtil.getLong(uploadPortletRequest, "userId");
 		long mbThreadId = ParamUtil.getLong(uploadPortletRequest, "mbThreadId");
 		String to = ParamUtil.getString(uploadPortletRequest, "to");
@@ -208,7 +207,7 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 					continue;
 				}
 
-				validateAttachment(fileName, inputStream);
+				validateAttachment(actionRequest, fileName, inputStream);
 
 				try {
 					ObjectValuePair<String, InputStream> inputStreamOVP =
@@ -222,20 +221,33 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 				}
 			}
 
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
 			UserThreadLocalServiceUtil.addPrivateMessage(
 				userId, mbThreadId, to, subject, body, inputStreamOVPs,
 				themeDisplay);
 		}
 		catch (Exception e) {
-			if (e instanceof IOException) {
-				throw new PortalException("Unable to process attachment", e);
-			}
-			else if (e instanceof FileExtensionException ||
-					 e instanceof FileNameException ||
-					 e instanceof FileSizeException ||
-					 e instanceof UserScreenNameException) {
+			if (!(e instanceof FileExtensionException) &&
+				!(e instanceof FileNameException) &&
+				!(e instanceof FileSizeException)) {
 
-				SessionErrors.add(actionRequest, e.getClass());
+				_log.error(e);
+			}
+
+			try {
+				SessionErrors.add(actionRequest, "invalidMessage", e);
+
+				String redirect = ParamUtil.getString(
+					actionRequest, "redirect");
+
+				if (Validator.isNotNull(redirect)) {
+					actionResponse.sendRedirect(redirect);
+				}
+			}
+			catch (Exception e2) {
+				_log.error(e2);
 			}
 		}
 		finally {
@@ -277,9 +289,6 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		UploadPortletRequest uploadPortletRequest =
 			PortalUtil.getUploadPortletRequest(resourceRequest);
 
@@ -288,7 +297,7 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
-			validateTo(to, themeDisplay);
+			validateTo(resourceRequest, to);
 
 			for (int i = 1; i <= 3; i++) {
 				String fileName = uploadPortletRequest.getFileName(
@@ -300,14 +309,24 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 					continue;
 				}
 
-				validateAttachment(fileName, inputStream);
+				validateAttachment(resourceRequest, fileName, inputStream);
 			}
 
 			jsonObject.put("success", true);
 		}
 		catch (Exception e) {
-			jsonObject.put(
-				"message", getMessage(resourceRequest, e.getClass()));
+			String message = null;
+
+			if (e instanceof PortalException) {
+				message = e.getMessage();
+			}
+			else {
+				message = getMessage(resourceRequest, e.getClass());
+
+				_log.error(e);
+			}
+
+			jsonObject.put("message", message);
 			jsonObject.put("success", false);
 		}
 
@@ -324,7 +343,8 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		if (FileExtensionException.class.equals(exceptionClass)) {
 			message = translate(
 				portletRequest,
-				"document-names-must-end-with-one-of-the-following-extensions");
+				"file-x-must-end-with-one-of-the-following-extensions",
+				arguments);
 
 			message +=
 				CharPool.SPACE +
@@ -335,7 +355,7 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		}
 		else if (FileNameException.class.equals(exceptionClass)) {
 			message = translate(
-				portletRequest, "please-enter-a-file-with-a-valid-file-name");
+				portletRequest, "file-name-x-is-invalid", arguments);
 		}
 		else if (FileSizeException.class.equals(exceptionClass)) {
 			long fileMaxSize = PrefsPropsUtil.getLong(
@@ -353,6 +373,9 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 				"please-enter-a-file-with-a-valid-file-size-no-larger-than-x",
 				fileMaxSize);
 		}
+		else if (IOException.class.equals(exceptionClass)) {
+			message = translate(portletRequest, "unable-to-process-attachment");
+		}
 		else if (UserScreenNameException.class.equals(exceptionClass)) {
 			message = translate(
 				portletRequest, "the-following-users-were-not-found",
@@ -361,10 +384,24 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		}
 		else {
 			message = translate(
-				portletRequest, "your-request-failed-to-complete");
+				portletRequest,
+				"an-unexpected-error-occurred-while-sending-your-message");
 		}
 
 		return message;
+	}
+
+	protected <E extends PortalException> E getPortalException(
+			PortletRequest portletRequest, Class<E> exceptionClass,
+			Object... arguments)
+		throws Exception {
+
+		String message = getMessage(portletRequest, exceptionClass, arguments);
+
+		Constructor<E> exceptionConstructor = exceptionClass.getConstructor(
+			String.class);
+
+		return exceptionConstructor.newInstance(message);
 	}
 
 	protected void getUsers(
@@ -445,7 +482,9 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		}
 	}
 
-	protected void validateAttachment(String fileName, InputStream inputStream)
+	protected void validateAttachment(
+			PortletRequest portletRequest, String fileName,
+			InputStream inputStream)
 		throws Exception {
 
 		if (inputStream instanceof ByteArrayFileInputStream) {
@@ -459,12 +498,15 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 				 (file.length() >
 				  PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE)))) {
 
-				throw new FileSizeException(fileName);
+				throw getPortalException(
+					portletRequest, FileSizeException.class);
 			}
 		}
 
 		if (!isValidName(fileName)) {
-			throw new FileNameException(fileName);
+
+			throw getPortalException(
+				portletRequest, FileNameException.class, fileName);
 		}
 
 		String[] fileExtensions = PrefsPropsUtil.getStringArray(
@@ -483,16 +525,21 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		}
 
 		if (!validFileExtension) {
-			throw new FileExtensionException(fileName);
+
+			throw getPortalException(
+				portletRequest, FileExtensionException.class, fileName);
 		}
 	}
 
-	protected void validateTo(String to, ThemeDisplay themeDisplay)
+	protected void validateTo(PortletRequest portletRequest, String to)
 		throws Exception {
 
 		if (Validator.isNull(to)) {
 			return;
 		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
 		String[] recipients = StringUtil.split(to);
 
@@ -524,7 +571,8 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			sb.append(StringUtil.merge(failedRecipients, "', '"));
 			sb.append(StringPool.APOSTROPHE);
 
-			throw new UserScreenNameException(sb.toString());
+			throw getPortalException(
+				portletRequest, UserScreenNameException.class, sb.toString());
 		}
 	}
 
