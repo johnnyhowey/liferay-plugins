@@ -306,22 +306,22 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			jsonObject.put("success", true);
 		}
 		catch (Exception e) {
-			jsonObject.put("message", getMessage(resourceRequest, e));
+			jsonObject.put(
+				"message", getMessage(resourceRequest, e.getClass()));
 			jsonObject.put("success", false);
 		}
 
 		writeJSON(resourceRequest, resourceResponse, jsonObject);
 	}
 
-	protected String getMessage(PortletRequest portletRequest, Exception key)
+	protected String getMessage(
+			PortletRequest portletRequest,
+			Class<? extends Exception> exceptionClass, Object... arguments)
 		throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
 
 		String message = null;
 
-		if (key instanceof FileExtensionException) {
+		if (FileExtensionException.class.equals(exceptionClass)) {
 			message = translate(
 				portletRequest,
 				"document-names-must-end-with-one-of-the-following-extensions");
@@ -333,11 +333,11 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 							PropsKeys.DL_FILE_EXTENSIONS, StringPool.COMMA),
 						StringPool.COMMA_AND_SPACE);
 		}
-		else if (key instanceof FileNameException) {
+		else if (FileNameException.class.equals(exceptionClass)) {
 			message = translate(
 				portletRequest, "please-enter-a-file-with-a-valid-file-name");
 		}
-		else if (key instanceof FileSizeException) {
+		else if (FileSizeException.class.equals(exceptionClass)) {
 			long fileMaxSize = PrefsPropsUtil.getLong(
 				PropsKeys.DL_FILE_MAX_SIZE);
 
@@ -353,11 +353,11 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 				"please-enter-a-file-with-a-valid-file-size-no-larger-than-x",
 				fileMaxSize);
 		}
-		else if (key instanceof UserScreenNameException) {
+		else if (UserScreenNameException.class.equals(exceptionClass)) {
 			message = translate(
-				portletRequest, "the-following-users-were-not-found");
+				portletRequest, "the-following-users-were-not-found",
+				arguments);
 
-			message += CharPool.SPACE + key.getMessage();
 		}
 		else {
 			message = translate(
