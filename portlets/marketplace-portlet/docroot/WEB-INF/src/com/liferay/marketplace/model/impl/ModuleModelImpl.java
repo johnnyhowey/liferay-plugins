@@ -65,6 +65,8 @@ public class ModuleModelImpl extends BaseModelImpl<Module>
 		};
 	public static final String TABLE_SQL_CREATE = "create table Marketplace_Module (uuid_ VARCHAR(75) null,moduleId LONG not null primary key,appId LONG,contextName VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table Marketplace_Module";
+	public static final String ORDER_BY_JPQL = " ORDER BY module.moduleId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Marketplace_Module.moduleId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -80,6 +82,7 @@ public class ModuleModelImpl extends BaseModelImpl<Module>
 	public static long APPID_COLUMN_BITMASK = 1L;
 	public static long CONTEXTNAME_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long MODULEID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.marketplace.model.Module"));
 
@@ -95,7 +98,7 @@ public class ModuleModelImpl extends BaseModelImpl<Module>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_moduleId);
+		return _moduleId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -240,13 +243,12 @@ public class ModuleModelImpl extends BaseModelImpl<Module>
 
 	@Override
 	public Module toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Module)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Module)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -396,9 +398,7 @@ public class ModuleModelImpl extends BaseModelImpl<Module>
 	}
 
 	private static ClassLoader _classLoader = Module.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Module.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Module.class };
 	private String _uuid;
 	private String _originalUuid;
 	private long _moduleId;
@@ -408,5 +408,5 @@ public class ModuleModelImpl extends BaseModelImpl<Module>
 	private String _contextName;
 	private String _originalContextName;
 	private long _columnBitmask;
-	private Module _escapedModelProxy;
+	private Module _escapedModel;
 }

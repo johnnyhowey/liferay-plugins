@@ -153,7 +153,7 @@ if (user2 != null) {
 						location.href = '<liferay-portlet:resourceURL id="exportVCard"><portlet:param name="userId" value="<%= String.valueOf(user2.getUserId()) %>" /></liferay-portlet:resourceURL>';
 					</c:when>
 					<c:otherwise>
-						location.href = '<liferay-portlet:resourceURL id="exportVCards"/>' + '&<portlet:namespace />userIds=' + A.all('.lfr-contact-grid-item input').val();
+						location.href = '<liferay-portlet:resourceURL id="exportVCards" />' + '&<portlet:namespace />userIds=' + A.all('.lfr-contact-grid-item input').val();
 					</c:otherwise>
 				</c:choose>
 			},
@@ -184,7 +184,7 @@ if (user2 != null) {
 		contactsToolbarChildren.push(
 			{
 				handler: function(event) {
-					var uri = '<liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/new_message.jsp" /></liferay-portlet:renderURL>';
+					var uri = '<liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/new_message.jsp" /></liferay-portlet:renderURL>';
 
 					<c:choose>
 						<c:when test="<%= user2 != null %>">

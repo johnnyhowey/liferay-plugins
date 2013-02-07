@@ -189,7 +189,7 @@ if (comment) {
 				<span class="microblogs-countdown">150</span>
 			</c:if>
 
-			<aui:button disabled="true" inputCssClass="microblogs-button-input" name="submit" type="submit" value="post" />
+			<aui:button disabled="<%= !repost ? true : false %>" inputCssClass="microblogs-button-input" name="submit" type="submit" value="post" />
 
 			<c:if test="<%= repost %>">
 				<aui:button onClick="Liferay.Microblogs.closePopup();" type="cancel" />
@@ -285,8 +285,14 @@ if (comment) {
 				}
 			);
 
+			var contextCountEvent = 'input';
+
+			if (A.UA.ie >= 9) {
+				contextCountEvent = ['input', 'keydown'];
+			}
+
 			contentTextarea.on(
-				'input',
+				contextCountEvent,
 				function(contentTextarea) {
 					updateHighlightDivSize(contentTextarea);
 
