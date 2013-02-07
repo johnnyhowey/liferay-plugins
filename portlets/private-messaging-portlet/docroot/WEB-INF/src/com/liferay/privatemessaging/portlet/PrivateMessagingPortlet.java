@@ -289,28 +289,12 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
-		UploadPortletRequest uploadPortletRequest =
-			PortalUtil.getUploadPortletRequest(resourceRequest);
-
-		String to = ParamUtil.getString(uploadPortletRequest, "to");
+		String to = ParamUtil.getString(resourceRequest, "to");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
 			validateTo(resourceRequest, to);
-
-			for (int i = 1; i <= 3; i++) {
-				String fileName = uploadPortletRequest.getFileName(
-					"msgFile" + i);
-				InputStream inputStream = uploadPortletRequest.getFileAsStream(
-					"msgFile" + i);
-
-				if (inputStream == null) {
-					continue;
-				}
-
-				validateAttachment(resourceRequest, fileName, inputStream);
-			}
 
 			jsonObject.put("success", true);
 		}
