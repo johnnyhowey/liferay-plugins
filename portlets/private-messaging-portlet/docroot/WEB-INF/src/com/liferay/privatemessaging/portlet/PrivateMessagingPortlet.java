@@ -34,6 +34,7 @@ import com.liferay.portal.kernel.notifications.UnknownChannelException;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -197,6 +198,9 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			new ArrayList<ObjectValuePair<String, InputStream>>();
 
 		try {
+
+			validateUpload(actionRequest);
+
 			for (int i = 1; i <= 3; i++) {
 				String fileName = uploadPortletRequest.getFileName(
 					"msgFile" + i);
@@ -342,20 +346,10 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 				portletRequest, "file-name-x-is-invalid", arguments);
 		}
 		else if (FileSizeException.class.equals(exceptionClass)) {
-			long fileMaxSize = PrefsPropsUtil.getLong(
-				PropsKeys.DL_FILE_MAX_SIZE);
-
-			if (fileMaxSize == 0) {
-				fileMaxSize = PrefsPropsUtil.getLong(
-					PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE);
-			}
-
-			fileMaxSize /= 1024;
-
 			message = translate(
 				portletRequest,
 				"please-enter-a-file-with-a-valid-file-size-no-larger-than-x",
-				fileMaxSize);
+				arguments);
 		}
 		else if (IOException.class.equals(exceptionClass)) {
 			message = translate(portletRequest, "unable-to-process-attachment");
@@ -477,13 +471,15 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 
 			File file = byteArrayFileInputStream.getFile();
 
-			if ((PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE) > 0) &&
-				((file == null) ||
-				 (file.length() >
-				  PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE)))) {
+			long fileMaxSize = PrefsPropsUtil.getLong(
+				PropsKeys.DL_FILE_MAX_SIZE);
+
+			if ((fileMaxSize > 0) &&
+				((file == null) || (file.length() > fileMaxSize))) {
 
 				throw getPortalException(
-					portletRequest, FileSizeException.class);
+					portletRequest, FileSizeException.class,
+					Long.valueOf(fileMaxSize / 1024));
 			}
 		}
 
@@ -557,6 +553,22 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 
 			throw getPortalException(
 				portletRequest, UserScreenNameException.class, sb.toString());
+		}
+	}
+
+	protected void validateUpload(PortletRequest portletRequest)
+		throws Exception {
+
+		UploadException uploadException = (UploadException)
+			portletRequest.getAttribute(WebKeys.UPLOAD_EXCEPTION);
+
+		if (uploadException != null) {
+			long fileMaxSize = PrefsPropsUtil.getLong(
+				PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE);
+
+			throw getPortalException(
+				portletRequest, FileSizeException.class,
+				Long.valueOf(fileMaxSize / 1024));
 		}
 	}
 
