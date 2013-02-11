@@ -32,6 +32,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityFeedEntry;
+import com.liferay.portlet.social.model.SocialActivitySet;
 
 /**
  * @author Peter Shin
@@ -59,6 +60,14 @@ public class AdminActivityInterpreter extends BaseSocialActivityInterpreter {
 		else if (className.equals(KBTemplate.class.getName())) {
 			return doInterpretKBTemplate(activity, themeDisplay);
 		}
+
+		return null;
+	}
+
+	@Override
+	protected SocialActivityFeedEntry doInterpret(
+			SocialActivitySet activitySet, ThemeDisplay themeDisplay)
+		throws Exception {
 
 		return null;
 	}

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.0.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_0_0.dtd">
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
 
 <service-builder package-path="com.liferay.akismet">
 	<namespace>Akismet</namespace>
@@ -15,7 +15,8 @@
 
 		<!-- Other fields -->
 
-		<column name="mbMessageId" type="long" />
+		<column name="classNameId" type="long" />
+		<column name="classPK" type="long" />
 		<column name="type" type="String" />
 		<column name="permalink" type="String" />
 		<column name="referrer" type="String" />
@@ -28,8 +29,9 @@
 		<finder name="LtModifiedDate" return-type="Collection">
 			<finder-column name="modifiedDate" comparator="&lt;" />
 		</finder>
-		<finder name="MBMessageId" return-type="AkismetData">
-			<finder-column name="mbMessageId" />
+		<finder name="C_C" return-type="AkismetData">
+			<finder-column name="classNameId" />
+			<finder-column name="classPK" />
 		</finder>
 	</entity>
 </service-builder>

@@ -32,6 +32,7 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
+import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 
 import javax.portlet.ActionRequest;
@@ -92,9 +93,9 @@ public class AkismetEditMessageAction extends BaseStrutsPortletAction {
 
 	@Override
 	public void serveResource(
-		StrutsPortletAction originalStrutsPortletAction,
-		PortletConfig portletConfig, ResourceRequest resourceRequest,
-		ResourceResponse resourceResponse)
+			StrutsPortletAction originalStrutsPortletAction,
+			PortletConfig portletConfig, ResourceRequest resourceRequest,
+			ResourceResponse resourceResponse)
 		throws Exception {
 
 		originalStrutsPortletAction.serveResource(
@@ -130,25 +131,21 @@ public class AkismetEditMessageAction extends BaseStrutsPortletAction {
 			actionRequest);
 
 		if (spam) {
-			MBMessageLocalServiceUtil.updateStatus(
+			MBMessage message = MBMessageLocalServiceUtil.updateStatus(
 				themeDisplay.getUserId(), messageId,
 				WorkflowConstants.STATUS_DENIED, serviceContext);
 
-			if (AkismetUtil.isMessageBoardsEnabled(
-					themeDisplay.getCompanyId())) {
-
-				AkismetUtil.submitSpam(messageId);
+			if (AkismetUtil.isMessageBoardsEnabled(message.getCompanyId())) {
+				AkismetUtil.submitSpam(message);
 			}
 		}
 		else {
-			MBMessageLocalServiceUtil.updateStatus(
+			MBMessage message = MBMessageLocalServiceUtil.updateStatus(
 				themeDisplay.getUserId(), messageId,
 				WorkflowConstants.STATUS_APPROVED, serviceContext);
 
-			if (AkismetUtil.isMessageBoardsEnabled(
-					themeDisplay.getCompanyId())) {
-
-				AkismetUtil.submitHam(messageId);
+			if (AkismetUtil.isMessageBoardsEnabled(message.getCompanyId())) {
+				AkismetUtil.submitHam(message);
 			}
 		}
 	}

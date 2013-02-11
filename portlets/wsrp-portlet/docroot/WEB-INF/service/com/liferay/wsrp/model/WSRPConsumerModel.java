@@ -221,6 +221,36 @@ public interface WSRPConsumerModel extends BaseModel<WSRPConsumer> {
 	 */
 	public void setForwardCookies(String forwardCookies);
 
+	/**
+	 * Returns the forward headers of this w s r p consumer.
+	 *
+	 * @return the forward headers of this w s r p consumer
+	 */
+	@AutoEscape
+	public String getForwardHeaders();
+
+	/**
+	 * Sets the forward headers of this w s r p consumer.
+	 *
+	 * @param forwardHeaders the forward headers of this w s r p consumer
+	 */
+	public void setForwardHeaders(String forwardHeaders);
+
+	/**
+	 * Returns the markup character sets of this w s r p consumer.
+	 *
+	 * @return the markup character sets of this w s r p consumer
+	 */
+	@AutoEscape
+	public String getMarkupCharacterSets();
+
+	/**
+	 * Sets the markup character sets of this w s r p consumer.
+	 *
+	 * @param markupCharacterSets the markup character sets of this w s r p consumer
+	 */
+	public void setMarkupCharacterSets(String markupCharacterSets);
+
 	public boolean isNew();
 
 	public void setNew(boolean n);
@@ -248,6 +278,8 @@ public interface WSRPConsumerModel extends BaseModel<WSRPConsumer> {
 	public CacheModel<WSRPConsumer> toCacheModel();
 
 	public WSRPConsumer toEscapedModel();
+
+	public WSRPConsumer toUnescapedModel();
 
 	public String toString();
 

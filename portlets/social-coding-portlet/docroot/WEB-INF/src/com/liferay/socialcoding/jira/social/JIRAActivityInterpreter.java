@@ -25,6 +25,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityFeedEntry;
+import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.socialcoding.model.JIRAAction;
 import com.liferay.socialcoding.model.JIRAIssue;
 import com.liferay.socialcoding.service.JIRAActionLocalServiceUtil;
@@ -126,6 +127,14 @@ public class JIRAActivityInterpreter extends BaseSocialActivityInterpreter {
 		String body = sb.toString();
 
 		return new SocialActivityFeedEntry(link, title, body);
+	}
+
+	@Override
+	protected SocialActivityFeedEntry doInterpret(
+			SocialActivitySet activitySet, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		return null;
 	}
 
 	protected String interpretJIRAChangeItem(

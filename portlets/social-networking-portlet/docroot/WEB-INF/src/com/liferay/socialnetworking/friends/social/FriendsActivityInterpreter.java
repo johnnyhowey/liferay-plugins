@@ -15,6 +15,7 @@
 package com.liferay.socialnetworking.friends.social;
 
 import com.liferay.portal.kernel.util.HtmlUtil;
+import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -22,6 +23,7 @@ import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityFeedEntry;
+import com.liferay.portlet.social.model.SocialActivitySet;
 
 /**
  * @author Brian Wing Shun Chan
@@ -51,13 +53,12 @@ public class FriendsActivityInterpreter extends BaseSocialActivityInterpreter {
 
 		// Link
 
-		StringBuilder sb = new StringBuilder();
+		StringBundler sb = new StringBundler(4);
 
 		sb.append(themeDisplay.getPortalURL());
 		sb.append(themeDisplay.getPathFriendlyURLPublic());
 		sb.append(StringPool.SLASH);
 		sb.append(HtmlUtil.escapeURL(creatorUser.getScreenName()));
-		sb.append("/friends");
 
 		String link = sb.toString();
 
@@ -66,7 +67,7 @@ public class FriendsActivityInterpreter extends BaseSocialActivityInterpreter {
 		String title = StringPool.BLANK;
 
 		if (activityType == FriendsActivityKeys.ADD_FRIEND) {
-			sb = new StringBuilder();
+			sb = new StringBundler(8);
 
 			sb.append("<a href=\"");
 			sb.append(themeDisplay.getPortalURL());
@@ -79,7 +80,7 @@ public class FriendsActivityInterpreter extends BaseSocialActivityInterpreter {
 
 			String creatorUserNameURL = sb.toString();
 
-			sb = new StringBuilder();
+			sb = new StringBundler(8);
 
 			sb.append("<a href=\"");
 			sb.append(themeDisplay.getPortalURL());
@@ -102,6 +103,14 @@ public class FriendsActivityInterpreter extends BaseSocialActivityInterpreter {
 		String body = StringPool.BLANK;
 
 		return new SocialActivityFeedEntry(link, title, body);
+	}
+
+	@Override
+	protected SocialActivityFeedEntry doInterpret(
+			SocialActivitySet activitySet, ThemeDisplay themeDisplay)
+		throws Exception {
+
+		return null;
 	}
 
 	private static final String[] _CLASS_NAMES = new String[] {
