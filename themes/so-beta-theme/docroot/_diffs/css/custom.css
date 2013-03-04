@@ -1,7 +1,27 @@
 @import "compass";
-@import "normalize";
 @import "strata-skin";
-@import "portlet-styling";
+
+html > .lfr-dockbar-pinned {
+	padding-top: 3.25em;
+
+	#user-bar {
+		left: 0;
+		position: fixed;
+		right: 0;
+		top: 0;
+	}
+
+	&.show-dockbar {
+		padding-top: 5.60em;
+
+		#user-bar {
+			left: 0;
+			position: fixed;
+			right: 0;
+			top: 2.45em;
+		}
+	}
+}
 
 body {
 	background: #FFF;
@@ -30,13 +50,54 @@ a {
 	@include clear-both;
 }
 
-// Forms
+/*  Forms Custom  */
 
-.invite-members, .aui-buttonitem-content, .aui-tabview-list .aui-tab-label {
+/*
+
+Modified forms can be found within the forms.css
+
+*/
+
+.aui-panel-hd {
+	@include normal-gradient;
+	@include default-border;
+}
+
+.aui-dialog-content {
+	padding: 0;
+
+	.aui-dialog-hd {
+		border: 1px solid $default-border-color;
+		border-width: 0 0 1px;
+		padding: 0 0 0 0.5em;
+
+		@include border-radius(4px 4px 0 0);
+		@include box-shadow(none);
+
+		.aui-toolbar {
+			margin: -1px;
+		}
+	}
+}
+
+.aui-panel-hd-text {
+	font-weight: normal;
+}
+
+.aui-panel-bd {
+	padding: 0 1em 1em;
+
+}
+
+.invite-members, .social-relations a, .aui-buttonitem-icon-only, .aui-buttonitem-content, .aui-tabview-list .aui-tab-label {
 	@include button-default;
 }
 
-.invite-members {
+.aui-buttonitem-icon-only {
+	padding: 4px 5px 5px;
+}
+
+.invite-members, .social-relations a {
 	@include border-radius(4px);
 
 	&:hover, &:focus {
@@ -68,7 +129,11 @@ a {
 	}
 }
 
-// end form
+.hidden-accessible, #navigation h1 {
+	@include hidden-accessible;
+}
+
+/*  Dockbar  */
 
 #dockbar {
 	&, .user-toolbar {
@@ -80,35 +145,15 @@ a {
 	display: block;
 }
 
-.hidden-accessible, #navigation h1 {
-	clip: rect(0, 0, 0, 0);
-	position: absolute;
-	font-size: 0;
-	text-indent: -9999em;
-}
-
-.portlet-column-content {
-	border: 1px solid $default-border-color;
-	border-width: 0 1px;
-	margin: 0 0 0 -1px;
-	padding: 0;
-}
-
-#footer {
-	border-top: 1px solid $default-border-color;
-	clear: both;
-	padding: 1em;
-	position: relative;
-	top: -1px;
-}
+/*  User Bar  */
 
 #user-bar {
-	background: #32363A;
+	background: #32363A url(../images/custom/user_bar_default_bg.png) repeat-x;
 	font-weight: 200;
 	position: relative;
 	z-index: 2;
 
-	@include background-image(linear-gradient(bottom, #252d31 0, #32363a 100%));
+	@include background-image(linear-gradient(bottom, #252D31 0, #32363A 100%));
 
 	&, a {
 		color: #FFF;
@@ -286,9 +331,8 @@ a {
 				width: 20%;
 
 				@include box-shadow(0 1px 2px rgba(0,0,0, .4) inset);
-
-				@include transition-property(width);
 				@include transition-duration(.5s);
+				@include transition-property(width);
 			}
 
 			input[type=image] {
@@ -313,8 +357,8 @@ a {
 					text-shadow: none;
 					width: 99%;
 
-					@include default-border;
 					@include box-shadow(0 1px 2px rgba(0,0,0, 0) inset);
+					@include default-border;
 				}
 			}
 
@@ -378,6 +422,120 @@ a {
 			}
 		}
 	}
+
+	.notifications {
+		position: relative;
+
+		.notification-count {
+			color: $default-text-color;
+			background: transparent;
+			padding: 0;
+			text-shadow: none;
+			margin: 0 -0.1em;
+		}
+
+		.user-notification-events-icon {
+			background: rgba(255,255,255, 1);
+
+			@include border-radius(20px);
+
+			&:hover {
+				background: rgba(0,0,0, .8);
+
+				.notification-count {
+					color: #FFF;
+				}
+			}
+		}
+	}
+
+	.user-notification-events a, .user-notification-events a:hover, li:hover .user-notification-events a {
+		background: transparent;
+		box-shadow: none;
+		color: $blue;
+		display: inline;
+		font-weight: normal;
+		padding: 0;
+		text-shadow: none;
+	}
+
+	.user-notification-events {
+		color: $default-text-color;
+		right: 0;
+		top: 100%;
+		width: 350px;
+
+		@include clear-both;
+
+		.aui-menu-content {
+			background: #FFF;
+		}
+
+		.user-notification-event-content {
+			border-bottom: 1px solid $default-border-color;
+		}
+
+		.user-notification-event-sender {
+			float: left;
+			position: relative;
+		}
+
+		.thumbnail {
+			display: block;
+			overflow: hidden;
+			width: 45px;
+			height: 45px;
+
+			img {
+				max-width: 45px;
+				min-height: 45px;
+			}
+		}
+
+		.icon {
+			bottom: 0;
+			left: 0;
+			position: absolute;
+		}
+
+		.notification-entry {
+			color: $default-text-color;
+			margin-left: 45px;
+			padding: 0.125em 0.5em;
+		}
+
+		div.request, div.user-notification-event-footer {
+			a {
+				display: inline-block;
+
+				@include border-radius(4px);
+				@include button-default;
+
+				&:hover, &:focus {
+					@include button-hover;
+				}
+
+				&:active {
+					@include button-active;
+				}
+			}
+		}
+
+		.request {
+			text-align: right;
+		}
+	}
+}
+
+.portlet-column-content {
+	border: 1px solid $default-border-color;
+	border-width: 0 1px;
+	margin: 0 0 0 -1px;
+	padding: 0;
+}
+
+.portlet-column-last .portlet-column-content {
+	border-left-width: none;
 }
 
 /*  Breadcrumb  */
@@ -385,12 +543,13 @@ a {
 .breadcrumbs-horizontal {
 	border: 1px solid $default-border-color;
 	border-width: 1px 0;
-	margin-top: -1px;
+	margin: -1px 0;
 
 	li {
 		background: transparent url(../images/custom/so_breadcrumbs.png) right 50% no-repeat;
 		border-bottom: 1px solid $default-border-color;
 		max-width: 33.333%;
+		margin-bottom: -1px;
 
 		span {
 			display: block;
@@ -419,19 +578,33 @@ a {
 
 		&.last {
 			background-image: none;
+
+			a {
+				color: $red;
+			}
 		}
 	}
 }
 
-#banner {
-	border-width: 1px 0;
-	padding: 1.05em 1.5em;
+/*  Site Breadcrumbs  */
 
+.site-breadcrumbs .breadcrumbs-horizontal {
+	border-top: 1px solid $default-border-color;
+	margin: 0 0 -1px;
+}
+
+/*  Banner  */
+
+#banner {
+	padding: 1em 1.5em;
 	@include header;
+
+	border-width: 1px 0;
 
 	h1, h2 {
 		font-size: 1.8em;
 		font-weight: 200;
+		line-height: 1em;
 		margin: 0;
 		text-shadow: 0 1px 0px #FFF;
 	}
@@ -451,10 +624,12 @@ a {
 
 		img {
 			display: inline;
-			vertical-align: middle;
+			height: 32px;
+			margin: -.25em 0 -.25em -.45em;
 			position: relative;
 			top: -0.125em;
-			margin: -.25em 0 -.25em -.45em;
+			vertical-align: middle;
+			width: auto;
 		}
 	}
 
@@ -462,7 +637,7 @@ a {
 		background: transparent none 50% 50% no-repeat;
 		background-size: cover;
 		display: inline-block;
-		margin: -0.65em 0.5em -0.6em -0.86em;
+		margin: -0.62em 0.5em -0.55em -0.86em;
 		overflow: hidden;
 		vertical-align: middle;
 
@@ -604,6 +779,9 @@ a {
 	background: #FFF;
 	float: left;
 	width: 100%;
+	position: relative;
+
+	@include box-shadow(-4px 0 15px -7px rgba(0,0,0, .6));
 }
 
 .user-dashboard {
@@ -636,6 +814,7 @@ a {
 	.aui-tab-label {
 		font-weight: 200;
 		text-decoration: none;
+		margin-bottom: -1px;
 
 		&:hover, &:focus {
 			text-shadow: none;
@@ -651,6 +830,7 @@ a {
 
 .portlet {
 	border-bottom: 1px solid $default-border-color;
+	margin-bottom: -1px;
 
 	.portlet-topper, .portlet-content {
 		padding: 1em;
@@ -676,4 +856,45 @@ a {
 
 .controls-visible .portlet-borderless-container {
 	min-height: 2.5em;
+}
+
+#footer {
+	clear: both;
+	padding: 1em;
+}
+
+@import "portlet-styling";
+@import "ie";
+
+@media (max-width:860px) {
+	#user-bar {
+		a {
+			padding: 0.25em .7em;
+		}
+
+		.user-name {
+			display: none;
+		}
+	}
+
+	#content, #navigation, #navigation ul {
+		border-width: 0;
+	}
+
+	#navigation {
+		float: none;
+		margin-left: 0;
+		width: 100%;
+
+		li {
+			float: left;
+		}
+
+		@include subtle-gradient;
+		@include clear-both;
+	}
+
+	#content {
+		padding-left: 0;
+	}
 }

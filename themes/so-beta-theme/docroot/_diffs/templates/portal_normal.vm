@@ -9,6 +9,8 @@
 
 	$theme.include($top_head_include)
 
+	<meta name="viewport" content="user-scalable=yes, initial-scale=1.0, width=device-width" />
+
 	<script type="text/javascript">
 	lang = {
 		defaultGoTo: 'Go To ▾',
@@ -21,22 +23,12 @@
 
 $theme.include($body_top_include)
 
-#if ($is_signed_in && $show_dockbar)
+#if ($is_signed_in)
 	#dockbar()
 #end
 
 #if ($has_navigation || $is_signed_in)
 	#parse ("$full_templates_path/user_bar.vm")
-#end
-
-#if (!$page_group.isUser())
-	<nav class="site-breadcrumbs" id="breadcrumbs">
-		<h1 class="hidden-accessible">
-			<span>#language("breadcrumbs")</span>
-		</h1>
-
-		#breadcrumbs()
-	</nav>
 #end
 
 <div id="wrapper">
@@ -142,6 +134,16 @@ $theme.include($body_top_include)
 		$theme.wrapPortlet("portlet.vm", $content_include)
 	#end
 	</div>
+
+	#if (!$page_group.isUser())
+		<nav class="site-breadcrumbs" id="breadcrumbs">
+			<h1 class="hidden-accessible">
+				<span>#language("breadcrumbs")</span>
+			</h1>
+
+			#breadcrumbs()
+		</nav>
+	#end
 
 	<footer id="footer" role="contentinfo">
 		<p class="powered-by">

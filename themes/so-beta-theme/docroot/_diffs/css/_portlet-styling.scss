@@ -16,7 +16,7 @@
 	display: block;
 }
 
-/* Top Links Component */
+/*  Top Links Component  */
 
 .top-links {
 	background: $control-bg-color;
@@ -84,7 +84,7 @@
 	}
 }
 
-// LFR Header Row
+/*  LFR Header Row  */
 
 .lfr-header-row {
 	.lfr-actions {
@@ -117,6 +117,8 @@
 	}
 }
 
+/*  Document Library  */
+
 .portlet-document-library {
 	.lfr-app-column-view {
 		.results-row td {
@@ -132,11 +134,6 @@
 		}
 	}
 
-	.document-library-breadcrumb {
-		background: #FFF;
-		border-top: 1px solid $default-border-color;
-	}
-
 	.lfr-app-column-view, .lfr-app-column-view .results-row td, .lfr-document-library-comments.lfr-panel.lfr-extended, .portlet-msg, .portlet-msg-alert, .portlet-msg-error, .portlet-msg-info, .portlet-msg-success, .search-button-container, .search-button-container .aui-column:before, .search-button-container .aui-column-content, .search-button-container .aui-column-content-center {
 		border-width: 0;
 	}
@@ -145,20 +142,21 @@
 		margin: 0;
 	}
 
+	.document-library-breadcrumb {
+		background: #FFF;
+		border-bottom-width: 0;
+	}
+
 	.breadcrumbs-horizontal {
 		margin-top: -1px;
 	}
 
-	.document-container {
-		min-height: 400px;
-	}
-
-	.document-library-breadcrumb {
-		border-bottom-width: 0;
-	}
-
 	.breadcrumbs .last {
 		background-image: none;
+	}
+
+	.document-container {
+		min-height: 400px;
 	}
 
 	.lfr-header-row-content {
@@ -173,14 +171,16 @@
 		}
 
 		.aui-field-input-text {
-			border-radius: 4px 0 0 4px;
 			padding: 4px 4px 5px;
+
+			@include border-radius(4px 0 0 4px);
 		}
 
 		.aui-button-input {
 			border-left-width: 0;
-			border-radius: 0 4px 4px 0;
 			padding: 4px .4em;
+
+			@include border-radius(0 4px 4px 0);
 		}
 	}
 
@@ -312,8 +312,21 @@
 		text-shadow: none;
 	}
 
-	.view .context-pane .context-pane-content {
-		border-left: 1px solid $default-border-color;
+	.view {
+		.aui-column-content {
+			border: 1px solid $default-border-color;
+			border-width: 0 1px;
+			margin-left: -1px;
+		}
+
+		.aui-column-first .aui-column-content {
+			border-left-width: 0;
+			margin-left: 0;
+		}
+
+		.aui-column-last .aui-column-content {
+			border-right-width: 0;
+		}
 	}
 
 	.context-pane .context-pane-content {
@@ -427,11 +440,6 @@
 	.entry-bubble {
 		margin-left: 0;
 	}
-
-	&:after {
-		border-color: transparent #FFF transparent transparent;
-		left: -4px;
-	}
 }
 
 /*  Activities Portlet  */
@@ -480,7 +488,7 @@
 	}
 
 	.portlet-title {
-		color: #666;
+		color: $default-text-color;
 		font-size: 1.5em;
 		font-weight: normal;
 		margin-top: .25em;
@@ -502,7 +510,7 @@
 	}
 }
 
-/* Blogs */
+/*  Blogs  */
 
 .portlet-blogs {
 	.portlet-borderless-container .portlet-body {
@@ -654,7 +662,7 @@
 	}
 }
 
-/* Blogs Aggregator */
+/*  Blogs Aggregator  */
 
 .portlet-blogs-aggregator {
 	.entry-author, .entry-date {
@@ -814,7 +822,7 @@
 		}
 
 		.contacts-list {
-			border-right: 1px solid $default-border-color
+			border-right: 1px solid $default-border-color;
 		}
 
 		.taglib-header, .contacts-profile {
@@ -835,13 +843,12 @@
 		min-height: 30px;
 	}
 
-	.social-relations a {
-		border: 1px solid transparent;
-		color: $btn-default-text;
-		display: inline-block;
-		font-weight: bold;
-		line-height: 1em;
-		padding: 6px 4px;
+	.social-relations {
+		background: $control-bg-color;
+
+		a .taglib-text {
+			text-decoration: none;
+		}
 	}
 
 	.contacts-action-content span {
@@ -881,19 +888,12 @@
 		border-bottom: 1px solid $btn-border-default;
 	}
 
-	.lfr-contact-grid-item .lfr-contact-extra,
-	.lfr-contact-grid-item .lfr-contact-job-title,
-	.lfr-contact-grid-item .lfr-contact-name,
-	.lfr-detail-info .lfr-contact-extra,
-	.lfr-detail-info .lfr-contact-job-title,
-	.lfr-detail-info .lfr-contact-name {
+	.lfr-contact-grid-item .lfr-contact-extra, .lfr-contact-grid-item .lfr-contact-job-title, .lfr-contact-grid-item .lfr-contact-name, .lfr-detail-info .lfr-contact-extra, .lfr-detail-info .lfr-contact-job-title, .lfr-detail-info .lfr-contact-name {
 		overflow: hidden;
 	}
 
-	.contacts-result-content {
-		.contacts-result .last-name-anchor a {
-			padding: 0.25em;
-		}
+	.contacts-result-content .contacts-result .last-name-anchor a {
+		padding: 0.25em;
 	}
 }
 
@@ -965,7 +965,7 @@
 	}
 
 	.message-link:hover {
-		background-color: #E8EFF4;
+		background-color: $btn-background-default;
 		text-decoration: none;
 	}
 
@@ -992,8 +992,7 @@
 	}
 }
 
-
-/* Message Boards */
+/*  Message Boards  */
 
 .portlet-message-boards {
 	.category-current {
@@ -1344,8 +1343,17 @@
 }
 
 /*  Invite Members  */
+
 .so-portlet-invite-members {
 	.invite-members {
 		margin: 1em;
+	}
+}
+
+/*  SO Portlet Sites  */
+
+.aui-dialog-bd .so-sites-directory {
+	.taglib-header {
+		display: none;
 	}
 }
