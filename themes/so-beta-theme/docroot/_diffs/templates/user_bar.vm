@@ -1,6 +1,6 @@
 <nav id="user-bar">
-	<a id="so_logo" href="$site_default_url" title="#language("go-to") $site_name">
-		<img alt="$logo_description" height="$site_logo_height" src="$site_logo" width="$site_logo_width" />
+	<a id="so_logo" href="$user_dashboard_url" title="#language("go-to") Social Office Dashboard">
+		<img alt="$logo_description" height="32" src="$so_logo" width="32" />
 	</a>
 
 	<h1 class="hidden-accessible">User Navigation</h1>

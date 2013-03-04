@@ -12,6 +12,27 @@ AUI().ready(
 		var toggleDockbar = userBar.one('#toggleDockbar');
 		var user_menus = userBar.all('.has-menu .child-menu');
 
+		var notificationButton = userBar.one('.user-notification-events-icon');
+		var notifications = userBar.one('.user-notification-events');
+
+		if (notificationButton) {
+			notificationButton.on(
+				'click',
+				function (event) {
+					event.preventDefault()
+					event.stopPropagation();
+					notifications.toggleClass('aui-overlaycontext-hidden');
+				}
+			);
+
+			notifications.on(
+				'click',
+				function () {
+					event.stopPropagation();
+				}
+			);
+		}
+
 		if (toggleDockbar) {
 			toggleDockbar.on(
 				'click',
@@ -35,7 +56,7 @@ AUI().ready(
 			);
 		}
 
-		// The Search Thing
+		// Site Search
 
 		var searchInput = userBar.one('.search input');
 
@@ -68,6 +89,10 @@ AUI().ready(
 
 			if (pageSearch.hasClass('focus')) {
 				pageSearch.removeClass('focus');
+			}
+
+			if (!notifications.hasClass('aui-overlaycontext-hidden')) {
+				notifications.addClass('aui-overlaycontext-hidden');
 			}
 		});
 
@@ -124,14 +149,29 @@ AUI().ready(
 
 		if (messageBoard) {
 			var toggleEditControls = function (node) {
-				node.each(function(n) {
-					n.on(
-						['mouseover', 'mouseout']
-						, function(event) {
-							n.toggleClass('controls-visible');
-						}
-					)
-				});
+				node.each(
+					function(n) {
+						n.on(
+							['mouseenter', 'mouseleave']
+							, function(event) {
+								var t = 10000;
+
+								if (event.type == 'mouseenter') {
+									n.addClass('controls-visible');
+								} else if (event.type == 'mouseleave') {
+									n.removeClass('controls-visible');
+								}
+
+								setTimeout(
+									function() {
+										if (n.hasClass('controls-visible')) {
+											n.removeClass('controls-visible');
+										}
+								}, t);
+							}
+						);
+					}
+				);
 			};
 
 			var threads = messageBoard.all('.message-container');

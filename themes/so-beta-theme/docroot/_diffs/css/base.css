@@ -1,147 +1,7 @@
 /* ---------- Browser normalization ---------- */
-/*
-article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
-	display: block;
-}
 
-body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
-	margin: 0;
-	padding: 0;
-}
+@import "normalize";
 
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-	clear: both;
-}
-
-fieldset, img {
-	border: 0;
-}
-
-address, caption, cite, code, dfn, th, var {
-	font-style: normal;
-	font-weight: normal;
-}
-
-caption, th {
-	text-align: left;
-}
-
-q:before, q:after {
-	content: '';
-}
-
-abbr, acronym {
-	border: 0;
-	border-bottom: 1px dotted #000;
-	cursor: help;
-}
-
-html {
-	overflow-y: scroll;
-}
-
-html.aui-dialog-iframe-root-node {
-	overflow: auto;
-}
-
-body {
-	background: #FFF;
-	font: 62.5%/1.4 Arial, Helvetica, Verdana, sans-serif;
-}
-
-body.portal-popup {
-	background: none;
-	padding: 10px;
-}
-
-body.aui-dialog-iframe-popup {
-	padding-bottom: 0;
-}
-
-body.portal-iframe {
-	padding: 0;
-}
-
-blockquote, ul, ol, dl {
-	margin: 1em;
-}
-
-ol, ul, dl {
-	margin-left: 2em;
-}
-
-ol {
-	list-style: decimal outside;
-}
-
-ul {
-	list-style: disc outside;
-}
-
-ul ul {
-	list-style-type: circle;
-}
-
-ol ol {
-	list-style-type: upper-roman;
-}
-
-dl dd {
-	margin-left: 1em;
-}
-
-th {
-	font-weight: bold;
-}
-
-caption {
-	margin-bottom: 0.5em;
-	text-align: center;
-}
-
-p {
-	margin-bottom: 1em;
-}*/
-
-/* ---------- Links ---------- */
-/*
-a {
-}
-
-a:hover {
-}
-
-a:visited {
-}*/
-
-/* ---------- Headers ---------- */
-/*
-h1 {
-	font-size: 1.8em;
-}
-
-h2 {
-	font-size: 1.6em;
-}
-
-h3 {
-	font-size: 1.4em;
-}
-
-h1, h2, h3 {
-	margin: 1em 0;
-}
-
-h4, h5, h6 {
-	font-size: 1.1em;
-}
-
-h1, h2, h3, h4, h5, h6, strong {
-	font-weight: bold;
-}
-*/
 /* ---------- Logo ---------- */
 
 .logo {
@@ -190,18 +50,9 @@ body.html-editor {
 /* ---------- Text formatting ---------- */
 
 /*
-b, strong {
-	font-weight: bold;
-}
 
-i, em {
-	font-style: italic;
-}
+This is being done in the _normalize.scss
 
-code, pre {
-	font-family: "Courier New", Courier, monospace;
-	white-space: pre;
-}
 */
 
 .important {
