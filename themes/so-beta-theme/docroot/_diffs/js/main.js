@@ -57,7 +57,7 @@ AUI().ready(
 		}
 
 		// Site Search
-
+		var dashboardNav = userBar.one('#dashboardNav');
 		var searchInput = userBar.one('.search input');
 
 		var sitesResultContainer = userBar.one('.so-portlet-sites .portlet-content');
@@ -71,6 +71,8 @@ AUI().ready(
 
 			if (!sitesResultContainer.hasClass('search-focus')) {
 				sitesResultContainer.addClass('search-focus');
+
+				dashboardNav.setStyle('position','static');
 			}
 		});
 
@@ -81,6 +83,7 @@ AUI().ready(
 		body.on(['click',], function(event) {
 			if (sitesResultContainer.hasClass('search-focus')) {
 				sitesResultContainer.removeClass('search-focus');
+				dashboardNav.setStyle('position','relative');
 			}
 
 			if (searchInput.get('value') == '') {
@@ -154,20 +157,20 @@ AUI().ready(
 						n.on(
 							['mouseenter', 'mouseleave']
 							, function(event) {
-								var t = 10000;
+									var t = 10000;
 
 								if (event.type == 'mouseenter') {
 									n.addClass('controls-visible');
+
+									setTimeout(
+										function() {
+											if (n.hasClass('controls-visible')) {
+												n.removeClass('controls-visible');
+											}
+									}, t);
 								} else if (event.type == 'mouseleave') {
 									n.removeClass('controls-visible');
 								}
-
-								setTimeout(
-									function() {
-										if (n.hasClass('controls-visible')) {
-											n.removeClass('controls-visible');
-										}
-								}, t);
 							}
 						);
 					}

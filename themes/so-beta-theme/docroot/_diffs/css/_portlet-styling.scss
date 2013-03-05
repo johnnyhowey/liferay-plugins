@@ -84,6 +84,10 @@
 	}
 }
 
+.taglib-header .header-back-to a {
+	padding: 0 0.2em;
+}
+
 /*  LFR Header Row  */
 
 .lfr-header-row {
@@ -436,10 +440,6 @@
 
 .profile-page .microblogs-status-container {
 	top: 0;
-
-	.entry-bubble {
-		margin-left: 0;
-	}
 }
 
 /*  Activities Portlet  */

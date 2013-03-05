@@ -52,15 +52,27 @@ a {
 
 /*  Forms Custom  */
 
-/*
-
-Modified forms can be found within the forms.css
-
-*/
-
-.aui-panel-hd {
+.aui-panel-hd, .lfr-panel.lfr-extended .lfr-panel-titlebar {
 	@include normal-gradient;
 	@include default-border;
+}
+
+.invite-members, .social-relations a, .aui-buttonitem-content, .aui-tabview-list .aui-tab-label {
+	@include button-default;
+}
+
+.invite-members, .social-relations a {
+	@include border-radius(4px);
+
+	&:hover, &:focus {
+		text-decoration: none;
+
+		@include button-hover;
+	}
+
+	&:active {
+		@include button-active;
+	}
 }
 
 .aui-dialog-content {
@@ -86,29 +98,10 @@ Modified forms can be found within the forms.css
 
 .aui-panel-bd {
 	padding: 0 1em 1em;
-
-}
-
-.invite-members, .social-relations a, .aui-buttonitem-icon-only, .aui-buttonitem-content, .aui-tabview-list .aui-tab-label {
-	@include button-default;
 }
 
 .aui-buttonitem-icon-only {
 	padding: 4px 5px 5px;
-}
-
-.invite-members, .social-relations a {
-	@include border-radius(4px);
-
-	&:hover, &:focus {
-		text-decoration: none;
-
-		@include button-hover;
-	}
-
-	&:active {
-		@include button-active;
-	}
 }
 
 .aui-button-holder {
@@ -288,7 +281,6 @@ Modified forms can be found within the forms.css
 			padding: 3.4em 0 0;
 			right: 0;
 			visibility: hidden;
-			z-index: 1;
 
 			@include border-radius(4px);
 			@include menu-style;
@@ -346,6 +338,7 @@ Modified forms can be found within the forms.css
 
 		.search-focus {
 			visibility: visible;
+			z-index: 4;
 
 			.search {
 				width: auto;
@@ -527,6 +520,13 @@ Modified forms can be found within the forms.css
 	}
 }
 
+#dashboardNav {
+	position: relative;
+	z-index: 3;
+}
+
+/*  Layout  */
+
 .portlet-column-content {
 	border: 1px solid $default-border-color;
 	border-width: 0 1px;
@@ -534,11 +534,15 @@ Modified forms can be found within the forms.css
 	padding: 0;
 }
 
-.portlet-column-last .portlet-column-content {
-	border-left-width: none;
+.portlet-column-content-only, .ltr .portlet-column-content-last, .rtl .portlet-column-content-first {
+	border-right-width: 0;
 }
 
-/*  Breadcrumb  */
+.portlet-column-last .portlet-column-content {
+	border-left-width: 0;
+}
+
+/*  Breadcrumbs  */
 
 .breadcrumbs-horizontal {
 	border: 1px solid $default-border-color;
@@ -778,8 +782,9 @@ Modified forms can be found within the forms.css
 #main-content {
 	background: #FFF;
 	float: left;
-	width: 100%;
+	min-height: 500px;
 	position: relative;
+	width: 100%;
 
 	@include box-shadow(-4px 0 15px -7px rgba(0,0,0, .6));
 }
