@@ -6,7 +6,7 @@
 	<h1 class="hidden-accessible">User Navigation</h1>
 
 	#if ($is_signed_in)
-	<ul>
+	<ul id="dashboardNav">
 		#foreach ($user_item in $user_layout)
 			#if ($user_item.isRootLayout() && !$user_item.isHidden() && $permissionChecker.hasPermission($user_item.getGroupId(), "com.liferay.portal.model.Layout", $user_item.getPlid(), "VIEW"))
 

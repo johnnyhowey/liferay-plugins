@@ -3,8 +3,8 @@
 
 <look-and-feel>
 	<compatibility>
-		<version>6.1.0+</version>
 		<version>6.2.0+</version>
+		<version>6.1.0+</version>
 	</compatibility>
 	<theme id="so" name="Social Office">
 		<color-scheme id="fluid" name="Fluid Layout">
@@ -13,6 +13,12 @@
 		<color-scheme id="normal" name="Normal">
 			<default-cs>true</default-cs>
 			<css-class>normal</css-class>
+		</color-scheme>
+		<color-scheme id="beta" name="Social Office Beta Theme">
+			<css-class>so-theme-beta</css-class>
+			<color-scheme-images-path>${images-path}/color_schemes/so-theme-beta</color-scheme-images-path>
+
+			<templates-path>${templates_path}/color-schemes/so-theme-beta</templates-path>
 		</color-scheme>
 	</theme>
 </look-and-feel>

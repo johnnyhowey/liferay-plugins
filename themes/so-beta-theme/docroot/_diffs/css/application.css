@@ -215,13 +215,12 @@
 	padding: 0;
 
 	.aui-textboxlistentry-holder {
-		background: #fff;
-		border: 1px solid;
-		border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
+		background: #FFF;
 		margin-bottom: 5px;
-		padding: 5px;
 		position: relative;
 		overflow: visible;
+
+		@include input-field-default;
 	}
 }
 
@@ -246,8 +245,7 @@
 }
 
 .aui-tagselector-focused .aui-textboxlistentry-holder {
-	background: #FFC none;
-	border: 1px solid #FC0;
+	@include input-field-focus;
 }
 
 .aui-categoriesselector-content .aui-textboxlistentry-holder {
