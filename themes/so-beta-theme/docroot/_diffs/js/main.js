@@ -4,6 +4,8 @@ AUI().ready(
 	This function gets loaded when all the HTML, not including the portlets, is
 	loaded.
 	*/
+	'aui-base',
+	'aui-io-request',
 	'event',
 
 	function(A) {
@@ -14,6 +16,7 @@ AUI().ready(
 
 		var notificationButton = userBar.one('.user-notification-events-icon');
 		var notifications = userBar.one('.user-notification-events');
+		var notificationEvents = notifications.all('user-notification-event-content');
 
 		if (notificationButton) {
 			notificationButton.on(
@@ -21,15 +24,48 @@ AUI().ready(
 				function (event) {
 					event.preventDefault()
 					event.stopPropagation();
+
 					notifications.toggleClass('aui-overlaycontext-hidden');
 				}
 			);
 
-			notifications.on(
+			notifications.delegate(
 				'click',
-				function () {
+				function(event) {
 					event.stopPropagation();
-				}
+
+					var portletURL = event.currentTarget.getAttribute('data-portletUrl');
+
+					if (portletURL) {
+						window.location = portletURL;
+					}
+				},
+				'.user-notification-event-content'
+			);
+
+			userBar.one('#_7_WAR_soportlet_notificationsMenuContent').delegate(
+				'click',
+				function(event) {
+					event.preventDefault();
+
+					var row = event.currentTarget.ancestor('.user-notification-event-content');
+					var loadingRow = A.Node.create('<div class="loading-animation"></div>');
+
+					row.hide().placeAfter(loadingRow);
+
+					A.io.request(
+						event.currentTarget.attr('href'),
+						{
+							on: {
+								success: function() {
+									row.remove();
+									loadingRow.remove();
+								}
+							}
+						}
+					);
+				},
+				'a'
 			);
 		}
 
@@ -204,7 +240,6 @@ AUI().ready(
 				}
 			);
 		}
-
 	}
 );
 
