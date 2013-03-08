@@ -29,44 +29,44 @@ AUI().ready(
 				}
 			);
 
-			notifications.delegate(
-				'click',
-				function(event) {
-					event.stopPropagation();
+			// notifications.delegate(
+			// 	'click',
+			// 	function(event) {
+			// 		event.stopPropagation();
 
-					var portletURL = event.currentTarget.getAttribute('data-portletUrl');
+			// 		var portletURL = event.currentTarget.getAttribute('data-portletUrl');
 
-					if (portletURL) {
-						window.location = portletURL;
-					}
-				},
-				'.user-notification-event-content'
-			);
+			// 		if (portletURL) {
+			// 			window.location = portletURL;
+			// 		}
+			// 	},
+			// 	'.user-notification-event-content'
+			// );
 
-			userBar.one('#_7_WAR_soportlet_notificationsMenuContent').delegate(
-				'click',
-				function(event) {
-					event.preventDefault();
+			// userBar.one('#_7_WAR_soportlet_notificationsMenuContent').delegate(
+			// 	'click',
+			// 	function(event) {
+			// 		event.preventDefault();
 
-					var row = event.currentTarget.ancestor('.user-notification-event-content');
-					var loadingRow = A.Node.create('<div class="loading-animation"></div>');
+			// 		var row = event.currentTarget.ancestor('.user-notification-event-content');
+			// 		var loadingRow = A.Node.create('<div class="loading-animation"></div>');
 
-					row.hide().placeAfter(loadingRow);
+			// 		row.hide().placeAfter(loadingRow);
 
-					A.io.request(
-						event.currentTarget.attr('href'),
-						{
-							on: {
-								success: function() {
-									row.remove();
-									loadingRow.remove();
-								}
-							}
-						}
-					);
-				},
-				'a'
-			);
+			// 		A.io.request(
+			// 			event.currentTarget.attr('href'),
+			// 			{
+			// 				on: {
+			// 					success: function() {
+			// 						row.remove();
+			// 						loadingRow.remove();
+			// 					}
+			// 				}
+			// 			}
+			// 		);
+			// 	},
+			// 	'a'
+			// );
 		}
 
 		if (toggleDockbar) {
