@@ -29,19 +29,19 @@ AUI().ready(
 				}
 			);
 
-			// notifications.delegate(
-			// 	'click',
-			// 	function(event) {
-			// 		event.stopPropagation();
+			notifications.delegate(
+				'click',
+				function(event) {
+					event.stopPropagation();
 
-			// 		var portletURL = event.currentTarget.getAttribute('data-portletUrl');
+					var portletURL = event.currentTarget.getAttribute('data-portletUrl');
 
-			// 		if (portletURL) {
-			// 			window.location = portletURL;
-			// 		}
-			// 	},
-			// 	'.user-notification-event-content'
-			// );
+					if (portletURL) {
+						window.location = portletURL;
+					}
+				},
+				'.user-notification-event-content'
+			);
 
 			// userBar.one('#_7_WAR_soportlet_notificationsMenuContent').delegate(
 			// 	'click',
