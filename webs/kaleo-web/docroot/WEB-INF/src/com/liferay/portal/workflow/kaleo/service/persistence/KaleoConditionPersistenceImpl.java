@@ -227,9 +227,53 @@ public class KaleoConditionPersistenceImpl extends BasePersistenceImpl<KaleoCond
 		}
 	}
 
+	protected void cacheUniqueFindersCache(KaleoCondition kaleoCondition) {
+		if (kaleoCondition.isNew()) {
+			Object[] args = new Object[] {
+					Long.valueOf(kaleoCondition.getKaleoNodeId())
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KALEONODEID, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KALEONODEID, args,
+				kaleoCondition);
+		}
+		else {
+			KaleoConditionModelImpl kaleoConditionModelImpl = (KaleoConditionModelImpl)kaleoCondition;
+
+			if ((kaleoConditionModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_KALEONODEID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(kaleoCondition.getKaleoNodeId())
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KALEONODEID,
+					args, Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KALEONODEID,
+					args, kaleoCondition);
+			}
+		}
+	}
+
 	protected void clearUniqueFindersCache(KaleoCondition kaleoCondition) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KALEONODEID,
-			new Object[] { Long.valueOf(kaleoCondition.getKaleoNodeId()) });
+		KaleoConditionModelImpl kaleoConditionModelImpl = (KaleoConditionModelImpl)kaleoCondition;
+
+		Object[] args = new Object[] {
+				Long.valueOf(kaleoCondition.getKaleoNodeId())
+			};
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEONODEID, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KALEONODEID, args);
+
+		if ((kaleoConditionModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_KALEONODEID.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					Long.valueOf(kaleoConditionModelImpl.getOriginalKaleoNodeId())
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEONODEID, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KALEONODEID, args);
+		}
 	}
 
 	/**
@@ -405,29 +449,8 @@ public class KaleoConditionPersistenceImpl extends BasePersistenceImpl<KaleoCond
 			KaleoConditionImpl.class, kaleoCondition.getPrimaryKey(),
 			kaleoCondition);
 
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KALEONODEID,
-				new Object[] { Long.valueOf(kaleoCondition.getKaleoNodeId()) },
-				kaleoCondition);
-		}
-		else {
-			if ((kaleoConditionModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_KALEONODEID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kaleoConditionModelImpl.getOriginalKaleoNodeId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEONODEID,
-					args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_KALEONODEID,
-					args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_KALEONODEID,
-					new Object[] { Long.valueOf(kaleoCondition.getKaleoNodeId()) },
-					kaleoCondition);
-			}
-		}
+		clearUniqueFindersCache(kaleoCondition);
+		cacheUniqueFindersCache(kaleoCondition);
 
 		return kaleoCondition;
 	}
@@ -1846,8 +1869,10 @@ public class KaleoConditionPersistenceImpl extends BasePersistenceImpl<KaleoCond
 				List<ModelListener<KaleoCondition>> listenersList = new ArrayList<ModelListener<KaleoCondition>>();
 
 				for (String listenerClassName : listenerClassNames) {
+					Class<?> clazz = getClass();
+
 					listenersList.add((ModelListener<KaleoCondition>)InstanceFactory.newInstance(
-							listenerClassName));
+							clazz.getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);

@@ -25,6 +25,8 @@ public class PortletPropsValues {
 	public static final int BUDDY_LIST_MAX_BUDDIES = GetterUtil.getInteger(
 		PortletProps.get(PortletPropsKeys.BUDDY_LIST_MAX_BUDDIES));
 
+	public static final String[] BUDDY_LIST_SITE_EXCLUDES = new String[0];
+
 	public static final String BUDDY_LIST_STRATEGY = GetterUtil.getString(
 		PortletProps.get(PortletPropsKeys.BUDDY_LIST_STRATEGY));
 

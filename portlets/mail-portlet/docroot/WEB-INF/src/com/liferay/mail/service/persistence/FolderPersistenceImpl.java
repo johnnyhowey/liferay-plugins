@@ -206,13 +206,59 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 		}
 	}
 
+	protected void cacheUniqueFindersCache(Folder folder) {
+		if (folder.isNew()) {
+			Object[] args = new Object[] {
+					Long.valueOf(folder.getAccountId()),
+					
+					folder.getFullName()
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A_F, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_F, args, folder);
+		}
+		else {
+			FolderModelImpl folderModelImpl = (FolderModelImpl)folder;
+
+			if ((folderModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_A_F.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						Long.valueOf(folder.getAccountId()),
+						
+						folder.getFullName()
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A_F, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_F, args, folder);
+			}
+		}
+	}
+
 	protected void clearUniqueFindersCache(Folder folder) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_F,
-			new Object[] {
+		FolderModelImpl folderModelImpl = (FolderModelImpl)folder;
+
+		Object[] args = new Object[] {
 				Long.valueOf(folder.getAccountId()),
 				
-			folder.getFullName()
-			});
+				folder.getFullName()
+			};
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_F, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_F, args);
+
+		if ((folderModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_A_F.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					Long.valueOf(folderModelImpl.getOriginalAccountId()),
+					
+					folderModelImpl.getOriginalFullName()
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_F, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_F, args);
+		}
 	}
 
 	/**
@@ -361,35 +407,8 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 		EntityCacheUtil.putResult(FolderModelImpl.ENTITY_CACHE_ENABLED,
 			FolderImpl.class, folder.getPrimaryKey(), folder);
 
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_F,
-				new Object[] {
-					Long.valueOf(folder.getAccountId()),
-					
-				folder.getFullName()
-				}, folder);
-		}
-		else {
-			if ((folderModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_A_F.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(folderModelImpl.getOriginalAccountId()),
-						
-						folderModelImpl.getOriginalFullName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_F, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_F, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_F,
-					new Object[] {
-						Long.valueOf(folder.getAccountId()),
-						
-					folder.getFullName()
-					}, folder);
-			}
-		}
+		clearUniqueFindersCache(folder);
+		cacheUniqueFindersCache(folder);
 
 		return folder;
 	}
@@ -1384,8 +1403,10 @@ public class FolderPersistenceImpl extends BasePersistenceImpl<Folder>
 				List<ModelListener<Folder>> listenersList = new ArrayList<ModelListener<Folder>>();
 
 				for (String listenerClassName : listenerClassNames) {
+					Class<?> clazz = getClass();
+
 					listenersList.add((ModelListener<Folder>)InstanceFactory.newInstance(
-							listenerClassName));
+							clazz.getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);

@@ -21,6 +21,7 @@ import com.liferay.microblogs.model.MicroblogsEntry;
 import com.liferay.microblogs.model.MicroblogsEntryConstants;
 import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
 import com.liferay.microblogs.service.permission.MicroblogsEntryPermission;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.security.permission.ActionKeys;
@@ -89,10 +90,7 @@ public class MicroblogsActivityInterpreter
 			}
 		}
 
-		String entryContent = getValue(
-			activity.getExtraData(), "content", microblogsEntry.getContent());
-
-		sb.append(entryContent);
+		sb.append(HtmlUtil.escape(microblogsEntry.getContent()));
 
 		String title = sb.toString();
 

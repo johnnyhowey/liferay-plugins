@@ -13,5 +13,10 @@
 				"web content"
 			]
 		},
+		{
+			"abstractSummary": "This is an abstract summary.",
+			"name": "Child Web Content 1.xml",
+			"smallImage": "company_logo.png"
+		}
 	]
 }

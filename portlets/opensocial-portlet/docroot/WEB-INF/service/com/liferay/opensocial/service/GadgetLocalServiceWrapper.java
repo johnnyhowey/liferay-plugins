@@ -73,13 +73,11 @@ public class GadgetLocalServiceWrapper implements GadgetLocalService,
 	*
 	* @param gadget the gadget
 	* @return the gadget that was removed
-	* @throws PortalException
 	* @throws SystemException if a system exception occurred
 	*/
 	public com.liferay.opensocial.model.Gadget deleteGadget(
 		com.liferay.opensocial.model.Gadget gadget)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.SystemException {
 		return _gadgetLocalService.deleteGadget(gadget);
 	}
 
@@ -273,16 +271,13 @@ public class GadgetLocalServiceWrapper implements GadgetLocalService,
 			portletCategoryNames, serviceContext);
 	}
 
-	public void destroyGadget(java.lang.String uuid, long companyId,
-		java.lang.String name)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_gadgetLocalService.destroyGadget(uuid, companyId, name);
+	public void destroyGadget(java.lang.String uuid, long companyId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		_gadgetLocalService.destroyGadget(uuid, companyId);
 	}
 
 	public void destroyGadgets()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.SystemException {
 		_gadgetLocalService.destroyGadgets();
 	}
 

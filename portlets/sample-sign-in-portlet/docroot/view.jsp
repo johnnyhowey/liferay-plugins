@@ -29,7 +29,6 @@
 <%@ page import="com.liferay.portal.UserLockoutException" %>
 <%@ page import="com.liferay.portal.UserPasswordException" %>
 <%@ page import="com.liferay.portal.UserScreenNameException" %>
-<%@ page import="com.liferay.portal.model.Company" %>
 <%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.Constants" %>
 <%@ page import="com.liferay.portal.kernel.util.GetterUtil" %>
@@ -38,6 +37,7 @@
 <%@ page import="com.liferay.portal.kernel.util.ParamUtil" %>
 <%@ page import="com.liferay.portal.kernel.util.PortalClassInvoker" %>
 <%@ page import="com.liferay.portal.kernel.util.PropsUtil" %>
+<%@ page import="com.liferay.portal.model.Company" %>
 <%@ page import="com.liferay.portal.security.auth.AuthException" %>
 
 <%@ page import="javax.portlet.WindowState" %>
@@ -69,8 +69,9 @@
 		boolean rememberMe = ParamUtil.getBoolean(request, "rememberMe");
 		%>
 
-		<form action="<portlet:actionURL><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.UPDATE %>" /></portlet:actionURL>" method="post" name="<portlet:namespace />fm">
-		<input name="saveLastPath" type="hidden" value="0" />
+		<form action="<portlet:actionURL />" method="post" name="<portlet:namespace />fm">
+		<input name="saveLastPath" type="hidden" value="<%= false %>" />
+		<input name="<portlet:namespace /><%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 		<input name="<portlet:namespace />rememberMe" type="hidden" value="<%= rememberMe %>" />
 
 		<liferay-ui:error exception="<%= AuthException.class %>" message="authentication-failed" />

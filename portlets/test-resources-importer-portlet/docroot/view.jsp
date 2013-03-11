@@ -94,19 +94,35 @@ for (String importer : importers) {
 		if (groupId == 0) {
 			continue;
 		}
-
-		LayoutSet layoutSet = LayoutSetLocalServiceUtil.getLayoutSet(groupId, false);
 		%>
 
-		LayoutSet#getPageCount=<%= _assertEquals(5, layoutSet.getPageCount()) %>
+		LayoutLocalServiceUtil#getLayoutsCount=<%= _assertEquals(5, LayoutLocalServiceUtil.getLayoutsCount(group, false)) %><br />
+
+		<%
+		Layout importedLayout = LayoutLocalServiceUtil.getLayout(groupId, false, 1);
+
+		UnicodeProperties layoutTypeSettingsProperties = importedLayout.getTypeSettingsProperties();
+
+		String nestedColumnIds = layoutTypeSettingsProperties.get(LayoutTypePortletConstants.NESTED_COLUMN_IDS);
+		%>
+
+		LayoutTypePortletConstants#NESTED_COLUMN_IDS=<%= _assertTrue((nestedColumnIds != null) && nestedColumnIds.contains("column-1") && nestedColumnIds.contains("column-2")) %>
 	</p>
 
 	<p>
 
 		<%
-		DLFileEntry dlFileEntry = DLFileEntryLocalServiceUtil.fetchFileEntry(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "company_logo");
+		DLFileEntry dlFileEntry = null;
 
-		String[] assetTagNames = AssetTagLocalServiceUtil.getTagNames(DLFileEntry.class.getName(), dlFileEntry.getFileEntryId());
+		String[] assetTagNames = null;
+
+		try {
+			dlFileEntry = DLFileEntryLocalServiceUtil.getFileEntry(groupId, DLFolderConstants.DEFAULT_PARENT_FOLDER_ID, "company_logo");
+
+			assetTagNames = AssetTagLocalServiceUtil.getTagNames(DLFileEntry.class.getName(), dlFileEntry.getFileEntryId());
+		}
+		catch (Exception e) {
+		}
 		%>
 
 		AssetTagLocalServiceUtil#getTagNames=<%= _assertTrue(ArrayUtil.contains(assetTagNames, "logo")) %>
@@ -121,6 +137,10 @@ for (String importer : importers) {
 		<%
 		JournalArticle journalArticle = JournalArticleLocalServiceUtil.getArticle(groupId, "CHILD-WEB-CONTENT-1");
 		%>
+
+		JournalArticle#getDescription=<%= _assertTrue(Validator.isNotNull(journalArticle.getDescription())) %><br />
+
+		JournalArticle#isSmallImage=<%= _assertTrue(journalArticle.isSmallImage()) %><br />
 
 		JournalArticle#isTemplateDriven=<%= _assertTrue(journalArticle.isTemplateDriven()) %><br />
 

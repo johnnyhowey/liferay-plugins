@@ -57,6 +57,9 @@ public class WSRPServletContextListener
 			protected void onDeploy() throws Exception {
 				ExtensionHelperUtil.initialize();
 
+				WSRPConsumerPortletLocalServiceUtil.
+					destroyWSRPConsumerPortlets();
+
 				WSRPConsumerPortletLocalServiceUtil.initWSRPConsumerPortlets();
 			}
 

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.messaging.BaseMessageListener;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.servlet.ServletContextPool;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PropertiesUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -33,7 +34,6 @@ import com.liferay.resourcesimporter.util.FileSystemImporter;
 import com.liferay.resourcesimporter.util.Importer;
 import com.liferay.resourcesimporter.util.ImporterException;
 import com.liferay.resourcesimporter.util.LARImporter;
-import com.liferay.resourcesimporter.util.PortletPropsValues;
 import com.liferay.resourcesimporter.util.ResourceImporter;
 
 import java.io.IOException;
@@ -74,22 +74,12 @@ public class HotDeployMessageListener extends BaseMessageListener {
 			return;
 		}
 
-		Properties pluginProperties = getPluginProperties(servletContext);
+		Properties pluginPackageProperties = getPluginPackageProperties(
+			servletContext);
 
-		String targetClassName = pluginProperties.getProperty(
+		String targetClassName = pluginPackageProperties.getProperty(
 			"resources-importer-target-class-name",
 			LayoutSetPrototype.class.getName());
-
-		String targetValue = pluginProperties.getProperty(
-			"resources-importer-target-value");
-
-		if (Validator.isNull(targetValue)) {
-			targetValue = TextFormatter.format(
-				servletContextName, TextFormatter.J);
-		}
-
-		String resourcesDir = pluginProperties.getProperty(
-			"resources-importer-external-dir");
 
 		Set<String> resourcePaths = servletContext.getResourcePaths(
 			_RESOURCES_DIR);
@@ -122,6 +112,9 @@ public class HotDeployMessageListener extends BaseMessageListener {
 					importer.setResourcesDir(_RESOURCES_DIR);
 				}
 				else {
+					String resourcesDir = pluginPackageProperties.getProperty(
+						"resources-importer-external-dir");
+
 					if (Validator.isNotNull(resourcesDir)) {
 						importer = getFileSystemImporter();
 
@@ -137,13 +130,24 @@ public class HotDeployMessageListener extends BaseMessageListener {
 				importer.setServletContext(servletContext);
 				importer.setServletContextName(servletContextName);
 				importer.setTargetClassName(targetClassName);
+
+				String targetValue = pluginPackageProperties.getProperty(
+					"resources-importer-target-value");
+
+				if (Validator.isNull(targetValue)) {
+					targetValue = TextFormatter.format(
+						servletContextName, TextFormatter.J);
+				}
+
 				importer.setTargetValue(targetValue);
 
 				importer.afterPropertiesSet();
 
-				if (!PortletPropsValues.DEVELOPER_MODE_ENABLED &&
-					importer.isExisting()) {
+				boolean developerModeEnabled = GetterUtil.getBoolean(
+					pluginPackageProperties.getProperty(
+						"resources-importer-developer-mode-enabled"));
 
+				if (!developerModeEnabled && importer.isExisting()) {
 					if (_log.isInfoEnabled()) {
 						_log.info(
 							"Group or layout set prototype already exists " +
@@ -217,8 +221,10 @@ public class HotDeployMessageListener extends BaseMessageListener {
 		return new LARImporter();
 	}
 
-	protected Properties getPluginProperties(ServletContext servletContext) {
-		Properties properties = null;
+	protected Properties getPluginPackageProperties(
+		ServletContext servletContext) {
+
+		Properties properties = new Properties();
 
 		try {
 			String propertiesString = StringUtil.read(
@@ -235,15 +241,11 @@ public class HotDeployMessageListener extends BaseMessageListener {
 				propertiesString = propertiesString.replace(
 					"${context.path}", contextPath);
 
-				properties = PropertiesUtil.load(propertiesString);
+				PropertiesUtil.load(properties, propertiesString);
 			}
 		}
 		catch (IOException e) {
 			_log.error(e, e);
-		}
-
-		if (properties == null) {
-			properties = new Properties();
 		}
 
 		return properties;

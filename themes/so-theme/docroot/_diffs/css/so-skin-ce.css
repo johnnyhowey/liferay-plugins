@@ -6,6 +6,7 @@ $fixed-width: 980px;
 $gray: #CECECE;
 $gray-dark: #C7D0DA;
 $gray-light: #F4F4F4;
+$gray-medium: #EEE;
 $navigation-width: 200px;
 $red: #8F0920;
 
@@ -34,17 +35,12 @@ a:hover {
 
 #content {
 	width: 760px;
+	z-index: 1;
 	zoom: 1;
 }
 
 #so-sidebar .search input[type=image], .aui-dialog .sidebar {
 	display: none;
-}
-
-#content div#column-1.portlet-column-only .portlet-column-content {
-	background-color: #FFF;
-	margin-bottom: -1px;
-	margin-right: -1px;
 }
 
 /* ---------- Heading ---------- */
@@ -87,7 +83,7 @@ a:hover {
 }
 
 #heading {
-	height: 79px;
+	min-height: 79px;
 }
 
 #heading, #footer {
@@ -123,33 +119,31 @@ a:hover {
 #content {
 	#so-context {
 		border: 1px solid $gray-dark;
-		border-width: 0 1px 1px 0;
+		border-width: 0 1px 1px;
 		position: relative;
+		z-index: 3;
 		zoom: 1;
 	}
 
 	.portlet-layout {
+		border-collapse: separate;
+
 		.portlet-column-only {
 			background: #FFF;
-			border-right: 1px solid $gray-dark;
 			position: relative;
 			z-index: 2;
-
-			.portlet-column-content {
-				border-bottom: 1px solid $gray-dark;
-			}
-		}
-
-		.portlet-column:before {
-			border-right: 1px solid $gray-dark;
-			bottom: 0;
-			content: "";
-			position: absolute;
-			top: 0;
 		}
 
 		.portlet-column-content {
+			border: 1px solid $gray-dark;
+			border-width: 0 1px;
+			margin-right: -1px;
 			padding: 0;
+			position: relative;
+		}
+
+		.portlet-column-content-first, .portlet-column-content-only {
+			margin-left: -1px;
 		}
 	}
 
@@ -264,6 +258,7 @@ a:hover {
 
 #so-sidebar {
 	border-right: 1px solid $gray-dark;
+	padding-bottom: 31px;
 
 	.portlet-msg, .portlet-msg-alert, .portlet-msg-error, .portlet-msg-info, .portlet-msg-success {
 		margin: 0 0 10px;
@@ -380,7 +375,7 @@ a:hover {
 			margin-bottom: 1em;
 
 			.empty, .more, .name, .name a {
-				padding: 3px 3px 3px 25px;
+				padding: 3px 7px 3px 25px;
 			}
 		}
 
@@ -428,7 +423,7 @@ a:hover {
 	}
 
 	.aui-button-holder {
-		background: #EEE;
+		background: $gray-medium;
 		border-top: 1px solid #BFBFBF;
 		margin: 1em 0;
 		padding: 0.5em;
@@ -450,7 +445,6 @@ a:hover {
 }
 
 .user-sites, .user-tags {
-	border-bottom: 1px solid $gray-dark;
 	margin: 0 -10px;
 	padding: 0 10px 6px;
 }
@@ -466,7 +460,7 @@ a:hover {
 
 	a {
 		background: $blue-link;
-		color: #EEE;
+		color: $gray-medium;
 		display: inline-block;
 		margin: 4px;
 		padding: 3px 6px;
@@ -474,8 +468,6 @@ a:hover {
 }
 
 .profile-header {
-	border: 1px solid $gray-dark;
-	border-width: 0 0 1px 1px;
 	padding: 10px;
 
 	h1 {
@@ -548,7 +540,7 @@ button, input[type=button], input[type=submit], input[type=reset], #toggleFluid,
 
 input[type=button], input[type=reset], input[type=submit], .aui-button button, .aui-state-hover, .contacts-portlet .social-relations a, .edit-controls a:hover, .invite-members:hover, .lfr-actions.lfr-extended, .portlet-blogs .lfr-meta-actions a, .thread-controls a:hover, .tasks-dialog .control a.taglib-icon, .top-links-navigation a:hover {
 	&:hover {
-		background: #EEE;
+		background: $gray-medium;
 		border-color: #AAA;
 		color: #5A5A5A;
 	}
@@ -892,25 +884,16 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		left: -4px;
 	}
 
-	.user-portrait, .user-portrait .avatar {
-		height: 45px;
-		width: 45px;
-	}
-
-	.user-portrait .avatar img {
-		max-width: 45px;
-	}
-
-	.activity-data {
-		padding-left: 10px;
-	}
-
 	a.group {
 		color: $red;
 	}
 
 	.taglib-page-iterator {
 		word-break: break-all;
+	}
+
+	.search-results .journal-article-page-number {
+		display: inline-block;
 	}
 }
 
@@ -1010,7 +993,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 
 	.lfr-discussion-form-reply {
-		background-color: #EEE;
+		background-color: $gray-medium;
 	}
 
 	.lfr-discussion-details-content, .lfr-discussion-form-reply {
@@ -1176,7 +1159,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 
 	.aui-tabview-list {
 		border-left-color: $gray-dark;
-		border-width: 0 0 1px 1px;
+		border-width: 0 0 1px 0;
 		margin-bottom: 0;
 	}
 
@@ -1190,8 +1173,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 
 	.calendar-container {
-		border: 1px solid $gray-dark;
-		border-width: 0 1px;
+		border-right: 1px solid $gray-dark;
 		width: auto;
 
 		.calendar-day {
@@ -1218,11 +1200,12 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		clear: both;
 
 		.hour, .half-hour {
-			border-bottom: 1px dotted #EEE;
+			border-bottom: 1px dotted $gray-medium;
 		}
 
 		.half-hour {
 			border-bottom-style: solid;
+			height: 24px;
 		}
 
 		.half-hour, .night-hour {
@@ -1230,8 +1213,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		}
 
 		.event-box {
-			background: #EEE;
+			background: $gray-medium;
 			border: 1px solid #CCC;
+			margin-top: 1px;
+			padding-top: 6px;
 		}
 	}
 
@@ -1261,7 +1246,6 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 .contacts-portlet {
 	.contacts-profile {
 		border-bottom: 1px solid $gray-dark;
-		margin-bottom: -1px;
 
 		.lfr-contact-name a {
 			color: $red;
@@ -1274,7 +1258,19 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 
 	.lfr-app-column-view {
 		border-width: 1px 0 0;
-		margin-left: 1px;
+
+		.contacts-list {
+			border-right: 1px solid $gray-dark;
+		}
+
+		.aui-column:before {
+			border-right-width: 0;
+			margin-left: 0;
+		}
+
+		.aui-column-content {
+			border-right-width: 0;
+		}
 	}
 
 	.contact-group-filter .contact-group-filter-content {
@@ -1303,24 +1299,19 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		padding: 10px;
 	}
 
-	.members-container {
-		border: 1px solid $gray-dark;
-		border-width: 1px 0;
+	.members-container .lfr-members-grid-item {
+		.lfr-user-data-extra, .lfr-user-data-name, .lfr-user-data-job-title {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 
-		.lfr-members-grid-item {
-			.lfr-user-data-extra, .lfr-user-data-name, .lfr-user-data-job-title {
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
+		.lfr-members-thumb {
+			margin: 0;
+		}
 
-			.lfr-members-thumb {
-				margin: 0;
-			}
-
-			&:hover {
-				background: #EEE;
-			}
+		&:hover {
+			background: $gray-medium;
 		}
 	}
 
@@ -1373,8 +1364,6 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 /* Documents and Images Library */
 
 .portlet-document-library {
-	border-left: 1px solid $gray-dark;
-
 	.lfr-app-column-view {
 		.results-row td {
 			background: transparent;
@@ -1417,8 +1406,40 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		margin-top: 0.2em;
 	}
 
-	.search-button-container .aui-field-input-text {
-		padding: 5px 4px;
+	.lfr-header-row-content {
+		padding: 4px;
+	}
+
+	.lfr-search-combobox {
+		margin: 0 0 0 2px;
+
+		.aui-w30, .aui-w70 {
+			width: auto;
+		}
+
+		.aui-field-input-text {
+			border-radius: 4px 0 0 4px;
+			height: 16px;
+			padding: 5px;
+		}
+
+		.aui-button-input {
+			border-left-width: 0;
+			border-radius: 0 4px 4px 0;
+			height: 28px;
+		}
+	}
+
+	.select-documents .aui-field-element{
+		padding: 5px 6px 6px;
+	}
+
+	.lfr-actions.lfr-extended {
+		padding: 3px 3px 4px;
+	}
+
+	.aui-buttonitem-icon-only {
+		padding: 5px;
 	}
 
 	.aui-w65 {
@@ -1427,14 +1448,6 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 
 	.aui-w35 {
 		width: 30%;
-	}
-
-	.asset-details:before {
-		border-right: 1px solid $gray-dark;
-		bottom: 0;
-		content: "";
-		position: absolute;
-		top: 0;
 	}
 
 	.edit-permissions .header-title {
@@ -1468,12 +1481,26 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 }
 
 .portlet-document-library-display {
+	zoom: 1;
+
 	.top-links-container {
 		margin: 0;
 	}
 
 	.asset-column-details-content {
 		border-width: 0;
+	}
+
+	.lfr-asset-column-content {
+		margin-right: 0;
+
+		.lfr-panel {
+			margin-bottom: 0;
+		}
+	}
+
+	.lfr-panel-content {
+		padding: 0;
 	}
 }
 
@@ -1488,6 +1515,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 
 	.taglib-header {
 		position: relative;
+		z-index: 1;
 	}
 
 	.header-back-to {
@@ -1498,7 +1526,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 
 	.document-info {
-		background-color: #EEE;
+		background-color: $gray-medium;
 	}
 
 	.aui-column-content-first, .aui-column-content-last, .document-library-breadcrumb, .search-button-container .aui-column:before, .search-button-container .aui-column-content, .search-button-container .aui-column-content-center {
@@ -1506,7 +1534,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 
 	.lfr-header-row {
-		background: #EEE;
+		background: $gray-medium;
 		min-height: 33px;
 	}
 
@@ -1517,6 +1545,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	.lfr-header-row-content .parent-folder-title {
 		color: $button-text-color;
 		text-shadow: none;
+	}
+
+	.view .context-pane .context-pane-content {
+		border-left: 1px solid $gray-dark;
 	}
 
 	.context-pane .context-pane-content {
@@ -1542,6 +1574,29 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 }
 
+.rtl .portlet-document-library {
+	.aui-column-last {
+		margin-right: 0;
+
+		.toolbar .aui-toolbar-content {
+			direction: ltr;
+		}
+
+		.search-button-container .aui-column {
+			padding: 2px 0 0 3px;
+			width: auto;
+		}
+
+		.context-pane-content {
+			margin-right: 0;
+		}
+	}
+
+	.aui-column-content-first {
+		border-right: 0 solid transparent;
+	}
+}
+
 /* Events Display Portlet */
 
 .events-display-portlet {
@@ -1557,11 +1612,11 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		}
 
 		.results-row td, .results-row.alt td {
-			border-bottom: 1px solid #EEE;
+			border-bottom: 1px solid $gray-medium;
 		}
 
 		.results-row.hover td {
-			background: #EEE;
+			background: $gray-medium;
 		}
 	}
 }
@@ -1596,14 +1651,24 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 
 	.menu {
 		border-right: 1px solid $gray-dark;
+		margin-right: -1px;
+	}
+
+	.result {
+		margin-left: 0;
+	}
+
+	.result-content {
+		padding: 0;
 	}
 
 	.results-grid {
 		border-width: 0;
 	}
 
-	.result-content {
-		margin: 0 -5px 0 -2px;
+	td, th {
+		border-color: $gray-dark;
+		border-right-width: 0;
 	}
 }
 
@@ -1747,7 +1812,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 
 	.edit-controls, .thread-controls {
-		background: #EEE;
+		background: $gray-medium;
 		border: 1px solid $gray;
 		padding: 4px 5px;
 
@@ -1862,8 +1927,6 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 }
 
 .portlet-message-boards, .portlet-wiki {
-	border-left: 1px solid $gray-dark;
-
 	.top-links-container .top-link{
 		vertical-align: middle;
 	}
@@ -1981,7 +2044,9 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 /*  Private Messaging  */
 
 .private-messaging-portlet {
-	margin-left: 1px;
+	.thread-content .controls {
+		margin-bottom: -1px;
+	}
 
 	.controls, .portlet-msg-info, .portlet-msg-success {
 		border-width: 0 0 1px;
@@ -2135,7 +2200,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 
 	.results-row:hover td, .results-row.alt:hover td {
-		background: #EEE;
+		background: $gray-medium;
 	}
 
 	.user-notification-event-content {
@@ -2155,7 +2220,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 }
 
 .top-links .top-links-navigation {
-	background: #EEE;
+	background: $gray-medium;
 	padding: 4px 8px;
 	width: auto;
 
@@ -2210,14 +2275,14 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	padding: 3px 0 3px 20px;
 
 	&:hover {
-		background-color: #EEE;
+		background-color: $gray-medium;
 		text-decoration: none;
 	}
 }
 
 .tasks-dialog {
 	.comment-wrapper {
-		border: 1px solid #EEE;
+		border: 1px solid $gray-medium;
 
 		.comment-body {
 			background: #FFF;
@@ -2225,7 +2290,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		}
 
 		.comment-info {
-			background: #EEE;
+			background: $gray-medium;
 			padding: 5px;
 		}
 
@@ -2295,22 +2360,6 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 /* ---------- Internet Explorer ---------- */
 
 .ie7 {
-	#content td {
-		&.portlet-column {
-			border-left: 1px solid $gray-dark;
-		}
-
-		&.portlet-column-only {
-			&, .portlet-column-content {
-				border-width: 0 0 0 1px;
-			}
-
-			.portlet-boundary {
-				border-width: 0;
-			}
-		}
-	}
-
 	#so-sidebar {
 		.profile-image {
 			float: left;
@@ -2323,8 +2372,8 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		#navigation {
 			clear: both;
 
-			ul li {
-				margin-top: -2px;
+			a {
+				zoom: 1;
 			}
 		}
 
@@ -2359,6 +2408,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		}
 	}
 
+	#so-context #column-1 {
+		overflow: visible;
+	}
+
 	.aui-button-input-checkbox {
 		height: 13px;
 		width: 13px;
@@ -2369,13 +2422,8 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 			margin-bottom: 0;
 		}
 
-		.contacts-list {
-			border-right: 1px solid $gray-dark;
-			margin-left: -1px;
-
-			.contacts-list-content {
-				border-right-width: 0;
-			}
+		.contacts-list .contacts-list-content {
+			border-right-width: 0;
 		}
 	}
 
@@ -2391,12 +2439,12 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		}
 	}
 
-	.portlet-calendar {
-		margin-left: -1px;
-	}
-
 	.portlet-document-library, .portlet-document-library-display {
 		margin-right: 1px;
+
+		.view .aui-column-last {
+			margin-right: 0;
+		}
 
 		.navigation-pane-content {
 			border-right-width: 0;
@@ -2460,6 +2508,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 }
 
 .ie {
+	#content .portlet-layout {
+		border-collapse: collapse;
+	}
+
 	.aui-form-validator-error {
 		padding-left: 20px;
 		text-indent: 0;
@@ -2467,6 +2519,10 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 
 	.tasks-portlet {
 		zoom: 1;
+	}
+
+	&.rtl #navigation {
+		margin-right: 1px;
 	}
 }
 

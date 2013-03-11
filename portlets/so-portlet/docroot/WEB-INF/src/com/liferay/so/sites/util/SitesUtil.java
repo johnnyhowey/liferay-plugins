@@ -138,7 +138,7 @@ public class SitesUtil {
 	}
 
 	protected static int doGetVisibleSitesCount(
-			long comapnyId, long userId, String keywords, boolean usersSites)
+			long companyId, long userId, String keywords, boolean usersSites)
 		throws Exception {
 
 		if (usersSites) {
@@ -150,37 +150,24 @@ public class SitesUtil {
 			params.put("usersGroups", userId);
 
 			return GroupLocalServiceUtil.searchCount(
-				comapnyId, keywords, null, params);
+				companyId, keywords, null, params);
 		}
 		else {
 			LinkedHashMap<String, Object> params =
 				new LinkedHashMap<String, Object>();
+
+			params.put("active", Boolean.TRUE);
+			params.put("pageCount", Boolean.TRUE);
 
 			List<Integer> types = new ArrayList<Integer>();
 
 			types.add(GroupConstants.TYPE_SITE_OPEN);
 			types.add(GroupConstants.TYPE_SITE_RESTRICTED);
 
-			params.put("active", Boolean.TRUE);
-			params.put("pageCount", Boolean.TRUE);
 			params.put("types", types);
 
-			int groupsCount = GroupLocalServiceUtil.searchCount(
-				comapnyId, keywords, null, params);
-
-			params.clear();
-
-			params.put("usersGroups", userId);
-
-			types.clear();
-
-			types.add(GroupConstants.TYPE_SITE_PRIVATE);
-
-			params.put("pageCount", Boolean.TRUE);
-			params.put("types", types);
-
-			return groupsCount + GroupLocalServiceUtil.searchCount(
-				comapnyId, keywords, null, params);
+			return GroupLocalServiceUtil.searchCount(
+				companyId, keywords, null, params);
 		}
 	}
 

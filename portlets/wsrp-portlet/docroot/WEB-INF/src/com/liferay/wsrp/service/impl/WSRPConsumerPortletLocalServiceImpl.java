@@ -181,14 +181,20 @@ public class WSRPConsumerPortletLocalServiceImpl
 			Portlet portlet = _portletsPool.remove(wsrpConsumerPortletUuid);
 
 			if (portlet == null) {
-				return;
+				WSRPConsumerPortlet wsrpConsumerPortlet =
+					getWSRPConsumerPortlet(wsrpConsumerPortletId);
+
+				portlet = PortletLocalServiceUtil.getPortletById(
+					wsrpConsumerPortlet.getCompanyId(),
+					getPortletId(wsrpConsumerPortletUuid));
+			}
+			else {
+				WSRPConsumerManagerFactory.destroyWSRPConsumerManager(url);
+
+				_failedWSRPConsumerPortlets.remove(wsrpConsumerPortletId);
 			}
 
-			WSRPConsumerManagerFactory.destroyWSRPConsumerManager(url);
-
 			PortletInstanceFactoryUtil.destroy(portlet);
-
-			_failedWSRPConsumerPortlets.remove(wsrpConsumerPortletId);
 		}
 		catch (Exception e) {
 			_log.error(
@@ -504,11 +510,7 @@ public class WSRPConsumerPortletLocalServiceImpl
 			return portlet;
 		}
 
-		String portletId = ConsumerPortlet.PORTLET_NAME_PREFIX.concat(
-			wsrpConsumerPortletUuid);
-
-		portletId = PortalUtil.getJsSafePortletId(
-			PortalUUIDUtil.toJsSafeUuid(portletId));
+		String portletId = getPortletId(wsrpConsumerPortletUuid);
 
 		portlet = PortletLocalServiceUtil.clonePortlet(_CONSUMER_PORTLET_ID);
 
@@ -580,6 +582,16 @@ public class WSRPConsumerPortletLocalServiceImpl
 		return portlet;
 	}
 
+	protected String getPortletId(String wsrpConsumerPortletUuid) {
+		String portletId = ConsumerPortlet.PORTLET_NAME_PREFIX.concat(
+			wsrpConsumerPortletUuid);
+
+		portletId = PortalUtil.getJsSafePortletId(
+			PortalUUIDUtil.toJsSafeUuid(portletId));
+
+		return portletId;
+	}
+
 	protected String getProxyURL(String url) {
 		return "/proxy?url=" + HttpUtil.encodeURL(url);
 	}
@@ -600,6 +612,16 @@ public class WSRPConsumerPortletLocalServiceImpl
 
 		String name = ExtensionHelperUtil.getNameAttribute(messageElement);
 		String value = messageElement.getValue();
+
+		if (Validator.isNull(name)) {
+			if (_log.isInfoEnabled()) {
+				_log.info(
+					"Message element " + messageElement.toString() +
+						" has a null name");
+			}
+
+			return;
+		}
 
 		if (name.equals("css-class-wrapper")) {
 			portlet.setCssClassWrapper(value);
