@@ -56,10 +56,10 @@ JSONObject userPrefsJSONObject = ExpandoValueServiceUtil.getJSONData(themeDispla
 		{
 			appId: '<%= gadget.getUrl() %>',
 			checksum: '<%= gadgetSpec.getChecksum() %>',
-			country: '<%= themeDisplay.getLocale().getCountry() %>',
+			country: '<%= locale.getCountry() %>',
 			debug: <%= PortletPropsValues.SHINDIG_JS_DEBUG %>,
 			height: <%= modulePrefs.getHeight() %>,
-			language: '<%= themeDisplay.getLocale().getLanguage() %>',
+			language: '<%= _getLanguage(locale) %>',
 			moduleId: '<%= moduleId %>',
 			nocache: <%= PortletPropsValues.SHINDIG_NO_CACHE %>,
 			portletId: '<%= portletDisplay.getId() %>',
@@ -80,3 +80,17 @@ JSONObject userPrefsJSONObject = ExpandoValueServiceUtil.getJSONData(themeDispla
 		}
 	).render('#<portlet:namespace />gadget');
 </aui:script>
+
+<%!
+private String _getLanguage(Locale locale) {
+	String language = locale.getLanguage();
+
+	// See http://docs.opensocial.org/display/OSREF/Gadgets+XML+Reference
+
+	if (language.equals(Locale.CHINESE.getLanguage())) {
+		language = language + StringPool.DASH + locale.getCountry();
+	}
+
+	return language;
+}
+%>

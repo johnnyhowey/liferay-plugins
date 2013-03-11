@@ -277,6 +277,16 @@ public class JIRAChangeItemWrapper implements JIRAChangeItem,
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_jiraChangeItem.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_jiraChangeItem.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_jiraChangeItem.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -304,6 +314,10 @@ public class JIRAChangeItemWrapper implements JIRAChangeItem,
 		return new JIRAChangeItemWrapper(_jiraChangeItem.toEscapedModel());
 	}
 
+	public com.liferay.socialcoding.model.JIRAChangeItem toUnescapedModel() {
+		return new JIRAChangeItemWrapper(_jiraChangeItem.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _jiraChangeItem.toString();
@@ -319,7 +333,7 @@ public class JIRAChangeItemWrapper implements JIRAChangeItem,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public JIRAChangeItem getWrappedJIRAChangeItem() {
 		return _jiraChangeItem;

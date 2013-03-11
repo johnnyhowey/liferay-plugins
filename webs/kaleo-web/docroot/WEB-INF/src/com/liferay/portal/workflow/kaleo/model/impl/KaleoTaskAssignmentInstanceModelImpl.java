@@ -98,6 +98,7 @@ public class KaleoTaskAssignmentInstanceModelImpl extends BaseModelImpl<KaleoTas
 	public static long KALEODEFINITIONID_COLUMN_BITMASK = 2L;
 	public static long KALEOINSTANCEID_COLUMN_BITMASK = 4L;
 	public static long KALEOTASKINSTANCETOKENID_COLUMN_BITMASK = 8L;
+	public static long KALEOTASKASSIGNMENTINSTANCEID_COLUMN_BITMASK = 16L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignmentInstance"));
 
@@ -113,7 +114,7 @@ public class KaleoTaskAssignmentInstanceModelImpl extends BaseModelImpl<KaleoTas
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kaleoTaskAssignmentInstanceId);
+		return _kaleoTaskAssignmentInstanceId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -494,13 +495,12 @@ public class KaleoTaskAssignmentInstanceModelImpl extends BaseModelImpl<KaleoTas
 
 	@Override
 	public KaleoTaskAssignmentInstance toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KaleoTaskAssignmentInstance)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KaleoTaskAssignmentInstance)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -812,7 +812,7 @@ public class KaleoTaskAssignmentInstanceModelImpl extends BaseModelImpl<KaleoTas
 	}
 
 	private static ClassLoader _classLoader = KaleoTaskAssignmentInstance.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KaleoTaskAssignmentInstance.class
 		};
 	private long _kaleoTaskAssignmentInstanceId;
@@ -842,5 +842,5 @@ public class KaleoTaskAssignmentInstanceModelImpl extends BaseModelImpl<KaleoTas
 	private boolean _completed;
 	private Date _completionDate;
 	private long _columnBitmask;
-	private KaleoTaskAssignmentInstance _escapedModelProxy;
+	private KaleoTaskAssignmentInstance _escapedModel;
 }

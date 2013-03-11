@@ -19,8 +19,6 @@ import com.liferay.ams.model.Definition;
 import com.liferay.ams.model.impl.DefinitionImpl;
 import com.liferay.ams.model.impl.DefinitionModelImpl;
 
-import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -38,10 +36,9 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import java.io.Serializable;
@@ -186,7 +183,7 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	 */
 	public Definition remove(long definitionId)
 		throws NoSuchDefinitionException, SystemException {
-		return remove(Long.valueOf(definitionId));
+		return remove((Serializable)definitionId);
 	}
 
 	/**
@@ -240,7 +237,14 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.delete(session, definition);
+			if (!session.contains(definition)) {
+				definition = (Definition)session.get(DefinitionImpl.class,
+						definition.getPrimaryKeyObj());
+			}
+
+			if (definition != null) {
+				session.delete(definition);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -249,14 +253,16 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 			closeSession(session);
 		}
 
-		clearCache(definition);
+		if (definition != null) {
+			clearCache(definition);
+		}
 
 		return definition;
 	}
 
 	@Override
-	public Definition updateImpl(com.liferay.ams.model.Definition definition,
-		boolean merge) throws SystemException {
+	public Definition updateImpl(com.liferay.ams.model.Definition definition)
+		throws SystemException {
 		definition = toUnwrappedModel(definition);
 
 		boolean isNew = definition.isNew();
@@ -266,9 +272,14 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 		try {
 			session = openSession();
 
-			BatchSessionUtil.update(session, definition, merge);
+			if (definition.isNew()) {
+				session.save(definition);
 
-			definition.setNew(false);
+				definition.setNew(false);
+			}
+			else {
+				session.merge(definition);
+			}
 		}
 		catch (Exception e) {
 			throw processException(e);
@@ -321,13 +332,24 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	 *
 	 * @param primaryKey the primary key of the definition
 	 * @return the definition
-	 * @throws com.liferay.portal.NoSuchModelException if a definition with the primary key could not be found
+	 * @throws com.liferay.ams.NoSuchDefinitionException if a definition with the primary key could not be found
 	 * @throws SystemException if a system exception occurred
 	 */
 	@Override
 	public Definition findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
+		throws NoSuchDefinitionException, SystemException {
+		Definition definition = fetchByPrimaryKey(primaryKey);
+
+		if (definition == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+			}
+
+			throw new NoSuchDefinitionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				primaryKey);
+		}
+
+		return definition;
 	}
 
 	/**
@@ -340,18 +362,7 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	 */
 	public Definition findByPrimaryKey(long definitionId)
 		throws NoSuchDefinitionException, SystemException {
-		Definition definition = fetchByPrimaryKey(definitionId);
-
-		if (definition == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + definitionId);
-			}
-
-			throw new NoSuchDefinitionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				definitionId);
-		}
-
-		return definition;
+		return findByPrimaryKey((Serializable)definitionId);
 	}
 
 	/**
@@ -364,7 +375,42 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	@Override
 	public Definition fetchByPrimaryKey(Serializable primaryKey)
 		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
+		Definition definition = (Definition)EntityCacheUtil.getResult(DefinitionModelImpl.ENTITY_CACHE_ENABLED,
+				DefinitionImpl.class, primaryKey);
+
+		if (definition == _nullDefinition) {
+			return null;
+		}
+
+		if (definition == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				definition = (Definition)session.get(DefinitionImpl.class,
+						primaryKey);
+
+				if (definition != null) {
+					cacheResult(definition);
+				}
+				else {
+					EntityCacheUtil.putResult(DefinitionModelImpl.ENTITY_CACHE_ENABLED,
+						DefinitionImpl.class, primaryKey, _nullDefinition);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(DefinitionModelImpl.ENTITY_CACHE_ENABLED,
+					DefinitionImpl.class, primaryKey);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return definition;
 	}
 
 	/**
@@ -376,43 +422,7 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	 */
 	public Definition fetchByPrimaryKey(long definitionId)
 		throws SystemException {
-		Definition definition = (Definition)EntityCacheUtil.getResult(DefinitionModelImpl.ENTITY_CACHE_ENABLED,
-				DefinitionImpl.class, definitionId);
-
-		if (definition == _nullDefinition) {
-			return null;
-		}
-
-		if (definition == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				definition = (Definition)session.get(DefinitionImpl.class,
-						Long.valueOf(definitionId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (definition != null) {
-					cacheResult(definition);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(DefinitionModelImpl.ENTITY_CACHE_ENABLED,
-						DefinitionImpl.class, definitionId, _nullDefinition);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return definition;
+		return fetchByPrimaryKey((Serializable)definitionId);
 	}
 
 	/**
@@ -429,7 +439,7 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	 * Returns a range of all the definitions.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.ams.model.impl.DefinitionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of definitions
@@ -446,7 +456,7 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	 * Returns an ordered range of all the definitions.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.ams.model.impl.DefinitionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of definitions
@@ -457,11 +467,13 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	 */
 	public List<Definition> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -490,6 +502,10 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 			}
 			else {
 				sql = _SQL_SELECT_DEFINITION;
+
+				if (pagination) {
+					sql = sql.concat(DefinitionModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -499,30 +515,29 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<Definition>)QueryUtil.list(q, getDialect(),
 							start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<Definition>(list);
 				}
 				else {
 					list = (List<Definition>)QueryUtil.list(q, getDialect(),
 							start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -560,18 +575,17 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 				Query q = session.createQuery(_SQL_COUNT_DEFINITION);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -593,7 +607,7 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 
 				for (String listenerClassName : listenerClassNames) {
 					listenersList.add((ModelListener<Definition>)InstanceFactory.newInstance(
-							listenerClassName));
+							getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
@@ -607,19 +621,10 @@ public class DefinitionPersistenceImpl extends BasePersistenceImpl<Definition>
 	public void destroy() {
 		EntityCacheUtil.removeCache(DefinitionImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = AssetPersistence.class)
-	protected AssetPersistence assetPersistence;
-	@BeanReference(type = CheckoutPersistence.class)
-	protected CheckoutPersistence checkoutPersistence;
-	@BeanReference(type = DefinitionPersistence.class)
-	protected DefinitionPersistence definitionPersistence;
-	@BeanReference(type = TypePersistence.class)
-	protected TypePersistence typePersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_DEFINITION = "SELECT definition FROM Definition definition";
 	private static final String _SQL_COUNT_DEFINITION = "SELECT COUNT(definition) FROM Definition definition";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "definition.";

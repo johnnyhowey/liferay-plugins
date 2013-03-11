@@ -221,6 +221,10 @@ public interface MeetupsRegistrationModel extends AuditedModel,
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -232,6 +236,8 @@ public interface MeetupsRegistrationModel extends AuditedModel,
 	public CacheModel<MeetupsRegistration> toCacheModel();
 
 	public MeetupsRegistration toEscapedModel();
+
+	public MeetupsRegistration toUnescapedModel();
 
 	public String toString();
 

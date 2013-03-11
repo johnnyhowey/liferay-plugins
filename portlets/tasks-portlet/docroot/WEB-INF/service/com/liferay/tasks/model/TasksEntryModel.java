@@ -320,6 +320,10 @@ public interface TasksEntryModel extends BaseModel<TasksEntry>, GroupedModel {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -331,6 +335,8 @@ public interface TasksEntryModel extends BaseModel<TasksEntry>, GroupedModel {
 	public CacheModel<TasksEntry> toCacheModel();
 
 	public TasksEntry toEscapedModel();
+
+	public TasksEntry toUnescapedModel();
 
 	public String toString();
 

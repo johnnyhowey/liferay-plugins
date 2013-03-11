@@ -102,6 +102,10 @@ public interface BarModel extends BaseModel<Bar> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -113,6 +117,8 @@ public interface BarModel extends BaseModel<Bar> {
 	public CacheModel<Bar> toCacheModel();
 
 	public Bar toEscapedModel();
+
+	public Bar toUnescapedModel();
 
 	public String toString();
 

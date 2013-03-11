@@ -206,6 +206,10 @@ public interface OAuthConsumerModel extends BaseModel<OAuthConsumer> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -217,6 +221,8 @@ public interface OAuthConsumerModel extends BaseModel<OAuthConsumer> {
 	public CacheModel<OAuthConsumer> toCacheModel();
 
 	public OAuthConsumer toEscapedModel();
+
+	public OAuthConsumer toUnescapedModel();
 
 	public String toString();
 

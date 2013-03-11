@@ -94,94 +94,18 @@ public class BarUtil {
 	}
 
 	/**
-	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, boolean)
+	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel)
 	 */
-	public static Bar update(Bar bar, boolean merge) throws SystemException {
-		return getPersistence().update(bar, merge);
+	public static Bar update(Bar bar) throws SystemException {
+		return getPersistence().update(bar);
 	}
 
 	/**
-	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, boolean, ServiceContext)
+	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, ServiceContext)
 	 */
-	public static Bar update(Bar bar, boolean merge,
-		ServiceContext serviceContext) throws SystemException {
-		return getPersistence().update(bar, merge, serviceContext);
-	}
-
-	/**
-	* Caches the bar in the entity cache if it is enabled.
-	*
-	* @param bar the bar
-	*/
-	public static void cacheResult(com.liferay.testtransaction.model.Bar bar) {
-		getPersistence().cacheResult(bar);
-	}
-
-	/**
-	* Caches the bars in the entity cache if it is enabled.
-	*
-	* @param bars the bars
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.testtransaction.model.Bar> bars) {
-		getPersistence().cacheResult(bars);
-	}
-
-	/**
-	* Creates a new bar with the primary key. Does not add the bar to the database.
-	*
-	* @param barId the primary key for the new bar
-	* @return the new bar
-	*/
-	public static com.liferay.testtransaction.model.Bar create(long barId) {
-		return getPersistence().create(barId);
-	}
-
-	/**
-	* Removes the bar with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param barId the primary key of the bar
-	* @return the bar that was removed
-	* @throws com.liferay.testtransaction.NoSuchBarException if a bar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.testtransaction.model.Bar remove(long barId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.testtransaction.NoSuchBarException {
-		return getPersistence().remove(barId);
-	}
-
-	public static com.liferay.testtransaction.model.Bar updateImpl(
-		com.liferay.testtransaction.model.Bar bar, boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(bar, merge);
-	}
-
-	/**
-	* Returns the bar with the primary key or throws a {@link com.liferay.testtransaction.NoSuchBarException} if it could not be found.
-	*
-	* @param barId the primary key of the bar
-	* @return the bar
-	* @throws com.liferay.testtransaction.NoSuchBarException if a bar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.testtransaction.model.Bar findByPrimaryKey(
-		long barId)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.testtransaction.NoSuchBarException {
-		return getPersistence().findByPrimaryKey(barId);
-	}
-
-	/**
-	* Returns the bar with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param barId the primary key of the bar
-	* @return the bar, or <code>null</code> if a bar with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.testtransaction.model.Bar fetchByPrimaryKey(
-		long barId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(barId);
+	public static Bar update(Bar bar, ServiceContext serviceContext)
+		throws SystemException {
+		return getPersistence().update(bar, serviceContext);
 	}
 
 	/**
@@ -201,7 +125,7 @@ public class BarUtil {
 	* Returns a range of all the bars where text = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.testtransaction.model.impl.BarModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param text the text
@@ -220,7 +144,7 @@ public class BarUtil {
 	* Returns an ordered range of all the bars where text = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.testtransaction.model.impl.BarModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param text the text
@@ -321,6 +245,105 @@ public class BarUtil {
 	}
 
 	/**
+	* Removes all the bars where text = &#63; from the database.
+	*
+	* @param text the text
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByText(java.lang.String text)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByText(text);
+	}
+
+	/**
+	* Returns the number of bars where text = &#63;.
+	*
+	* @param text the text
+	* @return the number of matching bars
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByText(java.lang.String text)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByText(text);
+	}
+
+	/**
+	* Caches the bar in the entity cache if it is enabled.
+	*
+	* @param bar the bar
+	*/
+	public static void cacheResult(com.liferay.testtransaction.model.Bar bar) {
+		getPersistence().cacheResult(bar);
+	}
+
+	/**
+	* Caches the bars in the entity cache if it is enabled.
+	*
+	* @param bars the bars
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.testtransaction.model.Bar> bars) {
+		getPersistence().cacheResult(bars);
+	}
+
+	/**
+	* Creates a new bar with the primary key. Does not add the bar to the database.
+	*
+	* @param barId the primary key for the new bar
+	* @return the new bar
+	*/
+	public static com.liferay.testtransaction.model.Bar create(long barId) {
+		return getPersistence().create(barId);
+	}
+
+	/**
+	* Removes the bar with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param barId the primary key of the bar
+	* @return the bar that was removed
+	* @throws com.liferay.testtransaction.NoSuchBarException if a bar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.testtransaction.model.Bar remove(long barId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testtransaction.NoSuchBarException {
+		return getPersistence().remove(barId);
+	}
+
+	public static com.liferay.testtransaction.model.Bar updateImpl(
+		com.liferay.testtransaction.model.Bar bar)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(bar);
+	}
+
+	/**
+	* Returns the bar with the primary key or throws a {@link com.liferay.testtransaction.NoSuchBarException} if it could not be found.
+	*
+	* @param barId the primary key of the bar
+	* @return the bar
+	* @throws com.liferay.testtransaction.NoSuchBarException if a bar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.testtransaction.model.Bar findByPrimaryKey(
+		long barId)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testtransaction.NoSuchBarException {
+		return getPersistence().findByPrimaryKey(barId);
+	}
+
+	/**
+	* Returns the bar with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param barId the primary key of the bar
+	* @return the bar, or <code>null</code> if a bar with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.testtransaction.model.Bar fetchByPrimaryKey(
+		long barId) throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(barId);
+	}
+
+	/**
 	* Returns all the bars.
 	*
 	* @return the bars
@@ -335,7 +358,7 @@ public class BarUtil {
 	* Returns a range of all the bars.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.testtransaction.model.impl.BarModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of bars
@@ -353,7 +376,7 @@ public class BarUtil {
 	* Returns an ordered range of all the bars.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.testtransaction.model.impl.BarModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of bars
@@ -370,17 +393,6 @@ public class BarUtil {
 	}
 
 	/**
-	* Removes all the bars where text = &#63; from the database.
-	*
-	* @param text the text
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByText(java.lang.String text)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByText(text);
-	}
-
-	/**
 	* Removes all the bars from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -388,18 +400,6 @@ public class BarUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of bars where text = &#63;.
-	*
-	* @param text the text
-	* @return the number of matching bars
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByText(java.lang.String text)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByText(text);
 	}
 
 	/**
@@ -425,7 +425,7 @@ public class BarUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.2.0
 	 */
 	public void setPersistence(BarPersistence persistence) {
 	}

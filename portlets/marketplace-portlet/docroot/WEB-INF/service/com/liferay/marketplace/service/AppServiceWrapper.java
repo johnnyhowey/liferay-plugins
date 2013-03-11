@@ -56,10 +56,10 @@ public class AppServiceWrapper implements AppService,
 	}
 
 	public com.liferay.marketplace.model.App addApp(long remoteAppId,
-		java.lang.String version, java.io.InputStream inputStream)
+		java.lang.String version, java.io.File file)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _appService.addApp(remoteAppId, version, inputStream);
+		return _appService.addApp(remoteAppId, version, file);
 	}
 
 	public com.liferay.marketplace.model.App deleteApp(long appId)
@@ -81,21 +81,21 @@ public class AppServiceWrapper implements AppService,
 	}
 
 	public com.liferay.marketplace.model.App updateApp(long appId,
-		java.lang.String version, java.io.InputStream inputStream)
+		java.lang.String version, java.io.File file)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
-		return _appService.updateApp(appId, version, inputStream);
+		return _appService.updateApp(appId, version, file);
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
 	public AppService getWrappedAppService() {
 		return _appService;
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #setWrappedService}
+	 * @deprecated As of 6.1.0, replaced by {@link #setWrappedService}
 	 */
 	public void setWrappedAppService(AppService appService) {
 		_appService = appService;

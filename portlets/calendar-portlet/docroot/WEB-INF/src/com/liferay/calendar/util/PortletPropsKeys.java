@@ -48,7 +48,6 @@ public class PortletPropsKeys {
 	public static final String CALENDAR_RESOURCE_FORCE_AUTOGENERATE_CODE =
 		"calendar.resource.force.autogenerate.code";
 
-	public static final String CALENDAR_RESOURCE_TYPES =
-		"calendar.resource.types";
+	public static final String CALENDAR_RSS_TEMPLATE = "calendar.rss.template";
 
 }

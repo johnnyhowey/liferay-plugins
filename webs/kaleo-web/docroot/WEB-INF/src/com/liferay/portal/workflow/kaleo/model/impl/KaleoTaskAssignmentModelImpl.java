@@ -99,6 +99,7 @@ public class KaleoTaskAssignmentModelImpl extends BaseModelImpl<KaleoTaskAssignm
 	public static long KALEOCLASSNAME_COLUMN_BITMASK = 4L;
 	public static long KALEOCLASSPK_COLUMN_BITMASK = 8L;
 	public static long KALEODEFINITIONID_COLUMN_BITMASK = 16L;
+	public static long KALEOTASKASSIGNMENTID_COLUMN_BITMASK = 32L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoTaskAssignment"));
 
@@ -114,7 +115,7 @@ public class KaleoTaskAssignmentModelImpl extends BaseModelImpl<KaleoTaskAssignm
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kaleoTaskAssignmentId);
+		return _kaleoTaskAssignmentId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -520,13 +521,12 @@ public class KaleoTaskAssignmentModelImpl extends BaseModelImpl<KaleoTaskAssignm
 
 	@Override
 	public KaleoTaskAssignment toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KaleoTaskAssignment)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KaleoTaskAssignment)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -853,7 +853,7 @@ public class KaleoTaskAssignmentModelImpl extends BaseModelImpl<KaleoTaskAssignm
 	}
 
 	private static ClassLoader _classLoader = KaleoTaskAssignment.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KaleoTaskAssignment.class
 		};
 	private long _kaleoTaskAssignmentId;
@@ -883,5 +883,5 @@ public class KaleoTaskAssignmentModelImpl extends BaseModelImpl<KaleoTaskAssignm
 	private String _assigneeScriptLanguage;
 	private String _assigneeScriptRequiredContexts;
 	private long _columnBitmask;
-	private KaleoTaskAssignment _escapedModelProxy;
+	private KaleoTaskAssignment _escapedModel;
 }
