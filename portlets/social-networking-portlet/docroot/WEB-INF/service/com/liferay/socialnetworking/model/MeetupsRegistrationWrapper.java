@@ -349,6 +349,16 @@ public class MeetupsRegistrationWrapper implements MeetupsRegistration,
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_meetupsRegistration.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_meetupsRegistration.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_meetupsRegistration.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -376,6 +386,10 @@ public class MeetupsRegistrationWrapper implements MeetupsRegistration,
 		return new MeetupsRegistrationWrapper(_meetupsRegistration.toEscapedModel());
 	}
 
+	public com.liferay.socialnetworking.model.MeetupsRegistration toUnescapedModel() {
+		return new MeetupsRegistrationWrapper(_meetupsRegistration.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _meetupsRegistration.toString();
@@ -391,7 +405,7 @@ public class MeetupsRegistrationWrapper implements MeetupsRegistration,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public MeetupsRegistration getWrappedMeetupsRegistration() {
 		return _meetupsRegistration;

@@ -236,6 +236,10 @@ public interface JIRAIssueModel extends BaseModel<JIRAIssue> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -247,6 +251,8 @@ public interface JIRAIssueModel extends BaseModel<JIRAIssue> {
 	public CacheModel<JIRAIssue> toCacheModel();
 
 	public JIRAIssue toEscapedModel();
+
+	public JIRAIssue toUnescapedModel();
 
 	public String toString();
 

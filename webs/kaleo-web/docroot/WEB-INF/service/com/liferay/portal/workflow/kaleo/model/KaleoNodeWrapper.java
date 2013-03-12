@@ -490,6 +490,16 @@ public class KaleoNodeWrapper implements KaleoNode, ModelWrapper<KaleoNode> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_kaleoNode.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_kaleoNode.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_kaleoNode.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -515,6 +525,10 @@ public class KaleoNodeWrapper implements KaleoNode, ModelWrapper<KaleoNode> {
 
 	public com.liferay.portal.workflow.kaleo.model.KaleoNode toEscapedModel() {
 		return new KaleoNodeWrapper(_kaleoNode.toEscapedModel());
+	}
+
+	public com.liferay.portal.workflow.kaleo.model.KaleoNode toUnescapedModel() {
+		return new KaleoNodeWrapper(_kaleoNode.toUnescapedModel());
 	}
 
 	@Override
@@ -555,7 +569,7 @@ public class KaleoNodeWrapper implements KaleoNode, ModelWrapper<KaleoNode> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public KaleoNode getWrappedKaleoNode() {
 		return _kaleoNode;

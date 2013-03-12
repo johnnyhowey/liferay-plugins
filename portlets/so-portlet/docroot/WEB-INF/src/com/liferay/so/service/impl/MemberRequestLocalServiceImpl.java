@@ -18,6 +18,7 @@
 package com.liferay.so.service.impl;
 
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -65,6 +66,15 @@ public class MemberRequestLocalServiceImpl
 
 		User user = userLocalService.getUserById(userId);
 
+		try {
+			User receiverUser = userLocalService.getUserByEmailAddress(
+				serviceContext.getCompanyId(), receiverEmailAddress);
+
+			receiverUserId = receiverUser.getUserId();
+		}
+		catch (NoSuchUserException nsue) {
+		}
+
 		Date now = new Date();
 
 		long memberRequestId = counterLocalService.increment();
@@ -84,7 +94,7 @@ public class MemberRequestLocalServiceImpl
 		memberRequest.setInvitedTeamId(invitedTeamId);
 		memberRequest.setStatus(InviteMembersConstants.STATUS_PENDING);
 
-		memberRequestPersistence.update(memberRequest, false);
+		memberRequestPersistence.update(memberRequest);
 
 		// Email
 
@@ -97,7 +107,9 @@ public class MemberRequestLocalServiceImpl
 
 		// Notifications
 
-		sendNotificationEvent(memberRequest);
+		if (receiverUserId > 0) {
+			sendNotificationEvent(memberRequest);
+		}
 
 		return memberRequest;
 	}
@@ -202,7 +214,7 @@ public class MemberRequestLocalServiceImpl
 		memberRequest.setModifiedDate(new Date());
 		memberRequest.setStatus(status);
 
-		memberRequestPersistence.update(memberRequest, false);
+		memberRequestPersistence.update(memberRequest);
 
 		if (status == InviteMembersConstants.STATUS_ACCEPTED) {
 			userLocalService.addGroupUsers(
@@ -236,9 +248,56 @@ public class MemberRequestLocalServiceImpl
 		memberRequest.setModifiedDate(new Date());
 		memberRequest.setReceiverUserId(receiverUserId);
 
-		memberRequestPersistence.update(memberRequest, false);
+		memberRequestPersistence.update(memberRequest);
+
+		if (receiverUserId > 0) {
+			sendNotificationEvent(memberRequest);
+		}
 
 		return memberRequest;
+	}
+
+	protected String getCreateAccountURL(
+		MemberRequest memberRequest, ServiceContext serviceContext) {
+
+		String createAccountURL = (String)serviceContext.getAttribute(
+			"createAccountURL");
+
+		if (Validator.isNull(createAccountURL)) {
+			createAccountURL = serviceContext.getPortalURL();
+		}
+
+		String redirectURL = getRedirectURL(serviceContext);
+
+		redirectURL = HttpUtil.addParameter(
+			redirectURL, "key", memberRequest.getKey());
+
+		createAccountURL = HttpUtil.addParameter(
+			createAccountURL, "redirect", redirectURL);
+
+		return createAccountURL;
+	}
+
+	protected String getLoginURL(ServiceContext serviceContext) {
+		String loginURL = (String)serviceContext.getAttribute("loginURL");
+
+		if (Validator.isNull(loginURL)) {
+			loginURL = serviceContext.getPortalURL();
+		}
+
+		String redirectURL = getRedirectURL(serviceContext);
+
+		return HttpUtil.addParameter(loginURL, "redirect", redirectURL);
+	}
+
+	protected String getRedirectURL(ServiceContext serviceContext) {
+		String redirectURL = (String)serviceContext.getAttribute("redirectURL");
+
+		if (Validator.isNull(redirectURL)) {
+			redirectURL = serviceContext.getCurrentURL();
+		}
+
+		return redirectURL;
 	}
 
 	protected void sendEmail(
@@ -300,25 +359,6 @@ public class MemberRequestLocalServiceImpl
 				user.getFullName()
 			});
 
-		String createAccountURL = (String)serviceContext.getAttribute(
-			"createAccountURL");
-
-		if (Validator.isNull(createAccountURL)) {
-			createAccountURL = serviceContext.getPortalURL();
-		}
-
-		createAccountURL = HttpUtil.addParameter(
-			createAccountURL, "key", memberRequest.getKey());
-
-		String loginURL = (String)serviceContext.getAttribute("loginURL");
-
-		if (Validator.isNull(loginURL)) {
-			loginURL = serviceContext.getPortalURL();
-		}
-
-		loginURL = HttpUtil.addParameter(
-			loginURL, "key", memberRequest.getKey());
-
 		body = StringUtil.replace(
 			body,
 			new String[] {
@@ -328,9 +368,10 @@ public class MemberRequestLocalServiceImpl
 				"[$MEMBER_REQUEST_USER$]"
 			},
 			new String[] {
-				fromAddress, fromName, createAccountURL,
-				group.getDescriptiveName(serviceContext.getLocale()), loginURL,
-				user.getFullName()
+				fromAddress, fromName,
+				getCreateAccountURL(memberRequest, serviceContext),
+				group.getDescriptiveName(serviceContext.getLocale()),
+				getLoginURL(serviceContext), user.getFullName()
 			});
 
 		InternetAddress from = new InternetAddress(fromAddress, fromName);

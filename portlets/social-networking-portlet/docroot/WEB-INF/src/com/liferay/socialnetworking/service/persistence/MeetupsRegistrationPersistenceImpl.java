@@ -14,8 +14,6 @@
 
 package com.liferay.socialnetworking.service.persistence;
 
-import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -35,10 +33,9 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.socialnetworking.NoSuchMeetupsRegistrationException;
@@ -76,60 +73,6 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MEETUPSENTRYID =
-		new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
-			MeetupsRegistrationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByMeetupsEntryId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEETUPSENTRYID =
-		new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
-			MeetupsRegistrationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByMeetupsEntryId",
-			new String[] { Long.class.getName() },
-			MeetupsRegistrationModelImpl.MEETUPSENTRYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_MEETUPSENTRYID = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByMeetupsEntryId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_U_ME = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
-			MeetupsRegistrationImpl.class, FINDER_CLASS_NAME_ENTITY,
-			"fetchByU_ME",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			MeetupsRegistrationModelImpl.USERID_COLUMN_BITMASK |
-			MeetupsRegistrationModelImpl.MEETUPSENTRYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_U_ME = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_ME",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ME_S = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
-			MeetupsRegistrationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByME_S",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ME_S = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
-			MeetupsRegistrationImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByME_S",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			MeetupsRegistrationModelImpl.MEETUPSENTRYID_COLUMN_BITMASK |
-			MeetupsRegistrationModelImpl.STATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_ME_S = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByME_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
 			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
 			MeetupsRegistrationImpl.class,
@@ -141,433 +84,29 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
 			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the meetups registration in the entity cache if it is enabled.
-	 *
-	 * @param meetupsRegistration the meetups registration
-	 */
-	public void cacheResult(MeetupsRegistration meetupsRegistration) {
-		EntityCacheUtil.putResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationImpl.class, meetupsRegistration.getPrimaryKey(),
-			meetupsRegistration);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_ME,
-			new Object[] {
-				Long.valueOf(meetupsRegistration.getUserId()),
-				Long.valueOf(meetupsRegistration.getMeetupsEntryId())
-			}, meetupsRegistration);
-
-		meetupsRegistration.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the meetups registrations in the entity cache if it is enabled.
-	 *
-	 * @param meetupsRegistrations the meetups registrations
-	 */
-	public void cacheResult(List<MeetupsRegistration> meetupsRegistrations) {
-		for (MeetupsRegistration meetupsRegistration : meetupsRegistrations) {
-			if (EntityCacheUtil.getResult(
-						MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-						MeetupsRegistrationImpl.class,
-						meetupsRegistration.getPrimaryKey()) == null) {
-				cacheResult(meetupsRegistration);
-			}
-			else {
-				meetupsRegistration.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all meetups registrations.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(MeetupsRegistrationImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(MeetupsRegistrationImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the meetups registration.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(MeetupsRegistration meetupsRegistration) {
-		EntityCacheUtil.removeResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationImpl.class, meetupsRegistration.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(meetupsRegistration);
-	}
-
-	@Override
-	public void clearCache(List<MeetupsRegistration> meetupsRegistrations) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (MeetupsRegistration meetupsRegistration : meetupsRegistrations) {
-			EntityCacheUtil.removeResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-				MeetupsRegistrationImpl.class,
-				meetupsRegistration.getPrimaryKey());
-
-			clearUniqueFindersCache(meetupsRegistration);
-		}
-	}
-
-	protected void clearUniqueFindersCache(
-		MeetupsRegistration meetupsRegistration) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_ME,
-			new Object[] {
-				Long.valueOf(meetupsRegistration.getUserId()),
-				Long.valueOf(meetupsRegistration.getMeetupsEntryId())
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MEETUPSENTRYID =
+		new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
+			MeetupsRegistrationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByMeetupsEntryId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-	}
-
-	/**
-	 * Creates a new meetups registration with the primary key. Does not add the meetups registration to the database.
-	 *
-	 * @param meetupsRegistrationId the primary key for the new meetups registration
-	 * @return the new meetups registration
-	 */
-	public MeetupsRegistration create(long meetupsRegistrationId) {
-		MeetupsRegistration meetupsRegistration = new MeetupsRegistrationImpl();
-
-		meetupsRegistration.setNew(true);
-		meetupsRegistration.setPrimaryKey(meetupsRegistrationId);
-
-		return meetupsRegistration;
-	}
-
-	/**
-	 * Removes the meetups registration with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param meetupsRegistrationId the primary key of the meetups registration
-	 * @return the meetups registration that was removed
-	 * @throws com.liferay.socialnetworking.NoSuchMeetupsRegistrationException if a meetups registration with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MeetupsRegistration remove(long meetupsRegistrationId)
-		throws NoSuchMeetupsRegistrationException, SystemException {
-		return remove(Long.valueOf(meetupsRegistrationId));
-	}
-
-	/**
-	 * Removes the meetups registration with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the meetups registration
-	 * @return the meetups registration that was removed
-	 * @throws com.liferay.socialnetworking.NoSuchMeetupsRegistrationException if a meetups registration with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MeetupsRegistration remove(Serializable primaryKey)
-		throws NoSuchMeetupsRegistrationException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			MeetupsRegistration meetupsRegistration = (MeetupsRegistration)session.get(MeetupsRegistrationImpl.class,
-					primaryKey);
-
-			if (meetupsRegistration == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchMeetupsRegistrationException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(meetupsRegistration);
-		}
-		catch (NoSuchMeetupsRegistrationException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected MeetupsRegistration removeImpl(
-		MeetupsRegistration meetupsRegistration) throws SystemException {
-		meetupsRegistration = toUnwrappedModel(meetupsRegistration);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.delete(session, meetupsRegistration);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		clearCache(meetupsRegistration);
-
-		return meetupsRegistration;
-	}
-
-	@Override
-	public MeetupsRegistration updateImpl(
-		com.liferay.socialnetworking.model.MeetupsRegistration meetupsRegistration,
-		boolean merge) throws SystemException {
-		meetupsRegistration = toUnwrappedModel(meetupsRegistration);
-
-		boolean isNew = meetupsRegistration.isNew();
-
-		MeetupsRegistrationModelImpl meetupsRegistrationModelImpl = (MeetupsRegistrationModelImpl)meetupsRegistration;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.update(session, meetupsRegistration, merge);
-
-			meetupsRegistration.setNew(false);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !MeetupsRegistrationModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((meetupsRegistrationModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEETUPSENTRYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(meetupsRegistrationModelImpl.getOriginalMeetupsEntryId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MEETUPSENTRYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEETUPSENTRYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(meetupsRegistrationModelImpl.getMeetupsEntryId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MEETUPSENTRYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEETUPSENTRYID,
-					args);
-			}
-
-			if ((meetupsRegistrationModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ME_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(meetupsRegistrationModelImpl.getOriginalMeetupsEntryId()),
-						Integer.valueOf(meetupsRegistrationModelImpl.getOriginalStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ME_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ME_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(meetupsRegistrationModelImpl.getMeetupsEntryId()),
-						Integer.valueOf(meetupsRegistrationModelImpl.getStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ME_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ME_S,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-			MeetupsRegistrationImpl.class, meetupsRegistration.getPrimaryKey(),
-			meetupsRegistration);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_ME,
-				new Object[] {
-					Long.valueOf(meetupsRegistration.getUserId()),
-					Long.valueOf(meetupsRegistration.getMeetupsEntryId())
-				}, meetupsRegistration);
-		}
-		else {
-			if ((meetupsRegistrationModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_U_ME.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(meetupsRegistrationModelImpl.getOriginalUserId()),
-						Long.valueOf(meetupsRegistrationModelImpl.getOriginalMeetupsEntryId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_ME, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_ME, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_ME,
-					new Object[] {
-						Long.valueOf(meetupsRegistration.getUserId()),
-						Long.valueOf(meetupsRegistration.getMeetupsEntryId())
-					}, meetupsRegistration);
-			}
-		}
-
-		return meetupsRegistration;
-	}
-
-	protected MeetupsRegistration toUnwrappedModel(
-		MeetupsRegistration meetupsRegistration) {
-		if (meetupsRegistration instanceof MeetupsRegistrationImpl) {
-			return meetupsRegistration;
-		}
-
-		MeetupsRegistrationImpl meetupsRegistrationImpl = new MeetupsRegistrationImpl();
-
-		meetupsRegistrationImpl.setNew(meetupsRegistration.isNew());
-		meetupsRegistrationImpl.setPrimaryKey(meetupsRegistration.getPrimaryKey());
-
-		meetupsRegistrationImpl.setMeetupsRegistrationId(meetupsRegistration.getMeetupsRegistrationId());
-		meetupsRegistrationImpl.setCompanyId(meetupsRegistration.getCompanyId());
-		meetupsRegistrationImpl.setUserId(meetupsRegistration.getUserId());
-		meetupsRegistrationImpl.setUserName(meetupsRegistration.getUserName());
-		meetupsRegistrationImpl.setCreateDate(meetupsRegistration.getCreateDate());
-		meetupsRegistrationImpl.setModifiedDate(meetupsRegistration.getModifiedDate());
-		meetupsRegistrationImpl.setMeetupsEntryId(meetupsRegistration.getMeetupsEntryId());
-		meetupsRegistrationImpl.setStatus(meetupsRegistration.getStatus());
-		meetupsRegistrationImpl.setComments(meetupsRegistration.getComments());
-
-		return meetupsRegistrationImpl;
-	}
-
-	/**
-	 * Returns the meetups registration with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the meetups registration
-	 * @return the meetups registration
-	 * @throws com.liferay.portal.NoSuchModelException if a meetups registration with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MeetupsRegistration findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the meetups registration with the primary key or throws a {@link com.liferay.socialnetworking.NoSuchMeetupsRegistrationException} if it could not be found.
-	 *
-	 * @param meetupsRegistrationId the primary key of the meetups registration
-	 * @return the meetups registration
-	 * @throws com.liferay.socialnetworking.NoSuchMeetupsRegistrationException if a meetups registration with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MeetupsRegistration findByPrimaryKey(long meetupsRegistrationId)
-		throws NoSuchMeetupsRegistrationException, SystemException {
-		MeetupsRegistration meetupsRegistration = fetchByPrimaryKey(meetupsRegistrationId);
-
-		if (meetupsRegistration == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					meetupsRegistrationId);
-			}
-
-			throw new NoSuchMeetupsRegistrationException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				meetupsRegistrationId);
-		}
-
-		return meetupsRegistration;
-	}
-
-	/**
-	 * Returns the meetups registration with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the meetups registration
-	 * @return the meetups registration, or <code>null</code> if a meetups registration with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public MeetupsRegistration fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the meetups registration with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param meetupsRegistrationId the primary key of the meetups registration
-	 * @return the meetups registration, or <code>null</code> if a meetups registration with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MeetupsRegistration fetchByPrimaryKey(long meetupsRegistrationId)
-		throws SystemException {
-		MeetupsRegistration meetupsRegistration = (MeetupsRegistration)EntityCacheUtil.getResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-				MeetupsRegistrationImpl.class, meetupsRegistrationId);
-
-		if (meetupsRegistration == _nullMeetupsRegistration) {
-			return null;
-		}
-
-		if (meetupsRegistration == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				meetupsRegistration = (MeetupsRegistration)session.get(MeetupsRegistrationImpl.class,
-						Long.valueOf(meetupsRegistrationId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (meetupsRegistration != null) {
-					cacheResult(meetupsRegistration);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
-						MeetupsRegistrationImpl.class, meetupsRegistrationId,
-						_nullMeetupsRegistration);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return meetupsRegistration;
-	}
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEETUPSENTRYID =
+		new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
+			MeetupsRegistrationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByMeetupsEntryId",
+			new String[] { Long.class.getName() },
+			MeetupsRegistrationModelImpl.MEETUPSENTRYID_COLUMN_BITMASK |
+			MeetupsRegistrationModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_MEETUPSENTRYID = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByMeetupsEntryId",
+			new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the meetups registrations where meetupsEntryId = &#63;.
@@ -586,7 +125,7 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	 * Returns a range of all the meetups registrations where meetupsEntryId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialnetworking.model.impl.MeetupsRegistrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param meetupsEntryId the meetups entry ID
@@ -604,7 +143,7 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	 * Returns an ordered range of all the meetups registrations where meetupsEntryId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialnetworking.model.impl.MeetupsRegistrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param meetupsEntryId the meetups entry ID
@@ -617,11 +156,13 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	public List<MeetupsRegistration> findByMeetupsEntryId(long meetupsEntryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEETUPSENTRYID;
 			finderArgs = new Object[] { meetupsEntryId };
 		}
@@ -666,8 +207,8 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(MeetupsRegistrationModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -684,22 +225,29 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 
 				qPos.add(meetupsEntryId);
 
-				list = (List<MeetupsRegistration>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<MeetupsRegistration>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<MeetupsRegistration>(list);
+				}
+				else {
+					list = (List<MeetupsRegistration>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -927,7 +475,6 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 				}
 			}
 		}
-
 		else {
 			query.append(MeetupsRegistrationModelImpl.ORDER_BY_JPQL);
 		}
@@ -960,6 +507,86 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the meetups registrations where meetupsEntryId = &#63; from the database.
+	 *
+	 * @param meetupsEntryId the meetups entry ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByMeetupsEntryId(long meetupsEntryId)
+		throws SystemException {
+		for (MeetupsRegistration meetupsRegistration : findByMeetupsEntryId(
+				meetupsEntryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(meetupsRegistration);
+		}
+	}
+
+	/**
+	 * Returns the number of meetups registrations where meetupsEntryId = &#63;.
+	 *
+	 * @param meetupsEntryId the meetups entry ID
+	 * @return the number of matching meetups registrations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByMeetupsEntryId(long meetupsEntryId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_MEETUPSENTRYID;
+
+		Object[] finderArgs = new Object[] { meetupsEntryId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MEETUPSREGISTRATION_WHERE);
+
+			query.append(_FINDER_COLUMN_MEETUPSENTRYID_MEETUPSENTRYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(meetupsEntryId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_MEETUPSENTRYID_MEETUPSENTRYID_2 = "meetupsRegistration.meetupsEntryId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_U_ME = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
+			MeetupsRegistrationImpl.class, FINDER_CLASS_NAME_ENTITY,
+			"fetchByU_ME",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			MeetupsRegistrationModelImpl.USERID_COLUMN_BITMASK |
+			MeetupsRegistrationModelImpl.MEETUPSENTRYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_U_ME = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_ME",
+			new String[] { Long.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the meetups registration where userId = &#63; and meetupsEntryId = &#63; or throws a {@link com.liferay.socialnetworking.NoSuchMeetupsRegistrationException} if it could not be found.
@@ -1049,8 +676,6 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 
 			query.append(_FINDER_COLUMN_U_ME_MEETUPSENTRYID_2);
 
-			query.append(MeetupsRegistrationModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -1068,16 +693,21 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 
 				List<MeetupsRegistration> list = q.list();
 
-				result = list;
-
-				MeetupsRegistration meetupsRegistration = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_ME,
 						finderArgs, list);
 				}
 				else {
-					meetupsRegistration = list.get(0);
+					if ((list.size() > 1) && _log.isWarnEnabled()) {
+						_log.warn(
+							"MeetupsRegistrationPersistenceImpl.fetchByU_ME(long, long, boolean) with parameters (" +
+							StringUtil.merge(finderArgs) +
+							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+					}
+
+					MeetupsRegistration meetupsRegistration = list.get(0);
+
+					result = meetupsRegistration;
 
 					cacheResult(meetupsRegistration);
 
@@ -1087,30 +717,124 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 							finderArgs, meetupsRegistration);
 					}
 				}
-
-				return meetupsRegistration;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_ME,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_ME,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (MeetupsRegistration)result;
-			}
+			return (MeetupsRegistration)result;
 		}
 	}
+
+	/**
+	 * Removes the meetups registration where userId = &#63; and meetupsEntryId = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @param meetupsEntryId the meetups entry ID
+	 * @return the meetups registration that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MeetupsRegistration removeByU_ME(long userId, long meetupsEntryId)
+		throws NoSuchMeetupsRegistrationException, SystemException {
+		MeetupsRegistration meetupsRegistration = findByU_ME(userId,
+				meetupsEntryId);
+
+		return remove(meetupsRegistration);
+	}
+
+	/**
+	 * Returns the number of meetups registrations where userId = &#63; and meetupsEntryId = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param meetupsEntryId the meetups entry ID
+	 * @return the number of matching meetups registrations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByU_ME(long userId, long meetupsEntryId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_U_ME;
+
+		Object[] finderArgs = new Object[] { userId, meetupsEntryId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MEETUPSREGISTRATION_WHERE);
+
+			query.append(_FINDER_COLUMN_U_ME_USERID_2);
+
+			query.append(_FINDER_COLUMN_U_ME_MEETUPSENTRYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(userId);
+
+				qPos.add(meetupsEntryId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_U_ME_USERID_2 = "meetupsRegistration.userId = ? AND ";
+	private static final String _FINDER_COLUMN_U_ME_MEETUPSENTRYID_2 = "meetupsRegistration.meetupsEntryId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_ME_S = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
+			MeetupsRegistrationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByME_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ME_S = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED,
+			MeetupsRegistrationImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByME_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			MeetupsRegistrationModelImpl.MEETUPSENTRYID_COLUMN_BITMASK |
+			MeetupsRegistrationModelImpl.STATUS_COLUMN_BITMASK |
+			MeetupsRegistrationModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_ME_S = new FinderPath(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByME_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
 
 	/**
 	 * Returns all the meetups registrations where meetupsEntryId = &#63; and status = &#63;.
@@ -1130,7 +854,7 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	 * Returns a range of all the meetups registrations where meetupsEntryId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialnetworking.model.impl.MeetupsRegistrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param meetupsEntryId the meetups entry ID
@@ -1149,7 +873,7 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	 * Returns an ordered range of all the meetups registrations where meetupsEntryId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialnetworking.model.impl.MeetupsRegistrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param meetupsEntryId the meetups entry ID
@@ -1163,11 +887,13 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	public List<MeetupsRegistration> findByME_S(long meetupsEntryId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ME_S;
 			finderArgs = new Object[] { meetupsEntryId, status };
 		}
@@ -1215,8 +941,8 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(MeetupsRegistrationModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1235,22 +961,29 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 
 				qPos.add(status);
 
-				list = (List<MeetupsRegistration>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<MeetupsRegistration>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<MeetupsRegistration>(list);
+				}
+				else {
+					list = (List<MeetupsRegistration>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1490,7 +1223,6 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 				}
 			}
 		}
-
 		else {
 			query.append(MeetupsRegistrationModelImpl.ORDER_BY_JPQL);
 		}
@@ -1527,6 +1259,544 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	}
 
 	/**
+	 * Removes all the meetups registrations where meetupsEntryId = &#63; and status = &#63; from the database.
+	 *
+	 * @param meetupsEntryId the meetups entry ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByME_S(long meetupsEntryId, int status)
+		throws SystemException {
+		for (MeetupsRegistration meetupsRegistration : findByME_S(
+				meetupsEntryId, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				null)) {
+			remove(meetupsRegistration);
+		}
+	}
+
+	/**
+	 * Returns the number of meetups registrations where meetupsEntryId = &#63; and status = &#63;.
+	 *
+	 * @param meetupsEntryId the meetups entry ID
+	 * @param status the status
+	 * @return the number of matching meetups registrations
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByME_S(long meetupsEntryId, int status)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_ME_S;
+
+		Object[] finderArgs = new Object[] { meetupsEntryId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MEETUPSREGISTRATION_WHERE);
+
+			query.append(_FINDER_COLUMN_ME_S_MEETUPSENTRYID_2);
+
+			query.append(_FINDER_COLUMN_ME_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(meetupsEntryId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_ME_S_MEETUPSENTRYID_2 = "meetupsRegistration.meetupsEntryId = ? AND ";
+	private static final String _FINDER_COLUMN_ME_S_STATUS_2 = "meetupsRegistration.status = ?";
+
+	/**
+	 * Caches the meetups registration in the entity cache if it is enabled.
+	 *
+	 * @param meetupsRegistration the meetups registration
+	 */
+	public void cacheResult(MeetupsRegistration meetupsRegistration) {
+		EntityCacheUtil.putResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationImpl.class, meetupsRegistration.getPrimaryKey(),
+			meetupsRegistration);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_ME,
+			new Object[] {
+				meetupsRegistration.getUserId(),
+				meetupsRegistration.getMeetupsEntryId()
+			}, meetupsRegistration);
+
+		meetupsRegistration.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the meetups registrations in the entity cache if it is enabled.
+	 *
+	 * @param meetupsRegistrations the meetups registrations
+	 */
+	public void cacheResult(List<MeetupsRegistration> meetupsRegistrations) {
+		for (MeetupsRegistration meetupsRegistration : meetupsRegistrations) {
+			if (EntityCacheUtil.getResult(
+						MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+						MeetupsRegistrationImpl.class,
+						meetupsRegistration.getPrimaryKey()) == null) {
+				cacheResult(meetupsRegistration);
+			}
+			else {
+				meetupsRegistration.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all meetups registrations.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(MeetupsRegistrationImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(MeetupsRegistrationImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the meetups registration.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(MeetupsRegistration meetupsRegistration) {
+		EntityCacheUtil.removeResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationImpl.class, meetupsRegistration.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(meetupsRegistration);
+	}
+
+	@Override
+	public void clearCache(List<MeetupsRegistration> meetupsRegistrations) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (MeetupsRegistration meetupsRegistration : meetupsRegistrations) {
+			EntityCacheUtil.removeResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+				MeetupsRegistrationImpl.class,
+				meetupsRegistration.getPrimaryKey());
+
+			clearUniqueFindersCache(meetupsRegistration);
+		}
+	}
+
+	protected void cacheUniqueFindersCache(
+		MeetupsRegistration meetupsRegistration) {
+		if (meetupsRegistration.isNew()) {
+			Object[] args = new Object[] {
+					meetupsRegistration.getUserId(),
+					meetupsRegistration.getMeetupsEntryId()
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_ME, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_ME, args,
+				meetupsRegistration);
+		}
+		else {
+			MeetupsRegistrationModelImpl meetupsRegistrationModelImpl = (MeetupsRegistrationModelImpl)meetupsRegistration;
+
+			if ((meetupsRegistrationModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_U_ME.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						meetupsRegistration.getUserId(),
+						meetupsRegistration.getMeetupsEntryId()
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_ME, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_ME, args,
+					meetupsRegistration);
+			}
+		}
+	}
+
+	protected void clearUniqueFindersCache(
+		MeetupsRegistration meetupsRegistration) {
+		MeetupsRegistrationModelImpl meetupsRegistrationModelImpl = (MeetupsRegistrationModelImpl)meetupsRegistration;
+
+		Object[] args = new Object[] {
+				meetupsRegistration.getUserId(),
+				meetupsRegistration.getMeetupsEntryId()
+			};
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_ME, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_ME, args);
+
+		if ((meetupsRegistrationModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_U_ME.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					meetupsRegistrationModelImpl.getOriginalUserId(),
+					meetupsRegistrationModelImpl.getOriginalMeetupsEntryId()
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_ME, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_ME, args);
+		}
+	}
+
+	/**
+	 * Creates a new meetups registration with the primary key. Does not add the meetups registration to the database.
+	 *
+	 * @param meetupsRegistrationId the primary key for the new meetups registration
+	 * @return the new meetups registration
+	 */
+	public MeetupsRegistration create(long meetupsRegistrationId) {
+		MeetupsRegistration meetupsRegistration = new MeetupsRegistrationImpl();
+
+		meetupsRegistration.setNew(true);
+		meetupsRegistration.setPrimaryKey(meetupsRegistrationId);
+
+		return meetupsRegistration;
+	}
+
+	/**
+	 * Removes the meetups registration with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param meetupsRegistrationId the primary key of the meetups registration
+	 * @return the meetups registration that was removed
+	 * @throws com.liferay.socialnetworking.NoSuchMeetupsRegistrationException if a meetups registration with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MeetupsRegistration remove(long meetupsRegistrationId)
+		throws NoSuchMeetupsRegistrationException, SystemException {
+		return remove((Serializable)meetupsRegistrationId);
+	}
+
+	/**
+	 * Removes the meetups registration with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the meetups registration
+	 * @return the meetups registration that was removed
+	 * @throws com.liferay.socialnetworking.NoSuchMeetupsRegistrationException if a meetups registration with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MeetupsRegistration remove(Serializable primaryKey)
+		throws NoSuchMeetupsRegistrationException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			MeetupsRegistration meetupsRegistration = (MeetupsRegistration)session.get(MeetupsRegistrationImpl.class,
+					primaryKey);
+
+			if (meetupsRegistration == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchMeetupsRegistrationException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(meetupsRegistration);
+		}
+		catch (NoSuchMeetupsRegistrationException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected MeetupsRegistration removeImpl(
+		MeetupsRegistration meetupsRegistration) throws SystemException {
+		meetupsRegistration = toUnwrappedModel(meetupsRegistration);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(meetupsRegistration)) {
+				meetupsRegistration = (MeetupsRegistration)session.get(MeetupsRegistrationImpl.class,
+						meetupsRegistration.getPrimaryKeyObj());
+			}
+
+			if (meetupsRegistration != null) {
+				session.delete(meetupsRegistration);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (meetupsRegistration != null) {
+			clearCache(meetupsRegistration);
+		}
+
+		return meetupsRegistration;
+	}
+
+	@Override
+	public MeetupsRegistration updateImpl(
+		com.liferay.socialnetworking.model.MeetupsRegistration meetupsRegistration)
+		throws SystemException {
+		meetupsRegistration = toUnwrappedModel(meetupsRegistration);
+
+		boolean isNew = meetupsRegistration.isNew();
+
+		MeetupsRegistrationModelImpl meetupsRegistrationModelImpl = (MeetupsRegistrationModelImpl)meetupsRegistration;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (meetupsRegistration.isNew()) {
+				session.save(meetupsRegistration);
+
+				meetupsRegistration.setNew(false);
+			}
+			else {
+				session.merge(meetupsRegistration);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !MeetupsRegistrationModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((meetupsRegistrationModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEETUPSENTRYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						meetupsRegistrationModelImpl.getOriginalMeetupsEntryId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MEETUPSENTRYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEETUPSENTRYID,
+					args);
+
+				args = new Object[] {
+						meetupsRegistrationModelImpl.getMeetupsEntryId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MEETUPSENTRYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MEETUPSENTRYID,
+					args);
+			}
+
+			if ((meetupsRegistrationModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ME_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						meetupsRegistrationModelImpl.getOriginalMeetupsEntryId(),
+						meetupsRegistrationModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ME_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ME_S,
+					args);
+
+				args = new Object[] {
+						meetupsRegistrationModelImpl.getMeetupsEntryId(),
+						meetupsRegistrationModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_ME_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_ME_S,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+			MeetupsRegistrationImpl.class, meetupsRegistration.getPrimaryKey(),
+			meetupsRegistration);
+
+		clearUniqueFindersCache(meetupsRegistration);
+		cacheUniqueFindersCache(meetupsRegistration);
+
+		return meetupsRegistration;
+	}
+
+	protected MeetupsRegistration toUnwrappedModel(
+		MeetupsRegistration meetupsRegistration) {
+		if (meetupsRegistration instanceof MeetupsRegistrationImpl) {
+			return meetupsRegistration;
+		}
+
+		MeetupsRegistrationImpl meetupsRegistrationImpl = new MeetupsRegistrationImpl();
+
+		meetupsRegistrationImpl.setNew(meetupsRegistration.isNew());
+		meetupsRegistrationImpl.setPrimaryKey(meetupsRegistration.getPrimaryKey());
+
+		meetupsRegistrationImpl.setMeetupsRegistrationId(meetupsRegistration.getMeetupsRegistrationId());
+		meetupsRegistrationImpl.setCompanyId(meetupsRegistration.getCompanyId());
+		meetupsRegistrationImpl.setUserId(meetupsRegistration.getUserId());
+		meetupsRegistrationImpl.setUserName(meetupsRegistration.getUserName());
+		meetupsRegistrationImpl.setCreateDate(meetupsRegistration.getCreateDate());
+		meetupsRegistrationImpl.setModifiedDate(meetupsRegistration.getModifiedDate());
+		meetupsRegistrationImpl.setMeetupsEntryId(meetupsRegistration.getMeetupsEntryId());
+		meetupsRegistrationImpl.setStatus(meetupsRegistration.getStatus());
+		meetupsRegistrationImpl.setComments(meetupsRegistration.getComments());
+
+		return meetupsRegistrationImpl;
+	}
+
+	/**
+	 * Returns the meetups registration with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the meetups registration
+	 * @return the meetups registration
+	 * @throws com.liferay.socialnetworking.NoSuchMeetupsRegistrationException if a meetups registration with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MeetupsRegistration findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchMeetupsRegistrationException, SystemException {
+		MeetupsRegistration meetupsRegistration = fetchByPrimaryKey(primaryKey);
+
+		if (meetupsRegistration == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+			}
+
+			throw new NoSuchMeetupsRegistrationException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				primaryKey);
+		}
+
+		return meetupsRegistration;
+	}
+
+	/**
+	 * Returns the meetups registration with the primary key or throws a {@link com.liferay.socialnetworking.NoSuchMeetupsRegistrationException} if it could not be found.
+	 *
+	 * @param meetupsRegistrationId the primary key of the meetups registration
+	 * @return the meetups registration
+	 * @throws com.liferay.socialnetworking.NoSuchMeetupsRegistrationException if a meetups registration with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MeetupsRegistration findByPrimaryKey(long meetupsRegistrationId)
+		throws NoSuchMeetupsRegistrationException, SystemException {
+		return findByPrimaryKey((Serializable)meetupsRegistrationId);
+	}
+
+	/**
+	 * Returns the meetups registration with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the meetups registration
+	 * @return the meetups registration, or <code>null</code> if a meetups registration with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public MeetupsRegistration fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		MeetupsRegistration meetupsRegistration = (MeetupsRegistration)EntityCacheUtil.getResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+				MeetupsRegistrationImpl.class, primaryKey);
+
+		if (meetupsRegistration == _nullMeetupsRegistration) {
+			return null;
+		}
+
+		if (meetupsRegistration == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				meetupsRegistration = (MeetupsRegistration)session.get(MeetupsRegistrationImpl.class,
+						primaryKey);
+
+				if (meetupsRegistration != null) {
+					cacheResult(meetupsRegistration);
+				}
+				else {
+					EntityCacheUtil.putResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+						MeetupsRegistrationImpl.class, primaryKey,
+						_nullMeetupsRegistration);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(MeetupsRegistrationModelImpl.ENTITY_CACHE_ENABLED,
+					MeetupsRegistrationImpl.class, primaryKey);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return meetupsRegistration;
+	}
+
+	/**
+	 * Returns the meetups registration with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param meetupsRegistrationId the primary key of the meetups registration
+	 * @return the meetups registration, or <code>null</code> if a meetups registration with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public MeetupsRegistration fetchByPrimaryKey(long meetupsRegistrationId)
+		throws SystemException {
+		return fetchByPrimaryKey((Serializable)meetupsRegistrationId);
+	}
+
+	/**
 	 * Returns all the meetups registrations.
 	 *
 	 * @return the meetups registrations
@@ -1540,7 +1810,7 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	 * Returns a range of all the meetups registrations.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialnetworking.model.impl.MeetupsRegistrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of meetups registrations
@@ -1557,7 +1827,7 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	 * Returns an ordered range of all the meetups registrations.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialnetworking.model.impl.MeetupsRegistrationModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of meetups registrations
@@ -1568,11 +1838,13 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	 */
 	public List<MeetupsRegistration> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1600,7 +1872,11 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_MEETUPSREGISTRATION.concat(MeetupsRegistrationModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_MEETUPSREGISTRATION;
+
+				if (pagination) {
+					sql = sql.concat(MeetupsRegistrationModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1610,80 +1886,34 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<MeetupsRegistration>)QueryUtil.list(q,
 							getDialect(), start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<MeetupsRegistration>(list);
 				}
 				else {
 					list = (List<MeetupsRegistration>)QueryUtil.list(q,
 							getDialect(), start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the meetups registrations where meetupsEntryId = &#63; from the database.
-	 *
-	 * @param meetupsEntryId the meetups entry ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByMeetupsEntryId(long meetupsEntryId)
-		throws SystemException {
-		for (MeetupsRegistration meetupsRegistration : findByMeetupsEntryId(
-				meetupsEntryId)) {
-			remove(meetupsRegistration);
-		}
-	}
-
-	/**
-	 * Removes the meetups registration where userId = &#63; and meetupsEntryId = &#63; from the database.
-	 *
-	 * @param userId the user ID
-	 * @param meetupsEntryId the meetups entry ID
-	 * @return the meetups registration that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public MeetupsRegistration removeByU_ME(long userId, long meetupsEntryId)
-		throws NoSuchMeetupsRegistrationException, SystemException {
-		MeetupsRegistration meetupsRegistration = findByU_ME(userId,
-				meetupsEntryId);
-
-		return remove(meetupsRegistration);
-	}
-
-	/**
-	 * Removes all the meetups registrations where meetupsEntryId = &#63; and status = &#63; from the database.
-	 *
-	 * @param meetupsEntryId the meetups entry ID
-	 * @param status the status
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByME_S(long meetupsEntryId, int status)
-		throws SystemException {
-		for (MeetupsRegistration meetupsRegistration : findByME_S(
-				meetupsEntryId, status)) {
-			remove(meetupsRegistration);
-		}
 	}
 
 	/**
@@ -1695,178 +1925,6 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 		for (MeetupsRegistration meetupsRegistration : findAll()) {
 			remove(meetupsRegistration);
 		}
-	}
-
-	/**
-	 * Returns the number of meetups registrations where meetupsEntryId = &#63;.
-	 *
-	 * @param meetupsEntryId the meetups entry ID
-	 * @return the number of matching meetups registrations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByMeetupsEntryId(long meetupsEntryId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { meetupsEntryId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_MEETUPSENTRYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MEETUPSREGISTRATION_WHERE);
-
-			query.append(_FINDER_COLUMN_MEETUPSENTRYID_MEETUPSENTRYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(meetupsEntryId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_MEETUPSENTRYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of meetups registrations where userId = &#63; and meetupsEntryId = &#63;.
-	 *
-	 * @param userId the user ID
-	 * @param meetupsEntryId the meetups entry ID
-	 * @return the number of matching meetups registrations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByU_ME(long userId, long meetupsEntryId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { userId, meetupsEntryId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_U_ME,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_MEETUPSREGISTRATION_WHERE);
-
-			query.append(_FINDER_COLUMN_U_ME_USERID_2);
-
-			query.append(_FINDER_COLUMN_U_ME_MEETUPSENTRYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(userId);
-
-				qPos.add(meetupsEntryId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_ME,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of meetups registrations where meetupsEntryId = &#63; and status = &#63;.
-	 *
-	 * @param meetupsEntryId the meetups entry ID
-	 * @param status the status
-	 * @return the number of matching meetups registrations
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByME_S(long meetupsEntryId, int status)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { meetupsEntryId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_ME_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_MEETUPSREGISTRATION_WHERE);
-
-			query.append(_FINDER_COLUMN_ME_S_MEETUPSENTRYID_2);
-
-			query.append(_FINDER_COLUMN_ME_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(meetupsEntryId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_ME_S,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1888,18 +1946,17 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 				Query q = session.createQuery(_SQL_COUNT_MEETUPSREGISTRATION);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1921,7 +1978,7 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 
 				for (String listenerClassName : listenerClassNames) {
 					listenersList.add((ModelListener<MeetupsRegistration>)InstanceFactory.newInstance(
-							listenerClassName));
+							getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
@@ -1935,26 +1992,14 @@ public class MeetupsRegistrationPersistenceImpl extends BasePersistenceImpl<Meet
 	public void destroy() {
 		EntityCacheUtil.removeCache(MeetupsRegistrationImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = MeetupsEntryPersistence.class)
-	protected MeetupsEntryPersistence meetupsEntryPersistence;
-	@BeanReference(type = MeetupsRegistrationPersistence.class)
-	protected MeetupsRegistrationPersistence meetupsRegistrationPersistence;
-	@BeanReference(type = WallEntryPersistence.class)
-	protected WallEntryPersistence wallEntryPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_MEETUPSREGISTRATION = "SELECT meetupsRegistration FROM MeetupsRegistration meetupsRegistration";
 	private static final String _SQL_SELECT_MEETUPSREGISTRATION_WHERE = "SELECT meetupsRegistration FROM MeetupsRegistration meetupsRegistration WHERE ";
 	private static final String _SQL_COUNT_MEETUPSREGISTRATION = "SELECT COUNT(meetupsRegistration) FROM MeetupsRegistration meetupsRegistration";
 	private static final String _SQL_COUNT_MEETUPSREGISTRATION_WHERE = "SELECT COUNT(meetupsRegistration) FROM MeetupsRegistration meetupsRegistration WHERE ";
-	private static final String _FINDER_COLUMN_MEETUPSENTRYID_MEETUPSENTRYID_2 = "meetupsRegistration.meetupsEntryId = ?";
-	private static final String _FINDER_COLUMN_U_ME_USERID_2 = "meetupsRegistration.userId = ? AND ";
-	private static final String _FINDER_COLUMN_U_ME_MEETUPSENTRYID_2 = "meetupsRegistration.meetupsEntryId = ?";
-	private static final String _FINDER_COLUMN_ME_S_MEETUPSENTRYID_2 = "meetupsRegistration.meetupsEntryId = ? AND ";
-	private static final String _FINDER_COLUMN_ME_S_STATUS_2 = "meetupsRegistration.status = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "meetupsRegistration.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No MeetupsRegistration exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No MeetupsRegistration exists with the key {";

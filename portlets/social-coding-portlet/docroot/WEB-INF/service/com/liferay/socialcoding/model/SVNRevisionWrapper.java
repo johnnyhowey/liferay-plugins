@@ -253,6 +253,16 @@ public class SVNRevisionWrapper implements SVNRevision,
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_svnRevision.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_svnRevision.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_svnRevision.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -277,6 +287,10 @@ public class SVNRevisionWrapper implements SVNRevision,
 
 	public com.liferay.socialcoding.model.SVNRevision toEscapedModel() {
 		return new SVNRevisionWrapper(_svnRevision.toEscapedModel());
+	}
+
+	public com.liferay.socialcoding.model.SVNRevision toUnescapedModel() {
+		return new SVNRevisionWrapper(_svnRevision.toUnescapedModel());
 	}
 
 	@Override
@@ -306,7 +320,7 @@ public class SVNRevisionWrapper implements SVNRevision,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public SVNRevision getWrappedSVNRevision() {
 		return _svnRevision;

@@ -99,6 +99,7 @@ public class KaleoNotificationModelImpl extends BaseModelImpl<KaleoNotification>
 	public static long KALEOCLASSNAME_COLUMN_BITMASK = 4L;
 	public static long KALEOCLASSPK_COLUMN_BITMASK = 8L;
 	public static long KALEODEFINITIONID_COLUMN_BITMASK = 16L;
+	public static long KALEONOTIFICATIONID_COLUMN_BITMASK = 32L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoNotification"));
 
@@ -114,7 +115,7 @@ public class KaleoNotificationModelImpl extends BaseModelImpl<KaleoNotification>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kaleoNotificationId);
+		return _kaleoNotificationId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -525,13 +526,12 @@ public class KaleoNotificationModelImpl extends BaseModelImpl<KaleoNotification>
 
 	@Override
 	public KaleoNotification toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KaleoNotification)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KaleoNotification)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -868,7 +868,7 @@ public class KaleoNotificationModelImpl extends BaseModelImpl<KaleoNotification>
 	}
 
 	private static ClassLoader _classLoader = KaleoNotification.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KaleoNotification.class
 		};
 	private long _kaleoNotificationId;
@@ -898,5 +898,5 @@ public class KaleoNotificationModelImpl extends BaseModelImpl<KaleoNotification>
 	private String _templateLanguage;
 	private String _notificationTypes;
 	private long _columnBitmask;
-	private KaleoNotification _escapedModelProxy;
+	private KaleoNotification _escapedModel;
 }

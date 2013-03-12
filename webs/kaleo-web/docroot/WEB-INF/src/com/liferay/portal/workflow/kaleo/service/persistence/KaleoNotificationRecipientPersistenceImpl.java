@@ -14,8 +14,6 @@
 
 package com.liferay.portal.workflow.kaleo.service.persistence;
 
-import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -35,11 +33,9 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.RolePersistence;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 import com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException;
 import com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient;
@@ -77,73 +73,6 @@ public class KaleoNotificationRecipientPersistenceImpl
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
-			KaleoNotificationRecipientImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
-			KaleoNotificationRecipientImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			KaleoNotificationRecipientModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
-			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByCompanyId", new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEODEFINITIONID =
-		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
-			KaleoNotificationRecipientImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByKaleoDefinitionId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID =
-		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
-			KaleoNotificationRecipientImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByKaleoDefinitionId", new String[] { Long.class.getName() },
-			KaleoNotificationRecipientModelImpl.KALEODEFINITIONID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_KALEODEFINITIONID = new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
-			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByKaleoDefinitionId", new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEONOTIFICATIONID =
-		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
-			KaleoNotificationRecipientImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
-			"findByKaleoNotificationId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONOTIFICATIONID =
-		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
-			KaleoNotificationRecipientImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"findByKaleoNotificationId", new String[] { Long.class.getName() },
-			KaleoNotificationRecipientModelImpl.KALEONOTIFICATIONID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_KALEONOTIFICATIONID = new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
-			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByKaleoNotificationId", new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
 			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
 			KaleoNotificationRecipientImpl.class,
@@ -156,424 +85,28 @@ public class KaleoNotificationRecipientPersistenceImpl
 			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
 			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll",
 			new String[0]);
-
-	/**
-	 * Caches the kaleo notification recipient in the entity cache if it is enabled.
-	 *
-	 * @param kaleoNotificationRecipient the kaleo notification recipient
-	 */
-	public void cacheResult(
-		KaleoNotificationRecipient kaleoNotificationRecipient) {
-		EntityCacheUtil.putResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
 			KaleoNotificationRecipientImpl.class,
-			kaleoNotificationRecipient.getPrimaryKey(),
-			kaleoNotificationRecipient);
-
-		kaleoNotificationRecipient.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the kaleo notification recipients in the entity cache if it is enabled.
-	 *
-	 * @param kaleoNotificationRecipients the kaleo notification recipients
-	 */
-	public void cacheResult(
-		List<KaleoNotificationRecipient> kaleoNotificationRecipients) {
-		for (KaleoNotificationRecipient kaleoNotificationRecipient : kaleoNotificationRecipients) {
-			if (EntityCacheUtil.getResult(
-						KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-						KaleoNotificationRecipientImpl.class,
-						kaleoNotificationRecipient.getPrimaryKey()) == null) {
-				cacheResult(kaleoNotificationRecipient);
-			}
-			else {
-				kaleoNotificationRecipient.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all kaleo notification recipients.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(KaleoNotificationRecipientImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(KaleoNotificationRecipientImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the kaleo notification recipient.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(
-		KaleoNotificationRecipient kaleoNotificationRecipient) {
-		EntityCacheUtil.removeResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
 			KaleoNotificationRecipientImpl.class,
-			kaleoNotificationRecipient.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(
-		List<KaleoNotificationRecipient> kaleoNotificationRecipients) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (KaleoNotificationRecipient kaleoNotificationRecipient : kaleoNotificationRecipients) {
-			EntityCacheUtil.removeResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-				KaleoNotificationRecipientImpl.class,
-				kaleoNotificationRecipient.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new kaleo notification recipient with the primary key. Does not add the kaleo notification recipient to the database.
-	 *
-	 * @param kaleoNotificationRecipientId the primary key for the new kaleo notification recipient
-	 * @return the new kaleo notification recipient
-	 */
-	public KaleoNotificationRecipient create(long kaleoNotificationRecipientId) {
-		KaleoNotificationRecipient kaleoNotificationRecipient = new KaleoNotificationRecipientImpl();
-
-		kaleoNotificationRecipient.setNew(true);
-		kaleoNotificationRecipient.setPrimaryKey(kaleoNotificationRecipientId);
-
-		return kaleoNotificationRecipient;
-	}
-
-	/**
-	 * Removes the kaleo notification recipient with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
-	 * @return the kaleo notification recipient that was removed
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoNotificationRecipient remove(long kaleoNotificationRecipientId)
-		throws NoSuchNotificationRecipientException, SystemException {
-		return remove(Long.valueOf(kaleoNotificationRecipientId));
-	}
-
-	/**
-	 * Removes the kaleo notification recipient with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the kaleo notification recipient
-	 * @return the kaleo notification recipient that was removed
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public KaleoNotificationRecipient remove(Serializable primaryKey)
-		throws NoSuchNotificationRecipientException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			KaleoNotificationRecipient kaleoNotificationRecipient = (KaleoNotificationRecipient)session.get(KaleoNotificationRecipientImpl.class,
-					primaryKey);
-
-			if (kaleoNotificationRecipient == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchNotificationRecipientException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(kaleoNotificationRecipient);
-		}
-		catch (NoSuchNotificationRecipientException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected KaleoNotificationRecipient removeImpl(
-		KaleoNotificationRecipient kaleoNotificationRecipient)
-		throws SystemException {
-		kaleoNotificationRecipient = toUnwrappedModel(kaleoNotificationRecipient);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.delete(session, kaleoNotificationRecipient);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		clearCache(kaleoNotificationRecipient);
-
-		return kaleoNotificationRecipient;
-	}
-
-	@Override
-	public KaleoNotificationRecipient updateImpl(
-		com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient kaleoNotificationRecipient,
-		boolean merge) throws SystemException {
-		kaleoNotificationRecipient = toUnwrappedModel(kaleoNotificationRecipient);
-
-		boolean isNew = kaleoNotificationRecipient.isNew();
-
-		KaleoNotificationRecipientModelImpl kaleoNotificationRecipientModelImpl = (KaleoNotificationRecipientModelImpl)kaleoNotificationRecipient;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.update(session, kaleoNotificationRecipient, merge);
-
-			kaleoNotificationRecipient.setNew(false);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew ||
-				!KaleoNotificationRecipientModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((kaleoNotificationRecipientModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kaleoNotificationRecipientModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kaleoNotificationRecipientModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-
-			if ((kaleoNotificationRecipientModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kaleoNotificationRecipientModelImpl.getOriginalKaleoDefinitionId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEODEFINITIONID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kaleoNotificationRecipientModelImpl.getKaleoDefinitionId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEODEFINITIONID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID,
-					args);
-			}
-
-			if ((kaleoNotificationRecipientModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONOTIFICATIONID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kaleoNotificationRecipientModelImpl.getOriginalKaleoNotificationId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEONOTIFICATIONID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONOTIFICATIONID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kaleoNotificationRecipientModelImpl.getKaleoNotificationId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEONOTIFICATIONID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONOTIFICATIONID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-			KaleoNotificationRecipientImpl.class,
-			kaleoNotificationRecipient.getPrimaryKey(),
-			kaleoNotificationRecipient);
-
-		return kaleoNotificationRecipient;
-	}
-
-	protected KaleoNotificationRecipient toUnwrappedModel(
-		KaleoNotificationRecipient kaleoNotificationRecipient) {
-		if (kaleoNotificationRecipient instanceof KaleoNotificationRecipientImpl) {
-			return kaleoNotificationRecipient;
-		}
-
-		KaleoNotificationRecipientImpl kaleoNotificationRecipientImpl = new KaleoNotificationRecipientImpl();
-
-		kaleoNotificationRecipientImpl.setNew(kaleoNotificationRecipient.isNew());
-		kaleoNotificationRecipientImpl.setPrimaryKey(kaleoNotificationRecipient.getPrimaryKey());
-
-		kaleoNotificationRecipientImpl.setKaleoNotificationRecipientId(kaleoNotificationRecipient.getKaleoNotificationRecipientId());
-		kaleoNotificationRecipientImpl.setGroupId(kaleoNotificationRecipient.getGroupId());
-		kaleoNotificationRecipientImpl.setCompanyId(kaleoNotificationRecipient.getCompanyId());
-		kaleoNotificationRecipientImpl.setUserId(kaleoNotificationRecipient.getUserId());
-		kaleoNotificationRecipientImpl.setUserName(kaleoNotificationRecipient.getUserName());
-		kaleoNotificationRecipientImpl.setCreateDate(kaleoNotificationRecipient.getCreateDate());
-		kaleoNotificationRecipientImpl.setModifiedDate(kaleoNotificationRecipient.getModifiedDate());
-		kaleoNotificationRecipientImpl.setKaleoDefinitionId(kaleoNotificationRecipient.getKaleoDefinitionId());
-		kaleoNotificationRecipientImpl.setKaleoNotificationId(kaleoNotificationRecipient.getKaleoNotificationId());
-		kaleoNotificationRecipientImpl.setRecipientClassName(kaleoNotificationRecipient.getRecipientClassName());
-		kaleoNotificationRecipientImpl.setRecipientClassPK(kaleoNotificationRecipient.getRecipientClassPK());
-		kaleoNotificationRecipientImpl.setRecipientRoleType(kaleoNotificationRecipient.getRecipientRoleType());
-		kaleoNotificationRecipientImpl.setAddress(kaleoNotificationRecipient.getAddress());
-
-		return kaleoNotificationRecipientImpl;
-	}
-
-	/**
-	 * Returns the kaleo notification recipient with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the kaleo notification recipient
-	 * @return the kaleo notification recipient
-	 * @throws com.liferay.portal.NoSuchModelException if a kaleo notification recipient with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public KaleoNotificationRecipient findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the kaleo notification recipient with the primary key or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException} if it could not be found.
-	 *
-	 * @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
-	 * @return the kaleo notification recipient
-	 * @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoNotificationRecipient findByPrimaryKey(
-		long kaleoNotificationRecipientId)
-		throws NoSuchNotificationRecipientException, SystemException {
-		KaleoNotificationRecipient kaleoNotificationRecipient = fetchByPrimaryKey(kaleoNotificationRecipientId);
-
-		if (kaleoNotificationRecipient == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					kaleoNotificationRecipientId);
-			}
-
-			throw new NoSuchNotificationRecipientException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				kaleoNotificationRecipientId);
-		}
-
-		return kaleoNotificationRecipient;
-	}
-
-	/**
-	 * Returns the kaleo notification recipient with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the kaleo notification recipient
-	 * @return the kaleo notification recipient, or <code>null</code> if a kaleo notification recipient with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public KaleoNotificationRecipient fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the kaleo notification recipient with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
-	 * @return the kaleo notification recipient, or <code>null</code> if a kaleo notification recipient with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KaleoNotificationRecipient fetchByPrimaryKey(
-		long kaleoNotificationRecipientId) throws SystemException {
-		KaleoNotificationRecipient kaleoNotificationRecipient = (KaleoNotificationRecipient)EntityCacheUtil.getResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-				KaleoNotificationRecipientImpl.class,
-				kaleoNotificationRecipientId);
-
-		if (kaleoNotificationRecipient == _nullKaleoNotificationRecipient) {
-			return null;
-		}
-
-		if (kaleoNotificationRecipient == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				kaleoNotificationRecipient = (KaleoNotificationRecipient)session.get(KaleoNotificationRecipientImpl.class,
-						Long.valueOf(kaleoNotificationRecipientId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (kaleoNotificationRecipient != null) {
-					cacheResult(kaleoNotificationRecipient);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
-						KaleoNotificationRecipientImpl.class,
-						kaleoNotificationRecipientId,
-						_nullKaleoNotificationRecipient);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return kaleoNotificationRecipient;
-	}
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			KaleoNotificationRecipientModelImpl.COMPANYID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
+			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByCompanyId", new String[] { Long.class.getName() });
 
 	/**
 	 * Returns all the kaleo notification recipients where companyId = &#63;.
@@ -592,7 +125,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 	 * Returns a range of all the kaleo notification recipients where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -610,7 +143,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 	 * Returns an ordered range of all the kaleo notification recipients where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -623,11 +156,13 @@ public class KaleoNotificationRecipientPersistenceImpl
 	public List<KaleoNotificationRecipient> findByCompanyId(long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -668,8 +203,8 @@ public class KaleoNotificationRecipientPersistenceImpl
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KaleoNotificationRecipientModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -686,22 +221,29 @@ public class KaleoNotificationRecipientPersistenceImpl
 
 				qPos.add(companyId);
 
-				list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KaleoNotificationRecipient>(list);
+				}
+				else {
+					list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -928,7 +470,6 @@ public class KaleoNotificationRecipientPersistenceImpl
 				}
 			}
 		}
-
 		else {
 			query.append(KaleoNotificationRecipientModelImpl.ORDER_BY_JPQL);
 		}
@@ -963,6 +504,95 @@ public class KaleoNotificationRecipientPersistenceImpl
 	}
 
 	/**
+	 * Removes all the kaleo notification recipients where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (KaleoNotificationRecipient kaleoNotificationRecipient : findByCompanyId(
+				companyId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kaleoNotificationRecipient);
+		}
+	}
+
+	/**
+	 * Returns the number of kaleo notification recipients where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching kaleo notification recipients
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
+
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_KALEONOTIFICATIONRECIPIENT_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "kaleoNotificationRecipient.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEODEFINITIONID =
+		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
+			KaleoNotificationRecipientImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByKaleoDefinitionId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID =
+		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
+			KaleoNotificationRecipientImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByKaleoDefinitionId", new String[] { Long.class.getName() },
+			KaleoNotificationRecipientModelImpl.KALEODEFINITIONID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_KALEODEFINITIONID = new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
+			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByKaleoDefinitionId", new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the kaleo notification recipients where kaleoDefinitionId = &#63;.
 	 *
 	 * @param kaleoDefinitionId the kaleo definition ID
@@ -979,7 +609,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 	 * Returns a range of all the kaleo notification recipients where kaleoDefinitionId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param kaleoDefinitionId the kaleo definition ID
@@ -997,7 +627,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 	 * Returns an ordered range of all the kaleo notification recipients where kaleoDefinitionId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param kaleoDefinitionId the kaleo definition ID
@@ -1010,11 +640,13 @@ public class KaleoNotificationRecipientPersistenceImpl
 	public List<KaleoNotificationRecipient> findByKaleoDefinitionId(
 		long kaleoDefinitionId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID;
 			finderArgs = new Object[] { kaleoDefinitionId };
 		}
@@ -1059,8 +691,8 @@ public class KaleoNotificationRecipientPersistenceImpl
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KaleoNotificationRecipientModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1077,22 +709,29 @@ public class KaleoNotificationRecipientPersistenceImpl
 
 				qPos.add(kaleoDefinitionId);
 
-				list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KaleoNotificationRecipient>(list);
+				}
+				else {
+					list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1322,7 +961,6 @@ public class KaleoNotificationRecipientPersistenceImpl
 				}
 			}
 		}
-
 		else {
 			query.append(KaleoNotificationRecipientModelImpl.ORDER_BY_JPQL);
 		}
@@ -1357,6 +995,99 @@ public class KaleoNotificationRecipientPersistenceImpl
 	}
 
 	/**
+	 * Removes all the kaleo notification recipients where kaleoDefinitionId = &#63; from the database.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByKaleoDefinitionId(long kaleoDefinitionId)
+		throws SystemException {
+		for (KaleoNotificationRecipient kaleoNotificationRecipient : findByKaleoDefinitionId(
+				kaleoDefinitionId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kaleoNotificationRecipient);
+		}
+	}
+
+	/**
+	 * Returns the number of kaleo notification recipients where kaleoDefinitionId = &#63;.
+	 *
+	 * @param kaleoDefinitionId the kaleo definition ID
+	 * @return the number of matching kaleo notification recipients
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByKaleoDefinitionId(long kaleoDefinitionId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_KALEODEFINITIONID;
+
+		Object[] finderArgs = new Object[] { kaleoDefinitionId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_KALEONOTIFICATIONRECIPIENT_WHERE);
+
+			query.append(_FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoDefinitionId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2 =
+		"kaleoNotificationRecipient.kaleoDefinitionId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_KALEONOTIFICATIONID =
+		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
+			KaleoNotificationRecipientImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION,
+			"findByKaleoNotificationId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONOTIFICATIONID =
+		new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
+			KaleoNotificationRecipientImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"findByKaleoNotificationId", new String[] { Long.class.getName() },
+			KaleoNotificationRecipientModelImpl.KALEONOTIFICATIONID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_KALEONOTIFICATIONID = new FinderPath(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientModelImpl.FINDER_CACHE_ENABLED,
+			Long.class, FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByKaleoNotificationId", new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the kaleo notification recipients where kaleoNotificationId = &#63;.
 	 *
 	 * @param kaleoNotificationId the kaleo notification ID
@@ -1373,7 +1104,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 	 * Returns a range of all the kaleo notification recipients where kaleoNotificationId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param kaleoNotificationId the kaleo notification ID
@@ -1391,7 +1122,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 	 * Returns an ordered range of all the kaleo notification recipients where kaleoNotificationId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param kaleoNotificationId the kaleo notification ID
@@ -1404,11 +1135,13 @@ public class KaleoNotificationRecipientPersistenceImpl
 	public List<KaleoNotificationRecipient> findByKaleoNotificationId(
 		long kaleoNotificationId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONOTIFICATIONID;
 			finderArgs = new Object[] { kaleoNotificationId };
 		}
@@ -1453,8 +1186,8 @@ public class KaleoNotificationRecipientPersistenceImpl
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KaleoNotificationRecipientModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1471,22 +1204,29 @@ public class KaleoNotificationRecipientPersistenceImpl
 
 				qPos.add(kaleoNotificationId);
 
-				list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
-						getDialect(), start, end);
+				if (!pagination) {
+					list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
+							getDialect(), start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KaleoNotificationRecipient>(list);
+				}
+				else {
+					list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
+							getDialect(), start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1716,7 +1456,6 @@ public class KaleoNotificationRecipientPersistenceImpl
 				}
 			}
 		}
-
 		else {
 			query.append(KaleoNotificationRecipientModelImpl.ORDER_BY_JPQL);
 		}
@@ -1751,6 +1490,504 @@ public class KaleoNotificationRecipientPersistenceImpl
 	}
 
 	/**
+	 * Removes all the kaleo notification recipients where kaleoNotificationId = &#63; from the database.
+	 *
+	 * @param kaleoNotificationId the kaleo notification ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByKaleoNotificationId(long kaleoNotificationId)
+		throws SystemException {
+		for (KaleoNotificationRecipient kaleoNotificationRecipient : findByKaleoNotificationId(
+				kaleoNotificationId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kaleoNotificationRecipient);
+		}
+	}
+
+	/**
+	 * Returns the number of kaleo notification recipients where kaleoNotificationId = &#63;.
+	 *
+	 * @param kaleoNotificationId the kaleo notification ID
+	 * @return the number of matching kaleo notification recipients
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByKaleoNotificationId(long kaleoNotificationId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_KALEONOTIFICATIONID;
+
+		Object[] finderArgs = new Object[] { kaleoNotificationId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_KALEONOTIFICATIONRECIPIENT_WHERE);
+
+			query.append(_FINDER_COLUMN_KALEONOTIFICATIONID_KALEONOTIFICATIONID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(kaleoNotificationId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_KALEONOTIFICATIONID_KALEONOTIFICATIONID_2 =
+		"kaleoNotificationRecipient.kaleoNotificationId = ?";
+
+	/**
+	 * Caches the kaleo notification recipient in the entity cache if it is enabled.
+	 *
+	 * @param kaleoNotificationRecipient the kaleo notification recipient
+	 */
+	public void cacheResult(
+		KaleoNotificationRecipient kaleoNotificationRecipient) {
+		EntityCacheUtil.putResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientImpl.class,
+			kaleoNotificationRecipient.getPrimaryKey(),
+			kaleoNotificationRecipient);
+
+		kaleoNotificationRecipient.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the kaleo notification recipients in the entity cache if it is enabled.
+	 *
+	 * @param kaleoNotificationRecipients the kaleo notification recipients
+	 */
+	public void cacheResult(
+		List<KaleoNotificationRecipient> kaleoNotificationRecipients) {
+		for (KaleoNotificationRecipient kaleoNotificationRecipient : kaleoNotificationRecipients) {
+			if (EntityCacheUtil.getResult(
+						KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+						KaleoNotificationRecipientImpl.class,
+						kaleoNotificationRecipient.getPrimaryKey()) == null) {
+				cacheResult(kaleoNotificationRecipient);
+			}
+			else {
+				kaleoNotificationRecipient.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all kaleo notification recipients.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(KaleoNotificationRecipientImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(KaleoNotificationRecipientImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the kaleo notification recipient.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(
+		KaleoNotificationRecipient kaleoNotificationRecipient) {
+		EntityCacheUtil.removeResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientImpl.class,
+			kaleoNotificationRecipient.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(
+		List<KaleoNotificationRecipient> kaleoNotificationRecipients) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (KaleoNotificationRecipient kaleoNotificationRecipient : kaleoNotificationRecipients) {
+			EntityCacheUtil.removeResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+				KaleoNotificationRecipientImpl.class,
+				kaleoNotificationRecipient.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new kaleo notification recipient with the primary key. Does not add the kaleo notification recipient to the database.
+	 *
+	 * @param kaleoNotificationRecipientId the primary key for the new kaleo notification recipient
+	 * @return the new kaleo notification recipient
+	 */
+	public KaleoNotificationRecipient create(long kaleoNotificationRecipientId) {
+		KaleoNotificationRecipient kaleoNotificationRecipient = new KaleoNotificationRecipientImpl();
+
+		kaleoNotificationRecipient.setNew(true);
+		kaleoNotificationRecipient.setPrimaryKey(kaleoNotificationRecipientId);
+
+		return kaleoNotificationRecipient;
+	}
+
+	/**
+	 * Removes the kaleo notification recipient with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
+	 * @return the kaleo notification recipient that was removed
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoNotificationRecipient remove(long kaleoNotificationRecipientId)
+		throws NoSuchNotificationRecipientException, SystemException {
+		return remove((Serializable)kaleoNotificationRecipientId);
+	}
+
+	/**
+	 * Removes the kaleo notification recipient with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the kaleo notification recipient
+	 * @return the kaleo notification recipient that was removed
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public KaleoNotificationRecipient remove(Serializable primaryKey)
+		throws NoSuchNotificationRecipientException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			KaleoNotificationRecipient kaleoNotificationRecipient = (KaleoNotificationRecipient)session.get(KaleoNotificationRecipientImpl.class,
+					primaryKey);
+
+			if (kaleoNotificationRecipient == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchNotificationRecipientException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(kaleoNotificationRecipient);
+		}
+		catch (NoSuchNotificationRecipientException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected KaleoNotificationRecipient removeImpl(
+		KaleoNotificationRecipient kaleoNotificationRecipient)
+		throws SystemException {
+		kaleoNotificationRecipient = toUnwrappedModel(kaleoNotificationRecipient);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(kaleoNotificationRecipient)) {
+				kaleoNotificationRecipient = (KaleoNotificationRecipient)session.get(KaleoNotificationRecipientImpl.class,
+						kaleoNotificationRecipient.getPrimaryKeyObj());
+			}
+
+			if (kaleoNotificationRecipient != null) {
+				session.delete(kaleoNotificationRecipient);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (kaleoNotificationRecipient != null) {
+			clearCache(kaleoNotificationRecipient);
+		}
+
+		return kaleoNotificationRecipient;
+	}
+
+	@Override
+	public KaleoNotificationRecipient updateImpl(
+		com.liferay.portal.workflow.kaleo.model.KaleoNotificationRecipient kaleoNotificationRecipient)
+		throws SystemException {
+		kaleoNotificationRecipient = toUnwrappedModel(kaleoNotificationRecipient);
+
+		boolean isNew = kaleoNotificationRecipient.isNew();
+
+		KaleoNotificationRecipientModelImpl kaleoNotificationRecipientModelImpl = (KaleoNotificationRecipientModelImpl)kaleoNotificationRecipient;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (kaleoNotificationRecipient.isNew()) {
+				session.save(kaleoNotificationRecipient);
+
+				kaleoNotificationRecipient.setNew(false);
+			}
+			else {
+				session.merge(kaleoNotificationRecipient);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew ||
+				!KaleoNotificationRecipientModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((kaleoNotificationRecipientModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kaleoNotificationRecipientModelImpl.getOriginalCompanyId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] {
+						kaleoNotificationRecipientModelImpl.getCompanyId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+
+			if ((kaleoNotificationRecipientModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kaleoNotificationRecipientModelImpl.getOriginalKaleoDefinitionId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEODEFINITIONID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID,
+					args);
+
+				args = new Object[] {
+						kaleoNotificationRecipientModelImpl.getKaleoDefinitionId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEODEFINITIONID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEODEFINITIONID,
+					args);
+			}
+
+			if ((kaleoNotificationRecipientModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONOTIFICATIONID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kaleoNotificationRecipientModelImpl.getOriginalKaleoNotificationId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEONOTIFICATIONID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONOTIFICATIONID,
+					args);
+
+				args = new Object[] {
+						kaleoNotificationRecipientModelImpl.getKaleoNotificationId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_KALEONOTIFICATIONID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_KALEONOTIFICATIONID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+			KaleoNotificationRecipientImpl.class,
+			kaleoNotificationRecipient.getPrimaryKey(),
+			kaleoNotificationRecipient);
+
+		return kaleoNotificationRecipient;
+	}
+
+	protected KaleoNotificationRecipient toUnwrappedModel(
+		KaleoNotificationRecipient kaleoNotificationRecipient) {
+		if (kaleoNotificationRecipient instanceof KaleoNotificationRecipientImpl) {
+			return kaleoNotificationRecipient;
+		}
+
+		KaleoNotificationRecipientImpl kaleoNotificationRecipientImpl = new KaleoNotificationRecipientImpl();
+
+		kaleoNotificationRecipientImpl.setNew(kaleoNotificationRecipient.isNew());
+		kaleoNotificationRecipientImpl.setPrimaryKey(kaleoNotificationRecipient.getPrimaryKey());
+
+		kaleoNotificationRecipientImpl.setKaleoNotificationRecipientId(kaleoNotificationRecipient.getKaleoNotificationRecipientId());
+		kaleoNotificationRecipientImpl.setGroupId(kaleoNotificationRecipient.getGroupId());
+		kaleoNotificationRecipientImpl.setCompanyId(kaleoNotificationRecipient.getCompanyId());
+		kaleoNotificationRecipientImpl.setUserId(kaleoNotificationRecipient.getUserId());
+		kaleoNotificationRecipientImpl.setUserName(kaleoNotificationRecipient.getUserName());
+		kaleoNotificationRecipientImpl.setCreateDate(kaleoNotificationRecipient.getCreateDate());
+		kaleoNotificationRecipientImpl.setModifiedDate(kaleoNotificationRecipient.getModifiedDate());
+		kaleoNotificationRecipientImpl.setKaleoDefinitionId(kaleoNotificationRecipient.getKaleoDefinitionId());
+		kaleoNotificationRecipientImpl.setKaleoNotificationId(kaleoNotificationRecipient.getKaleoNotificationId());
+		kaleoNotificationRecipientImpl.setRecipientClassName(kaleoNotificationRecipient.getRecipientClassName());
+		kaleoNotificationRecipientImpl.setRecipientClassPK(kaleoNotificationRecipient.getRecipientClassPK());
+		kaleoNotificationRecipientImpl.setRecipientRoleType(kaleoNotificationRecipient.getRecipientRoleType());
+		kaleoNotificationRecipientImpl.setAddress(kaleoNotificationRecipient.getAddress());
+
+		return kaleoNotificationRecipientImpl;
+	}
+
+	/**
+	 * Returns the kaleo notification recipient with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the kaleo notification recipient
+	 * @return the kaleo notification recipient
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public KaleoNotificationRecipient findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchNotificationRecipientException, SystemException {
+		KaleoNotificationRecipient kaleoNotificationRecipient = fetchByPrimaryKey(primaryKey);
+
+		if (kaleoNotificationRecipient == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+			}
+
+			throw new NoSuchNotificationRecipientException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				primaryKey);
+		}
+
+		return kaleoNotificationRecipient;
+	}
+
+	/**
+	 * Returns the kaleo notification recipient with the primary key or throws a {@link com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException} if it could not be found.
+	 *
+	 * @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
+	 * @return the kaleo notification recipient
+	 * @throws com.liferay.portal.workflow.kaleo.NoSuchNotificationRecipientException if a kaleo notification recipient with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoNotificationRecipient findByPrimaryKey(
+		long kaleoNotificationRecipientId)
+		throws NoSuchNotificationRecipientException, SystemException {
+		return findByPrimaryKey((Serializable)kaleoNotificationRecipientId);
+	}
+
+	/**
+	 * Returns the kaleo notification recipient with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the kaleo notification recipient
+	 * @return the kaleo notification recipient, or <code>null</code> if a kaleo notification recipient with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public KaleoNotificationRecipient fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		KaleoNotificationRecipient kaleoNotificationRecipient = (KaleoNotificationRecipient)EntityCacheUtil.getResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+				KaleoNotificationRecipientImpl.class, primaryKey);
+
+		if (kaleoNotificationRecipient == _nullKaleoNotificationRecipient) {
+			return null;
+		}
+
+		if (kaleoNotificationRecipient == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				kaleoNotificationRecipient = (KaleoNotificationRecipient)session.get(KaleoNotificationRecipientImpl.class,
+						primaryKey);
+
+				if (kaleoNotificationRecipient != null) {
+					cacheResult(kaleoNotificationRecipient);
+				}
+				else {
+					EntityCacheUtil.putResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+						KaleoNotificationRecipientImpl.class, primaryKey,
+						_nullKaleoNotificationRecipient);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(KaleoNotificationRecipientModelImpl.ENTITY_CACHE_ENABLED,
+					KaleoNotificationRecipientImpl.class, primaryKey);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return kaleoNotificationRecipient;
+	}
+
+	/**
+	 * Returns the kaleo notification recipient with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param kaleoNotificationRecipientId the primary key of the kaleo notification recipient
+	 * @return the kaleo notification recipient, or <code>null</code> if a kaleo notification recipient with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KaleoNotificationRecipient fetchByPrimaryKey(
+		long kaleoNotificationRecipientId) throws SystemException {
+		return fetchByPrimaryKey((Serializable)kaleoNotificationRecipientId);
+	}
+
+	/**
 	 * Returns all the kaleo notification recipients.
 	 *
 	 * @return the kaleo notification recipients
@@ -1764,7 +2001,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 	 * Returns a range of all the kaleo notification recipients.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of kaleo notification recipients
@@ -1781,7 +2018,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 	 * Returns an ordered range of all the kaleo notification recipients.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.portal.workflow.kaleo.model.impl.KaleoNotificationRecipientModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of kaleo notification recipients
@@ -1792,11 +2029,13 @@ public class KaleoNotificationRecipientPersistenceImpl
 	 */
 	public List<KaleoNotificationRecipient> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1824,7 +2063,11 @@ public class KaleoNotificationRecipientPersistenceImpl
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_KALEONOTIFICATIONRECIPIENT.concat(KaleoNotificationRecipientModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_KALEONOTIFICATIONRECIPIENT;
+
+				if (pagination) {
+					sql = sql.concat(KaleoNotificationRecipientModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1834,76 +2077,34 @@ public class KaleoNotificationRecipientPersistenceImpl
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
 							getDialect(), start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<KaleoNotificationRecipient>(list);
 				}
 				else {
 					list = (List<KaleoNotificationRecipient>)QueryUtil.list(q,
 							getDialect(), start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the kaleo notification recipients where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (KaleoNotificationRecipient kaleoNotificationRecipient : findByCompanyId(
-				companyId)) {
-			remove(kaleoNotificationRecipient);
-		}
-	}
-
-	/**
-	 * Removes all the kaleo notification recipients where kaleoDefinitionId = &#63; from the database.
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByKaleoDefinitionId(long kaleoDefinitionId)
-		throws SystemException {
-		for (KaleoNotificationRecipient kaleoNotificationRecipient : findByKaleoDefinitionId(
-				kaleoDefinitionId)) {
-			remove(kaleoNotificationRecipient);
-		}
-	}
-
-	/**
-	 * Removes all the kaleo notification recipients where kaleoNotificationId = &#63; from the database.
-	 *
-	 * @param kaleoNotificationId the kaleo notification ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByKaleoNotificationId(long kaleoNotificationId)
-		throws SystemException {
-		for (KaleoNotificationRecipient kaleoNotificationRecipient : findByKaleoNotificationId(
-				kaleoNotificationId)) {
-			remove(kaleoNotificationRecipient);
-		}
 	}
 
 	/**
@@ -1915,167 +2116,6 @@ public class KaleoNotificationRecipientPersistenceImpl
 		for (KaleoNotificationRecipient kaleoNotificationRecipient : findAll()) {
 			remove(kaleoNotificationRecipient);
 		}
-	}
-
-	/**
-	 * Returns the number of kaleo notification recipients where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching kaleo notification recipients
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_KALEONOTIFICATIONRECIPIENT_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of kaleo notification recipients where kaleoDefinitionId = &#63;.
-	 *
-	 * @param kaleoDefinitionId the kaleo definition ID
-	 * @return the number of matching kaleo notification recipients
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByKaleoDefinitionId(long kaleoDefinitionId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { kaleoDefinitionId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_KALEODEFINITIONID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_KALEONOTIFICATIONRECIPIENT_WHERE);
-
-			query.append(_FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoDefinitionId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KALEODEFINITIONID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of kaleo notification recipients where kaleoNotificationId = &#63;.
-	 *
-	 * @param kaleoNotificationId the kaleo notification ID
-	 * @return the number of matching kaleo notification recipients
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByKaleoNotificationId(long kaleoNotificationId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { kaleoNotificationId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_KALEONOTIFICATIONID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_KALEONOTIFICATIONRECIPIENT_WHERE);
-
-			query.append(_FINDER_COLUMN_KALEONOTIFICATIONID_KALEONOTIFICATIONID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(kaleoNotificationId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_KALEONOTIFICATIONID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -2097,18 +2137,17 @@ public class KaleoNotificationRecipientPersistenceImpl
 				Query q = session.createQuery(_SQL_COUNT_KALEONOTIFICATIONRECIPIENT);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2130,7 +2169,7 @@ public class KaleoNotificationRecipientPersistenceImpl
 
 				for (String listenerClassName : listenerClassNames) {
 					listenersList.add((ModelListener<KaleoNotificationRecipient>)InstanceFactory.newInstance(
-							listenerClassName));
+							getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
@@ -2144,54 +2183,14 @@ public class KaleoNotificationRecipientPersistenceImpl
 	public void destroy() {
 		EntityCacheUtil.removeCache(KaleoNotificationRecipientImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = KaleoActionPersistence.class)
-	protected KaleoActionPersistence kaleoActionPersistence;
-	@BeanReference(type = KaleoConditionPersistence.class)
-	protected KaleoConditionPersistence kaleoConditionPersistence;
-	@BeanReference(type = KaleoDefinitionPersistence.class)
-	protected KaleoDefinitionPersistence kaleoDefinitionPersistence;
-	@BeanReference(type = KaleoInstancePersistence.class)
-	protected KaleoInstancePersistence kaleoInstancePersistence;
-	@BeanReference(type = KaleoInstanceTokenPersistence.class)
-	protected KaleoInstanceTokenPersistence kaleoInstanceTokenPersistence;
-	@BeanReference(type = KaleoLogPersistence.class)
-	protected KaleoLogPersistence kaleoLogPersistence;
-	@BeanReference(type = KaleoNodePersistence.class)
-	protected KaleoNodePersistence kaleoNodePersistence;
-	@BeanReference(type = KaleoNotificationPersistence.class)
-	protected KaleoNotificationPersistence kaleoNotificationPersistence;
-	@BeanReference(type = KaleoNotificationRecipientPersistence.class)
-	protected KaleoNotificationRecipientPersistence kaleoNotificationRecipientPersistence;
-	@BeanReference(type = KaleoTaskPersistence.class)
-	protected KaleoTaskPersistence kaleoTaskPersistence;
-	@BeanReference(type = KaleoTaskAssignmentPersistence.class)
-	protected KaleoTaskAssignmentPersistence kaleoTaskAssignmentPersistence;
-	@BeanReference(type = KaleoTaskAssignmentInstancePersistence.class)
-	protected KaleoTaskAssignmentInstancePersistence kaleoTaskAssignmentInstancePersistence;
-	@BeanReference(type = KaleoTaskInstanceTokenPersistence.class)
-	protected KaleoTaskInstanceTokenPersistence kaleoTaskInstanceTokenPersistence;
-	@BeanReference(type = KaleoTimerPersistence.class)
-	protected KaleoTimerPersistence kaleoTimerPersistence;
-	@BeanReference(type = KaleoTimerInstanceTokenPersistence.class)
-	protected KaleoTimerInstanceTokenPersistence kaleoTimerInstanceTokenPersistence;
-	@BeanReference(type = KaleoTransitionPersistence.class)
-	protected KaleoTransitionPersistence kaleoTransitionPersistence;
-	@BeanReference(type = RolePersistence.class)
-	protected RolePersistence rolePersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_KALEONOTIFICATIONRECIPIENT = "SELECT kaleoNotificationRecipient FROM KaleoNotificationRecipient kaleoNotificationRecipient";
 	private static final String _SQL_SELECT_KALEONOTIFICATIONRECIPIENT_WHERE = "SELECT kaleoNotificationRecipient FROM KaleoNotificationRecipient kaleoNotificationRecipient WHERE ";
 	private static final String _SQL_COUNT_KALEONOTIFICATIONRECIPIENT = "SELECT COUNT(kaleoNotificationRecipient) FROM KaleoNotificationRecipient kaleoNotificationRecipient";
 	private static final String _SQL_COUNT_KALEONOTIFICATIONRECIPIENT_WHERE = "SELECT COUNT(kaleoNotificationRecipient) FROM KaleoNotificationRecipient kaleoNotificationRecipient WHERE ";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "kaleoNotificationRecipient.companyId = ?";
-	private static final String _FINDER_COLUMN_KALEODEFINITIONID_KALEODEFINITIONID_2 =
-		"kaleoNotificationRecipient.kaleoDefinitionId = ?";
-	private static final String _FINDER_COLUMN_KALEONOTIFICATIONID_KALEONOTIFICATIONID_2 =
-		"kaleoNotificationRecipient.kaleoNotificationId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "kaleoNotificationRecipient.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No KaleoNotificationRecipient exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No KaleoNotificationRecipient exists with the key {";

@@ -52,9 +52,12 @@ import org.apache.ws.security.message.token.UsernameToken;
  */
 public class ServiceHandler implements InvocationHandler {
 
-	public ServiceHandler(String forwardCookies, String userToken, boolean v2) {
+	public ServiceHandler(
+		String forwardCookies, String forwardHeaders, String userToken,
+		boolean v2) {
+
 		_engineConfiguration = getEngineConfiguration(
-			forwardCookies, userToken);
+			forwardCookies, forwardHeaders, userToken);
 
 		_v2 = v2;
 
@@ -108,7 +111,7 @@ public class ServiceHandler implements InvocationHandler {
 		sb.append(_version);
 		sb.append(".bind.WSRP_");
 		sb.append(_version);
-		sb.append(StringPool.UNDERLINE) ;
+		sb.append(StringPool.UNDERLINE);
 		sb.append(serviceName);
 		sb.append("_Binding_SOAPStub");
 
@@ -172,7 +175,7 @@ public class ServiceHandler implements InvocationHandler {
 	}
 
 	protected EngineConfiguration getEngineConfiguration(
-		String forwardCookies, String userToken) {
+		String forwardCookies, String forwardHeaders, String userToken) {
 
 		SimpleChain requestSimpleChain = new SimpleChain();
 
@@ -207,7 +210,8 @@ public class ServiceHandler implements InvocationHandler {
 
 		SimpleProvider simpleProvider = new SimpleProvider();
 
-		HTTPSender httpSender = new WSRPHTTPSender(forwardCookies);
+		HTTPSender httpSender = new WSRPHTTPSender(
+			forwardCookies, forwardHeaders);
 
 		simpleProvider.deployTransport(
 			HTTPTransport.DEFAULT_TRANSPORT_NAME,

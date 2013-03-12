@@ -80,7 +80,7 @@ if (user2 != null) {
 			},
 			icon: 'add-coworker',
 			id: '<portlet:namespace />addConnectionButton',
-			label: '<%= UnicodeLanguageUtil.get(pageContext, "add-connection") %>',
+			label: '<%= UnicodeLanguageUtil.get(pageContext, "connect") %>',
 			visible: <%= showAddAsConnectionButton %>
 		}
 	);
@@ -92,7 +92,7 @@ if (user2 != null) {
 			},
 			icon: 'remove-coworker',
 			id: '<portlet:namespace />removeConnectionButton',
-			label: '<%= UnicodeLanguageUtil.get(pageContext, "remove-connection") %>',
+			label: '<%= UnicodeLanguageUtil.get(pageContext, "disconnect") %>',
 			visible: <%= showRemoveAsConnectionButton %>
 		}
 	);
@@ -145,37 +145,6 @@ if (user2 != null) {
 		}
 	);
 
-	contactsToolbarChildren.push(
-		{
-			handler: function(event) {
-				<c:choose>
-					<c:when test="<%= (user2 != null) %>">
-						location.href = '<liferay-portlet:resourceURL id="exportVCard"><portlet:param name="userId" value="<%= String.valueOf(user2.getUserId()) %>" /></liferay-portlet:resourceURL>';
-					</c:when>
-					<c:otherwise>
-						location.href = '<liferay-portlet:resourceURL id="exportVCards"/>' + '&<portlet:namespace />userIds=' + A.all('.lfr-contact-grid-item input').val();
-					</c:otherwise>
-				</c:choose>
-			},
-			icon: 'export',
-			id: '<portlet:namespace />exportButton',
-			label: '<%= UnicodeLanguageUtil.get(pageContext, "vcard") %>'
-		}
-	);
-
-	<c:if test="<%= Validator.isNotNull(userDisplayURL) %>">
-		contactsToolbarChildren.push(
-			{
-				handler: function(event) {
-					location.href= '<%= userDisplayURL %>';
-				},
-				icon: 'user',
-				id: '<portlet:namespace />gotoProfileButton',
-				label: '<%= UnicodeLanguageUtil.get(pageContext, "profile") %>'
-			}
-		);
-	</c:if>
-
 	<%
 	ServletContext servletContext = ServletContextPool.get("private-messaging-portlet");
 	%>
@@ -184,7 +153,9 @@ if (user2 != null) {
 		contactsToolbarChildren.push(
 			{
 				handler: function(event) {
-					var uri = '<liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.POP_UP.toString() %>"><portlet:param name="mvcPath" value="/new_message.jsp" /></liferay-portlet:renderURL>';
+					<portlet:renderURL var="redirectURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>" />
+
+					var uri = '<liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/new_message.jsp" /><portlet:param name="redirect" value="<%= redirectURL %>" /></liferay-portlet:renderURL>';
 
 					<c:choose>
 						<c:when test="<%= user2 != null %>">
@@ -197,10 +168,7 @@ if (user2 != null) {
 
 					new A.Dialog(
 						{
-							align: {
-								node: null,
-								points: ['tc', 'tc']
-							},
+							align: Liferay.Util.Window.ALIGN_CENTER,
 							cssClass: 'private-messaging-portlet',
 							destroyOnClose: true,
 							modal: true,
@@ -219,10 +187,28 @@ if (user2 != null) {
 				},
 				icon: 'send-message',
 				id: '<portlet:namespace />sendMessageButton',
-				label: '<%= UnicodeLanguageUtil.get(pageContext, "send-message") %>'
+				label: '<%= UnicodeLanguageUtil.get(pageContext, "message") %>'
 			}
 		);
 	</c:if>
+
+	contactsToolbarChildren.push(
+		{
+			handler: function(event) {
+				<c:choose>
+					<c:when test="<%= (user2 != null) %>">
+						location.href = '<liferay-portlet:resourceURL id="exportVCard"><portlet:param name="userId" value="<%= String.valueOf(user2.getUserId()) %>" /></liferay-portlet:resourceURL>';
+					</c:when>
+					<c:otherwise>
+						location.href = '<liferay-portlet:resourceURL id="exportVCards" />&<portlet:namespace />userIds=' + A.all('.lfr-contact-grid-item input').val();
+					</c:otherwise>
+				</c:choose>
+			},
+			icon: 'export',
+			id: '<portlet:namespace />exportButton',
+			label: '<%= UnicodeLanguageUtil.get(pageContext, "vcard") %>'
+		}
+	);
 
 	var contactsToolbar = new A.Toolbar(
 		{

@@ -249,6 +249,10 @@ public interface KaleoTaskModel extends BaseModel<KaleoTask>, GroupedModel {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -260,6 +264,8 @@ public interface KaleoTaskModel extends BaseModel<KaleoTask>, GroupedModel {
 	public CacheModel<KaleoTask> toCacheModel();
 
 	public KaleoTask toEscapedModel();
+
+	public KaleoTask toUnescapedModel();
 
 	public String toString();
 

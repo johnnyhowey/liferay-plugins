@@ -302,6 +302,16 @@ public class JIRAActionWrapper implements JIRAAction, ModelWrapper<JIRAAction> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_jiraAction.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_jiraAction.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_jiraAction.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -328,6 +338,10 @@ public class JIRAActionWrapper implements JIRAAction, ModelWrapper<JIRAAction> {
 		return new JIRAActionWrapper(_jiraAction.toEscapedModel());
 	}
 
+	public com.liferay.socialcoding.model.JIRAAction toUnescapedModel() {
+		return new JIRAActionWrapper(_jiraAction.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _jiraAction.toString();
@@ -343,7 +357,7 @@ public class JIRAActionWrapper implements JIRAAction, ModelWrapper<JIRAAction> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public JIRAAction getWrappedJIRAAction() {
 		return _jiraAction;

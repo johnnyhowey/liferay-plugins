@@ -556,6 +556,16 @@ public class KaleoTimerWrapper implements KaleoTimer, ModelWrapper<KaleoTimer> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_kaleoTimer.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_kaleoTimer.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_kaleoTimer.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -583,6 +593,10 @@ public class KaleoTimerWrapper implements KaleoTimer, ModelWrapper<KaleoTimer> {
 		return new KaleoTimerWrapper(_kaleoTimer.toEscapedModel());
 	}
 
+	public com.liferay.portal.workflow.kaleo.model.KaleoTimer toUnescapedModel() {
+		return new KaleoTimerWrapper(_kaleoTimer.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _kaleoTimer.toString();
@@ -607,7 +621,7 @@ public class KaleoTimerWrapper implements KaleoTimer, ModelWrapper<KaleoTimer> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public KaleoTimer getWrappedKaleoTimer() {
 		return _kaleoTimer;
