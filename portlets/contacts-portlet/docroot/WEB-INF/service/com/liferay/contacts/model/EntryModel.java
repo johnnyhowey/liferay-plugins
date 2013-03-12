@@ -236,6 +236,10 @@ public interface EntryModel extends BaseModel<Entry>, GroupedModel {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -247,6 +251,8 @@ public interface EntryModel extends BaseModel<Entry>, GroupedModel {
 	public CacheModel<Entry> toCacheModel();
 
 	public Entry toEscapedModel();
+
+	public Entry toUnescapedModel();
 
 	public String toString();
 

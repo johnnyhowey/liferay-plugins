@@ -205,6 +205,10 @@ public interface WSRPProducerModel extends BaseModel<WSRPProducer> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -216,6 +220,8 @@ public interface WSRPProducerModel extends BaseModel<WSRPProducer> {
 	public CacheModel<WSRPProducer> toCacheModel();
 
 	public WSRPProducer toEscapedModel();
+
+	public WSRPProducer toUnescapedModel();
 
 	public String toString();
 

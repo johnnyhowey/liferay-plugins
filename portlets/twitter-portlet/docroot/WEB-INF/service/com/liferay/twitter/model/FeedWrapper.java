@@ -367,6 +367,16 @@ public class FeedWrapper implements Feed, ModelWrapper<Feed> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_feed.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_feed.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_feed.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -393,6 +403,10 @@ public class FeedWrapper implements Feed, ModelWrapper<Feed> {
 		return new FeedWrapper(_feed.toEscapedModel());
 	}
 
+	public com.liferay.twitter.model.Feed toUnescapedModel() {
+		return new FeedWrapper(_feed.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _feed.toString();
@@ -408,7 +422,7 @@ public class FeedWrapper implements Feed, ModelWrapper<Feed> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Feed getWrappedFeed() {
 		return _feed;

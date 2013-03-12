@@ -25,7 +25,7 @@ Calendar calendar = (Calendar)row.getObject();
 <liferay-ui:icon-menu>
 	<c:if test="<%= CalendarPermission.contains(permissionChecker, calendar, ActionKeys.UPDATE) %>">
 		<portlet:renderURL var="editURL">
-			<portlet:param name="jspPage" value="/edit_calendar.jsp" />
+			<portlet:param name="mvcPath" value="/edit_calendar.jsp" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="calendarId" value="<%= String.valueOf(calendar.getCalendarId()) %>" />
 			<portlet:param name="calendarResourceId" value="<%= String.valueOf(calendar.getCalendarResourceId()) %>" />
@@ -83,6 +83,20 @@ Calendar calendar = (Calendar)row.getObject();
 		<liferay-ui:icon
 			image="permissions"
 			url="<%= permissionsURL %>"
+		/>
+	</c:if>
+
+	<c:if test="<%= enableRSS %>">
+		<liferay-portlet:resourceURL id="calendarBookingsRSS" varImpl="calendarRSSURL">
+			<portlet:param name="calendarId" value="<%= String.valueOf(calendar.getCalendarId()) %>" />
+			<portlet:param name="timeInterval" value="<%= String.valueOf(rssTimeInterval) %>" />
+		</liferay-portlet:resourceURL>
+
+		<liferay-ui:rss
+			delta="<%= rssDelta %>"
+			displayStyle="<%= rssDisplayStyle %>"
+			feedType="<%= rssFeedType %>"
+			resourceURL="<%= calendarRSSURL %>"
 		/>
 	</c:if>
 

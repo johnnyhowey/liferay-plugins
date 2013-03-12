@@ -340,6 +340,10 @@ public interface KaleoNotificationModel extends BaseModel<KaleoNotification>,
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -351,6 +355,8 @@ public interface KaleoNotificationModel extends BaseModel<KaleoNotification>,
 	public CacheModel<KaleoNotification> toCacheModel();
 
 	public KaleoNotification toEscapedModel();
+
+	public KaleoNotification toUnescapedModel();
 
 	public String toString();
 

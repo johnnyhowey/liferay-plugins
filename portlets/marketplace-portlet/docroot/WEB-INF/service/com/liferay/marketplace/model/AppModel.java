@@ -221,6 +221,10 @@ public interface AppModel extends AuditedModel, BaseModel<App> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -232,6 +236,8 @@ public interface AppModel extends AuditedModel, BaseModel<App> {
 	public CacheModel<App> toCacheModel();
 
 	public App toEscapedModel();
+
+	public App toUnescapedModel();
 
 	public String toString();
 

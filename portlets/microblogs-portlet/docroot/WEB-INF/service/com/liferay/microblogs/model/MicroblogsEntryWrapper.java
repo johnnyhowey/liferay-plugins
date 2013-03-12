@@ -421,6 +421,16 @@ public class MicroblogsEntryWrapper implements MicroblogsEntry,
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_microblogsEntry.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_microblogsEntry.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_microblogsEntry.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -448,6 +458,10 @@ public class MicroblogsEntryWrapper implements MicroblogsEntry,
 		return new MicroblogsEntryWrapper(_microblogsEntry.toEscapedModel());
 	}
 
+	public com.liferay.microblogs.model.MicroblogsEntry toUnescapedModel() {
+		return new MicroblogsEntryWrapper(_microblogsEntry.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _microblogsEntry.toString();
@@ -463,7 +477,7 @@ public class MicroblogsEntryWrapper implements MicroblogsEntry,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public MicroblogsEntry getWrappedMicroblogsEntry() {
 		return _microblogsEntry;

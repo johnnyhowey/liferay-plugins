@@ -16,6 +16,7 @@ package com.liferay.portal.workflow.kaleo.service.impl;
 
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -110,7 +111,7 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 		kaleoTaskInstanceToken.setWorkflowContext(
 			WorkflowContextUtil.convert(workflowContext));
 
-		kaleoTaskInstanceTokenPersistence.update(kaleoTaskInstanceToken, false);
+		kaleoTaskInstanceTokenPersistence.update(kaleoTaskInstanceToken);
 
 		kaleoTaskAssignmentInstanceLocalService.addTaskAssignmentInstances(
 			kaleoTaskInstanceToken, kaleoTaskAssignments, workflowContext,
@@ -133,7 +134,7 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 		kaleoTaskInstanceToken.setWorkflowContext(
 			WorkflowContextUtil.convert(workflowContext));
 
-		kaleoTaskInstanceTokenPersistence.update(kaleoTaskInstanceToken, false);
+		kaleoTaskInstanceTokenPersistence.update(kaleoTaskInstanceToken);
 
 		kaleoTaskAssignmentInstanceLocalService.
 			assignKaleoTaskAssignmentInstance(
@@ -157,7 +158,7 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 		kaleoTaskInstanceToken.setCompleted(true);
 		kaleoTaskInstanceToken.setCompletionDate(new Date());
 
-		kaleoTaskInstanceTokenPersistence.update(kaleoTaskInstanceToken, false);
+		kaleoTaskInstanceTokenPersistence.update(kaleoTaskInstanceToken);
 
 		// Kaleo task assignment instance
 
@@ -399,12 +400,14 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
 			KaleoTaskInstanceToken.class, getClassLoader());
 
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("companyId").eq(
-				serviceContext.getCompanyId()));
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("workflowContext").like(
-				"\"userId\":" + userId));
+		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(companyIdProperty.eq(serviceContext.getCompanyId()));
+
+		Property workflowContextProperty = PropertyFactoryUtil.forName(
+			"workflowContext");
+
+		dynamicQuery.add(workflowContextProperty.like("\"userId\":" + userId));
 
 		addCompletedCriterion(dynamicQuery, completed);
 
@@ -418,12 +421,14 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
 			KaleoTaskInstanceToken.class, getClassLoader());
 
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("companyId").eq(
-				serviceContext.getCompanyId()));
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("workflowContext").like(
-				"\"userId\":" + userId));
+		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(companyIdProperty.eq(serviceContext.getCompanyId()));
+
+		Property workflowContextProperty = PropertyFactoryUtil.forName(
+			"workflowContext");
+
+		dynamicQuery.add(workflowContextProperty.like("\"userId\":" + userId));
 
 		addCompletedCriterion(dynamicQuery, completed);
 
@@ -568,7 +573,7 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 			kaleoTaskInstance.setDueDate(cal.getTime());
 		}
 
-		kaleoTaskInstanceTokenPersistence.update(kaleoTaskInstance, false);
+		kaleoTaskInstanceTokenPersistence.update(kaleoTaskInstance);
 
 		return kaleoTaskInstance;
 	}
@@ -580,8 +585,9 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 			return;
 		}
 
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("completed").eq(completed));
+		Property property = PropertyFactoryUtil.forName("completed");
+
+		dynamicQuery.add(property.eq(completed));
 	}
 
 	protected DynamicQuery buildDynamicQuery(
@@ -590,9 +596,9 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
 			KaleoTaskInstanceToken.class, getClassLoader());
 
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("companyId").eq(
-				serviceContext.getCompanyId()));
+		Property property = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(property.eq(serviceContext.getCompanyId()));
 
 		addCompletedCriterion(dynamicQuery, completed);
 
@@ -606,11 +612,14 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
 			KaleoTaskInstanceToken.class, getClassLoader());
 
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("companyId").eq(
-				serviceContext.getCompanyId()));
-		dynamicQuery.add(
-			PropertyFactoryUtil.forName("kaleoInstanceId").eq(kaleoInstanceId));
+		Property companyIdProperty = PropertyFactoryUtil.forName("companyId");
+
+		dynamicQuery.add(companyIdProperty.eq(serviceContext.getCompanyId()));
+
+		Property kaleoInstanceIdProperty = PropertyFactoryUtil.forName(
+			"kaleoInstanceId");
+
+		dynamicQuery.add(kaleoInstanceIdProperty.eq(kaleoInstanceId));
 
 		addCompletedCriterion(dynamicQuery, completed);
 

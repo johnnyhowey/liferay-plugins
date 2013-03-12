@@ -264,6 +264,10 @@ public interface MicroblogsEntryModel extends AuditedModel,
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -275,6 +279,8 @@ public interface MicroblogsEntryModel extends AuditedModel,
 	public CacheModel<MicroblogsEntry> toCacheModel();
 
 	public MicroblogsEntry toEscapedModel();
+
+	public MicroblogsEntry toUnescapedModel();
 
 	public String toString();
 

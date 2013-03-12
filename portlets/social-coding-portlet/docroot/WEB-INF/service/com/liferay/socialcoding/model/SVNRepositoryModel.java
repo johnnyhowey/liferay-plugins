@@ -116,6 +116,10 @@ public interface SVNRepositoryModel extends BaseModel<SVNRepository> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -127,6 +131,8 @@ public interface SVNRepositoryModel extends BaseModel<SVNRepository> {
 	public CacheModel<SVNRepository> toCacheModel();
 
 	public SVNRepository toEscapedModel();
+
+	public SVNRepository toUnescapedModel();
 
 	public String toString();
 

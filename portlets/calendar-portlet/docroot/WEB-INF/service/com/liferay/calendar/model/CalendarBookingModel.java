@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.GroupedModel;
+import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.model.WorkflowedModel;
 import com.liferay.portal.service.ServiceContext;
 
@@ -45,7 +46,7 @@ import java.util.Map;
  * @generated
  */
 public interface CalendarBookingModel extends BaseModel<CalendarBooking>,
-	GroupedModel, WorkflowedModel {
+	GroupedModel, StagedModel, WorkflowedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -453,32 +454,32 @@ public interface CalendarBookingModel extends BaseModel<CalendarBooking>,
 	public void setLocation(String location);
 
 	/**
-	 * Returns the start date of this calendar booking.
+	 * Returns the start time of this calendar booking.
 	 *
-	 * @return the start date of this calendar booking
+	 * @return the start time of this calendar booking
 	 */
-	public long getStartDate();
+	public long getStartTime();
 
 	/**
-	 * Sets the start date of this calendar booking.
+	 * Sets the start time of this calendar booking.
 	 *
-	 * @param startDate the start date of this calendar booking
+	 * @param startTime the start time of this calendar booking
 	 */
-	public void setStartDate(long startDate);
+	public void setStartTime(long startTime);
 
 	/**
-	 * Returns the end date of this calendar booking.
+	 * Returns the end time of this calendar booking.
 	 *
-	 * @return the end date of this calendar booking
+	 * @return the end time of this calendar booking
 	 */
-	public long getEndDate();
+	public long getEndTime();
 
 	/**
-	 * Sets the end date of this calendar booking.
+	 * Sets the end time of this calendar booking.
 	 *
-	 * @param endDate the end date of this calendar booking
+	 * @param endTime the end time of this calendar booking
 	 */
-	public void setEndDate(long endDate);
+	public void setEndTime(long endTime);
 
 	/**
 	 * Returns the all day of this calendar booking.
@@ -647,7 +648,7 @@ public interface CalendarBookingModel extends BaseModel<CalendarBooking>,
 	public void setStatusDate(Date statusDate);
 
 	/**
-	 * @deprecated Renamed to {@link #isApproved()}
+	 * @deprecated As of 6.1.0, replaced by {@link #isApproved()}
 	 */
 	public boolean getApproved();
 
@@ -730,6 +731,10 @@ public interface CalendarBookingModel extends BaseModel<CalendarBooking>,
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
@@ -744,6 +749,8 @@ public interface CalendarBookingModel extends BaseModel<CalendarBooking>,
 	public CacheModel<CalendarBooking> toCacheModel();
 
 	public CalendarBooking toEscapedModel();
+
+	public CalendarBooking toUnescapedModel();
 
 	public String toString();
 

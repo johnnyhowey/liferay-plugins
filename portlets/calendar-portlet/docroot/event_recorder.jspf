@@ -20,8 +20,8 @@
 	<div class="aui-scheduler-event-recorder-overlay-arrow"></div>
 
 	<input name="allDay" type="hidden" value="{allDay}" />
-	<input name="startDate" type="hidden" value="{startDate}" />
-	<input name="endDate" type="hidden" value="{endDate}" />
+	<input name="startTime" type="hidden" value="{startTime}" />
+	<input name="endTime" type="hidden" value="{endTime}" />
 
 	<div class="aui-scheduler-event-recorder-overlay-header">
 		<tpl if="values.permissions.MANAGE_BOOKINGS">
@@ -61,36 +61,32 @@
 					</td>
 					<td>
 						<select id="<portlet:namespace />eventRecorderCalendar" name="calendarId">
-
-							<%
-							for (Calendar calendar : manageableCalendars) {
-							%>
-
-								<option value="<%= calendar.getCalendarId() %>"><%= calendar.getName(locale) %></option>
-
-							<%
-							}
-							%>
-
+							<tpl for="calendarIds">
+								<tpl for="parent.availableCalendars[values]">
+									<tpl if="values.get('permissions').MANAGE_BOOKINGS == true">
+										<option value="{[values.get('calendarId')]}">{[Liferay.CalendarUtil.getCalendarName(values.get('name'), values.get('calendarResourceName'))]}</option>
+									</tpl>
+								</tpl>
+							</tpl>
 						</select>
 					</td>
 				</tr>
 			</tpl>
 
-			<tr class="aui-helper-hidden" id="<portlet:namespace />eventRecorderUsers">
+			<tr <tpl if="!values.editing">class="aui-helper-hidden"</tpl> id="<portlet:namespace />eventRecorderUsers">
 				<td>
 					<liferay-ui:message key="users" />:
 				</td>
 				<td>
-					<label class="calendar-portlet-invitees"></label>
+					<label class="calendar-portlet-invitees"><liferay-ui:message key="loading" /></label>
 				</td>
 			</tr>
-			<tr class="aui-helper-hidden" id="<portlet:namespace />eventRecorderResources">
+			<tr <tpl if="!values.editing">class="aui-helper-hidden"</tpl> id="<portlet:namespace />eventRecorderResources">
 				<td>
 					<liferay-ui:message key="resources" />:
 				</td>
 				<td>
-					<label class="calendar-portlet-invitees"></label>
+					<label class="calendar-portlet-invitees"><liferay-ui:message key="loading" /></label>
 				</td>
 			</tr>
 		</table>

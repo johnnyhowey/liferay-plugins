@@ -817,6 +817,16 @@ public class AccountWrapper implements Account, ModelWrapper<Account> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_account.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_account.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_account.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -843,6 +853,10 @@ public class AccountWrapper implements Account, ModelWrapper<Account> {
 		return new AccountWrapper(_account.toEscapedModel());
 	}
 
+	public com.liferay.mail.model.Account toUnescapedModel() {
+		return new AccountWrapper(_account.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _account.toString();
@@ -866,7 +880,7 @@ public class AccountWrapper implements Account, ModelWrapper<Account> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Account getWrappedAccount() {
 		return _account;

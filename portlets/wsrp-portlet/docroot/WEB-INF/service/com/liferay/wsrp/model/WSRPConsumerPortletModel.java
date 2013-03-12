@@ -190,6 +190,10 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -201,6 +205,8 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	public CacheModel<WSRPConsumerPortlet> toCacheModel();
 
 	public WSRPConsumerPortlet toEscapedModel();
+
+	public WSRPConsumerPortlet toUnescapedModel();
 
 	public String toString();
 

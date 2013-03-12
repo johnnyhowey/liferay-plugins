@@ -329,6 +329,10 @@ public interface KaleoTransitionModel extends BaseModel<KaleoTransition>,
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -340,6 +344,8 @@ public interface KaleoTransitionModel extends BaseModel<KaleoTransition>,
 	public CacheModel<KaleoTransition> toCacheModel();
 
 	public KaleoTransition toEscapedModel();
+
+	public KaleoTransition toUnescapedModel();
 
 	public String toString();
 

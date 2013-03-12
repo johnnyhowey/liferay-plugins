@@ -388,6 +388,10 @@ public interface KaleoDefinitionModel extends BaseModel<KaleoDefinition>,
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public void prepareLocalizedFieldsForImport(Locale defaultImportLocale)
@@ -402,6 +406,8 @@ public interface KaleoDefinitionModel extends BaseModel<KaleoDefinition>,
 	public CacheModel<KaleoDefinition> toCacheModel();
 
 	public KaleoDefinition toEscapedModel();
+
+	public KaleoDefinition toUnescapedModel();
 
 	public String toString();
 

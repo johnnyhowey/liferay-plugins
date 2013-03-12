@@ -18,8 +18,6 @@ import com.liferay.chat.model.Status;
 import com.liferay.chat.service.StatusLocalServiceUtil;
 import com.liferay.chat.util.PortletPropsValues;
 import com.liferay.chat.util.comparator.BuddyComparator;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
@@ -28,6 +26,9 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ContactConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.UserLocalServiceUtil;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,7 +72,11 @@ public class JabberImpl implements Jabber {
 	public String getResource(String jabberId) {
 		String resource = StringUtil.extractLast(jabberId, StringPool.AT);
 
-		resource = StringUtil.extractLast(jabberId, StringPool.SLASH);
+		resource = StringUtil.extractLast(resource, StringPool.SLASH);
+
+		if (resource == null) {
+			return StringPool.BLANK;
+		}
 
 		return resource;
 	}
@@ -187,6 +192,7 @@ public class JabberImpl implements Jabber {
 
 				try {
 					importUser(userId, password);
+
 					connect(userId, password);
 				}
 				catch (XMPPException xmppe2) {
@@ -303,9 +309,7 @@ public class JabberImpl implements Jabber {
 		updateStatus(userId, online, null);
 	}
 
-	protected Connection connect()
-		throws PortalException, SystemException, XMPPException {
-
+	protected Connection connect() throws Exception {
 		long userId = -1;
 		String password = null;
 
@@ -313,7 +317,7 @@ public class JabberImpl implements Jabber {
 	}
 
 	protected Connection connect(long userId, String password)
-		throws PortalException, SystemException, XMPPException {
+		throws Exception {
 
 		Connection connection = getConnection(userId);
 
@@ -356,13 +360,23 @@ public class JabberImpl implements Jabber {
 		return _connections.get(userId);
 	}
 
-	protected ConnectionConfiguration getConnectionConfiguration() {
+	protected ConnectionConfiguration getConnectionConfiguration()
+		throws UnknownHostException {
+
 		if (_connectionConfiguration != null) {
 			return _connectionConfiguration;
 		}
 
+		String jabberHost = PortletPropsValues.JABBER_HOST;
+
+		if (!Validator.isIPAddress(jabberHost)) {
+			InetAddress inetAddress = InetAddress.getByName(jabberHost);
+
+			jabberHost = inetAddress.getHostAddress();
+		}
+
 		_connectionConfiguration = new ConnectionConfiguration(
-			PortletPropsValues.JABBER_HOST, PortletPropsValues.JABBER_PORT,
+			jabberHost, PortletPropsValues.JABBER_PORT,
 			PortletPropsValues.JABBER_SERVICE_NAME);
 
 		_connectionConfiguration.setSendPresence(false);
@@ -387,9 +401,7 @@ public class JabberImpl implements Jabber {
 			PortletPropsValues.JABBER_SERVICE_NAME);
 	}
 
-	protected void importUser(long userId, String password)
-		throws PortalException, SystemException, XMPPException {
-
+	protected void importUser(long userId, String password) throws Exception {
 		Connection connection = connect();
 
 		AccountManager accountManager = connection.getAccountManager();

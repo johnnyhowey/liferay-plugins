@@ -35,11 +35,13 @@
 		<field name="description" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
 		</field>
-		<field name="location" type="String" />
-		<field name="startDate" type="long">
+		<field name="location" type="String">
+			<hint-collection name="TEXTAREA" />
+		</field>
+		<field name="startTime" type="long">
 			<hint name="type">Date</hint>
 		</field>
-		<field name="endDate" type="long">
+		<field name="endTime" type="long">
 			<hint name="type">Date</hint>
 		</field>
 		<field name="allDay" type="boolean" />
@@ -73,7 +75,6 @@
 		<field name="description" type="String" localized="true">
 			<hint-collection name="TEXTAREA" />
 		</field>
-		<field name="type" type="String" />
 		<field name="active" type="boolean" />
 	</model>
 </model-hints>

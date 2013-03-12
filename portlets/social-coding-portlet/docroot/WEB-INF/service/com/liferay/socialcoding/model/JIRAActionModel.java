@@ -191,6 +191,10 @@ public interface JIRAActionModel extends BaseModel<JIRAAction> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -202,6 +206,8 @@ public interface JIRAActionModel extends BaseModel<JIRAAction> {
 	public CacheModel<JIRAAction> toCacheModel();
 
 	public JIRAAction toEscapedModel();
+
+	public JIRAAction toUnescapedModel();
 
 	public String toString();
 

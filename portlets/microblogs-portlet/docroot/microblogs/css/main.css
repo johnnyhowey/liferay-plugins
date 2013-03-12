@@ -1,16 +1,4 @@
-/**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
- *
- * This library is free software; you can redistribute it and/or modify it under
- * the terms of the GNU Lesser General Public License as published by the Free
- * Software Foundation; either version 2.1 of the License, or (at your option)
- * any later version.
- *
- * This library is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
- * details.
- */
+@import "compass";
 
 $microblogs-border-color: #C7D0DA;
 
@@ -31,19 +19,17 @@ $microblogs-border-color: #C7D0DA;
 		.aui-field-text {
 			display: block;
 			padding: 0 5px;
-		}
 
-		.aui-field-text textarea {
-			height: 1.25em;
-			margin: 0 -10px;
-			overflow: hidden;
-			width: 100%;
-		}
-
-		.aui-field-text-focused {
 			textarea {
-				height: auto;
+				height: 1.25em;
+				margin: 0 -10px;
+				overflow: hidden;
+				width: 100%;
 			}
+		}
+
+		.aui-field-text-focused textarea {
+			height: auto;
 		}
 
 		.aui-button-holder {
@@ -52,6 +38,11 @@ $microblogs-border-color: #C7D0DA;
 
 		.aui-field-select {
 			display: inline-block;
+			float: left;
+
+			.aui-field-element {
+				position: static;
+			}
 		}
 
 		.button-holder-right {
@@ -68,7 +59,7 @@ $microblogs-border-color: #C7D0DA;
 			top: 14px;
 		}
 
-		 .microblogs-countdown-warned {
+		.microblogs-countdown-warned {
 			background: #F00;
 		}
 
@@ -81,14 +72,14 @@ $microblogs-border-color: #C7D0DA;
 	.autocomplete {
 		background-color: #FFF;
 		height: 18px;
-		position: relative;
 		padding: 8px;
+		position: relative;
 	}
 
 	.microblogs-entry {
 		border-bottom: 1px solid $microblogs-border-color;
 		margin: 0 15px;
-		padding: 1em 0 .5em;
+		padding: 1em 0 0.5em;
 
 		.entry-bubble {
 			margin-left: 50px;
@@ -98,8 +89,8 @@ $microblogs-border-color: #C7D0DA;
 	.thumbnail {
 		float: left;
 		height: 45px;
-		overflow: hidden;
 		margin-right: 2px;
+		overflow: hidden;
 		width: 45px;
 
 		img {
@@ -118,7 +109,7 @@ $microblogs-border-color: #C7D0DA;
 
 		.footer {
 			color: #CCC;
-			font-size: .9em;
+			font-size: 0.9em;
 
 			.action {
 				display: none;
@@ -189,11 +180,9 @@ $microblogs-border-color: #C7D0DA;
 			display: inline;
 		}
 
-		.microblogs-entry-form {
-			.button-holder-right {
-				float: none;
-				margin-left: 35px;
-			}
+		.microblogs-entry-form .button-holder-right {
+			float: none;
+			margin-left: 35px;
 		}
 
 		.microblogs-entry-content, .autocomplete {
@@ -210,51 +199,57 @@ $microblogs-border-color: #C7D0DA;
 	}
 
 	.microblogs-entry-form:after, .microblogs-entry:after {
-		content: "";
 		clear: both;
+		content: "";
 		display: block;
 	}
 
 	.highlighter-content {
 		color: transparent;
+		line-height: 1.5em;
+
+		@include force-wrap();
+
 		left: 1px;
 		padding: 5px;
 		position: absolute;
 		top: 1px;
+		width: 100%;
 		visibility: hidden;
-		word-wrap: break-word;
 		z-index: 998;
-	}
 
-	.highlighter-content.textbox {
-		min-height: 20px;
-		padding: 2px;
-		position: static;
-	}
+		&.textbox {
+			min-height: 20px;
+			padding: 2px;
+			position: static;
+		}
 
-	.highlighter-content span {
-		background-color: #97D1FF;
-		font-weight: normal;
-		line-height: 1.45em;
-		margin: -2px -2px 0;
-		padding: 2px 2px 0;
-		visibility: visible;
-		zoom: 1;
-	}
+		span {
+			background-color: #97D1FF;
+			font-weight: normal;
+			margin: -2px -2px 0;
+			padding: 2px 2px 0;
+			visibility: visible;
+			zoom: 1;
+		}
 
-	.highlighter-content div {
-		display: inline-block;
-		white-space: pre;
+		div {
+			display: inline-block;
+			width: 100%;
+
+			@include force-wrap();
+		}
 	}
 
 	.aui-field-input-text {
 		background: none transparent;
-		border: none;
+		border-width: 0;
+		line-height: 1.5em;
 		min-width: 99%;
+		outline: none;
 		position: absolute;
 		resize: none;
 		top: 0;
-		outline: none;
 		z-index: 999;
 	}
 
