@@ -91,6 +91,7 @@ public class MeetupsRegistrationModelImpl extends BaseModelImpl<MeetupsRegistrat
 	public static long MEETUPSENTRYID_COLUMN_BITMASK = 1L;
 	public static long STATUS_COLUMN_BITMASK = 2L;
 	public static long USERID_COLUMN_BITMASK = 4L;
+	public static long MODIFIEDDATE_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.socialnetworking.model.MeetupsRegistration"));
 
@@ -106,7 +107,7 @@ public class MeetupsRegistrationModelImpl extends BaseModelImpl<MeetupsRegistrat
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_meetupsRegistrationId);
+		return _meetupsRegistrationId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -343,13 +344,12 @@ public class MeetupsRegistrationModelImpl extends BaseModelImpl<MeetupsRegistrat
 
 	@Override
 	public MeetupsRegistration toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (MeetupsRegistration)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (MeetupsRegistration)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -563,7 +563,7 @@ public class MeetupsRegistrationModelImpl extends BaseModelImpl<MeetupsRegistrat
 	}
 
 	private static ClassLoader _classLoader = MeetupsRegistration.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			MeetupsRegistration.class
 		};
 	private long _meetupsRegistrationId;
@@ -583,5 +583,5 @@ public class MeetupsRegistrationModelImpl extends BaseModelImpl<MeetupsRegistrat
 	private boolean _setOriginalStatus;
 	private String _comments;
 	private long _columnBitmask;
-	private MeetupsRegistration _escapedModelProxy;
+	private MeetupsRegistration _escapedModel;
 }

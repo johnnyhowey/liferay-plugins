@@ -31,12 +31,13 @@ import com.liferay.portal.kernel.notifications.ChannelException;
 import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.UnknownChannelException;
+import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
@@ -47,7 +48,7 @@ import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.portal.model.CompanyConstants;
+import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
 import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -55,7 +56,6 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.documentlibrary.FileExtensionException;
 import com.liferay.portlet.documentlibrary.FileNameException;
 import com.liferay.portlet.documentlibrary.FileSizeException;
-import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.privatemessaging.service.UserThreadLocalServiceUtil;
@@ -67,6 +67,8 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import java.lang.reflect.Constructor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -130,22 +132,18 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 				throw new PrincipalException();
 			}
 
-			String path = message.getAttachmentsDir() + "/" + fileName;
-
-			InputStream inputStream = DLStoreUtil.getFileAsStream(
-				message.getCompanyId(), CompanyConstants.SYSTEM, path);
-			int contentLength = (int)DLStoreUtil.getFileSize(
-				message.getCompanyId(), CompanyConstants.SYSTEM, path);
-			String contentType = MimeTypesUtil.getContentType(fileName);
-
 			HttpServletRequest request = PortalUtil.getHttpServletRequest(
 				actionRequest);
 			HttpServletResponse response = PortalUtil.getHttpServletResponse(
 				actionResponse);
 
+			FileEntry fileEntry = PortletFileRepositoryUtil.getPortletFileEntry(
+				message.getGroupId(), message.getAttachmentsFolderId(),
+				fileName);
+
 			ServletResponseUtil.sendFile(
-				request, response, fileName, inputStream, contentLength,
-				contentType);
+				request, response, fileName, fileEntry.getContentStream(),
+				fileEntry.getSize(), fileEntry.getMimeType());
 		}
 		catch (Exception e) {
 			PortalUtil.sendError(e, actionRequest, actionResponse);
@@ -191,9 +189,6 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		UploadPortletRequest uploadPortletRequest =
 			PortalUtil.getUploadPortletRequest(actionRequest);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		long userId = ParamUtil.getLong(uploadPortletRequest, "userId");
 		long mbThreadId = ParamUtil.getLong(uploadPortletRequest, "mbThreadId");
 		String to = ParamUtil.getString(uploadPortletRequest, "to");
@@ -203,6 +198,9 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			new ArrayList<ObjectValuePair<String, InputStream>>();
 
 		try {
+
+			validateUpload(actionRequest);
+
 			for (int i = 1; i <= 3; i++) {
 				String fileName = uploadPortletRequest.getFileName(
 					"msgFile" + i);
@@ -213,7 +211,7 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 					continue;
 				}
 
-				validateAttachment(fileName, inputStream);
+				validateAttachment(actionRequest, fileName, inputStream);
 
 				try {
 					ObjectValuePair<String, InputStream> inputStreamOVP =
@@ -227,20 +225,33 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 				}
 			}
 
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)actionRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
 			UserThreadLocalServiceUtil.addPrivateMessage(
 				userId, mbThreadId, to, subject, body, inputStreamOVPs,
 				themeDisplay);
 		}
 		catch (Exception e) {
-			if (e instanceof IOException) {
-				throw new PortalException("Unable to process attachment", e);
-			}
-			else if (e instanceof FileExtensionException ||
-					 e instanceof FileNameException ||
-					 e instanceof FileSizeException ||
-					 e instanceof UserScreenNameException) {
+			if (!(e instanceof FileExtensionException) &&
+				!(e instanceof FileNameException) &&
+				!(e instanceof FileSizeException)) {
 
-				SessionErrors.add(actionRequest, e.getClass());
+				_log.error(e);
+			}
+
+			try {
+				SessionErrors.add(actionRequest, "invalidMessage", e);
+
+				String redirect = ParamUtil.getString(
+					actionRequest, "redirect");
+
+				if (Validator.isNotNull(redirect)) {
+					actionResponse.sendRedirect(redirect);
+				}
+			}
+			catch (Exception e2) {
+				_log.error(e2);
 			}
 		}
 		finally {
@@ -282,54 +293,46 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
-		UploadPortletRequest uploadPortletRequest =
-			PortalUtil.getUploadPortletRequest(resourceRequest);
-
-		String to = ParamUtil.getString(uploadPortletRequest, "to");
+		String to = ParamUtil.getString(resourceRequest, "to");
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
-			validateTo(to, themeDisplay);
-
-			for (int i = 1; i <= 3; i++) {
-				String fileName = uploadPortletRequest.getFileName(
-					"msgFile" + i);
-				InputStream inputStream = uploadPortletRequest.getFileAsStream(
-					"msgFile" + i);
-
-				if (inputStream == null) {
-					continue;
-				}
-
-				validateAttachment(fileName, inputStream);
-			}
+			validateTo(resourceRequest, to);
 
 			jsonObject.put("success", true);
 		}
 		catch (Exception e) {
-			jsonObject.put("message", getMessage(resourceRequest, e));
+			String message = null;
+
+			if (e instanceof PortalException) {
+				message = e.getMessage();
+			}
+			else {
+				message = getMessage(resourceRequest, e.getClass());
+
+				_log.error(e);
+			}
+
+			jsonObject.put("message", message);
 			jsonObject.put("success", false);
 		}
 
 		writeJSON(resourceRequest, resourceResponse, jsonObject);
 	}
 
-	protected String getMessage(PortletRequest portletRequest, Exception key)
+	protected String getMessage(
+			PortletRequest portletRequest,
+			Class<? extends Exception> exceptionClass, Object... arguments)
 		throws Exception {
-
-		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
 
 		String message = null;
 
-		if (key instanceof FileExtensionException) {
+		if (FileExtensionException.class.equals(exceptionClass)) {
 			message = translate(
 				portletRequest,
-				"document-names-must-end-with-one-of-the-following-extensions");
+				"file-x-must-end-with-one-of-the-following-extensions",
+				arguments);
 
 			message +=
 				CharPool.SPACE +
@@ -338,38 +341,45 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 							PropsKeys.DL_FILE_EXTENSIONS, StringPool.COMMA),
 						StringPool.COMMA_AND_SPACE);
 		}
-		else if (key instanceof FileNameException) {
+		else if (FileNameException.class.equals(exceptionClass)) {
 			message = translate(
-				portletRequest, "please-enter-a-file-with-a-valid-file-name");
+				portletRequest, "file-name-x-is-invalid", arguments);
 		}
-		else if (key instanceof FileSizeException) {
-			long fileMaxSize = PrefsPropsUtil.getLong(
-				PropsKeys.DL_FILE_MAX_SIZE);
-
-			if (fileMaxSize == 0) {
-				fileMaxSize = PrefsPropsUtil.getLong(
-					PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE);
-			}
-
-			fileMaxSize /= 1024;
-
+		else if (FileSizeException.class.equals(exceptionClass)) {
 			message = translate(
 				portletRequest,
 				"please-enter-a-file-with-a-valid-file-size-no-larger-than-x",
-				fileMaxSize);
+				arguments);
 		}
-		else if (key instanceof UserScreenNameException) {
+		else if (IOException.class.equals(exceptionClass)) {
+			message = translate(portletRequest, "unable-to-process-attachment");
+		}
+		else if (UserScreenNameException.class.equals(exceptionClass)) {
 			message = translate(
-				portletRequest, "the-following-users-were-not-found");
+				portletRequest, "the-following-users-were-not-found",
+				arguments);
 
-			message += CharPool.SPACE + key.getMessage();
 		}
 		else {
 			message = translate(
-				portletRequest, "your-request-failed-to-complete");
+				portletRequest,
+				"an-unexpected-error-occurred-while-sending-your-message");
 		}
 
 		return message;
+	}
+
+	protected <E extends PortalException> E getPortalException(
+			PortletRequest portletRequest, Class<E> exceptionClass,
+			Object... arguments)
+		throws Exception {
+
+		String message = getMessage(portletRequest, exceptionClass, arguments);
+
+		Constructor<E> exceptionConstructor = exceptionClass.getConstructor(
+			String.class);
+
+		return exceptionConstructor.newInstance(message);
 	}
 
 	protected void getUsers(
@@ -450,7 +460,9 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		}
 	}
 
-	protected void validateAttachment(String fileName, InputStream inputStream)
+	protected void validateAttachment(
+			PortletRequest portletRequest, String fileName,
+			InputStream inputStream)
 		throws Exception {
 
 		if (inputStream instanceof ByteArrayFileInputStream) {
@@ -459,17 +471,22 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 
 			File file = byteArrayFileInputStream.getFile();
 
-			if ((PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE) > 0) &&
-				((file == null) ||
-				 (file.length() >
-				  PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE)))) {
+			long fileMaxSize = PrefsPropsUtil.getLong(
+				PropsKeys.DL_FILE_MAX_SIZE);
 
-				throw new FileSizeException(fileName);
+			if ((fileMaxSize > 0) &&
+				((file == null) || (file.length() > fileMaxSize))) {
+
+				throw getPortalException(
+					portletRequest, FileSizeException.class,
+					Long.valueOf(fileMaxSize / 1024));
 			}
 		}
 
 		if (!isValidName(fileName)) {
-			throw new FileNameException(fileName);
+
+			throw getPortalException(
+				portletRequest, FileNameException.class, fileName);
 		}
 
 		String[] fileExtensions = PrefsPropsUtil.getStringArray(
@@ -488,16 +505,21 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 		}
 
 		if (!validFileExtension) {
-			throw new FileExtensionException(fileName);
+
+			throw getPortalException(
+				portletRequest, FileExtensionException.class, fileName);
 		}
 	}
 
-	protected void validateTo(String to, ThemeDisplay themeDisplay)
+	protected void validateTo(PortletRequest portletRequest, String to)
 		throws Exception {
 
 		if (Validator.isNull(to)) {
 			return;
 		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)portletRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
 		String[] recipients = StringUtil.split(to);
 
@@ -529,7 +551,24 @@ public class PrivateMessagingPortlet extends MVCPortlet {
 			sb.append(StringUtil.merge(failedRecipients, "', '"));
 			sb.append(StringPool.APOSTROPHE);
 
-			throw new UserScreenNameException(sb.toString());
+			throw getPortalException(
+				portletRequest, UserScreenNameException.class, sb.toString());
+		}
+	}
+
+	protected void validateUpload(PortletRequest portletRequest)
+		throws Exception {
+
+		UploadException uploadException = (UploadException)
+			portletRequest.getAttribute(WebKeys.UPLOAD_EXCEPTION);
+
+		if (uploadException != null) {
+			long fileMaxSize = PrefsPropsUtil.getLong(
+				PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE);
+
+			throw getPortalException(
+				portletRequest, FileSizeException.class,
+				Long.valueOf(fileMaxSize / 1024));
 		}
 	}
 

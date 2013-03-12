@@ -1,11 +1,22 @@
+*~
 *-ext.properties
+*.bak
+*.iml
+*.ipr
+*.iws
+*.swp
 .ant_targets
+.ant-targets-build.xml
+.ivy/
 .sass-cache/
 .sass_cache_*.css
 _sass_cache_*.css
 
 /*/*/bin
 /*/*/classes
+/*/*/temp
+/*/*/test-classes
+/*/*/test-results
 /*/*/tmp
 
 /*/*/docroot/WEB-INF/classes
@@ -13,3 +24,5 @@ _sass_cache_*.css
 
 /build.*.properties
 /dist
+/lib
+/tools/*/*/*/lib

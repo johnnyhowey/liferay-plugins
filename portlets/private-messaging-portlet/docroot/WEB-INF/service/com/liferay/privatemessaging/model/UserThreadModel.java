@@ -247,6 +247,10 @@ public interface UserThreadModel extends AuditedModel, BaseModel<UserThread> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -258,6 +262,8 @@ public interface UserThreadModel extends AuditedModel, BaseModel<UserThread> {
 	public CacheModel<UserThread> toCacheModel();
 
 	public UserThread toEscapedModel();
+
+	public UserThread toUnescapedModel();
 
 	public String toString();
 

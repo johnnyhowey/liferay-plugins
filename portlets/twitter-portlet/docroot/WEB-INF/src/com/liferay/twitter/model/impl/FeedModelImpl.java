@@ -72,6 +72,8 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 		};
 	public static final String TABLE_SQL_CREATE = "create table Twitter_Feed (feedId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,twitterUserId LONG,twitterScreenName VARCHAR(75) null,lastStatusId LONG)";
 	public static final String TABLE_SQL_DROP = "drop table Twitter_Feed";
+	public static final String ORDER_BY_JPQL = " ORDER BY feed.feedId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Twitter_Feed.feedId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -87,6 +89,7 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long TWITTERSCREENNAME_COLUMN_BITMASK = 2L;
 	public static long TWITTERUSERID_COLUMN_BITMASK = 4L;
+	public static long FEEDID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.twitter.model.Feed"));
 
@@ -102,7 +105,7 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_feedId);
+		return _feedId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -343,13 +346,12 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 
 	@Override
 	public Feed toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Feed)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Feed)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -560,9 +562,7 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 	}
 
 	private static ClassLoader _classLoader = Feed.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Feed.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Feed.class };
 	private long _feedId;
 	private long _companyId;
 	private long _originalCompanyId;
@@ -580,5 +580,5 @@ public class FeedModelImpl extends BaseModelImpl<Feed> implements FeedModel {
 	private String _originalTwitterScreenName;
 	private long _lastStatusId;
 	private long _columnBitmask;
-	private Feed _escapedModelProxy;
+	private Feed _escapedModel;
 }

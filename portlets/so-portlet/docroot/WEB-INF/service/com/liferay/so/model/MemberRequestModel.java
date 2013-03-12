@@ -278,6 +278,10 @@ public interface MemberRequestModel extends BaseModel<MemberRequest>,
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -289,6 +293,8 @@ public interface MemberRequestModel extends BaseModel<MemberRequest>,
 	public CacheModel<MemberRequest> toCacheModel();
 
 	public MemberRequest toEscapedModel();
+
+	public MemberRequest toUnescapedModel();
 
 	public String toString();
 

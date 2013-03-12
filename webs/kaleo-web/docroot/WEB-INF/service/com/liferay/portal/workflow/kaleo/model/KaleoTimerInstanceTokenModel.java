@@ -406,6 +406,10 @@ public interface KaleoTimerInstanceTokenModel extends BaseModel<KaleoTimerInstan
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -417,6 +421,8 @@ public interface KaleoTimerInstanceTokenModel extends BaseModel<KaleoTimerInstan
 	public CacheModel<KaleoTimerInstanceToken> toCacheModel();
 
 	public KaleoTimerInstanceToken toEscapedModel();
+
+	public KaleoTimerInstanceToken toUnescapedModel();
 
 	public String toString();
 

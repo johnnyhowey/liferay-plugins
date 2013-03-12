@@ -17,6 +17,12 @@
  */
 --%>
 
+<liferay-ui:error key="invalidMessage">
+	<% PortalException portalException = (PortalException) errorException; %>
+
+	<%= portalException.getMessage() %>
+</liferay-ui:error>
+
 <aui:layout cssClass="controls">
 	<aui:column columnWidth="85" cssClass="col-1">
 		<aui:button cssClass="check-all" name="checkAll" type="checkbox" />
@@ -34,7 +40,7 @@
 </aui:layout>
 
 <liferay-ui:search-container
-	delta="10"
+	delta="<%= SEARCH_CONTAINER_PAGE_DEFAULT_DELTA %>"
 	emptyResultsMessage="no-messages-found"
 >
 	<liferay-ui:search-container-results>
