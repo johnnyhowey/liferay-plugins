@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.PortalClassLoaderUtil;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -30,8 +31,6 @@ import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -63,7 +62,7 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_calendarBookingId);
+		return _calendarBookingId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -88,8 +87,8 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		attributes.put("title", getTitle());
 		attributes.put("description", getDescription());
 		attributes.put("location", getLocation());
-		attributes.put("startDate", getStartDate());
-		attributes.put("endDate", getEndDate());
+		attributes.put("startTime", getStartTime());
+		attributes.put("endTime", getEndTime());
 		attributes.put("allDay", getAllDay());
 		attributes.put("recurrence", getRecurrence());
 		attributes.put("firstReminder", getFirstReminder());
@@ -191,16 +190,16 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 			setLocation(location);
 		}
 
-		Long startDate = (Long)attributes.get("startDate");
+		Long startTime = (Long)attributes.get("startTime");
 
-		if (startDate != null) {
-			setStartDate(startDate);
+		if (startTime != null) {
+			setStartTime(startTime);
 		}
 
-		Long endDate = (Long)attributes.get("endDate");
+		Long endTime = (Long)attributes.get("endTime");
 
-		if (endDate != null) {
-			setEndDate(endDate);
+		if (endTime != null) {
+			setEndTime(endTime);
 		}
 
 		Boolean allDay = (Boolean)attributes.get("allDay");
@@ -562,20 +561,20 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		_location = location;
 	}
 
-	public long getStartDate() {
-		return _startDate;
+	public long getStartTime() {
+		return _startTime;
 	}
 
-	public void setStartDate(long startDate) {
-		_startDate = startDate;
+	public void setStartTime(long startTime) {
+		_startTime = startTime;
 	}
 
-	public long getEndDate() {
-		return _endDate;
+	public long getEndTime() {
+		return _endTime;
 	}
 
-	public void setEndDate(long endDate) {
-		_endDate = endDate;
+	public void setEndTime(long endTime) {
+		_endTime = endTime;
 	}
 
 	public boolean getAllDay() {
@@ -712,7 +711,7 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	}
 
 	/**
-	 * @deprecated {@link #isApproved}
+	 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
 	 */
 	public boolean getApproved() {
 		return isApproved();
@@ -828,7 +827,7 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 
 	@Override
 	public CalendarBooking toEscapedModel() {
-		return (CalendarBooking)Proxy.newProxyInstance(CalendarBooking.class.getClassLoader(),
+		return (CalendarBooking)ProxyUtil.newProxyInstance(CalendarBooking.class.getClassLoader(),
 			new Class[] { CalendarBooking.class },
 			new AutoEscapeBeanHandler(this));
 	}
@@ -851,8 +850,8 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		clone.setTitle(getTitle());
 		clone.setDescription(getDescription());
 		clone.setLocation(getLocation());
-		clone.setStartDate(getStartDate());
-		clone.setEndDate(getEndDate());
+		clone.setStartTime(getStartTime());
+		clone.setEndTime(getEndTime());
 		clone.setAllDay(getAllDay());
 		clone.setRecurrence(getRecurrence());
 		clone.setFirstReminder(getFirstReminder());
@@ -870,10 +869,10 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	public int compareTo(CalendarBooking calendarBooking) {
 		int value = 0;
 
-		if (getStartDate() < calendarBooking.getStartDate()) {
+		if (getStartTime() < calendarBooking.getStartTime()) {
 			value = -1;
 		}
-		else if (getStartDate() > calendarBooking.getStartDate()) {
+		else if (getStartTime() > calendarBooking.getStartTime()) {
 			value = 1;
 		}
 		else {
@@ -884,8 +883,7 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 			return value;
 		}
 
-		value = getTitle().toLowerCase()
-					.compareTo(calendarBooking.getTitle().toLowerCase());
+		value = getTitle().compareToIgnoreCase(calendarBooking.getTitle());
 
 		if (value != 0) {
 			return value;
@@ -956,10 +954,10 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		sb.append(getDescription());
 		sb.append(", location=");
 		sb.append(getLocation());
-		sb.append(", startDate=");
-		sb.append(getStartDate());
-		sb.append(", endDate=");
-		sb.append(getEndDate());
+		sb.append(", startTime=");
+		sb.append(getStartTime());
+		sb.append(", endTime=");
+		sb.append(getEndTime());
 		sb.append(", allDay=");
 		sb.append(getAllDay());
 		sb.append(", recurrence=");
@@ -1049,12 +1047,12 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 		sb.append(getLocation());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>startDate</column-name><column-value><![CDATA[");
-		sb.append(getStartDate());
+			"<column><column-name>startTime</column-name><column-value><![CDATA[");
+		sb.append(getStartTime());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>endDate</column-name><column-value><![CDATA[");
-		sb.append(getEndDate());
+			"<column><column-name>endTime</column-name><column-value><![CDATA[");
+		sb.append(getEndTime());
 		sb.append("]]></column-value></column>");
 		sb.append(
 			"<column><column-name>allDay</column-name><column-value><![CDATA[");
@@ -1119,8 +1117,8 @@ public class CalendarBookingClp extends BaseModelImpl<CalendarBooking>
 	private String _description;
 	private String _descriptionCurrentLanguageId;
 	private String _location;
-	private long _startDate;
-	private long _endDate;
+	private long _startTime;
+	private long _endTime;
 	private boolean _allDay;
 	private String _recurrence;
 	private long _firstReminder;

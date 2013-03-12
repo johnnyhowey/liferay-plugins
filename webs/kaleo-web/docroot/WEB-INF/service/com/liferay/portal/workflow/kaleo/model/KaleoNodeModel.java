@@ -307,6 +307,10 @@ public interface KaleoNodeModel extends BaseModel<KaleoNode>, GroupedModel {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -318,6 +322,8 @@ public interface KaleoNodeModel extends BaseModel<KaleoNode>, GroupedModel {
 	public CacheModel<KaleoNode> toCacheModel();
 
 	public KaleoNode toEscapedModel();
+
+	public KaleoNode toUnescapedModel();
 
 	public String toString();
 

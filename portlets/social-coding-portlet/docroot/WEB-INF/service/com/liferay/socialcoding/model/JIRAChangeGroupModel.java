@@ -132,6 +132,10 @@ public interface JIRAChangeGroupModel extends BaseModel<JIRAChangeGroup> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -143,6 +147,8 @@ public interface JIRAChangeGroupModel extends BaseModel<JIRAChangeGroup> {
 	public CacheModel<JIRAChangeGroup> toCacheModel();
 
 	public JIRAChangeGroup toEscapedModel();
+
+	public JIRAChangeGroup toUnescapedModel();
 
 	public String toString();
 

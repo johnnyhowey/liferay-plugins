@@ -235,6 +235,10 @@ public interface FeedModel extends AuditedModel, BaseModel<Feed> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -246,6 +250,8 @@ public interface FeedModel extends AuditedModel, BaseModel<Feed> {
 	public CacheModel<Feed> toCacheModel();
 
 	public Feed toEscapedModel();
+
+	public Feed toUnescapedModel();
 
 	public String toString();
 

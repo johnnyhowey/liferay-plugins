@@ -19,8 +19,6 @@ import com.liferay.marketplace.model.Module;
 import com.liferay.marketplace.model.impl.ModuleImpl;
 import com.liferay.marketplace.model.impl.ModuleModelImpl;
 
-import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -40,12 +38,11 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import java.io.Serializable;
@@ -78,14 +75,23 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
 			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
 			new String[] {
 				String.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
 			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
@@ -96,497 +102,6 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 			ModuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
 			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_APPID = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByAppId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_APPID = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByAppId",
-			new String[] { Long.class.getName() },
-			ModuleModelImpl.APPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_APPID = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByAppId",
-			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CONTEXTNAME =
-		new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByContextName",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTEXTNAME =
-		new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByContextName",
-			new String[] { String.class.getName() },
-			ModuleModelImpl.CONTEXTNAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_CONTEXTNAME = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByContextName",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_A_C = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByA_C",
-			new String[] { Long.class.getName(), String.class.getName() },
-			ModuleModelImpl.APPID_COLUMN_BITMASK |
-			ModuleModelImpl.CONTEXTNAME_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_A_C = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA_C",
-			new String[] { Long.class.getName(), String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the module in the entity cache if it is enabled.
-	 *
-	 * @param module the module
-	 */
-	public void cacheResult(Module module) {
-		EntityCacheUtil.putResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleImpl.class, module.getPrimaryKey(), module);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_C,
-			new Object[] {
-				Long.valueOf(module.getAppId()),
-				
-			module.getContextName()
-			}, module);
-
-		module.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the modules in the entity cache if it is enabled.
-	 *
-	 * @param modules the modules
-	 */
-	public void cacheResult(List<Module> modules) {
-		for (Module module : modules) {
-			if (EntityCacheUtil.getResult(
-						ModuleModelImpl.ENTITY_CACHE_ENABLED, ModuleImpl.class,
-						module.getPrimaryKey()) == null) {
-				cacheResult(module);
-			}
-			else {
-				module.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all modules.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(ModuleImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(ModuleImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the module.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(Module module) {
-		EntityCacheUtil.removeResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleImpl.class, module.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(module);
-	}
-
-	@Override
-	public void clearCache(List<Module> modules) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (Module module : modules) {
-			EntityCacheUtil.removeResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-				ModuleImpl.class, module.getPrimaryKey());
-
-			clearUniqueFindersCache(module);
-		}
-	}
-
-	protected void clearUniqueFindersCache(Module module) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_C,
-			new Object[] {
-				Long.valueOf(module.getAppId()),
-				
-			module.getContextName()
-			});
-	}
-
-	/**
-	 * Creates a new module with the primary key. Does not add the module to the database.
-	 *
-	 * @param moduleId the primary key for the new module
-	 * @return the new module
-	 */
-	public Module create(long moduleId) {
-		Module module = new ModuleImpl();
-
-		module.setNew(true);
-		module.setPrimaryKey(moduleId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		module.setUuid(uuid);
-
-		return module;
-	}
-
-	/**
-	 * Removes the module with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param moduleId the primary key of the module
-	 * @return the module that was removed
-	 * @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Module remove(long moduleId)
-		throws NoSuchModuleException, SystemException {
-		return remove(Long.valueOf(moduleId));
-	}
-
-	/**
-	 * Removes the module with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the module
-	 * @return the module that was removed
-	 * @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Module remove(Serializable primaryKey)
-		throws NoSuchModuleException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Module module = (Module)session.get(ModuleImpl.class, primaryKey);
-
-			if (module == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchModuleException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(module);
-		}
-		catch (NoSuchModuleException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected Module removeImpl(Module module) throws SystemException {
-		module = toUnwrappedModel(module);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.delete(session, module);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		clearCache(module);
-
-		return module;
-	}
-
-	@Override
-	public Module updateImpl(com.liferay.marketplace.model.Module module,
-		boolean merge) throws SystemException {
-		module = toUnwrappedModel(module);
-
-		boolean isNew = module.isNew();
-
-		ModuleModelImpl moduleModelImpl = (ModuleModelImpl)module;
-
-		if (Validator.isNull(module.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			module.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.update(session, module, merge);
-
-			module.setNew(false);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !ModuleModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((moduleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] { moduleModelImpl.getOriginalUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { moduleModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((moduleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_APPID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(moduleModelImpl.getOriginalAppId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_APPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_APPID,
-					args);
-
-				args = new Object[] { Long.valueOf(moduleModelImpl.getAppId()) };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_APPID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_APPID,
-					args);
-			}
-
-			if ((moduleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTEXTNAME.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						moduleModelImpl.getOriginalContextName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CONTEXTNAME,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTEXTNAME,
-					args);
-
-				args = new Object[] { moduleModelImpl.getContextName() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CONTEXTNAME,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTEXTNAME,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-			ModuleImpl.class, module.getPrimaryKey(), module);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_C,
-				new Object[] {
-					Long.valueOf(module.getAppId()),
-					
-				module.getContextName()
-				}, module);
-		}
-		else {
-			if ((moduleModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_A_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(moduleModelImpl.getOriginalAppId()),
-						
-						moduleModelImpl.getOriginalContextName()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_C, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_C, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_C,
-					new Object[] {
-						Long.valueOf(module.getAppId()),
-						
-					module.getContextName()
-					}, module);
-			}
-		}
-
-		return module;
-	}
-
-	protected Module toUnwrappedModel(Module module) {
-		if (module instanceof ModuleImpl) {
-			return module;
-		}
-
-		ModuleImpl moduleImpl = new ModuleImpl();
-
-		moduleImpl.setNew(module.isNew());
-		moduleImpl.setPrimaryKey(module.getPrimaryKey());
-
-		moduleImpl.setUuid(module.getUuid());
-		moduleImpl.setModuleId(module.getModuleId());
-		moduleImpl.setAppId(module.getAppId());
-		moduleImpl.setContextName(module.getContextName());
-
-		return moduleImpl;
-	}
-
-	/**
-	 * Returns the module with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the module
-	 * @return the module
-	 * @throws com.liferay.portal.NoSuchModelException if a module with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Module findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the module with the primary key or throws a {@link com.liferay.marketplace.NoSuchModuleException} if it could not be found.
-	 *
-	 * @param moduleId the primary key of the module
-	 * @return the module
-	 * @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Module findByPrimaryKey(long moduleId)
-		throws NoSuchModuleException, SystemException {
-		Module module = fetchByPrimaryKey(moduleId);
-
-		if (module == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + moduleId);
-			}
-
-			throw new NoSuchModuleException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				moduleId);
-		}
-
-		return module;
-	}
-
-	/**
-	 * Returns the module with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the module
-	 * @return the module, or <code>null</code> if a module with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Module fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the module with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param moduleId the primary key of the module
-	 * @return the module, or <code>null</code> if a module with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Module fetchByPrimaryKey(long moduleId) throws SystemException {
-		Module module = (Module)EntityCacheUtil.getResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-				ModuleImpl.class, moduleId);
-
-		if (module == _nullModule) {
-			return null;
-		}
-
-		if (module == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				module = (Module)session.get(ModuleImpl.class,
-						Long.valueOf(moduleId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (module != null) {
-					cacheResult(module);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
-						ModuleImpl.class, moduleId, _nullModule);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return module;
-	}
 
 	/**
 	 * Returns all the modules where uuid = &#63;.
@@ -603,7 +118,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 * Returns a range of all the modules where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -621,7 +136,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 * Returns an ordered range of all the modules where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -633,11 +148,13 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 */
 	public List<Module> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -667,26 +184,32 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_MODULE_WHERE);
 
+			boolean bindUuid = false;
+
 			if (uuid == null) {
 				query.append(_FINDER_COLUMN_UUID_UUID_1);
 			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_UUID_3);
+			}
 			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_UUID_2);
 			}
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(ModuleModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -700,25 +223,33 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (uuid != null) {
+				if (bindUuid) {
 					qPos.add(uuid);
 				}
 
-				list = (List<Module>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Module>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Module>(list);
+				}
+				else {
+					list = (List<Module>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -880,16 +411,18 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 		query.append(_SQL_SELECT_MODULE_WHERE);
 
+		boolean bindUuid = false;
+
 		if (uuid == null) {
 			query.append(_FINDER_COLUMN_UUID_UUID_1);
 		}
+		else if (uuid.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_UUID_UUID_3);
+		}
 		else {
-			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_UUID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_UUID_UUID_2);
-			}
+			bindUuid = true;
+
+			query.append(_FINDER_COLUMN_UUID_UUID_2);
 		}
 
 		if (orderByComparator != null) {
@@ -947,6 +480,9 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 				}
 			}
 		}
+		else {
+			query.append(ModuleModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -957,7 +493,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (uuid != null) {
+		if (bindUuid) {
 			qPos.add(uuid);
 		}
 
@@ -980,6 +516,107 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	}
 
 	/**
+	 * Removes all the modules where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (Module module : findByUuid(uuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(module);
+		}
+	}
+
+	/**
+	 * Returns the number of modules where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching modules
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MODULE_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_UUID_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindUuid) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "module.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "module.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(module.uuid IS NULL OR module.uuid = '')";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_APPID = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByAppId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_APPID = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByAppId",
+			new String[] { Long.class.getName() },
+			ModuleModelImpl.APPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_APPID = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByAppId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the modules where appId = &#63;.
 	 *
 	 * @param appId the app ID
@@ -994,7 +631,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 * Returns a range of all the modules where appId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param appId the app ID
@@ -1012,7 +649,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 * Returns an ordered range of all the modules where appId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param appId the app ID
@@ -1024,11 +661,13 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 */
 	public List<Module> findByAppId(long appId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_APPID;
 			finderArgs = new Object[] { appId };
 		}
@@ -1058,7 +697,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_MODULE_WHERE);
@@ -1068,6 +707,10 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(ModuleModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1083,21 +726,29 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 				qPos.add(appId);
 
-				list = (List<Module>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Module>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Module>(list);
+				}
+				else {
+					list = (List<Module>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1317,6 +968,9 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 				}
 			}
 		}
+		else {
+			query.append(ModuleModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1348,6 +1002,93 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	}
 
 	/**
+	 * Removes all the modules where appId = &#63; from the database.
+	 *
+	 * @param appId the app ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByAppId(long appId) throws SystemException {
+		for (Module module : findByAppId(appId, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(module);
+		}
+	}
+
+	/**
+	 * Returns the number of modules where appId = &#63;.
+	 *
+	 * @param appId the app ID
+	 * @return the number of matching modules
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByAppId(long appId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_APPID;
+
+		Object[] finderArgs = new Object[] { appId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MODULE_WHERE);
+
+			query.append(_FINDER_COLUMN_APPID_APPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(appId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_APPID_APPID_2 = "module.appId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_CONTEXTNAME =
+		new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByContextName",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTEXTNAME =
+		new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByContextName",
+			new String[] { String.class.getName() },
+			ModuleModelImpl.CONTEXTNAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_CONTEXTNAME = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByContextName",
+			new String[] { String.class.getName() });
+
+	/**
 	 * Returns all the modules where contextName = &#63;.
 	 *
 	 * @param contextName the context name
@@ -1364,7 +1105,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 * Returns a range of all the modules where contextName = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param contextName the context name
@@ -1382,7 +1123,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 * Returns an ordered range of all the modules where contextName = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param contextName the context name
@@ -1394,11 +1135,13 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 */
 	public List<Module> findByContextName(String contextName, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTEXTNAME;
 			finderArgs = new Object[] { contextName };
 		}
@@ -1428,26 +1171,32 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_MODULE_WHERE);
 
+			boolean bindContextName = false;
+
 			if (contextName == null) {
 				query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_1);
 			}
+			else if (contextName.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_3);
+			}
 			else {
-				if (contextName.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_2);
-				}
+				bindContextName = true;
+
+				query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_2);
 			}
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(ModuleModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -1461,25 +1210,33 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (contextName != null) {
+				if (bindContextName) {
 					qPos.add(contextName);
 				}
 
-				list = (List<Module>)QueryUtil.list(q, getDialect(), start, end);
+				if (!pagination) {
+					list = (List<Module>)QueryUtil.list(q, getDialect(), start,
+							end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Module>(list);
+				}
+				else {
+					list = (List<Module>)QueryUtil.list(q, getDialect(), start,
+							end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1644,16 +1401,18 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 		query.append(_SQL_SELECT_MODULE_WHERE);
 
+		boolean bindContextName = false;
+
 		if (contextName == null) {
 			query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_1);
 		}
+		else if (contextName.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_3);
+		}
 		else {
-			if (contextName.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_2);
-			}
+			bindContextName = true;
+
+			query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_2);
 		}
 
 		if (orderByComparator != null) {
@@ -1711,6 +1470,9 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 				}
 			}
 		}
+		else {
+			query.append(ModuleModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -1721,7 +1483,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (contextName != null) {
+		if (bindContextName) {
 			qPos.add(contextName);
 		}
 
@@ -1742,6 +1504,100 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the modules where contextName = &#63; from the database.
+	 *
+	 * @param contextName the context name
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByContextName(String contextName)
+		throws SystemException {
+		for (Module module : findByContextName(contextName, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(module);
+		}
+	}
+
+	/**
+	 * Returns the number of modules where contextName = &#63;.
+	 *
+	 * @param contextName the context name
+	 * @return the number of matching modules
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByContextName(String contextName) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_CONTEXTNAME;
+
+		Object[] finderArgs = new Object[] { contextName };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_MODULE_WHERE);
+
+			boolean bindContextName = false;
+
+			if (contextName == null) {
+				query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_1);
+			}
+			else if (contextName.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_3);
+			}
+			else {
+				bindContextName = true;
+
+				query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindContextName) {
+					qPos.add(contextName);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_1 = "module.contextName IS NULL";
+	private static final String _FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_2 = "module.contextName = ?";
+	private static final String _FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_3 = "(module.contextName IS NULL OR module.contextName = '')";
+	public static final FinderPath FINDER_PATH_FETCH_BY_A_C = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, ModuleImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByA_C",
+			new String[] { Long.class.getName(), String.class.getName() },
+			ModuleModelImpl.APPID_COLUMN_BITMASK |
+			ModuleModelImpl.CONTEXTNAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_A_C = new FinderPath(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByA_C",
+			new String[] { Long.class.getName(), String.class.getName() });
 
 	/**
 	 * Returns the module where appId = &#63; and contextName = &#63; or throws a {@link com.liferay.marketplace.NoSuchModuleException} if it could not be found.
@@ -1822,22 +1678,24 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		}
 
 		if (result == null) {
-			StringBundler query = new StringBundler(3);
+			StringBundler query = new StringBundler(4);
 
 			query.append(_SQL_SELECT_MODULE_WHERE);
 
 			query.append(_FINDER_COLUMN_A_C_APPID_2);
 
+			boolean bindContextName = false;
+
 			if (contextName == null) {
 				query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_1);
 			}
+			else if (contextName.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_3);
+			}
 			else {
-				if (contextName.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_2);
-				}
+				bindContextName = true;
+
+				query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_2);
 			}
 
 			String sql = query.toString();
@@ -1853,22 +1711,27 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 				qPos.add(appId);
 
-				if (contextName != null) {
+				if (bindContextName) {
 					qPos.add(contextName);
 				}
 
 				List<Module> list = q.list();
-
-				result = list;
-
-				Module module = null;
 
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_C,
 						finderArgs, list);
 				}
 				else {
-					module = list.get(0);
+					if ((list.size() > 1) && _log.isWarnEnabled()) {
+						_log.warn(
+							"ModulePersistenceImpl.fetchByA_C(long, String, boolean) with parameters (" +
+							StringUtil.merge(finderArgs) +
+							") yields a result set with more than 1 result. This violates the logical unique restriction. There is no order guarantee on which result is returned by this finder.");
+					}
+
+					Module module = list.get(0);
+
+					result = module;
 
 					cacheResult(module);
 
@@ -1879,29 +1742,566 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 							finderArgs, module);
 					}
 				}
-
-				return module;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_C,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_C,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
+			return (Module)result;
+		}
+	}
+
+	/**
+	 * Removes the module where appId = &#63; and contextName = &#63; from the database.
+	 *
+	 * @param appId the app ID
+	 * @param contextName the context name
+	 * @return the module that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Module removeByA_C(long appId, String contextName)
+		throws NoSuchModuleException, SystemException {
+		Module module = findByA_C(appId, contextName);
+
+		return remove(module);
+	}
+
+	/**
+	 * Returns the number of modules where appId = &#63; and contextName = &#63;.
+	 *
+	 * @param appId the app ID
+	 * @param contextName the context name
+	 * @return the number of matching modules
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByA_C(long appId, String contextName)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_A_C;
+
+		Object[] finderArgs = new Object[] { appId, contextName };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_MODULE_WHERE);
+
+			query.append(_FINDER_COLUMN_A_C_APPID_2);
+
+			boolean bindContextName = false;
+
+			if (contextName == null) {
+				query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_1);
+			}
+			else if (contextName.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_3);
 			}
 			else {
-				return (Module)result;
+				bindContextName = true;
+
+				query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(appId);
+
+				if (bindContextName) {
+					qPos.add(contextName);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
 			}
 		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_A_C_APPID_2 = "module.appId = ? AND ";
+	private static final String _FINDER_COLUMN_A_C_CONTEXTNAME_1 = "module.contextName IS NULL";
+	private static final String _FINDER_COLUMN_A_C_CONTEXTNAME_2 = "module.contextName = ?";
+	private static final String _FINDER_COLUMN_A_C_CONTEXTNAME_3 = "(module.contextName IS NULL OR module.contextName = '')";
+
+	/**
+	 * Caches the module in the entity cache if it is enabled.
+	 *
+	 * @param module the module
+	 */
+	public void cacheResult(Module module) {
+		EntityCacheUtil.putResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleImpl.class, module.getPrimaryKey(), module);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_C,
+			new Object[] { module.getAppId(), module.getContextName() }, module);
+
+		module.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the modules in the entity cache if it is enabled.
+	 *
+	 * @param modules the modules
+	 */
+	public void cacheResult(List<Module> modules) {
+		for (Module module : modules) {
+			if (EntityCacheUtil.getResult(
+						ModuleModelImpl.ENTITY_CACHE_ENABLED, ModuleImpl.class,
+						module.getPrimaryKey()) == null) {
+				cacheResult(module);
+			}
+			else {
+				module.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all modules.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(ModuleImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(ModuleImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the module.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(Module module) {
+		EntityCacheUtil.removeResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleImpl.class, module.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(module);
+	}
+
+	@Override
+	public void clearCache(List<Module> modules) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (Module module : modules) {
+			EntityCacheUtil.removeResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+				ModuleImpl.class, module.getPrimaryKey());
+
+			clearUniqueFindersCache(module);
+		}
+	}
+
+	protected void cacheUniqueFindersCache(Module module) {
+		if (module.isNew()) {
+			Object[] args = new Object[] {
+					module.getAppId(), module.getContextName()
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A_C, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_C, args, module);
+		}
+		else {
+			ModuleModelImpl moduleModelImpl = (ModuleModelImpl)module;
+
+			if ((moduleModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_A_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						module.getAppId(), module.getContextName()
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A_C, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_A_C, args, module);
+			}
+		}
+	}
+
+	protected void clearUniqueFindersCache(Module module) {
+		ModuleModelImpl moduleModelImpl = (ModuleModelImpl)module;
+
+		Object[] args = new Object[] { module.getAppId(), module.getContextName() };
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_C, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_C, args);
+
+		if ((moduleModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_A_C.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					moduleModelImpl.getOriginalAppId(),
+					moduleModelImpl.getOriginalContextName()
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_A_C, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_A_C, args);
+		}
+	}
+
+	/**
+	 * Creates a new module with the primary key. Does not add the module to the database.
+	 *
+	 * @param moduleId the primary key for the new module
+	 * @return the new module
+	 */
+	public Module create(long moduleId) {
+		Module module = new ModuleImpl();
+
+		module.setNew(true);
+		module.setPrimaryKey(moduleId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		module.setUuid(uuid);
+
+		return module;
+	}
+
+	/**
+	 * Removes the module with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param moduleId the primary key of the module
+	 * @return the module that was removed
+	 * @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Module remove(long moduleId)
+		throws NoSuchModuleException, SystemException {
+		return remove((Serializable)moduleId);
+	}
+
+	/**
+	 * Removes the module with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the module
+	 * @return the module that was removed
+	 * @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Module remove(Serializable primaryKey)
+		throws NoSuchModuleException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Module module = (Module)session.get(ModuleImpl.class, primaryKey);
+
+			if (module == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchModuleException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(module);
+		}
+		catch (NoSuchModuleException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected Module removeImpl(Module module) throws SystemException {
+		module = toUnwrappedModel(module);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(module)) {
+				module = (Module)session.get(ModuleImpl.class,
+						module.getPrimaryKeyObj());
+			}
+
+			if (module != null) {
+				session.delete(module);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (module != null) {
+			clearCache(module);
+		}
+
+		return module;
+	}
+
+	@Override
+	public Module updateImpl(com.liferay.marketplace.model.Module module)
+		throws SystemException {
+		module = toUnwrappedModel(module);
+
+		boolean isNew = module.isNew();
+
+		ModuleModelImpl moduleModelImpl = (ModuleModelImpl)module;
+
+		if (Validator.isNull(module.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			module.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (module.isNew()) {
+				session.save(module);
+
+				module.setNew(false);
+			}
+			else {
+				session.merge(module);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !ModuleModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((moduleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] { moduleModelImpl.getOriginalUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { moduleModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((moduleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_APPID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] { moduleModelImpl.getOriginalAppId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_APPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_APPID,
+					args);
+
+				args = new Object[] { moduleModelImpl.getAppId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_APPID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_APPID,
+					args);
+			}
+
+			if ((moduleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTEXTNAME.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						moduleModelImpl.getOriginalContextName()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CONTEXTNAME,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTEXTNAME,
+					args);
+
+				args = new Object[] { moduleModelImpl.getContextName() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_CONTEXTNAME,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_CONTEXTNAME,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+			ModuleImpl.class, module.getPrimaryKey(), module);
+
+		clearUniqueFindersCache(module);
+		cacheUniqueFindersCache(module);
+
+		return module;
+	}
+
+	protected Module toUnwrappedModel(Module module) {
+		if (module instanceof ModuleImpl) {
+			return module;
+		}
+
+		ModuleImpl moduleImpl = new ModuleImpl();
+
+		moduleImpl.setNew(module.isNew());
+		moduleImpl.setPrimaryKey(module.getPrimaryKey());
+
+		moduleImpl.setUuid(module.getUuid());
+		moduleImpl.setModuleId(module.getModuleId());
+		moduleImpl.setAppId(module.getAppId());
+		moduleImpl.setContextName(module.getContextName());
+
+		return moduleImpl;
+	}
+
+	/**
+	 * Returns the module with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the module
+	 * @return the module
+	 * @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Module findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchModuleException, SystemException {
+		Module module = fetchByPrimaryKey(primaryKey);
+
+		if (module == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+			}
+
+			throw new NoSuchModuleException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				primaryKey);
+		}
+
+		return module;
+	}
+
+	/**
+	 * Returns the module with the primary key or throws a {@link com.liferay.marketplace.NoSuchModuleException} if it could not be found.
+	 *
+	 * @param moduleId the primary key of the module
+	 * @return the module
+	 * @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Module findByPrimaryKey(long moduleId)
+		throws NoSuchModuleException, SystemException {
+		return findByPrimaryKey((Serializable)moduleId);
+	}
+
+	/**
+	 * Returns the module with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the module
+	 * @return the module, or <code>null</code> if a module with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Module fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		Module module = (Module)EntityCacheUtil.getResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+				ModuleImpl.class, primaryKey);
+
+		if (module == _nullModule) {
+			return null;
+		}
+
+		if (module == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				module = (Module)session.get(ModuleImpl.class, primaryKey);
+
+				if (module != null) {
+					cacheResult(module);
+				}
+				else {
+					EntityCacheUtil.putResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+						ModuleImpl.class, primaryKey, _nullModule);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(ModuleModelImpl.ENTITY_CACHE_ENABLED,
+					ModuleImpl.class, primaryKey);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return module;
+	}
+
+	/**
+	 * Returns the module with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param moduleId the primary key of the module
+	 * @return the module, or <code>null</code> if a module with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Module fetchByPrimaryKey(long moduleId) throws SystemException {
+		return fetchByPrimaryKey((Serializable)moduleId);
 	}
 
 	/**
@@ -1918,7 +2318,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 * Returns a range of all the modules.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of modules
@@ -1934,7 +2334,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 * Returns an ordered range of all the modules.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of modules
@@ -1945,11 +2345,13 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	 */
 	public List<Module> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1978,6 +2380,10 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 			}
 			else {
 				sql = _SQL_SELECT_MODULE;
+
+				if (pagination) {
+					sql = sql.concat(ModuleModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1987,87 +2393,34 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<Module>)QueryUtil.list(q, getDialect(), start,
 							end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<Module>(list);
 				}
 				else {
 					list = (List<Module>)QueryUtil.list(q, getDialect(), start,
 							end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the modules where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (Module module : findByUuid(uuid)) {
-			remove(module);
-		}
-	}
-
-	/**
-	 * Removes all the modules where appId = &#63; from the database.
-	 *
-	 * @param appId the app ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByAppId(long appId) throws SystemException {
-		for (Module module : findByAppId(appId)) {
-			remove(module);
-		}
-	}
-
-	/**
-	 * Removes all the modules where contextName = &#63; from the database.
-	 *
-	 * @param contextName the context name
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByContextName(String contextName)
-		throws SystemException {
-		for (Module module : findByContextName(contextName)) {
-			remove(module);
-		}
-	}
-
-	/**
-	 * Removes the module where appId = &#63; and contextName = &#63; from the database.
-	 *
-	 * @param appId the app ID
-	 * @param contextName the context name
-	 * @return the module that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Module removeByA_C(long appId, String contextName)
-		throws NoSuchModuleException, SystemException {
-		Module module = findByA_C(appId, contextName);
-
-		return remove(module);
 	}
 
 	/**
@@ -2079,260 +2432,6 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 		for (Module module : findAll()) {
 			remove(module);
 		}
-	}
-
-	/**
-	 * Returns the number of modules where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching modules
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MODULE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of modules where appId = &#63;.
-	 *
-	 * @param appId the app ID
-	 * @return the number of matching modules
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByAppId(long appId) throws SystemException {
-		Object[] finderArgs = new Object[] { appId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_APPID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MODULE_WHERE);
-
-			query.append(_FINDER_COLUMN_APPID_APPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(appId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_APPID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of modules where contextName = &#63;.
-	 *
-	 * @param contextName the context name
-	 * @return the number of matching modules
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByContextName(String contextName) throws SystemException {
-		Object[] finderArgs = new Object[] { contextName };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_CONTEXTNAME,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_MODULE_WHERE);
-
-			if (contextName == null) {
-				query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_1);
-			}
-			else {
-				if (contextName.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (contextName != null) {
-					qPos.add(contextName);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_CONTEXTNAME,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of modules where appId = &#63; and contextName = &#63;.
-	 *
-	 * @param appId the app ID
-	 * @param contextName the context name
-	 * @return the number of matching modules
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByA_C(long appId, String contextName)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { appId, contextName };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_A_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_MODULE_WHERE);
-
-			query.append(_FINDER_COLUMN_A_C_APPID_2);
-
-			if (contextName == null) {
-				query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_1);
-			}
-			else {
-				if (contextName.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_A_C_CONTEXTNAME_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(appId);
-
-				if (contextName != null) {
-					qPos.add(contextName);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_A_C, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -2354,18 +2453,17 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 				Query q = session.createQuery(_SQL_COUNT_MODULE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2387,7 +2485,7 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 
 				for (String listenerClassName : listenerClassNames) {
 					listenersList.add((ModelListener<Module>)InstanceFactory.newInstance(
-							listenerClassName));
+							getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
@@ -2401,30 +2499,14 @@ public class ModulePersistenceImpl extends BasePersistenceImpl<Module>
 	public void destroy() {
 		EntityCacheUtil.removeCache(ModuleImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = AppPersistence.class)
-	protected AppPersistence appPersistence;
-	@BeanReference(type = ModulePersistence.class)
-	protected ModulePersistence modulePersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_MODULE = "SELECT module FROM Module module";
 	private static final String _SQL_SELECT_MODULE_WHERE = "SELECT module FROM Module module WHERE ";
 	private static final String _SQL_COUNT_MODULE = "SELECT COUNT(module) FROM Module module";
 	private static final String _SQL_COUNT_MODULE_WHERE = "SELECT COUNT(module) FROM Module module WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "module.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "module.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(module.uuid IS NULL OR module.uuid = ?)";
-	private static final String _FINDER_COLUMN_APPID_APPID_2 = "module.appId = ?";
-	private static final String _FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_1 = "module.contextName IS NULL";
-	private static final String _FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_2 = "module.contextName = ?";
-	private static final String _FINDER_COLUMN_CONTEXTNAME_CONTEXTNAME_3 = "(module.contextName IS NULL OR module.contextName = ?)";
-	private static final String _FINDER_COLUMN_A_C_APPID_2 = "module.appId = ? AND ";
-	private static final String _FINDER_COLUMN_A_C_CONTEXTNAME_1 = "module.contextName IS NULL";
-	private static final String _FINDER_COLUMN_A_C_CONTEXTNAME_2 = "module.contextName = ?";
-	private static final String _FINDER_COLUMN_A_C_CONTEXTNAME_3 = "(module.contextName IS NULL OR module.contextName = ?)";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "module.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Module exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Module exists with the key {";

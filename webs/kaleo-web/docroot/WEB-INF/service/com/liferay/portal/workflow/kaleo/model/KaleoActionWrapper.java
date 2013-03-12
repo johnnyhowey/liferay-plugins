@@ -575,6 +575,16 @@ public class KaleoActionWrapper implements KaleoAction,
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_kaleoAction.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_kaleoAction.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_kaleoAction.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -602,6 +612,10 @@ public class KaleoActionWrapper implements KaleoAction,
 		return new KaleoActionWrapper(_kaleoAction.toEscapedModel());
 	}
 
+	public com.liferay.portal.workflow.kaleo.model.KaleoAction toUnescapedModel() {
+		return new KaleoActionWrapper(_kaleoAction.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _kaleoAction.toString();
@@ -617,7 +631,7 @@ public class KaleoActionWrapper implements KaleoAction,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public KaleoAction getWrappedKaleoAction() {
 		return _kaleoAction;

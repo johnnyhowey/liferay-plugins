@@ -303,6 +303,16 @@ public class GadgetWrapper implements Gadget, ModelWrapper<Gadget> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_gadget.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_gadget.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_gadget.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -329,6 +339,10 @@ public class GadgetWrapper implements Gadget, ModelWrapper<Gadget> {
 		return new GadgetWrapper(_gadget.toEscapedModel());
 	}
 
+	public com.liferay.opensocial.model.Gadget toUnescapedModel() {
+		return new GadgetWrapper(_gadget.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _gadget.toString();
@@ -344,7 +358,7 @@ public class GadgetWrapper implements Gadget, ModelWrapper<Gadget> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Gadget getWrappedGadget() {
 		return _gadget;

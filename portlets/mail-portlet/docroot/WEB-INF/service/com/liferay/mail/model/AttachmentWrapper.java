@@ -346,6 +346,16 @@ public class AttachmentWrapper implements Attachment, ModelWrapper<Attachment> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_attachment.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_attachment.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_attachment.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -372,6 +382,10 @@ public class AttachmentWrapper implements Attachment, ModelWrapper<Attachment> {
 		return new AttachmentWrapper(_attachment.toEscapedModel());
 	}
 
+	public com.liferay.mail.model.Attachment toUnescapedModel() {
+		return new AttachmentWrapper(_attachment.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _attachment.toString();
@@ -387,7 +401,7 @@ public class AttachmentWrapper implements Attachment, ModelWrapper<Attachment> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Attachment getWrappedAttachment() {
 		return _attachment;

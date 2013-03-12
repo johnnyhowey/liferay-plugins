@@ -53,7 +53,7 @@ public class FavoriteSiteLocalServiceImpl
 		favoriteSite.setCompanyId(user.getCompanyId());
 		favoriteSite.setUserId(userId);
 
-		favoriteSitePersistence.update(favoriteSite, false);
+		favoriteSitePersistence.update(favoriteSite);
 
 		return favoriteSite;
 	}
@@ -66,7 +66,7 @@ public class FavoriteSiteLocalServiceImpl
 	}
 
 	public void deleteFavoriteSites(long userId, long groupId)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		favoriteSitePersistence.removeByG_U(groupId, userId);
 	}

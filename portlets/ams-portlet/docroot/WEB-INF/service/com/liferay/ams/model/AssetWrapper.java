@@ -381,6 +381,16 @@ public class AssetWrapper implements Asset, ModelWrapper<Asset> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_asset.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_asset.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_asset.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -407,6 +417,10 @@ public class AssetWrapper implements Asset, ModelWrapper<Asset> {
 		return new AssetWrapper(_asset.toEscapedModel());
 	}
 
+	public com.liferay.ams.model.Asset toUnescapedModel() {
+		return new AssetWrapper(_asset.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _asset.toString();
@@ -422,7 +436,7 @@ public class AssetWrapper implements Asset, ModelWrapper<Asset> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Asset getWrappedAsset() {
 		return _asset;

@@ -19,11 +19,10 @@
 
 <%@ include file="/init.jsp" %>
 
-<liferay-portlet:actionURL name="deleteUserNotificationEvents" portletName="<%= PortletKeys.SO_NOTIFICATION %>" var="deleteURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>">
-	<portlet:param name="redirect" value="<%= currentURL %>" />
-</liferay-portlet:actionURL>
+<liferay-portlet:actionURL name="deleteUserNotificationEvents" portletName="<%= PortletKeys.SO_NOTIFICATION %>" var="deleteURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>" />
 
 <aui:form action="<%= deleteURL %>" method="get" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "deleteNotifications();" %>'>
+	<aui:input name="redirect" type="hidden" value="<%= currentURL %>" />
 	<aui:input name="userNotificationEventUuids" type="hidden" />
 
 	<aui:fieldset>
@@ -62,7 +61,7 @@
 
 						long userId = notificationEventJSONObject.getLong("userId");
 
-						String userFullName = PortalUtil.getUserName(userId, StringPool.BLANK);
+						String userFullName = HtmlUtil.escape(PortalUtil.getUserName(userId, StringPool.BLANK));
 
 						String userDisplayURL = StringPool.BLANK;
 						String userPortaitURL = StringPool.BLANK;

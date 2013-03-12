@@ -94,96 +94,18 @@ public class EntryUtil {
 	}
 
 	/**
-	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, boolean)
+	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel)
 	 */
-	public static Entry update(Entry entry, boolean merge)
+	public static Entry update(Entry entry) throws SystemException {
+		return getPersistence().update(entry);
+	}
+
+	/**
+	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, ServiceContext)
+	 */
+	public static Entry update(Entry entry, ServiceContext serviceContext)
 		throws SystemException {
-		return getPersistence().update(entry, merge);
-	}
-
-	/**
-	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, boolean, ServiceContext)
-	 */
-	public static Entry update(Entry entry, boolean merge,
-		ServiceContext serviceContext) throws SystemException {
-		return getPersistence().update(entry, merge, serviceContext);
-	}
-
-	/**
-	* Caches the entry in the entity cache if it is enabled.
-	*
-	* @param entry the entry
-	*/
-	public static void cacheResult(com.liferay.contacts.model.Entry entry) {
-		getPersistence().cacheResult(entry);
-	}
-
-	/**
-	* Caches the entries in the entity cache if it is enabled.
-	*
-	* @param entries the entries
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.contacts.model.Entry> entries) {
-		getPersistence().cacheResult(entries);
-	}
-
-	/**
-	* Creates a new entry with the primary key. Does not add the entry to the database.
-	*
-	* @param entryId the primary key for the new entry
-	* @return the new entry
-	*/
-	public static com.liferay.contacts.model.Entry create(long entryId) {
-		return getPersistence().create(entryId);
-	}
-
-	/**
-	* Removes the entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param entryId the primary key of the entry
-	* @return the entry that was removed
-	* @throws com.liferay.contacts.NoSuchEntryException if a entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.contacts.model.Entry remove(long entryId)
-		throws com.liferay.contacts.NoSuchEntryException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(entryId);
-	}
-
-	public static com.liferay.contacts.model.Entry updateImpl(
-		com.liferay.contacts.model.Entry entry, boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(entry, merge);
-	}
-
-	/**
-	* Returns the entry with the primary key or throws a {@link com.liferay.contacts.NoSuchEntryException} if it could not be found.
-	*
-	* @param entryId the primary key of the entry
-	* @return the entry
-	* @throws com.liferay.contacts.NoSuchEntryException if a entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.contacts.model.Entry findByPrimaryKey(
-		long entryId)
-		throws com.liferay.contacts.NoSuchEntryException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(entryId);
-	}
-
-	/**
-	* Returns the entry with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param entryId the primary key of the entry
-	* @return the entry, or <code>null</code> if a entry with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.contacts.model.Entry fetchByPrimaryKey(
-		long entryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(entryId);
+		return getPersistence().update(entry, serviceContext);
 	}
 
 	/**
@@ -202,7 +124,7 @@ public class EntryUtil {
 	* Returns a range of all the entries where userId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.contacts.model.impl.EntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -221,7 +143,7 @@ public class EntryUtil {
 	* Returns an ordered range of all the entries where userId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.contacts.model.impl.EntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param userId the user ID
@@ -323,6 +245,29 @@ public class EntryUtil {
 	}
 
 	/**
+	* Removes all the entries where userId = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUserId(userId);
+	}
+
+	/**
+	* Returns the number of entries where userId = &#63;.
+	*
+	* @param userId the user ID
+	* @return the number of matching entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUserId(long userId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUserId(userId);
+	}
+
+	/**
 	* Returns the entry where userId = &#63; and emailAddress = &#63; or throws a {@link com.liferay.contacts.NoSuchEntryException} if it could not be found.
 	*
 	* @param userId the user ID
@@ -369,6 +314,111 @@ public class EntryUtil {
 	}
 
 	/**
+	* Removes the entry where userId = &#63; and emailAddress = &#63; from the database.
+	*
+	* @param userId the user ID
+	* @param emailAddress the email address
+	* @return the entry that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.contacts.model.Entry removeByU_EA(long userId,
+		java.lang.String emailAddress)
+		throws com.liferay.contacts.NoSuchEntryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByU_EA(userId, emailAddress);
+	}
+
+	/**
+	* Returns the number of entries where userId = &#63; and emailAddress = &#63;.
+	*
+	* @param userId the user ID
+	* @param emailAddress the email address
+	* @return the number of matching entries
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByU_EA(long userId, java.lang.String emailAddress)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByU_EA(userId, emailAddress);
+	}
+
+	/**
+	* Caches the entry in the entity cache if it is enabled.
+	*
+	* @param entry the entry
+	*/
+	public static void cacheResult(com.liferay.contacts.model.Entry entry) {
+		getPersistence().cacheResult(entry);
+	}
+
+	/**
+	* Caches the entries in the entity cache if it is enabled.
+	*
+	* @param entries the entries
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.contacts.model.Entry> entries) {
+		getPersistence().cacheResult(entries);
+	}
+
+	/**
+	* Creates a new entry with the primary key. Does not add the entry to the database.
+	*
+	* @param entryId the primary key for the new entry
+	* @return the new entry
+	*/
+	public static com.liferay.contacts.model.Entry create(long entryId) {
+		return getPersistence().create(entryId);
+	}
+
+	/**
+	* Removes the entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param entryId the primary key of the entry
+	* @return the entry that was removed
+	* @throws com.liferay.contacts.NoSuchEntryException if a entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.contacts.model.Entry remove(long entryId)
+		throws com.liferay.contacts.NoSuchEntryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(entryId);
+	}
+
+	public static com.liferay.contacts.model.Entry updateImpl(
+		com.liferay.contacts.model.Entry entry)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(entry);
+	}
+
+	/**
+	* Returns the entry with the primary key or throws a {@link com.liferay.contacts.NoSuchEntryException} if it could not be found.
+	*
+	* @param entryId the primary key of the entry
+	* @return the entry
+	* @throws com.liferay.contacts.NoSuchEntryException if a entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.contacts.model.Entry findByPrimaryKey(
+		long entryId)
+		throws com.liferay.contacts.NoSuchEntryException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(entryId);
+	}
+
+	/**
+	* Returns the entry with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param entryId the primary key of the entry
+	* @return the entry, or <code>null</code> if a entry with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.contacts.model.Entry fetchByPrimaryKey(
+		long entryId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(entryId);
+	}
+
+	/**
 	* Returns all the entries.
 	*
 	* @return the entries
@@ -383,7 +433,7 @@ public class EntryUtil {
 	* Returns a range of all the entries.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.contacts.model.impl.EntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of entries
@@ -401,7 +451,7 @@ public class EntryUtil {
 	* Returns an ordered range of all the entries.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.contacts.model.impl.EntryModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of entries
@@ -418,32 +468,6 @@ public class EntryUtil {
 	}
 
 	/**
-	* Removes all the entries where userId = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUserId(userId);
-	}
-
-	/**
-	* Removes the entry where userId = &#63; and emailAddress = &#63; from the database.
-	*
-	* @param userId the user ID
-	* @param emailAddress the email address
-	* @return the entry that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.contacts.model.Entry removeByU_EA(long userId,
-		java.lang.String emailAddress)
-		throws com.liferay.contacts.NoSuchEntryException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByU_EA(userId, emailAddress);
-	}
-
-	/**
 	* Removes all the entries from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -451,31 +475,6 @@ public class EntryUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of entries where userId = &#63;.
-	*
-	* @param userId the user ID
-	* @return the number of matching entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUserId(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUserId(userId);
-	}
-
-	/**
-	* Returns the number of entries where userId = &#63; and emailAddress = &#63;.
-	*
-	* @param userId the user ID
-	* @param emailAddress the email address
-	* @return the number of matching entries
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByU_EA(long userId, java.lang.String emailAddress)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByU_EA(userId, emailAddress);
 	}
 
 	/**
@@ -501,7 +500,7 @@ public class EntryUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.2.0
 	 */
 	public void setPersistence(EntryPersistence persistence) {
 	}
