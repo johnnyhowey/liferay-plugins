@@ -3,8 +3,9 @@
 
 <liferay-portlet-app>
 	<portlet>
-		<portlet-name>user-bar</portlet-name>
+		<portlet-name>1</portlet-name>
 		<icon>/icon.png</icon>
+		<use-default-template>false</use-default-template>
 		<header-portlet-css>/css/main.css</header-portlet-css>
 		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
 		<css-class-wrapper>user-bar-portlet</css-class-wrapper>
@@ -25,20 +26,4 @@
 		<role-name>user</role-name>
 		<role-link>User</role-link>
 	</role-mapper>
-	<!-- <user-attribute>
-		<description>User Given Name</description>
-		<name>user.name.given</name>
-	</user-attribute>
-	<user-attribute>
-		<description>User Last Name</description>
-		<name>user.name.family</name>
-	</user-attribute>
-	<user-attribute>
-		<description>User eMail</description>
-		<name>user.home-info.online.email</name>
-	</user-attribute>
-	<user-attribute>
-		<description>Company Organization</description>
-		<name>user.business-info.postal.organization</name>
-	</user-attribute> -->
 </liferay-portlet-app>

@@ -1,0 +1,161 @@
+@import "compass/css3";
+
+#user-bar {
+	background: #32363A url(@portal_ctx@/images/user_bar_default_bg.png) repeat-x;
+	font-weight: 200;
+	position: relative;
+	z-index: 2;
+
+	@include background-image(linear-gradient(bottom, #252D31 0, #32363A 100%));
+
+	&, a {
+		color: #FFF;
+	}
+
+	#so_logo {
+		display: inline-block;
+		padding: 0.225em 0.45em;
+		vertical-align: middle;
+
+		&, &:hover {
+			background-color: transparent;
+
+			@include box-shadow(none);
+		}
+	}
+
+	a {
+		background: rgba(0,0,0, 0);
+		padding: 0.25em .8em;
+		text-shadow: 0 1px 2px rgba(0,0,0, .75);
+
+		@include border-radius(4px);
+		@include transition-property(background-color);
+		@include transition-duration(.5s);
+	}
+
+	li.selected a, a:hover, li:hover a {
+		background: rgba(0,0,0, .48);
+		text-decoration: none;
+
+		@include box-shadow(0 1px 2px rgba(0,0,0, .75));
+	}
+
+	ul, li {
+		display: inline-block;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.child-menu {
+		background: rgba(0,0,0, .75);
+		position: absolute;
+		top: -10em;
+		left: 0;
+		max-width: 200px;
+		min-width: 150px;
+		opacity: 0;
+		overflow: hidden;
+		z-index: 1;
+
+		@include border-radius(4px);
+		@include transition-property(all);
+		@include transition-duration(.5s);
+
+		li {
+			display: block;
+		}
+	}
+
+	.has-children, .has-menu {
+		position: relative;
+		z-index: 2;
+
+		&:hover .child-menu {
+			opacity: 1;
+			top: 100%;
+
+			a {
+				background: rgba(0,0,0, 0);
+
+				@include box-shadow(0 1px 2px rgba(0,0,0, 0));
+			}
+		}
+	}
+
+	li a {
+		display: block;
+	}
+
+	.user-menu {
+		float: right;
+		padding: .5em;
+
+		.avatar {
+			background: transparent none 50% 50% no-repeat;
+			background-size: cover;
+			display: inline-block;
+			height: 24px;
+			margin: -0.65em 0 -0.5em -0.5em;
+			overflow: hidden;
+			vertical-align: middle;
+			width: 24px;
+
+			img {
+				max-width: 24px;
+				min-height: 24px;
+				visibility: hidden;
+			}
+		}
+
+		.child-menu {
+			left: auto;
+			right: 0;
+		}
+	}
+
+	.notifications {
+		position: relative;
+
+		.notification-count {
+			color: #202020;
+			background: transparent;
+			padding: 0;
+			text-shadow: none;
+			margin: 0 -0.1em;
+		}
+
+		.user-notification-events-icon {
+			background: rgba(255,255,255, 1);
+
+			@include border-radius(20px);
+
+			&:hover {
+				background: rgba(0,0,0, .8);
+
+				.notification-count {
+					color: #FFF;
+				}
+			}
+		}
+	}
+
+}
+
+#dashboardNav {
+	position: relative;
+	z-index: 3;
+}
+
+@media (max-width:860px) {
+	#user-bar {
+		a {
+			padding: 0.25em .7em;
+		}
+
+		.user-name {
+			display: none;
+		}
+	}
+}

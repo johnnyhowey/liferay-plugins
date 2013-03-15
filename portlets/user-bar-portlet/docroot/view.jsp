@@ -62,9 +62,15 @@ page import="com.liferay.portal.service.UserLocalServiceUtil" %>
 			String friendlyURL = mySiteURL + curLayout.getFriendlyURL();
 			String layoutName = curLayout.getName(themeDisplay.getLocale(), true);
 
+			String curLayoutIsSelected = "";
+
+			if (curLayout.getPlid() == layout.getPlid()) {
+				curLayoutIsSelected = " class=\"selected\"";
+			}
+
 %>
 
-<li><a href="<%= friendlyURL %>"><%= layoutName %></a></li>
+<li<%= curLayoutIsSelected %>><a href="<%= friendlyURL %>"><%= layoutName %></a></li>
 
 <%
 		}
