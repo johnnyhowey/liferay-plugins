@@ -15,7 +15,63 @@
 %>
 
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
+
+<%@ page import="javax.portlet.PortletPreferences" %><%@
+page import="java.util.List" %><%@
+page import="java.util.Locale" %>
+
+<%@ page import="com.liferay.portal.model.Group" %><%@
+page import="com.liferay.portal.model.Layout" %><%@
+page import="com.liferay.portal.service.GroupLocalServiceUtil" %><%@
+page import="com.liferay.portal.service.LayoutLocalServiceUtil" %><%@
+page import="com.liferay.portal.service.UserLocalServiceUtil" %>
+
+<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
+<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+
+<liferay-theme:defineObjects />
 
 <portlet:defineObjects />
 
-This is the <b>User Bar</b> portlet.
+<liferay-util:html-top>
+
+
+<%
+	PortletPreferences prefs = renderRequest.getPreferences();
+
+	Group mySite = user.getGroup();
+	String mySiteURL = mySite.getPathFriendlyURL(true,themeDisplay) + "/" + user.getScreenName();
+
+	List < Layout > myLayouts = LayoutLocalServiceUtil.getLayouts(mySite.getGroupId(), true);
+
+%>
+
+<nav id="user-bar">
+	<a href="<%= mySiteURL %>" id="so_logo">
+		<img alt="Social Office Logo" src="<%= request.getContextPath() + "/images/so_logo.png" %>" height="32" width="32" />
+	</a>
+
+	<ul id="dashboardNav">
+
+<%
+
+	for (Layout curLayout : myLayouts) {
+		if (curLayout.isRootLayout() && !curLayout.isHidden()) {
+
+			String friendlyURL = mySiteURL + curLayout.getFriendlyURL();
+			String layoutName = curLayout.getName(themeDisplay.getLocale(), true);
+
+%>
+
+<li><a href="<%= friendlyURL %>"><%= layoutName %></a></li>
+
+<%
+		}
+	}
+%>
+
+	</ul>
+</nav>
+
+</liferay-util:html-top>
