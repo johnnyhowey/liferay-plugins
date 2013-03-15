@@ -27,9 +27,9 @@ $theme.include($body_top_include)
 	#dockbar()
 #end
 
-#if ($has_navigation || $is_signed_in)
-	#parse ("$full_templates_path/user_bar.vm")
-#end
+##if ($has_navigation || $is_signed_in)
+##	#parse ("$full_templates_path/user_bar.vm")
+##end
 
 <div id="wrapper">
 	<a class="hidden-accessible" href="#main-content" id="skip-to-content">#language("skip-to-content")</a>
