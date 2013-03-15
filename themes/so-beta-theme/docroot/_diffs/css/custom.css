@@ -1,25 +1,6 @@
 @import "compass";
 @import "strata-skin";
 
-html > .lfr-dockbar-pinned {
-	padding-top: 3.25em;
-
-	#user-bar {
-		left: 0;
-		position: fixed;
-		right: 0;
-		top: 0;
-	}
-
-	&.show-dockbar {
-		#user-bar {
-			left: 0;
-			position: fixed;
-			right: 0;
-		}
-	}
-}
-
 body {
 	background: #FFF;
 	color: $default-text-color;
@@ -377,18 +358,6 @@ a {
 
 .hidden-accessible, #navigation h1 {
 	@include hidden-accessible;
-}
-
-/*  Dockbar  */
-
-#dockbar {
-	&, .user-toolbar {
-		display: none;
-	}
-}
-
-.show-dockbar #dockbar {
-	display: block;
 }
 
 /*  Layout  */
