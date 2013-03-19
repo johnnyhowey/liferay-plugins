@@ -26,11 +26,15 @@ import com.liferay.knowledgebase.util.ActionKeys;
 import com.liferay.knowledgebase.util.KnowledgeBaseUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author Peter Shin
@@ -43,8 +47,14 @@ public class AdminActivityInterpreter extends BaseSocialActivityInterpreter {
 	}
 
 	@Override
-	protected String getLink(SocialActivity activity, ThemeDisplay themeDisplay)
+	protected String getLink(
+			SocialActivity activity, ServiceContext serviceContext)
 		throws Exception {
+
+		HttpServletRequest request = serviceContext.getRequest();
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+			WebKeys.THEME_DISPLAY);
 
 		String className = activity.getClassName();
 
@@ -108,21 +118,21 @@ public class AdminActivityInterpreter extends BaseSocialActivityInterpreter {
 	@Override
 	protected Object[] getTitleArguments(
 		String groupName, SocialActivity activity, String link, String title,
-		ThemeDisplay themeDisplay) {
+		ServiceContext serviceContext) {
 
 		String className = activity.getClassName();
 
 		if (className.equals(KBArticle.class.getName())) {
 			return getTitleArgumentsKBArticle(
-				groupName, activity, link, title, themeDisplay);
+				groupName, activity, link, title, serviceContext);
 		}
 		else if (className.equals(KBComment.class.getName())) {
 			return getTitleArgumentsKBComment(
-				groupName, activity, link, title, themeDisplay);
+				groupName, activity, link, title, serviceContext);
 		}
 		else if (className.equals(KBTemplate.class.getName())) {
 			return getTitleArgumentsKBTemplate(
-				groupName, activity, link, title, themeDisplay);
+				groupName, activity, link, title, serviceContext);
 		}
 
 		return new Object[0];
@@ -131,9 +141,14 @@ public class AdminActivityInterpreter extends BaseSocialActivityInterpreter {
 
 	protected Object[] getTitleArgumentsKBArticle(
 		String groupName, SocialActivity activity, String link, String title,
-		ThemeDisplay themeDisplay) {
+		ServiceContext serviceContext) {
 
 		try {
+			HttpServletRequest request = serviceContext.getRequest();
+
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
 			String creatorUserName = getUserName(
 				activity.getUserId(), themeDisplay);
 
@@ -154,9 +169,14 @@ public class AdminActivityInterpreter extends BaseSocialActivityInterpreter {
 
 	protected Object[] getTitleArgumentsKBComment(
 		String groupName, SocialActivity activity, String link, String title,
-		ThemeDisplay themeDisplay) {
+		ServiceContext serviceContext) {
 
 		try {
+			HttpServletRequest request = serviceContext.getRequest();
+
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
 			String creatorUserName = getUserName(
 				activity.getUserId(), themeDisplay);
 
@@ -199,9 +219,14 @@ public class AdminActivityInterpreter extends BaseSocialActivityInterpreter {
 
 	protected Object[] getTitleArgumentsKBTemplate(
 		String groupName, SocialActivity activity, String link, String title,
-		ThemeDisplay themeDisplay) {
+		ServiceContext serviceContext) {
 
 		try {
+			HttpServletRequest request = serviceContext.getRequest();
+
+			ThemeDisplay themeDisplay = (ThemeDisplay)request.getAttribute(
+				WebKeys.THEME_DISPLAY);
+
 			String creatorUserName = getUserName(
 				activity.getUserId(), themeDisplay);
 
