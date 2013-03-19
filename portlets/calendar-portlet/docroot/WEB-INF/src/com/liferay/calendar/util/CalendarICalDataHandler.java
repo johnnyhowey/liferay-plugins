@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -565,18 +565,18 @@ public class CalendarICalDataHandler implements CalendarDataHandler {
 
 		if (calendarBooking.isAllDay()) {
 			DtStart dtStart = new DtStart(
-				new Date(calendarBooking.getStartDate()));
+				new Date(calendarBooking.getStartTime()));
 
 			propertyList.add(dtStart);
 		}
 		else {
 			DtStart dtStart = new DtStart(
-				toICalDateTime(calendarBooking.getStartDate()));
+				toICalDateTime(calendarBooking.getStartTime()));
 
 			propertyList.add(dtStart);
 
 			DtEnd dtEnd = new DtEnd(
-				toICalDateTime(calendarBooking.getEndDate()));
+				toICalDateTime(calendarBooking.getEndTime()));
 
 			propertyList.add(dtEnd);
 		}
@@ -610,7 +610,7 @@ public class CalendarICalDataHandler implements CalendarDataHandler {
 
 			int index = recurrence.indexOf(StringPool.NEW_LINE);
 
-			if (index != 0) {
+			if (index > 0) {
 				recurrence = recurrence.substring(0, index);
 			}
 

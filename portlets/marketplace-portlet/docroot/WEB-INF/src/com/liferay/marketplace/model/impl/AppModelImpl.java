@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -77,6 +77,8 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 		};
 	public static final String TABLE_SQL_CREATE = "create table Marketplace_App (uuid_ VARCHAR(75) null,appId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,remoteAppId LONG,version VARCHAR(75) null)";
 	public static final String TABLE_SQL_DROP = "drop table Marketplace_App";
+	public static final String ORDER_BY_JPQL = " ORDER BY app.appId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY Marketplace_App.appId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -92,6 +94,7 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long REMOTEAPPID_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long APPID_COLUMN_BITMASK = 8L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -154,7 +157,7 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_appId);
+		return _appId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -398,13 +401,12 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 
 	@Override
 	public App toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (App)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (App)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -621,9 +623,7 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	}
 
 	private static ClassLoader _classLoader = App.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			App.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { App.class };
 	private String _uuid;
 	private String _originalUuid;
 	private long _appId;
@@ -640,5 +640,5 @@ public class AppModelImpl extends BaseModelImpl<App> implements AppModel {
 	private boolean _setOriginalRemoteAppId;
 	private String _version;
 	private long _columnBitmask;
-	private App _escapedModelProxy;
+	private App _escapedModel;
 }

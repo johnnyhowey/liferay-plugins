@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -27,7 +27,6 @@ import com.liferay.calendar.notification.NotificationType;
 import com.liferay.calendar.service.permission.CalendarPermission;
 import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.CamelCaseUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -145,7 +144,7 @@ public class NotificationUtil {
 	}
 
 	public static void notifyCalendarBookingReminders(
-			CalendarBooking calendarBooking)
+			CalendarBooking calendarBooking, long nowTime)
 		throws Exception {
 
 		List<NotificationRecipient> notificationRecipients =
@@ -156,15 +155,7 @@ public class NotificationUtil {
 
 			User user = notificationRecipient.getUser();
 
-			java.util.Calendar now = CalendarFactoryUtil.getCalendar(
-				user.getTimeZone(), user.getLocale());
-
-			long nowTime = now.getTimeInMillis();
-
-			java.util.Calendar startDate = CalendarFactoryUtil.getCalendar(
-				user.getTimeZone(), user.getLocale());
-
-			long startTime = startDate.getTimeInMillis();
+			long startTime = calendarBooking.getStartTime();
 
 			if (nowTime > startTime) {
 				return;
@@ -192,13 +183,15 @@ public class NotificationUtil {
 					calendarBooking.getSecondReminderNotificationType();
 			}
 
-			NotificationSender notificationSender =
-				NotificationSenderFactory.getNotificationSender(
-					notificationType.toString());
+			if (notificationType != null) {
+				NotificationSender notificationSender =
+					NotificationSenderFactory.getNotificationSender(
+						notificationType.toString());
 
-			notificationSender.sendNotification(
-				notificationRecipient, NotificationTemplateType.REMINDER,
-				notificationTemplateContext);
+				notificationSender.sendNotification(
+					notificationRecipient, NotificationTemplateType.REMINDER,
+					notificationTemplateContext);
+			}
 		}
 	}
 

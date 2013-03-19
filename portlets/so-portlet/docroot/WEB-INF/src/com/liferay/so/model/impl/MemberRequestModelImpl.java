@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -95,6 +95,7 @@ public class MemberRequestModelImpl extends BaseModelImpl<MemberRequest>
 	public static long KEY_COLUMN_BITMASK = 2L;
 	public static long RECEIVERUSERID_COLUMN_BITMASK = 4L;
 	public static long STATUS_COLUMN_BITMASK = 8L;
+	public static long CREATEDATE_COLUMN_BITMASK = 16L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.so.model.MemberRequest"));
 
@@ -110,7 +111,7 @@ public class MemberRequestModelImpl extends BaseModelImpl<MemberRequest>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_memberRequestId);
+		return _memberRequestId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -410,13 +411,12 @@ public class MemberRequestModelImpl extends BaseModelImpl<MemberRequest>
 
 	@Override
 	public MemberRequest toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (MemberRequest)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (MemberRequest)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -659,7 +659,7 @@ public class MemberRequestModelImpl extends BaseModelImpl<MemberRequest>
 	}
 
 	private static ClassLoader _classLoader = MemberRequest.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			MemberRequest.class
 		};
 	private long _memberRequestId;
@@ -684,5 +684,5 @@ public class MemberRequestModelImpl extends BaseModelImpl<MemberRequest>
 	private int _originalStatus;
 	private boolean _setOriginalStatus;
 	private long _columnBitmask;
-	private MemberRequest _escapedModelProxy;
+	private MemberRequest _escapedModel;
 }

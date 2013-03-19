@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -176,6 +176,16 @@ public class TypeWrapper implements Type, ModelWrapper<Type> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_type.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_type.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_type.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -202,6 +212,10 @@ public class TypeWrapper implements Type, ModelWrapper<Type> {
 		return new TypeWrapper(_type.toEscapedModel());
 	}
 
+	public com.liferay.ams.model.Type toUnescapedModel() {
+		return new TypeWrapper(_type.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _type.toString();
@@ -217,7 +231,7 @@ public class TypeWrapper implements Type, ModelWrapper<Type> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Type getWrappedType() {
 		return _type;

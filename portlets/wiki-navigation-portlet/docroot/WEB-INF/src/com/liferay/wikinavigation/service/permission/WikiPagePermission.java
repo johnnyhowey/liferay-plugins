@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,6 +16,7 @@ package com.liferay.wikinavigation.service.permission;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.ClassResolverUtil;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.PortalClassInvoker;
 import com.liferay.portal.security.permission.PermissionChecker;
@@ -46,7 +47,8 @@ public class WikiPagePermission {
 	private static Log _log = LogFactoryUtil.getLog(WikiPagePermission.class);
 
 	private static MethodKey _containsMethodKey = new MethodKey(
-		"com.liferay.portlet.wiki.service.permission.WikiPagePermission",
+		ClassResolverUtil.resolveByPortalClassLoader(
+			"com.liferay.portlet.wiki.service.permission.WikiPagePermission"),
 		"contains", PermissionChecker.class, WikiPage.class, String.class);
 
 }

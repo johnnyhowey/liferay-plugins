@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
 
-<project name="portlets" basedir="." default="deploy" xmlns:antelope="antlib:ise.antelope.tasks">
+<project name="portlets" basedir="." default="deploy" xmlns:antelope="antlib:ise.antelope.tasks" xmlns:ivy="antlib:org.apache.ivy.ant">
 	<property name="project.dir" value=".." />
 
 	<import file="../build-common-plugins.xml" />
@@ -84,8 +84,25 @@
 						<copy overwrite="true" todir="${portlet.dir}">
 							<fileset
 								dir="${project.dir}/tools/portlet_${portlet.framework}_tmpl"
+								excludes="ivy.xml"
 							/>
 						</copy>
+
+						<if>
+							<available file="${project.dir}/tools/portlet_${portlet.framework}_tmpl/ivy.xml" />
+							<then>
+								<ivy:resolve
+									file="${project.dir}/tools/portlet_${portlet.framework}_tmpl/ivy.xml"
+									log="download-only"
+								/>
+
+								<ivy:retrieve
+									log="download-only"
+									pattern="${portlet.dir}/docroot/WEB-INF/lib/[artifact].[ext]"
+									type="jar"
+								/>
+							</then>
+						</if>
 					</then>
 				</if>
 
@@ -157,6 +174,38 @@ speed-filters-enabled=false
 								includes="js/**,view.jsp"
 							/>
 						</delete>
+					</then>
+				</if>
+
+				<if>
+					<equals arg1="${portlet.framework}" arg2="scala" />
+					<then>
+						<move
+							file="${portlet.dir}/docroot/WEB-INF/src/ScalaPortlet.scala"
+							tofile="${portlet.dir}/docroot/WEB-INF/src/${portlet.java.package.name}/${portlet.java.class.name}ScalaPortlet.scala"
+						/>
+
+						<echo file="${portlet.dir}/docroot/WEB-INF/liferay-plugin-package.properties" append="true">
+
+portal-dependency-jars=scala-library.jar</echo>
+
+						<replace file="${portlet.dir}/docroot/WEB-INF/portlet.xml">
+							<replacetoken><![CDATA[<portlet-class>com.liferay.util.bridges.mvc.MVCPortlet</portlet-class>]]></replacetoken>
+							<replacevalue><![CDATA[<portlet-class>@portlet.java.package.name@.@portlet.java.class.name@Portlet</portlet-class>]]></replacevalue>
+						</replace>
+
+						<replaceregexp match="&lt;/instanceable&gt;(.*)&lt;/footer-portlet-javascript&gt;" replace="&lt;/instanceable&gt;" flags="s">
+							<fileset
+								dir="${portlet.dir}/docroot/WEB-INF"
+								includes="liferay-portlet.xml"
+							/>
+						</replaceregexp>
+
+						<replace file="${portlet.dir}/docroot/WEB-INF/liferay-portlet.xml">
+							<replacetoken><![CDATA[</instanceable>]]></replacetoken>
+							<replacevalue><![CDATA[</instanceable>
+	<ajaxable>false</ajaxable>]]></replacevalue>
+						</replace>
 					</then>
 				</if>
 

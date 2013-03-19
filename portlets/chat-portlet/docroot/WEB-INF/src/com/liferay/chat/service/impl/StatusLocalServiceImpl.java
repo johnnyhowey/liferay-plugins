@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,11 +15,14 @@
 package com.liferay.chat.service.impl;
 
 import com.liferay.chat.jabber.JabberUtil;
+import com.liferay.chat.model.Entry;
+import com.liferay.chat.model.EntryConstants;
 import com.liferay.chat.model.Status;
 import com.liferay.chat.service.base.StatusLocalServiceBaseImpl;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.StringPool;
 
 import java.util.List;
@@ -38,10 +41,12 @@ public class StatusLocalServiceImpl extends StatusLocalServiceBaseImpl {
 	}
 
 	public List<Object[]> getGroupStatuses(
-			long userId, long modifiedDate, int start, int end)
+			long userId, long modifiedDate, String[] groupNames, int start,
+			int end)
 		throws SystemException {
 
-		return statusFinder.findByUsersGroups(userId, modifiedDate, start, end);
+		return statusFinder.findByUsersGroups(
+			userId, modifiedDate, groupNames, start, end);
 	}
 
 	public List<Object[]> getSocialStatuses(
@@ -98,6 +103,15 @@ public class StatusLocalServiceImpl extends StatusLocalServiceBaseImpl {
 		}
 
 		if (activePanelId != null) {
+			List<Entry> entries = entryPersistence.findByF_T(
+				GetterUtil.getLong(activePanelId), userId);
+
+			for (Entry entry : entries) {
+				entry.setFlag(EntryConstants.FLAG_READ);
+
+				entryPersistence.update(entry);
+			}
+
 			status.setActivePanelId(activePanelId);
 		}
 
@@ -110,7 +124,7 @@ public class StatusLocalServiceImpl extends StatusLocalServiceBaseImpl {
 		}
 
 		try {
-			statusPersistence.update(status, false);
+			statusPersistence.update(status);
 		}
 		catch (SystemException se) {
 			if (_log.isWarnEnabled()) {

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -47,6 +47,15 @@ String redirect = ParamUtil.getString(request, "redirect");
 			<aui:option label="100" selected="<%= max == 100 %>" />
 		</aui:select>
 	</aui:fieldset>
+
+	<c:if test="<%= PortalUtil.isRSSFeedsEnabled() %>">
+		<liferay-ui:rss-settings
+			delta="<%= rssDelta %>"
+			displayStyle="<%= rssDisplayStyle %>"
+			enabled="<%= enableRSS %>"
+			feedType="<%= rssFeedType %>"
+		/>
+	</c:if>
 
 	<aui:button-row>
 		<aui:button type="submit" />

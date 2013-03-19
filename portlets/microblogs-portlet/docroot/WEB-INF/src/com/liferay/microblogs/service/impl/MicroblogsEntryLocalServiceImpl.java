@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -80,7 +80,7 @@ public class MicroblogsEntryLocalServiceImpl
 		microblogsEntry.setReceiverMicroblogsEntryId(receiverMicroblogsEntryId);
 		microblogsEntry.setSocialRelationType(socialRelationType);
 
-		microblogsEntryPersistence.update(microblogsEntry, false);
+		microblogsEntryPersistence.update(microblogsEntry);
 
 		// Resources
 
@@ -273,7 +273,7 @@ public class MicroblogsEntryLocalServiceImpl
 		microblogsEntry.setContent(content);
 		microblogsEntry.setSocialRelationType(socialRelationType);
 
-		microblogsEntryPersistence.update(microblogsEntry, false);
+		microblogsEntryPersistence.update(microblogsEntry);
 
 		// Asset
 
@@ -329,9 +329,7 @@ public class MicroblogsEntryLocalServiceImpl
 			return;
 		}
 
-		if ((type == MicroblogsEntryConstants.TYPE_REPLY) ||
-			(type == MicroblogsEntryConstants.TYPE_REPOST)) {
-
+		if (type == MicroblogsEntryConstants.TYPE_REPOST) {
 			throw new UnsupportedMicroblogsEntryException();
 		}
 	}

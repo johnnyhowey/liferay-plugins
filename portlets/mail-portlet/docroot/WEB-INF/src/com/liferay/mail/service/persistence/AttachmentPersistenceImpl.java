@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,8 +19,6 @@ import com.liferay.mail.model.Attachment;
 import com.liferay.mail.model.impl.AttachmentImpl;
 import com.liferay.mail.model.impl.AttachmentModelImpl;
 
-import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -40,10 +38,9 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import java.io.Serializable;
@@ -76,6 +73,15 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
+	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+			AttachmentModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_MESSAGEID =
 		new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
 			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
@@ -83,8 +89,8 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 			new String[] {
 				Long.class.getName(),
 				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
 	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MESSAGEID =
 		new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
@@ -96,367 +102,6 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 			AttachmentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByMessageId",
 			new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, AttachmentImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findAll", new String[0]);
-	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the attachment in the entity cache if it is enabled.
-	 *
-	 * @param attachment the attachment
-	 */
-	public void cacheResult(Attachment attachment) {
-		EntityCacheUtil.putResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentImpl.class, attachment.getPrimaryKey(), attachment);
-
-		attachment.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the attachments in the entity cache if it is enabled.
-	 *
-	 * @param attachments the attachments
-	 */
-	public void cacheResult(List<Attachment> attachments) {
-		for (Attachment attachment : attachments) {
-			if (EntityCacheUtil.getResult(
-						AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-						AttachmentImpl.class, attachment.getPrimaryKey()) == null) {
-				cacheResult(attachment);
-			}
-			else {
-				attachment.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all attachments.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(AttachmentImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(AttachmentImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the attachment.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(Attachment attachment) {
-		EntityCacheUtil.removeResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentImpl.class, attachment.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<Attachment> attachments) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (Attachment attachment : attachments) {
-			EntityCacheUtil.removeResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-				AttachmentImpl.class, attachment.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new attachment with the primary key. Does not add the attachment to the database.
-	 *
-	 * @param attachmentId the primary key for the new attachment
-	 * @return the new attachment
-	 */
-	public Attachment create(long attachmentId) {
-		Attachment attachment = new AttachmentImpl();
-
-		attachment.setNew(true);
-		attachment.setPrimaryKey(attachmentId);
-
-		return attachment;
-	}
-
-	/**
-	 * Removes the attachment with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param attachmentId the primary key of the attachment
-	 * @return the attachment that was removed
-	 * @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Attachment remove(long attachmentId)
-		throws NoSuchAttachmentException, SystemException {
-		return remove(Long.valueOf(attachmentId));
-	}
-
-	/**
-	 * Removes the attachment with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the attachment
-	 * @return the attachment that was removed
-	 * @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Attachment remove(Serializable primaryKey)
-		throws NoSuchAttachmentException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			Attachment attachment = (Attachment)session.get(AttachmentImpl.class,
-					primaryKey);
-
-			if (attachment == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchAttachmentException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(attachment);
-		}
-		catch (NoSuchAttachmentException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected Attachment removeImpl(Attachment attachment)
-		throws SystemException {
-		attachment = toUnwrappedModel(attachment);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.delete(session, attachment);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		clearCache(attachment);
-
-		return attachment;
-	}
-
-	@Override
-	public Attachment updateImpl(com.liferay.mail.model.Attachment attachment,
-		boolean merge) throws SystemException {
-		attachment = toUnwrappedModel(attachment);
-
-		boolean isNew = attachment.isNew();
-
-		AttachmentModelImpl attachmentModelImpl = (AttachmentModelImpl)attachment;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.update(session, attachment, merge);
-
-			attachment.setNew(false);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !AttachmentModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((attachmentModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MESSAGEID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(attachmentModelImpl.getOriginalMessageId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MESSAGEID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MESSAGEID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(attachmentModelImpl.getMessageId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MESSAGEID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MESSAGEID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-			AttachmentImpl.class, attachment.getPrimaryKey(), attachment);
-
-		return attachment;
-	}
-
-	protected Attachment toUnwrappedModel(Attachment attachment) {
-		if (attachment instanceof AttachmentImpl) {
-			return attachment;
-		}
-
-		AttachmentImpl attachmentImpl = new AttachmentImpl();
-
-		attachmentImpl.setNew(attachment.isNew());
-		attachmentImpl.setPrimaryKey(attachment.getPrimaryKey());
-
-		attachmentImpl.setAttachmentId(attachment.getAttachmentId());
-		attachmentImpl.setCompanyId(attachment.getCompanyId());
-		attachmentImpl.setUserId(attachment.getUserId());
-		attachmentImpl.setAccountId(attachment.getAccountId());
-		attachmentImpl.setFolderId(attachment.getFolderId());
-		attachmentImpl.setMessageId(attachment.getMessageId());
-		attachmentImpl.setContentPath(attachment.getContentPath());
-		attachmentImpl.setFileName(attachment.getFileName());
-		attachmentImpl.setSize(attachment.getSize());
-
-		return attachmentImpl;
-	}
-
-	/**
-	 * Returns the attachment with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the attachment
-	 * @return the attachment
-	 * @throws com.liferay.portal.NoSuchModelException if a attachment with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Attachment findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the attachment with the primary key or throws a {@link com.liferay.mail.NoSuchAttachmentException} if it could not be found.
-	 *
-	 * @param attachmentId the primary key of the attachment
-	 * @return the attachment
-	 * @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Attachment findByPrimaryKey(long attachmentId)
-		throws NoSuchAttachmentException, SystemException {
-		Attachment attachment = fetchByPrimaryKey(attachmentId);
-
-		if (attachment == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + attachmentId);
-			}
-
-			throw new NoSuchAttachmentException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				attachmentId);
-		}
-
-		return attachment;
-	}
-
-	/**
-	 * Returns the attachment with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the attachment
-	 * @return the attachment, or <code>null</code> if a attachment with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public Attachment fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the attachment with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param attachmentId the primary key of the attachment
-	 * @return the attachment, or <code>null</code> if a attachment with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public Attachment fetchByPrimaryKey(long attachmentId)
-		throws SystemException {
-		Attachment attachment = (Attachment)EntityCacheUtil.getResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-				AttachmentImpl.class, attachmentId);
-
-		if (attachment == _nullAttachment) {
-			return null;
-		}
-
-		if (attachment == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				attachment = (Attachment)session.get(AttachmentImpl.class,
-						Long.valueOf(attachmentId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (attachment != null) {
-					cacheResult(attachment);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
-						AttachmentImpl.class, attachmentId, _nullAttachment);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return attachment;
-	}
 
 	/**
 	 * Returns all the attachments where messageId = &#63;.
@@ -475,7 +120,7 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	 * Returns a range of all the attachments where messageId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.mail.model.impl.AttachmentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param messageId the message ID
@@ -493,7 +138,7 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	 * Returns an ordered range of all the attachments where messageId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.mail.model.impl.AttachmentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param messageId the message ID
@@ -505,11 +150,13 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	 */
 	public List<Attachment> findByMessageId(long messageId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MESSAGEID;
 			finderArgs = new Object[] { messageId };
 		}
@@ -539,7 +186,7 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 						(orderByComparator.getOrderByFields().length * 3));
 			}
 			else {
-				query = new StringBundler(2);
+				query = new StringBundler(3);
 			}
 
 			query.append(_SQL_SELECT_ATTACHMENT_WHERE);
@@ -549,6 +196,10 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(AttachmentModelImpl.ORDER_BY_JPQL);
 			}
 
 			String sql = query.toString();
@@ -564,22 +215,29 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 
 				qPos.add(messageId);
 
-				list = (List<Attachment>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<Attachment>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<Attachment>(list);
+				}
+				else {
+					list = (List<Attachment>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -803,6 +461,9 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 				}
 			}
 		}
+		else {
+			query.append(AttachmentModelImpl.ORDER_BY_JPQL);
+		}
 
 		String sql = query.toString();
 
@@ -834,6 +495,436 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	}
 
 	/**
+	 * Removes all the attachments where messageId = &#63; from the database.
+	 *
+	 * @param messageId the message ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByMessageId(long messageId) throws SystemException {
+		for (Attachment attachment : findByMessageId(messageId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(attachment);
+		}
+	}
+
+	/**
+	 * Returns the number of attachments where messageId = &#63;.
+	 *
+	 * @param messageId the message ID
+	 * @return the number of matching attachments
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByMessageId(long messageId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_MESSAGEID;
+
+		Object[] finderArgs = new Object[] { messageId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_ATTACHMENT_WHERE);
+
+			query.append(_FINDER_COLUMN_MESSAGEID_MESSAGEID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(messageId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_MESSAGEID_MESSAGEID_2 = "attachment.messageId = ?";
+
+	/**
+	 * Caches the attachment in the entity cache if it is enabled.
+	 *
+	 * @param attachment the attachment
+	 */
+	public void cacheResult(Attachment attachment) {
+		EntityCacheUtil.putResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+			AttachmentImpl.class, attachment.getPrimaryKey(), attachment);
+
+		attachment.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the attachments in the entity cache if it is enabled.
+	 *
+	 * @param attachments the attachments
+	 */
+	public void cacheResult(List<Attachment> attachments) {
+		for (Attachment attachment : attachments) {
+			if (EntityCacheUtil.getResult(
+						AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+						AttachmentImpl.class, attachment.getPrimaryKey()) == null) {
+				cacheResult(attachment);
+			}
+			else {
+				attachment.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all attachments.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(AttachmentImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(AttachmentImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the attachment.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(Attachment attachment) {
+		EntityCacheUtil.removeResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+			AttachmentImpl.class, attachment.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<Attachment> attachments) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (Attachment attachment : attachments) {
+			EntityCacheUtil.removeResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+				AttachmentImpl.class, attachment.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new attachment with the primary key. Does not add the attachment to the database.
+	 *
+	 * @param attachmentId the primary key for the new attachment
+	 * @return the new attachment
+	 */
+	public Attachment create(long attachmentId) {
+		Attachment attachment = new AttachmentImpl();
+
+		attachment.setNew(true);
+		attachment.setPrimaryKey(attachmentId);
+
+		return attachment;
+	}
+
+	/**
+	 * Removes the attachment with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param attachmentId the primary key of the attachment
+	 * @return the attachment that was removed
+	 * @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Attachment remove(long attachmentId)
+		throws NoSuchAttachmentException, SystemException {
+		return remove((Serializable)attachmentId);
+	}
+
+	/**
+	 * Removes the attachment with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the attachment
+	 * @return the attachment that was removed
+	 * @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Attachment remove(Serializable primaryKey)
+		throws NoSuchAttachmentException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			Attachment attachment = (Attachment)session.get(AttachmentImpl.class,
+					primaryKey);
+
+			if (attachment == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchAttachmentException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(attachment);
+		}
+		catch (NoSuchAttachmentException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected Attachment removeImpl(Attachment attachment)
+		throws SystemException {
+		attachment = toUnwrappedModel(attachment);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(attachment)) {
+				attachment = (Attachment)session.get(AttachmentImpl.class,
+						attachment.getPrimaryKeyObj());
+			}
+
+			if (attachment != null) {
+				session.delete(attachment);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (attachment != null) {
+			clearCache(attachment);
+		}
+
+		return attachment;
+	}
+
+	@Override
+	public Attachment updateImpl(com.liferay.mail.model.Attachment attachment)
+		throws SystemException {
+		attachment = toUnwrappedModel(attachment);
+
+		boolean isNew = attachment.isNew();
+
+		AttachmentModelImpl attachmentModelImpl = (AttachmentModelImpl)attachment;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (attachment.isNew()) {
+				session.save(attachment);
+
+				attachment.setNew(false);
+			}
+			else {
+				session.merge(attachment);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !AttachmentModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((attachmentModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MESSAGEID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						attachmentModelImpl.getOriginalMessageId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MESSAGEID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MESSAGEID,
+					args);
+
+				args = new Object[] { attachmentModelImpl.getMessageId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_MESSAGEID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_MESSAGEID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+			AttachmentImpl.class, attachment.getPrimaryKey(), attachment);
+
+		return attachment;
+	}
+
+	protected Attachment toUnwrappedModel(Attachment attachment) {
+		if (attachment instanceof AttachmentImpl) {
+			return attachment;
+		}
+
+		AttachmentImpl attachmentImpl = new AttachmentImpl();
+
+		attachmentImpl.setNew(attachment.isNew());
+		attachmentImpl.setPrimaryKey(attachment.getPrimaryKey());
+
+		attachmentImpl.setAttachmentId(attachment.getAttachmentId());
+		attachmentImpl.setCompanyId(attachment.getCompanyId());
+		attachmentImpl.setUserId(attachment.getUserId());
+		attachmentImpl.setAccountId(attachment.getAccountId());
+		attachmentImpl.setFolderId(attachment.getFolderId());
+		attachmentImpl.setMessageId(attachment.getMessageId());
+		attachmentImpl.setContentPath(attachment.getContentPath());
+		attachmentImpl.setFileName(attachment.getFileName());
+		attachmentImpl.setSize(attachment.getSize());
+
+		return attachmentImpl;
+	}
+
+	/**
+	 * Returns the attachment with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the attachment
+	 * @return the attachment
+	 * @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Attachment findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchAttachmentException, SystemException {
+		Attachment attachment = fetchByPrimaryKey(primaryKey);
+
+		if (attachment == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+			}
+
+			throw new NoSuchAttachmentException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				primaryKey);
+		}
+
+		return attachment;
+	}
+
+	/**
+	 * Returns the attachment with the primary key or throws a {@link com.liferay.mail.NoSuchAttachmentException} if it could not be found.
+	 *
+	 * @param attachmentId the primary key of the attachment
+	 * @return the attachment
+	 * @throws com.liferay.mail.NoSuchAttachmentException if a attachment with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Attachment findByPrimaryKey(long attachmentId)
+		throws NoSuchAttachmentException, SystemException {
+		return findByPrimaryKey((Serializable)attachmentId);
+	}
+
+	/**
+	 * Returns the attachment with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the attachment
+	 * @return the attachment, or <code>null</code> if a attachment with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public Attachment fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		Attachment attachment = (Attachment)EntityCacheUtil.getResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+				AttachmentImpl.class, primaryKey);
+
+		if (attachment == _nullAttachment) {
+			return null;
+		}
+
+		if (attachment == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				attachment = (Attachment)session.get(AttachmentImpl.class,
+						primaryKey);
+
+				if (attachment != null) {
+					cacheResult(attachment);
+				}
+				else {
+					EntityCacheUtil.putResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+						AttachmentImpl.class, primaryKey, _nullAttachment);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(AttachmentModelImpl.ENTITY_CACHE_ENABLED,
+					AttachmentImpl.class, primaryKey);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return attachment;
+	}
+
+	/**
+	 * Returns the attachment with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param attachmentId the primary key of the attachment
+	 * @return the attachment, or <code>null</code> if a attachment with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public Attachment fetchByPrimaryKey(long attachmentId)
+		throws SystemException {
+		return fetchByPrimaryKey((Serializable)attachmentId);
+	}
+
+	/**
 	 * Returns all the attachments.
 	 *
 	 * @return the attachments
@@ -847,7 +938,7 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	 * Returns a range of all the attachments.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.mail.model.impl.AttachmentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of attachments
@@ -864,7 +955,7 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	 * Returns an ordered range of all the attachments.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.mail.model.impl.AttachmentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of attachments
@@ -875,11 +966,13 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	 */
 	public List<Attachment> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -908,6 +1001,10 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 			}
 			else {
 				sql = _SQL_SELECT_ATTACHMENT;
+
+				if (pagination) {
+					sql = sql.concat(AttachmentModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -917,47 +1014,34 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<Attachment>)QueryUtil.list(q, getDialect(),
 							start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<Attachment>(list);
 				}
 				else {
 					list = (List<Attachment>)QueryUtil.list(q, getDialect(),
 							start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the attachments where messageId = &#63; from the database.
-	 *
-	 * @param messageId the message ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByMessageId(long messageId) throws SystemException {
-		for (Attachment attachment : findByMessageId(messageId)) {
-			remove(attachment);
-		}
 	}
 
 	/**
@@ -969,59 +1053,6 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 		for (Attachment attachment : findAll()) {
 			remove(attachment);
 		}
-	}
-
-	/**
-	 * Returns the number of attachments where messageId = &#63;.
-	 *
-	 * @param messageId the message ID
-	 * @return the number of matching attachments
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByMessageId(long messageId) throws SystemException {
-		Object[] finderArgs = new Object[] { messageId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_MESSAGEID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_ATTACHMENT_WHERE);
-
-			query.append(_FINDER_COLUMN_MESSAGEID_MESSAGEID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(messageId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_MESSAGEID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -1043,18 +1074,17 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 				Query q = session.createQuery(_SQL_COUNT_ATTACHMENT);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -1076,7 +1106,7 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 
 				for (String listenerClassName : listenerClassNames) {
 					listenersList.add((ModelListener<Attachment>)InstanceFactory.newInstance(
-							listenerClassName));
+							getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
@@ -1090,24 +1120,14 @@ public class AttachmentPersistenceImpl extends BasePersistenceImpl<Attachment>
 	public void destroy() {
 		EntityCacheUtil.removeCache(AttachmentImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = AccountPersistence.class)
-	protected AccountPersistence accountPersistence;
-	@BeanReference(type = AttachmentPersistence.class)
-	protected AttachmentPersistence attachmentPersistence;
-	@BeanReference(type = FolderPersistence.class)
-	protected FolderPersistence folderPersistence;
-	@BeanReference(type = MessagePersistence.class)
-	protected MessagePersistence messagePersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_ATTACHMENT = "SELECT attachment FROM Attachment attachment";
 	private static final String _SQL_SELECT_ATTACHMENT_WHERE = "SELECT attachment FROM Attachment attachment WHERE ";
 	private static final String _SQL_COUNT_ATTACHMENT = "SELECT COUNT(attachment) FROM Attachment attachment";
 	private static final String _SQL_COUNT_ATTACHMENT_WHERE = "SELECT COUNT(attachment) FROM Attachment attachment WHERE ";
-	private static final String _FINDER_COLUMN_MESSAGEID_MESSAGEID_2 = "attachment.messageId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "attachment.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No Attachment exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No Attachment exists with the key {";

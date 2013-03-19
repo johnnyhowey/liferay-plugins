@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -93,7 +93,7 @@ public class DefaultKaleoSignaler
 	}
 
 	public void signalExit(
-		String transitionName, ExecutionContext executionContext)
+			String transitionName, ExecutionContext executionContext)
 		throws PortalException, SystemException {
 
 		KaleoInstanceToken kaleoInstanceToken =

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -31,21 +31,6 @@ CalendarResourceDisplayTerms displayTerms = new CalendarResourceDisplayTerms(ren
 		<aui:input name="<%= displayTerms.NAME %>" value="<%= displayTerms.getName() %>" />
 
 		<aui:input name="<%= displayTerms.DESCRIPTION %>" value="<%= displayTerms.getDescription() %>" />
-
-		<aui:select name="type" value="">
-			<aui:option label="all" value="<%= displayTerms.getType() %>" />
-
-			<%
-			for (String type : PortletPropsValues.CALENDAR_RESOURCE_TYPES) {
-			%>
-
-				<aui:option label="<%= type %>" value="<%= type %>" />
-
-			<%
-			}
-			%>
-
-		</aui:select>
 
 		<aui:select name="<%= displayTerms.ACTIVE %>" value="<%= displayTerms.isActive() %>">
 			<aui:option label="yes" value="true" />

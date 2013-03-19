@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,14 +18,13 @@ import com.liferay.chat.service.EntryLocalServiceUtil;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,7 +53,7 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_entryId);
+		return _entryId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -70,6 +69,7 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 		attributes.put("fromUserId", getFromUserId());
 		attributes.put("toUserId", getToUserId());
 		attributes.put("content", getContent());
+		attributes.put("flag", getFlag());
 
 		return attributes;
 	}
@@ -104,6 +104,12 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 
 		if (content != null) {
 			setContent(content);
+		}
+
+		Integer flag = (Integer)attributes.get("flag");
+
+		if (flag != null) {
+			setFlag(flag);
 		}
 	}
 
@@ -163,6 +169,14 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 		_content = content;
 	}
 
+	public int getFlag() {
+		return _flag;
+	}
+
+	public void setFlag(int flag) {
+		_flag = flag;
+	}
+
 	public BaseModel<?> getEntryRemoteModel() {
 		return _entryRemoteModel;
 	}
@@ -182,7 +196,7 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 
 	@Override
 	public Entry toEscapedModel() {
-		return (Entry)Proxy.newProxyInstance(Entry.class.getClassLoader(),
+		return (Entry)ProxyUtil.newProxyInstance(Entry.class.getClassLoader(),
 			new Class[] { Entry.class }, new AutoEscapeBeanHandler(this));
 	}
 
@@ -195,6 +209,7 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 		clone.setFromUserId(getFromUserId());
 		clone.setToUserId(getToUserId());
 		clone.setContent(getContent());
+		clone.setFlag(getFlag());
 
 		return clone;
 	}
@@ -253,7 +268,7 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(13);
 
 		sb.append("{entryId=");
 		sb.append(getEntryId());
@@ -265,13 +280,15 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 		sb.append(getToUserId());
 		sb.append(", content=");
 		sb.append(getContent());
+		sb.append(", flag=");
+		sb.append(getFlag());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(19);
+		StringBundler sb = new StringBundler(22);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.chat.model.Entry");
@@ -297,6 +314,10 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 			"<column><column-name>content</column-name><column-value><![CDATA[");
 		sb.append(getContent());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>flag</column-name><column-value><![CDATA[");
+		sb.append(getFlag());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -310,5 +331,6 @@ public class EntryClp extends BaseModelImpl<Entry> implements Entry {
 	private long _toUserId;
 	private String _toUserUuid;
 	private String _content;
+	private int _flag;
 	private BaseModel<?> _entryRemoteModel;
 }

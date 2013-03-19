@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,14 +29,13 @@ String content = BeanParamUtil.getString(kbTemplate, request, "content");
 	title='<%= (kbTemplate != null) ? kbTemplate.getTitle() : "new-template" %>'
 />
 
-<liferay-portlet:actionURL name="updateKBTemplate" var="updateKBTemplateURL">
-	<portlet:param name="mvcPath" value='<%= templatePath + "edit_template.jsp" %>' />
-	<portlet:param name="redirect" value="<%= redirect %>" />
-	<portlet:param name="kbTemplateId" value="<%= String.valueOf(kbTemplateId) %>" />
-</liferay-portlet:actionURL>
+<liferay-portlet:actionURL name="updateKBTemplate" var="updateKBTemplateURL" />
 
 <aui:form action="<%= updateKBTemplateURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "updateKBTemplate();" %>'>
+	<aui:input name="mvcPath" type="hidden" value='<%= templatePath + "edit_template.jsp" %>' />
 	<aui:input name="<%= Constants.CMD %>" type="hidden" />
+	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="kbTemplateId" type="hidden" value="<%= String.valueOf(kbTemplateId) %>" />
 
 	<liferay-ui:error exception="<%= KBTemplateContentException.class %>" message="please-enter-valid-content" />
 	<liferay-ui:error exception="<%= KBTemplateTitleException.class %>" message="please-enter-a-valid-title" />

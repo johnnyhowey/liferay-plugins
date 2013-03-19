@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -84,6 +84,7 @@ public class SVNRevisionModelImpl extends BaseModelImpl<SVNRevision>
 			true);
 	public static long SVNREPOSITORYID_COLUMN_BITMASK = 1L;
 	public static long SVNUSERID_COLUMN_BITMASK = 2L;
+	public static long REVISIONNUMBER_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.socialcoding.model.SVNRevision"));
 
@@ -99,7 +100,7 @@ public class SVNRevisionModelImpl extends BaseModelImpl<SVNRevision>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_svnRevisionId);
+		return _svnRevisionId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -268,13 +269,12 @@ public class SVNRevisionModelImpl extends BaseModelImpl<SVNRevision>
 
 	@Override
 	public SVNRevision toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (SVNRevision)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (SVNRevision)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -455,7 +455,7 @@ public class SVNRevisionModelImpl extends BaseModelImpl<SVNRevision>
 	}
 
 	private static ClassLoader _classLoader = SVNRevision.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			SVNRevision.class
 		};
 	private long _svnRevisionId;
@@ -468,5 +468,5 @@ public class SVNRevisionModelImpl extends BaseModelImpl<SVNRevision>
 	private long _revisionNumber;
 	private String _comments;
 	private long _columnBitmask;
-	private SVNRevision _escapedModelProxy;
+	private SVNRevision _escapedModel;
 }

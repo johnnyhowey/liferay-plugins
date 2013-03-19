@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -55,9 +55,7 @@ import java.util.zip.ZipFile;
  */
 public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 
-	public App addApp(
-			long userId, long remoteAppId, String version,
-			InputStream inputStream)
+	public App addApp(long userId, long remoteAppId, String version, File file)
 		throws PortalException, SystemException {
 
 		// App
@@ -82,14 +80,14 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 		app.setRemoteAppId(remoteAppId);
 		app.setVersion(version);
 
-		appPersistence.update(app, false);
+		appPersistence.update(app);
 
 		// File
 
-		if (inputStream != null) {
+		if (file != null) {
 			DLStoreUtil.addFile(
 				app.getCompanyId(), CompanyConstants.SYSTEM, app.getFilePath(),
-				false, inputStream);
+				false, file);
 		}
 
 		return app;
@@ -299,7 +297,7 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 		}
 	}
 
-	public App updateApp(long appId, String version, InputStream inputStream)
+	public App updateApp(long appId, String version, File file)
 		throws PortalException, SystemException {
 
 		// App
@@ -311,11 +309,11 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 		app.setModifiedDate(new Date());
 		app.setVersion(version);
 
-		appPersistence.update(app, false);
+		appPersistence.update(app);
 
 		// File
 
-		if (inputStream != null) {
+		if (file != null) {
 			try {
 				DLStoreUtil.deleteFile(
 					app.getCompanyId(), CompanyConstants.SYSTEM,
@@ -326,7 +324,7 @@ public class AppLocalServiceImpl extends AppLocalServiceBaseImpl {
 
 			DLStoreUtil.addFile(
 				app.getCompanyId(), CompanyConstants.SYSTEM, app.getFilePath(),
-				false, inputStream);
+				false, file);
 		}
 
 		return app;

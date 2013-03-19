@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,10 +14,14 @@
 
 package com.liferay.wsrp.servlet;
 
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.HotDeployMessageListener;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
+import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
+import com.liferay.wsrp.service.ClpSerializer;
 import com.liferay.wsrp.service.WSRPConsumerPortletLocalServiceUtil;
+import com.liferay.wsrp.util.ExtensionHelperUtil;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -38,20 +42,33 @@ public class WSRPServletContextListener
 
 	@Override
 	protected void doPortalDestroy() throws Exception {
+		MessageBusUtil.unregisterMessageListener(
+			DestinationNames.HOT_DEPLOY, _hotDeployMessageListener);
+
 		WSRPConsumerPortletLocalServiceUtil.destroyWSRPConsumerPortlets();
 	}
 
 	@Override
 	protected void doPortalInit() {
-		try {
-			WSRPConsumerPortletLocalServiceUtil.initWSRPConsumerPortlets();
-		}
-		catch (Exception e) {
-			_log.error("Unable to initialize WSRP consumer portlets", e);
-		}
+		_hotDeployMessageListener = new HotDeployMessageListener(
+			ClpSerializer.getServletContextName()) {
+
+			@Override
+			protected void onDeploy() throws Exception {
+				ExtensionHelperUtil.initialize();
+
+				WSRPConsumerPortletLocalServiceUtil.
+					destroyWSRPConsumerPortlets();
+
+				WSRPConsumerPortletLocalServiceUtil.initWSRPConsumerPortlets();
+			}
+
+		};
+
+		MessageBusUtil.registerMessageListener(
+			DestinationNames.HOT_DEPLOY, _hotDeployMessageListener);
 	}
 
-	private static Log _log = LogFactoryUtil.getLog(
-		WSRPServletContextListener.class);
+	private MessageListener _hotDeployMessageListener;
 
 }

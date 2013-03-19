@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,14 +29,16 @@ CalendarResource calendarResource = (CalendarResource)request.getAttribute(WebKe
 	title='<%= (calendar != null) ? calendar.getName(locale) : LanguageUtil.format(pageContext, "add-new-calendar-for-x", calendarResource.getName(locale)) %>'
 />
 
-<liferay-portlet:actionURL name="updateCalendar" var="updateCalendarURL">
-	<liferay-portlet:param name="mvcPath" value="/calendar/edit_calendar.jsp" />
-	<liferay-portlet:param name="calendarId" value="<%= (calendar != null) ? String.valueOf(calendar.getCalendarId()) : StringPool.BLANK %>" />
-	<liferay-portlet:param name="calendarResourceId" value="<%= String.valueOf(calendarResource.getCalendarResourceId()) %>" />
-	<liferay-portlet:param name="redirect" value="<%= redirect %>" />
-</liferay-portlet:actionURL>
+<liferay-portlet:actionURL name="updateCalendar" var="updateCalendarURL" />
 
 <aui:form action="<%= updateCalendarURL %>" method="post" name="fm" onSubmit='<%= "event.preventDefault(); " + renderResponse.getNamespace() + "updateCalendar();" %>'>
+	<aui:input name="mvcPath" type="hidden" value="/edit_calendar.jsp" />
+	<aui:input name="redirect" type="hidden" value="<%= redirect %>" />
+	<aui:input name="calendarId" type="hidden" value="<%= (calendar != null) ? String.valueOf(calendar.getCalendarId()) : StringPool.BLANK %>" />
+	<aui:input name="calendarResourceId" type="hidden" value="<%= (calendarResource != null) ? String.valueOf(calendarResource.getCalendarResourceId()) : StringPool.BLANK %>" />
+
+	<liferay-ui:error exception="<%= CalendarNameException.class %>" message="please-enter-a-valid-name" />
+
 	<aui:model-context bean="<%= calendar %>" model="<%= Calendar.class %>" />
 
 	<aui:fieldset>

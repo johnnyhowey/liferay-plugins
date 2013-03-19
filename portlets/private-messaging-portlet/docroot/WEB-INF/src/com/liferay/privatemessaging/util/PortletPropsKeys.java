@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -24,6 +24,9 @@ public interface PortletPropsKeys {
 
 	public static final String AUTOCOMPLETE_RECIPIENT_MAX =
 		"autocomplete.recipient.max";
+
+	public static final String AUTOCOMPLETE_RECIPIENT_SITE_EXCLUDES =
+		"autocomplete.recipient.site.excludes";
 
 	public static final String AUTOCOMPLETE_RECIPIENT_TYPE =
 		"autocomplete.recipient.type";

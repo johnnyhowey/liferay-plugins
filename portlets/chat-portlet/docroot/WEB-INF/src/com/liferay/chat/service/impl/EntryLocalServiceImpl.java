@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -32,15 +32,15 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 			long createDate, long fromUserId, long toUserId, String content)
 		throws SystemException {
 
+		List<Entry> entries = entryFinder.findByEmptyContent(
+			fromUserId, toUserId, 0, 5);
+
+		for (Entry entry : entries) {
+			entryPersistence.remove(entry);
+		}
+
 		if (Validator.isNull(content)) {
 			content = StringPool.BLANK;
-
-			List<Entry> entries = entryFinder.findByEmptyContent(
-				fromUserId, toUserId, 0, 5);
-
-			for (Entry entry : entries) {
-				entryPersistence.remove(entry);
-			}
 		}
 		else {
 			if (content.length() > 500) {
@@ -57,7 +57,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		entry.setToUserId(toUserId);
 		entry.setContent(content);
 
-		entryPersistence.update(entry, false);
+		entryPersistence.update(entry);
 
 		JabberUtil.sendMessage(fromUserId, toUserId, content);
 

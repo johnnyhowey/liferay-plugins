@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -92,7 +92,7 @@ public class BarModelImpl extends BaseModelImpl<Bar> implements BarModel {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_barId);
+		return _barId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -182,13 +182,12 @@ public class BarModelImpl extends BaseModelImpl<Bar> implements BarModel {
 
 	@Override
 	public Bar toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Bar)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Bar)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -306,12 +305,10 @@ public class BarModelImpl extends BaseModelImpl<Bar> implements BarModel {
 	}
 
 	private static ClassLoader _classLoader = Bar.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Bar.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Bar.class };
 	private long _barId;
 	private String _text;
 	private String _originalText;
 	private long _columnBitmask;
-	private Bar _escapedModelProxy;
+	private Bar _escapedModel;
 }

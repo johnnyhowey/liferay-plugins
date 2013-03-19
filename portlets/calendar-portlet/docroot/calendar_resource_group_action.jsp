@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,7 +24,7 @@ Group group = (Group)row.getObject();
 
 <liferay-ui:icon-menu>
 	<portlet:renderURL var="calendarsURL">
-		<portlet:param name="jspPage" value="/view_calendars.jsp" />
+		<portlet:param name="mvcPath" value="/view_calendars.jsp" />
 		<portlet:param name="redirect" value="<%= currentURL %>" />
 		<portlet:param name="classNameId" value="<%= String.valueOf(PortalUtil.getClassNameId(Group.class)) %>" />
 		<portlet:param name="classPK" value="<%= String.valueOf(group.getGroupId()) %>" />

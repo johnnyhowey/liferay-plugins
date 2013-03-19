@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -62,7 +62,7 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 		foo.setField5(field5);
 		foo.setExpandoBridgeAttributes(serviceContext);
 
-		fooPersistence.update(foo, false);
+		fooPersistence.update(foo);
 
 		// Asset
 
@@ -143,7 +143,7 @@ public class FooLocalServiceImpl extends FooLocalServiceBaseImpl {
 		foo.setField5(field5);
 		foo.setExpandoBridgeAttributes(serviceContext);
 
-		fooPersistence.update(foo, false);
+		fooPersistence.update(foo);
 
 		updateAsset(
 			user.getUserId(), foo, serviceContext.getAssetCategoryIds(),

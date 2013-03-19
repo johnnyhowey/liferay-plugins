@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -38,6 +38,7 @@ import com.liferay.portal.util.comparator.UserFirstNameComparator;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil;
 import com.liferay.portlet.messageboards.util.comparator.MessageCreateDateComparator;
+import com.liferay.portlet.sites.util.SitesUtil;
 import com.liferay.portlet.social.model.SocialRelationConstants;
 import com.liferay.privatemessaging.NoSuchUserThreadException;
 import com.liferay.privatemessaging.model.UserThread;
@@ -65,18 +66,16 @@ public class PrivateMessagingUtil {
 			new LinkedHashMap<String, Object>();
 
 		if (type.equals("site")) {
-			List<Group> usersGroups = GroupLocalServiceUtil.getUserGroups(
+			params.put("inherit", Boolean.TRUE);
+
+			List<Group> groups = GroupLocalServiceUtil.getUserGroups(
 				userId, true);
 
-			long[] usersGroupsIds = new long[usersGroups.size()];
-
-			for (int i = 0; i < usersGroups.size(); i++) {
-				Group group = usersGroups.get(i);
-
-				usersGroupsIds[i] = group.getGroupId();
-			}
-
-			params.put("usersGroups", usersGroupsIds);
+			params.put(
+				"usersGroups",
+				SitesUtil.filterGroups(
+					groups,
+					PortletPropsValues.AUTOCOMPLETE_RECIPIENT_SITE_EXCLUDES));
 		}
 		else if (!type.equals("all")) {
 			params.put(
