@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -119,6 +119,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	public static long STATUS_COLUMN_BITMASK = 128L;
 	public static long UUID_COLUMN_BITMASK = 256L;
 	public static long VERSION_COLUMN_BITMASK = 512L;
+	public static long MODIFIEDDATE_COLUMN_BITMASK = 1024L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -196,7 +197,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kbArticleId);
+		return _kbArticleId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -788,7 +789,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	}
 
 	/**
-	 * @deprecated {@link #isApproved}
+	 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
 	 */
 	public boolean getApproved() {
 		return isApproved();
@@ -894,13 +895,12 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 
 	@Override
 	public KBArticle toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KBArticle)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KBArticle)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -1310,7 +1310,7 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	}
 
 	private static ClassLoader _classLoader = KBArticle.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KBArticle.class
 		};
 	private String _uuid;
@@ -1358,5 +1358,5 @@ public class KBArticleModelImpl extends BaseModelImpl<KBArticle>
 	private String _statusByUserName;
 	private Date _statusDate;
 	private long _columnBitmask;
-	private KBArticle _escapedModelProxy;
+	private KBArticle _escapedModel;
 }

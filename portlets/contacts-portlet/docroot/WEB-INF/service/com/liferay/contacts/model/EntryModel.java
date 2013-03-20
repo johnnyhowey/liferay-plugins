@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -236,6 +236,10 @@ public interface EntryModel extends BaseModel<Entry>, GroupedModel {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -247,6 +251,8 @@ public interface EntryModel extends BaseModel<Entry>, GroupedModel {
 	public CacheModel<Entry> toCacheModel();
 
 	public Entry toEscapedModel();
+
+	public Entry toUnescapedModel();
 
 	public String toString();
 

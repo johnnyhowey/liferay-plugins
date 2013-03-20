@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,6 +20,12 @@ import com.liferay.util.portlet.PortletProps;
  * @author Brian Wing Shun Chan
  */
 public class PortletPropsValues {
+
+	public static final String COMPANY_DEFAULT_LOCALE = PortletProps.get(
+		PortletPropsKeys.COMPANY_DEFAULT_LOCALE);
+
+	public static final String COMPANY_DEFAULT_TIME_ZONE = PortletProps.get(
+		PortletPropsKeys.COMPANY_DEFAULT_TIME_ZONE);
 
 	public static final String[] LANGUAGE_IDS = PortletProps.getArray(
 		PortletPropsKeys.LANGUAGE_IDS);

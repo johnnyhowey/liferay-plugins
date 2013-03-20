@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -60,8 +60,9 @@ public class UpgradeBookmarks extends UpgradeProcess {
 				}
 
 				BookmarksFolderLocalServiceUtil.updateFolder(
-					folder.getFolderId(), folder.getParentFolderId(), name,
-					folder.getDescription(), true, new ServiceContext());
+					folder.getUserId(), folder.getFolderId(),
+					folder.getParentFolderId(), name, folder.getDescription(),
+					true, new ServiceContext());
 			}
 		}
 	}

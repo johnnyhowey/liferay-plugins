@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -66,7 +66,7 @@ public class WallEntryLocalServiceImpl extends WallEntryLocalServiceBaseImpl {
 		wallEntry.setModifiedDate(now);
 		wallEntry.setComments(comments);
 
-		wallEntryPersistence.update(wallEntry, false);
+		wallEntryPersistence.update(wallEntry);
 
 		// Email
 
@@ -116,7 +116,7 @@ public class WallEntryLocalServiceImpl extends WallEntryLocalServiceBaseImpl {
 
 	@Override
 	public WallEntry deleteWallEntry(WallEntry wallEntry)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		// Entry
 
@@ -173,7 +173,7 @@ public class WallEntryLocalServiceImpl extends WallEntryLocalServiceBaseImpl {
 		wallEntry.setModifiedDate(new Date());
 		wallEntry.setComments(comments);
 
-		wallEntryPersistence.update(wallEntry, false);
+		wallEntryPersistence.update(wallEntry);
 
 		return wallEntry;
 	}

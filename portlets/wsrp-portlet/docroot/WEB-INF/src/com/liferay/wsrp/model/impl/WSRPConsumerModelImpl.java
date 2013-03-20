@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -69,9 +69,11 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 			{ "wsdl", Types.CLOB },
 			{ "registrationContextString", Types.CLOB },
 			{ "registrationPropertiesString", Types.VARCHAR },
-			{ "forwardCookies", Types.VARCHAR }
+			{ "forwardCookies", Types.VARCHAR },
+			{ "forwardHeaders", Types.VARCHAR },
+			{ "markupCharacterSets", Types.VARCHAR }
 		};
-	public static final String TABLE_SQL_CREATE = "create table WSRP_WSRPConsumer (uuid_ VARCHAR(75) null,wsrpConsumerId LONG not null primary key,companyId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,url STRING null,wsdl TEXT null,registrationContextString TEXT null,registrationPropertiesString STRING null,forwardCookies VARCHAR(75) null)";
+	public static final String TABLE_SQL_CREATE = "create table WSRP_WSRPConsumer (uuid_ VARCHAR(75) null,wsrpConsumerId LONG not null primary key,companyId LONG,createDate DATE null,modifiedDate DATE null,name VARCHAR(75) null,url STRING null,wsdl TEXT null,registrationContextString TEXT null,registrationPropertiesString STRING null,forwardCookies VARCHAR(255) null,forwardHeaders VARCHAR(255) null,markupCharacterSets VARCHAR(255) null)";
 	public static final String TABLE_SQL_DROP = "drop table WSRP_WSRPConsumer";
 	public static final String ORDER_BY_JPQL = " ORDER BY wsrpConsumer.name ASC";
 	public static final String ORDER_BY_SQL = " ORDER BY WSRP_WSRPConsumer.name ASC";
@@ -89,6 +91,7 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 			true);
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long UUID_COLUMN_BITMASK = 2L;
+	public static long NAME_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.wsrp.model.WSRPConsumer"));
 
@@ -104,7 +107,7 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_wsrpConsumerId);
+		return _wsrpConsumerId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -136,6 +139,8 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 		attributes.put("registrationPropertiesString",
 			getRegistrationPropertiesString());
 		attributes.put("forwardCookies", getForwardCookies());
+		attributes.put("forwardHeaders", getForwardHeaders());
+		attributes.put("markupCharacterSets", getMarkupCharacterSets());
 
 		return attributes;
 	}
@@ -208,6 +213,19 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 
 		if (forwardCookies != null) {
 			setForwardCookies(forwardCookies);
+		}
+
+		String forwardHeaders = (String)attributes.get("forwardHeaders");
+
+		if (forwardHeaders != null) {
+			setForwardHeaders(forwardHeaders);
+		}
+
+		String markupCharacterSets = (String)attributes.get(
+				"markupCharacterSets");
+
+		if (markupCharacterSets != null) {
+			setMarkupCharacterSets(markupCharacterSets);
 		}
 	}
 
@@ -357,6 +375,32 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 		_forwardCookies = forwardCookies;
 	}
 
+	public String getForwardHeaders() {
+		if (_forwardHeaders == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _forwardHeaders;
+		}
+	}
+
+	public void setForwardHeaders(String forwardHeaders) {
+		_forwardHeaders = forwardHeaders;
+	}
+
+	public String getMarkupCharacterSets() {
+		if (_markupCharacterSets == null) {
+			return StringPool.BLANK;
+		}
+		else {
+			return _markupCharacterSets;
+		}
+	}
+
+	public void setMarkupCharacterSets(String markupCharacterSets) {
+		_markupCharacterSets = markupCharacterSets;
+	}
+
 	public long getColumnBitmask() {
 		return _columnBitmask;
 	}
@@ -376,13 +420,12 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 
 	@Override
 	public WSRPConsumer toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (WSRPConsumer)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (WSRPConsumer)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -400,6 +443,8 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 		wsrpConsumerImpl.setRegistrationContextString(getRegistrationContextString());
 		wsrpConsumerImpl.setRegistrationPropertiesString(getRegistrationPropertiesString());
 		wsrpConsumerImpl.setForwardCookies(getForwardCookies());
+		wsrpConsumerImpl.setForwardHeaders(getForwardHeaders());
+		wsrpConsumerImpl.setMarkupCharacterSets(getMarkupCharacterSets());
 
 		wsrpConsumerImpl.resetOriginalValues();
 
@@ -545,12 +590,29 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 			wsrpConsumerCacheModel.forwardCookies = null;
 		}
 
+		wsrpConsumerCacheModel.forwardHeaders = getForwardHeaders();
+
+		String forwardHeaders = wsrpConsumerCacheModel.forwardHeaders;
+
+		if ((forwardHeaders != null) && (forwardHeaders.length() == 0)) {
+			wsrpConsumerCacheModel.forwardHeaders = null;
+		}
+
+		wsrpConsumerCacheModel.markupCharacterSets = getMarkupCharacterSets();
+
+		String markupCharacterSets = wsrpConsumerCacheModel.markupCharacterSets;
+
+		if ((markupCharacterSets != null) &&
+				(markupCharacterSets.length() == 0)) {
+			wsrpConsumerCacheModel.markupCharacterSets = null;
+		}
+
 		return wsrpConsumerCacheModel;
 	}
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(23);
+		StringBundler sb = new StringBundler(27);
 
 		sb.append("{uuid=");
 		sb.append(getUuid());
@@ -574,13 +636,17 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 		sb.append(getRegistrationPropertiesString());
 		sb.append(", forwardCookies=");
 		sb.append(getForwardCookies());
+		sb.append(", forwardHeaders=");
+		sb.append(getForwardHeaders());
+		sb.append(", markupCharacterSets=");
+		sb.append(getMarkupCharacterSets());
 		sb.append("}");
 
 		return sb.toString();
 	}
 
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(37);
+		StringBundler sb = new StringBundler(43);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.wsrp.model.WSRPConsumer");
@@ -630,6 +696,14 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 			"<column><column-name>forwardCookies</column-name><column-value><![CDATA[");
 		sb.append(getForwardCookies());
 		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>forwardHeaders</column-name><column-value><![CDATA[");
+		sb.append(getForwardHeaders());
+		sb.append("]]></column-value></column>");
+		sb.append(
+			"<column><column-name>markupCharacterSets</column-name><column-value><![CDATA[");
+		sb.append(getMarkupCharacterSets());
+		sb.append("]]></column-value></column>");
 
 		sb.append("</model>");
 
@@ -637,7 +711,7 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 	}
 
 	private static ClassLoader _classLoader = WSRPConsumer.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			WSRPConsumer.class
 		};
 	private String _uuid;
@@ -654,6 +728,8 @@ public class WSRPConsumerModelImpl extends BaseModelImpl<WSRPConsumer>
 	private String _registrationContextString;
 	private String _registrationPropertiesString;
 	private String _forwardCookies;
+	private String _forwardHeaders;
+	private String _markupCharacterSets;
 	private long _columnBitmask;
-	private WSRPConsumer _escapedModelProxy;
+	private WSRPConsumer _escapedModel;
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -89,6 +89,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 			true);
 	public static long EMAILADDRESS_COLUMN_BITMASK = 1L;
 	public static long USERID_COLUMN_BITMASK = 2L;
+	public static long FULLNAME_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.contacts.model.Entry"));
 
@@ -104,7 +105,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_entryId);
+		return _entryId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -351,13 +352,12 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 
 	@Override
 	public Entry toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Entry)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Entry)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -383,8 +383,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	public int compareTo(Entry entry) {
 		int value = 0;
 
-		value = getFullName().toLowerCase()
-					.compareTo(entry.getFullName().toLowerCase());
+		value = getFullName().compareToIgnoreCase(entry.getFullName());
 
 		if (value != 0) {
 			return value;
@@ -584,9 +583,7 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	}
 
 	private static ClassLoader _classLoader = Entry.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Entry.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Entry.class };
 	private long _entryId;
 	private long _groupId;
 	private long _companyId;
@@ -602,5 +599,5 @@ public class EntryModelImpl extends BaseModelImpl<Entry> implements EntryModel {
 	private String _originalEmailAddress;
 	private String _comments;
 	private long _columnBitmask;
-	private Entry _escapedModelProxy;
+	private Entry _escapedModel;
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -24,6 +24,9 @@ public class PortletPropsValues {
 
 	public static final String[] CONSUMER_REQUEST_EXTENSIONS =
 		PortletProps.getArray(PortletPropsKeys.CONSUMER_REQUEST_EXTENSIONS);
+
+	public static final String EXTENSION_HELPER_IMPL = PortletProps.get(
+		PortletPropsKeys.EXTENSION_HELPER_IMPL);
 
 	public static final String[] PROXY_URL_IPS_ALLOWED = PortletProps.getArray(
 		PortletPropsKeys.PROXY_URL_IPS_ALLOWED);

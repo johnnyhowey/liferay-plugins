@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -425,6 +425,16 @@ public class KaleoConditionWrapper implements KaleoCondition,
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_kaleoCondition.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_kaleoCondition.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_kaleoCondition.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -452,6 +462,10 @@ public class KaleoConditionWrapper implements KaleoCondition,
 		return new KaleoConditionWrapper(_kaleoCondition.toEscapedModel());
 	}
 
+	public com.liferay.portal.workflow.kaleo.model.KaleoCondition toUnescapedModel() {
+		return new KaleoConditionWrapper(_kaleoCondition.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _kaleoCondition.toString();
@@ -467,7 +481,7 @@ public class KaleoConditionWrapper implements KaleoCondition,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public KaleoCondition getWrappedKaleoCondition() {
 		return _kaleoCondition;

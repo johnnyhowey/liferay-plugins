@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -22,10 +22,10 @@ package com.liferay.contacts.util;
  */
 public class PortletKeys extends com.liferay.portal.util.PortletKeys {
 
-	public static final String CONTACTS_CENTER = "1";
+	public static final String CONTACTS_CENTER = "1_WAR_contactsportlet";
 
-	public static final String MEMBERS = "4";
+	public static final String MEMBERS = "4_WAR_contactsportlet";
 
-	public static final String PROFILE = "2";
+	public static final String PROFILE = "2_WAR_contactsportlet";
 
 }

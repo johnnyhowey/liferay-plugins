@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -73,7 +73,7 @@ request.setAttribute("view_user.jsp-user", user2);
 
 				<aui:layout cssClass="contacts-action">
 					<c:choose>
-						<c:when test="<%= portletName.equals(PortletKeys.CONTACTS_CENTER) || portletName.equals(PortletKeys.MEMBERS) %>">
+						<c:when test="<%= portletId.equals(PortletKeys.CONTACTS_CENTER) || portletId.equals(PortletKeys.MEMBERS) %>">
 
 							<%
 							boolean blocked = false;
@@ -116,7 +116,7 @@ request.setAttribute("view_user.jsp-user", user2);
 								cssClass='<%= showBlockIcon ? "block" : "block aui-helper-hidden" %>'
 								image="../social/block"
 								label="<%= true %>"
-								message="block"
+								message="blocked"
 							/>
 						</c:when>
 						<c:otherwise>

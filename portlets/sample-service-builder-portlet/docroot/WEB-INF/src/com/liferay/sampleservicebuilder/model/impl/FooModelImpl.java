@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -99,6 +99,7 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 	public static long FIELD2_COLUMN_BITMASK = 2L;
 	public static long GROUPID_COLUMN_BITMASK = 4L;
 	public static long UUID_COLUMN_BITMASK = 8L;
+	public static long FIELD1_COLUMN_BITMASK = 16L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -165,7 +166,7 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_fooId);
+		return _fooId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -496,13 +497,12 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 
 	@Override
 	public Foo toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Foo)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Foo)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -770,9 +770,7 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 	}
 
 	private static ClassLoader _classLoader = Foo.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
-			Foo.class
-		};
+	private static Class<?>[] _escapedModelInterfaces = new Class[] { Foo.class };
 	private String _uuid;
 	private String _originalUuid;
 	private long _fooId;
@@ -795,5 +793,5 @@ public class FooModelImpl extends BaseModelImpl<Foo> implements FooModel {
 	private Date _field4;
 	private String _field5;
 	private long _columnBitmask;
-	private Foo _escapedModelProxy;
+	private Foo _escapedModel;
 }

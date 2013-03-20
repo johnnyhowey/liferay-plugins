@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -390,6 +390,16 @@ public class UserThreadWrapper implements UserThread, ModelWrapper<UserThread> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_userThread.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_userThread.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_userThread.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -417,6 +427,10 @@ public class UserThreadWrapper implements UserThread, ModelWrapper<UserThread> {
 		return new UserThreadWrapper(_userThread.toEscapedModel());
 	}
 
+	public com.liferay.privatemessaging.model.UserThread toUnescapedModel() {
+		return new UserThreadWrapper(_userThread.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _userThread.toString();
@@ -432,7 +446,7 @@ public class UserThreadWrapper implements UserThread, ModelWrapper<UserThread> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public UserThread getWrappedUserThread() {
 		return _userThread;

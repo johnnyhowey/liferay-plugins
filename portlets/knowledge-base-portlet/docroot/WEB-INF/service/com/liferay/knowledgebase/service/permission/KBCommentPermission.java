@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -57,18 +57,16 @@ public class KBCommentPermission {
 		String className = kbComment.getClassName();
 
 		if (className.equals(KBArticle.class.getName())) {
-			KBArticle kbArticle =
-				KBArticleLocalServiceUtil.getLatestKBArticle(
-					kbComment.getClassPK(), WorkflowConstants.STATUS_ANY);
+			KBArticle kbArticle = KBArticleLocalServiceUtil.getLatestKBArticle(
+				kbComment.getClassPK(), WorkflowConstants.STATUS_ANY);
 
 			return permissionChecker.hasPermission(
 				kbArticle.getGroupId(), KBArticle.class.getName(),
 				kbArticle.getPrimaryKey(), ActionKeys.UPDATE);
 		}
 		else if (className.equals(KBTemplate.class.getName())) {
-			KBTemplate kbTemplate =
-				KBTemplateLocalServiceUtil.getKBTemplate(
-					kbComment.getClassPK());
+			KBTemplate kbTemplate = KBTemplateLocalServiceUtil.getKBTemplate(
+				kbComment.getClassPK());
 
 			return permissionChecker.hasPermission(
 				kbTemplate.getGroupId(), KBTemplate.class.getName(),

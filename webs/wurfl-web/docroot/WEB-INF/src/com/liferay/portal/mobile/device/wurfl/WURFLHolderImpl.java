@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License as published by the Free
@@ -154,7 +154,8 @@ public class WURFLHolderImpl implements WURFLHolder {
 			PortletPropsValues.WURFL_DATABASE_PATCHES);
 
 		for (String fileName : fileNames) {
-			File file = new File(PortletPropsValues.WURFL_DATABASE_PATCHES, fileName);
+			File file = new File(
+				PortletPropsValues.WURFL_DATABASE_PATCHES, fileName);
 
 			FileInputStream fileInputStream = new FileInputStream(file);
 

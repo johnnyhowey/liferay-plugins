@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,15 +40,15 @@ public class JCalendarUtil {
 	public static final long SECOND = 1000;
 
 	public static long getDaysBetween(
-		Calendar startDateJCalendar, Calendar endDateJCalendar) {
+		Calendar startTimeJCalendar, Calendar endTimeJCalendar) {
 
-		startDateJCalendar = toMidnightJCalendar(startDateJCalendar);
-		endDateJCalendar = toMidnightJCalendar(endDateJCalendar);
+		startTimeJCalendar = toMidnightJCalendar(startTimeJCalendar);
+		endTimeJCalendar = toMidnightJCalendar(endTimeJCalendar);
 
-		long startdateTime = startDateJCalendar.getTimeInMillis();
-		long endDateTime = endDateJCalendar.getTimeInMillis();
+		long startTime = startTimeJCalendar.getTimeInMillis();
+		long endTime = endTimeJCalendar.getTimeInMillis();
 
-		return (endDateTime - startdateTime) / DAY;
+		return (endTime - startTime) / DAY;
 	}
 
 	public static Calendar getJCalendar(

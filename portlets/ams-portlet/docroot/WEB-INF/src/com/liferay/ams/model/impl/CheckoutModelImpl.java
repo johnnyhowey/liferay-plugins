@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -74,6 +74,8 @@ public class CheckoutModelImpl extends BaseModelImpl<Checkout>
 		};
 	public static final String TABLE_SQL_CREATE = "create table AMS_Checkout (checkoutId LONG not null primary key,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,assetId LONG,checkOutDate DATE null,expectedCheckInDate DATE null,actualCheckInDate DATE null)";
 	public static final String TABLE_SQL_DROP = "drop table AMS_Checkout";
+	public static final String ORDER_BY_JPQL = " ORDER BY checkout.checkoutId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY AMS_Checkout.checkoutId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -99,7 +101,7 @@ public class CheckoutModelImpl extends BaseModelImpl<Checkout>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_checkoutId);
+		return _checkoutId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -303,13 +305,12 @@ public class CheckoutModelImpl extends BaseModelImpl<Checkout>
 
 	@Override
 	public Checkout toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Checkout)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Checkout)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -531,7 +532,7 @@ public class CheckoutModelImpl extends BaseModelImpl<Checkout>
 	}
 
 	private static ClassLoader _classLoader = Checkout.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Checkout.class
 		};
 	private long _checkoutId;
@@ -545,5 +546,5 @@ public class CheckoutModelImpl extends BaseModelImpl<Checkout>
 	private Date _checkOutDate;
 	private Date _expectedCheckInDate;
 	private Date _actualCheckInDate;
-	private Checkout _escapedModelProxy;
+	private Checkout _escapedModel;
 }

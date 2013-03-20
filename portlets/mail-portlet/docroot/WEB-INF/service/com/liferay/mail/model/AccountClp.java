@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,14 +18,13 @@ import com.liferay.mail.service.AccountLocalServiceUtil;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class AccountClp extends BaseModelImpl<Account> implements Account {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_accountId);
+		return _accountId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -518,7 +517,7 @@ public class AccountClp extends BaseModelImpl<Account> implements Account {
 
 	@Override
 	public Account toEscapedModel() {
-		return (Account)Proxy.newProxyInstance(Account.class.getClassLoader(),
+		return (Account)ProxyUtil.newProxyInstance(Account.class.getClassLoader(),
 			new Class[] { Account.class }, new AutoEscapeBeanHandler(this));
 	}
 

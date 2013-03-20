@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -203,6 +203,16 @@ public class JIRAChangeGroupWrapper implements JIRAChangeGroup,
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_jiraChangeGroup.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_jiraChangeGroup.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_jiraChangeGroup.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -230,6 +240,10 @@ public class JIRAChangeGroupWrapper implements JIRAChangeGroup,
 		return new JIRAChangeGroupWrapper(_jiraChangeGroup.toEscapedModel());
 	}
 
+	public com.liferay.socialcoding.model.JIRAChangeGroup toUnescapedModel() {
+		return new JIRAChangeGroupWrapper(_jiraChangeGroup.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _jiraChangeGroup.toString();
@@ -245,7 +259,7 @@ public class JIRAChangeGroupWrapper implements JIRAChangeGroup,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public JIRAChangeGroup getWrappedJIRAChangeGroup() {
 		return _jiraChangeGroup;

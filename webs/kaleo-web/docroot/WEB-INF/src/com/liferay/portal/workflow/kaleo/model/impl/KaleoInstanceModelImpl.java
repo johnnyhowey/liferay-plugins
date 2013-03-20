@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -99,6 +99,7 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 	public static long KALEODEFINITIONID_COLUMN_BITMASK = 8L;
 	public static long KALEODEFINITIONNAME_COLUMN_BITMASK = 16L;
 	public static long KALEODEFINITIONVERSION_COLUMN_BITMASK = 32L;
+	public static long KALEOINSTANCEID_COLUMN_BITMASK = 64L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoInstance"));
 
@@ -114,7 +115,7 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kaleoInstanceId);
+		return _kaleoInstanceId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -504,13 +505,12 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 
 	@Override
 	public KaleoInstance toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KaleoInstance)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KaleoInstance)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -820,7 +820,7 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 	}
 
 	private static ClassLoader _classLoader = KaleoInstance.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KaleoInstance.class
 		};
 	private long _kaleoInstanceId;
@@ -851,5 +851,5 @@ public class KaleoInstanceModelImpl extends BaseModelImpl<KaleoInstance>
 	private Date _originalCompletionDate;
 	private String _workflowContext;
 	private long _columnBitmask;
-	private KaleoInstance _escapedModelProxy;
+	private KaleoInstance _escapedModel;
 }

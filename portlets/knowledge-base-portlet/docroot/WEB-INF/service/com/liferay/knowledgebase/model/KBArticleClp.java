@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,6 +19,7 @@ import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.BaseModel;
@@ -26,8 +27,6 @@ import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -57,7 +56,7 @@ public class KBArticleClp extends BaseModelImpl<KBArticle> implements KBArticle 
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kbArticleId);
+		return _kbArticleId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -469,6 +468,14 @@ public class KBArticleClp extends BaseModelImpl<KBArticle> implements KBArticle 
 		_statusDate = statusDate;
 	}
 
+	public long getAttachmentsFolderId() {
+		throw new UnsupportedOperationException();
+	}
+
+	public java.util.List<com.liferay.portal.kernel.repository.model.FileEntry> getAttachmentsFileEntries() {
+		throw new UnsupportedOperationException();
+	}
+
 	public boolean isFirstVersion() {
 		throw new UnsupportedOperationException();
 	}
@@ -490,7 +497,7 @@ public class KBArticleClp extends BaseModelImpl<KBArticle> implements KBArticle 
 	}
 
 	/**
-	 * @deprecated {@link #isApproved}
+	 * @deprecated As of 6.1.0, replaced by {@link #isApproved}
 	 */
 	public boolean getApproved() {
 		return isApproved();
@@ -596,7 +603,7 @@ public class KBArticleClp extends BaseModelImpl<KBArticle> implements KBArticle 
 
 	@Override
 	public KBArticle toEscapedModel() {
-		return (KBArticle)Proxy.newProxyInstance(KBArticle.class.getClassLoader(),
+		return (KBArticle)ProxyUtil.newProxyInstance(KBArticle.class.getClassLoader(),
 			new Class[] { KBArticle.class }, new AutoEscapeBeanHandler(this));
 	}
 
