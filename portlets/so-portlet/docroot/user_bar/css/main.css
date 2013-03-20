@@ -1,5 +1,17 @@
 @import "compass/css3";
 
+$default-border-color: #C9C9C9;
+$default-text-color: #202020;
+$blue: #0E50A9;
+
+@mixin clear-both {
+	&:after {
+		content: "";
+		clear: both;
+		display: block;
+	}
+}
+
 html > body.lfr-dockbar-pinned {
 	padding-top: 74px;
 
@@ -17,7 +29,7 @@ html > body.lfr-dockbar-pinned {
 }
 
 #user-bar {
-	background: #32363A url(@portal_ctx@/images/user_bar_default_bg.png) repeat-x;
+	background: #32363A url(@portal_ctx@/user_bar/images/user_bar_default_bg.png) repeat-x;
 	font-weight: 200;
 	position: relative;
 	z-index: 2;
@@ -102,6 +114,83 @@ html > body.lfr-dockbar-pinned {
 			img {
 				vertical-align: bottom;
 			}
+		}
+	}
+
+	.user-notification-events a, .user-notification-events a:hover, li:hover .user-notification-events a {
+		background: transparent;
+		box-shadow: none;
+		color: $blue;
+		display: inline;
+		font-weight: normal;
+		padding: 0;
+		text-shadow: none;
+	}
+
+	.user-notification-events {
+		color: $default-text-color;
+		right: 0;
+		top: 100%;
+		width: 350px;
+
+		@include clear-both;
+
+		.aui-menu-content {
+			background: #FFF;
+		}
+
+		.user-notification-event-content {
+			border-bottom: 1px solid $default-border-color;
+		}
+
+		.user-notification-event-sender {
+			float: left;
+			position: relative;
+		}
+
+		.thumbnail {
+			display: block;
+			overflow: hidden;
+			width: 45px;
+			height: 45px;
+
+			img {
+				max-width: 45px;
+				min-height: 45px;
+			}
+		}
+
+		.icon {
+			bottom: 0;
+			left: 0;
+			position: absolute;
+		}
+
+		.notification-entry {
+			color: $default-text-color;
+			margin-left: 45px;
+			padding: 0.125em 0.5em;
+		}
+
+/*		div.request, div.user-notification-event-footer {
+			a {
+				display: inline-block;
+
+				@include border-radius(4px);
+				@include button-default;
+
+				&:hover, &:focus {
+					@include button-hover;
+				}
+
+				&:active {
+					@include button-active;
+				}
+			}
+		}*/
+
+		.request {
+			text-align: right;
 		}
 	}
 

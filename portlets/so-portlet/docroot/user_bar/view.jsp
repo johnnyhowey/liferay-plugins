@@ -13,10 +13,10 @@
  * details.
  */
 %>
-
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
-
+<%@ taglib prefix="liferay-portlet" uri="http://liferay.com/tld/portlet" %>
 <%@ page import="javax.portlet.PortletPreferences" %><%@
 page import="java.util.List" %><%@
 page import="java.util.Locale" %>
@@ -44,12 +44,11 @@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 	String mySitePublicURL = mySite.getPathFriendlyURL(false,themeDisplay) + "/" + user.getScreenName();
 
 	List < Layout > myLayouts = LayoutLocalServiceUtil.getLayouts(mySite.getGroupId(), true);
-
 %>
 
 <nav id="user-bar">
 	<a href="<%= mySiteURL %>" id="so_logo">
-		<img alt="Social Office Logo" src="<%= request.getContextPath() + "/images/so_logo.png" %>" height="32" width="32" />
+		<img alt="Social Office Logo" src="<%= request.getContextPath() + "/user_bar/images/so_logo.png" %>" height="32" width="32" />
 	</a>
 
 	<ul id="dashboardNav">
@@ -83,8 +82,44 @@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 			<liferay-portlet:runtime portletName="7_WAR_soportlet" />
 		</li>
 		<li class="user-info"><a href="<%= mySitePublicURL %>"><span class="avatar"><img src="<%= HtmlUtil.escape(user.getPortraitURL(themeDisplay)) %>" alt="<%= user.getFullName() %>"></span><span class="full-name"><%= user.getFullName() %></span></a></li>
-		<li><a class="config-icon" href="javascript:;" id="userBarConfig"><img alt="Configuration Icon" src="<%= request.getContextPath() + "/images/cog.png" %>" height="15" width="15" /><span class="aui-helper-hidden">Configuration</span></a></li>
+		<li><a class="config-icon" href="javascript:;" id="userBarConfig"><img alt="Configuration Icon" src="<%= request.getContextPath() + "/user_bar/images/cog.png" %>" height="15" width="15" /><span class="aui-helper-hidden">Configuration</span></a></li>
 	</ul>
 </nav>
 
 </liferay-util:html-top>
+
+<aui:script use="aui-base event">
+	var userBar = A.one('#user-bar');
+	var user_menus = userBar.all('.has-menu .child-menu');
+
+	var notificationButton = userBar.one('.user-notification-events-icon');
+	var notifications = userBar.one('.user-notification-events');
+	var notificationEvents = notifications.all('user-notification-event-content');
+	console.log(userBar);
+
+	if (notificationButton) {
+		notificationButton.on(
+			'click',
+			function (event) {
+				event.preventDefault()
+				event.stopPropagation();
+
+				notifications.toggleClass('aui-overlaycontext-hidden');
+			}
+		);
+
+		notifications.delegate(
+			'click',
+			function(event) {
+				event.stopPropagation();
+
+				var portletURL = event.currentTarget.getAttribute('data-portletUrl');
+
+				if (portletURL) {
+					window.location = portletURL;
+				}
+			},
+			'.user-notification-event-content'
+		);
+	}
+</aui:script>
