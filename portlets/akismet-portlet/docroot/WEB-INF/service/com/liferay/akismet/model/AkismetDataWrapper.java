@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -48,7 +48,8 @@ public class AkismetDataWrapper implements AkismetData,
 
 		attributes.put("akismetDataId", getAkismetDataId());
 		attributes.put("modifiedDate", getModifiedDate());
-		attributes.put("mbMessageId", getMbMessageId());
+		attributes.put("classNameId", getClassNameId());
+		attributes.put("classPK", getClassPK());
 		attributes.put("type", getType());
 		attributes.put("permalink", getPermalink());
 		attributes.put("referrer", getReferrer());
@@ -72,10 +73,16 @@ public class AkismetDataWrapper implements AkismetData,
 			setModifiedDate(modifiedDate);
 		}
 
-		Long mbMessageId = (Long)attributes.get("mbMessageId");
+		Long classNameId = (Long)attributes.get("classNameId");
 
-		if (mbMessageId != null) {
-			setMbMessageId(mbMessageId);
+		if (classNameId != null) {
+			setClassNameId(classNameId);
+		}
+
+		Long classPK = (Long)attributes.get("classPK");
+
+		if (classPK != null) {
+			setClassPK(classPK);
 		}
 
 		String type = (String)attributes.get("type");
@@ -170,21 +177,52 @@ public class AkismetDataWrapper implements AkismetData,
 	}
 
 	/**
-	* Returns the mb message ID of this akismet data.
+	* Returns the fully qualified class name of this akismet data.
 	*
-	* @return the mb message ID of this akismet data
+	* @return the fully qualified class name of this akismet data
 	*/
-	public long getMbMessageId() {
-		return _akismetData.getMbMessageId();
+	public java.lang.String getClassName() {
+		return _akismetData.getClassName();
+	}
+
+	public void setClassName(java.lang.String className) {
+		_akismetData.setClassName(className);
 	}
 
 	/**
-	* Sets the mb message ID of this akismet data.
+	* Returns the class name ID of this akismet data.
 	*
-	* @param mbMessageId the mb message ID of this akismet data
+	* @return the class name ID of this akismet data
 	*/
-	public void setMbMessageId(long mbMessageId) {
-		_akismetData.setMbMessageId(mbMessageId);
+	public long getClassNameId() {
+		return _akismetData.getClassNameId();
+	}
+
+	/**
+	* Sets the class name ID of this akismet data.
+	*
+	* @param classNameId the class name ID of this akismet data
+	*/
+	public void setClassNameId(long classNameId) {
+		_akismetData.setClassNameId(classNameId);
+	}
+
+	/**
+	* Returns the class p k of this akismet data.
+	*
+	* @return the class p k of this akismet data
+	*/
+	public long getClassPK() {
+		return _akismetData.getClassPK();
+	}
+
+	/**
+	* Sets the class p k of this akismet data.
+	*
+	* @param classPK the class p k of this akismet data
+	*/
+	public void setClassPK(long classPK) {
+		_akismetData.setClassPK(classPK);
 	}
 
 	/**
@@ -328,6 +366,16 @@ public class AkismetDataWrapper implements AkismetData,
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_akismetData.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_akismetData.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_akismetData.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -354,6 +402,10 @@ public class AkismetDataWrapper implements AkismetData,
 		return new AkismetDataWrapper(_akismetData.toEscapedModel());
 	}
 
+	public com.liferay.akismet.model.AkismetData toUnescapedModel() {
+		return new AkismetDataWrapper(_akismetData.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _akismetData.toString();
@@ -369,7 +421,7 @@ public class AkismetDataWrapper implements AkismetData,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public AkismetData getWrappedAkismetData() {
 		return _akismetData;

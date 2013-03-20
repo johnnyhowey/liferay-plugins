@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,6 +16,7 @@ package com.liferay.portal.workflow.kaleo.model;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
@@ -23,8 +24,6 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.portal.workflow.kaleo.service.KaleoNotificationLocalServiceUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kaleoNotificationId);
+		return _kaleoNotificationId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -356,7 +355,7 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 
 	@Override
 	public KaleoNotification toEscapedModel() {
-		return (KaleoNotification)Proxy.newProxyInstance(KaleoNotification.class.getClassLoader(),
+		return (KaleoNotification)ProxyUtil.newProxyInstance(KaleoNotification.class.getClassLoader(),
 			new Class[] { KaleoNotification.class },
 			new AutoEscapeBeanHandler(this));
 	}

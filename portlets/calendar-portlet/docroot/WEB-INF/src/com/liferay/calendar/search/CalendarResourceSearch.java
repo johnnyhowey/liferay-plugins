@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -47,7 +47,6 @@ public class CalendarResourceSearch extends SearchContainer<CalendarResource> {
 		headerNames.add("code");
 		headerNames.add("name");
 		headerNames.add("description");
-		headerNames.add("type");
 		headerNames.add("active");
 
 		orderableHeaders.put("code", "code");
@@ -82,8 +81,6 @@ public class CalendarResourceSearch extends SearchContainer<CalendarResource> {
 		iteratorURL.setParameter(
 			CalendarResourceDisplayTerms.SCOPE,
 			String.valueOf(displayTerms.getScope()));
-		iteratorURL.setParameter(
-			CalendarResourceDisplayTerms.TYPE, displayTerms.getType());
 
 		try {
 			PortalPreferences preferences =

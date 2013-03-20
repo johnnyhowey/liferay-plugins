@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,8 +14,6 @@
 
 package com.liferay.socialcoding.service.persistence;
 
-import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -35,11 +33,10 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.socialcoding.NoSuchSVNRevisionException;
@@ -77,67 +74,6 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SVNUSERID =
-		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findBySVNUserId",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNUSERID =
-		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBySVNUserId",
-			new String[] { String.class.getName() },
-			SVNRevisionModelImpl.SVNUSERID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_SVNUSERID = new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySVNUserId",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SVNREPOSITORYID =
-		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findBySVNRepositoryId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNREPOSITORYID =
-		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBySVNRepositoryId",
-			new String[] { Long.class.getName() },
-			SVNRevisionModelImpl.SVNREPOSITORYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_SVNREPOSITORYID = new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countBySVNRepositoryId", new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SVNU_SVNR =
-		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findBySVNU_SVNR",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNU_SVNR =
-		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBySVNU_SVNR",
-			new String[] { String.class.getName(), Long.class.getName() },
-			SVNRevisionModelImpl.SVNUSERID_COLUMN_BITMASK |
-			SVNRevisionModelImpl.SVNREPOSITORYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_SVNU_SVNR = new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySVNU_SVNR",
-			new String[] { String.class.getName(), Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -147,398 +83,27 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
 			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the s v n revision in the entity cache if it is enabled.
-	 *
-	 * @param svnRevision the s v n revision
-	 */
-	public void cacheResult(SVNRevision svnRevision) {
-		EntityCacheUtil.putResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionImpl.class, svnRevision.getPrimaryKey(), svnRevision);
-
-		svnRevision.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the s v n revisions in the entity cache if it is enabled.
-	 *
-	 * @param svnRevisions the s v n revisions
-	 */
-	public void cacheResult(List<SVNRevision> svnRevisions) {
-		for (SVNRevision svnRevision : svnRevisions) {
-			if (EntityCacheUtil.getResult(
-						SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-						SVNRevisionImpl.class, svnRevision.getPrimaryKey()) == null) {
-				cacheResult(svnRevision);
-			}
-			else {
-				svnRevision.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all s v n revisions.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(SVNRevisionImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(SVNRevisionImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the s v n revision.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(SVNRevision svnRevision) {
-		EntityCacheUtil.removeResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionImpl.class, svnRevision.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<SVNRevision> svnRevisions) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (SVNRevision svnRevision : svnRevisions) {
-			EntityCacheUtil.removeResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-				SVNRevisionImpl.class, svnRevision.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new s v n revision with the primary key. Does not add the s v n revision to the database.
-	 *
-	 * @param svnRevisionId the primary key for the new s v n revision
-	 * @return the new s v n revision
-	 */
-	public SVNRevision create(long svnRevisionId) {
-		SVNRevision svnRevision = new SVNRevisionImpl();
-
-		svnRevision.setNew(true);
-		svnRevision.setPrimaryKey(svnRevisionId);
-
-		return svnRevision;
-	}
-
-	/**
-	 * Removes the s v n revision with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param svnRevisionId the primary key of the s v n revision
-	 * @return the s v n revision that was removed
-	 * @throws com.liferay.socialcoding.NoSuchSVNRevisionException if a s v n revision with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SVNRevision remove(long svnRevisionId)
-		throws NoSuchSVNRevisionException, SystemException {
-		return remove(Long.valueOf(svnRevisionId));
-	}
-
-	/**
-	 * Removes the s v n revision with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the s v n revision
-	 * @return the s v n revision that was removed
-	 * @throws com.liferay.socialcoding.NoSuchSVNRevisionException if a s v n revision with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SVNRevision remove(Serializable primaryKey)
-		throws NoSuchSVNRevisionException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SVNRevision svnRevision = (SVNRevision)session.get(SVNRevisionImpl.class,
-					primaryKey);
-
-			if (svnRevision == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchSVNRevisionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(svnRevision);
-		}
-		catch (NoSuchSVNRevisionException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected SVNRevision removeImpl(SVNRevision svnRevision)
-		throws SystemException {
-		svnRevision = toUnwrappedModel(svnRevision);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.delete(session, svnRevision);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		clearCache(svnRevision);
-
-		return svnRevision;
-	}
-
-	@Override
-	public SVNRevision updateImpl(
-		com.liferay.socialcoding.model.SVNRevision svnRevision, boolean merge)
-		throws SystemException {
-		svnRevision = toUnwrappedModel(svnRevision);
-
-		boolean isNew = svnRevision.isNew();
-
-		SVNRevisionModelImpl svnRevisionModelImpl = (SVNRevisionModelImpl)svnRevision;
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.update(session, svnRevision, merge);
-
-			svnRevision.setNew(false);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !SVNRevisionModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((svnRevisionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNUSERID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						svnRevisionModelImpl.getOriginalSvnUserId()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNUSERID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNUSERID,
-					args);
-
-				args = new Object[] { svnRevisionModelImpl.getSvnUserId() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNUSERID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNUSERID,
-					args);
-			}
-
-			if ((svnRevisionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNREPOSITORYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(svnRevisionModelImpl.getOriginalSvnRepositoryId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNREPOSITORYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNREPOSITORYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(svnRevisionModelImpl.getSvnRepositoryId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNREPOSITORYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNREPOSITORYID,
-					args);
-			}
-
-			if ((svnRevisionModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNU_SVNR.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						svnRevisionModelImpl.getOriginalSvnUserId(),
-						Long.valueOf(svnRevisionModelImpl.getOriginalSvnRepositoryId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNU_SVNR,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNU_SVNR,
-					args);
-
-				args = new Object[] {
-						svnRevisionModelImpl.getSvnUserId(),
-						Long.valueOf(svnRevisionModelImpl.getSvnRepositoryId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNU_SVNR,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNU_SVNR,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-			SVNRevisionImpl.class, svnRevision.getPrimaryKey(), svnRevision);
-
-		return svnRevision;
-	}
-
-	protected SVNRevision toUnwrappedModel(SVNRevision svnRevision) {
-		if (svnRevision instanceof SVNRevisionImpl) {
-			return svnRevision;
-		}
-
-		SVNRevisionImpl svnRevisionImpl = new SVNRevisionImpl();
-
-		svnRevisionImpl.setNew(svnRevision.isNew());
-		svnRevisionImpl.setPrimaryKey(svnRevision.getPrimaryKey());
-
-		svnRevisionImpl.setSvnRevisionId(svnRevision.getSvnRevisionId());
-		svnRevisionImpl.setSvnUserId(svnRevision.getSvnUserId());
-		svnRevisionImpl.setCreateDate(svnRevision.getCreateDate());
-		svnRevisionImpl.setSvnRepositoryId(svnRevision.getSvnRepositoryId());
-		svnRevisionImpl.setRevisionNumber(svnRevision.getRevisionNumber());
-		svnRevisionImpl.setComments(svnRevision.getComments());
-
-		return svnRevisionImpl;
-	}
-
-	/**
-	 * Returns the s v n revision with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the s v n revision
-	 * @return the s v n revision
-	 * @throws com.liferay.portal.NoSuchModelException if a s v n revision with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SVNRevision findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the s v n revision with the primary key or throws a {@link com.liferay.socialcoding.NoSuchSVNRevisionException} if it could not be found.
-	 *
-	 * @param svnRevisionId the primary key of the s v n revision
-	 * @return the s v n revision
-	 * @throws com.liferay.socialcoding.NoSuchSVNRevisionException if a s v n revision with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SVNRevision findByPrimaryKey(long svnRevisionId)
-		throws NoSuchSVNRevisionException, SystemException {
-		SVNRevision svnRevision = fetchByPrimaryKey(svnRevisionId);
-
-		if (svnRevision == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + svnRevisionId);
-			}
-
-			throw new NoSuchSVNRevisionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				svnRevisionId);
-		}
-
-		return svnRevision;
-	}
-
-	/**
-	 * Returns the s v n revision with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the s v n revision
-	 * @return the s v n revision, or <code>null</code> if a s v n revision with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public SVNRevision fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the s v n revision with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param svnRevisionId the primary key of the s v n revision
-	 * @return the s v n revision, or <code>null</code> if a s v n revision with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public SVNRevision fetchByPrimaryKey(long svnRevisionId)
-		throws SystemException {
-		SVNRevision svnRevision = (SVNRevision)EntityCacheUtil.getResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-				SVNRevisionImpl.class, svnRevisionId);
-
-		if (svnRevision == _nullSVNRevision) {
-			return null;
-		}
-
-		if (svnRevision == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				svnRevision = (SVNRevision)session.get(SVNRevisionImpl.class,
-						Long.valueOf(svnRevisionId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (svnRevision != null) {
-					cacheResult(svnRevision);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
-						SVNRevisionImpl.class, svnRevisionId, _nullSVNRevision);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return svnRevision;
-	}
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SVNUSERID =
+		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findBySVNUserId",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNUSERID =
+		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBySVNUserId",
+			new String[] { String.class.getName() },
+			SVNRevisionModelImpl.SVNUSERID_COLUMN_BITMASK |
+			SVNRevisionModelImpl.REVISIONNUMBER_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_SVNUSERID = new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySVNUserId",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the s v n revisions where svnUserId = &#63;.
@@ -557,7 +122,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 * Returns a range of all the s v n revisions where svnUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.SVNRevisionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param svnUserId the svn user ID
@@ -575,7 +140,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 * Returns an ordered range of all the s v n revisions where svnUserId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.SVNRevisionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param svnUserId the svn user ID
@@ -587,11 +152,13 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 */
 	public List<SVNRevision> findBySVNUserId(String svnUserId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNUSERID;
 			finderArgs = new Object[] { svnUserId };
 		}
@@ -626,24 +193,26 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 			query.append(_SQL_SELECT_SVNREVISION_WHERE);
 
+			boolean bindSvnUserId = false;
+
 			if (svnUserId == null) {
 				query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_1);
 			}
+			else if (svnUserId.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_3);
+			}
 			else {
-				if (svnUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_2);
-				}
+				bindSvnUserId = true;
+
+				query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_2);
 			}
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(SVNRevisionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -658,26 +227,33 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (svnUserId != null) {
+				if (bindSvnUserId) {
 					qPos.add(svnUserId);
 				}
 
-				list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<SVNRevision>(list);
+				}
+				else {
+					list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -844,16 +420,18 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 		query.append(_SQL_SELECT_SVNREVISION_WHERE);
 
+		boolean bindSvnUserId = false;
+
 		if (svnUserId == null) {
 			query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_1);
 		}
+		else if (svnUserId.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_3);
+		}
 		else {
-			if (svnUserId.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_2);
-			}
+			bindSvnUserId = true;
+
+			query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_2);
 		}
 
 		if (orderByComparator != null) {
@@ -911,7 +489,6 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 				}
 			}
 		}
-
 		else {
 			query.append(SVNRevisionModelImpl.ORDER_BY_JPQL);
 		}
@@ -925,7 +502,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (svnUserId != null) {
+		if (bindSvnUserId) {
 			qPos.add(svnUserId);
 		}
 
@@ -948,6 +525,110 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	}
 
 	/**
+	 * Removes all the s v n revisions where svnUserId = &#63; from the database.
+	 *
+	 * @param svnUserId the svn user ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeBySVNUserId(String svnUserId) throws SystemException {
+		for (SVNRevision svnRevision : findBySVNUserId(svnUserId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(svnRevision);
+		}
+	}
+
+	/**
+	 * Returns the number of s v n revisions where svnUserId = &#63;.
+	 *
+	 * @param svnUserId the svn user ID
+	 * @return the number of matching s v n revisions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countBySVNUserId(String svnUserId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_SVNUSERID;
+
+		Object[] finderArgs = new Object[] { svnUserId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SVNREVISION_WHERE);
+
+			boolean bindSvnUserId = false;
+
+			if (svnUserId == null) {
+				query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_1);
+			}
+			else if (svnUserId.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_3);
+			}
+			else {
+				bindSvnUserId = true;
+
+				query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindSvnUserId) {
+					qPos.add(svnUserId);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_SVNUSERID_SVNUSERID_1 = "svnRevision.svnUserId IS NULL";
+	private static final String _FINDER_COLUMN_SVNUSERID_SVNUSERID_2 = "svnRevision.svnUserId = ?";
+	private static final String _FINDER_COLUMN_SVNUSERID_SVNUSERID_3 = "(svnRevision.svnUserId IS NULL OR svnRevision.svnUserId = '')";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SVNREPOSITORYID =
+		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findBySVNRepositoryId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNREPOSITORYID =
+		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBySVNRepositoryId",
+			new String[] { Long.class.getName() },
+			SVNRevisionModelImpl.SVNREPOSITORYID_COLUMN_BITMASK |
+			SVNRevisionModelImpl.REVISIONNUMBER_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_SVNREPOSITORYID = new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countBySVNRepositoryId", new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the s v n revisions where svnRepositoryId = &#63;.
 	 *
 	 * @param svnRepositoryId the svn repository ID
@@ -964,7 +645,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 * Returns a range of all the s v n revisions where svnRepositoryId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.SVNRevisionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param svnRepositoryId the svn repository ID
@@ -982,7 +663,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 * Returns an ordered range of all the s v n revisions where svnRepositoryId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.SVNRevisionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param svnRepositoryId the svn repository ID
@@ -995,11 +676,13 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	public List<SVNRevision> findBySVNRepositoryId(long svnRepositoryId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNREPOSITORYID;
 			finderArgs = new Object[] { svnRepositoryId };
 		}
@@ -1044,8 +727,8 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(SVNRevisionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1062,22 +745,29 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 				qPos.add(svnRepositoryId);
 
-				list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<SVNRevision>(list);
+				}
+				else {
+					list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1301,7 +991,6 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 				}
 			}
 		}
-
 		else {
 			query.append(SVNRevisionModelImpl.ORDER_BY_JPQL);
 		}
@@ -1336,6 +1025,98 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	}
 
 	/**
+	 * Removes all the s v n revisions where svnRepositoryId = &#63; from the database.
+	 *
+	 * @param svnRepositoryId the svn repository ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeBySVNRepositoryId(long svnRepositoryId)
+		throws SystemException {
+		for (SVNRevision svnRevision : findBySVNRepositoryId(svnRepositoryId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(svnRevision);
+		}
+	}
+
+	/**
+	 * Returns the number of s v n revisions where svnRepositoryId = &#63;.
+	 *
+	 * @param svnRepositoryId the svn repository ID
+	 * @return the number of matching s v n revisions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countBySVNRepositoryId(long svnRepositoryId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_SVNREPOSITORYID;
+
+		Object[] finderArgs = new Object[] { svnRepositoryId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_SVNREVISION_WHERE);
+
+			query.append(_FINDER_COLUMN_SVNREPOSITORYID_SVNREPOSITORYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(svnRepositoryId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_SVNREPOSITORYID_SVNREPOSITORYID_2 =
+		"svnRevision.svnRepositoryId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_SVNU_SVNR =
+		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findBySVNU_SVNR",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNU_SVNR =
+		new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, SVNRevisionImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findBySVNU_SVNR",
+			new String[] { String.class.getName(), Long.class.getName() },
+			SVNRevisionModelImpl.SVNUSERID_COLUMN_BITMASK |
+			SVNRevisionModelImpl.SVNREPOSITORYID_COLUMN_BITMASK |
+			SVNRevisionModelImpl.REVISIONNUMBER_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_SVNU_SVNR = new FinderPath(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countBySVNU_SVNR",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns all the s v n revisions where svnUserId = &#63; and svnRepositoryId = &#63;.
 	 *
 	 * @param svnUserId the svn user ID
@@ -1353,7 +1134,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 * Returns a range of all the s v n revisions where svnUserId = &#63; and svnRepositoryId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.SVNRevisionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param svnUserId the svn user ID
@@ -1372,7 +1153,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 * Returns an ordered range of all the s v n revisions where svnUserId = &#63; and svnRepositoryId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.SVNRevisionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param svnUserId the svn user ID
@@ -1386,11 +1167,13 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	public List<SVNRevision> findBySVNU_SVNR(String svnUserId,
 		long svnRepositoryId, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNU_SVNR;
 			finderArgs = new Object[] { svnUserId, svnRepositoryId };
 		}
@@ -1430,16 +1213,18 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 			query.append(_SQL_SELECT_SVNREVISION_WHERE);
 
+			boolean bindSvnUserId = false;
+
 			if (svnUserId == null) {
 				query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_1);
 			}
+			else if (svnUserId.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_3);
+			}
 			else {
-				if (svnUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_2);
-				}
+				bindSvnUserId = true;
+
+				query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_2);
 			}
 
 			query.append(_FINDER_COLUMN_SVNU_SVNR_SVNREPOSITORYID_2);
@@ -1448,8 +1233,8 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(SVNRevisionModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1464,28 +1249,35 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (svnUserId != null) {
+				if (bindSvnUserId) {
 					qPos.add(svnUserId);
 				}
 
 				qPos.add(svnRepositoryId);
 
-				list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<SVNRevision>(list);
+				}
+				else {
+					list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1666,16 +1458,18 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 		query.append(_SQL_SELECT_SVNREVISION_WHERE);
 
+		boolean bindSvnUserId = false;
+
 		if (svnUserId == null) {
 			query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_1);
 		}
+		else if (svnUserId.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_3);
+		}
 		else {
-			if (svnUserId.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_2);
-			}
+			bindSvnUserId = true;
+
+			query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_2);
 		}
 
 		query.append(_FINDER_COLUMN_SVNU_SVNR_SVNREPOSITORYID_2);
@@ -1735,7 +1529,6 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 				}
 			}
 		}
-
 		else {
 			query.append(SVNRevisionModelImpl.ORDER_BY_JPQL);
 		}
@@ -1749,7 +1542,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (svnUserId != null) {
+		if (bindSvnUserId) {
 			qPos.add(svnUserId);
 		}
 
@@ -1774,6 +1567,501 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	}
 
 	/**
+	 * Removes all the s v n revisions where svnUserId = &#63; and svnRepositoryId = &#63; from the database.
+	 *
+	 * @param svnUserId the svn user ID
+	 * @param svnRepositoryId the svn repository ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeBySVNU_SVNR(String svnUserId, long svnRepositoryId)
+		throws SystemException {
+		for (SVNRevision svnRevision : findBySVNU_SVNR(svnUserId,
+				svnRepositoryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(svnRevision);
+		}
+	}
+
+	/**
+	 * Returns the number of s v n revisions where svnUserId = &#63; and svnRepositoryId = &#63;.
+	 *
+	 * @param svnUserId the svn user ID
+	 * @param svnRepositoryId the svn repository ID
+	 * @return the number of matching s v n revisions
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countBySVNU_SVNR(String svnUserId, long svnRepositoryId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_SVNU_SVNR;
+
+		Object[] finderArgs = new Object[] { svnUserId, svnRepositoryId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_SVNREVISION_WHERE);
+
+			boolean bindSvnUserId = false;
+
+			if (svnUserId == null) {
+				query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_1);
+			}
+			else if (svnUserId.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_3);
+			}
+			else {
+				bindSvnUserId = true;
+
+				query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_2);
+			}
+
+			query.append(_FINDER_COLUMN_SVNU_SVNR_SVNREPOSITORYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindSvnUserId) {
+					qPos.add(svnUserId);
+				}
+
+				qPos.add(svnRepositoryId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_SVNU_SVNR_SVNUSERID_1 = "svnRevision.svnUserId IS NULL AND ";
+	private static final String _FINDER_COLUMN_SVNU_SVNR_SVNUSERID_2 = "svnRevision.svnUserId = ? AND ";
+	private static final String _FINDER_COLUMN_SVNU_SVNR_SVNUSERID_3 = "(svnRevision.svnUserId IS NULL OR svnRevision.svnUserId = '') AND ";
+	private static final String _FINDER_COLUMN_SVNU_SVNR_SVNREPOSITORYID_2 = "svnRevision.svnRepositoryId = ?";
+
+	/**
+	 * Caches the s v n revision in the entity cache if it is enabled.
+	 *
+	 * @param svnRevision the s v n revision
+	 */
+	public void cacheResult(SVNRevision svnRevision) {
+		EntityCacheUtil.putResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionImpl.class, svnRevision.getPrimaryKey(), svnRevision);
+
+		svnRevision.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the s v n revisions in the entity cache if it is enabled.
+	 *
+	 * @param svnRevisions the s v n revisions
+	 */
+	public void cacheResult(List<SVNRevision> svnRevisions) {
+		for (SVNRevision svnRevision : svnRevisions) {
+			if (EntityCacheUtil.getResult(
+						SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+						SVNRevisionImpl.class, svnRevision.getPrimaryKey()) == null) {
+				cacheResult(svnRevision);
+			}
+			else {
+				svnRevision.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all s v n revisions.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(SVNRevisionImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(SVNRevisionImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the s v n revision.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(SVNRevision svnRevision) {
+		EntityCacheUtil.removeResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionImpl.class, svnRevision.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<SVNRevision> svnRevisions) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (SVNRevision svnRevision : svnRevisions) {
+			EntityCacheUtil.removeResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+				SVNRevisionImpl.class, svnRevision.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new s v n revision with the primary key. Does not add the s v n revision to the database.
+	 *
+	 * @param svnRevisionId the primary key for the new s v n revision
+	 * @return the new s v n revision
+	 */
+	public SVNRevision create(long svnRevisionId) {
+		SVNRevision svnRevision = new SVNRevisionImpl();
+
+		svnRevision.setNew(true);
+		svnRevision.setPrimaryKey(svnRevisionId);
+
+		return svnRevision;
+	}
+
+	/**
+	 * Removes the s v n revision with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param svnRevisionId the primary key of the s v n revision
+	 * @return the s v n revision that was removed
+	 * @throws com.liferay.socialcoding.NoSuchSVNRevisionException if a s v n revision with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRevision remove(long svnRevisionId)
+		throws NoSuchSVNRevisionException, SystemException {
+		return remove((Serializable)svnRevisionId);
+	}
+
+	/**
+	 * Removes the s v n revision with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the s v n revision
+	 * @return the s v n revision that was removed
+	 * @throws com.liferay.socialcoding.NoSuchSVNRevisionException if a s v n revision with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SVNRevision remove(Serializable primaryKey)
+		throws NoSuchSVNRevisionException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SVNRevision svnRevision = (SVNRevision)session.get(SVNRevisionImpl.class,
+					primaryKey);
+
+			if (svnRevision == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchSVNRevisionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(svnRevision);
+		}
+		catch (NoSuchSVNRevisionException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected SVNRevision removeImpl(SVNRevision svnRevision)
+		throws SystemException {
+		svnRevision = toUnwrappedModel(svnRevision);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(svnRevision)) {
+				svnRevision = (SVNRevision)session.get(SVNRevisionImpl.class,
+						svnRevision.getPrimaryKeyObj());
+			}
+
+			if (svnRevision != null) {
+				session.delete(svnRevision);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (svnRevision != null) {
+			clearCache(svnRevision);
+		}
+
+		return svnRevision;
+	}
+
+	@Override
+	public SVNRevision updateImpl(
+		com.liferay.socialcoding.model.SVNRevision svnRevision)
+		throws SystemException {
+		svnRevision = toUnwrappedModel(svnRevision);
+
+		boolean isNew = svnRevision.isNew();
+
+		SVNRevisionModelImpl svnRevisionModelImpl = (SVNRevisionModelImpl)svnRevision;
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (svnRevision.isNew()) {
+				session.save(svnRevision);
+
+				svnRevision.setNew(false);
+			}
+			else {
+				session.merge(svnRevision);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !SVNRevisionModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((svnRevisionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNUSERID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						svnRevisionModelImpl.getOriginalSvnUserId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNUSERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNUSERID,
+					args);
+
+				args = new Object[] { svnRevisionModelImpl.getSvnUserId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNUSERID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNUSERID,
+					args);
+			}
+
+			if ((svnRevisionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNREPOSITORYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						svnRevisionModelImpl.getOriginalSvnRepositoryId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNREPOSITORYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNREPOSITORYID,
+					args);
+
+				args = new Object[] { svnRevisionModelImpl.getSvnRepositoryId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNREPOSITORYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNREPOSITORYID,
+					args);
+			}
+
+			if ((svnRevisionModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNU_SVNR.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						svnRevisionModelImpl.getOriginalSvnUserId(),
+						svnRevisionModelImpl.getOriginalSvnRepositoryId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNU_SVNR,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNU_SVNR,
+					args);
+
+				args = new Object[] {
+						svnRevisionModelImpl.getSvnUserId(),
+						svnRevisionModelImpl.getSvnRepositoryId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_SVNU_SVNR,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_SVNU_SVNR,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+			SVNRevisionImpl.class, svnRevision.getPrimaryKey(), svnRevision);
+
+		return svnRevision;
+	}
+
+	protected SVNRevision toUnwrappedModel(SVNRevision svnRevision) {
+		if (svnRevision instanceof SVNRevisionImpl) {
+			return svnRevision;
+		}
+
+		SVNRevisionImpl svnRevisionImpl = new SVNRevisionImpl();
+
+		svnRevisionImpl.setNew(svnRevision.isNew());
+		svnRevisionImpl.setPrimaryKey(svnRevision.getPrimaryKey());
+
+		svnRevisionImpl.setSvnRevisionId(svnRevision.getSvnRevisionId());
+		svnRevisionImpl.setSvnUserId(svnRevision.getSvnUserId());
+		svnRevisionImpl.setCreateDate(svnRevision.getCreateDate());
+		svnRevisionImpl.setSvnRepositoryId(svnRevision.getSvnRepositoryId());
+		svnRevisionImpl.setRevisionNumber(svnRevision.getRevisionNumber());
+		svnRevisionImpl.setComments(svnRevision.getComments());
+
+		return svnRevisionImpl;
+	}
+
+	/**
+	 * Returns the s v n revision with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the s v n revision
+	 * @return the s v n revision
+	 * @throws com.liferay.socialcoding.NoSuchSVNRevisionException if a s v n revision with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SVNRevision findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchSVNRevisionException, SystemException {
+		SVNRevision svnRevision = fetchByPrimaryKey(primaryKey);
+
+		if (svnRevision == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+			}
+
+			throw new NoSuchSVNRevisionException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				primaryKey);
+		}
+
+		return svnRevision;
+	}
+
+	/**
+	 * Returns the s v n revision with the primary key or throws a {@link com.liferay.socialcoding.NoSuchSVNRevisionException} if it could not be found.
+	 *
+	 * @param svnRevisionId the primary key of the s v n revision
+	 * @return the s v n revision
+	 * @throws com.liferay.socialcoding.NoSuchSVNRevisionException if a s v n revision with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRevision findByPrimaryKey(long svnRevisionId)
+		throws NoSuchSVNRevisionException, SystemException {
+		return findByPrimaryKey((Serializable)svnRevisionId);
+	}
+
+	/**
+	 * Returns the s v n revision with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the s v n revision
+	 * @return the s v n revision, or <code>null</code> if a s v n revision with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public SVNRevision fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		SVNRevision svnRevision = (SVNRevision)EntityCacheUtil.getResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+				SVNRevisionImpl.class, primaryKey);
+
+		if (svnRevision == _nullSVNRevision) {
+			return null;
+		}
+
+		if (svnRevision == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				svnRevision = (SVNRevision)session.get(SVNRevisionImpl.class,
+						primaryKey);
+
+				if (svnRevision != null) {
+					cacheResult(svnRevision);
+				}
+				else {
+					EntityCacheUtil.putResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+						SVNRevisionImpl.class, primaryKey, _nullSVNRevision);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(SVNRevisionModelImpl.ENTITY_CACHE_ENABLED,
+					SVNRevisionImpl.class, primaryKey);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return svnRevision;
+	}
+
+	/**
+	 * Returns the s v n revision with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param svnRevisionId the primary key of the s v n revision
+	 * @return the s v n revision, or <code>null</code> if a s v n revision with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public SVNRevision fetchByPrimaryKey(long svnRevisionId)
+		throws SystemException {
+		return fetchByPrimaryKey((Serializable)svnRevisionId);
+	}
+
+	/**
 	 * Returns all the s v n revisions.
 	 *
 	 * @return the s v n revisions
@@ -1787,7 +2075,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 * Returns a range of all the s v n revisions.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.SVNRevisionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of s v n revisions
@@ -1804,7 +2092,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 * Returns an ordered range of all the s v n revisions.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.socialcoding.model.impl.SVNRevisionModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of s v n revisions
@@ -1815,11 +2103,13 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	 */
 	public List<SVNRevision> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1847,7 +2137,11 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_SVNREVISION.concat(SVNRevisionModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_SVNREVISION;
+
+				if (pagination) {
+					sql = sql.concat(SVNRevisionModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1857,75 +2151,34 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
 							start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<SVNRevision>(list);
 				}
 				else {
 					list = (List<SVNRevision>)QueryUtil.list(q, getDialect(),
 							start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the s v n revisions where svnUserId = &#63; from the database.
-	 *
-	 * @param svnUserId the svn user ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeBySVNUserId(String svnUserId) throws SystemException {
-		for (SVNRevision svnRevision : findBySVNUserId(svnUserId)) {
-			remove(svnRevision);
-		}
-	}
-
-	/**
-	 * Removes all the s v n revisions where svnRepositoryId = &#63; from the database.
-	 *
-	 * @param svnRepositoryId the svn repository ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeBySVNRepositoryId(long svnRepositoryId)
-		throws SystemException {
-		for (SVNRevision svnRevision : findBySVNRepositoryId(svnRepositoryId)) {
-			remove(svnRevision);
-		}
-	}
-
-	/**
-	 * Removes all the s v n revisions where svnUserId = &#63; and svnRepositoryId = &#63; from the database.
-	 *
-	 * @param svnUserId the svn user ID
-	 * @param svnRepositoryId the svn repository ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeBySVNU_SVNR(String svnUserId, long svnRepositoryId)
-		throws SystemException {
-		for (SVNRevision svnRevision : findBySVNU_SVNR(svnUserId,
-				svnRepositoryId)) {
-			remove(svnRevision);
-		}
 	}
 
 	/**
@@ -1937,196 +2190,6 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 		for (SVNRevision svnRevision : findAll()) {
 			remove(svnRevision);
 		}
-	}
-
-	/**
-	 * Returns the number of s v n revisions where svnUserId = &#63;.
-	 *
-	 * @param svnUserId the svn user ID
-	 * @return the number of matching s v n revisions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countBySVNUserId(String svnUserId) throws SystemException {
-		Object[] finderArgs = new Object[] { svnUserId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_SVNUSERID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SVNREVISION_WHERE);
-
-			if (svnUserId == null) {
-				query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_1);
-			}
-			else {
-				if (svnUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SVNUSERID_SVNUSERID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (svnUserId != null) {
-					qPos.add(svnUserId);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SVNUSERID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s v n revisions where svnRepositoryId = &#63;.
-	 *
-	 * @param svnRepositoryId the svn repository ID
-	 * @return the number of matching s v n revisions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countBySVNRepositoryId(long svnRepositoryId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { svnRepositoryId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_SVNREPOSITORYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_SVNREVISION_WHERE);
-
-			query.append(_FINDER_COLUMN_SVNREPOSITORYID_SVNREPOSITORYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(svnRepositoryId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SVNREPOSITORYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of s v n revisions where svnUserId = &#63; and svnRepositoryId = &#63;.
-	 *
-	 * @param svnUserId the svn user ID
-	 * @param svnRepositoryId the svn repository ID
-	 * @return the number of matching s v n revisions
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countBySVNU_SVNR(String svnUserId, long svnRepositoryId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { svnUserId, svnRepositoryId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_SVNU_SVNR,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_SVNREVISION_WHERE);
-
-			if (svnUserId == null) {
-				query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_1);
-			}
-			else {
-				if (svnUserId.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_SVNU_SVNR_SVNUSERID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_SVNU_SVNR_SVNREPOSITORYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (svnUserId != null) {
-					qPos.add(svnUserId);
-				}
-
-				qPos.add(svnRepositoryId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_SVNU_SVNR,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -2148,18 +2211,17 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 				Query q = session.createQuery(_SQL_COUNT_SVNREVISION);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2181,7 +2243,7 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 
 				for (String listenerClassName : listenerClassNames) {
 					listenersList.add((ModelListener<SVNRevision>)InstanceFactory.newInstance(
-							listenerClassName));
+							getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
@@ -2195,36 +2257,14 @@ public class SVNRevisionPersistenceImpl extends BasePersistenceImpl<SVNRevision>
 	public void destroy() {
 		EntityCacheUtil.removeCache(SVNRevisionImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = JIRAActionPersistence.class)
-	protected JIRAActionPersistence jiraActionPersistence;
-	@BeanReference(type = JIRAChangeGroupPersistence.class)
-	protected JIRAChangeGroupPersistence jiraChangeGroupPersistence;
-	@BeanReference(type = JIRAChangeItemPersistence.class)
-	protected JIRAChangeItemPersistence jiraChangeItemPersistence;
-	@BeanReference(type = JIRAIssuePersistence.class)
-	protected JIRAIssuePersistence jiraIssuePersistence;
-	@BeanReference(type = SVNRepositoryPersistence.class)
-	protected SVNRepositoryPersistence svnRepositoryPersistence;
-	@BeanReference(type = SVNRevisionPersistence.class)
-	protected SVNRevisionPersistence svnRevisionPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_SVNREVISION = "SELECT svnRevision FROM SVNRevision svnRevision";
 	private static final String _SQL_SELECT_SVNREVISION_WHERE = "SELECT svnRevision FROM SVNRevision svnRevision WHERE ";
 	private static final String _SQL_COUNT_SVNREVISION = "SELECT COUNT(svnRevision) FROM SVNRevision svnRevision";
 	private static final String _SQL_COUNT_SVNREVISION_WHERE = "SELECT COUNT(svnRevision) FROM SVNRevision svnRevision WHERE ";
-	private static final String _FINDER_COLUMN_SVNUSERID_SVNUSERID_1 = "svnRevision.svnUserId IS NULL";
-	private static final String _FINDER_COLUMN_SVNUSERID_SVNUSERID_2 = "svnRevision.svnUserId = ?";
-	private static final String _FINDER_COLUMN_SVNUSERID_SVNUSERID_3 = "(svnRevision.svnUserId IS NULL OR svnRevision.svnUserId = ?)";
-	private static final String _FINDER_COLUMN_SVNREPOSITORYID_SVNREPOSITORYID_2 =
-		"svnRevision.svnRepositoryId = ?";
-	private static final String _FINDER_COLUMN_SVNU_SVNR_SVNUSERID_1 = "svnRevision.svnUserId IS NULL AND ";
-	private static final String _FINDER_COLUMN_SVNU_SVNR_SVNUSERID_2 = "svnRevision.svnUserId = ? AND ";
-	private static final String _FINDER_COLUMN_SVNU_SVNR_SVNUSERID_3 = "(svnRevision.svnUserId IS NULL OR svnRevision.svnUserId = ?) AND ";
-	private static final String _FINDER_COLUMN_SVNU_SVNR_SVNREPOSITORYID_2 = "svnRevision.svnRepositoryId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "svnRevision.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No SVNRevision exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No SVNRevision exists with the key {";

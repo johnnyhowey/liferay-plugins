@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -45,7 +45,9 @@ ServletContext portalServletContext = ServletContextPool.get(portalServletContex
 	title='<%= (wsrpProducer != null) ? wsrpProducer.getName() : "new-producer" %>'
 />
 
-<form action="<portlet:actionURL name="updateWSRPProducer"><portlet:param name="mvcPath" value="/admin/edit_producer.jsp" /><portlet:param name="redirect" value="<%= redirect %>" /></portlet:actionURL>" method="post" name="<portlet:namespace />fm" onSubmit="<portlet:namespace />saveProducer(); return false;">
+<form action="<portlet:actionURL name="updateWSRPProducer" />" method="post" name="<portlet:namespace />fm" onSubmit="<portlet:namespace />saveProducer(); return false;">
+<input name="<portlet:namespace />mvcPath" type="hidden" value="/admin/edit_producer.jsp" />
+<input name="<portlet:namespace />redirect" type="hidden" value="<%= redirect %>" />
 <input name="<portlet:namespace />wsrpProducerId" type="hidden" value="<%= wsrpProducerId %>" />
 <input name="<portlet:namespace />portletIds" type="hidden" value="" />
 
@@ -167,7 +169,7 @@ ServletContext portalServletContext = ServletContextPool.get(portalServletContex
 
 <input type="submit" value="<liferay-ui:message key="save" />" />
 
-<input type="button" value="<liferay-ui:message key="cancel" />" onClick="location.href = '<%= HtmlUtil.escape(PortalUtil.escapeRedirect(redirect)) %>';" />
+<input onClick="location.href = '<%= HtmlUtil.escape(PortalUtil.escapeRedirect(redirect)) %>';" type="button" value="<liferay-ui:message key="cancel" />" />
 
 </form>
 

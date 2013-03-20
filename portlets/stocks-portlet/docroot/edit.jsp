@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -58,7 +58,7 @@ symbolsString = StringUtil.merge(symbols, StringPool.SPACE);
 
 <br /><br />
 
-<input type="button" value="<liferay-ui:message key="save" />" onClick="submitForm(document.<portlet:namespace />fm);" />
+<input onClick="submitForm(document.<portlet:namespace />fm);" type="button" value="<liferay-ui:message key="save" />" />
 
 </form>
 

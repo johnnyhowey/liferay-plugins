@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,26 +19,29 @@
 <%
 KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_ARTICLE);
 
-String[] fileNames = kbArticle.getAttachmentsFileNames();
+List<FileEntry> attachmentsFileEntries = new ArrayList<FileEntry>();
+
+if (kbArticle != null) {
+	attachmentsFileEntries = kbArticle.getAttachmentsFileEntries();
+}
 %>
 
-<c:if test="<%= fileNames.length > 0 %>">
+<c:if test="<%= attachmentsFileEntries.size() > 0 %>">
 	<div class="kb-article-attachments">
 
 		<%
-		for (String fileName : fileNames) {
+		for (FileEntry fileEntry : attachmentsFileEntries) {
 		%>
 
 			<div>
 				<liferay-portlet:resourceURL id="attachment" var="clipURL">
-					<portlet:param name="resourcePrimKey" value="<%= String.valueOf(kbArticle.getResourcePrimKey()) %>" />
-					<portlet:param name="fileName" value="<%= fileName %>" />
+					<portlet:param name="fileEntryId" value="<%= String.valueOf(fileEntry.getFileEntryId()) %>" />
 				</liferay-portlet:resourceURL>
 
 				<liferay-ui:icon
 					image="clip"
 					label="<%= true %>"
-					message='<%= FileUtil.getShortFileName(fileName) + " (" + TextFormatter.formatKB(DLStoreUtil.getFileSize(company.getCompanyId(), CompanyConstants.SYSTEM, fileName), locale) + "k)" %>'
+					message='<%= fileEntry.getTitle() + " (" + TextFormatter.formatStorageSize(fileEntry.getSize(), locale) + ")" %>'
 					method="get"
 					url="<%= clipURL %>"
 				/>

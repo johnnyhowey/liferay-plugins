@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -88,6 +88,7 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long GROUPID_COLUMN_BITMASK = 2L;
 	public static long UUID_COLUMN_BITMASK = 4L;
+	public static long NAME_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.wsrp.model.WSRPProducer"));
 
@@ -103,7 +104,7 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_wsrpProducerId);
+		return _wsrpProducerId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -337,13 +338,12 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 
 	@Override
 	public WSRPProducer toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (WSRPProducer)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (WSRPProducer)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -564,7 +564,7 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 	}
 
 	private static ClassLoader _classLoader = WSRPProducer.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			WSRPProducer.class
 		};
 	private String _uuid;
@@ -582,5 +582,5 @@ public class WSRPProducerModelImpl extends BaseModelImpl<WSRPProducer>
 	private String _version;
 	private String _portletIds;
 	private long _columnBitmask;
-	private WSRPProducer _escapedModelProxy;
+	private WSRPProducer _escapedModel;
 }

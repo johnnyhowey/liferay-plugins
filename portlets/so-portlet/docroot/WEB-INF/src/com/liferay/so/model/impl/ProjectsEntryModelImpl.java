@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -91,6 +91,7 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 				"value.object.column.bitmask.enabled.com.liferay.so.model.ProjectsEntry"),
 			true);
 	public static long USERID_COLUMN_BITMASK = 1L;
+	public static long ENDDATE_COLUMN_BITMASK = 2L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.so.model.ProjectsEntry"));
 
@@ -106,7 +107,7 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_projectsEntryId);
+		return _projectsEntryId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -358,13 +359,12 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 
 	@Override
 	public ProjectsEntry toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (ProjectsEntry)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (ProjectsEntry)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -611,7 +611,7 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 	}
 
 	private static ClassLoader _classLoader = ProjectsEntry.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			ProjectsEntry.class
 		};
 	private long _projectsEntryId;
@@ -629,5 +629,5 @@ public class ProjectsEntryModelImpl extends BaseModelImpl<ProjectsEntry>
 	private Date _endDate;
 	private String _data;
 	private long _columnBitmask;
-	private ProjectsEntry _escapedModelProxy;
+	private ProjectsEntry _escapedModel;
 }

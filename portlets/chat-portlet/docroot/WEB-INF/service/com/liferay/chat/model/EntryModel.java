@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -159,6 +159,20 @@ public interface EntryModel extends BaseModel<Entry> {
 	 */
 	public void setContent(String content);
 
+	/**
+	 * Returns the flag of this entry.
+	 *
+	 * @return the flag of this entry
+	 */
+	public int getFlag();
+
+	/**
+	 * Sets the flag of this entry.
+	 *
+	 * @param flag the flag of this entry
+	 */
+	public void setFlag(int flag);
+
 	public boolean isNew();
 
 	public void setNew(boolean n);
@@ -175,6 +189,10 @@ public interface EntryModel extends BaseModel<Entry> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -186,6 +204,8 @@ public interface EntryModel extends BaseModel<Entry> {
 	public CacheModel<Entry> toCacheModel();
 
 	public Entry toEscapedModel();
+
+	public Entry toUnescapedModel();
 
 	public String toString();
 

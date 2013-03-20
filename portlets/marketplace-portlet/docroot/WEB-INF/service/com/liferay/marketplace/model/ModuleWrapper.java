@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -201,6 +201,16 @@ public class ModuleWrapper implements Module, ModelWrapper<Module> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_module.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_module.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_module.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -227,6 +237,10 @@ public class ModuleWrapper implements Module, ModelWrapper<Module> {
 		return new ModuleWrapper(_module.toEscapedModel());
 	}
 
+	public com.liferay.marketplace.model.Module toUnescapedModel() {
+		return new ModuleWrapper(_module.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _module.toString();
@@ -242,7 +256,7 @@ public class ModuleWrapper implements Module, ModelWrapper<Module> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Module getWrappedModule() {
 		return _module;

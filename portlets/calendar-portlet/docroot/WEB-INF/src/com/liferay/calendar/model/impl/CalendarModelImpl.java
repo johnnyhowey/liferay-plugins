@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -108,6 +108,7 @@ public class CalendarModelImpl extends BaseModelImpl<Calendar>
 	public static long GROUPID_COLUMN_BITMASK = 8L;
 	public static long RESOURCEBLOCKID_COLUMN_BITMASK = 16L;
 	public static long UUID_COLUMN_BITMASK = 32L;
+	public static long NAME_COLUMN_BITMASK = 64L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -175,7 +176,7 @@ public class CalendarModelImpl extends BaseModelImpl<Calendar>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_calendarId);
+		return _calendarId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -701,13 +702,12 @@ public class CalendarModelImpl extends BaseModelImpl<Calendar>
 
 	@Override
 	public Calendar toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Calendar)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Calendar)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -985,7 +985,7 @@ public class CalendarModelImpl extends BaseModelImpl<Calendar>
 	}
 
 	private static ClassLoader _classLoader = Calendar.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Calendar.class
 		};
 	private String _uuid;
@@ -1017,5 +1017,5 @@ public class CalendarModelImpl extends BaseModelImpl<Calendar>
 	private boolean _originalDefaultCalendar;
 	private boolean _setOriginalDefaultCalendar;
 	private long _columnBitmask;
-	private Calendar _escapedModelProxy;
+	private Calendar _escapedModel;
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -91,6 +91,7 @@ public class KaleoTaskModelImpl extends BaseModelImpl<KaleoTask>
 	public static long COMPANYID_COLUMN_BITMASK = 1L;
 	public static long KALEODEFINITIONID_COLUMN_BITMASK = 2L;
 	public static long KALEONODEID_COLUMN_BITMASK = 4L;
+	public static long KALEOTASKID_COLUMN_BITMASK = 8L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.portal.workflow.kaleo.model.KaleoTask"));
 
@@ -106,7 +107,7 @@ public class KaleoTaskModelImpl extends BaseModelImpl<KaleoTask>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_kaleoTaskId);
+		return _kaleoTaskId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -377,13 +378,12 @@ public class KaleoTaskModelImpl extends BaseModelImpl<KaleoTask>
 
 	@Override
 	public KaleoTask toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (KaleoTask)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (KaleoTask)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -626,7 +626,7 @@ public class KaleoTaskModelImpl extends BaseModelImpl<KaleoTask>
 	}
 
 	private static ClassLoader _classLoader = KaleoTask.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			KaleoTask.class
 		};
 	private long _kaleoTaskId;
@@ -648,5 +648,5 @@ public class KaleoTaskModelImpl extends BaseModelImpl<KaleoTask>
 	private String _name;
 	private String _description;
 	private long _columnBitmask;
-	private KaleoTask _escapedModelProxy;
+	private KaleoTask _escapedModel;
 }

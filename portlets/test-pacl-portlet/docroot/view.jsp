@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -480,6 +480,97 @@
 </p>
 
 <liferay-ui:header
+	title="Environment Variables"
+/>
+
+<p>
+	java.home=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				System.getenv("java.home");
+			}
+
+		};
+		%>
+
+	java.io.tmpdir=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				System.getenv("java.io.tmpdir");
+			}
+
+		};
+		%>
+
+	java.vendor=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vendor");
+			}
+
+		};
+		%>
+
+	java.vendor.url=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vendor.url");
+			}
+
+		};
+		%>
+
+	java.vm.specification.name=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vm.specification.name");
+			}
+
+		};
+		%>
+
+	java.vm.vendor=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vm.vendor");
+			}
+
+		};
+		%>
+
+	java.vm.version=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vm.version");
+			}
+
+		};
+		%>
+
+</p>
+
+<liferay-ui:header
 	title="Expando Bridge"
 />
 
@@ -937,6 +1028,61 @@
 </p>
 
 <liferay-ui:header
+	title="Java Security"
+/>
+
+<p>
+	<h3>Crypto</h3>
+</p>
+
+<p>
+	AES Encrypt=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+
+				keyGenerator.init(128);
+
+				SecretKey secretKey = keyGenerator.generateKey();
+
+				Cipher cipher = Cipher.getInstance("AES");
+
+				cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+				String text = "Hello World";
+
+				cipher.doFinal(text.getBytes());
+			}
+		};
+		%>
+
+	HmacMD5=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				Mac mac = Mac.getInstance("HmacMD5");
+
+				String key = "123456789";
+
+				SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "HmacMD5");
+
+				mac.init(secretKeySpec);
+
+				String text = "Hello World";
+
+				mac.doFinal(text.getBytes());
+			}
+		};
+		%>
+
+</p>
+
+<liferay-ui:header
 	title="JNDI"
 />
 
@@ -1281,6 +1427,18 @@
 </p>
 
 <p>
+	ObjectMapper=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				new ObjectMapper();
+			}
+
+		};
+		%>
+
 	TestPACLUtil.class#TEST_FIELD=
 
 		<%
@@ -1324,6 +1482,61 @@
 
 		};
 		%>
+
+</p>
+
+<liferay-ui:header
+	title="Search Container"
+/>
+
+<p>
+
+	<%
+	List<Foo> foos = new ArrayList<Foo>();
+
+	foos.add(new FooImpl(1, "Class Loader"));
+	foos.add(new FooImpl(2, "Reflection"));
+	%>
+
+	<liferay-util:buffer var="searchContainerHTML">
+		<liferay-ui:search-container
+			headerNames="Check,Result"
+		>
+			<liferay-ui:search-container-results
+				results="<%= foos %>"
+				total="1"
+			/>
+
+			<liferay-ui:search-container-row
+				className="com.liferay.testpacl.model.Foo"
+				keyProperty="fooId"
+				modelVar="foo"
+			>
+
+				<liferay-ui:search-container-column-text
+					name="Check"
+					value="<%= foo.getField1() %>"
+				/>
+
+				<liferay-ui:search-container-column-text
+					name="Result"
+					value="PASSED"
+				/>
+
+			</liferay-ui:search-container-row>
+
+			<liferay-ui:search-iterator />
+		</liferay-ui:search-container>
+	</liferay-util:buffer>
+
+	<%
+	if (searchContainerHTML.replaceAll("\\s*", "").isEmpty()) {
+		out.write("FAILED");
+	}
+	else {
+		out.write(searchContainerHTML);
+	}
+	%>
 
 </p>
 

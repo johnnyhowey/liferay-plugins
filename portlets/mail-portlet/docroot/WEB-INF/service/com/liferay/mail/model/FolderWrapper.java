@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -373,6 +373,16 @@ public class FolderWrapper implements Folder, ModelWrapper<Folder> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_folder.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_folder.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_folder.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -399,6 +409,10 @@ public class FolderWrapper implements Folder, ModelWrapper<Folder> {
 		return new FolderWrapper(_folder.toEscapedModel());
 	}
 
+	public com.liferay.mail.model.Folder toUnescapedModel() {
+		return new FolderWrapper(_folder.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _folder.toString();
@@ -414,7 +428,7 @@ public class FolderWrapper implements Folder, ModelWrapper<Folder> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Folder getWrappedFolder() {
 		return _folder;

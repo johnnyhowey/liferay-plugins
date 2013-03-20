@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -590,6 +590,16 @@ public class KaleoDefinitionWrapper implements KaleoDefinition,
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_kaleoDefinition.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_kaleoDefinition.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_kaleoDefinition.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -623,6 +633,10 @@ public class KaleoDefinitionWrapper implements KaleoDefinition,
 		return new KaleoDefinitionWrapper(_kaleoDefinition.toEscapedModel());
 	}
 
+	public com.liferay.portal.workflow.kaleo.model.KaleoDefinition toUnescapedModel() {
+		return new KaleoDefinitionWrapper(_kaleoDefinition.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _kaleoDefinition.toString();
@@ -649,7 +663,7 @@ public class KaleoDefinitionWrapper implements KaleoDefinition,
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public KaleoDefinition getWrappedKaleoDefinition() {
 		return _kaleoDefinition;

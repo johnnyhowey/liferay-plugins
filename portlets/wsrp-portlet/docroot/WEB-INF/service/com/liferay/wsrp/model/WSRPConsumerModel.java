@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -221,6 +221,36 @@ public interface WSRPConsumerModel extends BaseModel<WSRPConsumer> {
 	 */
 	public void setForwardCookies(String forwardCookies);
 
+	/**
+	 * Returns the forward headers of this w s r p consumer.
+	 *
+	 * @return the forward headers of this w s r p consumer
+	 */
+	@AutoEscape
+	public String getForwardHeaders();
+
+	/**
+	 * Sets the forward headers of this w s r p consumer.
+	 *
+	 * @param forwardHeaders the forward headers of this w s r p consumer
+	 */
+	public void setForwardHeaders(String forwardHeaders);
+
+	/**
+	 * Returns the markup character sets of this w s r p consumer.
+	 *
+	 * @return the markup character sets of this w s r p consumer
+	 */
+	@AutoEscape
+	public String getMarkupCharacterSets();
+
+	/**
+	 * Sets the markup character sets of this w s r p consumer.
+	 *
+	 * @param markupCharacterSets the markup character sets of this w s r p consumer
+	 */
+	public void setMarkupCharacterSets(String markupCharacterSets);
+
 	public boolean isNew();
 
 	public void setNew(boolean n);
@@ -237,6 +267,10 @@ public interface WSRPConsumerModel extends BaseModel<WSRPConsumer> {
 
 	public ExpandoBridge getExpandoBridge();
 
+	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
+
+	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
+
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
 	public Object clone();
@@ -248,6 +282,8 @@ public interface WSRPConsumerModel extends BaseModel<WSRPConsumer> {
 	public CacheModel<WSRPConsumer> toCacheModel();
 
 	public WSRPConsumer toEscapedModel();
+
+	public WSRPConsumer toUnescapedModel();
 
 	public String toString();
 

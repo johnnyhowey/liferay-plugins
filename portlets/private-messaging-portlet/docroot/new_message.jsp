@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -20,6 +20,8 @@
 <%@ include file="/init.jsp" %>
 
 <%
+String redirect = ParamUtil.getString(request, "redirect");
+
 long mbThreadId = ParamUtil.getLong(request, "mbThreadId");
 
 String subject = StringPool.BLANK;
@@ -61,15 +63,12 @@ to = sb.toString() + to;
 
 <div id="<portlet:namespace />messageContainer"></div>
 
-<portlet:renderURL var="backURL" windowState="<%= WindowState.NORMAL.toString() %>" />
-
 <liferay-portlet:actionURL name="sendMessage" var="sendMessageURL">
-	<portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" />
+	<portlet:param name="redirect" value="<%= redirect %>" />
 </liferay-portlet:actionURL>
 
 <aui:layout cssClass="message-body-container">
 	<aui:form action="<%= sendMessageURL %>" enctype="multipart/form-data" method="post" name="fm" onSubmit="event.preventDefault();">
-		<aui:input name="redirect" type="hidden" value="<%= backURL %>" />
 		<aui:input name="userId" type="hidden" value="<%= user.getUserId() %>" />
 		<aui:input name="mbThreadId" type="hidden" value="<%= mbThreadId %>" />
 
@@ -142,7 +141,7 @@ to = sb.toString() + to;
 			var loadingMask = new A.LoadingMask(
 				{
 					'strings.loading': '<%= UnicodeLanguageUtil.get(pageContext, "sending-message") %>',
-					target: A.one('.private-messaging-portlet .aui-dialog-bd')
+					target: A.one('.private-messaging-portlet .message-body-container')
 				}
 			);
 
@@ -151,22 +150,15 @@ to = sb.toString() + to;
 			A.io.request(
 				'<liferay-portlet:resourceURL id="checkData"><liferay-portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" /></liferay-portlet:resourceURL>',
 				{
-					dataType: 'json',
-					form: {
-						id: form.getDOM(),
-						upload: true
-					},
-					on: {
-						complete: function(event, id, xhr) {
-							var responseText = xhr.responseText;
+					after: {
+						success: function(event, id, obj) {
+							var responseData = this.get('responseData');
 
-							var data = A.JSON.parse(responseText);
-
-							if (data.success) {
+							if (responseData.success) {
 								submitForm(document.<portlet:namespace />fm);
 							}
 							else {
-								<portlet:namespace />showMessage('<span class="portlet-msg-error">' + data.message + '</span>');
+								<portlet:namespace />showMessage('<span class="portlet-msg-error">' + responseData.message + '</span>');
 
 								loadingMask.hide();
 							}
@@ -176,6 +168,10 @@ to = sb.toString() + to;
 
 							loadingMask.hide();
 						}
+					},
+					dataType: 'json',
+					form: {
+						id: form.getDOM()
 					}
 				}
 			);

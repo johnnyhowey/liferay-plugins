@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,15 +41,23 @@ public class CalendarResourceImpl extends CalendarResourceBaseImpl {
 	public Calendar getDefaultCalendar() throws SystemException {
 		List<Calendar> calendars =
 			CalendarLocalServiceUtil.getCalendarResourceCalendars(
-					getGroupId(), getCalendarResourceId(), true);
+				getGroupId(), getCalendarResourceId(), true);
 
-		return calendars.get(0);
+		if (!calendars.isEmpty()) {
+			return calendars.get(0);
+		}
+
+		return null;
 	}
 
 	public long getDefaultCalendarId() throws SystemException {
 		Calendar calendar = getDefaultCalendar();
 
-		return calendar.getCalendarId();
+		if (calendar != null) {
+			return calendar.getCalendarId();
+		}
+
+		return 0;
 	}
 
 	public boolean isGlobal() {

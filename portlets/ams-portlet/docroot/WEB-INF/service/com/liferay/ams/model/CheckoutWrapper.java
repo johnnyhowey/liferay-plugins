@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -372,6 +372,16 @@ public class CheckoutWrapper implements Checkout, ModelWrapper<Checkout> {
 	}
 
 	public void setExpandoBridgeAttributes(
+		com.liferay.portal.model.BaseModel<?> baseModel) {
+		_checkout.setExpandoBridgeAttributes(baseModel);
+	}
+
+	public void setExpandoBridgeAttributes(
+		com.liferay.portlet.expando.model.ExpandoBridge expandoBridge) {
+		_checkout.setExpandoBridgeAttributes(expandoBridge);
+	}
+
+	public void setExpandoBridgeAttributes(
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		_checkout.setExpandoBridgeAttributes(serviceContext);
 	}
@@ -398,6 +408,10 @@ public class CheckoutWrapper implements Checkout, ModelWrapper<Checkout> {
 		return new CheckoutWrapper(_checkout.toEscapedModel());
 	}
 
+	public com.liferay.ams.model.Checkout toUnescapedModel() {
+		return new CheckoutWrapper(_checkout.toUnescapedModel());
+	}
+
 	@Override
 	public java.lang.String toString() {
 		return _checkout.toString();
@@ -413,7 +427,7 @@ public class CheckoutWrapper implements Checkout, ModelWrapper<Checkout> {
 	}
 
 	/**
-	 * @deprecated Renamed to {@link #getWrappedModel}
+	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedModel}
 	 */
 	public Checkout getWrappedCheckout() {
 		return _checkout;

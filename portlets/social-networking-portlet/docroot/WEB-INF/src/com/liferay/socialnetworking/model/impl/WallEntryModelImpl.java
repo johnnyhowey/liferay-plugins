@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -89,6 +89,7 @@ public class WallEntryModelImpl extends BaseModelImpl<WallEntry>
 			true);
 	public static long GROUPID_COLUMN_BITMASK = 1L;
 	public static long USERID_COLUMN_BITMASK = 2L;
+	public static long CREATEDATE_COLUMN_BITMASK = 4L;
 	public static final long LOCK_EXPIRATION_TIME = GetterUtil.getLong(com.liferay.util.service.ServiceProps.get(
 				"lock.expiration.time.com.liferay.socialnetworking.model.WallEntry"));
 
@@ -104,7 +105,7 @@ public class WallEntryModelImpl extends BaseModelImpl<WallEntry>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_wallEntryId);
+		return _wallEntryId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -313,13 +314,12 @@ public class WallEntryModelImpl extends BaseModelImpl<WallEntry>
 
 	@Override
 	public WallEntry toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (WallEntry)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (WallEntry)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -519,7 +519,7 @@ public class WallEntryModelImpl extends BaseModelImpl<WallEntry>
 	}
 
 	private static ClassLoader _classLoader = WallEntry.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			WallEntry.class
 		};
 	private long _wallEntryId;
@@ -536,5 +536,5 @@ public class WallEntryModelImpl extends BaseModelImpl<WallEntry>
 	private Date _modifiedDate;
 	private String _comments;
 	private long _columnBitmask;
-	private WallEntry _escapedModelProxy;
+	private WallEntry _escapedModel;
 }

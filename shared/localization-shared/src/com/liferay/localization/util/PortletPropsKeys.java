@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,6 +18,12 @@ package com.liferay.localization.util;
  * @author Brian Wing Shun Chan
  */
 public interface PortletPropsKeys {
+
+	public static final String COMPANY_DEFAULT_LOCALE =
+		"company.default.locale";
+
+	public static final String COMPANY_DEFAULT_TIME_ZONE =
+		"company.default.time.zone";
 
 	public static final String LANGUAGE_IDS = "language.ids";
 

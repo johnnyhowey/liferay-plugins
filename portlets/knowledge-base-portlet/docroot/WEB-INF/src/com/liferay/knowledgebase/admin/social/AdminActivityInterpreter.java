@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -127,7 +127,7 @@ public class AdminActivityInterpreter extends BaseSocialActivityInterpreter {
 			}
 		}
 
-		String articleTitle = getValue(
+		String articleTitle = getJSONValue(
 			activity.getExtraData(), "title", kbArticle.getTitle());
 
 		Object[] titleArguments = {
@@ -210,11 +210,11 @@ public class AdminActivityInterpreter extends BaseSocialActivityInterpreter {
 		String entityTitle = null;
 
 		if (kbArticle != null) {
-			entityTitle = getValue(
+			entityTitle = getJSONValue(
 				activity.getExtraData(), "title", kbArticle.getTitle());
 		}
 		else if (kbTemplate != null) {
-			entityTitle = getValue(
+			entityTitle = getJSONValue(
 				activity.getExtraData(), "title", kbTemplate.getTitle());
 		}
 
@@ -284,7 +284,7 @@ public class AdminActivityInterpreter extends BaseSocialActivityInterpreter {
 			}
 		}
 
-		String articleTitle = getValue(
+		String articleTitle = getJSONValue(
 			activity.getExtraData(), "title", kbTemplate.getTitle());
 
 		Object[] titleArguments = {creatorUserName, articleTitle, groupName};

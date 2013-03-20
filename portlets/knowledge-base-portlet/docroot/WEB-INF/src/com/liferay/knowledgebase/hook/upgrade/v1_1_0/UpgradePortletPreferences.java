@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -71,9 +71,8 @@ public class UpgradePortletPreferences
 			String portletId, String xml)
 		throws Exception {
 
-		PortletPreferences preferences =
-			PortletPreferencesFactoryUtil.fromXML(
-				companyId, ownerId, ownerType, plid, portletId, xml);
+		PortletPreferences preferences = PortletPreferencesFactoryUtil.fromXML(
+			companyId, ownerId, ownerType, plid, portletId, xml);
 
 		Map<String, String[]> preferencesMap = preferences.getMap();
 
@@ -118,7 +117,7 @@ public class UpgradePortletPreferences
 
 	private static final String[] _PORTLET_IDS = new String[] {
 		"1_WAR_knowledgebaseportlet", "2_WAR_knowledgebaseportlet",
-		"%3_WAR_knowledgebaseportlet_INSTANCE_%"
+		"3_WAR_knowledgebaseportlet_INSTANCE_%"
 	};
 
 	private static Map<String, String> _adminDefaultPreferencesMap;

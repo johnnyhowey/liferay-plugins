@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -18,7 +18,6 @@
 package com.liferay.so.hook.listeners;
 
 import com.liferay.portal.ModelListenerException;
-import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.model.BaseModelListener;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
@@ -28,7 +27,7 @@ import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portlet.expando.model.ExpandoBridge;
+import com.liferay.so.service.SocialOfficeServiceUtil;
 import com.liferay.so.util.LayoutSetPrototypeUtil;
 import com.liferay.so.util.RoleConstants;
 import com.liferay.so.util.SocialOfficeConstants;
@@ -86,12 +85,9 @@ public class RoleListener extends BaseModelListener<Role> {
 			for (User user : users) {
 				Group userGroup = user.getGroup();
 
-				ExpandoBridge expandoBridge = userGroup.getExpandoBridge();
+				if (SocialOfficeServiceUtil.isSocialOfficeGroup(
+						userGroup.getGroupId())) {
 
-				boolean socialOfficeEnabled = GetterUtil.getBoolean(
-					expandoBridge.getAttribute("socialOfficeEnabled"));
-
-				if (socialOfficeEnabled) {
 					continue;
 				}
 
@@ -156,12 +152,9 @@ public class RoleListener extends BaseModelListener<Role> {
 			for (User user : users) {
 				Group userGroup = user.getGroup();
 
-				ExpandoBridge expandoBridge = userGroup.getExpandoBridge();
+				if (!SocialOfficeServiceUtil.isSocialOfficeGroup(
+						userGroup.getGroupId())) {
 
-				boolean socialOfficeEnabled = GetterUtil.getBoolean(
-					expandoBridge.getAttribute("socialOfficeEnabled"));
-
-				if (!socialOfficeEnabled) {
 					continue;
 				}
 

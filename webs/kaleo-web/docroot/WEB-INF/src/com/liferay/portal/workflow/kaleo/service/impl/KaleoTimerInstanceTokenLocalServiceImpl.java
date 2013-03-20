@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -111,8 +111,7 @@ public class KaleoTimerInstanceTokenLocalServiceImpl
 		kaleoTimerInstanceToken.setWorkflowContext(
 			WorkflowContextUtil.convert(workflowContext));
 
-		kaleoTimerInstanceTokenPersistence.update(
-			kaleoTimerInstanceToken, false);
+		kaleoTimerInstanceTokenPersistence.update(kaleoTimerInstanceToken);
 
 		scheduleTimer(kaleoTimerInstanceToken, kaleoTimer);
 
@@ -162,8 +161,7 @@ public class KaleoTimerInstanceTokenLocalServiceImpl
 		kaleoTimerInstanceToken.setCompleted(true);
 		kaleoTimerInstanceToken.setCompletionDate(new Date());
 
-		kaleoTimerInstanceTokenPersistence.update(
-			kaleoTimerInstanceToken, false);
+		kaleoTimerInstanceTokenPersistence.update(kaleoTimerInstanceToken);
 
 		deleteScheduledTimer(kaleoTimerInstanceToken);
 

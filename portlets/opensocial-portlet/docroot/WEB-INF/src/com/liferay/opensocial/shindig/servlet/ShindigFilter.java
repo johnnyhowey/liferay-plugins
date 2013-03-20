@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,6 +16,7 @@ package com.liferay.opensocial.shindig.servlet;
 
 import com.google.inject.Injector;
 
+import com.liferay.opensocial.shindig.util.HttpServletRequestThreadLocal;
 import com.liferay.opensocial.shindig.util.ShindigUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -65,9 +66,9 @@ public class ShindigFilter extends InjectedFilter {
 			FilterChain filterChain)
 		throws IOException, ServletException {
 
-		if (injector == null) {
-			HttpServletRequest request = (HttpServletRequest)servletRequest;
+		HttpServletRequest request = (HttpServletRequest)servletRequest;
 
+		if (injector == null) {
 			HttpSession session = request.getSession();
 
 			_init(session.getServletContext());
@@ -87,7 +88,14 @@ public class ShindigFilter extends InjectedFilter {
 
 		ShindigUtil.setHost(host);
 
-		filterChain.doFilter(servletRequest, servletResponse);
+		HttpServletRequestThreadLocal.setHttpServletRequest(request);
+
+		try {
+			filterChain.doFilter(servletRequest, servletResponse);
+		}
+		finally {
+			HttpServletRequestThreadLocal.setHttpServletRequest(null);
+		}
 	}
 
 	@Override

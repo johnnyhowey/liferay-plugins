@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -98,7 +98,7 @@ public class TasksPortlet extends MVCPortlet {
 		}
 
 		if (SessionErrors.isEmpty(actionRequest)) {
-			SessionMessages.add(actionRequest, "request_processed");
+			SessionMessages.add(actionRequest, "requestProcessed");
 		}
 
 		String actionName = ParamUtil.getString(
@@ -184,7 +184,7 @@ public class TasksPortlet extends MVCPortlet {
 			dueDateHour += 12;
 		}
 
-		boolean neverDue = ParamUtil.getBoolean(actionRequest, "neverDue");
+		boolean addDueDate = ParamUtil.getBoolean(actionRequest, "addDueDate");
 		int status = ParamUtil.getInteger(actionRequest, "status");
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
@@ -196,14 +196,14 @@ public class TasksPortlet extends MVCPortlet {
 			if (tasksEntryId <= 0) {
 				taskEntry = TasksEntryServiceUtil.addTasksEntry(
 					title, priority, assigneeUserId, dueDateMonth, dueDateDay,
-					dueDateYear, dueDateHour, dueDateMinute, neverDue,
+					dueDateYear, dueDateHour, dueDateMinute, addDueDate,
 					serviceContext);
 			}
 			else {
 				taskEntry = TasksEntryServiceUtil.updateTasksEntry(
 					tasksEntryId, title, priority, assigneeUserId,
 					resolverUserId, dueDateMonth, dueDateDay, dueDateYear,
-					dueDateHour, dueDateMinute, neverDue, status,
+					dueDateHour, dueDateMinute, addDueDate, status,
 					serviceContext);
 			}
 

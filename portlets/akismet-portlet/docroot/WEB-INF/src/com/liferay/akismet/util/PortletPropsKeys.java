@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,5 +35,8 @@ public interface PortletPropsKeys {
 
 	public static final String AKISMET_RETAIN_SPAM_TIME =
 		"akismet.retain.spam.time";
+
+	public static final String AKISMET_WIKI_CHECK_ENABLED =
+		"akismet.wiki.check.enabled";
 
 }

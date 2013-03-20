@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,8 +14,6 @@
 
 package com.liferay.wsrp.service.persistence;
 
-import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -35,12 +33,11 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.UserPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
 
 import com.liferay.wsrp.NoSuchConsumerException;
@@ -78,64 +75,6 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			WSRPConsumerModelImpl.UUID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			WSRPConsumerModelImpl.UUID_COLUMN_BITMASK |
-			WSRPConsumerModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
-		new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
-			new String[] { Long.class.getName() },
-			WSRPConsumerModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
-			new String[] { Long.class.getName() });
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
 			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -145,410 +84,25 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
 			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the w s r p consumer in the entity cache if it is enabled.
-	 *
-	 * @param wsrpConsumer the w s r p consumer
-	 */
-	public void cacheResult(WSRPConsumer wsrpConsumer) {
-		EntityCacheUtil.putResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey(), wsrpConsumer);
-
-		wsrpConsumer.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the w s r p consumers in the entity cache if it is enabled.
-	 *
-	 * @param wsrpConsumers the w s r p consumers
-	 */
-	public void cacheResult(List<WSRPConsumer> wsrpConsumers) {
-		for (WSRPConsumer wsrpConsumer : wsrpConsumers) {
-			if (EntityCacheUtil.getResult(
-						WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-						WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey()) == null) {
-				cacheResult(wsrpConsumer);
-			}
-			else {
-				wsrpConsumer.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all w s r p consumers.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(WSRPConsumerImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(WSRPConsumerImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the w s r p consumer.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(WSRPConsumer wsrpConsumer) {
-		EntityCacheUtil.removeResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	@Override
-	public void clearCache(List<WSRPConsumer> wsrpConsumers) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (WSRPConsumer wsrpConsumer : wsrpConsumers) {
-			EntityCacheUtil.removeResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-				WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey());
-		}
-	}
-
-	/**
-	 * Creates a new w s r p consumer with the primary key. Does not add the w s r p consumer to the database.
-	 *
-	 * @param wsrpConsumerId the primary key for the new w s r p consumer
-	 * @return the new w s r p consumer
-	 */
-	public WSRPConsumer create(long wsrpConsumerId) {
-		WSRPConsumer wsrpConsumer = new WSRPConsumerImpl();
-
-		wsrpConsumer.setNew(true);
-		wsrpConsumer.setPrimaryKey(wsrpConsumerId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		wsrpConsumer.setUuid(uuid);
-
-		return wsrpConsumer;
-	}
-
-	/**
-	 * Removes the w s r p consumer with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param wsrpConsumerId the primary key of the w s r p consumer
-	 * @return the w s r p consumer that was removed
-	 * @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WSRPConsumer remove(long wsrpConsumerId)
-		throws NoSuchConsumerException, SystemException {
-		return remove(Long.valueOf(wsrpConsumerId));
-	}
-
-	/**
-	 * Removes the w s r p consumer with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the w s r p consumer
-	 * @return the w s r p consumer that was removed
-	 * @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public WSRPConsumer remove(Serializable primaryKey)
-		throws NoSuchConsumerException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			WSRPConsumer wsrpConsumer = (WSRPConsumer)session.get(WSRPConsumerImpl.class,
-					primaryKey);
-
-			if (wsrpConsumer == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchConsumerException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(wsrpConsumer);
-		}
-		catch (NoSuchConsumerException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected WSRPConsumer removeImpl(WSRPConsumer wsrpConsumer)
-		throws SystemException {
-		wsrpConsumer = toUnwrappedModel(wsrpConsumer);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.delete(session, wsrpConsumer);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		clearCache(wsrpConsumer);
-
-		return wsrpConsumer;
-	}
-
-	@Override
-	public WSRPConsumer updateImpl(
-		com.liferay.wsrp.model.WSRPConsumer wsrpConsumer, boolean merge)
-		throws SystemException {
-		wsrpConsumer = toUnwrappedModel(wsrpConsumer);
-
-		boolean isNew = wsrpConsumer.isNew();
-
-		WSRPConsumerModelImpl wsrpConsumerModelImpl = (WSRPConsumerModelImpl)wsrpConsumer;
-
-		if (Validator.isNull(wsrpConsumer.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			wsrpConsumer.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.update(session, wsrpConsumer, merge);
-
-			wsrpConsumer.setNew(false);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !WSRPConsumerModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((wsrpConsumerModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						wsrpConsumerModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { wsrpConsumerModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((wsrpConsumerModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						wsrpConsumerModelImpl.getOriginalUuid(),
-						Long.valueOf(wsrpConsumerModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						wsrpConsumerModelImpl.getUuid(),
-						Long.valueOf(wsrpConsumerModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((wsrpConsumerModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(wsrpConsumerModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(wsrpConsumerModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-			WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey(), wsrpConsumer);
-
-		return wsrpConsumer;
-	}
-
-	protected WSRPConsumer toUnwrappedModel(WSRPConsumer wsrpConsumer) {
-		if (wsrpConsumer instanceof WSRPConsumerImpl) {
-			return wsrpConsumer;
-		}
-
-		WSRPConsumerImpl wsrpConsumerImpl = new WSRPConsumerImpl();
-
-		wsrpConsumerImpl.setNew(wsrpConsumer.isNew());
-		wsrpConsumerImpl.setPrimaryKey(wsrpConsumer.getPrimaryKey());
-
-		wsrpConsumerImpl.setUuid(wsrpConsumer.getUuid());
-		wsrpConsumerImpl.setWsrpConsumerId(wsrpConsumer.getWsrpConsumerId());
-		wsrpConsumerImpl.setCompanyId(wsrpConsumer.getCompanyId());
-		wsrpConsumerImpl.setCreateDate(wsrpConsumer.getCreateDate());
-		wsrpConsumerImpl.setModifiedDate(wsrpConsumer.getModifiedDate());
-		wsrpConsumerImpl.setName(wsrpConsumer.getName());
-		wsrpConsumerImpl.setUrl(wsrpConsumer.getUrl());
-		wsrpConsumerImpl.setWsdl(wsrpConsumer.getWsdl());
-		wsrpConsumerImpl.setRegistrationContextString(wsrpConsumer.getRegistrationContextString());
-		wsrpConsumerImpl.setRegistrationPropertiesString(wsrpConsumer.getRegistrationPropertiesString());
-		wsrpConsumerImpl.setForwardCookies(wsrpConsumer.getForwardCookies());
-
-		return wsrpConsumerImpl;
-	}
-
-	/**
-	 * Returns the w s r p consumer with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the w s r p consumer
-	 * @return the w s r p consumer
-	 * @throws com.liferay.portal.NoSuchModelException if a w s r p consumer with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public WSRPConsumer findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the w s r p consumer with the primary key or throws a {@link com.liferay.wsrp.NoSuchConsumerException} if it could not be found.
-	 *
-	 * @param wsrpConsumerId the primary key of the w s r p consumer
-	 * @return the w s r p consumer
-	 * @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WSRPConsumer findByPrimaryKey(long wsrpConsumerId)
-		throws NoSuchConsumerException, SystemException {
-		WSRPConsumer wsrpConsumer = fetchByPrimaryKey(wsrpConsumerId);
-
-		if (wsrpConsumer == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + wsrpConsumerId);
-			}
-
-			throw new NoSuchConsumerException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				wsrpConsumerId);
-		}
-
-		return wsrpConsumer;
-	}
-
-	/**
-	 * Returns the w s r p consumer with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the w s r p consumer
-	 * @return the w s r p consumer, or <code>null</code> if a w s r p consumer with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public WSRPConsumer fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the w s r p consumer with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param wsrpConsumerId the primary key of the w s r p consumer
-	 * @return the w s r p consumer, or <code>null</code> if a w s r p consumer with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public WSRPConsumer fetchByPrimaryKey(long wsrpConsumerId)
-		throws SystemException {
-		WSRPConsumer wsrpConsumer = (WSRPConsumer)EntityCacheUtil.getResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-				WSRPConsumerImpl.class, wsrpConsumerId);
-
-		if (wsrpConsumer == _nullWSRPConsumer) {
-			return null;
-		}
-
-		if (wsrpConsumer == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				wsrpConsumer = (WSRPConsumer)session.get(WSRPConsumerImpl.class,
-						Long.valueOf(wsrpConsumerId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (wsrpConsumer != null) {
-					cacheResult(wsrpConsumer);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
-						WSRPConsumerImpl.class, wsrpConsumerId,
-						_nullWSRPConsumer);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return wsrpConsumer;
-	}
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] { String.class.getName() },
+			WSRPConsumerModelImpl.UUID_COLUMN_BITMASK |
+			WSRPConsumerModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the w s r p consumers where uuid = &#63;.
@@ -565,7 +119,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 * Returns a range of all the w s r p consumers where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.wsrp.model.impl.WSRPConsumerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -583,7 +137,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 * Returns an ordered range of all the w s r p consumers where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.wsrp.model.impl.WSRPConsumerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -595,11 +149,13 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 */
 	public List<WSRPConsumer> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -634,24 +190,26 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 			query.append(_SQL_SELECT_WSRPCONSUMER_WHERE);
 
+			boolean bindUuid = false;
+
 			if (uuid == null) {
 				query.append(_FINDER_COLUMN_UUID_UUID_1);
 			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_UUID_3);
+			}
 			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_UUID_2);
 			}
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(WSRPConsumerModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -666,26 +224,33 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (uuid != null) {
+				if (bindUuid) {
 					qPos.add(uuid);
 				}
 
-				list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<WSRPConsumer>(list);
+				}
+				else {
+					list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -849,16 +414,18 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 		query.append(_SQL_SELECT_WSRPCONSUMER_WHERE);
 
+		boolean bindUuid = false;
+
 		if (uuid == null) {
 			query.append(_FINDER_COLUMN_UUID_UUID_1);
 		}
+		else if (uuid.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_UUID_UUID_3);
+		}
 		else {
-			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_UUID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_UUID_UUID_2);
-			}
+			bindUuid = true;
+
+			query.append(_FINDER_COLUMN_UUID_UUID_2);
 		}
 
 		if (orderByComparator != null) {
@@ -916,7 +483,6 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 				}
 			}
 		}
-
 		else {
 			query.append(WSRPConsumerModelImpl.ORDER_BY_JPQL);
 		}
@@ -930,7 +496,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (uuid != null) {
+		if (bindUuid) {
 			qPos.add(uuid);
 		}
 
@@ -953,6 +519,110 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	}
 
 	/**
+	 * Removes all the w s r p consumers where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (WSRPConsumer wsrpConsumer : findByUuid(uuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(wsrpConsumer);
+		}
+	}
+
+	/**
+	 * Returns the number of w s r p consumers where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching w s r p consumers
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_WSRPCONSUMER_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_UUID_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindUuid) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "wsrpConsumer.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "wsrpConsumer.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(wsrpConsumer.uuid IS NULL OR wsrpConsumer.uuid = '')";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			WSRPConsumerModelImpl.UUID_COLUMN_BITMASK |
+			WSRPConsumerModelImpl.COMPANYID_COLUMN_BITMASK |
+			WSRPConsumerModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns all the w s r p consumers where uuid = &#63; and companyId = &#63;.
 	 *
 	 * @param uuid the uuid
@@ -970,7 +640,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 * Returns a range of all the w s r p consumers where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.wsrp.model.impl.WSRPConsumerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -989,7 +659,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 * Returns an ordered range of all the w s r p consumers where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.wsrp.model.impl.WSRPConsumerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -1003,11 +673,13 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	public List<WSRPConsumer> findByUuid_C(String uuid, long companyId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -1047,16 +719,18 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 			query.append(_SQL_SELECT_WSRPCONSUMER_WHERE);
 
+			boolean bindUuid = false;
+
 			if (uuid == null) {
 				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
 			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+			}
 			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
 			}
 
 			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
@@ -1065,8 +739,8 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(WSRPConsumerModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1081,28 +755,35 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (uuid != null) {
+				if (bindUuid) {
 					qPos.add(uuid);
 				}
 
 				qPos.add(companyId);
 
-				list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<WSRPConsumer>(list);
+				}
+				else {
+					list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1280,16 +961,18 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 		query.append(_SQL_SELECT_WSRPCONSUMER_WHERE);
 
+		boolean bindUuid = false;
+
 		if (uuid == null) {
 			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
 		}
+		else if (uuid.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+		}
 		else {
-			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-			}
+			bindUuid = true;
+
+			query.append(_FINDER_COLUMN_UUID_C_UUID_2);
 		}
 
 		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
@@ -1349,7 +1032,6 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 				}
 			}
 		}
-
 		else {
 			query.append(WSRPConsumerModelImpl.ORDER_BY_JPQL);
 		}
@@ -1363,7 +1045,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (uuid != null) {
+		if (bindUuid) {
 			qPos.add(uuid);
 		}
 
@@ -1388,6 +1070,119 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	}
 
 	/**
+	 * Removes all the w s r p consumers where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (WSRPConsumer wsrpConsumer : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(wsrpConsumer);
+		}
+	}
+
+	/**
+	 * Returns the number of w s r p consumers where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching w s r p consumers
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_WSRPCONSUMER_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindUuid) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "wsrpConsumer.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "wsrpConsumer.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(wsrpConsumer.uuid IS NULL OR wsrpConsumer.uuid = '') AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "wsrpConsumer.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByCompanyId",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID =
+		new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, WSRPConsumerImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByCompanyId",
+			new String[] { Long.class.getName() },
+			WSRPConsumerModelImpl.COMPANYID_COLUMN_BITMASK |
+			WSRPConsumerModelImpl.NAME_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_COMPANYID = new FinderPath(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByCompanyId",
+			new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the w s r p consumers where companyId = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -1404,7 +1199,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 * Returns a range of all the w s r p consumers where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.wsrp.model.impl.WSRPConsumerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -1422,7 +1217,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 * Returns an ordered range of all the w s r p consumers where companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.wsrp.model.impl.WSRPConsumerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -1434,11 +1229,13 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 */
 	public List<WSRPConsumer> findByCompanyId(long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID;
 			finderArgs = new Object[] { companyId };
 		}
@@ -1479,8 +1276,8 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(WSRPConsumerModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1497,22 +1294,29 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 				qPos.add(companyId);
 
-				list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
-						start, end);
+				if (!pagination) {
+					list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<WSRPConsumer>(list);
+				}
+				else {
+					list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1736,7 +1540,6 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 				}
 			}
 		}
-
 		else {
 			query.append(WSRPConsumerModelImpl.ORDER_BY_JPQL);
 		}
@@ -1771,6 +1574,489 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	}
 
 	/**
+	 * Removes all the w s r p consumers where companyId = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByCompanyId(long companyId) throws SystemException {
+		for (WSRPConsumer wsrpConsumer : findByCompanyId(companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(wsrpConsumer);
+		}
+	}
+
+	/**
+	 * Returns the number of w s r p consumers where companyId = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @return the number of matching w s r p consumers
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByCompanyId(long companyId) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_COMPANYID;
+
+		Object[] finderArgs = new Object[] { companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_WSRPCONSUMER_WHERE);
+
+			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "wsrpConsumer.companyId = ?";
+
+	/**
+	 * Caches the w s r p consumer in the entity cache if it is enabled.
+	 *
+	 * @param wsrpConsumer the w s r p consumer
+	 */
+	public void cacheResult(WSRPConsumer wsrpConsumer) {
+		EntityCacheUtil.putResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey(), wsrpConsumer);
+
+		wsrpConsumer.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the w s r p consumers in the entity cache if it is enabled.
+	 *
+	 * @param wsrpConsumers the w s r p consumers
+	 */
+	public void cacheResult(List<WSRPConsumer> wsrpConsumers) {
+		for (WSRPConsumer wsrpConsumer : wsrpConsumers) {
+			if (EntityCacheUtil.getResult(
+						WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+						WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey()) == null) {
+				cacheResult(wsrpConsumer);
+			}
+			else {
+				wsrpConsumer.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all w s r p consumers.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(WSRPConsumerImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(WSRPConsumerImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the w s r p consumer.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(WSRPConsumer wsrpConsumer) {
+		EntityCacheUtil.removeResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	@Override
+	public void clearCache(List<WSRPConsumer> wsrpConsumers) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (WSRPConsumer wsrpConsumer : wsrpConsumers) {
+			EntityCacheUtil.removeResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+				WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey());
+		}
+	}
+
+	/**
+	 * Creates a new w s r p consumer with the primary key. Does not add the w s r p consumer to the database.
+	 *
+	 * @param wsrpConsumerId the primary key for the new w s r p consumer
+	 * @return the new w s r p consumer
+	 */
+	public WSRPConsumer create(long wsrpConsumerId) {
+		WSRPConsumer wsrpConsumer = new WSRPConsumerImpl();
+
+		wsrpConsumer.setNew(true);
+		wsrpConsumer.setPrimaryKey(wsrpConsumerId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		wsrpConsumer.setUuid(uuid);
+
+		return wsrpConsumer;
+	}
+
+	/**
+	 * Removes the w s r p consumer with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param wsrpConsumerId the primary key of the w s r p consumer
+	 * @return the w s r p consumer that was removed
+	 * @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WSRPConsumer remove(long wsrpConsumerId)
+		throws NoSuchConsumerException, SystemException {
+		return remove((Serializable)wsrpConsumerId);
+	}
+
+	/**
+	 * Removes the w s r p consumer with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the w s r p consumer
+	 * @return the w s r p consumer that was removed
+	 * @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WSRPConsumer remove(Serializable primaryKey)
+		throws NoSuchConsumerException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			WSRPConsumer wsrpConsumer = (WSRPConsumer)session.get(WSRPConsumerImpl.class,
+					primaryKey);
+
+			if (wsrpConsumer == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchConsumerException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(wsrpConsumer);
+		}
+		catch (NoSuchConsumerException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected WSRPConsumer removeImpl(WSRPConsumer wsrpConsumer)
+		throws SystemException {
+		wsrpConsumer = toUnwrappedModel(wsrpConsumer);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(wsrpConsumer)) {
+				wsrpConsumer = (WSRPConsumer)session.get(WSRPConsumerImpl.class,
+						wsrpConsumer.getPrimaryKeyObj());
+			}
+
+			if (wsrpConsumer != null) {
+				session.delete(wsrpConsumer);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (wsrpConsumer != null) {
+			clearCache(wsrpConsumer);
+		}
+
+		return wsrpConsumer;
+	}
+
+	@Override
+	public WSRPConsumer updateImpl(
+		com.liferay.wsrp.model.WSRPConsumer wsrpConsumer)
+		throws SystemException {
+		wsrpConsumer = toUnwrappedModel(wsrpConsumer);
+
+		boolean isNew = wsrpConsumer.isNew();
+
+		WSRPConsumerModelImpl wsrpConsumerModelImpl = (WSRPConsumerModelImpl)wsrpConsumer;
+
+		if (Validator.isNull(wsrpConsumer.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			wsrpConsumer.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (wsrpConsumer.isNew()) {
+				session.save(wsrpConsumer);
+
+				wsrpConsumer.setNew(false);
+			}
+			else {
+				session.merge(wsrpConsumer);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !WSRPConsumerModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((wsrpConsumerModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						wsrpConsumerModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { wsrpConsumerModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((wsrpConsumerModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						wsrpConsumerModelImpl.getOriginalUuid(),
+						wsrpConsumerModelImpl.getOriginalCompanyId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						wsrpConsumerModelImpl.getUuid(),
+						wsrpConsumerModelImpl.getCompanyId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((wsrpConsumerModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						wsrpConsumerModelImpl.getOriginalCompanyId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+
+				args = new Object[] { wsrpConsumerModelImpl.getCompanyId() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_COMPANYID,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_COMPANYID,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+			WSRPConsumerImpl.class, wsrpConsumer.getPrimaryKey(), wsrpConsumer);
+
+		return wsrpConsumer;
+	}
+
+	protected WSRPConsumer toUnwrappedModel(WSRPConsumer wsrpConsumer) {
+		if (wsrpConsumer instanceof WSRPConsumerImpl) {
+			return wsrpConsumer;
+		}
+
+		WSRPConsumerImpl wsrpConsumerImpl = new WSRPConsumerImpl();
+
+		wsrpConsumerImpl.setNew(wsrpConsumer.isNew());
+		wsrpConsumerImpl.setPrimaryKey(wsrpConsumer.getPrimaryKey());
+
+		wsrpConsumerImpl.setUuid(wsrpConsumer.getUuid());
+		wsrpConsumerImpl.setWsrpConsumerId(wsrpConsumer.getWsrpConsumerId());
+		wsrpConsumerImpl.setCompanyId(wsrpConsumer.getCompanyId());
+		wsrpConsumerImpl.setCreateDate(wsrpConsumer.getCreateDate());
+		wsrpConsumerImpl.setModifiedDate(wsrpConsumer.getModifiedDate());
+		wsrpConsumerImpl.setName(wsrpConsumer.getName());
+		wsrpConsumerImpl.setUrl(wsrpConsumer.getUrl());
+		wsrpConsumerImpl.setWsdl(wsrpConsumer.getWsdl());
+		wsrpConsumerImpl.setRegistrationContextString(wsrpConsumer.getRegistrationContextString());
+		wsrpConsumerImpl.setRegistrationPropertiesString(wsrpConsumer.getRegistrationPropertiesString());
+		wsrpConsumerImpl.setForwardCookies(wsrpConsumer.getForwardCookies());
+		wsrpConsumerImpl.setForwardHeaders(wsrpConsumer.getForwardHeaders());
+		wsrpConsumerImpl.setMarkupCharacterSets(wsrpConsumer.getMarkupCharacterSets());
+
+		return wsrpConsumerImpl;
+	}
+
+	/**
+	 * Returns the w s r p consumer with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the w s r p consumer
+	 * @return the w s r p consumer
+	 * @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WSRPConsumer findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchConsumerException, SystemException {
+		WSRPConsumer wsrpConsumer = fetchByPrimaryKey(primaryKey);
+
+		if (wsrpConsumer == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+			}
+
+			throw new NoSuchConsumerException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				primaryKey);
+		}
+
+		return wsrpConsumer;
+	}
+
+	/**
+	 * Returns the w s r p consumer with the primary key or throws a {@link com.liferay.wsrp.NoSuchConsumerException} if it could not be found.
+	 *
+	 * @param wsrpConsumerId the primary key of the w s r p consumer
+	 * @return the w s r p consumer
+	 * @throws com.liferay.wsrp.NoSuchConsumerException if a w s r p consumer with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WSRPConsumer findByPrimaryKey(long wsrpConsumerId)
+		throws NoSuchConsumerException, SystemException {
+		return findByPrimaryKey((Serializable)wsrpConsumerId);
+	}
+
+	/**
+	 * Returns the w s r p consumer with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the w s r p consumer
+	 * @return the w s r p consumer, or <code>null</code> if a w s r p consumer with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public WSRPConsumer fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		WSRPConsumer wsrpConsumer = (WSRPConsumer)EntityCacheUtil.getResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+				WSRPConsumerImpl.class, primaryKey);
+
+		if (wsrpConsumer == _nullWSRPConsumer) {
+			return null;
+		}
+
+		if (wsrpConsumer == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				wsrpConsumer = (WSRPConsumer)session.get(WSRPConsumerImpl.class,
+						primaryKey);
+
+				if (wsrpConsumer != null) {
+					cacheResult(wsrpConsumer);
+				}
+				else {
+					EntityCacheUtil.putResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+						WSRPConsumerImpl.class, primaryKey, _nullWSRPConsumer);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(WSRPConsumerModelImpl.ENTITY_CACHE_ENABLED,
+					WSRPConsumerImpl.class, primaryKey);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return wsrpConsumer;
+	}
+
+	/**
+	 * Returns the w s r p consumer with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param wsrpConsumerId the primary key of the w s r p consumer
+	 * @return the w s r p consumer, or <code>null</code> if a w s r p consumer with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public WSRPConsumer fetchByPrimaryKey(long wsrpConsumerId)
+		throws SystemException {
+		return fetchByPrimaryKey((Serializable)wsrpConsumerId);
+	}
+
+	/**
 	 * Returns all the w s r p consumers.
 	 *
 	 * @return the w s r p consumers
@@ -1784,7 +2070,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 * Returns a range of all the w s r p consumers.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.wsrp.model.impl.WSRPConsumerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of w s r p consumers
@@ -1801,7 +2087,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 * Returns an ordered range of all the w s r p consumers.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.wsrp.model.impl.WSRPConsumerModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param start the lower bound of the range of w s r p consumers
@@ -1812,11 +2098,13 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	 */
 	public List<WSRPConsumer> findAll(int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
 			finderArgs = FINDER_ARGS_EMPTY;
 		}
@@ -1844,7 +2132,11 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 				sql = query.toString();
 			}
 			else {
-				sql = _SQL_SELECT_WSRPCONSUMER.concat(WSRPConsumerModelImpl.ORDER_BY_JPQL);
+				sql = _SQL_SELECT_WSRPCONSUMER;
+
+				if (pagination) {
+					sql = sql.concat(WSRPConsumerModelImpl.ORDER_BY_JPQL);
+				}
 			}
 
 			Session session = null;
@@ -1854,73 +2146,34 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				if (!pagination) {
 					list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
 							start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<WSRPConsumer>(list);
 				}
 				else {
 					list = (List<WSRPConsumer>)QueryUtil.list(q, getDialect(),
 							start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the w s r p consumers where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (WSRPConsumer wsrpConsumer : findByUuid(uuid)) {
-			remove(wsrpConsumer);
-		}
-	}
-
-	/**
-	 * Removes all the w s r p consumers where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (WSRPConsumer wsrpConsumer : findByUuid_C(uuid, companyId)) {
-			remove(wsrpConsumer);
-		}
-	}
-
-	/**
-	 * Removes all the w s r p consumers where companyId = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByCompanyId(long companyId) throws SystemException {
-		for (WSRPConsumer wsrpConsumer : findByCompanyId(companyId)) {
-			remove(wsrpConsumer);
-		}
 	}
 
 	/**
@@ -1932,195 +2185,6 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 		for (WSRPConsumer wsrpConsumer : findAll()) {
 			remove(wsrpConsumer);
 		}
-	}
-
-	/**
-	 * Returns the number of w s r p consumers where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching w s r p consumers
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_WSRPCONSUMER_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of w s r p consumers where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching w s r p consumers
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_WSRPCONSUMER_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of w s r p consumers where companyId = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @return the number of matching w s r p consumers
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByCompanyId(long companyId) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_COMPANYID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_WSRPCONSUMER_WHERE);
-
-			query.append(_FINDER_COLUMN_COMPANYID_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_COMPANYID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
 	}
 
 	/**
@@ -2142,18 +2206,17 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 				Query q = session.createQuery(_SQL_COUNT_WSRPCONSUMER);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -2175,7 +2238,7 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 
 				for (String listenerClassName : listenerClassNames) {
 					listenersList.add((ModelListener<WSRPConsumer>)InstanceFactory.newInstance(
-							listenerClassName));
+							getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
@@ -2189,29 +2252,14 @@ public class WSRPConsumerPersistenceImpl extends BasePersistenceImpl<WSRPConsume
 	public void destroy() {
 		EntityCacheUtil.removeCache(WSRPConsumerImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = WSRPConsumerPersistence.class)
-	protected WSRPConsumerPersistence wsrpConsumerPersistence;
-	@BeanReference(type = WSRPConsumerPortletPersistence.class)
-	protected WSRPConsumerPortletPersistence wsrpConsumerPortletPersistence;
-	@BeanReference(type = WSRPProducerPersistence.class)
-	protected WSRPProducerPersistence wsrpProducerPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
 	private static final String _SQL_SELECT_WSRPCONSUMER = "SELECT wsrpConsumer FROM WSRPConsumer wsrpConsumer";
 	private static final String _SQL_SELECT_WSRPCONSUMER_WHERE = "SELECT wsrpConsumer FROM WSRPConsumer wsrpConsumer WHERE ";
 	private static final String _SQL_COUNT_WSRPCONSUMER = "SELECT COUNT(wsrpConsumer) FROM WSRPConsumer wsrpConsumer";
 	private static final String _SQL_COUNT_WSRPCONSUMER_WHERE = "SELECT COUNT(wsrpConsumer) FROM WSRPConsumer wsrpConsumer WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "wsrpConsumer.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "wsrpConsumer.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(wsrpConsumer.uuid IS NULL OR wsrpConsumer.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "wsrpConsumer.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "wsrpConsumer.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(wsrpConsumer.uuid IS NULL OR wsrpConsumer.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "wsrpConsumer.companyId = ?";
-	private static final String _FINDER_COLUMN_COMPANYID_COMPANYID_2 = "wsrpConsumer.companyId = ?";
 	private static final String _ORDER_BY_ENTITY_ALIAS = "wsrpConsumer.";
 	private static final String _NO_SUCH_ENTITY_WITH_PRIMARY_KEY = "No WSRPConsumer exists with the primary key ";
 	private static final String _NO_SUCH_ENTITY_WITH_KEY = "No WSRPConsumer exists with the key {";

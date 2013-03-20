@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,13 +18,12 @@ import com.liferay.ams.service.TypeLocalServiceUtil;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class TypeClp extends BaseModelImpl<Type> implements Type {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_typeId);
+		return _typeId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -135,7 +134,7 @@ public class TypeClp extends BaseModelImpl<Type> implements Type {
 
 	@Override
 	public Type toEscapedModel() {
-		return (Type)Proxy.newProxyInstance(Type.class.getClassLoader(),
+		return (Type)ProxyUtil.newProxyInstance(Type.class.getClassLoader(),
 			new Class[] { Type.class }, new AutoEscapeBeanHandler(this));
 	}
 
