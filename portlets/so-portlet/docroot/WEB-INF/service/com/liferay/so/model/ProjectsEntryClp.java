@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -17,6 +17,7 @@ package com.liferay.so.model;
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
@@ -25,8 +26,6 @@ import com.liferay.portal.util.PortalUtil;
 import com.liferay.so.service.ProjectsEntryLocalServiceUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -57,7 +56,7 @@ public class ProjectsEntryClp extends BaseModelImpl<ProjectsEntry>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_projectsEntryId);
+		return _projectsEntryId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -268,7 +267,7 @@ public class ProjectsEntryClp extends BaseModelImpl<ProjectsEntry>
 
 	@Override
 	public ProjectsEntry toEscapedModel() {
-		return (ProjectsEntry)Proxy.newProxyInstance(ProjectsEntry.class.getClassLoader(),
+		return (ProjectsEntry)ProxyUtil.newProxyInstance(ProjectsEntry.class.getClassLoader(),
 			new Class[] { ProjectsEntry.class }, new AutoEscapeBeanHandler(this));
 	}
 

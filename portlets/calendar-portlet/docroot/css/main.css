@@ -1,4 +1,20 @@
-@import "compass/css3";
+@import "compass";
+
+.calendar-portlet {
+	.allday-class-active .lfr-input-time {
+		display: none;
+	}
+
+	.aui-scheduler-view-agenda-info-container {
+		.aui-scheduler-view-agenda-info {
+			line-height: 1.2;
+
+			.aui-scheduler-view-agenda-info-biggie {
+				line-height: 30px;
+			}
+		}
+	}
+}
 
 .calendar-portlet-availability {
 	margin: 0 30px;
@@ -38,6 +54,27 @@
 	}
 }
 
+.aui-scheduler-event-recorder-overlay-header {
+	padding: 5px 25px 5px 10px;
+}
+
+.aui-scheduler-event-recorder-overlay-body select {
+	max-width: 340px;
+	width: 100%;
+}
+
+.aui-scheduler-event-recorder-overlay-content {
+	background: #FAFAFA;
+	border: 1px solid #C4C4C4;
+	outline-width: 0;
+	padding: 7px;
+}
+
+.aui-scheduler-event-recorder-overlay-content:hover {
+	background: #FFC;
+	border-color: #FC0;
+}
+
 .calendar-portlet-event-loading {
 	@include opacity(0.5);
 }
@@ -63,15 +100,20 @@
 .aui-calendar-list-item {
 	color: #222;
 	cursor: pointer;
+	display: block;
 	font-size: 12px;
 	line-height: 20px;
+	overflow: hidden;
 	padding: 0 5px;
 	position: relative;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 }
 
 .aui-calendar-list-item-hover, .aui-calendar-list-item-active {
 	background-color: #DCE3EA;
+
+	@include force-wrap();
 
 	.aui-calendar-list-item-arrow {
 		display: block;
@@ -178,7 +220,6 @@
 .aui-simple-menu-content {
 	background: none repeat scroll 0 0 #FFF;
 	border: 1px solid rgba(0, 0, 0, 0.2);
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 	font-size: 13px;
 	margin: 0;
 	outline: medium none;
@@ -189,7 +230,9 @@
 	color: #333;
 	cursor: pointer;
 	list-style-type: none;
+	overflow: hidden;
 	padding: 6px 7em 6px 30px;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 
 	&:hover {
@@ -242,6 +285,11 @@
 
 .calendar-portlet-recurrence-summary {
 	font-weight: bold;
+	text-transform: capitalize;
+
+	span {
+		text-transform: none;
+	}
 }
 
 .calendar-portlet-recurrence-container {
@@ -259,6 +307,8 @@
 }
 
 .calendar-portlet-field-date {
+	white-space: nowrap;
+
 	.calendar-portlet-field-datepicker {
 		display: inline-block;
 	}
@@ -298,8 +348,6 @@
 	margin: 0;
 }
 
-.yui3-skin-sam .calendar-portlet-mini-calendar {}
-
 .calendar-portlet-confirmation-text {
 	padding: 5px;
 }
@@ -317,7 +365,7 @@
 }
 
 .aui-scheduler-view-day-content .yui3-widget-hd {
-	padding-top: 4px
+	padding-top: 4px;
 }
 
 .aui-scheduler-view-day-header-day a {
@@ -327,7 +375,7 @@
 
 .yui3-skin-sam .calendar-portlet-mini-calendar .yui3-calendar-content {
 	background: #ffffff !important;
-	border: 1px solid #DDD
+	border: 1px solid #DDD;
 }
 
 .aui-dialog-iframe-popup .calendar-portlet .aui-fieldset {
@@ -342,26 +390,72 @@
 	min-height: 52px;
 }
 
-.yui3-skin-sam .yui3-calendar-day.lfr-busy-day {
-	&, &:hover, &.yui3-calendar-day-selected {
-		background: #000;
+.calendar-subscribe-link {
+	background: url(@theme_image_path@/common/rss.png) 8px center no-repeat;
+}
+
+.rss-time-interval {
+	margin-top: -1em;
+	margin-left: 2em;
+}
+
+.yui3-skin-sam {
+	.yui3-calendar-day.lfr-busy-day {
+		background: transparent;
+		position: relative;
+
+		&.yui3-calendar-day-selected {
+			background-color: #B3D4FF;
+		}
+
+		&:hover {
+			background-color: #06C;
+			color: #FFF;
+		}
+	}
+
+	.yui3-calendar-day.lfr-busy-day:after {
+		border-bottom: 7px solid transparent;
+		border-right: 7px solid black;
+		content: '';
+		display: block;
+		height: 0;
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 0;
+	}
+}
+
+.ie6, .ie7 {
+	.yui3-skin-sam .yui3-calendar-day.lfr-busy-day {
+		background: transparent url(../images/lfr-busy-day-arrow.png) right top no-repeat;
 	}
 }
 
 /* --- Extras --- */
 
+.aui-scheduler-event-recorder-overlay-content {
+	@include background-image(linear-gradient(top, #F7F7F7, white));
+	@include border-radius(2px);
+	@include box-shadow(inset 0 1px 2px #ddd);
+	@include transition(background 0.3s ease-in, border-color 0.3s ease-out);
+}
+
 .calendar-portlet-wrapper {
 	@include border-radius(5px);
 }
 
-.calendar-portlet-list-header .aui-calendar-list-item-arrow,
-.aui-calendar-list-item .aui-calendar-list-item-color,
-.aui-calendar-list-item .aui-calendar-list-item-arrow {
+.calendar-portlet-list-header .aui-calendar-list-item-arrow, .aui-calendar-list-item .aui-calendar-list-item-color, .aui-calendar-list-item .aui-calendar-list-item-arrow {
 	@include border-radius(3px);
 }
 
 .aui-calendar-list-item-arrow, .aui-calendar-list-item-color, .aui-simple-color-picker-item {
 	@include border-radius(1px);
+}
+
+.aui-simple-menu-content {
+	@include box-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 .aui-simple-menu-item {
@@ -378,18 +472,4 @@
 
 .aui-simple-color-picker-item:hover, .aui-simple-color-picker-item-selected {
 	@include transition(border-color 0s);
-}
-
-.yui3-skin-sam {
-	.yui3-calendar-day.lfr-busy-day {
-		@include background-image(linear-gradient(225deg, rgb(0, 0, 0) 15%, rgb(255, 255, 255) 0%));
-
-		&:hover {
-			@include background-image(linear-gradient(225deg, rgb(0, 0, 0) 15%, rgb(0, 102, 204) 0%));
-		}
-
-		&.yui3-calendar-day-selected {
-			@include background-image(linear-gradient(225deg, rgb(0, 0, 0) 15%, rgb(179, 215, 255) 0%));
-		}
-	}
 }

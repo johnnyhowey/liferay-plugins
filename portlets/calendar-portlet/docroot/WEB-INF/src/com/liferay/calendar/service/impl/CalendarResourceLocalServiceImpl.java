@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,6 +15,7 @@
 package com.liferay.calendar.service.impl;
 
 import com.liferay.calendar.CalendarResourceCodeException;
+import com.liferay.calendar.CalendarResourceNameException;
 import com.liferay.calendar.DuplicateCalendarResourceException;
 import com.liferay.calendar.model.Calendar;
 import com.liferay.calendar.model.CalendarBooking;
@@ -24,6 +25,8 @@ import com.liferay.calendar.util.PortletPropsValues;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.ContentTypes;
+import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
@@ -50,13 +53,12 @@ public class CalendarResourceLocalServiceImpl
 	public CalendarResource addCalendarResource(
 			long userId, long groupId, String className, long classPK,
 			String classUuid, String code, Map<Locale, String> nameMap,
-			Map<Locale, String> descriptionMap, String type, boolean active,
+			Map<Locale, String> descriptionMap, boolean active,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Calendar resource
 
-		User user = userPersistence.findByPrimaryKey(userId);
 		long calendarResourceId = counterLocalService.increment();
 
 		if (Validator.isNull(className)) {
@@ -66,17 +68,13 @@ public class CalendarResourceLocalServiceImpl
 
 		long classNameId = PortalUtil.getClassNameId(className);
 
-		long globalUserId = 0;
-
 		if (isGlobalResource(classNameId)) {
-			globalUserId = getGlobalResourceUserId(classNameId, classPK);
+			userId = getGlobalResourceUserId(classNameId, classPK);
 
 			groupId = getGlobalResourceGroupId(serviceContext.getCompanyId());
 		}
 
-		if (globalUserId > 0) {
-			userId = globalUserId;
-		}
+		User user = userPersistence.findByPrimaryKey(userId);
 
 		if (PortletPropsValues.CALENDAR_RESOURCE_FORCE_AUTOGENERATE_CODE ||
 			Validator.isNull(code)) {
@@ -90,7 +88,7 @@ public class CalendarResourceLocalServiceImpl
 
 		Date now = new Date();
 
-		validate(groupId, classNameId, classPK, code);
+		validate(groupId, classNameId, classPK, code, nameMap);
 
 		CalendarResource calendarResource = calendarResourcePersistence.create(
 			calendarResourceId);
@@ -115,10 +113,9 @@ public class CalendarResourceLocalServiceImpl
 		calendarResource.setCode(code);
 		calendarResource.setNameMap(nameMap);
 		calendarResource.setDescriptionMap(descriptionMap);
-		calendarResource.setType(type);
 		calendarResource.setActive(active);
 
-		calendarResourcePersistence.update(calendarResource, false);
+		calendarResourcePersistence.update(calendarResource);
 
 		// Resources
 
@@ -133,6 +130,13 @@ public class CalendarResourceLocalServiceImpl
 		calendarLocalService.addCalendar(
 			userId, groupId, calendarResourceId, nameMap, descriptionMap,
 			PortletPropsValues.CALENDAR_COLOR_DEFAULT, true, serviceContext);
+
+		// Asset
+
+		updateAsset(
+			calendarResource.getUserId(), calendarResource,
+			serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames());
 
 		return calendarResource;
 	}
@@ -217,14 +221,14 @@ public class CalendarResourceLocalServiceImpl
 
 	public List<CalendarResource> search(
 			long companyId, long[] groupIds, long[] classNameIds, String code,
-			String name, String description, String type, boolean active,
+			String name, String description, boolean active,
 			boolean andOperator, int start, int end,
 			OrderByComparator orderByComparator)
 		throws SystemException {
 
-		return calendarResourceFinder.findByC_G_C_C_N_D_T_A(
-			companyId, groupIds, classNameIds, code, name, description, type,
-			active, andOperator, start, end, orderByComparator);
+		return calendarResourceFinder.findByC_G_C_C_N_D_A(
+			companyId, groupIds, classNameIds, code, name, description, active,
+			andOperator, start, end, orderByComparator);
 	}
 
 	public List<CalendarResource> searchByKeywords(
@@ -249,22 +253,41 @@ public class CalendarResourceLocalServiceImpl
 
 	public int searchCount(
 			long companyId, long[] groupIds, long[] classNameIds, String code,
-			String name, String description, String type, boolean active,
+			String name, String description, boolean active,
 			boolean andOperator)
 		throws SystemException {
 
-		return calendarResourceFinder.countByC_G_C_C_N_D_T_A(
-			companyId, groupIds, classNameIds, code, name, description, type,
-			active, andOperator);
+		return calendarResourceFinder.countByC_G_C_C_N_D_A(
+			companyId, groupIds, classNameIds, code, name, description, active,
+			andOperator);
+	}
+
+	public void updateAsset(
+			long userId, CalendarResource calendarResource,
+			long[] assetCategoryIds, String[] assetTagNames)
+		throws PortalException, SystemException {
+
+		assetEntryLocalService.updateEntry(
+			userId, calendarResource.getGroupId(),
+			calendarResource.getCreateDate(),
+			calendarResource.getModifiedDate(),
+			CalendarResource.class.getName(),
+			calendarResource.getCalendarResourceId(),
+			calendarResource.getUuid(), 0, assetCategoryIds, assetTagNames,
+			true, null, null, null, ContentTypes.TEXT,
+			calendarResource.getName(), calendarResource.getDescription(), null,
+			null, null, 0, 0, null, false);
 	}
 
 	public CalendarResource updateCalendarResource(
 			long calendarResourceId, Map<Locale, String> nameMap,
-			Map<Locale, String> descriptionMap, String type, boolean active,
+			Map<Locale, String> descriptionMap, boolean active,
 			ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
 		// Calendar resource
+
+		validate(nameMap);
 
 		CalendarResource calendarResource =
 			calendarResourcePersistence.findByPrimaryKey(calendarResourceId);
@@ -272,15 +295,16 @@ public class CalendarResourceLocalServiceImpl
 		calendarResource.setModifiedDate(serviceContext.getModifiedDate(null));
 		calendarResource.setNameMap(nameMap);
 		calendarResource.setDescriptionMap(descriptionMap);
-		calendarResource.setType(type);
 		calendarResource.setActive(active);
 
-		calendarResourcePersistence.update(calendarResource, false);
+		calendarResourcePersistence.update(calendarResource);
 
-		// Resources
+		// Asset
 
-		resourceLocalService.updateModelResources(
-			calendarResource, serviceContext);
+		updateAsset(
+			calendarResource.getUserId(), calendarResource,
+			serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames());
 
 		return calendarResource;
 	}
@@ -330,10 +354,19 @@ public class CalendarResourceLocalServiceImpl
 	}
 
 	protected void validate(
-			long groupId, long classNameId, long classPK, String code)
+			long groupId, long classNameId, long classPK, String code,
+			Map<Locale, String> nameMap)
 		throws PortalException, SystemException {
 
-		validate(groupId, code);
+		validate(nameMap);
+
+		if (Validator.isNull(code) || (code.indexOf(CharPool.SPACE) != -1)) {
+			throw new CalendarResourceCodeException();
+		}
+
+		if (calendarResourcePersistence.countByG_C(groupId, code) > 0) {
+			throw new DuplicateCalendarResourceException();
+		}
 
 		CalendarResource calendarResource =
 			calendarResourcePersistence.fetchByC_C(classNameId, classPK);
@@ -343,15 +376,13 @@ public class CalendarResourceLocalServiceImpl
 		}
 	}
 
-	protected void validate(long groupId, String code)
-		throws PortalException, SystemException {
+	protected void validate(Map<Locale, String> nameMap)
+		throws PortalException {
 
-		if (Validator.isNull(code) || (code.indexOf(CharPool.SPACE) != -1)) {
-			throw new CalendarResourceCodeException();
-		}
+		Locale locale = LocaleUtil.getDefault();
 
-		if (calendarResourcePersistence.countByG_C(groupId, code) > 0) {
-			throw new DuplicateCalendarResourceException();
+		if (nameMap.isEmpty() || Validator.isNull(nameMap.get(locale))) {
+			throw new CalendarResourceNameException();
 		}
 	}
 

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -32,9 +32,9 @@ Group group = themeDisplay.getScopeGroup();
 		PortletURL portletURL = null;
 
 		try {
-			long contactsPlid = PortalUtil.getPlidFromPortletId(group.getGroupId(), false, "1_WAR_contactsportlet");
+			long contactsPlid = PortalUtil.getPlidFromPortletId(group.getGroupId(), false, PortletKeys.CONTACTS_CENTER);
 
-			portletURL = PortletURLFactoryUtil.create(request, "1_WAR_contactsportlet", contactsPlid, PortletRequest.RENDER_PHASE);
+			portletURL = PortletURLFactoryUtil.create(request, PortletKeys.CONTACTS_CENTER, contactsPlid, PortletRequest.RENDER_PHASE);
 		}
 		catch (Exception e){
 			portletURL = renderResponse.createRenderURL();
@@ -48,7 +48,7 @@ Group group = themeDisplay.getScopeGroup();
 		<c:choose>
 			<c:when test="<%= users.isEmpty() %>">
 				<div class="portlet-msg-info">
-					<liferay-ui:message arguments="<%= group.getDescriptiveName(locale) %>" key="x-has-no-contacts" />
+					<liferay-ui:message arguments="<%= HtmlUtil.escape(group.getDescriptiveName(locale)) %>" key="x-has-no-contacts" />
 				</div>
 			</c:when>
 			<c:otherwise>
@@ -81,7 +81,7 @@ Group group = themeDisplay.getScopeGroup();
 					%>
 
 					<c:if test="<%= portletURL != null %>">
-						<a class="lfr-contact-grid-item" href="<%= portletURL %>"><liferay-ui:message arguments="<%= group.getDescriptiveName(locale) %>" key="view-all-x-connections" /></a>
+						<a class="lfr-contact-grid-item" href="<%= portletURL %>"><liferay-ui:message arguments="<%= HtmlUtil.escape(group.getDescriptiveName(locale)) %>" key="view-all-x-connections" /></a>
 					</c:if>
 				</aui:layout>
 			</c:otherwise>

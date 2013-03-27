@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,14 +18,13 @@ import com.liferay.mail.service.FolderLocalServiceUtil;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class FolderClp extends BaseModelImpl<Folder> implements Folder {
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_folderId);
+		return _folderId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -251,7 +250,7 @@ public class FolderClp extends BaseModelImpl<Folder> implements Folder {
 
 	@Override
 	public Folder toEscapedModel() {
-		return (Folder)Proxy.newProxyInstance(Folder.class.getClassLoader(),
+		return (Folder)ProxyUtil.newProxyInstance(Folder.class.getClassLoader(),
 			new Class[] { Folder.class }, new AutoEscapeBeanHandler(this));
 	}
 

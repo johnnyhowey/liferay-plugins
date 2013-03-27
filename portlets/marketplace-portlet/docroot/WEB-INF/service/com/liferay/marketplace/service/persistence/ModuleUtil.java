@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -94,96 +94,18 @@ public class ModuleUtil {
 	}
 
 	/**
-	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, boolean)
+	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel)
 	 */
-	public static Module update(Module module, boolean merge)
+	public static Module update(Module module) throws SystemException {
+		return getPersistence().update(module);
+	}
+
+	/**
+	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, ServiceContext)
+	 */
+	public static Module update(Module module, ServiceContext serviceContext)
 		throws SystemException {
-		return getPersistence().update(module, merge);
-	}
-
-	/**
-	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, boolean, ServiceContext)
-	 */
-	public static Module update(Module module, boolean merge,
-		ServiceContext serviceContext) throws SystemException {
-		return getPersistence().update(module, merge, serviceContext);
-	}
-
-	/**
-	* Caches the module in the entity cache if it is enabled.
-	*
-	* @param module the module
-	*/
-	public static void cacheResult(com.liferay.marketplace.model.Module module) {
-		getPersistence().cacheResult(module);
-	}
-
-	/**
-	* Caches the modules in the entity cache if it is enabled.
-	*
-	* @param modules the modules
-	*/
-	public static void cacheResult(
-		java.util.List<com.liferay.marketplace.model.Module> modules) {
-		getPersistence().cacheResult(modules);
-	}
-
-	/**
-	* Creates a new module with the primary key. Does not add the module to the database.
-	*
-	* @param moduleId the primary key for the new module
-	* @return the new module
-	*/
-	public static com.liferay.marketplace.model.Module create(long moduleId) {
-		return getPersistence().create(moduleId);
-	}
-
-	/**
-	* Removes the module with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param moduleId the primary key of the module
-	* @return the module that was removed
-	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.marketplace.model.Module remove(long moduleId)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().remove(moduleId);
-	}
-
-	public static com.liferay.marketplace.model.Module updateImpl(
-		com.liferay.marketplace.model.Module module, boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(module, merge);
-	}
-
-	/**
-	* Returns the module with the primary key or throws a {@link com.liferay.marketplace.NoSuchModuleException} if it could not be found.
-	*
-	* @param moduleId the primary key of the module
-	* @return the module
-	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.marketplace.model.Module findByPrimaryKey(
-		long moduleId)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().findByPrimaryKey(moduleId);
-	}
-
-	/**
-	* Returns the module with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param moduleId the primary key of the module
-	* @return the module, or <code>null</code> if a module with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.marketplace.model.Module fetchByPrimaryKey(
-		long moduleId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().fetchByPrimaryKey(moduleId);
+		return getPersistence().update(module, serviceContext);
 	}
 
 	/**
@@ -203,7 +125,7 @@ public class ModuleUtil {
 	* Returns a range of all the modules where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -222,7 +144,7 @@ public class ModuleUtil {
 	* Returns an ordered range of all the modules where uuid = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param uuid the uuid
@@ -323,6 +245,29 @@ public class ModuleUtil {
 	}
 
 	/**
+	* Removes all the modules where uuid = &#63; from the database.
+	*
+	* @param uuid the uuid
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByUuid(uuid);
+	}
+
+	/**
+	* Returns the number of modules where uuid = &#63;.
+	*
+	* @param uuid the uuid
+	* @return the number of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByUuid(java.lang.String uuid)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByUuid(uuid);
+	}
+
+	/**
 	* Returns all the modules where appId = &#63;.
 	*
 	* @param appId the app ID
@@ -338,7 +283,7 @@ public class ModuleUtil {
 	* Returns a range of all the modules where appId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param appId the app ID
@@ -357,7 +302,7 @@ public class ModuleUtil {
 	* Returns an ordered range of all the modules where appId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param appId the app ID
@@ -458,6 +403,29 @@ public class ModuleUtil {
 	}
 
 	/**
+	* Removes all the modules where appId = &#63; from the database.
+	*
+	* @param appId the app ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByAppId(long appId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByAppId(appId);
+	}
+
+	/**
+	* Returns the number of modules where appId = &#63;.
+	*
+	* @param appId the app ID
+	* @return the number of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByAppId(long appId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByAppId(appId);
+	}
+
+	/**
 	* Returns all the modules where contextName = &#63;.
 	*
 	* @param contextName the context name
@@ -474,7 +442,7 @@ public class ModuleUtil {
 	* Returns a range of all the modules where contextName = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param contextName the context name
@@ -493,7 +461,7 @@ public class ModuleUtil {
 	* Returns an ordered range of all the modules where contextName = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param contextName the context name
@@ -600,6 +568,29 @@ public class ModuleUtil {
 	}
 
 	/**
+	* Removes all the modules where contextName = &#63; from the database.
+	*
+	* @param contextName the context name
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByContextName(java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByContextName(contextName);
+	}
+
+	/**
+	* Returns the number of modules where contextName = &#63;.
+	*
+	* @param contextName the context name
+	* @return the number of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByContextName(java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByContextName(contextName);
+	}
+
+	/**
 	* Returns the module where appId = &#63; and contextName = &#63; or throws a {@link com.liferay.marketplace.NoSuchModuleException} if it could not be found.
 	*
 	* @param appId the app ID
@@ -645,6 +636,111 @@ public class ModuleUtil {
 	}
 
 	/**
+	* Removes the module where appId = &#63; and contextName = &#63; from the database.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @return the module that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.marketplace.model.Module removeByA_C(long appId,
+		java.lang.String contextName)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().removeByA_C(appId, contextName);
+	}
+
+	/**
+	* Returns the number of modules where appId = &#63; and contextName = &#63;.
+	*
+	* @param appId the app ID
+	* @param contextName the context name
+	* @return the number of matching modules
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByA_C(long appId, java.lang.String contextName)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByA_C(appId, contextName);
+	}
+
+	/**
+	* Caches the module in the entity cache if it is enabled.
+	*
+	* @param module the module
+	*/
+	public static void cacheResult(com.liferay.marketplace.model.Module module) {
+		getPersistence().cacheResult(module);
+	}
+
+	/**
+	* Caches the modules in the entity cache if it is enabled.
+	*
+	* @param modules the modules
+	*/
+	public static void cacheResult(
+		java.util.List<com.liferay.marketplace.model.Module> modules) {
+		getPersistence().cacheResult(modules);
+	}
+
+	/**
+	* Creates a new module with the primary key. Does not add the module to the database.
+	*
+	* @param moduleId the primary key for the new module
+	* @return the new module
+	*/
+	public static com.liferay.marketplace.model.Module create(long moduleId) {
+		return getPersistence().create(moduleId);
+	}
+
+	/**
+	* Removes the module with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param moduleId the primary key of the module
+	* @return the module that was removed
+	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.marketplace.model.Module remove(long moduleId)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().remove(moduleId);
+	}
+
+	public static com.liferay.marketplace.model.Module updateImpl(
+		com.liferay.marketplace.model.Module module)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().updateImpl(module);
+	}
+
+	/**
+	* Returns the module with the primary key or throws a {@link com.liferay.marketplace.NoSuchModuleException} if it could not be found.
+	*
+	* @param moduleId the primary key of the module
+	* @return the module
+	* @throws com.liferay.marketplace.NoSuchModuleException if a module with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.marketplace.model.Module findByPrimaryKey(
+		long moduleId)
+		throws com.liferay.marketplace.NoSuchModuleException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByPrimaryKey(moduleId);
+	}
+
+	/**
+	* Returns the module with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param moduleId the primary key of the module
+	* @return the module, or <code>null</code> if a module with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.marketplace.model.Module fetchByPrimaryKey(
+		long moduleId)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByPrimaryKey(moduleId);
+	}
+
+	/**
 	* Returns all the modules.
 	*
 	* @return the modules
@@ -659,7 +755,7 @@ public class ModuleUtil {
 	* Returns a range of all the modules.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of modules
@@ -677,7 +773,7 @@ public class ModuleUtil {
 	* Returns an ordered range of all the modules.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.marketplace.model.impl.ModuleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of modules
@@ -694,54 +790,6 @@ public class ModuleUtil {
 	}
 
 	/**
-	* Removes all the modules where uuid = &#63; from the database.
-	*
-	* @param uuid the uuid
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByUuid(uuid);
-	}
-
-	/**
-	* Removes all the modules where appId = &#63; from the database.
-	*
-	* @param appId the app ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByAppId(long appId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByAppId(appId);
-	}
-
-	/**
-	* Removes all the modules where contextName = &#63; from the database.
-	*
-	* @param contextName the context name
-	* @throws SystemException if a system exception occurred
-	*/
-	public static void removeByContextName(java.lang.String contextName)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getPersistence().removeByContextName(contextName);
-	}
-
-	/**
-	* Removes the module where appId = &#63; and contextName = &#63; from the database.
-	*
-	* @param appId the app ID
-	* @param contextName the context name
-	* @return the module that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public static com.liferay.marketplace.model.Module removeByA_C(long appId,
-		java.lang.String contextName)
-		throws com.liferay.marketplace.NoSuchModuleException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().removeByA_C(appId, contextName);
-	}
-
-	/**
 	* Removes all the modules from the database.
 	*
 	* @throws SystemException if a system exception occurred
@@ -749,55 +797,6 @@ public class ModuleUtil {
 	public static void removeAll()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		getPersistence().removeAll();
-	}
-
-	/**
-	* Returns the number of modules where uuid = &#63;.
-	*
-	* @param uuid the uuid
-	* @return the number of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByUuid(java.lang.String uuid)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByUuid(uuid);
-	}
-
-	/**
-	* Returns the number of modules where appId = &#63;.
-	*
-	* @param appId the app ID
-	* @return the number of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByAppId(long appId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByAppId(appId);
-	}
-
-	/**
-	* Returns the number of modules where contextName = &#63;.
-	*
-	* @param contextName the context name
-	* @return the number of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByContextName(java.lang.String contextName)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByContextName(contextName);
-	}
-
-	/**
-	* Returns the number of modules where appId = &#63; and contextName = &#63;.
-	*
-	* @param appId the app ID
-	* @param contextName the context name
-	* @return the number of matching modules
-	* @throws SystemException if a system exception occurred
-	*/
-	public static int countByA_C(long appId, java.lang.String contextName)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().countByA_C(appId, contextName);
 	}
 
 	/**
@@ -823,7 +822,7 @@ public class ModuleUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.2.0
 	 */
 	public void setPersistence(ModulePersistence persistence) {
 	}

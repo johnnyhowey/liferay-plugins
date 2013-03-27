@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,14 +18,13 @@ import com.liferay.mail.service.AttachmentLocalServiceUtil;
 
 import com.liferay.portal.kernel.bean.AutoEscapeBeanHandler;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.util.ProxyUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.impl.BaseModelImpl;
 import com.liferay.portal.util.PortalUtil;
 
 import java.io.Serializable;
-
-import java.lang.reflect.Proxy;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +54,7 @@ public class AttachmentClp extends BaseModelImpl<Attachment>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_attachmentId);
+		return _attachmentId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -235,7 +234,7 @@ public class AttachmentClp extends BaseModelImpl<Attachment>
 
 	@Override
 	public Attachment toEscapedModel() {
-		return (Attachment)Proxy.newProxyInstance(Attachment.class.getClassLoader(),
+		return (Attachment)ProxyUtil.newProxyInstance(Attachment.class.getClassLoader(),
 			new Class[] { Attachment.class }, new AutoEscapeBeanHandler(this));
 	}
 

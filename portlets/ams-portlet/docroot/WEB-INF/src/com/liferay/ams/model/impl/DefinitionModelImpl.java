@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -77,6 +77,8 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 		};
 	public static final String TABLE_SQL_CREATE = "create table AMS_Definition (definitionId LONG not null primary key,groupId LONG,companyId LONG,userId LONG,userName VARCHAR(75) null,createDate DATE null,modifiedDate DATE null,typeId LONG,manufacturer VARCHAR(75) null,model VARCHAR(75) null,orderDate DATE null,quantity INTEGER,price DOUBLE)";
 	public static final String TABLE_SQL_DROP = "drop table AMS_Definition";
+	public static final String ORDER_BY_JPQL = " ORDER BY definition.definitionId ASC";
+	public static final String ORDER_BY_SQL = " ORDER BY AMS_Definition.definitionId ASC";
 	public static final String DATA_SOURCE = "liferayDataSource";
 	public static final String SESSION_FACTORY = "liferaySessionFactory";
 	public static final String TX_MANAGER = "liferayTransactionManager";
@@ -102,7 +104,7 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 	}
 
 	public Serializable getPrimaryKeyObj() {
-		return new Long(_definitionId);
+		return _definitionId;
 	}
 
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
@@ -361,13 +363,12 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 
 	@Override
 	public Definition toEscapedModel() {
-		if (_escapedModelProxy == null) {
-			_escapedModelProxy = (Definition)ProxyUtil.newProxyInstance(_classLoader,
-					_escapedModelProxyInterfaces,
-					new AutoEscapeBeanHandler(this));
+		if (_escapedModel == null) {
+			_escapedModel = (Definition)ProxyUtil.newProxyInstance(_classLoader,
+					_escapedModelInterfaces, new AutoEscapeBeanHandler(this));
 		}
 
-		return _escapedModelProxy;
+		return _escapedModel;
 	}
 
 	@Override
@@ -614,7 +615,7 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 	}
 
 	private static ClassLoader _classLoader = Definition.class.getClassLoader();
-	private static Class<?>[] _escapedModelProxyInterfaces = new Class[] {
+	private static Class<?>[] _escapedModelInterfaces = new Class[] {
 			Definition.class
 		};
 	private long _definitionId;
@@ -631,5 +632,5 @@ public class DefinitionModelImpl extends BaseModelImpl<Definition>
 	private Date _orderDate;
 	private int _quantity;
 	private double _price;
-	private Definition _escapedModelProxy;
+	private Definition _escapedModel;
 }

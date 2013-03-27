@@ -144,8 +144,6 @@ AUI().use(
 			instance._panelTitle = options.panelTitle;
 			instance._panelIcon = options.panelIcon;
 
-			instance._created = Liferay.Chat.Util.getCurrentTimestamp();
-
 			var panelHTML = instance._setPanelHTML(options.panelHTML);
 
 			instance.set('panelHTML', panelHTML);
@@ -298,7 +296,6 @@ AUI().use(
 			instance._chatOutput = instance._panel.one('.panel-output');
 			instance._statusMessage = instance._panel.one('.panel-profile');
 
-			instance._created = Liferay.Chat.Util.getCurrentTimestamp();
 			instance._lastMessageTime = 0;
 			instance._lastTypedTime = 0;
 			instance._typingDelay = 5000;
@@ -650,7 +647,6 @@ AUI().use(
 			init: function() {
 				var instance = this;
 
-				instance._closedChats = {};
 				instance._notificationTimeout = 8000;
 				instance._initialRequest = true;
 
@@ -661,8 +657,6 @@ AUI().use(
 				instance._myStatus = instance._chatContainer.one('.status-message');
 				instance._soundContainer = instance._chatContainer.one('.chat-sound');
 				instance._tabsContainer = instance._chatContainer.one('.chat-tabs');
-
-				instance._created = Liferay.Chat.Util.getCurrentTimestamp();
 
 				instance._sendTask = A.debounce(instance.send, 100, instance);
 
@@ -920,14 +914,16 @@ AUI().use(
 					for (var i in entryCache) {
 						var entry = entryCache[i];
 
-						chat.update(
-							{
-								cache: true,
-								content: entry.content,
-								createDate: entry.createDate,
-								incoming: (entry.fromUserId == userId)
-							}
-						);
+						if (entry.flag) {
+							chat.update(
+								{
+									cache: true,
+									content: entry.content,
+									createDate: entry.createDate,
+									incoming: (entry.fromUserId == userId)
+								}
+							);
+						}
 					}
 				}
 
@@ -1004,7 +1000,7 @@ AUI().use(
 				}
 
 				var entryCache = instance._entryCache;
-				var entryIds = instance._entryIds;
+				var entryIds = instance._entryIds.join('|');
 
 				var currentUserId = themeDisplay.getUserId();
 
@@ -1025,21 +1021,14 @@ AUI().use(
 
 					var userEntryCache = entryCache[userId];
 
-					if (entry.content !== '') {
+					var entryProcessed = (entryIds.indexOf('|' + entry.entryId) > -1);
+
+					if (!entryProcessed) {
 						userEntryCache[entry.entryId] = entry;
-						entryIds.push(entry.entryId);
+
+						instance._entryIds.push(entry.entryId);
 					}
 				}
-			},
-
-			_isMessageNew: function(entry, userId) {
-				var instance = this;
-
-				var createDate = entry.createDate;
-				var initDate = instance._created;
-				var closedDate = instance._closedChats[userId] || 0;
-
-				return (createDate > initDate && createDate > closedDate);
 			},
 
 			_onPanelClose: function(event) {
@@ -1054,8 +1043,6 @@ AUI().use(
 				if (panel instanceof Liferay.Chat.Conversation) {
 					delete instance._chatSessions[userId];
 				}
-
-				instance._closedChats[userId] = Liferay.Chat.Util.getCurrentTimestamp();
 
 				instance._activePanelId = '';
 				instance._saveSettings();
@@ -1092,12 +1079,12 @@ AUI().use(
 
 				instance._updateBuddies(response.buddies);
 
-				if (instance._cacheLoaded) {
-					instance._updateConversations(response.entries);
-				}
+				var entries = response.entries;
 
-				if (instance._initialRequest) {
-					instance._loadCache(response.entries);
+				var initialRequest = instance._initialRequest;
+
+				if (initialRequest) {
+					instance._loadCache(entries);
 
 					if (instance._activePanelId.length) {
 						var activePanelId = parseInt(instance._activePanelId, 10);
@@ -1107,9 +1094,10 @@ AUI().use(
 						}
 					}
 
-					instance._cacheLoaded = true;
-					instance._initialRequest = false;
+					instance._chatContainer.one('.chat-tabs > .buddy-list').removeClass('loading');
 				}
+
+				instance._updateConversations(entries);
 			},
 
 			_saveSettings: function() {
@@ -1208,7 +1196,7 @@ AUI().use(
 
 					var entryProcessed = (entryIds.indexOf('|' + entry.entryId) > -1);
 
-					if (!entryProcessed) {
+					if (!entryProcessed || (instance._initialRequest && !entry.flag)) {
 						var userId = entry.toUserId;
 						var incoming = false;
 
@@ -1222,7 +1210,7 @@ AUI().use(
 						if (buddy && incoming) {
 							var chat = instance._chatSessions[userId];
 
-							if (!chat && entry.content && instance._isMessageNew(entry, userId)) {
+							if (!chat && entry.content) {
 								chat = instance._createChatSession(
 									{
 										portraitId: buddy.portraitId,
@@ -1244,11 +1232,15 @@ AUI().use(
 									}
 								);
 							}
+
+							entry.flag = 1;
 						}
 					}
 				}
 
 				instance._loadCache(entries);
+
+				instance._initialRequest = false;
 			},
 
 			_updatePresence: function() {

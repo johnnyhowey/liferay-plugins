@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,7 +35,9 @@ import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.theme.ThemeDisplay;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,7 +51,7 @@ public class CalendarUtil {
 
 	public static JSONObject getCalendarRenderingRules(
 			ThemeDisplay themeDisplay, long[] calendarIds, int[] statuses,
-			long startDate, long endDate, String ruleName)
+			long startTime, long endTime, String ruleName)
 		throws SystemException {
 
 		List<CalendarBooking> calendarBookings =
@@ -59,7 +61,7 @@ public class CalendarUtil {
 					0, themeDisplay.getCompanyGroupId(),
 					themeDisplay.getScopeGroupId()
 				},
-				calendarIds, new long[0], -1, null, startDate, endDate, true,
+				calendarIds, new long[0], -1, null, startTime, endTime, true,
 				statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 				(OrderByComparator)null);
 
@@ -67,16 +69,16 @@ public class CalendarUtil {
 			new HashMap<Integer, Map<Integer, List<Integer>>>();
 
 		for (CalendarBooking calendarBooking : calendarBookings) {
-			java.util.Calendar startDateJCalendar = JCalendarUtil.getJCalendar(
-				calendarBooking.getStartDate());
-			java.util.Calendar endDateJCalendar = JCalendarUtil.getJCalendar(
-				calendarBooking.getEndDate());
+			java.util.Calendar startTimeJCalendar = JCalendarUtil.getJCalendar(
+				calendarBooking.getStartTime());
+			java.util.Calendar endTimeJCalendar = JCalendarUtil.getJCalendar(
+				calendarBooking.getEndTime());
 
 			long days = JCalendarUtil.getDaysBetween(
-				startDateJCalendar, endDateJCalendar);
+				startTimeJCalendar, endTimeJCalendar);
 
 			for (int i = 0; i <= days; i++) {
-				int year = startDateJCalendar.get(java.util.Calendar.YEAR);
+				int year = startTimeJCalendar.get(java.util.Calendar.YEAR);
 
 				Map<Integer, List<Integer>> rulesMonth = rulesMap.get(year);
 
@@ -86,7 +88,7 @@ public class CalendarUtil {
 					rulesMap.put(year, rulesMonth);
 				}
 
-				int month = startDateJCalendar.get(java.util.Calendar.MONTH);
+				int month = startTimeJCalendar.get(java.util.Calendar.MONTH);
 
 				List<Integer> rulesDay = rulesMonth.get(month);
 
@@ -96,14 +98,14 @@ public class CalendarUtil {
 					rulesMonth.put(month, rulesDay);
 				}
 
-				int day = startDateJCalendar.get(
+				int day = startTimeJCalendar.get(
 					java.util.Calendar.DAY_OF_MONTH);
 
 				if (!rulesDay.contains(day)) {
 					rulesDay.add(day);
 				}
 
-				startDateJCalendar.add(java.util.Calendar.DATE, 1);
+				startTimeJCalendar.add(java.util.Calendar.DATE, 1);
 			}
 		}
 
@@ -132,6 +134,23 @@ public class CalendarUtil {
 		}
 
 		return jsonObject;
+	}
+
+	public static Collection<CalendarResource> getCalendarResources(
+			List<CalendarBooking> calendarBookings)
+		throws PortalException, SystemException {
+
+		Set<CalendarResource> calendarResources =
+			new HashSet<CalendarResource>();
+
+		for (CalendarBooking calendarBooking : calendarBookings) {
+			CalendarResource calendarResource =
+				calendarBooking.getCalendarResource();
+
+			calendarResources.add(calendarResource);
+		}
+
+		return calendarResources;
 	}
 
 	public static OrderByComparator getOrderByComparator(
@@ -219,12 +238,33 @@ public class CalendarUtil {
 		jsonObject.put("classNameId", calendarResource.getClassNameId());
 		jsonObject.put("classPK", calendarResource.getClassPK());
 		jsonObject.put("global", calendarResource.isGlobal());
+		jsonObject.put("groupId", calendar.getGroupId());
 		jsonObject.put("name", calendar.getName(themeDisplay.getLocale()));
 		jsonObject.put(
 			"permissions",
 			_getPermissionsJSONObject(
 				themeDisplay.getPermissionChecker(), calendar));
 		jsonObject.put("userId", calendar.getUserId());
+
+		return jsonObject;
+	}
+
+	public static JSONObject toCalendarResourceJSONObject(
+			ThemeDisplay themeDisplay, CalendarResource calendarResource)
+		throws SystemException {
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		jsonObject.put(
+			"calendarResourceId", calendarResource.getCalendarResourceId());
+		jsonObject.put("classNameId", calendarResource.getClassNameId());
+		jsonObject.put("classPK", calendarResource.getClassPK());
+		jsonObject.put("classUuid", calendarResource.getClassUuid());
+		jsonObject.put("code", calendarResource.getCode());
+		jsonObject.put("groupId", calendarResource.getGroupId());
+		jsonObject.put(
+			"name", calendarResource.getName(themeDisplay.getLocale()));
+		jsonObject.put("userId", calendarResource.getUserId());
 
 		return jsonObject;
 	}
@@ -255,9 +295,19 @@ public class CalendarUtil {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		jsonObject.put(
+			ActionKeys.DELETE,
+			CalendarPermission.contains(
+				permissionChecker, calendar, ActionKeys.DELETE));
+
+		jsonObject.put(
 			ActionKeys.MANAGE_BOOKINGS,
 			CalendarPermission.contains(
 				permissionChecker, calendar, ActionKeys.MANAGE_BOOKINGS));
+
+		jsonObject.put(
+			ActionKeys.PERMISSIONS,
+			CalendarPermission.contains(
+				permissionChecker, calendar, ActionKeys.PERMISSIONS));
 
 		jsonObject.put(
 			ActionKeys.UPDATE,

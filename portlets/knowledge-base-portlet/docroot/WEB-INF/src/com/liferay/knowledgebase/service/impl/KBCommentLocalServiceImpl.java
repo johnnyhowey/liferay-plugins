@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -72,7 +72,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		kbComment.setContent(content);
 		kbComment.setHelpful(helpful);
 
-		kbCommentPersistence.update(kbComment, false);
+		kbCommentPersistence.update(kbComment);
 
 		// Social
 
@@ -90,7 +90,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 
 	@Override
 	public KBComment deleteKBComment(KBComment kbComment)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		// KB comment
 
@@ -115,7 +115,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 	}
 
 	public void deleteKBComments(String className, long classPK)
-		throws SystemException {
+		throws PortalException, SystemException {
 
 		long classNameId = PortalUtil.getClassNameId(className);
 
@@ -172,7 +172,7 @@ public class KBCommentLocalServiceImpl extends KBCommentLocalServiceBaseImpl {
 		kbComment.setContent(content);
 		kbComment.setHelpful(helpful);
 
-		kbCommentPersistence.update(kbComment, false);
+		kbCommentPersistence.update(kbComment);
 
 		// Social
 

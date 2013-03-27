@@ -5,8 +5,9 @@
 	default-init-method="afterPropertiesSet"
 	xmlns="http://www.springframework.org/schema/beans"
 	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd"
 >
 
 	<!-- Comparator -->
@@ -195,6 +196,9 @@
 				<entry key="private-message">
 					<bean class="com.liferay.portal.workflow.kaleo.runtime.notification.PrivateMessageNotificationSender" />
 				</entry>
+				<entry key="user-notification">
+					<bean class="com.liferay.portal.workflow.kaleo.runtime.notification.UserNotificationMessageSender" />
+				</entry>
 			</map>
 		</property>
 	</bean>
@@ -212,13 +216,22 @@
 	<bean id="com.liferay.portal.workflow.kaleo.runtime.notification.TemplateNotificationMessageGenerator" class="com.liferay.portal.workflow.kaleo.runtime.notification.TemplateNotificationMessageGenerator">
 		<property name="templateManagerNames">
 			<map>
-				<entry key="freemarker" value="FREEMARKER" />
-				<entry key="velocity" value="VELOCITY" />
+				<entry key="freemarker">
+					<util:constant static-field="com.liferay.portal.kernel.template.TemplateConstants.LANG_TYPE_FTL" />
+				</entry>
+				<entry key="velocity">
+					<util:constant static-field="com.liferay.portal.kernel.template.TemplateConstants.LANG_TYPE_VM" />
+				</entry>
 			</map>
 		</property>
 	</bean>
 	<bean id="com.liferay.portal.workflow.kaleo.runtime.timer.messaging.TimerMessageListener" class="com.liferay.portal.workflow.kaleo.runtime.timer.messaging.TimerMessageListener">
 		<property name="workflowEngine" ref="com.liferay.portal.workflow.kaleo.runtime.WorkflowEngine" />
+	</bean>
+	<bean id="com.liferay.portal.workflow.kaleo.runtime.util.ScriptingContextBuilderUtil" class="com.liferay.portal.workflow.kaleo.runtime.util.ScriptingContextBuilderUtil">
+		<property name="scriptingContextBuilder">
+			<bean class="com.liferay.portal.workflow.kaleo.runtime.util.ScriptingContextBuilderImpl" />
+		</property>
 	</bean>
 
 	<!-- Parser -->

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,7 +25,7 @@ CalendarResource calendarResource = (CalendarResource)row.getObject();
 <liferay-ui:icon-menu>
 	<c:if test="<%= CalendarResourcePermission.contains(permissionChecker, calendarResource, ActionKeys.UPDATE) %>">
 		<portlet:renderURL var="editURL">
-			<portlet:param name="jspPage" value="/edit_calendar_resource.jsp" />
+			<portlet:param name="mvcPath" value="/edit_calendar_resource.jsp" />
 			<portlet:param name="redirect" value="<%= currentURL %>" />
 			<portlet:param name="calendarResourceId" value="<%= String.valueOf(calendarResource.getCalendarResourceId()) %>" />
 		</portlet:renderURL>
@@ -64,7 +64,7 @@ CalendarResource calendarResource = (CalendarResource)row.getObject();
 	</c:if>
 
 	<portlet:renderURL var="calendarsURL">
-		<portlet:param name="jspPage" value="/view_calendars.jsp" />
+		<portlet:param name="mvcPath" value="/view_calendars.jsp" />
 		<portlet:param name="redirect" value="<%= currentURL %>" />
 		<portlet:param name="calendarResourceId" value="<%= String.valueOf(calendarResource.getCalendarResourceId()) %>" />
 	</portlet:renderURL>

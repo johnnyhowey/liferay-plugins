@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,8 +19,6 @@ import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.model.impl.KBArticleImpl;
 import com.liferay.knowledgebase.model.impl.KBArticleModelImpl;
 
-import com.liferay.portal.NoSuchModelException;
-import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;
 import com.liferay.portal.kernel.dao.orm.FinderCacheUtil;
@@ -42,25 +40,13 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.security.permission.InlineSQLHelperUtil;
-import com.liferay.portal.service.persistence.BatchSessionUtil;
-import com.liferay.portal.service.persistence.CompanyPersistence;
-import com.liferay.portal.service.persistence.GroupPersistence;
-import com.liferay.portal.service.persistence.LayoutPersistence;
-import com.liferay.portal.service.persistence.PortletPreferencesPersistence;
-import com.liferay.portal.service.persistence.SubscriptionPersistence;
-import com.liferay.portal.service.persistence.TicketPersistence;
-import com.liferay.portal.service.persistence.UserPersistence;
-import com.liferay.portal.service.persistence.WorkflowInstanceLinkPersistence;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
-
-import com.liferay.portlet.asset.service.persistence.AssetEntryPersistence;
-import com.liferay.portlet.ratings.service.persistence.RatingsStatsPersistence;
-import com.liferay.portlet.social.service.persistence.SocialActivityPersistence;
 
 import java.io.Serializable;
 
@@ -92,610 +78,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		".List1";
 	public static final String FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION = FINDER_CLASS_NAME_ENTITY +
 		".List2";
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
-			new String[] {
-				String.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
-			new String[] { String.class.getName() },
-			KBArticleModelImpl.UUID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
-			new String[] { String.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() },
-			KBArticleModelImpl.UUID_COLUMN_BITMASK |
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
-			new String[] {
-				String.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
-		new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() },
-			KBArticleModelImpl.UUID_COLUMN_BITMASK |
-			KBArticleModelImpl.COMPANYID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
-			new String[] { String.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_RESOURCEPRIMKEY =
-		new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByResourcePrimKey",
-			new String[] {
-				Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY =
-		new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByResourcePrimKey",
-			new String[] { Long.class.getName() },
-			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
-			"countByResourcePrimKey", new String[] { Long.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_G",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_G",
-			new String[] { Long.class.getName(), Long.class.getName() },
-			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_R_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_G",
-			new String[] { Long.class.getName(), Long.class.getName() });
-	public static final FinderPath FINDER_PATH_FETCH_BY_R_V = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByR_V",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.VERSION_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_R_V = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_V",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_L",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.LATEST_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_M",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.MAIN_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_S",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_S",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.STATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_L",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
-			KBArticleModelImpl.LATEST_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_M",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
-			KBArticleModelImpl.MAIN_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_S",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
-			KBArticleModelImpl.STATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_L",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			KBArticleModelImpl.COMPANYID_COLUMN_BITMASK |
-			KBArticleModelImpl.LATEST_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_M",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			KBArticleModelImpl.COMPANYID_COLUMN_BITMASK |
-			KBArticleModelImpl.MAIN_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_S",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_S",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			KBArticleModelImpl.COMPANYID_COLUMN_BITMASK |
-			KBArticleModelImpl.STATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_L",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.LATEST_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByP_L",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_M",
-			new String[] {
-				Long.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() },
-			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.MAIN_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByP_M",
-			new String[] { Long.class.getName(), Boolean.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_S",
-			new String[] {
-				Long.class.getName(), Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_S",
-			new String[] { Long.class.getName(), Integer.class.getName() },
-			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.STATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByP_S",
-			new String[] { Long.class.getName(), Integer.class.getName() });
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_G_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_G_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			},
-			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
-			KBArticleModelImpl.LATEST_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_G_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_G_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_G_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_G_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			},
-			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
-			KBArticleModelImpl.MAIN_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_G_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_G_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_G_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_G_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			},
-			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
-			KBArticleModelImpl.STATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_G_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_G_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			},
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
-			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.LATEST_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			},
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
-			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.MAIN_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			},
-			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
-			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
-			KBArticleModelImpl.STATUS_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				Integer.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_S_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_S_L",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(), Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_S_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(), Boolean.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_S_M",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(), Boolean.class.getName()
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_S_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(), Integer.class.getName(),
-				
-			"java.lang.Integer", "java.lang.Integer",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			});
-	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_S_S",
-			new String[] {
-				Long.class.getName(), Long.class.getName(),
-				String.class.getName(), Integer.class.getName()
-			});
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_ALL = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
 			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findAll", new String[0]);
@@ -705,911 +87,25 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public static final FinderPath FINDER_PATH_COUNT_ALL = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
 			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countAll", new String[0]);
-
-	/**
-	 * Caches the k b article in the entity cache if it is enabled.
-	 *
-	 * @param kbArticle the k b article
-	 */
-	public void cacheResult(KBArticle kbArticle) {
-		EntityCacheUtil.putResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleImpl.class, kbArticle.getPrimaryKey(), kbArticle);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				kbArticle.getUuid(), Long.valueOf(kbArticle.getGroupId())
-			}, kbArticle);
-
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V,
-			new Object[] {
-				Long.valueOf(kbArticle.getResourcePrimKey()),
-				Integer.valueOf(kbArticle.getVersion())
-			}, kbArticle);
-
-		kbArticle.resetOriginalValues();
-	}
-
-	/**
-	 * Caches the k b articles in the entity cache if it is enabled.
-	 *
-	 * @param kbArticles the k b articles
-	 */
-	public void cacheResult(List<KBArticle> kbArticles) {
-		for (KBArticle kbArticle : kbArticles) {
-			if (EntityCacheUtil.getResult(
-						KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-						KBArticleImpl.class, kbArticle.getPrimaryKey()) == null) {
-				cacheResult(kbArticle);
-			}
-			else {
-				kbArticle.resetOriginalValues();
-			}
-		}
-	}
-
-	/**
-	 * Clears the cache for all k b articles.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache() {
-		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
-			CacheRegistryUtil.clear(KBArticleImpl.class.getName());
-		}
-
-		EntityCacheUtil.clearCache(KBArticleImpl.class.getName());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-	}
-
-	/**
-	 * Clears the cache for the k b article.
-	 *
-	 * <p>
-	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
-	 * </p>
-	 */
-	@Override
-	public void clearCache(KBArticle kbArticle) {
-		EntityCacheUtil.removeResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleImpl.class, kbArticle.getPrimaryKey());
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		clearUniqueFindersCache(kbArticle);
-	}
-
-	@Override
-	public void clearCache(List<KBArticle> kbArticles) {
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-
-		for (KBArticle kbArticle : kbArticles) {
-			EntityCacheUtil.removeResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-				KBArticleImpl.class, kbArticle.getPrimaryKey());
-
-			clearUniqueFindersCache(kbArticle);
-		}
-	}
-
-	protected void clearUniqueFindersCache(KBArticle kbArticle) {
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-			new Object[] {
-				kbArticle.getUuid(), Long.valueOf(kbArticle.getGroupId())
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid",
+			new String[] {
+				String.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
 			});
-
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_V,
-			new Object[] {
-				Long.valueOf(kbArticle.getResourcePrimKey()),
-				Integer.valueOf(kbArticle.getVersion())
-			});
-	}
-
-	/**
-	 * Creates a new k b article with the primary key. Does not add the k b article to the database.
-	 *
-	 * @param kbArticleId the primary key for the new k b article
-	 * @return the new k b article
-	 */
-	public KBArticle create(long kbArticleId) {
-		KBArticle kbArticle = new KBArticleImpl();
-
-		kbArticle.setNew(true);
-		kbArticle.setPrimaryKey(kbArticleId);
-
-		String uuid = PortalUUIDUtil.generate();
-
-		kbArticle.setUuid(uuid);
-
-		return kbArticle;
-	}
-
-	/**
-	 * Removes the k b article with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param kbArticleId the primary key of the k b article
-	 * @return the k b article that was removed
-	 * @throws com.liferay.knowledgebase.NoSuchArticleException if a k b article with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KBArticle remove(long kbArticleId)
-		throws NoSuchArticleException, SystemException {
-		return remove(Long.valueOf(kbArticleId));
-	}
-
-	/**
-	 * Removes the k b article with the primary key from the database. Also notifies the appropriate model listeners.
-	 *
-	 * @param primaryKey the primary key of the k b article
-	 * @return the k b article that was removed
-	 * @throws com.liferay.knowledgebase.NoSuchArticleException if a k b article with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public KBArticle remove(Serializable primaryKey)
-		throws NoSuchArticleException, SystemException {
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			KBArticle kbArticle = (KBArticle)session.get(KBArticleImpl.class,
-					primaryKey);
-
-			if (kbArticle == null) {
-				if (_log.isWarnEnabled()) {
-					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
-				}
-
-				throw new NoSuchArticleException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-					primaryKey);
-			}
-
-			return remove(kbArticle);
-		}
-		catch (NoSuchArticleException nsee) {
-			throw nsee;
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	@Override
-	protected KBArticle removeImpl(KBArticle kbArticle)
-		throws SystemException {
-		kbArticle = toUnwrappedModel(kbArticle);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.delete(session, kbArticle);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		clearCache(kbArticle);
-
-		return kbArticle;
-	}
-
-	@Override
-	public KBArticle updateImpl(
-		com.liferay.knowledgebase.model.KBArticle kbArticle, boolean merge)
-		throws SystemException {
-		kbArticle = toUnwrappedModel(kbArticle);
-
-		boolean isNew = kbArticle.isNew();
-
-		KBArticleModelImpl kbArticleModelImpl = (KBArticleModelImpl)kbArticle;
-
-		if (Validator.isNull(kbArticle.getUuid())) {
-			String uuid = PortalUUIDUtil.generate();
-
-			kbArticle.setUuid(uuid);
-		}
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			BatchSessionUtil.update(session, kbArticle, merge);
-
-			kbArticle.setNew(false);
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-
-		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
-
-		if (isNew || !KBArticleModelImpl.COLUMN_BITMASK_ENABLED) {
-			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						kbArticleModelImpl.getOriginalUuid()
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-
-				args = new Object[] { kbArticleModelImpl.getUuid() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						kbArticleModelImpl.getOriginalUuid(),
-						Long.valueOf(kbArticleModelImpl.getOriginalCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-
-				args = new Object[] {
-						kbArticleModelImpl.getUuid(),
-						Long.valueOf(kbArticleModelImpl.getCompanyId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalResourcePrimKey())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getResourcePrimKey())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY,
-					args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalResourcePrimKey()),
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getResourcePrimKey()),
-						Long.valueOf(kbArticleModelImpl.getGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_L.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_L,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_L,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalResourcePrimKey()),
-						Integer.valueOf(kbArticleModelImpl.getOriginalStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getResourcePrimKey()),
-						Integer.valueOf(kbArticleModelImpl.getStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getGroupId()),
-						Boolean.valueOf(kbArticleModelImpl.getLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_M.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_M,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getGroupId()),
-						Boolean.valueOf(kbArticleModelImpl.getMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_M,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId()),
-						Integer.valueOf(kbArticleModelImpl.getOriginalStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getGroupId()),
-						Integer.valueOf(kbArticleModelImpl.getStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_L.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalCompanyId()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_L,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getCompanyId()),
-						Boolean.valueOf(kbArticleModelImpl.getLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_L,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_M.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalCompanyId()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_M,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getCompanyId()),
-						Boolean.valueOf(kbArticleModelImpl.getMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_M,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalCompanyId()),
-						Integer.valueOf(kbArticleModelImpl.getOriginalStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getCompanyId()),
-						Integer.valueOf(kbArticleModelImpl.getStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_L.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalParentResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_L,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getParentResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_L,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_M.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalParentResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_M,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getParentResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_M,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalParentResourcePrimKey()),
-						Integer.valueOf(kbArticleModelImpl.getOriginalStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getParentResourcePrimKey()),
-						Integer.valueOf(kbArticleModelImpl.getStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_L.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalResourcePrimKey()),
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_L,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getResourcePrimKey()),
-						Long.valueOf(kbArticleModelImpl.getGroupId()),
-						Boolean.valueOf(kbArticleModelImpl.getLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_L,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_M.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalResourcePrimKey()),
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_M,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getResourcePrimKey()),
-						Long.valueOf(kbArticleModelImpl.getGroupId()),
-						Boolean.valueOf(kbArticleModelImpl.getMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_M,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalResourcePrimKey()),
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId()),
-						Integer.valueOf(kbArticleModelImpl.getOriginalStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getResourcePrimKey()),
-						Long.valueOf(kbArticleModelImpl.getGroupId()),
-						Integer.valueOf(kbArticleModelImpl.getStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_S,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId()),
-						Long.valueOf(kbArticleModelImpl.getOriginalParentResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getGroupId()),
-						Long.valueOf(kbArticleModelImpl.getParentResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getLatest())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_M.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId()),
-						Long.valueOf(kbArticleModelImpl.getOriginalParentResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getOriginalMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_M,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getGroupId()),
-						Long.valueOf(kbArticleModelImpl.getParentResourcePrimKey()),
-						Boolean.valueOf(kbArticleModelImpl.getMain())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_M, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_M,
-					args);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_S.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId()),
-						Long.valueOf(kbArticleModelImpl.getOriginalParentResourcePrimKey()),
-						Integer.valueOf(kbArticleModelImpl.getOriginalStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_S,
-					args);
-
-				args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getGroupId()),
-						Long.valueOf(kbArticleModelImpl.getParentResourcePrimKey()),
-						Integer.valueOf(kbArticleModelImpl.getStatus())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_S, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_S,
-					args);
-			}
-		}
-
-		EntityCacheUtil.putResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-			KBArticleImpl.class, kbArticle.getPrimaryKey(), kbArticle);
-
-		if (isNew) {
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-				new Object[] {
-					kbArticle.getUuid(), Long.valueOf(kbArticle.getGroupId())
-				}, kbArticle);
-
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V,
-				new Object[] {
-					Long.valueOf(kbArticle.getResourcePrimKey()),
-					Integer.valueOf(kbArticle.getVersion())
-				}, kbArticle);
-		}
-		else {
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						kbArticleModelImpl.getOriginalUuid(),
-						Long.valueOf(kbArticleModelImpl.getOriginalGroupId())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
-					new Object[] {
-						kbArticle.getUuid(),
-						Long.valueOf(kbArticle.getGroupId())
-					}, kbArticle);
-			}
-
-			if ((kbArticleModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_R_V.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						Long.valueOf(kbArticleModelImpl.getOriginalResourcePrimKey()),
-						Integer.valueOf(kbArticleModelImpl.getOriginalVersion())
-					};
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_V, args);
-
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_V, args);
-
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V,
-					new Object[] {
-						Long.valueOf(kbArticle.getResourcePrimKey()),
-						Integer.valueOf(kbArticle.getVersion())
-					}, kbArticle);
-			}
-		}
-
-		return kbArticle;
-	}
-
-	protected KBArticle toUnwrappedModel(KBArticle kbArticle) {
-		if (kbArticle instanceof KBArticleImpl) {
-			return kbArticle;
-		}
-
-		KBArticleImpl kbArticleImpl = new KBArticleImpl();
-
-		kbArticleImpl.setNew(kbArticle.isNew());
-		kbArticleImpl.setPrimaryKey(kbArticle.getPrimaryKey());
-
-		kbArticleImpl.setUuid(kbArticle.getUuid());
-		kbArticleImpl.setKbArticleId(kbArticle.getKbArticleId());
-		kbArticleImpl.setResourcePrimKey(kbArticle.getResourcePrimKey());
-		kbArticleImpl.setGroupId(kbArticle.getGroupId());
-		kbArticleImpl.setCompanyId(kbArticle.getCompanyId());
-		kbArticleImpl.setUserId(kbArticle.getUserId());
-		kbArticleImpl.setUserName(kbArticle.getUserName());
-		kbArticleImpl.setCreateDate(kbArticle.getCreateDate());
-		kbArticleImpl.setModifiedDate(kbArticle.getModifiedDate());
-		kbArticleImpl.setRootResourcePrimKey(kbArticle.getRootResourcePrimKey());
-		kbArticleImpl.setParentResourcePrimKey(kbArticle.getParentResourcePrimKey());
-		kbArticleImpl.setVersion(kbArticle.getVersion());
-		kbArticleImpl.setTitle(kbArticle.getTitle());
-		kbArticleImpl.setContent(kbArticle.getContent());
-		kbArticleImpl.setDescription(kbArticle.getDescription());
-		kbArticleImpl.setPriority(kbArticle.getPriority());
-		kbArticleImpl.setSections(kbArticle.getSections());
-		kbArticleImpl.setViewCount(kbArticle.getViewCount());
-		kbArticleImpl.setLatest(kbArticle.isLatest());
-		kbArticleImpl.setMain(kbArticle.isMain());
-		kbArticleImpl.setStatus(kbArticle.getStatus());
-		kbArticleImpl.setStatusByUserId(kbArticle.getStatusByUserId());
-		kbArticleImpl.setStatusByUserName(kbArticle.getStatusByUserName());
-		kbArticleImpl.setStatusDate(kbArticle.getStatusDate());
-
-		return kbArticleImpl;
-	}
-
-	/**
-	 * Returns the k b article with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the k b article
-	 * @return the k b article
-	 * @throws com.liferay.portal.NoSuchModelException if a k b article with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public KBArticle findByPrimaryKey(Serializable primaryKey)
-		throws NoSuchModelException, SystemException {
-		return findByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the k b article with the primary key or throws a {@link com.liferay.knowledgebase.NoSuchArticleException} if it could not be found.
-	 *
-	 * @param kbArticleId the primary key of the k b article
-	 * @return the k b article
-	 * @throws com.liferay.knowledgebase.NoSuchArticleException if a k b article with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KBArticle findByPrimaryKey(long kbArticleId)
-		throws NoSuchArticleException, SystemException {
-		KBArticle kbArticle = fetchByPrimaryKey(kbArticleId);
-
-		if (kbArticle == null) {
-			if (_log.isWarnEnabled()) {
-				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + kbArticleId);
-			}
-
-			throw new NoSuchArticleException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
-				kbArticleId);
-		}
-
-		return kbArticle;
-	}
-
-	/**
-	 * Returns the k b article with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param primaryKey the primary key of the k b article
-	 * @return the k b article, or <code>null</code> if a k b article with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	@Override
-	public KBArticle fetchByPrimaryKey(Serializable primaryKey)
-		throws SystemException {
-		return fetchByPrimaryKey(((Long)primaryKey).longValue());
-	}
-
-	/**
-	 * Returns the k b article with the primary key or returns <code>null</code> if it could not be found.
-	 *
-	 * @param kbArticleId the primary key of the k b article
-	 * @return the k b article, or <code>null</code> if a k b article with the primary key could not be found
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KBArticle fetchByPrimaryKey(long kbArticleId)
-		throws SystemException {
-		KBArticle kbArticle = (KBArticle)EntityCacheUtil.getResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-				KBArticleImpl.class, kbArticleId);
-
-		if (kbArticle == _nullKBArticle) {
-			return null;
-		}
-
-		if (kbArticle == null) {
-			Session session = null;
-
-			boolean hasException = false;
-
-			try {
-				session = openSession();
-
-				kbArticle = (KBArticle)session.get(KBArticleImpl.class,
-						Long.valueOf(kbArticleId));
-			}
-			catch (Exception e) {
-				hasException = true;
-
-				throw processException(e);
-			}
-			finally {
-				if (kbArticle != null) {
-					cacheResult(kbArticle);
-				}
-				else if (!hasException) {
-					EntityCacheUtil.putResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
-						KBArticleImpl.class, kbArticleId, _nullKBArticle);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return kbArticle;
-	}
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid",
+			new String[] { String.class.getName() },
+			KBArticleModelImpl.UUID_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid",
+			new String[] { String.class.getName() });
 
 	/**
 	 * Returns all the k b articles where uuid = &#63;.
@@ -1626,7 +122,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -1644,7 +140,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where uuid = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -1656,11 +152,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 */
 	public List<KBArticle> findByUuid(String uuid, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID;
 			finderArgs = new Object[] { uuid };
 		}
@@ -1695,24 +193,26 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			query.append(_SQL_SELECT_KBARTICLE_WHERE);
 
+			boolean bindUuid = false;
+
 			if (uuid == null) {
 				query.append(_FINDER_COLUMN_UUID_UUID_1);
 			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_UUID_3);
+			}
 			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_UUID_2);
 			}
 
 			if (orderByComparator != null) {
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -1727,26 +227,33 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (uuid != null) {
+				if (bindUuid) {
 					qPos.add(uuid);
 				}
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -1910,16 +417,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_SQL_SELECT_KBARTICLE_WHERE);
 
+		boolean bindUuid = false;
+
 		if (uuid == null) {
 			query.append(_FINDER_COLUMN_UUID_UUID_1);
 		}
+		else if (uuid.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_UUID_UUID_3);
+		}
 		else {
-			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_UUID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_UUID_UUID_2);
-			}
+			bindUuid = true;
+
+			query.append(_FINDER_COLUMN_UUID_UUID_2);
 		}
 
 		if (orderByComparator != null) {
@@ -1977,7 +486,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -1991,7 +499,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (uuid != null) {
+		if (bindUuid) {
 			qPos.add(uuid);
 		}
 
@@ -2012,6 +520,99 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the k b articles where uuid = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid(String uuid) throws SystemException {
+		for (KBArticle kbArticle : findByUuid(uuid, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where uuid = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid(String uuid) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID;
+
+		Object[] finderArgs = new Object[] { uuid };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_UUID_1);
+			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_UUID_2);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindUuid) {
+					qPos.add(uuid);
+				}
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_UUID_1 = "kbArticle.uuid IS NULL";
+	private static final String _FINDER_COLUMN_UUID_UUID_2 = "kbArticle.uuid = ?";
+	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(kbArticle.uuid IS NULL OR kbArticle.uuid = '')";
+	public static final FinderPath FINDER_PATH_FETCH_BY_UUID_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() },
+			KBArticleModelImpl.UUID_COLUMN_BITMASK |
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUUID_G",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns the k b article where uuid = &#63; and groupId = &#63; or throws a {@link com.liferay.knowledgebase.NoSuchArticleException} if it could not be found.
@@ -2096,21 +697,21 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			query.append(_SQL_SELECT_KBARTICLE_WHERE);
 
+			boolean bindUuid = false;
+
 			if (uuid == null) {
 				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
 			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+			}
 			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_G_UUID_2);
 			}
 
 			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 
 			String sql = query.toString();
 
@@ -2123,7 +724,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (uuid != null) {
+				if (bindUuid) {
 					qPos.add(uuid);
 				}
 
@@ -2131,16 +732,14 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				List<KBArticle> list = q.list();
 
-				result = list;
-
-				KBArticle kbArticle = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
 						finderArgs, list);
 				}
 				else {
-					kbArticle = list.get(0);
+					KBArticle kbArticle = list.get(0);
+
+					result = kbArticle;
 
 					cacheResult(kbArticle);
 
@@ -2151,30 +750,138 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 							finderArgs, kbArticle);
 					}
 				}
-
-				return kbArticle;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (KBArticle)result;
-			}
+			return (KBArticle)result;
 		}
 	}
+
+	/**
+	 * Removes the k b article where uuid = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the k b article that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KBArticle removeByUUID_G(String uuid, long groupId)
+		throws NoSuchArticleException, SystemException {
+		KBArticle kbArticle = findByUUID_G(uuid, groupId);
+
+		return remove(kbArticle);
+	}
+
+	/**
+	 * Returns the number of k b articles where uuid = &#63; and groupId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param groupId the group ID
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUUID_G(String uuid, long groupId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_G;
+
+		Object[] finderArgs = new Object[] { uuid, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
+			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_G_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_G_UUID_2);
+			}
+
+			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindUuid) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "kbArticle.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "kbArticle.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(kbArticle.uuid IS NULL OR kbArticle.uuid = '') AND ";
+	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "kbArticle.groupId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_UUID_C = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByUuid_C",
+			new String[] {
+				String.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C =
+		new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() },
+			KBArticleModelImpl.UUID_COLUMN_BITMASK |
+			KBArticleModelImpl.COMPANYID_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_UUID_C = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByUuid_C",
+			new String[] { String.class.getName(), Long.class.getName() });
 
 	/**
 	 * Returns all the k b articles where uuid = &#63; and companyId = &#63;.
@@ -2194,7 +901,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -2213,7 +920,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where uuid = &#63; and companyId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param uuid the uuid
@@ -2226,11 +933,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 */
 	public List<KBArticle> findByUuid_C(String uuid, long companyId, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C;
 			finderArgs = new Object[] { uuid, companyId };
 		}
@@ -2270,16 +979,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			query.append(_SQL_SELECT_KBARTICLE_WHERE);
 
+			boolean bindUuid = false;
+
 			if (uuid == null) {
 				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
 			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+			}
 			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
 			}
 
 			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
@@ -2288,8 +999,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2304,28 +1015,35 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				QueryPos qPos = QueryPos.getInstance(q);
 
-				if (uuid != null) {
+				if (bindUuid) {
 					qPos.add(uuid);
 				}
 
 				qPos.add(companyId);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2503,16 +1221,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_SQL_SELECT_KBARTICLE_WHERE);
 
+		boolean bindUuid = false;
+
 		if (uuid == null) {
 			query.append(_FINDER_COLUMN_UUID_C_UUID_1);
 		}
+		else if (uuid.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+		}
 		else {
-			if (uuid.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-			}
+			bindUuid = true;
+
+			query.append(_FINDER_COLUMN_UUID_C_UUID_2);
 		}
 
 		query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
@@ -2572,7 +1292,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -2586,7 +1305,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		QueryPos qPos = QueryPos.getInstance(q);
 
-		if (uuid != null) {
+		if (bindUuid) {
 			qPos.add(uuid);
 		}
 
@@ -2611,6 +1330,119 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Removes all the k b articles where uuid = &#63; and companyId = &#63; from the database.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		for (KBArticle kbArticle : findByUuid_C(uuid, companyId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where uuid = &#63; and companyId = &#63;.
+	 *
+	 * @param uuid the uuid
+	 * @param companyId the company ID
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByUuid_C(String uuid, long companyId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_UUID_C;
+
+		Object[] finderArgs = new Object[] { uuid, companyId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean bindUuid = false;
+
+			if (uuid == null) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
+			}
+			else if (uuid.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_UUID_C_UUID_3);
+			}
+			else {
+				bindUuid = true;
+
+				query.append(_FINDER_COLUMN_UUID_C_UUID_2);
+			}
+
+			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (bindUuid) {
+					qPos.add(uuid);
+				}
+
+				qPos.add(companyId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "kbArticle.uuid IS NULL AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "kbArticle.uuid = ? AND ";
+	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(kbArticle.uuid IS NULL OR kbArticle.uuid = '') AND ";
+	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "kbArticle.companyId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_RESOURCEPRIMKEY =
+		new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByResourcePrimKey",
+			new String[] {
+				Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY =
+		new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByResourcePrimKey",
+			new String[] { Long.class.getName() },
+			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION,
+			"countByResourcePrimKey", new String[] { Long.class.getName() });
+
+	/**
 	 * Returns all the k b articles where resourcePrimKey = &#63;.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -2627,7 +1459,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -2645,7 +1477,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -2658,11 +1490,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByResourcePrimKey(long resourcePrimKey,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY;
 			finderArgs = new Object[] { resourcePrimKey };
 		}
@@ -2707,8 +1541,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -2725,22 +1559,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(resourcePrimKey);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -2964,7 +1805,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -2999,6 +1839,96 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Removes all the k b articles where resourcePrimKey = &#63; from the database.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByResourcePrimKey(long resourcePrimKey)
+		throws SystemException {
+		for (KBArticle kbArticle : findByResourcePrimKey(resourcePrimKey,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByResourcePrimKey(long resourcePrimKey)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY;
+
+		Object[] finderArgs = new Object[] { resourcePrimKey };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(2);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_RESOURCEPRIMKEY_RESOURCEPRIMKEY_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_RESOURCEPRIMKEY_RESOURCEPRIMKEY_2 =
+		"kbArticle.resourcePrimKey = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_G",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_G",
+			new String[] { Long.class.getName(), Long.class.getName() },
+			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_R_G = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_G",
+			new String[] { Long.class.getName(), Long.class.getName() });
+
+	/**
 	 * Returns all the k b articles where resourcePrimKey = &#63; and groupId = &#63;.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -3016,7 +1946,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = &#63; and groupId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -3035,7 +1965,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = &#63; and groupId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -3049,11 +1979,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_G(long resourcePrimKey, long groupId,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G;
 			finderArgs = new Object[] { resourcePrimKey, groupId };
 		}
@@ -3101,8 +2033,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -3121,22 +2053,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(groupId);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -3373,7 +2312,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -3427,7 +2365,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -3446,7 +2384,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where resourcePrimKey = &#63; and groupId = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -3500,7 +2438,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -3685,7 +2622,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -3734,6 +2670,146 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 			return null;
 		}
 	}
+
+	/**
+	 * Removes all the k b articles where resourcePrimKey = &#63; and groupId = &#63; from the database.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByR_G(long resourcePrimKey, long groupId)
+		throws SystemException {
+		for (KBArticle kbArticle : findByR_G(resourcePrimKey, groupId,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = &#63; and groupId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_G(long resourcePrimKey, long groupId)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_G;
+
+		Object[] finderArgs = new Object[] { resourcePrimKey, groupId };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_G_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_G_GROUPID_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(groupId);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByR_G(long resourcePrimKey, long groupId)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByR_G(resourcePrimKey, groupId);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_R_G_RESOURCEPRIMKEY_2);
+
+		query.append(_FINDER_COLUMN_R_G_GROUPID_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(resourcePrimKey);
+
+			qPos.add(groupId);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_R_G_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_R_G_GROUPID_2 = "kbArticle.groupId = ?";
+	public static final FinderPath FINDER_PATH_FETCH_BY_R_V = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_ENTITY, "fetchByR_V",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.VERSION_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_R_V = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_V",
+			new String[] { Long.class.getName(), Integer.class.getName() });
 
 	/**
 	 * Returns the k b article where resourcePrimKey = &#63; and version = &#63; or throws a {@link com.liferay.knowledgebase.NoSuchArticleException} if it could not be found.
@@ -3822,8 +2898,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			query.append(_FINDER_COLUMN_R_V_VERSION_2);
 
-			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-
 			String sql = query.toString();
 
 			Session session = null;
@@ -3841,16 +2915,14 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				List<KBArticle> list = q.list();
 
-				result = list;
-
-				KBArticle kbArticle = null;
-
 				if (list.isEmpty()) {
 					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V,
 						finderArgs, list);
 				}
 				else {
-					kbArticle = list.get(0);
+					KBArticle kbArticle = list.get(0);
+
+					result = kbArticle;
 
 					cacheResult(kbArticle);
 
@@ -3860,30 +2932,125 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 							finderArgs, kbArticle);
 					}
 				}
-
-				return kbArticle;
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_V,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (result == null) {
-					FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_V,
-						finderArgs);
-				}
-
 				closeSession(session);
 			}
 		}
+
+		if (result instanceof List<?>) {
+			return null;
+		}
 		else {
-			if (result instanceof List<?>) {
-				return null;
-			}
-			else {
-				return (KBArticle)result;
-			}
+			return (KBArticle)result;
 		}
 	}
+
+	/**
+	 * Removes the k b article where resourcePrimKey = &#63; and version = &#63; from the database.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param version the version
+	 * @return the k b article that was removed
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KBArticle removeByR_V(long resourcePrimKey, int version)
+		throws NoSuchArticleException, SystemException {
+		KBArticle kbArticle = findByR_V(resourcePrimKey, version);
+
+		return remove(kbArticle);
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = &#63; and version = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param version the version
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_V(long resourcePrimKey, int version)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_V;
+
+		Object[] finderArgs = new Object[] { resourcePrimKey, version };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_V_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_V_VERSION_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(version);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_R_V_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_R_V_VERSION_2 = "kbArticle.version = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_L",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.LATEST_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns all the k b articles where resourcePrimKey = &#63; and latest = &#63;.
@@ -3903,7 +3070,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -3922,7 +3089,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -3936,11 +3103,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_L(long resourcePrimKey, boolean latest,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_L;
 			finderArgs = new Object[] { resourcePrimKey, latest };
 		}
@@ -3988,8 +3157,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4008,22 +3177,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(latest);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4261,7 +3437,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -4301,7 +3476,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns all the k b articles where resourcePrimKey = any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -4319,7 +3494,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -4338,7 +3513,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -4352,11 +3527,17 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_L(long[] resourcePrimKeies, boolean latest,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_L;
+		if ((resourcePrimKeies != null) && (resourcePrimKeies.length == 1)) {
+			return findByR_L(resourcePrimKeies[0], latest, start, end,
+				orderByComparator);
+		}
+
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					StringUtil.merge(resourcePrimKeies), latest
 				};
@@ -4369,7 +3550,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				};
 		}
 
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_L,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -4423,8 +3604,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4445,28 +3626,229 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(latest);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_L,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_L,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
 	}
+
+	/**
+	 * Removes all the k b articles where resourcePrimKey = &#63; and latest = &#63; from the database.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param latest the latest
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByR_L(long resourcePrimKey, boolean latest)
+		throws SystemException {
+		for (KBArticle kbArticle : findByR_L(resourcePrimKey, latest,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = &#63; and latest = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_L(long resourcePrimKey, boolean latest)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_L;
+
+		Object[] finderArgs = new Object[] { resourcePrimKey, latest };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_L_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_L_LATEST_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = any &#63; and latest = &#63;.
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_L(long[] resourcePrimKeies, boolean latest)
+		throws SystemException {
+		Object[] finderArgs = new Object[] {
+				StringUtil.merge(resourcePrimKeies), latest
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_L,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < resourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_R_L_RESOURCEPRIMKEY_5);
+
+					if ((i + 1) < resourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_L_LATEST_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (resourcePrimKeies != null) {
+					qPos.add(resourcePrimKeies);
+				}
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_L,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_L,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_R_L_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_R_L_RESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_L_RESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_R_L_LATEST_2 = "kbArticle.latest = ?";
+	private static final String _FINDER_COLUMN_R_L_LATEST_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_L_LATEST_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_M",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.MAIN_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns all the k b articles where resourcePrimKey = &#63; and main = &#63;.
@@ -4486,7 +3868,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -4505,7 +3887,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -4519,11 +3901,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_M(long resourcePrimKey, boolean main,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M;
 			finderArgs = new Object[] { resourcePrimKey, main };
 		}
@@ -4571,8 +3955,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -4591,22 +3975,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(main);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -4843,7 +4234,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -4883,7 +4273,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns all the k b articles where resourcePrimKey = any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -4901,7 +4291,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -4920,7 +4310,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -4934,11 +4324,17 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_M(long[] resourcePrimKeies, boolean main,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_M;
+		if ((resourcePrimKeies != null) && (resourcePrimKeies.length == 1)) {
+			return findByR_M(resourcePrimKeies[0], main, start, end,
+				orderByComparator);
+		}
+
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] { StringUtil.merge(resourcePrimKeies), main };
 		}
 		else {
@@ -4949,7 +4345,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				};
 		}
 
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_M,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -5003,8 +4399,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5025,28 +4421,229 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(main);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_M,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_M,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
 	}
+
+	/**
+	 * Removes all the k b articles where resourcePrimKey = &#63; and main = &#63; from the database.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param main the main
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByR_M(long resourcePrimKey, boolean main)
+		throws SystemException {
+		for (KBArticle kbArticle : findByR_M(resourcePrimKey, main,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = &#63; and main = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_M(long resourcePrimKey, boolean main)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_M;
+
+		Object[] finderArgs = new Object[] { resourcePrimKey, main };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_M_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_M_MAIN_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = any &#63; and main = &#63;.
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_M(long[] resourcePrimKeies, boolean main)
+		throws SystemException {
+		Object[] finderArgs = new Object[] {
+				StringUtil.merge(resourcePrimKeies), main
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_M,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < resourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_R_M_RESOURCEPRIMKEY_5);
+
+					if ((i + 1) < resourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_M_MAIN_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (resourcePrimKeies != null) {
+					qPos.add(resourcePrimKeies);
+				}
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_M,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_M,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_R_M_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_R_M_RESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_M_RESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_R_M_MAIN_2 = "kbArticle.main = ?";
+	private static final String _FINDER_COLUMN_R_M_MAIN_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_M_MAIN_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.STATUS_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
 
 	/**
 	 * Returns all the k b articles where resourcePrimKey = &#63; and status = &#63;.
@@ -5066,7 +4663,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -5085,7 +4682,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -5099,11 +4696,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_S(long resourcePrimKey, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S;
 			finderArgs = new Object[] { resourcePrimKey, status };
 		}
@@ -5151,8 +4750,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5171,22 +4770,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(status);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -5423,7 +5029,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -5463,7 +5068,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns all the k b articles where resourcePrimKey = any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -5481,7 +5086,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -5500,7 +5105,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -5514,11 +5119,17 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_S(long[] resourcePrimKeies, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S;
+		if ((resourcePrimKeies != null) && (resourcePrimKeies.length == 1)) {
+			return findByR_S(resourcePrimKeies[0], status, start, end,
+				orderByComparator);
+		}
+
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					StringUtil.merge(resourcePrimKeies), status
 				};
@@ -5531,7 +5142,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				};
 		}
 
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -5585,8 +5196,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5607,28 +5218,225 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(status);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_S,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
 	}
+
+	/**
+	 * Removes all the k b articles where resourcePrimKey = &#63; and status = &#63; from the database.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByR_S(long resourcePrimKey, int status)
+		throws SystemException {
+		for (KBArticle kbArticle : findByR_S(resourcePrimKey, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_S(long resourcePrimKey, int status)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_S;
+
+		Object[] finderArgs = new Object[] { resourcePrimKey, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_S_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = any &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_S(long[] resourcePrimKeies, int status)
+		throws SystemException {
+		Object[] finderArgs = new Object[] {
+				StringUtil.merge(resourcePrimKeies), status
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_S,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < resourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_R_S_RESOURCEPRIMKEY_5);
+
+					if ((i + 1) < resourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_S_STATUS_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (resourcePrimKeies != null) {
+					qPos.add(resourcePrimKeies);
+				}
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_S,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_S,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_R_S_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_R_S_RESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_S_RESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_R_S_STATUS_2 = "kbArticle.status = ?";
+	private static final String _FINDER_COLUMN_R_S_STATUS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_S_STATUS_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_L",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.LATEST_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns all the k b articles where groupId = &#63; and latest = &#63;.
@@ -5648,7 +5456,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -5667,7 +5475,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -5680,11 +5488,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 */
 	public List<KBArticle> findByG_L(long groupId, boolean latest, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L;
 			finderArgs = new Object[] { groupId, latest };
 		}
@@ -5732,8 +5542,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -5752,22 +5562,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(latest);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -6003,7 +5820,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -6057,7 +5873,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -6076,7 +5892,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -6129,7 +5945,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -6314,7 +6129,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -6365,6 +6179,156 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Removes all the k b articles where groupId = &#63; and latest = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_L(long groupId, boolean latest)
+		throws SystemException {
+		for (KBArticle kbArticle : findByG_L(groupId, latest,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_L(long groupId, boolean latest)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_L;
+
+		Object[] finderArgs = new Object[] { groupId, latest };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_L_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_L_LATEST_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_L(long groupId, boolean latest)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_L(groupId, latest);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_G_L_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_L_LATEST_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(latest);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_L_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_L_LATEST_2 = "kbArticle.latest = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_M",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.MAIN_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
+
+	/**
 	 * Returns all the k b articles where groupId = &#63; and main = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -6382,7 +6346,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -6401,7 +6365,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -6414,11 +6378,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 */
 	public List<KBArticle> findByG_M(long groupId, boolean main, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_M;
 			finderArgs = new Object[] { groupId, main };
 		}
@@ -6466,8 +6432,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -6486,22 +6452,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(main);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -6735,7 +6708,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -6789,7 +6761,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -6808,7 +6780,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -6861,7 +6833,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -7046,7 +7017,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -7097,6 +7067,155 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Removes all the k b articles where groupId = &#63; and main = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_M(long groupId, boolean main)
+		throws SystemException {
+		for (KBArticle kbArticle : findByG_M(groupId, main, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_M(long groupId, boolean main) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_M;
+
+		Object[] finderArgs = new Object[] { groupId, main };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_M_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_M_MAIN_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_M(long groupId, boolean main)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_M(groupId, main);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_G_M_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_M_MAIN_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(main);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_M_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_M_MAIN_2 = "kbArticle.main = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.STATUS_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+
+	/**
 	 * Returns all the k b articles where groupId = &#63; and status = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -7114,7 +7233,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -7133,7 +7252,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -7146,11 +7265,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 */
 	public List<KBArticle> findByG_S(long groupId, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S;
 			finderArgs = new Object[] { groupId, status };
 		}
@@ -7198,8 +7319,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -7218,22 +7339,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(status);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -7469,7 +7597,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -7523,7 +7650,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -7542,7 +7669,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -7594,7 +7721,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -7779,7 +7905,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -7830,6 +7955,154 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Removes all the k b articles where groupId = &#63; and status = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_S(long groupId, int status) throws SystemException {
+		for (KBArticle kbArticle : findByG_S(groupId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_S(long groupId, int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_S;
+
+		Object[] finderArgs = new Object[] { groupId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_S(long groupId, int status)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_S(groupId, status);
+		}
+
+		StringBundler query = new StringBundler(3);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_S_STATUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_S_STATUS_2 = "kbArticle.status = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_L",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			KBArticleModelImpl.COMPANYID_COLUMN_BITMASK |
+			KBArticleModelImpl.LATEST_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
+
+	/**
 	 * Returns all the k b articles where companyId = &#63; and latest = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -7847,7 +8120,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where companyId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -7866,7 +8139,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where companyId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -7879,11 +8152,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 */
 	public List<KBArticle> findByC_L(long companyId, boolean latest, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_L;
 			finderArgs = new Object[] { companyId, latest };
 		}
@@ -7931,8 +8206,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -7951,22 +8226,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(latest);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -8203,7 +8485,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -8240,6 +8521,102 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Removes all the k b articles where companyId = &#63; and latest = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param latest the latest
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_L(long companyId, boolean latest)
+		throws SystemException {
+		for (KBArticle kbArticle : findByC_L(companyId, latest,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where companyId = &#63; and latest = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_L(long companyId, boolean latest)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_L;
+
+		Object[] finderArgs = new Object[] { companyId, latest };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_L_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_L_LATEST_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_L_COMPANYID_2 = "kbArticle.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_L_LATEST_2 = "kbArticle.latest = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_M",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			KBArticleModelImpl.COMPANYID_COLUMN_BITMASK |
+			KBArticleModelImpl.MAIN_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
+
+	/**
 	 * Returns all the k b articles where companyId = &#63; and main = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -8257,7 +8634,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where companyId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -8276,7 +8653,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where companyId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -8289,11 +8666,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 */
 	public List<KBArticle> findByC_M(long companyId, boolean main, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_M;
 			finderArgs = new Object[] { companyId, main };
 		}
@@ -8341,8 +8720,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -8361,22 +8740,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(main);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -8612,7 +8998,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -8649,6 +9034,102 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Removes all the k b articles where companyId = &#63; and main = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param main the main
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_M(long companyId, boolean main)
+		throws SystemException {
+		for (KBArticle kbArticle : findByC_M(companyId, main,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where companyId = &#63; and main = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_M(long companyId, boolean main)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_M;
+
+		Object[] finderArgs = new Object[] { companyId, main };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_M_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_M_MAIN_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_M_COMPANYID_2 = "kbArticle.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_M_MAIN_2 = "kbArticle.main = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByC_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			KBArticleModelImpl.COMPANYID_COLUMN_BITMASK |
+			KBArticleModelImpl.STATUS_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_C_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByC_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+
+	/**
 	 * Returns all the k b articles where companyId = &#63; and status = &#63;.
 	 *
 	 * @param companyId the company ID
@@ -8666,7 +9147,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where companyId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -8685,7 +9166,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where companyId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param companyId the company ID
@@ -8698,11 +9179,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 */
 	public List<KBArticle> findByC_S(long companyId, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S;
 			finderArgs = new Object[] { companyId, status };
 		}
@@ -8750,8 +9233,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -8770,22 +9253,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(status);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -9022,7 +9512,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -9059,6 +9548,105 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Removes all the k b articles where companyId = &#63; and status = &#63; from the database.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByC_S(long companyId, int status)
+		throws SystemException {
+		for (KBArticle kbArticle : findByC_S(companyId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where companyId = &#63; and status = &#63;.
+	 *
+	 * @param companyId the company ID
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByC_S(long companyId, int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_C_S;
+
+		Object[] finderArgs = new Object[] { companyId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
+
+			query.append(_FINDER_COLUMN_C_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(companyId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_C_S_COMPANYID_2 = "kbArticle.companyId = ? AND ";
+	private static final String _FINDER_COLUMN_C_S_STATUS_2 = "kbArticle.status = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_L",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.LATEST_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByP_L",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
+
+	/**
 	 * Returns all the k b articles where parentResourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * @param parentResourcePrimKey the parent resource prim key
@@ -9076,7 +9664,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where parentResourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKey the parent resource prim key
@@ -9095,7 +9683,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where parentResourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKey the parent resource prim key
@@ -9109,11 +9697,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByP_L(long parentResourcePrimKey,
 		boolean latest, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_L;
 			finderArgs = new Object[] { parentResourcePrimKey, latest };
 		}
@@ -9161,8 +9751,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -9181,22 +9771,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(latest);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -9436,7 +10033,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -9476,7 +10072,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns all the k b articles where parentResourcePrimKey = any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKeies the parent resource prim keies
@@ -9494,7 +10090,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where parentResourcePrimKey = any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKeies the parent resource prim keies
@@ -9513,7 +10109,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where parentResourcePrimKey = any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKeies the parent resource prim keies
@@ -9527,11 +10123,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByP_L(long[] parentResourcePrimKeies,
 		boolean latest, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_P_L;
+		if ((parentResourcePrimKeies != null) &&
+				(parentResourcePrimKeies.length == 1)) {
+			return findByP_L(parentResourcePrimKeies[0], latest, start, end,
+				orderByComparator);
+		}
+
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					StringUtil.merge(parentResourcePrimKeies), latest
 				};
@@ -9544,7 +10147,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				};
 		}
 
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_L,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -9599,8 +10202,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -9621,28 +10224,230 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(latest);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_L,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_L,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
 	}
+
+	/**
+	 * Removes all the k b articles where parentResourcePrimKey = &#63; and latest = &#63; from the database.
+	 *
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param latest the latest
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByP_L(long parentResourcePrimKey, boolean latest)
+		throws SystemException {
+		for (KBArticle kbArticle : findByP_L(parentResourcePrimKey, latest,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where parentResourcePrimKey = &#63; and latest = &#63;.
+	 *
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_L(long parentResourcePrimKey, boolean latest)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_L;
+
+		Object[] finderArgs = new Object[] { parentResourcePrimKey, latest };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_P_L_LATEST_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentResourcePrimKey);
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where parentResourcePrimKey = any &#63; and latest = &#63;.
+	 *
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_L(long[] parentResourcePrimKeies, boolean latest)
+		throws SystemException {
+		Object[] finderArgs = new Object[] {
+				StringUtil.merge(parentResourcePrimKeies), latest
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_L,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((parentResourcePrimKeies == null) ||
+					(parentResourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_5);
+
+					if ((i + 1) < parentResourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_P_L_LATEST_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (parentResourcePrimKeies != null) {
+					qPos.add(parentResourcePrimKeies);
+				}
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_L,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_L,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_P_L_LATEST_2 = "kbArticle.latest = ?";
+	private static final String _FINDER_COLUMN_P_L_LATEST_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_P_L_LATEST_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_M",
+			new String[] {
+				Long.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() },
+			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.MAIN_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByP_M",
+			new String[] { Long.class.getName(), Boolean.class.getName() });
 
 	/**
 	 * Returns all the k b articles where parentResourcePrimKey = &#63; and main = &#63;.
@@ -9662,7 +10467,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where parentResourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKey the parent resource prim key
@@ -9681,7 +10486,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where parentResourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKey the parent resource prim key
@@ -9695,11 +10500,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByP_M(long parentResourcePrimKey, boolean main,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_M;
 			finderArgs = new Object[] { parentResourcePrimKey, main };
 		}
@@ -9747,8 +10554,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -9767,22 +10574,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(main);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -10020,7 +10834,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -10060,7 +10873,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns all the k b articles where parentResourcePrimKey = any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKeies the parent resource prim keies
@@ -10078,7 +10891,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where parentResourcePrimKey = any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKeies the parent resource prim keies
@@ -10097,7 +10910,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where parentResourcePrimKey = any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKeies the parent resource prim keies
@@ -10111,11 +10924,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByP_M(long[] parentResourcePrimKeies,
 		boolean main, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_P_M;
+		if ((parentResourcePrimKeies != null) &&
+				(parentResourcePrimKeies.length == 1)) {
+			return findByP_M(parentResourcePrimKeies[0], main, start, end,
+				orderByComparator);
+		}
+
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					StringUtil.merge(parentResourcePrimKeies), main
 				};
@@ -10128,7 +10948,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				};
 		}
 
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_M,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -10183,8 +11003,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -10205,28 +11025,230 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(main);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_M,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_M,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
 	}
+
+	/**
+	 * Removes all the k b articles where parentResourcePrimKey = &#63; and main = &#63; from the database.
+	 *
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param main the main
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByP_M(long parentResourcePrimKey, boolean main)
+		throws SystemException {
+		for (KBArticle kbArticle : findByP_M(parentResourcePrimKey, main,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where parentResourcePrimKey = &#63; and main = &#63;.
+	 *
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_M(long parentResourcePrimKey, boolean main)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_M;
+
+		Object[] finderArgs = new Object[] { parentResourcePrimKey, main };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_P_M_MAIN_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentResourcePrimKey);
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where parentResourcePrimKey = any &#63; and main = &#63;.
+	 *
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_M(long[] parentResourcePrimKeies, boolean main)
+		throws SystemException {
+		Object[] finderArgs = new Object[] {
+				StringUtil.merge(parentResourcePrimKeies), main
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_M,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((parentResourcePrimKeies == null) ||
+					(parentResourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_5);
+
+					if ((i + 1) < parentResourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_P_M_MAIN_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (parentResourcePrimKeies != null) {
+					qPos.add(parentResourcePrimKeies);
+				}
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_M,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_M,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_P_M_MAIN_2 = "kbArticle.main = ?";
+	private static final String _FINDER_COLUMN_P_M_MAIN_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_P_M_MAIN_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByP_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByP_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.STATUS_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByP_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByP_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
 
 	/**
 	 * Returns all the k b articles where parentResourcePrimKey = &#63; and status = &#63;.
@@ -10246,7 +11268,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where parentResourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKey the parent resource prim key
@@ -10265,7 +11287,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where parentResourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKey the parent resource prim key
@@ -10279,11 +11301,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByP_S(long parentResourcePrimKey, int status,
 		int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S;
 			finderArgs = new Object[] { parentResourcePrimKey, status };
 		}
@@ -10331,8 +11355,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -10351,22 +11375,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(status);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -10604,7 +11635,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -10644,7 +11674,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns all the k b articles where parentResourcePrimKey = any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKeies the parent resource prim keies
@@ -10662,7 +11692,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where parentResourcePrimKey = any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKeies the parent resource prim keies
@@ -10681,7 +11711,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where parentResourcePrimKey = any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param parentResourcePrimKeies the parent resource prim keies
@@ -10695,11 +11725,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByP_S(long[] parentResourcePrimKeies,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_P_S;
+		if ((parentResourcePrimKeies != null) &&
+				(parentResourcePrimKeies.length == 1)) {
+			return findByP_S(parentResourcePrimKeies[0], status, start, end,
+				orderByComparator);
+		}
+
+		boolean pagination = true;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderArgs = new Object[] {
 					StringUtil.merge(parentResourcePrimKeies), status
 				};
@@ -10712,7 +11749,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				};
 		}
 
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_S,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
@@ -10767,8 +11804,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -10789,28 +11826,241 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(status);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_S,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_P_S,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
 	}
+
+	/**
+	 * Removes all the k b articles where parentResourcePrimKey = &#63; and status = &#63; from the database.
+	 *
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByP_S(long parentResourcePrimKey, int status)
+		throws SystemException {
+		for (KBArticle kbArticle : findByP_S(parentResourcePrimKey, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where parentResourcePrimKey = &#63; and status = &#63;.
+	 *
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_S(long parentResourcePrimKey, int status)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_P_S;
+
+		Object[] finderArgs = new Object[] { parentResourcePrimKey, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_P_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(parentResourcePrimKey);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where parentResourcePrimKey = any &#63; and status = &#63;.
+	 *
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByP_S(long[] parentResourcePrimKeies, int status)
+		throws SystemException {
+		Object[] finderArgs = new Object[] {
+				StringUtil.merge(parentResourcePrimKeies), status
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_S,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((parentResourcePrimKeies == null) ||
+					(parentResourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_5);
+
+					if ((i + 1) < parentResourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_P_S_STATUS_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (parentResourcePrimKeies != null) {
+					qPos.add(parentResourcePrimKeies);
+				}
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_S,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_S,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_P_S_STATUS_2 = "kbArticle.status = ?";
+	private static final String _FINDER_COLUMN_P_S_STATUS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_P_S_STATUS_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_G_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_G_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.LATEST_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_G_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_G_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
 
 	/**
 	 * Returns all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
@@ -10831,7 +12081,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -10851,7 +12101,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -10866,11 +12116,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_G_L(long resourcePrimKey, long groupId,
 		boolean latest, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_L;
 			finderArgs = new Object[] { resourcePrimKey, groupId, latest };
 		}
@@ -10921,8 +12173,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -10943,22 +12195,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(latest);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -11211,7 +12470,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -11250,191 +12508,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @return the matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByR_G_L(long[] resourcePrimKeies, long groupId,
-		boolean latest) throws SystemException {
-		return findByR_G_L(resourcePrimKeies, groupId, latest,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByR_G_L(long[] resourcePrimKeies, long groupId,
-		boolean latest, int start, int end) throws SystemException {
-		return findByR_G_L(resourcePrimKeies, groupId, latest, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByR_G_L(long[] resourcePrimKeies, long groupId,
-		boolean latest, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_L;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] {
-					StringUtil.merge(resourcePrimKeies), groupId, latest
-				};
-		}
-		else {
-			finderArgs = new Object[] {
-					StringUtil.merge(resourcePrimKeies), groupId, latest,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KBArticle kbArticle : list) {
-				if (!ArrayUtil.contains(resourcePrimKeies,
-							kbArticle.getResourcePrimKey()) ||
-						(groupId != kbArticle.getGroupId()) ||
-						(latest != kbArticle.getLatest())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < resourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_5);
-
-					if ((i + 1) < resourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_L_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_L_LATEST_5);
-
-			conjunctionable = true;
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (resourcePrimKeies != null) {
-					qPos.add(resourcePrimKeies);
-				}
-
-				qPos.add(groupId);
-
-				qPos.add(latest);
-
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
 	 * Returns all the k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -11453,7 +12526,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -11475,7 +12548,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -11532,7 +12605,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -11723,7 +12795,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -11794,7 +12865,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -11816,7 +12887,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -11897,7 +12968,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -11946,6 +13016,581 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Returns all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @return the matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByR_G_L(long[] resourcePrimKeies, long groupId,
+		boolean latest) throws SystemException {
+		return findByR_G_L(resourcePrimKeies, groupId, latest,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @return the range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByR_G_L(long[] resourcePrimKeies, long groupId,
+		boolean latest, int start, int end) throws SystemException {
+		return findByR_G_L(resourcePrimKeies, groupId, latest, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByR_G_L(long[] resourcePrimKeies, long groupId,
+		boolean latest, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		if ((resourcePrimKeies != null) && (resourcePrimKeies.length == 1)) {
+			return findByR_G_L(resourcePrimKeies[0], groupId, latest, start,
+				end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					StringUtil.merge(resourcePrimKeies), groupId, latest
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					StringUtil.merge(resourcePrimKeies), groupId, latest,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_L,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KBArticle kbArticle : list) {
+				if (!ArrayUtil.contains(resourcePrimKeies,
+							kbArticle.getResourcePrimKey()) ||
+						(groupId != kbArticle.getGroupId()) ||
+						(latest != kbArticle.getLatest())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < resourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_5);
+
+					if ((i + 1) < resourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_L_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_L_LATEST_5);
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (resourcePrimKeies != null) {
+					qPos.add(resourcePrimKeies);
+				}
+
+				qPos.add(groupId);
+
+				qPos.add(latest);
+
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_L,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_L,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63; from the database.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByR_G_L(long resourcePrimKey, long groupId, boolean latest)
+		throws SystemException {
+		for (KBArticle kbArticle : findByR_G_L(resourcePrimKey, groupId,
+				latest, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_G_L(long resourcePrimKey, long groupId, boolean latest)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_G_L;
+
+		Object[] finderArgs = new Object[] { resourcePrimKey, groupId, latest };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_G_L_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_R_G_L_LATEST_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(groupId);
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_G_L(long[] resourcePrimKeies, long groupId,
+		boolean latest) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				StringUtil.merge(resourcePrimKeies), groupId, latest
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_L,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < resourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_5);
+
+					if ((i + 1) < resourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_L_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_L_LATEST_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (resourcePrimKeies != null) {
+					qPos.add(resourcePrimKeies);
+				}
+
+				qPos.add(groupId);
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_L,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_L,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByR_G_L(long resourcePrimKey, long groupId,
+		boolean latest) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByR_G_L(resourcePrimKey, groupId, latest);
+		}
+
+		StringBundler query = new StringBundler(4);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2);
+
+		query.append(_FINDER_COLUMN_R_G_L_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_R_G_L_LATEST_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(resourcePrimKey);
+
+			qPos.add(groupId);
+
+			qPos.add(latest);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param latest the latest
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByR_G_L(long[] resourcePrimKeies, long groupId,
+		boolean latest) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByR_G_L(resourcePrimKeies, groupId, latest);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		boolean conjunctionable = false;
+
+		if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < resourcePrimKeies.length; i++) {
+				query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_5);
+
+				if ((i + 1) < resourcePrimKeies.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_R_G_L_GROUPID_5);
+
+		conjunctionable = true;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_R_G_L_LATEST_5);
+
+		conjunctionable = true;
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (resourcePrimKeies != null) {
+				qPos.add(resourcePrimKeies);
+			}
+
+			qPos.add(groupId);
+
+			qPos.add(latest);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_R_G_L_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_R_G_L_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_G_L_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_R_G_L_LATEST_2 = "kbArticle.latest = ?";
+	private static final String _FINDER_COLUMN_R_G_L_LATEST_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_G_L_LATEST_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_G_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_G_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.MAIN_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_G_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_G_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
+
+	/**
 	 * Returns all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -11964,7 +13609,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -11984,7 +13629,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -11999,11 +13644,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_G_M(long resourcePrimKey, long groupId,
 		boolean main, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_M;
 			finderArgs = new Object[] { resourcePrimKey, groupId, main };
 		}
@@ -12054,8 +13701,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -12076,22 +13723,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(main);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -12344,7 +13998,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -12383,191 +14036,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @return the matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByR_G_M(long[] resourcePrimKeies, long groupId,
-		boolean main) throws SystemException {
-		return findByR_G_M(resourcePrimKeies, groupId, main, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByR_G_M(long[] resourcePrimKeies, long groupId,
-		boolean main, int start, int end) throws SystemException {
-		return findByR_G_M(resourcePrimKeies, groupId, main, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByR_G_M(long[] resourcePrimKeies, long groupId,
-		boolean main, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_M;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] {
-					StringUtil.merge(resourcePrimKeies), groupId, main
-				};
-		}
-		else {
-			finderArgs = new Object[] {
-					StringUtil.merge(resourcePrimKeies), groupId, main,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KBArticle kbArticle : list) {
-				if (!ArrayUtil.contains(resourcePrimKeies,
-							kbArticle.getResourcePrimKey()) ||
-						(groupId != kbArticle.getGroupId()) ||
-						(main != kbArticle.getMain())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < resourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_5);
-
-					if ((i + 1) < resourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_M_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_M_MAIN_5);
-
-			conjunctionable = true;
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (resourcePrimKeies != null) {
-					qPos.add(resourcePrimKeies);
-				}
-
-				qPos.add(groupId);
-
-				qPos.add(main);
-
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
 	 * Returns all the k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -12586,7 +14054,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -12608,7 +14076,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -12665,7 +14133,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -12856,7 +14323,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -12927,7 +14393,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -12949,7 +14415,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -13030,7 +14496,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -13079,6 +14544,581 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Returns all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @return the matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByR_G_M(long[] resourcePrimKeies, long groupId,
+		boolean main) throws SystemException {
+		return findByR_G_M(resourcePrimKeies, groupId, main, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @return the range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByR_G_M(long[] resourcePrimKeies, long groupId,
+		boolean main, int start, int end) throws SystemException {
+		return findByR_G_M(resourcePrimKeies, groupId, main, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByR_G_M(long[] resourcePrimKeies, long groupId,
+		boolean main, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		if ((resourcePrimKeies != null) && (resourcePrimKeies.length == 1)) {
+			return findByR_G_M(resourcePrimKeies[0], groupId, main, start, end,
+				orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					StringUtil.merge(resourcePrimKeies), groupId, main
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					StringUtil.merge(resourcePrimKeies), groupId, main,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_M,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KBArticle kbArticle : list) {
+				if (!ArrayUtil.contains(resourcePrimKeies,
+							kbArticle.getResourcePrimKey()) ||
+						(groupId != kbArticle.getGroupId()) ||
+						(main != kbArticle.getMain())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < resourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_5);
+
+					if ((i + 1) < resourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_M_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_M_MAIN_5);
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (resourcePrimKeies != null) {
+					qPos.add(resourcePrimKeies);
+				}
+
+				qPos.add(groupId);
+
+				qPos.add(main);
+
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_M,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_M,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and main = &#63; from the database.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByR_G_M(long resourcePrimKey, long groupId, boolean main)
+		throws SystemException {
+		for (KBArticle kbArticle : findByR_G_M(resourcePrimKey, groupId, main,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_G_M(long resourcePrimKey, long groupId, boolean main)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_G_M;
+
+		Object[] finderArgs = new Object[] { resourcePrimKey, groupId, main };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_G_M_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_R_G_M_MAIN_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(groupId);
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_G_M(long[] resourcePrimKeies, long groupId, boolean main)
+		throws SystemException {
+		Object[] finderArgs = new Object[] {
+				StringUtil.merge(resourcePrimKeies), groupId, main
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_M,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < resourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_5);
+
+					if ((i + 1) < resourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_M_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_M_MAIN_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (resourcePrimKeies != null) {
+					qPos.add(resourcePrimKeies);
+				}
+
+				qPos.add(groupId);
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_M,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_M,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByR_G_M(long resourcePrimKey, long groupId,
+		boolean main) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByR_G_M(resourcePrimKey, groupId, main);
+		}
+
+		StringBundler query = new StringBundler(4);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2);
+
+		query.append(_FINDER_COLUMN_R_G_M_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_R_G_M_MAIN_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(resourcePrimKey);
+
+			qPos.add(groupId);
+
+			qPos.add(main);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param main the main
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByR_G_M(long[] resourcePrimKeies, long groupId,
+		boolean main) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByR_G_M(resourcePrimKeies, groupId, main);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		boolean conjunctionable = false;
+
+		if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < resourcePrimKeies.length; i++) {
+				query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_5);
+
+				if ((i + 1) < resourcePrimKeies.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_R_G_M_GROUPID_5);
+
+		conjunctionable = true;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_R_G_M_MAIN_5);
+
+		conjunctionable = true;
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (resourcePrimKeies != null) {
+				qPos.add(resourcePrimKeies);
+			}
+
+			qPos.add(groupId);
+
+			qPos.add(main);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_R_G_M_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_R_G_M_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_G_M_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_R_G_M_MAIN_2 = "kbArticle.main = ?";
+	private static final String _FINDER_COLUMN_R_G_M_MAIN_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_G_M_MAIN_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByR_G_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByR_G_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			},
+			KBArticleModelImpl.RESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.STATUS_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByR_G_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByR_G_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
 	 * Returns all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -13097,7 +15137,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -13117,7 +15157,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -13132,11 +15172,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByR_G_S(long resourcePrimKey, long groupId,
 		int status, int start, int end, OrderByComparator orderByComparator)
 		throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_S;
 			finderArgs = new Object[] { resourcePrimKey, groupId, status };
 		}
@@ -13187,8 +15229,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -13209,22 +15251,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(status);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -13477,7 +15526,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -13516,191 +15564,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByR_G_S(long[] resourcePrimKeies, long groupId,
-		int status) throws SystemException {
-		return findByR_G_S(resourcePrimKeies, groupId, status,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByR_G_S(long[] resourcePrimKeies, long groupId,
-		int status, int start, int end) throws SystemException {
-		return findByR_G_S(resourcePrimKeies, groupId, status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByR_G_S(long[] resourcePrimKeies, long groupId,
-		int status, int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_S;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] {
-					StringUtil.merge(resourcePrimKeies), groupId, status
-				};
-		}
-		else {
-			finderArgs = new Object[] {
-					StringUtil.merge(resourcePrimKeies), groupId, status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KBArticle kbArticle : list) {
-				if (!ArrayUtil.contains(resourcePrimKeies,
-							kbArticle.getResourcePrimKey()) ||
-						(groupId != kbArticle.getGroupId()) ||
-						(status != kbArticle.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < resourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_5);
-
-					if ((i + 1) < resourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_S_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_S_STATUS_5);
-
-			conjunctionable = true;
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (resourcePrimKeies != null) {
-					qPos.add(resourcePrimKeies);
-				}
-
-				qPos.add(groupId);
-
-				qPos.add(status);
-
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
 	 * Returns all the k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -13719,7 +15582,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -13740,7 +15603,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKey the resource prim key
@@ -13797,7 +15660,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -13988,7 +15850,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -14059,7 +15920,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -14080,7 +15941,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param resourcePrimKeies the resource prim keies
@@ -14161,7 +16022,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -14210,6 +16070,581 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Returns all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByR_G_S(long[] resourcePrimKeies, long groupId,
+		int status) throws SystemException {
+		return findByR_G_S(resourcePrimKeies, groupId, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @return the range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByR_G_S(long[] resourcePrimKeies, long groupId,
+		int status, int start, int end) throws SystemException {
+		return findByR_G_S(resourcePrimKeies, groupId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b articles where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByR_G_S(long[] resourcePrimKeies, long groupId,
+		int status, int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		if ((resourcePrimKeies != null) && (resourcePrimKeies.length == 1)) {
+			return findByR_G_S(resourcePrimKeies[0], groupId, status, start,
+				end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					StringUtil.merge(resourcePrimKeies), groupId, status
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					StringUtil.merge(resourcePrimKeies), groupId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_S,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KBArticle kbArticle : list) {
+				if (!ArrayUtil.contains(resourcePrimKeies,
+							kbArticle.getResourcePrimKey()) ||
+						(groupId != kbArticle.getGroupId()) ||
+						(status != kbArticle.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < resourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_5);
+
+					if ((i + 1) < resourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_S_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_S_STATUS_5);
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (resourcePrimKeies != null) {
+					qPos.add(resourcePrimKeies);
+				}
+
+				qPos.add(groupId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_S,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_R_G_S,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and status = &#63; from the database.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByR_G_S(long resourcePrimKey, long groupId, int status)
+		throws SystemException {
+		for (KBArticle kbArticle : findByR_G_S(resourcePrimKey, groupId,
+				status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_G_S(long resourcePrimKey, long groupId, int status)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_R_G_S;
+
+		Object[] finderArgs = new Object[] { resourcePrimKey, groupId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_R_G_S_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_R_G_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(resourcePrimKey);
+
+				qPos.add(groupId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByR_G_S(long[] resourcePrimKeies, long groupId, int status)
+		throws SystemException {
+		Object[] finderArgs = new Object[] {
+				StringUtil.merge(resourcePrimKeies), groupId, status
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_S,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < resourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_5);
+
+					if ((i + 1) < resourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_S_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_R_G_S_STATUS_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				if (resourcePrimKeies != null) {
+					qPos.add(resourcePrimKeies);
+				}
+
+				qPos.add(groupId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_S,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_S,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKey the resource prim key
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByR_G_S(long resourcePrimKey, long groupId, int status)
+		throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByR_G_S(resourcePrimKey, groupId, status);
+		}
+
+		StringBundler query = new StringBundler(4);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2);
+
+		query.append(_FINDER_COLUMN_R_G_S_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_R_G_S_STATUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(resourcePrimKey);
+
+			qPos.add(groupId);
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
+	 *
+	 * @param resourcePrimKeies the resource prim keies
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByR_G_S(long[] resourcePrimKeies, long groupId,
+		int status) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByR_G_S(resourcePrimKeies, groupId, status);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		boolean conjunctionable = false;
+
+		if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < resourcePrimKeies.length; i++) {
+				query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_5);
+
+				if ((i + 1) < resourcePrimKeies.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_R_G_S_GROUPID_5);
+
+		conjunctionable = true;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_R_G_S_STATUS_5);
+
+		conjunctionable = true;
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			if (resourcePrimKeies != null) {
+				qPos.add(resourcePrimKeies);
+			}
+
+			qPos.add(groupId);
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_R_G_S_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_R_G_S_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_G_S_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_R_G_S_STATUS_2 = "kbArticle.status = ?";
+	private static final String _FINDER_COLUMN_R_G_S_STATUS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_R_G_S_STATUS_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.LATEST_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
+
+	/**
 	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -14228,7 +16663,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -14250,7 +16685,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -14265,11 +16700,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByG_P_L(long groupId,
 		long parentResourcePrimKey, boolean latest, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L;
 			finderArgs = new Object[] { groupId, parentResourcePrimKey, latest };
 		}
@@ -14320,8 +16757,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -14342,22 +16779,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(latest);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -14611,7 +17055,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -14650,195 +17093,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param latest the latest
-	 * @return the matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_L(long groupId,
-		long[] parentResourcePrimKeies, boolean latest)
-		throws SystemException {
-		return findByG_P_L(groupId, parentResourcePrimKeies, latest,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param latest the latest
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_L(long groupId,
-		long[] parentResourcePrimKeies, boolean latest, int start, int end)
-		throws SystemException {
-		return findByG_P_L(groupId, parentResourcePrimKeies, latest, start,
-			end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param latest the latest
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_L(long groupId,
-		long[] parentResourcePrimKeies, boolean latest, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_L;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] {
-					groupId, StringUtil.merge(parentResourcePrimKeies), latest
-				};
-		}
-		else {
-			finderArgs = new Object[] {
-					groupId, StringUtil.merge(parentResourcePrimKeies), latest,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KBArticle kbArticle : list) {
-				if ((groupId != kbArticle.getGroupId()) ||
-						!ArrayUtil.contains(parentResourcePrimKeies,
-							kbArticle.getParentResourcePrimKey()) ||
-						(latest != kbArticle.getLatest())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_L_GROUPID_5);
-
-			conjunctionable = true;
-
-			if ((parentResourcePrimKeies == null) ||
-					(parentResourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_5);
-
-					if ((i + 1) < parentResourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_L_LATEST_5);
-
-			conjunctionable = true;
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (parentResourcePrimKeies != null) {
-					qPos.add(parentResourcePrimKeies);
-				}
-
-				qPos.add(latest);
-
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
 	 * Returns all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -14857,7 +17111,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -14879,7 +17133,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -14936,7 +17190,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -15129,7 +17382,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -15201,7 +17453,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -15223,7 +17475,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -15305,7 +17557,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -15354,6 +17605,590 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param latest the latest
+	 * @return the matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_L(long groupId,
+		long[] parentResourcePrimKeies, boolean latest)
+		throws SystemException {
+		return findByG_P_L(groupId, parentResourcePrimKeies, latest,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param latest the latest
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @return the range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_L(long groupId,
+		long[] parentResourcePrimKeies, boolean latest, int start, int end)
+		throws SystemException {
+		return findByG_P_L(groupId, parentResourcePrimKeies, latest, start,
+			end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param latest the latest
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_L(long groupId,
+		long[] parentResourcePrimKeies, boolean latest, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		if ((parentResourcePrimKeies != null) &&
+				(parentResourcePrimKeies.length == 1)) {
+			return findByG_P_L(groupId, parentResourcePrimKeies[0], latest,
+				start, end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					groupId, StringUtil.merge(parentResourcePrimKeies), latest
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, StringUtil.merge(parentResourcePrimKeies), latest,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_L,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KBArticle kbArticle : list) {
+				if ((groupId != kbArticle.getGroupId()) ||
+						!ArrayUtil.contains(parentResourcePrimKeies,
+							kbArticle.getParentResourcePrimKey()) ||
+						(latest != kbArticle.getLatest())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_L_GROUPID_5);
+
+			conjunctionable = true;
+
+			if ((parentResourcePrimKeies == null) ||
+					(parentResourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_5);
+
+					if ((i + 1) < parentResourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_L_LATEST_5);
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (parentResourcePrimKeies != null) {
+					qPos.add(parentResourcePrimKeies);
+				}
+
+				qPos.add(latest);
+
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_L,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_L,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param latest the latest
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_P_L(long groupId, long parentResourcePrimKey,
+		boolean latest) throws SystemException {
+		for (KBArticle kbArticle : findByG_P_L(groupId, parentResourcePrimKey,
+				latest, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_L(long groupId, long parentResourcePrimKey,
+		boolean latest) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_L;
+
+		Object[] finderArgs = new Object[] {
+				groupId, parentResourcePrimKey, latest
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_L_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_G_P_L_LATEST_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_L(long groupId, long[] parentResourcePrimKeies,
+		boolean latest) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				groupId, StringUtil.merge(parentResourcePrimKeies), latest
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_L,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_L_GROUPID_5);
+
+			conjunctionable = true;
+
+			if ((parentResourcePrimKeies == null) ||
+					(parentResourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_5);
+
+					if ((i + 1) < parentResourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_L_LATEST_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (parentResourcePrimKeies != null) {
+					qPos.add(parentResourcePrimKeies);
+				}
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_L,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_L,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param latest the latest
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_L(long groupId, long parentResourcePrimKey,
+		boolean latest) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_L(groupId, parentResourcePrimKey, latest);
+		}
+
+		StringBundler query = new StringBundler(4);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_G_P_L_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_2);
+
+		query.append(_FINDER_COLUMN_G_P_L_LATEST_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentResourcePrimKey);
+
+			qPos.add(latest);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param latest the latest
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_L(long groupId, long[] parentResourcePrimKeies,
+		boolean latest) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_L(groupId, parentResourcePrimKeies, latest);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		boolean conjunctionable = false;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_L_GROUPID_5);
+
+		conjunctionable = true;
+
+		if ((parentResourcePrimKeies == null) ||
+				(parentResourcePrimKeies.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+				query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_5);
+
+				if ((i + 1) < parentResourcePrimKeies.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_L_LATEST_5);
+
+		conjunctionable = true;
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			if (parentResourcePrimKeies != null) {
+				qPos.add(parentResourcePrimKeies);
+			}
+
+			qPos.add(latest);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_P_L_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_L_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_L_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_L_LATEST_2 = "kbArticle.latest = ?";
+	private static final String _FINDER_COLUMN_G_P_L_LATEST_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_L_LATEST_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			},
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.MAIN_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Boolean.class.getName()
+			});
+
+	/**
 	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -15372,7 +18207,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -15394,7 +18229,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -15409,11 +18244,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByG_P_M(long groupId,
 		long parentResourcePrimKey, boolean main, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_M;
 			finderArgs = new Object[] { groupId, parentResourcePrimKey, main };
 		}
@@ -15464,8 +18301,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -15486,22 +18323,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(main);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -15755,7 +18599,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -15794,194 +18637,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param main the main
-	 * @return the matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_M(long groupId,
-		long[] parentResourcePrimKeies, boolean main) throws SystemException {
-		return findByG_P_M(groupId, parentResourcePrimKeies, main,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param main the main
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_M(long groupId,
-		long[] parentResourcePrimKeies, boolean main, int start, int end)
-		throws SystemException {
-		return findByG_P_M(groupId, parentResourcePrimKeies, main, start, end,
-			null);
-	}
-
-	/**
-	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param main the main
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_M(long groupId,
-		long[] parentResourcePrimKeies, boolean main, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_M;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] {
-					groupId, StringUtil.merge(parentResourcePrimKeies), main
-				};
-		}
-		else {
-			finderArgs = new Object[] {
-					groupId, StringUtil.merge(parentResourcePrimKeies), main,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KBArticle kbArticle : list) {
-				if ((groupId != kbArticle.getGroupId()) ||
-						!ArrayUtil.contains(parentResourcePrimKeies,
-							kbArticle.getParentResourcePrimKey()) ||
-						(main != kbArticle.getMain())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_M_GROUPID_5);
-
-			conjunctionable = true;
-
-			if ((parentResourcePrimKeies == null) ||
-					(parentResourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_5);
-
-					if ((i + 1) < parentResourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_M_MAIN_5);
-
-			conjunctionable = true;
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (parentResourcePrimKeies != null) {
-					qPos.add(parentResourcePrimKeies);
-				}
-
-				qPos.add(main);
-
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
 	 * Returns all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -16000,7 +18655,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -16022,7 +18677,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -16079,7 +18734,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -16272,7 +18926,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -16343,7 +18996,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -16365,7 +19018,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -16447,7 +19100,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -16496,6 +19148,587 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param main the main
+	 * @return the matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_M(long groupId,
+		long[] parentResourcePrimKeies, boolean main) throws SystemException {
+		return findByG_P_M(groupId, parentResourcePrimKeies, main,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param main the main
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @return the range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_M(long groupId,
+		long[] parentResourcePrimKeies, boolean main, int start, int end)
+		throws SystemException {
+		return findByG_P_M(groupId, parentResourcePrimKeies, main, start, end,
+			null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param main the main
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_M(long groupId,
+		long[] parentResourcePrimKeies, boolean main, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		if ((parentResourcePrimKeies != null) &&
+				(parentResourcePrimKeies.length == 1)) {
+			return findByG_P_M(groupId, parentResourcePrimKeies[0], main,
+				start, end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					groupId, StringUtil.merge(parentResourcePrimKeies), main
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, StringUtil.merge(parentResourcePrimKeies), main,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_M,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KBArticle kbArticle : list) {
+				if ((groupId != kbArticle.getGroupId()) ||
+						!ArrayUtil.contains(parentResourcePrimKeies,
+							kbArticle.getParentResourcePrimKey()) ||
+						(main != kbArticle.getMain())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_M_GROUPID_5);
+
+			conjunctionable = true;
+
+			if ((parentResourcePrimKeies == null) ||
+					(parentResourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_5);
+
+					if ((i + 1) < parentResourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_M_MAIN_5);
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (parentResourcePrimKeies != null) {
+					qPos.add(parentResourcePrimKeies);
+				}
+
+				qPos.add(main);
+
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_M,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_M,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param main the main
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_P_M(long groupId, long parentResourcePrimKey,
+		boolean main) throws SystemException {
+		for (KBArticle kbArticle : findByG_P_M(groupId, parentResourcePrimKey,
+				main, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_M(long groupId, long parentResourcePrimKey,
+		boolean main) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_M;
+
+		Object[] finderArgs = new Object[] { groupId, parentResourcePrimKey, main };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_M_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_G_P_M_MAIN_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_M(long groupId, long[] parentResourcePrimKeies,
+		boolean main) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				groupId, StringUtil.merge(parentResourcePrimKeies), main
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_M,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_M_GROUPID_5);
+
+			conjunctionable = true;
+
+			if ((parentResourcePrimKeies == null) ||
+					(parentResourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_5);
+
+					if ((i + 1) < parentResourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_M_MAIN_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (parentResourcePrimKeies != null) {
+					qPos.add(parentResourcePrimKeies);
+				}
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_M,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_M,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param main the main
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_M(long groupId, long parentResourcePrimKey,
+		boolean main) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_M(groupId, parentResourcePrimKey, main);
+		}
+
+		StringBundler query = new StringBundler(4);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_G_P_M_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_2);
+
+		query.append(_FINDER_COLUMN_G_P_M_MAIN_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentResourcePrimKey);
+
+			qPos.add(main);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param main the main
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_M(long groupId, long[] parentResourcePrimKeies,
+		boolean main) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_M(groupId, parentResourcePrimKeies, main);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		boolean conjunctionable = false;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_M_GROUPID_5);
+
+		conjunctionable = true;
+
+		if ((parentResourcePrimKeies == null) ||
+				(parentResourcePrimKeies.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+				query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_5);
+
+				if ((i + 1) < parentResourcePrimKeies.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_M_MAIN_5);
+
+		conjunctionable = true;
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			if (parentResourcePrimKeies != null) {
+				qPos.add(parentResourcePrimKeies);
+			}
+
+			qPos.add(main);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_P_M_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_M_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_M_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_M_MAIN_2 = "kbArticle.main = ?";
+	private static final String _FINDER_COLUMN_G_P_M_MAIN_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_M_MAIN_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_P_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			},
+			KBArticleModelImpl.GROUPID_COLUMN_BITMASK |
+			KBArticleModelImpl.PARENTRESOURCEPRIMKEY_COLUMN_BITMASK |
+			KBArticleModelImpl.STATUS_COLUMN_BITMASK |
+			KBArticleModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_P_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				Integer.class.getName()
+			});
+
+	/**
 	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -16514,7 +19747,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -16536,7 +19769,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -16551,11 +19784,13 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByG_P_S(long groupId,
 		long parentResourcePrimKey, int status, int start, int end,
 		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
+			pagination = false;
 			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_S;
 			finderArgs = new Object[] { groupId, parentResourcePrimKey, status };
 		}
@@ -16606,8 +19841,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -16628,22 +19863,29 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(status);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -16897,7 +20139,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -16936,194 +20177,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param status the status
-	 * @return the matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S(long groupId,
-		long[] parentResourcePrimKeies, int status) throws SystemException {
-		return findByG_P_S(groupId, parentResourcePrimKeies, status,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param status the status
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S(long groupId,
-		long[] parentResourcePrimKeies, int status, int start, int end)
-		throws SystemException {
-		return findByG_P_S(groupId, parentResourcePrimKeies, status, start,
-			end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param status the status
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S(long groupId,
-		long[] parentResourcePrimKeies, int status, int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] {
-					groupId, StringUtil.merge(parentResourcePrimKeies), status
-				};
-		}
-		else {
-			finderArgs = new Object[] {
-					groupId, StringUtil.merge(parentResourcePrimKeies), status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KBArticle kbArticle : list) {
-				if ((groupId != kbArticle.getGroupId()) ||
-						!ArrayUtil.contains(parentResourcePrimKeies,
-							kbArticle.getParentResourcePrimKey()) ||
-						(status != kbArticle.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_GROUPID_5);
-
-			conjunctionable = true;
-
-			if ((parentResourcePrimKeies == null) ||
-					(parentResourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_5);
-
-					if ((i + 1) < parentResourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_STATUS_5);
-
-			conjunctionable = true;
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (parentResourcePrimKeies != null) {
-					qPos.add(parentResourcePrimKeies);
-				}
-
-				qPos.add(status);
-
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
 	 * Returns all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -17142,7 +20195,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -17164,7 +20217,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -17221,7 +20274,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -17414,7 +20466,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -17485,7 +20536,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -17507,7 +20558,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -17589,7 +20640,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -17638,6 +20688,571 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param status the status
+	 * @return the matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_S(long groupId,
+		long[] parentResourcePrimKeies, int status) throws SystemException {
+		return findByG_P_S(groupId, parentResourcePrimKeies, status,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param status the status
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @return the range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_S(long groupId,
+		long[] parentResourcePrimKeies, int status, int start, int end)
+		throws SystemException {
+		return findByG_P_S(groupId, parentResourcePrimKeies, status, start,
+			end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param status the status
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_S(long groupId,
+		long[] parentResourcePrimKeies, int status, int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		if ((parentResourcePrimKeies != null) &&
+				(parentResourcePrimKeies.length == 1)) {
+			return findByG_P_S(groupId, parentResourcePrimKeies[0], status,
+				start, end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					groupId, StringUtil.merge(parentResourcePrimKeies), status
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, StringUtil.merge(parentResourcePrimKeies), status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KBArticle kbArticle : list) {
+				if ((groupId != kbArticle.getGroupId()) ||
+						!ArrayUtil.contains(parentResourcePrimKeies,
+							kbArticle.getParentResourcePrimKey()) ||
+						(status != kbArticle.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_GROUPID_5);
+
+			conjunctionable = true;
+
+			if ((parentResourcePrimKeies == null) ||
+					(parentResourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_5);
+
+					if ((i + 1) < parentResourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_STATUS_5);
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (parentResourcePrimKeies != null) {
+					qPos.add(parentResourcePrimKeies);
+				}
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param status the status
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_P_S(long groupId, long parentResourcePrimKey,
+		int status) throws SystemException {
+		for (KBArticle kbArticle : findByG_P_S(groupId, parentResourcePrimKey,
+				status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_S(long groupId, long parentResourcePrimKey, int status)
+		throws SystemException {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_P_S;
+
+		Object[] finderArgs = new Object[] {
+				groupId, parentResourcePrimKey, status
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(4);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_S_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_2);
+
+			query.append(_FINDER_COLUMN_G_P_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param status the status
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_S(long groupId, long[] parentResourcePrimKeies,
+		int status) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				groupId, StringUtil.merge(parentResourcePrimKeies), status
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_GROUPID_5);
+
+			conjunctionable = true;
+
+			if ((parentResourcePrimKeies == null) ||
+					(parentResourcePrimKeies.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+					query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_5);
+
+					if ((i + 1) < parentResourcePrimKeies.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_STATUS_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				if (parentResourcePrimKeies != null) {
+					qPos.add(parentResourcePrimKeies);
+				}
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param status the status
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_S(long groupId, long parentResourcePrimKey,
+		int status) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_S(groupId, parentResourcePrimKey, status);
+		}
+
+		StringBundler query = new StringBundler(4);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_G_P_S_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_2);
+
+		query.append(_FINDER_COLUMN_G_P_S_STATUS_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentResourcePrimKey);
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKeies the parent resource prim keies
+	 * @param status the status
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_S(long groupId, long[] parentResourcePrimKeies,
+		int status) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_S(groupId, parentResourcePrimKeies, status);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		boolean conjunctionable = false;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_GROUPID_5);
+
+		conjunctionable = true;
+
+		if ((parentResourcePrimKeies == null) ||
+				(parentResourcePrimKeies.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < parentResourcePrimKeies.length; i++) {
+				query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_5);
+
+				if ((i + 1) < parentResourcePrimKeies.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_STATUS_5);
+
+		conjunctionable = true;
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			if (parentResourcePrimKeies != null) {
+				qPos.add(parentResourcePrimKeies);
+			}
+
+			qPos.add(status);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_P_S_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_STATUS_2 = "kbArticle.status = ?";
+	private static final String _FINDER_COLUMN_G_P_S_STATUS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_STATUS_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_S_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_S_L",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Boolean.class.getName()
+			});
+
+	/**
 	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -17658,7 +21273,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -17681,7 +21296,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -17697,6 +21312,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByG_P_S_L(long groupId,
 		long parentResourcePrimKey, String sections, boolean latest, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -17740,16 +21356,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2);
 
+			boolean bindSections = false;
+
 			if (sections == null) {
 				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_1);
 			}
+			else if (sections.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
+			}
 			else {
-				if (sections.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
-				}
+				bindSections = true;
+
+				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
 			}
 
 			query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
@@ -17758,8 +21376,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -17778,28 +21396,35 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(parentResourcePrimKey);
 
-				if (sections != null) {
+				if (bindSections) {
 					qPos.add(sections);
 				}
 
 				qPos.add(latest);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -18012,16 +21637,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
@@ -18081,7 +21708,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -18099,7 +21725,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		qPos.add(parentResourcePrimKey);
 
-		if (sections != null) {
+		if (bindSections) {
 			qPos.add(sections);
 		}
 
@@ -18124,222 +21750,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param latest the latest
-	 * @return the matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S_L(long groupId,
-		long parentResourcePrimKey, String[] sectionses, boolean latest)
-		throws SystemException {
-		return findByG_P_S_L(groupId, parentResourcePrimKey, sectionses,
-			latest, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param latest the latest
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S_L(long groupId,
-		long parentResourcePrimKey, String[] sectionses, boolean latest,
-		int start, int end) throws SystemException {
-		return findByG_P_S_L(groupId, parentResourcePrimKey, sectionses,
-			latest, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param latest the latest
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S_L(long groupId,
-		long parentResourcePrimKey, String[] sectionses, boolean latest,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_L;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] {
-					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
-					latest
-				};
-		}
-		else {
-			finderArgs = new Object[] {
-					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
-					latest,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KBArticle kbArticle : list) {
-				if ((groupId != kbArticle.getGroupId()) ||
-						(parentResourcePrimKey != kbArticle.getParentResourcePrimKey()) ||
-						!ArrayUtil.contains(sectionses, kbArticle.getSections()) ||
-						(latest != kbArticle.getLatest())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_5);
-
-			conjunctionable = true;
-
-			if ((sectionses == null) || (sectionses.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < sectionses.length; i++) {
-					String sections = sectionses[i];
-
-					if (sections == null) {
-						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_4);
-					}
-					else {
-						if (sections.equals(StringPool.BLANK)) {
-							query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_6);
-						}
-						else {
-							query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_5);
-						}
-					}
-
-					if ((i + 1) < sectionses.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_L_LATEST_5);
-
-			conjunctionable = true;
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				if (sectionses != null) {
-					qPos.add(sectionses);
-				}
-
-				qPos.add(latest);
-
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
 	 * Returns all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -18360,7 +21770,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -18383,7 +21793,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -18425,16 +21835,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
@@ -18453,7 +21865,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -18487,7 +21898,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			qPos.add(parentResourcePrimKey);
 
-			if (sections != null) {
+			if (bindSections) {
 				qPos.add(sections);
 			}
 
@@ -18579,16 +21990,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
@@ -18664,7 +22077,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -18696,7 +22108,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		qPos.add(parentResourcePrimKey);
 
-		if (sections != null) {
+		if (bindSections) {
 			qPos.add(sections);
 		}
 
@@ -18741,7 +22153,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -18764,7 +22176,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -18826,13 +22238,11 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				if (sections == null) {
 					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_4);
 				}
+				else if (sections.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_6);
+				}
 				else {
-					if (sections.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_6);
-					}
-					else {
-						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_5);
-					}
+					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_5);
 				}
 
 				if ((i + 1) < sectionses.length) {
@@ -18867,7 +22277,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -18918,6 +22327,689 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param latest the latest
+	 * @return the matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_S_L(long groupId,
+		long parentResourcePrimKey, String[] sectionses, boolean latest)
+		throws SystemException {
+		return findByG_P_S_L(groupId, parentResourcePrimKey, sectionses,
+			latest, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param latest the latest
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @return the range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_S_L(long groupId,
+		long parentResourcePrimKey, String[] sectionses, boolean latest,
+		int start, int end) throws SystemException {
+		return findByG_P_S_L(groupId, parentResourcePrimKey, sectionses,
+			latest, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param latest the latest
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_S_L(long groupId,
+		long parentResourcePrimKey, String[] sectionses, boolean latest,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		if ((sectionses != null) && (sectionses.length == 1)) {
+			return findByG_P_S_L(groupId, parentResourcePrimKey, sectionses[0],
+				latest, start, end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
+					latest
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
+					latest,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_L,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KBArticle kbArticle : list) {
+				if ((groupId != kbArticle.getGroupId()) ||
+						(parentResourcePrimKey != kbArticle.getParentResourcePrimKey()) ||
+						!ArrayUtil.contains(sectionses, kbArticle.getSections()) ||
+						(latest != kbArticle.getLatest())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_5);
+
+			conjunctionable = true;
+
+			if ((sectionses == null) || (sectionses.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < sectionses.length; i++) {
+					String sections = sectionses[i];
+
+					if (sections == null) {
+						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_4);
+					}
+					else if (sections.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_5);
+					}
+
+					if ((i + 1) < sectionses.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_L_LATEST_5);
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				if (sectionses != null) {
+					qPos.add(sectionses);
+				}
+
+				qPos.add(latest);
+
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_L,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_L,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sections the sections
+	 * @param latest the latest
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_P_S_L(long groupId, long parentResourcePrimKey,
+		String sections, boolean latest) throws SystemException {
+		for (KBArticle kbArticle : findByG_P_S_L(groupId,
+				parentResourcePrimKey, sections, latest, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sections the sections
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_S_L(long groupId, long parentResourcePrimKey,
+		String sections, boolean latest) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L;
+
+		Object[] finderArgs = new Object[] {
+				groupId, parentResourcePrimKey, sections, latest
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(5);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2);
+
+			boolean bindSections = false;
+
+			if (sections == null) {
+				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_1);
+			}
+			else if (sections.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
+			}
+			else {
+				bindSections = true;
+
+				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				if (bindSections) {
+					qPos.add(sections);
+				}
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param latest the latest
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_S_L(long groupId, long parentResourcePrimKey,
+		String[] sectionses, boolean latest) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
+				latest
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_5);
+
+			conjunctionable = true;
+
+			if ((sectionses == null) || (sectionses.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < sectionses.length; i++) {
+					String sections = sectionses[i];
+
+					if (sections == null) {
+						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_4);
+					}
+					else if (sections.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_5);
+					}
+
+					if ((i + 1) < sectionses.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_L_LATEST_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				if (sectionses != null) {
+					qPos.add(sectionses);
+				}
+
+				qPos.add(latest);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sections the sections
+	 * @param latest the latest
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_S_L(long groupId, long parentResourcePrimKey,
+		String sections, boolean latest) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_S_L(groupId, parentResourcePrimKey, sections,
+				latest);
+		}
+
+		StringBundler query = new StringBundler(5);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2);
+
+		boolean bindSections = false;
+
+		if (sections == null) {
+			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_1);
+		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
+		}
+		else {
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentResourcePrimKey);
+
+			if (bindSections) {
+				qPos.add(sections);
+			}
+
+			qPos.add(latest);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param latest the latest
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_S_L(long groupId, long parentResourcePrimKey,
+		String[] sectionses, boolean latest) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_S_L(groupId, parentResourcePrimKey, sectionses,
+				latest);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		boolean conjunctionable = false;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_5);
+
+		conjunctionable = true;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_5);
+
+		conjunctionable = true;
+
+		if ((sectionses == null) || (sectionses.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < sectionses.length; i++) {
+				String sections = sectionses[i];
+
+				if (sections == null) {
+					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_4);
+				}
+				else if (sections.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_6);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_5);
+				}
+
+				if ((i + 1) < sectionses.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_5);
+
+		conjunctionable = true;
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentResourcePrimKey);
+
+			if (sectionses != null) {
+				qPos.add(sectionses);
+			}
+
+			qPos.add(latest);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_P_S_L_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_L_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_L_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2) +
+		")";
+	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_1 = "kbArticle.sections LIKE NULL AND ";
+	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_2 = "kbArticle.sections LIKE ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_3 = "(kbArticle.sections IS NULL OR kbArticle.sections LIKE '') AND ";
+	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_L_SECTIONS_1) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_L_SECTIONS_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_L_SECTIONS_3) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_L_LATEST_2 = "kbArticle.latest = ?";
+	private static final String _FINDER_COLUMN_G_P_S_L_LATEST_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_L_LATEST_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_S_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Boolean.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_S_M",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Boolean.class.getName()
+			});
+
+	/**
 	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -18938,7 +23030,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -18961,7 +23053,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -18977,6 +23069,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByG_P_S_M(long groupId,
 		long parentResourcePrimKey, String sections, boolean main, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -19020,16 +23113,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2);
 
+			boolean bindSections = false;
+
 			if (sections == null) {
 				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_1);
 			}
+			else if (sections.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
+			}
 			else {
-				if (sections.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
-				}
+				bindSections = true;
+
+				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
 			}
 
 			query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
@@ -19038,8 +23133,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -19058,28 +23153,35 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(parentResourcePrimKey);
 
-				if (sections != null) {
+				if (bindSections) {
 					qPos.add(sections);
 				}
 
 				qPos.add(main);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -19292,16 +23394,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
@@ -19361,7 +23465,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -19379,7 +23482,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		qPos.add(parentResourcePrimKey);
 
-		if (sections != null) {
+		if (bindSections) {
 			qPos.add(sections);
 		}
 
@@ -19404,222 +23507,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param main the main
-	 * @return the matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S_M(long groupId,
-		long parentResourcePrimKey, String[] sectionses, boolean main)
-		throws SystemException {
-		return findByG_P_S_M(groupId, parentResourcePrimKey, sectionses, main,
-			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param main the main
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S_M(long groupId,
-		long parentResourcePrimKey, String[] sectionses, boolean main,
-		int start, int end) throws SystemException {
-		return findByG_P_S_M(groupId, parentResourcePrimKey, sectionses, main,
-			start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param main the main
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S_M(long groupId,
-		long parentResourcePrimKey, String[] sectionses, boolean main,
-		int start, int end, OrderByComparator orderByComparator)
-		throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_M;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] {
-					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
-					main
-				};
-		}
-		else {
-			finderArgs = new Object[] {
-					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
-					main,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KBArticle kbArticle : list) {
-				if ((groupId != kbArticle.getGroupId()) ||
-						(parentResourcePrimKey != kbArticle.getParentResourcePrimKey()) ||
-						!ArrayUtil.contains(sectionses, kbArticle.getSections()) ||
-						(main != kbArticle.getMain())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_5);
-
-			conjunctionable = true;
-
-			if ((sectionses == null) || (sectionses.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < sectionses.length; i++) {
-					String sections = sectionses[i];
-
-					if (sections == null) {
-						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_4);
-					}
-					else {
-						if (sections.equals(StringPool.BLANK)) {
-							query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_6);
-						}
-						else {
-							query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_5);
-						}
-					}
-
-					if ((i + 1) < sectionses.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_M_MAIN_5);
-
-			conjunctionable = true;
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				if (sectionses != null) {
-					qPos.add(sectionses);
-				}
-
-				qPos.add(main);
-
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
 	 * Returns all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -19640,7 +23527,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -19663,7 +23550,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -19705,16 +23592,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
@@ -19733,7 +23622,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -19767,7 +23655,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			qPos.add(parentResourcePrimKey);
 
-			if (sections != null) {
+			if (bindSections) {
 				qPos.add(sections);
 			}
 
@@ -19859,16 +23747,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
@@ -19944,7 +23834,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -19976,7 +23865,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		qPos.add(parentResourcePrimKey);
 
-		if (sections != null) {
+		if (bindSections) {
 			qPos.add(sections);
 		}
 
@@ -20021,7 +23910,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -20044,7 +23933,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -20106,13 +23995,11 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				if (sections == null) {
 					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_4);
 				}
+				else if (sections.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_6);
+				}
 				else {
-					if (sections.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_6);
-					}
-					else {
-						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_5);
-					}
+					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_5);
 				}
 
 				if ((i + 1) < sectionses.length) {
@@ -20147,7 +24034,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -20198,6 +24084,688 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
+	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param main the main
+	 * @return the matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_S_M(long groupId,
+		long parentResourcePrimKey, String[] sectionses, boolean main)
+		throws SystemException {
+		return findByG_P_S_M(groupId, parentResourcePrimKey, sectionses, main,
+			QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param main the main
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @return the range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_S_M(long groupId,
+		long parentResourcePrimKey, String[] sectionses, boolean main,
+		int start, int end) throws SystemException {
+		return findByG_P_S_M(groupId, parentResourcePrimKey, sectionses, main,
+			start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param main the main
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findByG_P_S_M(long groupId,
+		long parentResourcePrimKey, String[] sectionses, boolean main,
+		int start, int end, OrderByComparator orderByComparator)
+		throws SystemException {
+		if ((sectionses != null) && (sectionses.length == 1)) {
+			return findByG_P_S_M(groupId, parentResourcePrimKey, sectionses[0],
+				main, start, end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderArgs = new Object[] {
+					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
+					main
+				};
+		}
+		else {
+			finderArgs = new Object[] {
+					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
+					main,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_M,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KBArticle kbArticle : list) {
+				if ((groupId != kbArticle.getGroupId()) ||
+						(parentResourcePrimKey != kbArticle.getParentResourcePrimKey()) ||
+						!ArrayUtil.contains(sectionses, kbArticle.getSections()) ||
+						(main != kbArticle.getMain())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_5);
+
+			conjunctionable = true;
+
+			if ((sectionses == null) || (sectionses.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < sectionses.length; i++) {
+					String sections = sectionses[i];
+
+					if (sections == null) {
+						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_4);
+					}
+					else if (sections.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_5);
+					}
+
+					if ((i + 1) < sectionses.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_M_MAIN_5);
+
+			conjunctionable = true;
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				if (sectionses != null) {
+					qPos.add(sectionses);
+				}
+
+				qPos.add(main);
+
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_M,
+					finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_M,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sections the sections
+	 * @param main the main
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeByG_P_S_M(long groupId, long parentResourcePrimKey,
+		String sections, boolean main) throws SystemException {
+		for (KBArticle kbArticle : findByG_P_S_M(groupId,
+				parentResourcePrimKey, sections, main, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
+			remove(kbArticle);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sections the sections
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_S_M(long groupId, long parentResourcePrimKey,
+		String sections, boolean main) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M;
+
+		Object[] finderArgs = new Object[] {
+				groupId, parentResourcePrimKey, sections, main
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(5);
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2);
+
+			boolean bindSections = false;
+
+			if (sections == null) {
+				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_1);
+			}
+			else if (sections.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
+			}
+			else {
+				bindSections = true;
+
+				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				if (bindSections) {
+					qPos.add(sections);
+				}
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param main the main
+	 * @return the number of matching k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int countByG_P_S_M(long groupId, long parentResourcePrimKey,
+		String[] sectionses, boolean main) throws SystemException {
+		Object[] finderArgs = new Object[] {
+				groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
+				main
+			};
+
+		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M,
+				finderArgs, this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_COUNT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_5);
+
+			conjunctionable = true;
+
+			if ((sectionses == null) || (sectionses.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < sectionses.length; i++) {
+					String sections = sectionses[i];
+
+					if (sections == null) {
+						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_4);
+					}
+					else if (sections.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_5);
+					}
+
+					if ((i + 1) < sectionses.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_M_MAIN_5);
+
+			conjunctionable = true;
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				if (sectionses != null) {
+					qPos.add(sectionses);
+				}
+
+				qPos.add(main);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M,
+					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M,
+					finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sections the sections
+	 * @param main the main
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_S_M(long groupId, long parentResourcePrimKey,
+		String sections, boolean main) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_S_M(groupId, parentResourcePrimKey, sections, main);
+		}
+
+		StringBundler query = new StringBundler(5);
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2);
+
+		boolean bindSections = false;
+
+		if (sections == null) {
+			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_1);
+		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
+		}
+		else {
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentResourcePrimKey);
+
+			if (bindSections) {
+				qPos.add(sections);
+			}
+
+			qPos.add(main);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	/**
+	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param main the main
+	 * @return the number of matching k b articles that the user has permission to view
+	 * @throws SystemException if a system exception occurred
+	 */
+	public int filterCountByG_P_S_M(long groupId, long parentResourcePrimKey,
+		String[] sectionses, boolean main) throws SystemException {
+		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
+			return countByG_P_S_M(groupId, parentResourcePrimKey, sectionses,
+				main);
+		}
+
+		StringBundler query = new StringBundler();
+
+		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
+
+		boolean conjunctionable = false;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_5);
+
+		conjunctionable = true;
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_5);
+
+		conjunctionable = true;
+
+		if ((sectionses == null) || (sectionses.length > 0)) {
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(StringPool.OPEN_PARENTHESIS);
+
+			for (int i = 0; i < sectionses.length; i++) {
+				String sections = sectionses[i];
+
+				if (sections == null) {
+					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_4);
+				}
+				else if (sections.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_6);
+				}
+				else {
+					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_5);
+				}
+
+				if ((i + 1) < sectionses.length) {
+					query.append(WHERE_OR);
+				}
+			}
+
+			query.append(StringPool.CLOSE_PARENTHESIS);
+
+			conjunctionable = true;
+		}
+
+		if (conjunctionable) {
+			query.append(WHERE_AND);
+		}
+
+		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_5);
+
+		conjunctionable = true;
+
+		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
+				KBArticle.class.getName(),
+				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			SQLQuery q = session.createSQLQuery(sql);
+
+			q.addScalar(COUNT_COLUMN_NAME,
+				com.liferay.portal.kernel.dao.orm.Type.LONG);
+
+			QueryPos qPos = QueryPos.getInstance(q);
+
+			qPos.add(groupId);
+
+			qPos.add(parentResourcePrimKey);
+
+			if (sectionses != null) {
+				qPos.add(sectionses);
+			}
+
+			qPos.add(main);
+
+			Long count = (Long)q.uniqueResult();
+
+			return count.intValue();
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	private static final String _FINDER_COLUMN_G_P_S_M_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_M_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_M_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2) +
+		")";
+	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_1 = "kbArticle.sections LIKE NULL AND ";
+	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_2 = "kbArticle.sections LIKE ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_3 = "(kbArticle.sections IS NULL OR kbArticle.sections LIKE '') AND ";
+	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_M_SECTIONS_1) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_M_SECTIONS_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_M_SECTIONS_3) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_M_MAIN_2 = "kbArticle.main = ?";
+	private static final String _FINDER_COLUMN_G_P_S_M_MAIN_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_M_MAIN_2) + ")";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, KBArticleImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_P_S_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_S = new FinderPath(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByG_P_S_S",
+			new String[] {
+				Long.class.getName(), Long.class.getName(),
+				String.class.getName(), Integer.class.getName()
+			});
+
+	/**
 	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and status = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -20218,7 +24786,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -20241,7 +24809,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -20257,6 +24825,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public List<KBArticle> findByG_P_S_S(long groupId,
 		long parentResourcePrimKey, String sections, int status, int start,
 		int end, OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
@@ -20300,16 +24869,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			query.append(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2);
 
+			boolean bindSections = false;
+
 			if (sections == null) {
 				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_1);
 			}
+			else if (sections.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
+			}
 			else {
-				if (sections.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
-				}
+				bindSections = true;
+
+				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
 			}
 
 			query.append(_FINDER_COLUMN_G_P_S_S_STATUS_2);
@@ -20318,8 +24889,8 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
 			}
-
-			else {
+			else
+			 if (pagination) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 			}
 
@@ -20338,28 +24909,35 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(parentResourcePrimKey);
 
-				if (sections != null) {
+				if (bindSections) {
 					qPos.add(sections);
 				}
 
 				qPos.add(status);
 
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
@@ -20572,16 +25150,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_S_STATUS_2);
@@ -20641,7 +25221,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			query.append(KBArticleModelImpl.ORDER_BY_JPQL);
 		}
@@ -20659,7 +25238,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		qPos.add(parentResourcePrimKey);
 
-		if (sections != null) {
+		if (bindSections) {
 			qPos.add(sections);
 		}
 
@@ -20684,221 +25263,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param status the status
-	 * @return the matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S_S(long groupId,
-		long parentResourcePrimKey, String[] sectionses, int status)
-		throws SystemException {
-		return findByG_P_S_S(groupId, parentResourcePrimKey, sectionses,
-			status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
-	}
-
-	/**
-	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param status the status
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S_S(long groupId,
-		long parentResourcePrimKey, String[] sectionses, int status, int start,
-		int end) throws SystemException {
-		return findByG_P_S_S(groupId, parentResourcePrimKey, sectionses,
-			status, start, end, null);
-	}
-
-	/**
-	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and status = &#63;.
-	 *
-	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
-	 * </p>
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param status the status
-	 * @param start the lower bound of the range of k b articles
-	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public List<KBArticle> findByG_P_S_S(long groupId,
-		long parentResourcePrimKey, String[] sectionses, int status, int start,
-		int end, OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_S;
-		Object[] finderArgs = null;
-
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			finderArgs = new Object[] {
-					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
-					status
-				};
-		}
-		else {
-			finderArgs = new Object[] {
-					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
-					status,
-					
-					start, end, orderByComparator
-				};
-		}
-
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
-				finderArgs, this);
-
-		if ((list != null) && !list.isEmpty()) {
-			for (KBArticle kbArticle : list) {
-				if ((groupId != kbArticle.getGroupId()) ||
-						(parentResourcePrimKey != kbArticle.getParentResourcePrimKey()) ||
-						!ArrayUtil.contains(sectionses, kbArticle.getSections()) ||
-						(status != kbArticle.getStatus())) {
-					list = null;
-
-					break;
-				}
-			}
-		}
-
-		if (list == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_SELECT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_S_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_5);
-
-			conjunctionable = true;
-
-			if ((sectionses == null) || (sectionses.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < sectionses.length; i++) {
-					String sections = sectionses[i];
-
-					if (sections == null) {
-						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_4);
-					}
-					else {
-						if (sections.equals(StringPool.BLANK)) {
-							query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_6);
-						}
-						else {
-							query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_5);
-						}
-					}
-
-					if ((i + 1) < sectionses.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_S_STATUS_5);
-
-			conjunctionable = true;
-
-			if (orderByComparator != null) {
-				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
-					orderByComparator);
-			}
-
-			else {
-				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				if (sectionses != null) {
-					qPos.add(sectionses);
-				}
-
-				qPos.add(status);
-
-				list = (List<KBArticle>)QueryUtil.list(q, getDialect(), start,
-						end);
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
-				closeSession(session);
-			}
-		}
-
-		return list;
-	}
-
-	/**
 	 * Returns all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and status = &#63;.
 	 *
 	 * @param groupId the group ID
@@ -20919,7 +25283,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -20942,7 +25306,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permissions to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -20984,16 +25348,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_S_STATUS_2);
@@ -21012,7 +25378,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -21046,7 +25411,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			qPos.add(parentResourcePrimKey);
 
-			if (sections != null) {
+			if (bindSections) {
 				qPos.add(sections);
 			}
 
@@ -21138,16 +25503,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_S_STATUS_2);
@@ -21223,7 +25590,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				}
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -21255,7 +25621,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		qPos.add(parentResourcePrimKey);
 
-		if (sections != null) {
+		if (bindSections) {
 			qPos.add(sections);
 		}
 
@@ -21300,7 +25666,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns a range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -21323,7 +25689,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 * Returns an ordered range of all the k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
 	 * @param groupId the group ID
@@ -21384,13 +25750,11 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				if (sections == null) {
 					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_4);
 				}
+				else if (sections.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_6);
+				}
 				else {
-					if (sections.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_6);
-					}
-					else {
-						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_5);
-					}
+					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_5);
 				}
 
 				if ((i + 1) < sectionses.length) {
@@ -21425,7 +25789,6 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					orderByComparator);
 			}
 		}
-
 		else {
 			if (getDB().isSupportsInlineDistinct()) {
 				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
@@ -21476,81 +25839,181 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	}
 
 	/**
-	 * Returns all the k b articles.
+	 * Returns all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and status = &#63;.
 	 *
-	 * @return the k b articles
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param status the status
+	 * @return the matching k b articles
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<KBArticle> findAll() throws SystemException {
-		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	public List<KBArticle> findByG_P_S_S(long groupId,
+		long parentResourcePrimKey, String[] sectionses, int status)
+		throws SystemException {
+		return findByG_P_S_S(groupId, parentResourcePrimKey, sectionses,
+			status, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns a range of all the k b articles.
+	 * Returns a range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param status the status
 	 * @param start the lower bound of the range of k b articles
 	 * @param end the upper bound of the range of k b articles (not inclusive)
-	 * @return the range of k b articles
+	 * @return the range of matching k b articles
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<KBArticle> findAll(int start, int end)
-		throws SystemException {
-		return findAll(start, end, null);
+	public List<KBArticle> findByG_P_S_S(long groupId,
+		long parentResourcePrimKey, String[] sectionses, int status, int start,
+		int end) throws SystemException {
+		return findByG_P_S_S(groupId, parentResourcePrimKey, sectionses,
+			status, start, end, null);
 	}
 
 	/**
-	 * Returns an ordered range of all the k b articles.
+	 * Returns an ordered range of all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and status = &#63;.
 	 *
 	 * <p>
-	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	 * </p>
 	 *
+	 * @param groupId the group ID
+	 * @param parentResourcePrimKey the parent resource prim key
+	 * @param sectionses the sectionses
+	 * @param status the status
 	 * @param start the lower bound of the range of k b articles
 	 * @param end the upper bound of the range of k b articles (not inclusive)
 	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
-	 * @return the ordered range of k b articles
+	 * @return the ordered range of matching k b articles
 	 * @throws SystemException if a system exception occurred
 	 */
-	public List<KBArticle> findAll(int start, int end,
-		OrderByComparator orderByComparator) throws SystemException {
-		FinderPath finderPath = null;
-		Object[] finderArgs = new Object[] { start, end, orderByComparator };
+	public List<KBArticle> findByG_P_S_S(long groupId,
+		long parentResourcePrimKey, String[] sectionses, int status, int start,
+		int end, OrderByComparator orderByComparator) throws SystemException {
+		if ((sectionses != null) && (sectionses.length == 1)) {
+			return findByG_P_S_S(groupId, parentResourcePrimKey, sectionses[0],
+				status, start, end, orderByComparator);
+		}
+
+		boolean pagination = true;
+		Object[] finderArgs = null;
 
 		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
 				(orderByComparator == null)) {
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
-			finderArgs = FINDER_ARGS_EMPTY;
+			pagination = false;
+			finderArgs = new Object[] {
+					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
+					status
+				};
 		}
 		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
-			finderArgs = new Object[] { start, end, orderByComparator };
+			finderArgs = new Object[] {
+					groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
+					status,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_S,
 				finderArgs, this);
 
+		if ((list != null) && !list.isEmpty()) {
+			for (KBArticle kbArticle : list) {
+				if ((groupId != kbArticle.getGroupId()) ||
+						(parentResourcePrimKey != kbArticle.getParentResourcePrimKey()) ||
+						!ArrayUtil.contains(sectionses, kbArticle.getSections()) ||
+						(status != kbArticle.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
 		if (list == null) {
-			StringBundler query = null;
-			String sql = null;
+			StringBundler query = new StringBundler();
+
+			query.append(_SQL_SELECT_KBARTICLE_WHERE);
+
+			boolean conjunctionable = false;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_S_GROUPID_5);
+
+			conjunctionable = true;
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_5);
+
+			conjunctionable = true;
+
+			if ((sectionses == null) || (sectionses.length > 0)) {
+				if (conjunctionable) {
+					query.append(WHERE_AND);
+				}
+
+				query.append(StringPool.OPEN_PARENTHESIS);
+
+				for (int i = 0; i < sectionses.length; i++) {
+					String sections = sectionses[i];
+
+					if (sections == null) {
+						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_4);
+					}
+					else if (sections.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_6);
+					}
+					else {
+						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_5);
+					}
+
+					if ((i + 1) < sectionses.length) {
+						query.append(WHERE_OR);
+					}
+				}
+
+				query.append(StringPool.CLOSE_PARENTHESIS);
+
+				conjunctionable = true;
+			}
+
+			if (conjunctionable) {
+				query.append(WHERE_AND);
+			}
+
+			query.append(_FINDER_COLUMN_G_P_S_S_STATUS_5);
+
+			conjunctionable = true;
 
 			if (orderByComparator != null) {
-				query = new StringBundler(2 +
-						(orderByComparator.getOrderByFields().length * 3));
-
-				query.append(_SQL_SELECT_KBARTICLE);
-
 				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
 					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBArticleModelImpl.ORDER_BY_JPQL);
+			}
 
-				sql = query.toString();
-			}
-			else {
-				sql = _SQL_SELECT_KBARTICLE.concat(KBArticleModelImpl.ORDER_BY_JPQL);
-			}
+			String sql = query.toString();
 
 			Session session = null;
 
@@ -21559,412 +26022,48 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				Query q = session.createQuery(sql);
 
-				if (orderByComparator == null) {
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(parentResourcePrimKey);
+
+				if (sectionses != null) {
+					qPos.add(sectionses);
+				}
+
+				qPos.add(status);
+
+				if (!pagination) {
 					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
 							start, end, false);
 
 					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
 				}
 				else {
 					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
 							start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_S,
+					finderArgs, list);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_FIND_BY_G_P_S_S,
+					finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (list == null) {
-					FinderCacheUtil.removeResult(finderPath, finderArgs);
-				}
-				else {
-					cacheResult(list);
-
-					FinderCacheUtil.putResult(finderPath, finderArgs, list);
-				}
-
 				closeSession(session);
 			}
 		}
 
 		return list;
-	}
-
-	/**
-	 * Removes all the k b articles where uuid = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid(String uuid) throws SystemException {
-		for (KBArticle kbArticle : findByUuid(uuid)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes the k b article where uuid = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the k b article that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KBArticle removeByUUID_G(String uuid, long groupId)
-		throws NoSuchArticleException, SystemException {
-		KBArticle kbArticle = findByUUID_G(uuid, groupId);
-
-		return remove(kbArticle);
-	}
-
-	/**
-	 * Removes all the k b articles where uuid = &#63; and companyId = &#63; from the database.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		for (KBArticle kbArticle : findByUuid_C(uuid, companyId)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where resourcePrimKey = &#63; from the database.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByResourcePrimKey(long resourcePrimKey)
-		throws SystemException {
-		for (KBArticle kbArticle : findByResourcePrimKey(resourcePrimKey)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where resourcePrimKey = &#63; and groupId = &#63; from the database.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByR_G(long resourcePrimKey, long groupId)
-		throws SystemException {
-		for (KBArticle kbArticle : findByR_G(resourcePrimKey, groupId)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes the k b article where resourcePrimKey = &#63; and version = &#63; from the database.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param version the version
-	 * @return the k b article that was removed
-	 * @throws SystemException if a system exception occurred
-	 */
-	public KBArticle removeByR_V(long resourcePrimKey, int version)
-		throws NoSuchArticleException, SystemException {
-		KBArticle kbArticle = findByR_V(resourcePrimKey, version);
-
-		return remove(kbArticle);
-	}
-
-	/**
-	 * Removes all the k b articles where resourcePrimKey = &#63; and latest = &#63; from the database.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param latest the latest
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByR_L(long resourcePrimKey, boolean latest)
-		throws SystemException {
-		for (KBArticle kbArticle : findByR_L(resourcePrimKey, latest)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where resourcePrimKey = &#63; and main = &#63; from the database.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param main the main
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByR_M(long resourcePrimKey, boolean main)
-		throws SystemException {
-		for (KBArticle kbArticle : findByR_M(resourcePrimKey, main)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where resourcePrimKey = &#63; and status = &#63; from the database.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param status the status
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByR_S(long resourcePrimKey, int status)
-		throws SystemException {
-		for (KBArticle kbArticle : findByR_S(resourcePrimKey, status)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where groupId = &#63; and latest = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_L(long groupId, boolean latest)
-		throws SystemException {
-		for (KBArticle kbArticle : findByG_L(groupId, latest)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where groupId = &#63; and main = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_M(long groupId, boolean main)
-		throws SystemException {
-		for (KBArticle kbArticle : findByG_M(groupId, main)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where groupId = &#63; and status = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_S(long groupId, int status) throws SystemException {
-		for (KBArticle kbArticle : findByG_S(groupId, status)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where companyId = &#63; and latest = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param latest the latest
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_L(long companyId, boolean latest)
-		throws SystemException {
-		for (KBArticle kbArticle : findByC_L(companyId, latest)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where companyId = &#63; and main = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param main the main
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_M(long companyId, boolean main)
-		throws SystemException {
-		for (KBArticle kbArticle : findByC_M(companyId, main)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where companyId = &#63; and status = &#63; from the database.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByC_S(long companyId, int status)
-		throws SystemException {
-		for (KBArticle kbArticle : findByC_S(companyId, status)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where parentResourcePrimKey = &#63; and latest = &#63; from the database.
-	 *
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param latest the latest
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByP_L(long parentResourcePrimKey, boolean latest)
-		throws SystemException {
-		for (KBArticle kbArticle : findByP_L(parentResourcePrimKey, latest)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where parentResourcePrimKey = &#63; and main = &#63; from the database.
-	 *
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param main the main
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByP_M(long parentResourcePrimKey, boolean main)
-		throws SystemException {
-		for (KBArticle kbArticle : findByP_M(parentResourcePrimKey, main)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where parentResourcePrimKey = &#63; and status = &#63; from the database.
-	 *
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param status the status
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByP_S(long parentResourcePrimKey, int status)
-		throws SystemException {
-		for (KBArticle kbArticle : findByP_S(parentResourcePrimKey, status)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63; from the database.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByR_G_L(long resourcePrimKey, long groupId, boolean latest)
-		throws SystemException {
-		for (KBArticle kbArticle : findByR_G_L(resourcePrimKey, groupId, latest)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and main = &#63; from the database.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByR_G_M(long resourcePrimKey, long groupId, boolean main)
-		throws SystemException {
-		for (KBArticle kbArticle : findByR_G_M(resourcePrimKey, groupId, main)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where resourcePrimKey = &#63; and groupId = &#63; and status = &#63; from the database.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByR_G_S(long resourcePrimKey, long groupId, int status)
-		throws SystemException {
-		for (KBArticle kbArticle : findByR_G_S(resourcePrimKey, groupId, status)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param latest the latest
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_P_L(long groupId, long parentResourcePrimKey,
-		boolean latest) throws SystemException {
-		for (KBArticle kbArticle : findByG_P_L(groupId, parentResourcePrimKey,
-				latest)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param main the main
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_P_M(long groupId, long parentResourcePrimKey,
-		boolean main) throws SystemException {
-		for (KBArticle kbArticle : findByG_P_M(groupId, parentResourcePrimKey,
-				main)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param status the status
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_P_S(long groupId, long parentResourcePrimKey,
-		int status) throws SystemException {
-		for (KBArticle kbArticle : findByG_P_S(groupId, parentResourcePrimKey,
-				status)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sections the sections
-	 * @param latest the latest
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_P_S_L(long groupId, long parentResourcePrimKey,
-		String sections, boolean latest) throws SystemException {
-		for (KBArticle kbArticle : findByG_P_S_L(groupId,
-				parentResourcePrimKey, sections, latest)) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63; from the database.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sections the sections
-	 * @param main the main
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeByG_P_S_M(long groupId, long parentResourcePrimKey,
-		String sections, boolean main) throws SystemException {
-		for (KBArticle kbArticle : findByG_P_S_M(groupId,
-				parentResourcePrimKey, sections, main)) {
-			remove(kbArticle);
-		}
 	}
 
 	/**
@@ -21979,4563 +26078,9 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public void removeByG_P_S_S(long groupId, long parentResourcePrimKey,
 		String sections, int status) throws SystemException {
 		for (KBArticle kbArticle : findByG_P_S_S(groupId,
-				parentResourcePrimKey, sections, status)) {
+				parentResourcePrimKey, sections, status, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, null)) {
 			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Removes all the k b articles from the database.
-	 *
-	 * @throws SystemException if a system exception occurred
-	 */
-	public void removeAll() throws SystemException {
-		for (KBArticle kbArticle : findAll()) {
-			remove(kbArticle);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where uuid = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid(String uuid) throws SystemException {
-		Object[] finderArgs = new Object[] { uuid };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_UUID_2);
-				}
-			}
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where uuid = &#63; and groupId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param groupId the group ID
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUUID_G(String uuid, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_G_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_G_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where uuid = &#63; and companyId = &#63;.
-	 *
-	 * @param uuid the uuid
-	 * @param companyId the company ID
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByUuid_C(String uuid, long companyId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { uuid, companyId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_UUID_C,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			if (uuid == null) {
-				query.append(_FINDER_COLUMN_UUID_C_UUID_1);
-			}
-			else {
-				if (uuid.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_UUID_C_UUID_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_UUID_C_COMPANYID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (uuid != null) {
-					qPos.add(uuid);
-				}
-
-				qPos.add(companyId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_C,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByResourcePrimKey(long resourcePrimKey)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourcePrimKey };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(2);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_RESOURCEPRIMKEY_RESOURCEPRIMKEY_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = &#63; and groupId = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_G(long resourcePrimKey, long groupId)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourcePrimKey, groupId };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_G,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_G_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_G_GROUPID_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(groupId);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_G, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByR_G(long resourcePrimKey, long groupId)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByR_G(resourcePrimKey, groupId);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_R_G_RESOURCEPRIMKEY_2);
-
-		query.append(_FINDER_COLUMN_R_G_GROUPID_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(resourcePrimKey);
-
-			qPos.add(groupId);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = &#63; and version = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param version the version
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_V(long resourcePrimKey, int version)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourcePrimKey, version };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_V,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_V_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_V_VERSION_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(version);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_V, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = &#63; and latest = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_L(long resourcePrimKey, boolean latest)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourcePrimKey, latest };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_L_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_L_LATEST_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_L, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = any &#63; and latest = &#63;.
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_L(long[] resourcePrimKeies, boolean latest)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				StringUtil.merge(resourcePrimKeies), latest
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < resourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_R_L_RESOURCEPRIMKEY_5);
-
-					if ((i + 1) < resourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_L_LATEST_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (resourcePrimKeies != null) {
-					qPos.add(resourcePrimKeies);
-				}
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_L,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = &#63; and main = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_M(long resourcePrimKey, boolean main)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourcePrimKey, main };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_M_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_M_MAIN_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_M, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = any &#63; and main = &#63;.
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_M(long[] resourcePrimKeies, boolean main)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				StringUtil.merge(resourcePrimKeies), main
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < resourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_R_M_RESOURCEPRIMKEY_5);
-
-					if ((i + 1) < resourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_M_MAIN_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (resourcePrimKeies != null) {
-					qPos.add(resourcePrimKeies);
-				}
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_M,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_S(long resourcePrimKey, int status)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourcePrimKey, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_S_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_S, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = any &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_S(long[] resourcePrimKeies, int status)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				StringUtil.merge(resourcePrimKeies), status
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < resourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_R_S_RESOURCEPRIMKEY_5);
-
-					if ((i + 1) < resourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_S_STATUS_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (resourcePrimKeies != null) {
-					qPos.add(resourcePrimKeies);
-				}
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_S,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_L(long groupId, boolean latest)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, latest };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_L_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_L_LATEST_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_L, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_L(long groupId, boolean latest)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_L(groupId, latest);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_G_L_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_L_LATEST_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(latest);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_M(long groupId, boolean main) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, main };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_M_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_M_MAIN_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_M, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_M(long groupId, boolean main)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_M(groupId, main);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_G_M_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_M_MAIN_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(main);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_S(long groupId, int status) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_S, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_S(long groupId, int status)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_S(groupId, status);
-		}
-
-		StringBundler query = new StringBundler(3);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_G_S_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_S_STATUS_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(status);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where companyId = &#63; and latest = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_L(long companyId, boolean latest)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, latest };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_L_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_L_LATEST_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_L, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where companyId = &#63; and main = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_M(long companyId, boolean main)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, main };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_M_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_M_MAIN_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_M, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where companyId = &#63; and status = &#63;.
-	 *
-	 * @param companyId the company ID
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByC_S(long companyId, int status) throws SystemException {
-		Object[] finderArgs = new Object[] { companyId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_C_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_C_S_COMPANYID_2);
-
-			query.append(_FINDER_COLUMN_C_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(companyId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_C_S, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where parentResourcePrimKey = &#63; and latest = &#63;.
-	 *
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByP_L(long parentResourcePrimKey, boolean latest)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { parentResourcePrimKey, latest };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_P_L_LATEST_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(parentResourcePrimKey);
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_L, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where parentResourcePrimKey = any &#63; and latest = &#63;.
-	 *
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByP_L(long[] parentResourcePrimKeies, boolean latest)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				StringUtil.merge(parentResourcePrimKeies), latest
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((parentResourcePrimKeies == null) ||
-					(parentResourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_5);
-
-					if ((i + 1) < parentResourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_P_L_LATEST_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (parentResourcePrimKeies != null) {
-					qPos.add(parentResourcePrimKeies);
-				}
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_L,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where parentResourcePrimKey = &#63; and main = &#63;.
-	 *
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByP_M(long parentResourcePrimKey, boolean main)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { parentResourcePrimKey, main };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_P_M_MAIN_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(parentResourcePrimKey);
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_M, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where parentResourcePrimKey = any &#63; and main = &#63;.
-	 *
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByP_M(long[] parentResourcePrimKeies, boolean main)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				StringUtil.merge(parentResourcePrimKeies), main
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((parentResourcePrimKeies == null) ||
-					(parentResourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_5);
-
-					if ((i + 1) < parentResourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_P_M_MAIN_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (parentResourcePrimKeies != null) {
-					qPos.add(parentResourcePrimKeies);
-				}
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_M,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where parentResourcePrimKey = &#63; and status = &#63;.
-	 *
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByP_S(long parentResourcePrimKey, int status)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { parentResourcePrimKey, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_P_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(3);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_P_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(parentResourcePrimKey);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_P_S, finderArgs,
-					count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where parentResourcePrimKey = any &#63; and status = &#63;.
-	 *
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByP_S(long[] parentResourcePrimKeies, int status)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				StringUtil.merge(parentResourcePrimKeies), status
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((parentResourcePrimKeies == null) ||
-					(parentResourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_5);
-
-					if ((i + 1) < parentResourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_P_S_STATUS_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (parentResourcePrimKeies != null) {
-					qPos.add(parentResourcePrimKeies);
-				}
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_P_S,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_G_L(long resourcePrimKey, long groupId, boolean latest)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourcePrimKey, groupId, latest };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_G_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_G_L_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_R_G_L_LATEST_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(groupId);
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_G_L,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_G_L(long[] resourcePrimKeies, long groupId,
-		boolean latest) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				StringUtil.merge(resourcePrimKeies), groupId, latest
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < resourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_5);
-
-					if ((i + 1) < resourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_L_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_L_LATEST_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (resourcePrimKeies != null) {
-					qPos.add(resourcePrimKeies);
-				}
-
-				qPos.add(groupId);
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_L,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and latest = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByR_G_L(long resourcePrimKey, long groupId,
-		boolean latest) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByR_G_L(resourcePrimKey, groupId, latest);
-		}
-
-		StringBundler query = new StringBundler(4);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2);
-
-		query.append(_FINDER_COLUMN_R_G_L_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_R_G_L_LATEST_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(resourcePrimKey);
-
-			qPos.add(groupId);
-
-			qPos.add(latest);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and latest = &#63;.
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param latest the latest
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByR_G_L(long[] resourcePrimKeies, long groupId,
-		boolean latest) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByR_G_L(resourcePrimKeies, groupId, latest);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		boolean conjunctionable = false;
-
-		if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < resourcePrimKeies.length; i++) {
-				query.append(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_5);
-
-				if ((i + 1) < resourcePrimKeies.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_R_G_L_GROUPID_5);
-
-		conjunctionable = true;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_R_G_L_LATEST_5);
-
-		conjunctionable = true;
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			if (resourcePrimKeies != null) {
-				qPos.add(resourcePrimKeies);
-			}
-
-			qPos.add(groupId);
-
-			qPos.add(latest);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_G_M(long resourcePrimKey, long groupId, boolean main)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourcePrimKey, groupId, main };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_G_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_G_M_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_R_G_M_MAIN_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(groupId);
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_G_M,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_G_M(long[] resourcePrimKeies, long groupId, boolean main)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				StringUtil.merge(resourcePrimKeies), groupId, main
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < resourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_5);
-
-					if ((i + 1) < resourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_M_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_M_MAIN_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (resourcePrimKeies != null) {
-					qPos.add(resourcePrimKeies);
-				}
-
-				qPos.add(groupId);
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_M,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and main = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByR_G_M(long resourcePrimKey, long groupId,
-		boolean main) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByR_G_M(resourcePrimKey, groupId, main);
-		}
-
-		StringBundler query = new StringBundler(4);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2);
-
-		query.append(_FINDER_COLUMN_R_G_M_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_R_G_M_MAIN_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(resourcePrimKey);
-
-			qPos.add(groupId);
-
-			qPos.add(main);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and main = &#63;.
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param main the main
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByR_G_M(long[] resourcePrimKeies, long groupId,
-		boolean main) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByR_G_M(resourcePrimKeies, groupId, main);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		boolean conjunctionable = false;
-
-		if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < resourcePrimKeies.length; i++) {
-				query.append(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_5);
-
-				if ((i + 1) < resourcePrimKeies.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_R_G_M_GROUPID_5);
-
-		conjunctionable = true;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_R_G_M_MAIN_5);
-
-		conjunctionable = true;
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			if (resourcePrimKeies != null) {
-				qPos.add(resourcePrimKeies);
-			}
-
-			qPos.add(groupId);
-
-			qPos.add(main);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_G_S(long resourcePrimKey, long groupId, int status)
-		throws SystemException {
-		Object[] finderArgs = new Object[] { resourcePrimKey, groupId, status };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_R_G_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_R_G_S_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_R_G_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(resourcePrimKey);
-
-				qPos.add(groupId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_G_S,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByR_G_S(long[] resourcePrimKeies, long groupId, int status)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				StringUtil.merge(resourcePrimKeies), groupId, status
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < resourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_5);
-
-					if ((i + 1) < resourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_S_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_R_G_S_STATUS_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				if (resourcePrimKeies != null) {
-					qPos.add(resourcePrimKeies);
-				}
-
-				qPos.add(groupId);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_R_G_S,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = &#63; and groupId = &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKey the resource prim key
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByR_G_S(long resourcePrimKey, long groupId, int status)
-		throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByR_G_S(resourcePrimKey, groupId, status);
-		}
-
-		StringBundler query = new StringBundler(4);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2);
-
-		query.append(_FINDER_COLUMN_R_G_S_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_R_G_S_STATUS_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(resourcePrimKey);
-
-			qPos.add(groupId);
-
-			qPos.add(status);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where resourcePrimKey = any &#63; and groupId = &#63; and status = &#63;.
-	 *
-	 * @param resourcePrimKeies the resource prim keies
-	 * @param groupId the group ID
-	 * @param status the status
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByR_G_S(long[] resourcePrimKeies, long groupId,
-		int status) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByR_G_S(resourcePrimKeies, groupId, status);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		boolean conjunctionable = false;
-
-		if ((resourcePrimKeies == null) || (resourcePrimKeies.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < resourcePrimKeies.length; i++) {
-				query.append(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_5);
-
-				if ((i + 1) < resourcePrimKeies.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_R_G_S_GROUPID_5);
-
-		conjunctionable = true;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_R_G_S_STATUS_5);
-
-		conjunctionable = true;
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			if (resourcePrimKeies != null) {
-				qPos.add(resourcePrimKeies);
-			}
-
-			qPos.add(groupId);
-
-			qPos.add(status);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_L(long groupId, long parentResourcePrimKey,
-		boolean latest) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, parentResourcePrimKey, latest
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_L_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_G_P_L_LATEST_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_L,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_L(long groupId, long[] parentResourcePrimKeies,
-		boolean latest) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, StringUtil.merge(parentResourcePrimKeies), latest
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_L_GROUPID_5);
-
-			conjunctionable = true;
-
-			if ((parentResourcePrimKeies == null) ||
-					(parentResourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_5);
-
-					if ((i + 1) < parentResourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_L_LATEST_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (parentResourcePrimKeies != null) {
-					qPos.add(parentResourcePrimKeies);
-				}
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_L,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param latest the latest
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_L(long groupId, long parentResourcePrimKey,
-		boolean latest) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_L(groupId, parentResourcePrimKey, latest);
-		}
-
-		StringBundler query = new StringBundler(4);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_G_P_L_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_2);
-
-		query.append(_FINDER_COLUMN_G_P_L_LATEST_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(parentResourcePrimKey);
-
-			qPos.add(latest);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param latest the latest
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_L(long groupId, long[] parentResourcePrimKeies,
-		boolean latest) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_L(groupId, parentResourcePrimKeies, latest);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		boolean conjunctionable = false;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_L_GROUPID_5);
-
-		conjunctionable = true;
-
-		if ((parentResourcePrimKeies == null) ||
-				(parentResourcePrimKeies.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-				query.append(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_5);
-
-				if ((i + 1) < parentResourcePrimKeies.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_L_LATEST_5);
-
-		conjunctionable = true;
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			if (parentResourcePrimKeies != null) {
-				qPos.add(parentResourcePrimKeies);
-			}
-
-			qPos.add(latest);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_M(long groupId, long parentResourcePrimKey,
-		boolean main) throws SystemException {
-		Object[] finderArgs = new Object[] { groupId, parentResourcePrimKey, main };
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_M_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_G_P_M_MAIN_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_M,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_M(long groupId, long[] parentResourcePrimKeies,
-		boolean main) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, StringUtil.merge(parentResourcePrimKeies), main
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_M_GROUPID_5);
-
-			conjunctionable = true;
-
-			if ((parentResourcePrimKeies == null) ||
-					(parentResourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_5);
-
-					if ((i + 1) < parentResourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_M_MAIN_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (parentResourcePrimKeies != null) {
-					qPos.add(parentResourcePrimKeies);
-				}
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_M,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param main the main
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_M(long groupId, long parentResourcePrimKey,
-		boolean main) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_M(groupId, parentResourcePrimKey, main);
-		}
-
-		StringBundler query = new StringBundler(4);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_G_P_M_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_2);
-
-		query.append(_FINDER_COLUMN_G_P_M_MAIN_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(parentResourcePrimKey);
-
-			qPos.add(main);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param main the main
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_M(long groupId, long[] parentResourcePrimKeies,
-		boolean main) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_M(groupId, parentResourcePrimKeies, main);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		boolean conjunctionable = false;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_M_GROUPID_5);
-
-		conjunctionable = true;
-
-		if ((parentResourcePrimKeies == null) ||
-				(parentResourcePrimKeies.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-				query.append(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_5);
-
-				if ((i + 1) < parentResourcePrimKeies.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_M_MAIN_5);
-
-		conjunctionable = true;
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			if (parentResourcePrimKeies != null) {
-				qPos.add(parentResourcePrimKeies);
-			}
-
-			qPos.add(main);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_S(long groupId, long parentResourcePrimKey, int status)
-		throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, parentResourcePrimKey, status
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_COUNT_BY_G_P_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(4);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_S_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_2);
-
-			query.append(_FINDER_COLUMN_G_P_S_STATUS_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_G_P_S,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param status the status
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_S(long groupId, long[] parentResourcePrimKeies,
-		int status) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, StringUtil.merge(parentResourcePrimKeies), status
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_GROUPID_5);
-
-			conjunctionable = true;
-
-			if ((parentResourcePrimKeies == null) ||
-					(parentResourcePrimKeies.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-					query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_5);
-
-					if ((i + 1) < parentResourcePrimKeies.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_STATUS_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				if (parentResourcePrimKeies != null) {
-					qPos.add(parentResourcePrimKeies);
-				}
-
-				qPos.add(status);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param status the status
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_S(long groupId, long parentResourcePrimKey,
-		int status) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_S(groupId, parentResourcePrimKey, status);
-		}
-
-		StringBundler query = new StringBundler(4);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_G_P_S_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_2);
-
-		query.append(_FINDER_COLUMN_G_P_S_STATUS_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(parentResourcePrimKey);
-
-			qPos.add(status);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = any &#63; and status = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKeies the parent resource prim keies
-	 * @param status the status
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_S(long groupId, long[] parentResourcePrimKeies,
-		int status) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_S(groupId, parentResourcePrimKeies, status);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		boolean conjunctionable = false;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_GROUPID_5);
-
-		conjunctionable = true;
-
-		if ((parentResourcePrimKeies == null) ||
-				(parentResourcePrimKeies.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < parentResourcePrimKeies.length; i++) {
-				query.append(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_5);
-
-				if ((i + 1) < parentResourcePrimKeies.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_STATUS_5);
-
-		conjunctionable = true;
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			if (parentResourcePrimKeies != null) {
-				qPos.add(parentResourcePrimKeies);
-			}
-
-			qPos.add(status);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sections the sections
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_S_L(long groupId, long parentResourcePrimKey,
-		String sections, boolean latest) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, parentResourcePrimKey, sections, latest
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(5);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2);
-
-			if (sections == null) {
-				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_1);
-			}
-			else {
-				if (sections.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				if (sections != null) {
-					qPos.add(sections);
-				}
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param latest the latest
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_S_L(long groupId, long parentResourcePrimKey,
-		String[] sectionses, boolean latest) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
-				latest
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_5);
-
-			conjunctionable = true;
-
-			if ((sectionses == null) || (sectionses.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < sectionses.length; i++) {
-					String sections = sectionses[i];
-
-					if (sections == null) {
-						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_4);
-					}
-					else {
-						if (sections.equals(StringPool.BLANK)) {
-							query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_6);
-						}
-						else {
-							query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_5);
-						}
-					}
-
-					if ((i + 1) < sectionses.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_L_LATEST_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				if (sectionses != null) {
-					qPos.add(sectionses);
-				}
-
-				qPos.add(latest);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_L,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sections the sections
-	 * @param latest the latest
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_S_L(long groupId, long parentResourcePrimKey,
-		String sections, boolean latest) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_S_L(groupId, parentResourcePrimKey, sections,
-				latest);
-		}
-
-		StringBundler query = new StringBundler(5);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2);
-
-		if (sections == null) {
-			query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_1);
-		}
-		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_2);
-			}
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(parentResourcePrimKey);
-
-			if (sections != null) {
-				qPos.add(sections);
-			}
-
-			qPos.add(latest);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and latest = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param latest the latest
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_S_L(long groupId, long parentResourcePrimKey,
-		String[] sectionses, boolean latest) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_S_L(groupId, parentResourcePrimKey, sectionses,
-				latest);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		boolean conjunctionable = false;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_L_GROUPID_5);
-
-		conjunctionable = true;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_5);
-
-		conjunctionable = true;
-
-		if ((sectionses == null) || (sectionses.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < sectionses.length; i++) {
-				String sections = sectionses[i];
-
-				if (sections == null) {
-					query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_4);
-				}
-				else {
-					if (sections.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_6);
-					}
-					else {
-						query.append(_FINDER_COLUMN_G_P_S_L_SECTIONS_5);
-					}
-				}
-
-				if ((i + 1) < sectionses.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_L_LATEST_5);
-
-		conjunctionable = true;
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(parentResourcePrimKey);
-
-			if (sectionses != null) {
-				qPos.add(sectionses);
-			}
-
-			qPos.add(latest);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sections the sections
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_S_M(long groupId, long parentResourcePrimKey,
-		String sections, boolean main) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, parentResourcePrimKey, sections, main
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler(5);
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_2);
-
-			query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2);
-
-			if (sections == null) {
-				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_1);
-			}
-			else {
-				if (sections.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
-				}
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				if (sections != null) {
-					qPos.add(sections);
-				}
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param main the main
-	 * @return the number of matching k b articles
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int countByG_P_S_M(long groupId, long parentResourcePrimKey,
-		String[] sectionses, boolean main) throws SystemException {
-		Object[] finderArgs = new Object[] {
-				groupId, parentResourcePrimKey, StringUtil.merge(sectionses),
-				main
-			};
-
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M,
-				finderArgs, this);
-
-		if (count == null) {
-			StringBundler query = new StringBundler();
-
-			query.append(_SQL_COUNT_KBARTICLE_WHERE);
-
-			boolean conjunctionable = false;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_5);
-
-			conjunctionable = true;
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_5);
-
-			conjunctionable = true;
-
-			if ((sectionses == null) || (sectionses.length > 0)) {
-				if (conjunctionable) {
-					query.append(WHERE_AND);
-				}
-
-				query.append(StringPool.OPEN_PARENTHESIS);
-
-				for (int i = 0; i < sectionses.length; i++) {
-					String sections = sectionses[i];
-
-					if (sections == null) {
-						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_4);
-					}
-					else {
-						if (sections.equals(StringPool.BLANK)) {
-							query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_6);
-						}
-						else {
-							query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_5);
-						}
-					}
-
-					if ((i + 1) < sectionses.length) {
-						query.append(WHERE_OR);
-					}
-				}
-
-				query.append(StringPool.CLOSE_PARENTHESIS);
-
-				conjunctionable = true;
-			}
-
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(_FINDER_COLUMN_G_P_S_M_MAIN_5);
-
-			conjunctionable = true;
-
-			String sql = query.toString();
-
-			Session session = null;
-
-			try {
-				session = openSession();
-
-				Query q = session.createQuery(sql);
-
-				QueryPos qPos = QueryPos.getInstance(q);
-
-				qPos.add(groupId);
-
-				qPos.add(parentResourcePrimKey);
-
-				if (sectionses != null) {
-					qPos.add(sectionses);
-				}
-
-				qPos.add(main);
-
-				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_M,
-					finderArgs, count);
-
-				closeSession(session);
-			}
-		}
-
-		return count.intValue();
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sections the sections
-	 * @param main the main
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_S_M(long groupId, long parentResourcePrimKey,
-		String sections, boolean main) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_S_M(groupId, parentResourcePrimKey, sections, main);
-		}
-
-		StringBundler query = new StringBundler(5);
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_2);
-
-		query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2);
-
-		if (sections == null) {
-			query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_1);
-		}
-		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_2);
-			}
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_2);
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(parentResourcePrimKey);
-
-			if (sections != null) {
-				qPos.add(sections);
-			}
-
-			qPos.add(main);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
-		}
-	}
-
-	/**
-	 * Returns the number of k b articles that the user has permission to view where groupId = &#63; and parentResourcePrimKey = &#63; and sections LIKE any &#63; and main = &#63;.
-	 *
-	 * @param groupId the group ID
-	 * @param parentResourcePrimKey the parent resource prim key
-	 * @param sectionses the sectionses
-	 * @param main the main
-	 * @return the number of matching k b articles that the user has permission to view
-	 * @throws SystemException if a system exception occurred
-	 */
-	public int filterCountByG_P_S_M(long groupId, long parentResourcePrimKey,
-		String[] sectionses, boolean main) throws SystemException {
-		if (!InlineSQLHelperUtil.isEnabled(groupId)) {
-			return countByG_P_S_M(groupId, parentResourcePrimKey, sectionses,
-				main);
-		}
-
-		StringBundler query = new StringBundler();
-
-		query.append(_FILTER_SQL_COUNT_KBARTICLE_WHERE);
-
-		boolean conjunctionable = false;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_M_GROUPID_5);
-
-		conjunctionable = true;
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_5);
-
-		conjunctionable = true;
-
-		if ((sectionses == null) || (sectionses.length > 0)) {
-			if (conjunctionable) {
-				query.append(WHERE_AND);
-			}
-
-			query.append(StringPool.OPEN_PARENTHESIS);
-
-			for (int i = 0; i < sectionses.length; i++) {
-				String sections = sectionses[i];
-
-				if (sections == null) {
-					query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_4);
-				}
-				else {
-					if (sections.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_6);
-					}
-					else {
-						query.append(_FINDER_COLUMN_G_P_S_M_SECTIONS_5);
-					}
-				}
-
-				if ((i + 1) < sectionses.length) {
-					query.append(WHERE_OR);
-				}
-			}
-
-			query.append(StringPool.CLOSE_PARENTHESIS);
-
-			conjunctionable = true;
-		}
-
-		if (conjunctionable) {
-			query.append(WHERE_AND);
-		}
-
-		query.append(_FINDER_COLUMN_G_P_S_M_MAIN_5);
-
-		conjunctionable = true;
-
-		String sql = InlineSQLHelperUtil.replacePermissionCheck(query.toString(),
-				KBArticle.class.getName(),
-				_FILTER_ENTITY_TABLE_FILTER_PK_COLUMN, groupId);
-
-		Session session = null;
-
-		try {
-			session = openSession();
-
-			SQLQuery q = session.createSQLQuery(sql);
-
-			q.addScalar(COUNT_COLUMN_NAME,
-				com.liferay.portal.kernel.dao.orm.Type.LONG);
-
-			QueryPos qPos = QueryPos.getInstance(q);
-
-			qPos.add(groupId);
-
-			qPos.add(parentResourcePrimKey);
-
-			if (sectionses != null) {
-				qPos.add(sectionses);
-			}
-
-			qPos.add(main);
-
-			Long count = (Long)q.uniqueResult();
-
-			return count.intValue();
-		}
-		catch (Exception e) {
-			throw processException(e);
-		}
-		finally {
-			closeSession(session);
 		}
 	}
 
@@ -26551,12 +26096,14 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	 */
 	public int countByG_P_S_S(long groupId, long parentResourcePrimKey,
 		String sections, int status) throws SystemException {
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_S;
+
 		Object[] finderArgs = new Object[] {
 				groupId, parentResourcePrimKey, sections, status
 			};
 
-		Long count = (Long)FinderCacheUtil.getResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_S,
-				finderArgs, this);
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
 
 		if (count == null) {
 			StringBundler query = new StringBundler(5);
@@ -26567,16 +26114,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			query.append(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2);
 
+			boolean bindSections = false;
+
 			if (sections == null) {
 				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_1);
 			}
+			else if (sections.equals(StringPool.BLANK)) {
+				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
+			}
 			else {
-				if (sections.equals(StringPool.BLANK)) {
-					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
-				}
-				else {
-					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
-				}
+				bindSections = true;
+
+				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
 			}
 
 			query.append(_FINDER_COLUMN_G_P_S_S_STATUS_2);
@@ -26596,25 +26145,22 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				qPos.add(parentResourcePrimKey);
 
-				if (sections != null) {
+				if (bindSections) {
 					qPos.add(sections);
 				}
 
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
 			}
 			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
 				throw processException(e);
 			}
 			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
-
-				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_S,
-					finderArgs, count);
-
 				closeSession(session);
 			}
 		}
@@ -26678,13 +26224,11 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 					if (sections == null) {
 						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_4);
 					}
+					else if (sections.equals(StringPool.BLANK)) {
+						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_6);
+					}
 					else {
-						if (sections.equals(StringPool.BLANK)) {
-							query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_6);
-						}
-						else {
-							query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_5);
-						}
+						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_5);
 					}
 
 					if ((i + 1) < sectionses.length) {
@@ -26727,18 +26271,17 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				qPos.add(status);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_S,
 					finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_WITH_PAGINATION_COUNT_BY_G_P_S_S,
+					finderArgs);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -26771,16 +26314,18 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 		query.append(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2);
 
+		boolean bindSections = false;
+
 		if (sections == null) {
 			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_1);
 		}
+		else if (sections.equals(StringPool.BLANK)) {
+			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
+		}
 		else {
-			if (sections.equals(StringPool.BLANK)) {
-				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_3);
-			}
-			else {
-				query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
-			}
+			bindSections = true;
+
+			query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_2);
 		}
 
 		query.append(_FINDER_COLUMN_G_P_S_S_STATUS_2);
@@ -26805,7 +26350,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 			qPos.add(parentResourcePrimKey);
 
-			if (sections != null) {
+			if (bindSections) {
 				qPos.add(sections);
 			}
 
@@ -26875,13 +26420,11 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				if (sections == null) {
 					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_4);
 				}
+				else if (sections.equals(StringPool.BLANK)) {
+					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_6);
+				}
 				else {
-					if (sections.equals(StringPool.BLANK)) {
-						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_6);
-					}
-					else {
-						query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_5);
-					}
+					query.append(_FINDER_COLUMN_G_P_S_S_SECTIONS_5);
 				}
 
 				if ((i + 1) < sectionses.length) {
@@ -26940,6 +26483,1096 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 		}
 	}
 
+	private static final String _FINDER_COLUMN_G_P_S_S_GROUPID_2 = "kbArticle.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_S_GROUPID_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_S_GROUPID_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2) +
+		")";
+	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_1 = "kbArticle.sections LIKE NULL AND ";
+	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_2 = "kbArticle.sections LIKE ? AND ";
+	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_3 = "(kbArticle.sections IS NULL OR kbArticle.sections LIKE '') AND ";
+	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_4 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_S_SECTIONS_1) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_S_SECTIONS_2) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_6 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_S_SECTIONS_3) + ")";
+	private static final String _FINDER_COLUMN_G_P_S_S_STATUS_2 = "kbArticle.status = ?";
+	private static final String _FINDER_COLUMN_G_P_S_S_STATUS_5 = "(" +
+		removeConjunction(_FINDER_COLUMN_G_P_S_S_STATUS_2) + ")";
+
+	/**
+	 * Caches the k b article in the entity cache if it is enabled.
+	 *
+	 * @param kbArticle the k b article
+	 */
+	public void cacheResult(KBArticle kbArticle) {
+		EntityCacheUtil.putResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleImpl.class, kbArticle.getPrimaryKey(), kbArticle);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G,
+			new Object[] { kbArticle.getUuid(), kbArticle.getGroupId() },
+			kbArticle);
+
+		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V,
+			new Object[] { kbArticle.getResourcePrimKey(), kbArticle.getVersion() },
+			kbArticle);
+
+		kbArticle.resetOriginalValues();
+	}
+
+	/**
+	 * Caches the k b articles in the entity cache if it is enabled.
+	 *
+	 * @param kbArticles the k b articles
+	 */
+	public void cacheResult(List<KBArticle> kbArticles) {
+		for (KBArticle kbArticle : kbArticles) {
+			if (EntityCacheUtil.getResult(
+						KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+						KBArticleImpl.class, kbArticle.getPrimaryKey()) == null) {
+				cacheResult(kbArticle);
+			}
+			else {
+				kbArticle.resetOriginalValues();
+			}
+		}
+	}
+
+	/**
+	 * Clears the cache for all k b articles.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache() {
+		if (_HIBERNATE_CACHE_USE_SECOND_LEVEL_CACHE) {
+			CacheRegistryUtil.clear(KBArticleImpl.class.getName());
+		}
+
+		EntityCacheUtil.clearCache(KBArticleImpl.class.getName());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+	}
+
+	/**
+	 * Clears the cache for the k b article.
+	 *
+	 * <p>
+	 * The {@link com.liferay.portal.kernel.dao.orm.EntityCache} and {@link com.liferay.portal.kernel.dao.orm.FinderCache} are both cleared by this method.
+	 * </p>
+	 */
+	@Override
+	public void clearCache(KBArticle kbArticle) {
+		EntityCacheUtil.removeResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleImpl.class, kbArticle.getPrimaryKey());
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		clearUniqueFindersCache(kbArticle);
+	}
+
+	@Override
+	public void clearCache(List<KBArticle> kbArticles) {
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+
+		for (KBArticle kbArticle : kbArticles) {
+			EntityCacheUtil.removeResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+				KBArticleImpl.class, kbArticle.getPrimaryKey());
+
+			clearUniqueFindersCache(kbArticle);
+		}
+	}
+
+	protected void cacheUniqueFindersCache(KBArticle kbArticle) {
+		if (kbArticle.isNew()) {
+			Object[] args = new Object[] {
+					kbArticle.getUuid(), kbArticle.getGroupId()
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G, args,
+				kbArticle);
+
+			args = new Object[] {
+					kbArticle.getResourcePrimKey(), kbArticle.getVersion()
+				};
+
+			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_V, args,
+				Long.valueOf(1));
+			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V, args, kbArticle);
+		}
+		else {
+			KBArticleModelImpl kbArticleModelImpl = (KBArticleModelImpl)kbArticle;
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticle.getUuid(), kbArticle.getGroupId()
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G, args,
+					kbArticle);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_FETCH_BY_R_V.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticle.getResourcePrimKey(), kbArticle.getVersion()
+					};
+
+				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_R_V, args,
+					Long.valueOf(1));
+				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_R_V, args,
+					kbArticle);
+			}
+		}
+	}
+
+	protected void clearUniqueFindersCache(KBArticle kbArticle) {
+		KBArticleModelImpl kbArticleModelImpl = (KBArticleModelImpl)kbArticle;
+
+		Object[] args = new Object[] { kbArticle.getUuid(), kbArticle.getGroupId() };
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+
+		if ((kbArticleModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_UUID_G.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					kbArticleModelImpl.getOriginalUuid(),
+					kbArticleModelImpl.getOriginalGroupId()
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
+		}
+
+		args = new Object[] {
+				kbArticle.getResourcePrimKey(), kbArticle.getVersion()
+			};
+
+		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_V, args);
+		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_V, args);
+
+		if ((kbArticleModelImpl.getColumnBitmask() &
+				FINDER_PATH_FETCH_BY_R_V.getColumnBitmask()) != 0) {
+			args = new Object[] {
+					kbArticleModelImpl.getOriginalResourcePrimKey(),
+					kbArticleModelImpl.getOriginalVersion()
+				};
+
+			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_V, args);
+			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_R_V, args);
+		}
+	}
+
+	/**
+	 * Creates a new k b article with the primary key. Does not add the k b article to the database.
+	 *
+	 * @param kbArticleId the primary key for the new k b article
+	 * @return the new k b article
+	 */
+	public KBArticle create(long kbArticleId) {
+		KBArticle kbArticle = new KBArticleImpl();
+
+		kbArticle.setNew(true);
+		kbArticle.setPrimaryKey(kbArticleId);
+
+		String uuid = PortalUUIDUtil.generate();
+
+		kbArticle.setUuid(uuid);
+
+		return kbArticle;
+	}
+
+	/**
+	 * Removes the k b article with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param kbArticleId the primary key of the k b article
+	 * @return the k b article that was removed
+	 * @throws com.liferay.knowledgebase.NoSuchArticleException if a k b article with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KBArticle remove(long kbArticleId)
+		throws NoSuchArticleException, SystemException {
+		return remove((Serializable)kbArticleId);
+	}
+
+	/**
+	 * Removes the k b article with the primary key from the database. Also notifies the appropriate model listeners.
+	 *
+	 * @param primaryKey the primary key of the k b article
+	 * @return the k b article that was removed
+	 * @throws com.liferay.knowledgebase.NoSuchArticleException if a k b article with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public KBArticle remove(Serializable primaryKey)
+		throws NoSuchArticleException, SystemException {
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			KBArticle kbArticle = (KBArticle)session.get(KBArticleImpl.class,
+					primaryKey);
+
+			if (kbArticle == null) {
+				if (_log.isWarnEnabled()) {
+					_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+				}
+
+				throw new NoSuchArticleException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+					primaryKey);
+			}
+
+			return remove(kbArticle);
+		}
+		catch (NoSuchArticleException nsee) {
+			throw nsee;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	@Override
+	protected KBArticle removeImpl(KBArticle kbArticle)
+		throws SystemException {
+		kbArticle = toUnwrappedModel(kbArticle);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (!session.contains(kbArticle)) {
+				kbArticle = (KBArticle)session.get(KBArticleImpl.class,
+						kbArticle.getPrimaryKeyObj());
+			}
+
+			if (kbArticle != null) {
+				session.delete(kbArticle);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		if (kbArticle != null) {
+			clearCache(kbArticle);
+		}
+
+		return kbArticle;
+	}
+
+	@Override
+	public KBArticle updateImpl(
+		com.liferay.knowledgebase.model.KBArticle kbArticle)
+		throws SystemException {
+		kbArticle = toUnwrappedModel(kbArticle);
+
+		boolean isNew = kbArticle.isNew();
+
+		KBArticleModelImpl kbArticleModelImpl = (KBArticleModelImpl)kbArticle;
+
+		if (Validator.isNull(kbArticle.getUuid())) {
+			String uuid = PortalUUIDUtil.generate();
+
+			kbArticle.setUuid(uuid);
+		}
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			if (kbArticle.isNew()) {
+				session.save(kbArticle);
+
+				kbArticle.setNew(false);
+			}
+			else {
+				session.merge(kbArticle);
+			}
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+
+		FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
+
+		if (isNew || !KBArticleModelImpl.COLUMN_BITMASK_ENABLED) {
+			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
+		}
+
+		else {
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalUuid()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+
+				args = new Object[] { kbArticleModelImpl.getUuid() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalUuid(),
+						kbArticleModelImpl.getOriginalCompanyId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getUuid(),
+						kbArticleModelImpl.getCompanyId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_UUID_C,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalResourcePrimKey()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY,
+					args);
+
+				args = new Object[] { kbArticleModelImpl.getResourcePrimKey() };
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_RESOURCEPRIMKEY,
+					args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_RESOURCEPRIMKEY,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalResourcePrimKey(),
+						kbArticleModelImpl.getOriginalGroupId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getResourcePrimKey(),
+						kbArticleModelImpl.getGroupId()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_L.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalResourcePrimKey(),
+						kbArticleModelImpl.getOriginalLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_L,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getResourcePrimKey(),
+						kbArticleModelImpl.getLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_L,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalResourcePrimKey(),
+						kbArticleModelImpl.getOriginalMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getResourcePrimKey(),
+						kbArticleModelImpl.getMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_M,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalResourcePrimKey(),
+						kbArticleModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getResourcePrimKey(),
+						kbArticleModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_S,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalGroupId(),
+						kbArticleModelImpl.getOriginalLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getGroupId(),
+						kbArticleModelImpl.getLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_L,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_M.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalGroupId(),
+						kbArticleModelImpl.getOriginalMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_M,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getGroupId(),
+						kbArticleModelImpl.getMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_M,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalGroupId(),
+						kbArticleModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getGroupId(),
+						kbArticleModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_L.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalCompanyId(),
+						kbArticleModelImpl.getOriginalLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_L,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getCompanyId(),
+						kbArticleModelImpl.getLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_L,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_M.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalCompanyId(),
+						kbArticleModelImpl.getOriginalMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_M,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getCompanyId(),
+						kbArticleModelImpl.getMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_M,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalCompanyId(),
+						kbArticleModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getCompanyId(),
+						kbArticleModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_S,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_L.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalParentResourcePrimKey(),
+						kbArticleModelImpl.getOriginalLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_L,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getParentResourcePrimKey(),
+						kbArticleModelImpl.getLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_L,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_M.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalParentResourcePrimKey(),
+						kbArticleModelImpl.getOriginalMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_M,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getParentResourcePrimKey(),
+						kbArticleModelImpl.getMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_M,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalParentResourcePrimKey(),
+						kbArticleModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getParentResourcePrimKey(),
+						kbArticleModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_P_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_P_S,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_L.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalResourcePrimKey(),
+						kbArticleModelImpl.getOriginalGroupId(),
+						kbArticleModelImpl.getOriginalLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_L,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getResourcePrimKey(),
+						kbArticleModelImpl.getGroupId(),
+						kbArticleModelImpl.getLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_L,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_M.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalResourcePrimKey(),
+						kbArticleModelImpl.getOriginalGroupId(),
+						kbArticleModelImpl.getOriginalMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_M,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getResourcePrimKey(),
+						kbArticleModelImpl.getGroupId(),
+						kbArticleModelImpl.getMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_M,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalResourcePrimKey(),
+						kbArticleModelImpl.getOriginalGroupId(),
+						kbArticleModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_S,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getResourcePrimKey(),
+						kbArticleModelImpl.getGroupId(),
+						kbArticleModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_R_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_R_G_S,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalGroupId(),
+						kbArticleModelImpl.getOriginalParentResourcePrimKey(),
+						kbArticleModelImpl.getOriginalLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getGroupId(),
+						kbArticleModelImpl.getParentResourcePrimKey(),
+						kbArticleModelImpl.getLatest()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_L, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_L,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_M.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalGroupId(),
+						kbArticleModelImpl.getOriginalParentResourcePrimKey(),
+						kbArticleModelImpl.getOriginalMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_M,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getGroupId(),
+						kbArticleModelImpl.getParentResourcePrimKey(),
+						kbArticleModelImpl.getMain()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_M, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_M,
+					args);
+			}
+
+			if ((kbArticleModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbArticleModelImpl.getOriginalGroupId(),
+						kbArticleModelImpl.getOriginalParentResourcePrimKey(),
+						kbArticleModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_S,
+					args);
+
+				args = new Object[] {
+						kbArticleModelImpl.getGroupId(),
+						kbArticleModelImpl.getParentResourcePrimKey(),
+						kbArticleModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_P_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_P_S,
+					args);
+			}
+		}
+
+		EntityCacheUtil.putResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+			KBArticleImpl.class, kbArticle.getPrimaryKey(), kbArticle);
+
+		clearUniqueFindersCache(kbArticle);
+		cacheUniqueFindersCache(kbArticle);
+
+		return kbArticle;
+	}
+
+	protected KBArticle toUnwrappedModel(KBArticle kbArticle) {
+		if (kbArticle instanceof KBArticleImpl) {
+			return kbArticle;
+		}
+
+		KBArticleImpl kbArticleImpl = new KBArticleImpl();
+
+		kbArticleImpl.setNew(kbArticle.isNew());
+		kbArticleImpl.setPrimaryKey(kbArticle.getPrimaryKey());
+
+		kbArticleImpl.setUuid(kbArticle.getUuid());
+		kbArticleImpl.setKbArticleId(kbArticle.getKbArticleId());
+		kbArticleImpl.setResourcePrimKey(kbArticle.getResourcePrimKey());
+		kbArticleImpl.setGroupId(kbArticle.getGroupId());
+		kbArticleImpl.setCompanyId(kbArticle.getCompanyId());
+		kbArticleImpl.setUserId(kbArticle.getUserId());
+		kbArticleImpl.setUserName(kbArticle.getUserName());
+		kbArticleImpl.setCreateDate(kbArticle.getCreateDate());
+		kbArticleImpl.setModifiedDate(kbArticle.getModifiedDate());
+		kbArticleImpl.setRootResourcePrimKey(kbArticle.getRootResourcePrimKey());
+		kbArticleImpl.setParentResourcePrimKey(kbArticle.getParentResourcePrimKey());
+		kbArticleImpl.setVersion(kbArticle.getVersion());
+		kbArticleImpl.setTitle(kbArticle.getTitle());
+		kbArticleImpl.setContent(kbArticle.getContent());
+		kbArticleImpl.setDescription(kbArticle.getDescription());
+		kbArticleImpl.setPriority(kbArticle.getPriority());
+		kbArticleImpl.setSections(kbArticle.getSections());
+		kbArticleImpl.setViewCount(kbArticle.getViewCount());
+		kbArticleImpl.setLatest(kbArticle.isLatest());
+		kbArticleImpl.setMain(kbArticle.isMain());
+		kbArticleImpl.setStatus(kbArticle.getStatus());
+		kbArticleImpl.setStatusByUserId(kbArticle.getStatusByUserId());
+		kbArticleImpl.setStatusByUserName(kbArticle.getStatusByUserName());
+		kbArticleImpl.setStatusDate(kbArticle.getStatusDate());
+
+		return kbArticleImpl;
+	}
+
+	/**
+	 * Returns the k b article with the primary key or throws a {@link com.liferay.portal.NoSuchModelException} if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the k b article
+	 * @return the k b article
+	 * @throws com.liferay.knowledgebase.NoSuchArticleException if a k b article with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public KBArticle findByPrimaryKey(Serializable primaryKey)
+		throws NoSuchArticleException, SystemException {
+		KBArticle kbArticle = fetchByPrimaryKey(primaryKey);
+
+		if (kbArticle == null) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY + primaryKey);
+			}
+
+			throw new NoSuchArticleException(_NO_SUCH_ENTITY_WITH_PRIMARY_KEY +
+				primaryKey);
+		}
+
+		return kbArticle;
+	}
+
+	/**
+	 * Returns the k b article with the primary key or throws a {@link com.liferay.knowledgebase.NoSuchArticleException} if it could not be found.
+	 *
+	 * @param kbArticleId the primary key of the k b article
+	 * @return the k b article
+	 * @throws com.liferay.knowledgebase.NoSuchArticleException if a k b article with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KBArticle findByPrimaryKey(long kbArticleId)
+		throws NoSuchArticleException, SystemException {
+		return findByPrimaryKey((Serializable)kbArticleId);
+	}
+
+	/**
+	 * Returns the k b article with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param primaryKey the primary key of the k b article
+	 * @return the k b article, or <code>null</code> if a k b article with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	@Override
+	public KBArticle fetchByPrimaryKey(Serializable primaryKey)
+		throws SystemException {
+		KBArticle kbArticle = (KBArticle)EntityCacheUtil.getResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+				KBArticleImpl.class, primaryKey);
+
+		if (kbArticle == _nullKBArticle) {
+			return null;
+		}
+
+		if (kbArticle == null) {
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				kbArticle = (KBArticle)session.get(KBArticleImpl.class,
+						primaryKey);
+
+				if (kbArticle != null) {
+					cacheResult(kbArticle);
+				}
+				else {
+					EntityCacheUtil.putResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+						KBArticleImpl.class, primaryKey, _nullKBArticle);
+				}
+			}
+			catch (Exception e) {
+				EntityCacheUtil.removeResult(KBArticleModelImpl.ENTITY_CACHE_ENABLED,
+					KBArticleImpl.class, primaryKey);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return kbArticle;
+	}
+
+	/**
+	 * Returns the k b article with the primary key or returns <code>null</code> if it could not be found.
+	 *
+	 * @param kbArticleId the primary key of the k b article
+	 * @return the k b article, or <code>null</code> if a k b article with the primary key could not be found
+	 * @throws SystemException if a system exception occurred
+	 */
+	public KBArticle fetchByPrimaryKey(long kbArticleId)
+		throws SystemException {
+		return fetchByPrimaryKey((Serializable)kbArticleId);
+	}
+
+	/**
+	 * Returns all the k b articles.
+	 *
+	 * @return the k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findAll() throws SystemException {
+		return findAll(QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+	}
+
+	/**
+	 * Returns a range of all the k b articles.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @return the range of k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findAll(int start, int end)
+		throws SystemException {
+		return findAll(start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b articles.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBArticleModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param start the lower bound of the range of k b articles
+	 * @param end the upper bound of the range of k b articles (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of k b articles
+	 * @throws SystemException if a system exception occurred
+	 */
+	public List<KBArticle> findAll(int start, int end,
+		OrderByComparator orderByComparator) throws SystemException {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_ALL;
+			finderArgs = FINDER_ARGS_EMPTY;
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_ALL;
+			finderArgs = new Object[] { start, end, orderByComparator };
+		}
+
+		List<KBArticle> list = (List<KBArticle>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if (list == null) {
+			StringBundler query = null;
+			String sql = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(2 +
+						(orderByComparator.getOrderByFields().length * 3));
+
+				query.append(_SQL_SELECT_KBARTICLE);
+
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+
+				sql = query.toString();
+			}
+			else {
+				sql = _SQL_SELECT_KBARTICLE;
+
+				if (pagination) {
+					sql = sql.concat(KBArticleModelImpl.ORDER_BY_JPQL);
+				}
+			}
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				if (!pagination) {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = new UnmodifiableList<KBArticle>(list);
+				}
+				else {
+					list = (List<KBArticle>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Removes all the k b articles from the database.
+	 *
+	 * @throws SystemException if a system exception occurred
+	 */
+	public void removeAll() throws SystemException {
+		for (KBArticle kbArticle : findAll()) {
+			remove(kbArticle);
+		}
+	}
+
 	/**
 	 * Returns the number of k b articles.
 	 *
@@ -26959,18 +27592,17 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 				Query q = session.createQuery(_SQL_COUNT_KBARTICLE);
 
 				count = (Long)q.uniqueResult();
-			}
-			catch (Exception e) {
-				throw processException(e);
-			}
-			finally {
-				if (count == null) {
-					count = Long.valueOf(0);
-				}
 
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_ALL,
 					FINDER_ARGS_EMPTY, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_ALL,
+					FINDER_ARGS_EMPTY);
 
+				throw processException(e);
+			}
+			finally {
 				closeSession(session);
 			}
 		}
@@ -26992,7 +27624,7 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 
 				for (String listenerClassName : listenerClassNames) {
 					listenersList.add((ModelListener<KBArticle>)InstanceFactory.newInstance(
-							listenerClassName));
+							getClassLoader(), listenerClassName));
 				}
 
 				listeners = listenersList.toArray(new ModelListener[listenersList.size()]);
@@ -27006,228 +27638,14 @@ public class KBArticlePersistenceImpl extends BasePersistenceImpl<KBArticle>
 	public void destroy() {
 		EntityCacheUtil.removeCache(KBArticleImpl.class.getName());
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_ENTITY);
+		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITH_PAGINATION);
 		FinderCacheUtil.removeCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
 	}
 
-	@BeanReference(type = KBArticlePersistence.class)
-	protected KBArticlePersistence kbArticlePersistence;
-	@BeanReference(type = KBCommentPersistence.class)
-	protected KBCommentPersistence kbCommentPersistence;
-	@BeanReference(type = KBTemplatePersistence.class)
-	protected KBTemplatePersistence kbTemplatePersistence;
-	@BeanReference(type = CompanyPersistence.class)
-	protected CompanyPersistence companyPersistence;
-	@BeanReference(type = GroupPersistence.class)
-	protected GroupPersistence groupPersistence;
-	@BeanReference(type = LayoutPersistence.class)
-	protected LayoutPersistence layoutPersistence;
-	@BeanReference(type = PortletPreferencesPersistence.class)
-	protected PortletPreferencesPersistence portletPreferencesPersistence;
-	@BeanReference(type = SubscriptionPersistence.class)
-	protected SubscriptionPersistence subscriptionPersistence;
-	@BeanReference(type = TicketPersistence.class)
-	protected TicketPersistence ticketPersistence;
-	@BeanReference(type = UserPersistence.class)
-	protected UserPersistence userPersistence;
-	@BeanReference(type = WorkflowInstanceLinkPersistence.class)
-	protected WorkflowInstanceLinkPersistence workflowInstanceLinkPersistence;
-	@BeanReference(type = AssetEntryPersistence.class)
-	protected AssetEntryPersistence assetEntryPersistence;
-	@BeanReference(type = RatingsStatsPersistence.class)
-	protected RatingsStatsPersistence ratingsStatsPersistence;
-	@BeanReference(type = SocialActivityPersistence.class)
-	protected SocialActivityPersistence socialActivityPersistence;
 	private static final String _SQL_SELECT_KBARTICLE = "SELECT kbArticle FROM KBArticle kbArticle";
 	private static final String _SQL_SELECT_KBARTICLE_WHERE = "SELECT kbArticle FROM KBArticle kbArticle WHERE ";
 	private static final String _SQL_COUNT_KBARTICLE = "SELECT COUNT(kbArticle) FROM KBArticle kbArticle";
 	private static final String _SQL_COUNT_KBARTICLE_WHERE = "SELECT COUNT(kbArticle) FROM KBArticle kbArticle WHERE ";
-	private static final String _FINDER_COLUMN_UUID_UUID_1 = "kbArticle.uuid IS NULL";
-	private static final String _FINDER_COLUMN_UUID_UUID_2 = "kbArticle.uuid = ?";
-	private static final String _FINDER_COLUMN_UUID_UUID_3 = "(kbArticle.uuid IS NULL OR kbArticle.uuid = ?)";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_1 = "kbArticle.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_2 = "kbArticle.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_G_UUID_3 = "(kbArticle.uuid IS NULL OR kbArticle.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_G_GROUPID_2 = "kbArticle.groupId = ?";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_1 = "kbArticle.uuid IS NULL AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_2 = "kbArticle.uuid = ? AND ";
-	private static final String _FINDER_COLUMN_UUID_C_UUID_3 = "(kbArticle.uuid IS NULL OR kbArticle.uuid = ?) AND ";
-	private static final String _FINDER_COLUMN_UUID_C_COMPANYID_2 = "kbArticle.companyId = ?";
-	private static final String _FINDER_COLUMN_RESOURCEPRIMKEY_RESOURCEPRIMKEY_2 =
-		"kbArticle.resourcePrimKey = ?";
-	private static final String _FINDER_COLUMN_R_G_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_R_G_GROUPID_2 = "kbArticle.groupId = ?";
-	private static final String _FINDER_COLUMN_R_V_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_R_V_VERSION_2 = "kbArticle.version = ?";
-	private static final String _FINDER_COLUMN_R_L_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_R_L_RESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_L_RESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_R_L_LATEST_2 = "kbArticle.latest = ?";
-	private static final String _FINDER_COLUMN_R_L_LATEST_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_L_LATEST_2) + ")";
-	private static final String _FINDER_COLUMN_R_M_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_R_M_RESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_M_RESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_R_M_MAIN_2 = "kbArticle.main = ?";
-	private static final String _FINDER_COLUMN_R_M_MAIN_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_M_MAIN_2) + ")";
-	private static final String _FINDER_COLUMN_R_S_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_R_S_RESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_S_RESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_R_S_STATUS_2 = "kbArticle.status = ?";
-	private static final String _FINDER_COLUMN_R_S_STATUS_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_S_STATUS_2) + ")";
-	private static final String _FINDER_COLUMN_G_L_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_L_LATEST_2 = "kbArticle.latest = ?";
-	private static final String _FINDER_COLUMN_G_M_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_M_MAIN_2 = "kbArticle.main = ?";
-	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_S_STATUS_2 = "kbArticle.status = ?";
-	private static final String _FINDER_COLUMN_C_L_COMPANYID_2 = "kbArticle.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_L_LATEST_2 = "kbArticle.latest = ?";
-	private static final String _FINDER_COLUMN_C_M_COMPANYID_2 = "kbArticle.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_M_MAIN_2 = "kbArticle.main = ?";
-	private static final String _FINDER_COLUMN_C_S_COMPANYID_2 = "kbArticle.companyId = ? AND ";
-	private static final String _FINDER_COLUMN_C_S_STATUS_2 = "kbArticle.status = ?";
-	private static final String _FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_P_L_PARENTRESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_P_L_LATEST_2 = "kbArticle.latest = ?";
-	private static final String _FINDER_COLUMN_P_L_LATEST_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_P_L_LATEST_2) + ")";
-	private static final String _FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_P_M_PARENTRESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_P_M_MAIN_2 = "kbArticle.main = ?";
-	private static final String _FINDER_COLUMN_P_M_MAIN_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_P_M_MAIN_2) + ")";
-	private static final String _FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_P_S_PARENTRESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_P_S_STATUS_2 = "kbArticle.status = ?";
-	private static final String _FINDER_COLUMN_P_S_STATUS_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_P_S_STATUS_2) + ")";
-	private static final String _FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_G_L_RESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_R_G_L_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_R_G_L_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_G_L_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_R_G_L_LATEST_2 = "kbArticle.latest = ?";
-	private static final String _FINDER_COLUMN_R_G_L_LATEST_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_G_L_LATEST_2) + ")";
-	private static final String _FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_G_M_RESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_R_G_M_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_R_G_M_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_G_M_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_R_G_M_MAIN_2 = "kbArticle.main = ?";
-	private static final String _FINDER_COLUMN_R_G_M_MAIN_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_G_M_MAIN_2) + ")";
-	private static final String _FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2 = "kbArticle.resourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_G_S_RESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_R_G_S_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_R_G_S_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_G_S_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_R_G_S_STATUS_2 = "kbArticle.status = ?";
-	private static final String _FINDER_COLUMN_R_G_S_STATUS_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_R_G_S_STATUS_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_L_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_L_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_L_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_L_PARENTRESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_L_LATEST_2 = "kbArticle.latest = ?";
-	private static final String _FINDER_COLUMN_G_P_L_LATEST_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_L_LATEST_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_M_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_M_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_M_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_M_PARENTRESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_M_MAIN_2 = "kbArticle.main = ?";
-	private static final String _FINDER_COLUMN_G_P_M_MAIN_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_M_MAIN_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_PARENTRESOURCEPRIMKEY_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_STATUS_2 = "kbArticle.status = ?";
-	private static final String _FINDER_COLUMN_G_P_S_STATUS_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_STATUS_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_L_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_L_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_L_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_L_PARENTRESOURCEPRIMKEY_2) +
-		")";
-	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_1 = "kbArticle.sections LIKE NULL AND ";
-	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_2 = "kbArticle.sections LIKE ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_3 = "(kbArticle.sections IS NULL OR kbArticle.sections LIKE ?) AND ";
-	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_4 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_L_SECTIONS_1) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_L_SECTIONS_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_L_SECTIONS_6 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_L_SECTIONS_3) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_L_LATEST_2 = "kbArticle.latest = ?";
-	private static final String _FINDER_COLUMN_G_P_S_L_LATEST_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_L_LATEST_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_M_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_M_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_M_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_M_PARENTRESOURCEPRIMKEY_2) +
-		")";
-	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_1 = "kbArticle.sections LIKE NULL AND ";
-	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_2 = "kbArticle.sections LIKE ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_3 = "(kbArticle.sections IS NULL OR kbArticle.sections LIKE ?) AND ";
-	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_4 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_M_SECTIONS_1) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_M_SECTIONS_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_M_SECTIONS_6 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_M_SECTIONS_3) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_M_MAIN_2 = "kbArticle.main = ?";
-	private static final String _FINDER_COLUMN_G_P_S_M_MAIN_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_M_MAIN_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_S_GROUPID_2 = "kbArticle.groupId = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_S_GROUPID_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_S_GROUPID_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2 = "kbArticle.parentResourcePrimKey = ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_S_PARENTRESOURCEPRIMKEY_2) +
-		")";
-	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_1 = "kbArticle.sections LIKE NULL AND ";
-	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_2 = "kbArticle.sections LIKE ? AND ";
-	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_3 = "(kbArticle.sections IS NULL OR kbArticle.sections LIKE ?) AND ";
-	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_4 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_S_SECTIONS_1) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_S_SECTIONS_2) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_S_SECTIONS_6 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_S_SECTIONS_3) + ")";
-	private static final String _FINDER_COLUMN_G_P_S_S_STATUS_2 = "kbArticle.status = ?";
-	private static final String _FINDER_COLUMN_G_P_S_S_STATUS_5 = "(" +
-		_removeConjunction(_FINDER_COLUMN_G_P_S_S_STATUS_2) + ")";
-
-	private static String _removeConjunction(String sql) {
-		int pos = sql.indexOf(" AND ");
-
-		if (pos != -1) {
-			sql = sql.substring(0, pos);
-		}
-
-		return sql;
-	}
-
 	private static final String _FILTER_ENTITY_TABLE_FILTER_PK_COLUMN = "kbArticle.rootResourcePrimKey";
 	private static final String _FILTER_SQL_SELECT_KBARTICLE_WHERE = "SELECT DISTINCT {kbArticle.*} FROM KBArticle kbArticle WHERE ";
 	private static final String _FILTER_SQL_SELECT_KBARTICLE_NO_INLINE_DISTINCT_WHERE_1 =

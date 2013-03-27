@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -32,6 +32,7 @@ import com.liferay.wsrp.model.WSRPProducer;
 import com.liferay.wsrp.service.WSRPConsumerLocalServiceUtil;
 import com.liferay.wsrp.service.WSRPConsumerPortletLocalServiceUtil;
 import com.liferay.wsrp.service.WSRPProducerLocalServiceUtil;
+import com.liferay.wsrp.util.MarkupCharacterSetsUtil;
 import com.liferay.wsrp.util.WebKeys;
 
 import javax.portlet.ActionRequest;
@@ -189,7 +190,7 @@ public class AdminPortlet extends MVCPortlet {
 	}
 
 	protected void doUpdateServiceDescription(
-		ActionRequest actionRequest, ActionResponse actionResponse)
+			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
 		long wsrpConsumerId = ParamUtil.getLong(
@@ -213,6 +214,11 @@ public class AdminPortlet extends MVCPortlet {
 		String url = ParamUtil.getString(actionRequest, "url");
 		String forwardCookies = ParamUtil.getString(
 			actionRequest, "forwardCookies");
+		String forwardHeaders = ParamUtil.getString(
+			actionRequest, "forwardHeaders");
+		String markupCharacterSets =
+			MarkupCharacterSetsUtil.getSupportedMarkupCharacterSets(
+				ParamUtil.getString(actionRequest, "markupCharacterSets"));
 
 		if (wsrpConsumerId <= 0) {
 			ServiceContext serviceContext = ServiceContextFactory.getInstance(
@@ -220,11 +226,13 @@ public class AdminPortlet extends MVCPortlet {
 
 			WSRPConsumerLocalServiceUtil.addWSRPConsumer(
 				themeDisplay.getCompanyId(), adminPortletId, name, url,
-				forwardCookies, serviceContext);
+				forwardCookies, forwardHeaders, markupCharacterSets,
+				serviceContext);
 		}
 		else {
 			WSRPConsumerLocalServiceUtil.updateWSRPConsumer(
-				wsrpConsumerId, adminPortletId, name, url, forwardCookies);
+				wsrpConsumerId, adminPortletId, name, url, forwardCookies,
+				forwardHeaders, markupCharacterSets);
 		}
 	}
 

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,21 +26,36 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 %>
 
 <liferay-ui:tabs
-	names="message-boards,discussions"
+	names="message-boards,discussions,wikis"
 	param="tabs1"
 	url="<%= portletURL.toString() %>"
 />
 
 <liferay-ui:error exception="<%= NoSuchMessageException.class %>" message="the-message-could-not-be-found" />
+<liferay-ui:error exception="<%= NoSuchPageException.class %>" message="the-page-could-not-be-found" />
 <liferay-ui:error exception="<%= PrincipalException.class %>" message="you-do-not-have-the-required-permissions" />
 <liferay-ui:error exception="<%= RequiredMessageException.class %>" message="you-cannot-delete-a-root-message-that-has-more-than-one-immediate-reply" />
+
+<c:if test='<%= SessionMessages.contains(portletSession, "anotherUserHasMadeChangesToThesePages") %>'>
+
+	<%
+	String wikiPageLinks = (String)SessionMessages.get(renderRequest, "anotherUserHasMadeChangesToThesePages");
+	%>
+
+	<div class="portlet-msg-info">
+		<%= LanguageUtil.format(pageContext, "another-user-made-changes-to-the-following-pages-and-the-approved-changes-were-not-merged-into-the-latest-version-x", wikiPageLinks, false) %>
+	</div>
+</c:if>
 
 <c:choose>
 	<c:when test='<%= tabs1.equals("message-boards") %>'>
 		<%@ include file="/moderation/message_boards.jspf" %>
 	</c:when>
-	<c:otherwise>
+	<c:when test='<%= tabs1.equals("discussions") %>'>
 		<%@ include file="/moderation/discussions.jspf" %>
+	</c:when>
+	<c:otherwise>
+		<%@ include file="/moderation/wiki_pages.jspf" %>
 	</c:otherwise>
 </c:choose>
 
@@ -67,13 +82,41 @@ request.setAttribute("view.jsp-portletURL", portletURL);
 
 	Liferay.provide(
 		window,
-		'<portlet:namespace />notSpam',
+		'<portlet:namespace />notSpamMBMessages',
 		function() {
 			var notSpamMBMessageIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
 
-			if (notSpamMBMessageIds && confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-mark-the-selected-messages-as-not-spam") %>')) {
+			if (notSpamMBMessageIds && confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-mark-the-selected-messages-not-spam") %>')) {
 				document.<portlet:namespace />fm.<portlet:namespace />notSpamMBMessageIds.value = notSpamMBMessageIds;
-				submitForm(document.<portlet:namespace />fm, "<portlet:actionURL name="markNotSpam"><portlet:param name="redirect" value="<%= portletURL.toString() %>" /></portlet:actionURL>");
+				submitForm(document.<portlet:namespace />fm, "<portlet:actionURL name="markNotSpamMBMessages"><portlet:param name="redirect" value="<%= portletURL.toString() %>" /></portlet:actionURL>");
+			}
+		},
+		['liferay-util-list-fields']
+	);
+
+	Liferay.provide(
+		window,
+		'<portlet:namespace />notSpamWikiPages',
+		function() {
+			var notSpamWikiPageIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+
+			if (notSpamWikiPageIds && confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-mark-the-selected-pages-not-spam") %>')) {
+				document.<portlet:namespace />fm.<portlet:namespace />notSpamWikiPageIds.value = notSpamWikiPageIds;
+				submitForm(document.<portlet:namespace />fm, "<portlet:actionURL name="markNotSpamWikiPages"><portlet:param name="redirect" value="<%= portletURL.toString() %>" /></portlet:actionURL>");
+			}
+		},
+		['liferay-util-list-fields']
+	);
+
+	Liferay.provide(
+		window,
+		'<portlet:namespace />spamWikiPages',
+		function() {
+			var spamWikiPageIds = Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, "<portlet:namespace />allRowIds");
+
+			if (spamWikiPageIds && confirm('<%= UnicodeLanguageUtil.get(pageContext, "are-you-sure-you-want-to-mark-the-selected-pages-as-spam") %>')) {
+				document.<portlet:namespace />fm.<portlet:namespace />spamWikiPageIds.value = spamWikiPageIds;
+				submitForm(document.<portlet:namespace />fm, "<portlet:actionURL name="spamWikiPages"><portlet:param name="redirect" value="<%= portletURL.toString() %>" /></portlet:actionURL>");
 			}
 		},
 		['liferay-util-list-fields']

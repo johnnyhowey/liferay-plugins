@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,7 +14,9 @@
 
 package com.liferay.calendar.portlet;
 
+import com.liferay.calendar.CalendarNameException;
 import com.liferay.calendar.CalendarResourceCodeException;
+import com.liferay.calendar.CalendarResourceNameException;
 import com.liferay.calendar.DuplicateCalendarResourceException;
 import com.liferay.calendar.NoSuchResourceException;
 import com.liferay.calendar.model.Calendar;
@@ -38,6 +40,7 @@ import com.liferay.calendar.util.CalendarDataHandlerFactory;
 import com.liferay.calendar.util.CalendarResourceUtil;
 import com.liferay.calendar.util.CalendarUtil;
 import com.liferay.calendar.util.JCalendarUtil;
+import com.liferay.calendar.util.RSSUtil;
 import com.liferay.calendar.util.WebKeys;
 import com.liferay.calendar.util.comparator.CalendarResourceNameComparator;
 import com.liferay.calendar.workflow.CalendarBookingWorkflowConstants;
@@ -52,6 +55,7 @@ import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.LocalizationUtil;
@@ -80,6 +84,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -100,6 +105,7 @@ import javax.portlet.ResourceResponse;
  * @author Fabio Pezzutto
  * @author Andrea Di Giorgi
  * @author Marcellus Tavares
+ * @author Bruno Basto
  */
 public class CalendarPortlet extends MVCPortlet {
 
@@ -161,6 +167,9 @@ public class CalendarPortlet extends MVCPortlet {
 
 			if (resourceID.equals("calendarBookingInvitees")) {
 				serveCalendarBookingInvitees(resourceRequest, resourceResponse);
+			}
+			else if (resourceID.equals("calendarBookingsRSS")) {
+				serveCalendarBookingsRSS(resourceRequest, resourceResponse);
 			}
 			else if (resourceID.equals("calendarRenderingRules")) {
 				serveCalendarRenderingRules(resourceRequest, resourceResponse);
@@ -233,11 +242,11 @@ public class CalendarPortlet extends MVCPortlet {
 		Map<Locale, String> descriptionMap =
 			LocalizationUtil.getLocalizationMap(actionRequest, "description");
 		String location = ParamUtil.getString(actionRequest, "location");
-		java.util.Calendar startDateJCalendar = getJCalendar(
-			actionRequest, "startDate");
-		java.util.Calendar endDateJCalendar = getJCalendar(
-			actionRequest, "endDate");
-		long oldStartDate = ParamUtil.getLong(actionRequest, "oldStartDate");
+		java.util.Calendar startTimeJCalendar = getJCalendar(
+			actionRequest, "startTime");
+		java.util.Calendar endTimeJCalendar = getJCalendar(
+			actionRequest, "endTime");
+		long oldStartTime = ParamUtil.getLong(actionRequest, "oldStartTime");
 		boolean allDay = ParamUtil.getBoolean(actionRequest, "allDay");
 		String recurrence = getRecurrence(actionRequest);
 		long[] reminders = getReminders(actionRequest);
@@ -248,14 +257,17 @@ public class CalendarPortlet extends MVCPortlet {
 			CalendarBooking.class.getName(), actionRequest);
 
 		if (calendarBookingId <= 0) {
-			CalendarBookingServiceUtil.addCalendarBooking(
-				calendarId, childCalendarIds,
-				CalendarBookingConstants.PARENT_CALENDAR_BOOKING_ID_DEFAULT,
-				titleMap, descriptionMap, location,
-				startDateJCalendar.getTimeInMillis(),
-				endDateJCalendar.getTimeInMillis(), allDay, recurrence,
-				reminders[0], remindersType[0], reminders[1], remindersType[1],
-				serviceContext);
+			CalendarBooking calendarBooking =
+				CalendarBookingServiceUtil.addCalendarBooking(
+					calendarId, childCalendarIds,
+					CalendarBookingConstants.PARENT_CALENDAR_BOOKING_ID_DEFAULT,
+					titleMap, descriptionMap, location,
+					startTimeJCalendar.getTimeInMillis(),
+					endTimeJCalendar.getTimeInMillis(), allDay, recurrence,
+					reminders[0], remindersType[0], reminders[1],
+					remindersType[1], serviceContext);
+
+			calendarBookingId = calendarBooking.getCalendarBookingId();
 		}
 		else {
 			boolean updateCalendarBookingInstance = ParamUtil.getBoolean(
@@ -268,8 +280,8 @@ public class CalendarPortlet extends MVCPortlet {
 				CalendarBookingServiceUtil.updateCalendarBookingInstance(
 					calendarBookingId, calendarId, childCalendarIds, titleMap,
 					descriptionMap, location,
-					startDateJCalendar.getTimeInMillis(),
-					endDateJCalendar.getTimeInMillis(), allDay, recurrence,
+					startTimeJCalendar.getTimeInMillis(),
+					endTimeJCalendar.getTimeInMillis(), allDay, recurrence,
 					allFollowing, reminders[0], remindersType[0], reminders[1],
 					remindersType[1], status, serviceContext);
 			}
@@ -279,16 +291,16 @@ public class CalendarPortlet extends MVCPortlet {
 						calendarBookingId);
 
 				long duration =
-					(endDateJCalendar.getTimeInMillis() -
-						startDateJCalendar.getTimeInMillis());
+					(endTimeJCalendar.getTimeInMillis() -
+						startTimeJCalendar.getTimeInMillis());
 				long offset =
-					(startDateJCalendar.getTimeInMillis() - oldStartDate);
+					(startTimeJCalendar.getTimeInMillis() - oldStartTime);
 
 				CalendarBookingServiceUtil.updateCalendarBooking(
 					calendarBookingId, calendarId, childCalendarIds, titleMap,
 					descriptionMap, location,
-					(calendarBooking.getStartDate() + offset),
-					(calendarBooking.getStartDate() + offset + duration),
+					(calendarBooking.getStartTime() + offset),
+					(calendarBooking.getStartTime() + offset + duration),
 					allDay, recurrence, reminders[0], remindersType[0],
 					reminders[1], remindersType[1], status, serviceContext);
 			}
@@ -297,7 +309,18 @@ public class CalendarPortlet extends MVCPortlet {
 		String redirect = ParamUtil.getString(actionRequest, "redirect");
 
 		redirect = HttpUtil.setParameter(
+			redirect, actionResponse.getNamespace() + "calendarBookingId",
+			calendarBookingId);
+		redirect = HttpUtil.setParameter(
 			redirect, actionResponse.getNamespace() + "calendarId", calendarId);
+		redirect = HttpUtil.removeParameter(
+			redirect, actionResponse.getNamespace() + "startTime");
+		redirect = HttpUtil.removeParameter(
+			redirect, actionResponse.getNamespace() + "endTime");
+		redirect = HttpUtil.removeParameter(
+			redirect, actionResponse.getNamespace() + "allDay");
+		redirect = HttpUtil.removeParameter(
+			redirect, actionResponse.getNamespace() + "repeat");
 
 		actionRequest.setAttribute(WebKeys.REDIRECT, redirect);
 	}
@@ -316,7 +339,6 @@ public class CalendarPortlet extends MVCPortlet {
 			actionRequest, "name");
 		Map<Locale, String> descriptionMap =
 			LocalizationUtil.getLocalizationMap(actionRequest, "description");
-		String type = ParamUtil.getString(actionRequest, "type");
 		boolean active = ParamUtil.getBoolean(actionRequest, "active");
 
 		ServiceContext serviceContext = ServiceContextFactory.getInstance(
@@ -325,12 +347,12 @@ public class CalendarPortlet extends MVCPortlet {
 		if (calendarResourceId <= 0) {
 			CalendarResourceServiceUtil.addCalendarResource(
 				serviceContext.getScopeGroupId(), null, 0,
-				PortalUUIDUtil.generate(), code, nameMap, descriptionMap, type,
+				PortalUUIDUtil.generate(), code, nameMap, descriptionMap,
 				active, serviceContext);
 		}
 		else {
 			CalendarResourceServiceUtil.updateCalendarResource(
-				calendarResourceId, nameMap, descriptionMap, type, active,
+				calendarResourceId, nameMap, descriptionMap, active,
 				serviceContext);
 
 			if (defaultCalendarId > 0) {
@@ -418,9 +440,8 @@ public class CalendarPortlet extends MVCPortlet {
 		CalendarResource calendarResource = null;
 
 		if (calendarResourceId > 0) {
-			calendarResource =
-				CalendarResourceServiceUtil.getCalendarResource(
-					calendarResourceId);
+			calendarResource = CalendarResourceServiceUtil.getCalendarResource(
+				calendarResourceId);
 		}
 		else if ((classNameId > 0) && (classPK > 0)) {
 			calendarResource = CalendarResourceUtil.getCalendarResource(
@@ -570,7 +591,9 @@ public class CalendarPortlet extends MVCPortlet {
 
 	@Override
 	protected boolean isSessionErrorException(Throwable cause) {
-		if (cause instanceof CalendarResourceCodeException ||
+		if (cause instanceof CalendarNameException ||
+			cause instanceof CalendarResourceCodeException ||
+			cause instanceof CalendarResourceNameException ||
 			cause instanceof DuplicateCalendarResourceException ||
 			cause instanceof PrincipalException) {
 
@@ -584,6 +607,9 @@ public class CalendarPortlet extends MVCPortlet {
 		ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 			throws Exception {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		long parentCalendarBookingId = ParamUtil.getLong(
 			resourceRequest, "parentCalendarBookingId");
 
@@ -593,16 +619,58 @@ public class CalendarPortlet extends MVCPortlet {
 			CalendarBookingServiceUtil.getChildCalendarBookings(
 				parentCalendarBookingId);
 
-		for (CalendarBooking calendarBooking : childCalendarBookings) {
-			CalendarResource calendarResource =
-				calendarBooking.getCalendarResource();
+		Collection<CalendarResource> calendarResources =
+			CalendarUtil.getCalendarResources(childCalendarBookings);
 
-			addCalendarJSONObject(
-				resourceRequest, jsonArray, calendarResource.getClassNameId(),
-				calendarResource.getClassPK());
+		for (CalendarResource calendarResource : calendarResources) {
+			JSONObject jsonObject = CalendarUtil.toCalendarResourceJSONObject(
+				themeDisplay, calendarResource);
+
+			jsonArray.put(jsonObject);
 		}
 
 		writeJSON(resourceRequest, resourceResponse, jsonArray);
+	}
+
+	protected void serveCalendarBookingsRSS(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws Exception {
+
+		if (!PortalUtil.isRSSFeedsEnabled()) {
+			PortalUtil.sendRSSFeedsDisabledError(
+				resourceRequest, resourceResponse);
+
+			return;
+		}
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long calendarId = ParamUtil.getLong(resourceRequest, "calendarId");
+
+		long timeInterval = ParamUtil.getLong(
+			resourceRequest, "timeInterval", RSSUtil.TIME_INTERVAL_DEFAULT);
+
+		long startTime = System.currentTimeMillis();
+
+		long endTime = startTime + timeInterval;
+
+		int max = ParamUtil.getInteger(
+			resourceRequest, "max", SearchContainer.DEFAULT_DELTA);
+		String type = ParamUtil.getString(
+			resourceRequest, "type", RSSUtil.FORMAT_DEFAULT);
+		double version = ParamUtil.getDouble(
+			resourceRequest, "version", RSSUtil.VERSION_DEFAULT);
+		String displayStyle = ParamUtil.getString(
+			resourceRequest, "displayStyle", RSSUtil.DISPLAY_STYLE_DEFAULT);
+
+		String rss = CalendarBookingServiceUtil.getCalendarBookingsRSS(
+			calendarId, startTime, endTime, max, type, version, displayStyle,
+			themeDisplay);
+
+		PortletResponseUtil.sendFile(
+			resourceRequest, resourceResponse, null, rss.getBytes(),
+			ContentTypes.TEXT_XML_UTF8);
 	}
 
 	protected void serveCalendarRenderingRules(
@@ -619,13 +687,13 @@ public class CalendarPortlet extends MVCPortlet {
 			CalendarBookingWorkflowConstants.STATUS_MAYBE,
 			CalendarBookingWorkflowConstants.STATUS_PENDING
 		};
-		long startDate = ParamUtil.getLong(resourceRequest, "startDate");
-		long endDate = ParamUtil.getLong(resourceRequest, "endDate");
+		long startTime = ParamUtil.getLong(resourceRequest, "startTime");
+		long endTime = ParamUtil.getLong(resourceRequest, "endTime");
 		String ruleName = ParamUtil.getString(resourceRequest, "ruleName");
 
 		if (calendarIds.length > 0) {
 			JSONObject jsonObject = CalendarUtil.getCalendarRenderingRules(
-				themeDisplay, calendarIds, statuses, startDate, endDate,
+				themeDisplay, calendarIds, statuses, startTime, endTime,
 				ruleName);
 
 			writeJSON(resourceRequest, resourceResponse, jsonObject);
@@ -731,7 +799,7 @@ public class CalendarPortlet extends MVCPortlet {
 		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
 
-		long calendarId = ParamUtil.getLong(resourceRequest, "calendarId");
+		long calendarId = ParamUtil.getLong(uploadPortletRequest, "calendarId");
 
 		File file = uploadPortletRequest.getFile("file");
 

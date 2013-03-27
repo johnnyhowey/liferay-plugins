@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -19,8 +19,23 @@
 
 <%@ include file="/html/taglib/init.jsp" %>
 
+<%@ page import="com.liferay.portal.NoSuchRoleException" %>
+
+<%
+boolean socialOfficeUser = false;
+
+try {
+	socialOfficeUser = UserLocalServiceUtil.hasRoleUser(themeDisplay.getCompanyId(), "Social Office User", themeDisplay.getUserId(), true);
+}
+catch (NoSuchRoleException nsre) {
+
+	// This exception should never be thrown except while SO is being uninstalled
+
+}
+%>
+
 <c:choose>
-	<c:when test='<%= !UserLocalServiceUtil.hasRoleUser(themeDisplay.getCompanyId(), "Social Office User", themeDisplay.getUserId(), true) %>'>
+	<c:when test="<%= !socialOfficeUser %>">
 		<liferay-util:include page="/html/taglib/ui/my_sites/page.portal.jsp" />
 	</c:when>
 	<c:otherwise>

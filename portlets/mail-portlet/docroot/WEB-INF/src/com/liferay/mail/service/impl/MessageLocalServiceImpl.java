@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -77,7 +77,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		message.setSize(getSize(messageId, body));
 		message.setRemoteMessageId(remoteMessageId);
 
-		messagePersistence.update(message, false);
+		messagePersistence.update(message);
 
 		// Indexer
 
@@ -270,7 +270,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		message.setFlags(flags);
 		message.setSize(getSize(messageId, body));
 
-		messagePersistence.update(message, false);
+		messagePersistence.update(message);
 
 		return message;
 	}
@@ -291,7 +291,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 			message.setFlags(StringUtil.remove(flags, flagString));
 		}
 
-		return messagePersistence.update(message, false);
+		return messagePersistence.update(message);
 	}
 
 	public Message updateMessage(
@@ -318,7 +318,7 @@ public class MessageLocalServiceImpl extends MessageLocalServiceBaseImpl {
 		message.setSize(getSize(messageId, body));
 		message.setRemoteMessageId(remoteMessageId);
 
-		messagePersistence.update(message, false);
+		messagePersistence.update(message);
 
 		// Indexer
 

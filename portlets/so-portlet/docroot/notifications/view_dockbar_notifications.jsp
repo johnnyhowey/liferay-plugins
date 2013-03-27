@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -63,7 +63,7 @@ while (iterator.hasNext()) {
 
 			long userId = notificationEventJSONObject.getLong("userId");
 
-			String userFullName = PortalUtil.getUserName(userId, StringPool.BLANK);
+			String userFullName = HtmlUtil.escape(PortalUtil.getUserName(userId, StringPool.BLANK));
 
 			String userDisplayURL = StringPool.BLANK;
 			String userPortaitURL = StringPool.BLANK;
@@ -126,8 +126,8 @@ while (iterator.hasNext()) {
 	<span class="notification-count"><%= notificationEvents.size() %></span>
 </a>
 
-<aui:script use="aui-base">
-	var userNotificationEvents = A.one('.dockbar .user-notification-events');
+<aui:script use="aui-base,aui-io">
+	var userNotificationEvents = A.one('#<portlet:namespace />notificationsMenuContainer');
 	var userNotificationsContainer = userNotificationEvents.one('.user-notification-events-container');
 
 	<c:if test="<%= notificationEvents.size() > 0 %>">
@@ -141,6 +141,31 @@ while (iterator.hasNext()) {
 				}
 			},
 			'.user-notification-event-content'
+		);
+
+		userNotificationsContainer.delegate(
+			'click',
+			function(event) {
+				event.preventDefault();
+
+				var row = event.currentTarget.ancestor('.user-notification-event-content');
+				var loadingRow = A.Node.create('<div class="loading-animation"></div>');
+
+				row.hide().placeAfter(loadingRow);
+
+				A.io.request(
+					event.currentTarget.attr('href'),
+					{
+						on: {
+							success: function() {
+								row.remove();
+								loadingRow.remove();
+							}
+						}
+					}
+				);
+			},
+			'a'
 		);
 
 		var dismissNotifications = userNotificationEvents.one('.dismiss-notifications');

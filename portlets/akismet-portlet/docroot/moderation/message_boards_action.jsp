@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,7 +34,7 @@ long messageBoardsPlid = PortalUtil.getPlidFromPortletId(message.getGroupId(), P
 
 	<liferay-ui:icon image="page" message="view-in-context" target="_blank" url="<%= viewURL %>" />
 
-	<portlet:actionURL name="markNotSpam" var="markAsHamURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
+	<portlet:actionURL name="markNotSpamMBMessages" var="markAsHamURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
 		<portlet:param name="redirect" value="<%= portletURL.toString() %>" />
 		<portlet:param name="notSpamMBMessageIds" value="<%= String.valueOf(message.getMessageId()) %>" />
 	</portlet:actionURL>

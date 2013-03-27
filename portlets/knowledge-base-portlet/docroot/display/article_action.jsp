@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -57,19 +57,16 @@ KBArticle kbArticle = (KBArticle)row.getObject();
 		/>
 	</c:if>
 
-	<c:if test="<%= PortalUtil.isRSSFeedsEnabled() && (kbArticle.isApproved() || !kbArticle.isFirstVersion()) %>">
-		<liferay-portlet:resourceURL id="kbArticleRSS" var="kbArticleRSSURL">
+	<c:if test="<%= enableRSS && (kbArticle.isApproved() || !kbArticle.isFirstVersion()) %>">
+		<liferay-portlet:resourceURL id="kbArticleRSS" varImpl="kbArticleRSSURL">
 			<portlet:param name="resourcePrimKey" value="<%= String.valueOf(kbArticle.getResourcePrimKey()) %>" />
-			<portlet:param name="rssDelta" value="<%= String.valueOf(rssDelta) %>" />
-			<portlet:param name="rssDisplayStyle" value="<%= rssDisplayStyle %>" />
-			<portlet:param name="rssFormat" value="<%= rssFormat %>" />
 		</liferay-portlet:resourceURL>
 
-		<liferay-ui:icon
-			image="rss"
-			method="get"
-			target="_blank"
-			url="<%= kbArticleRSSURL %>"
+		<liferay-ui:rss
+			delta="<%= rssDelta %>"
+			displayStyle="<%= rssDisplayStyle %>"
+			feedType="<%= rssFeedType %>"
+			resourceURL="<%= kbArticleRSSURL %>"
 		/>
 	</c:if>
 

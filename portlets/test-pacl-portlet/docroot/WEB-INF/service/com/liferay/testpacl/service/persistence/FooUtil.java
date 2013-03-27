@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -94,18 +94,178 @@ public class FooUtil {
 	}
 
 	/**
-	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, boolean)
+	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel)
 	 */
-	public static Foo update(Foo foo, boolean merge) throws SystemException {
-		return getPersistence().update(foo, merge);
+	public static Foo update(Foo foo) throws SystemException {
+		return getPersistence().update(foo);
 	}
 
 	/**
-	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, boolean, ServiceContext)
+	 * @see com.liferay.portal.service.persistence.BasePersistence#update(com.liferay.portal.model.BaseModel, ServiceContext)
 	 */
-	public static Foo update(Foo foo, boolean merge,
-		ServiceContext serviceContext) throws SystemException {
-		return getPersistence().update(foo, merge, serviceContext);
+	public static Foo update(Foo foo, ServiceContext serviceContext)
+		throws SystemException {
+		return getPersistence().update(foo, serviceContext);
+	}
+
+	/**
+	* Returns all the foos where field2 = &#63;.
+	*
+	* @param field2 the field2
+	* @return the matching foos
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.testpacl.model.Foo> findByField2(
+		boolean field2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByField2(field2);
+	}
+
+	/**
+	* Returns a range of all the foos where field2 = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.testpacl.model.impl.FooModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param field2 the field2
+	* @param start the lower bound of the range of foos
+	* @param end the upper bound of the range of foos (not inclusive)
+	* @return the range of matching foos
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.testpacl.model.Foo> findByField2(
+		boolean field2, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().findByField2(field2, start, end);
+	}
+
+	/**
+	* Returns an ordered range of all the foos where field2 = &#63;.
+	*
+	* <p>
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.testpacl.model.impl.FooModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	* </p>
+	*
+	* @param field2 the field2
+	* @param start the lower bound of the range of foos
+	* @param end the upper bound of the range of foos (not inclusive)
+	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	* @return the ordered range of matching foos
+	* @throws SystemException if a system exception occurred
+	*/
+	public static java.util.List<com.liferay.testpacl.model.Foo> findByField2(
+		boolean field2, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence()
+				   .findByField2(field2, start, end, orderByComparator);
+	}
+
+	/**
+	* Returns the first foo in the ordered set where field2 = &#63;.
+	*
+	* @param field2 the field2
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching foo
+	* @throws com.liferay.testpacl.NoSuchFooException if a matching foo could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.testpacl.model.Foo findByField2_First(
+		boolean field2,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testpacl.NoSuchFooException {
+		return getPersistence().findByField2_First(field2, orderByComparator);
+	}
+
+	/**
+	* Returns the first foo in the ordered set where field2 = &#63;.
+	*
+	* @param field2 the field2
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the first matching foo, or <code>null</code> if a matching foo could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.testpacl.model.Foo fetchByField2_First(
+		boolean field2,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByField2_First(field2, orderByComparator);
+	}
+
+	/**
+	* Returns the last foo in the ordered set where field2 = &#63;.
+	*
+	* @param field2 the field2
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching foo
+	* @throws com.liferay.testpacl.NoSuchFooException if a matching foo could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.testpacl.model.Foo findByField2_Last(
+		boolean field2,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testpacl.NoSuchFooException {
+		return getPersistence().findByField2_Last(field2, orderByComparator);
+	}
+
+	/**
+	* Returns the last foo in the ordered set where field2 = &#63;.
+	*
+	* @param field2 the field2
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the last matching foo, or <code>null</code> if a matching foo could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.testpacl.model.Foo fetchByField2_Last(
+		boolean field2,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().fetchByField2_Last(field2, orderByComparator);
+	}
+
+	/**
+	* Returns the foos before and after the current foo in the ordered set where field2 = &#63;.
+	*
+	* @param fooId the primary key of the current foo
+	* @param field2 the field2
+	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	* @return the previous, current, and next foo
+	* @throws com.liferay.testpacl.NoSuchFooException if a foo with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public static com.liferay.testpacl.model.Foo[] findByField2_PrevAndNext(
+		long fooId, boolean field2,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.testpacl.NoSuchFooException {
+		return getPersistence()
+				   .findByField2_PrevAndNext(fooId, field2, orderByComparator);
+	}
+
+	/**
+	* Removes all the foos where field2 = &#63; from the database.
+	*
+	* @param field2 the field2
+	* @throws SystemException if a system exception occurred
+	*/
+	public static void removeByField2(boolean field2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		getPersistence().removeByField2(field2);
+	}
+
+	/**
+	* Returns the number of foos where field2 = &#63;.
+	*
+	* @param field2 the field2
+	* @return the number of matching foos
+	* @throws SystemException if a system exception occurred
+	*/
+	public static int countByField2(boolean field2)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getPersistence().countByField2(field2);
 	}
 
 	/**
@@ -152,9 +312,9 @@ public class FooUtil {
 	}
 
 	public static com.liferay.testpacl.model.Foo updateImpl(
-		com.liferay.testpacl.model.Foo foo, boolean merge)
+		com.liferay.testpacl.model.Foo foo)
 		throws com.liferay.portal.kernel.exception.SystemException {
-		return getPersistence().updateImpl(foo, merge);
+		return getPersistence().updateImpl(foo);
 	}
 
 	/**
@@ -198,7 +358,7 @@ public class FooUtil {
 	* Returns a range of all the foos.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.testpacl.model.impl.FooModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of foos
@@ -216,7 +376,7 @@ public class FooUtil {
 	* Returns an ordered range of all the foos.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.testpacl.model.impl.FooModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of foos
@@ -265,7 +425,7 @@ public class FooUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated As of 6.2.0
 	 */
 	public void setPersistence(FooPersistence persistence) {
 	}

@@ -1,41 +1,21 @@
-/**
- * Copyright (c) 2000-2011 Liferay, Inc. All rights reserved.
- *
- * This file is part of Liferay Social Office. Liferay Social Office is free
- * software: you can redistribute it and/or modify it under the terms of the GNU
- * Affero General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
- *
- * Liferay Social Office is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License
- * for more details.
- *
- * You should have received a copy of the GNU General Public License along with
- * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
- */
-
-@import "compass";
-
 .so-portlet-activities {
 	.activity-item {
-		margin-bottom: .5em;
-		min-height: 38px;
+		min-height: 45px;
 	}
 
 	.user-portrait {
 		float: left;
-		height: 38px;
+		height: 45px;
 		position: relative;
-		width: 38px;
+		width: 45px;
 
 		.avatar {
 			display: block;
-			height: 30px;
+			height: 45px;
 			overflow: hidden;
 
 			img {
-				max-width: 30px;
+				max-width: 45px;
 			}
 		}
 
@@ -47,7 +27,7 @@
 	}
 
 	.activity-data {
-		margin-left: 45px;
+		margin-left: 55px;
 	}
 
 	.activity-body a {
@@ -58,15 +38,5 @@
 			border-right-width: 0;
 			padding-right: 0;
 		}
-	}
-}
-
-.ie .so-portlet-activities {
-	.activity-item {
-		height: 38px;
-	}
-
-	.user-portrait .avatar img {
-		width: 30px;
 	}
 }

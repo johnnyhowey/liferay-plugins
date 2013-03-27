@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -38,67 +38,6 @@ public interface FolderPersistence extends BasePersistence<Folder> {
 	 */
 
 	/**
-	* Caches the folder in the entity cache if it is enabled.
-	*
-	* @param folder the folder
-	*/
-	public void cacheResult(com.liferay.mail.model.Folder folder);
-
-	/**
-	* Caches the folders in the entity cache if it is enabled.
-	*
-	* @param folders the folders
-	*/
-	public void cacheResult(
-		java.util.List<com.liferay.mail.model.Folder> folders);
-
-	/**
-	* Creates a new folder with the primary key. Does not add the folder to the database.
-	*
-	* @param folderId the primary key for the new folder
-	* @return the new folder
-	*/
-	public com.liferay.mail.model.Folder create(long folderId);
-
-	/**
-	* Removes the folder with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param folderId the primary key of the folder
-	* @return the folder that was removed
-	* @throws com.liferay.mail.NoSuchFolderException if a folder with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.mail.model.Folder remove(long folderId)
-		throws com.liferay.mail.NoSuchFolderException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.mail.model.Folder updateImpl(
-		com.liferay.mail.model.Folder folder, boolean merge)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the folder with the primary key or throws a {@link com.liferay.mail.NoSuchFolderException} if it could not be found.
-	*
-	* @param folderId the primary key of the folder
-	* @return the folder
-	* @throws com.liferay.mail.NoSuchFolderException if a folder with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.mail.model.Folder findByPrimaryKey(long folderId)
-		throws com.liferay.mail.NoSuchFolderException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the folder with the primary key or returns <code>null</code> if it could not be found.
-	*
-	* @param folderId the primary key of the folder
-	* @return the folder, or <code>null</code> if a folder with the primary key could not be found
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.mail.model.Folder fetchByPrimaryKey(long folderId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Returns all the folders where accountId = &#63;.
 	*
 	* @param accountId the account ID
@@ -113,7 +52,7 @@ public interface FolderPersistence extends BasePersistence<Folder> {
 	* Returns a range of all the folders where accountId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.mail.model.impl.FolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param accountId the account ID
@@ -130,7 +69,7 @@ public interface FolderPersistence extends BasePersistence<Folder> {
 	* Returns an ordered range of all the folders where accountId = &#63;.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.mail.model.impl.FolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param accountId the account ID
@@ -215,6 +154,25 @@ public interface FolderPersistence extends BasePersistence<Folder> {
 			com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes all the folders where accountId = &#63; from the database.
+	*
+	* @param accountId the account ID
+	* @throws SystemException if a system exception occurred
+	*/
+	public void removeByAccountId(long accountId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of folders where accountId = &#63;.
+	*
+	* @param accountId the account ID
+	* @return the number of matching folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByAccountId(long accountId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns the folder where accountId = &#63; and fullName = &#63; or throws a {@link com.liferay.mail.NoSuchFolderException} if it could not be found.
 	*
 	* @param accountId the account ID
@@ -254,6 +212,91 @@ public interface FolderPersistence extends BasePersistence<Folder> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
+	* Removes the folder where accountId = &#63; and fullName = &#63; from the database.
+	*
+	* @param accountId the account ID
+	* @param fullName the full name
+	* @return the folder that was removed
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.mail.model.Folder removeByA_F(long accountId,
+		java.lang.String fullName)
+		throws com.liferay.mail.NoSuchFolderException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the number of folders where accountId = &#63; and fullName = &#63;.
+	*
+	* @param accountId the account ID
+	* @param fullName the full name
+	* @return the number of matching folders
+	* @throws SystemException if a system exception occurred
+	*/
+	public int countByA_F(long accountId, java.lang.String fullName)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Caches the folder in the entity cache if it is enabled.
+	*
+	* @param folder the folder
+	*/
+	public void cacheResult(com.liferay.mail.model.Folder folder);
+
+	/**
+	* Caches the folders in the entity cache if it is enabled.
+	*
+	* @param folders the folders
+	*/
+	public void cacheResult(
+		java.util.List<com.liferay.mail.model.Folder> folders);
+
+	/**
+	* Creates a new folder with the primary key. Does not add the folder to the database.
+	*
+	* @param folderId the primary key for the new folder
+	* @return the new folder
+	*/
+	public com.liferay.mail.model.Folder create(long folderId);
+
+	/**
+	* Removes the folder with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param folderId the primary key of the folder
+	* @return the folder that was removed
+	* @throws com.liferay.mail.NoSuchFolderException if a folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.mail.model.Folder remove(long folderId)
+		throws com.liferay.mail.NoSuchFolderException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	public com.liferay.mail.model.Folder updateImpl(
+		com.liferay.mail.model.Folder folder)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the folder with the primary key or throws a {@link com.liferay.mail.NoSuchFolderException} if it could not be found.
+	*
+	* @param folderId the primary key of the folder
+	* @return the folder
+	* @throws com.liferay.mail.NoSuchFolderException if a folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.mail.model.Folder findByPrimaryKey(long folderId)
+		throws com.liferay.mail.NoSuchFolderException,
+			com.liferay.portal.kernel.exception.SystemException;
+
+	/**
+	* Returns the folder with the primary key or returns <code>null</code> if it could not be found.
+	*
+	* @param folderId the primary key of the folder
+	* @return the folder, or <code>null</code> if a folder with the primary key could not be found
+	* @throws SystemException if a system exception occurred
+	*/
+	public com.liferay.mail.model.Folder fetchByPrimaryKey(long folderId)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	/**
 	* Returns all the folders.
 	*
 	* @return the folders
@@ -266,7 +309,7 @@ public interface FolderPersistence extends BasePersistence<Folder> {
 	* Returns a range of all the folders.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.mail.model.impl.FolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of folders
@@ -281,7 +324,7 @@ public interface FolderPersistence extends BasePersistence<Folder> {
 	* Returns an ordered range of all the folders.
 	*
 	* <p>
-	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set.
+	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.mail.model.impl.FolderModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
 	* </p>
 	*
 	* @param start the lower bound of the range of folders
@@ -296,54 +339,11 @@ public interface FolderPersistence extends BasePersistence<Folder> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Removes all the folders where accountId = &#63; from the database.
-	*
-	* @param accountId the account ID
-	* @throws SystemException if a system exception occurred
-	*/
-	public void removeByAccountId(long accountId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Removes the folder where accountId = &#63; and fullName = &#63; from the database.
-	*
-	* @param accountId the account ID
-	* @param fullName the full name
-	* @return the folder that was removed
-	* @throws SystemException if a system exception occurred
-	*/
-	public com.liferay.mail.model.Folder removeByA_F(long accountId,
-		java.lang.String fullName)
-		throws com.liferay.mail.NoSuchFolderException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	/**
 	* Removes all the folders from the database.
 	*
 	* @throws SystemException if a system exception occurred
 	*/
 	public void removeAll()
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of folders where accountId = &#63;.
-	*
-	* @param accountId the account ID
-	* @return the number of matching folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByAccountId(long accountId)
-		throws com.liferay.portal.kernel.exception.SystemException;
-
-	/**
-	* Returns the number of folders where accountId = &#63; and fullName = &#63;.
-	*
-	* @param accountId the account ID
-	* @param fullName the full name
-	* @return the number of matching folders
-	* @throws SystemException if a system exception occurred
-	*/
-	public int countByA_F(long accountId, java.lang.String fullName)
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
