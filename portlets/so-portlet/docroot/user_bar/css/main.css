@@ -85,7 +85,12 @@ html > body.lfr-dockbar-pinned {
 		display: block;
 	}
 
+	.has-submenu {
+		position: relative;
+	}
+
 	.user-menu {
+		float: right;
 		padding: .5em;
 
 		.avatar {
