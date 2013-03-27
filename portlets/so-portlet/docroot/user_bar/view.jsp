@@ -95,7 +95,8 @@ page import="com.liferay.portal.kernel.util.HtmlUtil" %>
 	var notificationButton = userBar.one('.user-notification-events-icon');
 	var notifications = userBar.one('.user-notification-events');
 	var notificationEvents = notifications.all('user-notification-event-content');
-	console.log(userBar);
+
+console.log(notifications);
 
 	if (notificationButton) {
 		notificationButton.on(
