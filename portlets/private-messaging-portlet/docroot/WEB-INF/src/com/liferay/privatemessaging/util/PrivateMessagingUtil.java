@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,6 +17,7 @@
 
 package com.liferay.privatemessaging.util;
 
+import com.liferay.compat.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.NoSuchRoleException;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -65,20 +66,16 @@ public class PrivateMessagingUtil {
 			new LinkedHashMap<String, Object>();
 
 		if (type.equals("site")) {
-			params.put("inherit", true);
+			params.put("inherit", Boolean.TRUE);
 
-			List<Group> usersGroups = GroupLocalServiceUtil.getUserGroups(
+			List<Group> groups = GroupLocalServiceUtil.getUserGroups(
 				userId, true);
 
-			long[] usersGroupsIds = new long[usersGroups.size()];
-
-			for (int i = 0; i < usersGroups.size(); i++) {
-				Group group = usersGroups.get(i);
-
-				usersGroupsIds[i] = group.getGroupId();
-			}
-
-			params.put("usersGroups", usersGroupsIds);
+			params.put(
+				"usersGroups",
+				_filterGroupIds(
+					groups,
+					PortletPropsValues.AUTOCOMPLETE_RECIPIENT_SITE_EXCLUDES));
 		}
 		else if (!type.equals("all")) {
 			params.put(
@@ -300,6 +297,18 @@ public class PrivateMessagingUtil {
 		catch (NoSuchUserThreadException nsute) {
 			return false;
 		}
+	}
+
+	private static Long[] _filterGroupIds(List<Group> groups, String[] names) {
+		List<Long> groupIds = new ArrayList<Long>();
+
+		for (Group group : groups) {
+			if (!ArrayUtil.contains(names, group.getName())) {
+				groupIds.add(group.getGroupId());
+			}
+		}
+
+		return ArrayUtil.toArray(ArrayUtil.toLongArray(groupIds));
 	}
 
 }

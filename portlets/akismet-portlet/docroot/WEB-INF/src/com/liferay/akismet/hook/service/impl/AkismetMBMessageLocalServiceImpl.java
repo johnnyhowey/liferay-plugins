@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,7 +26,6 @@ import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
@@ -80,9 +79,11 @@ public class AkismetMBMessageLocalServiceImpl
 			return message;
 		}
 
+		String content = subject + "\n\n" + body;
+
 		int status = WorkflowConstants.STATUS_APPROVED;
 
-		if (isSpam(userId, subject, body, akismetData)) {
+		if (AkismetUtil.isSpam(userId, content, akismetData)) {
 			status = WorkflowConstants.STATUS_DENIED;
 		}
 
@@ -119,9 +120,11 @@ public class AkismetMBMessageLocalServiceImpl
 			return message;
 		}
 
+		String content = subject + "\n\n" + body;
+
 		int status = WorkflowConstants.STATUS_APPROVED;
 
-		if (isSpam(userId, subject, body, akismetData)) {
+		if (AkismetUtil.isSpam(userId, content, akismetData)) {
 			status = WorkflowConstants.STATUS_DENIED;
 		}
 
@@ -157,9 +160,11 @@ public class AkismetMBMessageLocalServiceImpl
 			return message;
 		}
 
+		String content = subject + "\n\n" + body;
+
 		int status = WorkflowConstants.STATUS_APPROVED;
 
-		if (isSpam(userId, subject, body, akismetData)) {
+		if (AkismetUtil.isSpam(userId, content, akismetData)) {
 			status = WorkflowConstants.STATUS_DENIED;
 		}
 
@@ -217,9 +222,11 @@ public class AkismetMBMessageLocalServiceImpl
 			return message;
 		}
 
+		String content = subject + "\n\n" + body;
+
 		int status = WorkflowConstants.STATUS_APPROVED;
 
-		if (isSpam(userId, subject, body, akismetData)) {
+		if (AkismetUtil.isSpam(userId, content, akismetData)) {
 			status = WorkflowConstants.STATUS_DENIED;
 		}
 
@@ -255,9 +262,11 @@ public class AkismetMBMessageLocalServiceImpl
 			return message;
 		}
 
+		String content = subject + "\n\n" + body;
+
 		int status = WorkflowConstants.STATUS_APPROVED;
 
-		if (isSpam(userId, subject, body, akismetData)) {
+		if (AkismetUtil.isSpam(userId, content, akismetData)) {
 			status = WorkflowConstants.STATUS_DENIED;
 		}
 
@@ -296,33 +305,11 @@ public class AkismetMBMessageLocalServiceImpl
 		return sb.toString();
 	}
 
-	protected boolean hasRequiredInfo(ServiceContext serviceContext) {
-		Map<String, String> headers = serviceContext.getHeaders();
-
-		if (headers == null) {
-			return false;
-		}
-
-		String userAgent = headers.get(HttpHeaders.USER_AGENT.toLowerCase());
-
-		if (Validator.isNull(userAgent)) {
-			return false;
-		}
-
-		String userIP = serviceContext.getRemoteAddr();
-
-		if (Validator.isNull(userIP)) {
-			return false;
-		}
-
-		return true;
-	}
-
 	protected boolean isDiscussionsEnabled(
 			long userId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		if (!hasRequiredInfo(serviceContext)) {
+		if (!AkismetUtil.hasRequiredInfo(serviceContext)) {
 			return false;
 		}
 
@@ -340,7 +327,7 @@ public class AkismetMBMessageLocalServiceImpl
 			long userId, long groupId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
-		if (!hasRequiredInfo(serviceContext)) {
+		if (!AkismetUtil.hasRequiredInfo(serviceContext)) {
 			return false;
 		}
 
@@ -365,32 +352,11 @@ public class AkismetMBMessageLocalServiceImpl
 		return true;
 	}
 
-	protected boolean isSpam(
-			long userId, String subject, String body, AkismetData akismetData)
-		throws PortalException, SystemException {
-
-		String content = subject + "\n\n" + body;
-
-		User user = UserLocalServiceUtil.getUser(userId);
-
-		if (AkismetUtil.isSpam(
-				user.getCompanyId(), akismetData.getUserIP(),
-				akismetData.getUserAgent(), akismetData.getReferrer(),
-				akismetData.getPermalink(), akismetData.getType(),
-				user.getFullName(), user.getEmailAddress(), content)) {
-
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-
 	protected AkismetData updateAkismetData(
 			MBMessage message, ServiceContext serviceContext)
 		throws SystemException {
 
-		if (!hasRequiredInfo(serviceContext)) {
+		if (!AkismetUtil.hasRequiredInfo(serviceContext)) {
 			return null;
 		}
 
@@ -404,8 +370,9 @@ public class AkismetMBMessageLocalServiceImpl
 		String userIP = serviceContext.getRemoteAddr();
 
 		return AkismetDataLocalServiceUtil.updateAkismetData(
-			message.getMessageId(), AkismetConstants.TYPE_COMMENT, permalink,
-			referrer, userAgent, userIP, StringPool.BLANK);
+			MBMessage.class.getName(), message.getMessageId(),
+			AkismetConstants.TYPE_COMMENT, permalink, referrer, userAgent,
+			userIP, StringPool.BLANK);
 	}
 
 }

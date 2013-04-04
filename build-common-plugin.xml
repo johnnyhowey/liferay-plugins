@@ -15,21 +15,7 @@
 		</then>
 	</if>
 
-	<antelope:stringutil string="${basedir}" property="plugin.name.beginindex">
-		<antelope:lastindexof string="${file.separator}" />
-	</antelope:stringutil>
-
-	<antelope:math
-		datatype="int"
-		operand1="${plugin.name.beginindex}"
-		operand2="1"
-		operation="+"
-		result="plugin.name.beginindex"
-	/>
-
-	<antelope:stringutil string="${basedir}" property="plugin.name">
-		<antelope:substring beginindex="${plugin.name.beginindex}" />
-	</antelope:stringutil>
+	<property name="plugin.name" value="${ant.project.name}" />
 
 	<if>
 		<antelope:endswith string="${plugin.name}" with="-shared" />
@@ -280,8 +266,8 @@
 		<mkdir dir="docroot/WEB-INF/service-classes" />
 
 		<path id="service.classpath">
+			<path refid="lib.classpath" />
 			<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
-			<fileset dir="${project.dir}/lib" includes="activation.jar,jsp-api.jar,mail.jar,servlet-api.jar" />
 			<fileset dir="docroot/WEB-INF/lib" excludes="${plugin.name}-service.jar" includes="*.jar" />
 		</path>
 
@@ -1148,7 +1134,9 @@ Please find a solution that does not require portal-impl.jar.
 					<formatter type="brief" usefile="false" />
 					<formatter type="xml" />
 					<batchtest todir="test-results/${test.type}">
-						<fileset dir="test-classes/${test.type}" includes="**/${class}.class" />
+						<fileset dir="test-classes/${test.type}" includes="**/${class}.class">
+							<exclude name="${junit.test.excludes}" />
+						</fileset>
 					</batchtest>
 				</junit>
 			</then>

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -496,10 +496,10 @@ public class ContactsCenterPortlet extends MVCPortlet {
 				updateAsset(actionRequest);
 			}
 			else if (fieldGroup.equals("comments") ||
-					fieldGroup.equals("details") ||
-					fieldGroup.equals("instantMessenger") ||
-					fieldGroup.equals("sms") ||
-					fieldGroup.equals("socialNetwork")) {
+					 fieldGroup.equals("details") ||
+					 fieldGroup.equals("instantMessenger") ||
+					 fieldGroup.equals("sms") ||
+					 fieldGroup.equals("socialNetwork")) {
 
 				updateProfile(actionRequest);
 			}
@@ -763,7 +763,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			LinkedHashMap<String, Object> params =
 				new LinkedHashMap<String, Object>();
 
-			params.put("inherit", true);
+			params.put("inherit", Boolean.TRUE);
 
 			Group group = themeDisplay.getScopeGroup();
 			Layout layout = themeDisplay.getLayout();
@@ -975,10 +975,9 @@ public class ContactsCenterPortlet extends MVCPortlet {
 
 			userJSONObject.put("connected", connected);
 
-			boolean following =
-				SocialRelationLocalServiceUtil.hasRelation(
-					themeDisplay.getUserId(), user.getUserId(),
-					SocialRelationConstants.TYPE_UNI_FOLLOWER);
+			boolean following = SocialRelationLocalServiceUtil.hasRelation(
+				themeDisplay.getUserId(), user.getUserId(),
+				SocialRelationConstants.TYPE_UNI_FOLLOWER);
 
 			userJSONObject.put("following", following);
 		}

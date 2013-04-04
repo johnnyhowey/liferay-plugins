@@ -38,6 +38,11 @@ $microblogs-border-color: #C7D0DA;
 
 		.aui-field-select {
 			display: inline-block;
+			float: left;
+
+			.aui-field-element {
+				position: static;
+			}
 		}
 
 		.button-holder-right {
@@ -201,12 +206,16 @@ $microblogs-border-color: #C7D0DA;
 
 	.highlighter-content {
 		color: transparent;
+		line-height: 1.5em;
+
+		@include force-wrap();
+
 		left: 1px;
 		padding: 5px;
 		position: absolute;
 		top: 1px;
+		width: 100%;
 		visibility: hidden;
-		word-wrap: break-word;
 		z-index: 998;
 
 		&.textbox {
@@ -218,7 +227,6 @@ $microblogs-border-color: #C7D0DA;
 		span {
 			background-color: #97D1FF;
 			font-weight: normal;
-			line-height: 1.45em;
 			margin: -2px -2px 0;
 			padding: 2px 2px 0;
 			visibility: visible;
@@ -227,13 +235,16 @@ $microblogs-border-color: #C7D0DA;
 
 		div {
 			display: inline-block;
-			white-space: pre;
+			width: 100%;
+
+			@include force-wrap();
 		}
 	}
 
 	.aui-field-input-text {
 		background: none transparent;
 		border-width: 0;
+		line-height: 1.5em;
 		min-width: 99%;
 		outline: none;
 		position: absolute;

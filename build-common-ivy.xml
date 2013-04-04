@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="build-common-ivy" xmlns:antelope="antlib:ise.antelope.tasks" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<property name="ivy.home" value="${project.dir}/.ivy" />
+	<property name="ivy.install.version" value="2.3.0" />
+
+	<if>
+		<not>
+			<available file="${ivy.home}/ivy-${ivy.install.version}.jar" />
+		</not>
+		<then>
+			<mkdir dir="${ivy.home}" />
+
+			<get
+				dest="${ivy.home}"
+				src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+			/>
+		</then>
+	</if>
+
+	<path id="ivy.lib.path">
+		<fileset
+			dir="${ivy.home}"
+			includes="ivy-${ivy.install.version}.jar"
+		/>
+	</path>
+
+	<taskdef classpathref="ivy.lib.path" resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" />
+
+	<basename file="${project.dir}" property="project.dir.name" />
+
+	<for list="${basedir},${project.dir}" param="ivy.xml.dir">
+		<sequential>
+			<if>
+				<available file="@{ivy.xml.dir}/ivy.xml" />
+				<then>
+					<pathconvert property="ivy.md5.dir">
+						<map from="${project.dir}" to="${ivy.home}/${project.dir.name}" />
+
+						<path location="@{ivy.xml.dir}"/>
+					</pathconvert>
+
+					<checksum file="@{ivy.xml.dir}/ivy.xml" todir="${ivy.md5.dir}" verifyproperty="ivy.xml.unmodified" />
+
+					<if>
+						<isfalse value="${ivy.xml.unmodified}" />
+						<then>
+							<ivy:settings file="${project.dir}/ivy-settings.xml" />
+
+							<ivy:resolve
+								file="@{ivy.xml.dir}/ivy.xml"
+								log="download-only"
+							/>
+
+							<if>
+								<or>
+									<equals arg1="@{ivy.xml.dir}" arg2="${project.dir}" />
+									<antelope:endswith string="${ant.project.name}" with="-shared" />
+								</or>
+								<then>
+									<ivy:retrieve
+										log="download-only"
+										pattern="@{ivy.xml.dir}/lib/[artifact].[ext]"
+										type="jar"
+									/>
+								</then>
+								<else>
+									<ivy:retrieve
+										log="download-only"
+										pattern="@{ivy.xml.dir}/docroot/WEB-INF/lib/[artifact].[ext]"
+										type="jar"
+									/>
+								</else>
+							</if>
+
+							<checksum file="@{ivy.xml.dir}/ivy.xml" todir="${ivy.md5.dir}" />
+						</then>
+					</if>
+
+					<var name="ivy.md5.dir" unset="true" />
+					<var name="ivy.xml.unmodified" unset="true" />
+				</then>
+			</if>
+		</sequential>
+	</for>
+</project>

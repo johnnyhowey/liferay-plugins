@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,9 +14,9 @@
 
 package com.liferay.compat.util.bridges.mvc;
 
+import com.liferay.compat.portal.kernel.portlet.DynamicActionRequest;
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.servlet.SessionErrors;
-import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ParamUtil;
 
 import java.io.IOException;
@@ -42,15 +42,25 @@ public class MVCPortlet extends com.liferay.util.bridges.mvc.MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws IOException, PortletException {
 
-		super.processAction(actionRequest, actionResponse);
+		DynamicActionRequest dynamicActionRequest = new DynamicActionRequest(
+			actionRequest);
 
-		if (copyRequestParameters && !SessionErrors.isEmpty(actionRequest)) {
-			UploadPortletRequest uploadPortletRequest =
-				(UploadPortletRequest)actionRequest.getAttribute(
-					PortalUtil.class.getName() + "#uploadPortletRequest");
+		if (copyRequestParameters &&
+			(dynamicActionRequest.getUploadPortletRequest() != null)) {
 
 			PortalUtil.copyRequestParameters(
-				uploadPortletRequest, actionResponse);
+				dynamicActionRequest.getUploadPortletRequest(),
+				dynamicActionRequest);
+		}
+
+		super.processAction(dynamicActionRequest, actionResponse);
+
+		if (copyRequestParameters &&
+			(dynamicActionRequest.getUploadPortletRequest() != null) &&
+			!SessionErrors.isEmpty(dynamicActionRequest)) {
+
+			PortalUtil.copyRequestParameters(
+				dynamicActionRequest, actionResponse);
 		}
 	}
 

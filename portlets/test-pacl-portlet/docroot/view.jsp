@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -65,7 +65,7 @@
 			protected void test() throws Exception {
 				EntityCacheUtil entityCacheUtil = new EntityCacheUtil();
 
-				EntityCache entityCache = entityCacheUtil.getEntityCache();
+				EntityCache entityCache = EntityCacheUtil.getEntityCache();
 
 				entityCacheUtil.setEntityCache(entityCache);
 			}
@@ -81,7 +81,7 @@
 			protected void test() throws Exception {
 				FinderCacheUtil finderCacheUtil = new FinderCacheUtil();
 
-				FinderCache finderCache = finderCacheUtil.getFinderCache();
+				FinderCache finderCache = FinderCacheUtil.getFinderCache();
 
 				finderCacheUtil.setFinderCache(finderCache);
 			}
@@ -97,7 +97,7 @@
 			protected void test() throws Exception {
 				PortalCustomSQLUtil portalCustomSQLUtil = new PortalCustomSQLUtil();
 
-				PortalCustomSQL portalCustomSQL = portalCustomSQLUtil.getPortalCustomSQL();
+				PortalCustomSQL portalCustomSQL = PortalCustomSQLUtil.getPortalCustomSQL();
 
 				portalCustomSQLUtil.setPortalCustomSQL(portalCustomSQL);
 			}
@@ -284,7 +284,7 @@
 	java.lang.ClassLoader#getSystemClassLoader=
 
 		<%
-		new SecurityExceptionTest(out, themeDisplay, false) {
+		new SecurityExceptionTest(out, themeDisplay, true) {
 
 			protected void test() throws Exception {
 				ClassLoader.getSystemClassLoader();
@@ -338,7 +338,7 @@
 	java.lang.Thread#getContextClassLoader=
 
 		<%
-		new SecurityExceptionTest(out, themeDisplay, false) {
+		new SecurityExceptionTest(out, themeDisplay, true) {
 
 			protected void test() throws Exception {
 				Thread thread = Thread.currentThread();
@@ -472,6 +472,97 @@
 
 			protected void test() throws Exception {
 				FooLocalServiceUtil.dynamicQuery();
+			}
+
+		};
+		%>
+
+</p>
+
+<liferay-ui:header
+	title="Environment Variables"
+/>
+
+<p>
+	java.home=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				System.getenv("java.home");
+			}
+
+		};
+		%>
+
+	java.io.tmpdir=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				System.getenv("java.io.tmpdir");
+			}
+
+		};
+		%>
+
+	java.vendor=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vendor");
+			}
+
+		};
+		%>
+
+	java.vendor.url=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vendor.url");
+			}
+
+		};
+		%>
+
+	java.vm.specification.name=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, true) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vm.specification.name");
+			}
+
+		};
+		%>
+
+	java.vm.vendor=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vm.vendor");
+			}
+
+		};
+		%>
+
+	java.vm.version=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				System.getenv("java.vm.version");
 			}
 
 		};
@@ -644,7 +735,7 @@
 	new FileSecurityExceptionTest(out, themeDisplay, false) {
 
 		protected void test() throws Exception {
-			testDeleteWithFile("../webapps/chat-portlet/WEB-INF/src/com/liferay/chat/util/ChatUtil.java");
+			testDeleteWithFile("../webapps/chat-portlet/WEB-INF/src/com/liferay/chat/util/ChatConstants.java");
 		}
 
 	};
@@ -652,7 +743,7 @@
 	new FileSecurityExceptionTest(out, themeDisplay, false) {
 
 		protected void test() throws Exception {
-			testDeleteWithFileUtil("../webapps/chat-portlet/WEB-INF/src/com/liferay/chat/util/ChatUtil.java");
+			testDeleteWithFileUtil("../webapps/chat-portlet/WEB-INF/src/com/liferay/chat/util/ChatConstants.java");
 		}
 
 	};
@@ -934,6 +1025,60 @@
 <p>
 	/portal/test/pacl/failure=<%= _assertFalse(FailureStrutsAction.isInstantiated()) %><br />
 	/portal/test/pacl/success=<%= _assertTrue(SuccessStrutsAction.isInstantiated()) %>
+</p>
+
+<liferay-ui:header
+	title="Java Security"
+/>
+
+<p>
+	<h3>Crypto</h3>
+</p>
+
+<p>
+	AES Encrypt=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+
+				keyGenerator.init(128);
+
+				SecretKey secretKey = keyGenerator.generateKey();
+
+				Cipher cipher = Cipher.getInstance("AES");
+
+				cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+
+				String text = "Hello World";
+
+				cipher.doFinal(text.getBytes());
+			}
+		};
+		%>
+
+	HmacMD5=
+
+		<%
+		new SecurityExceptionTest(out, themeDisplay, false) {
+
+			protected void test() throws Exception {
+				Mac mac = Mac.getInstance("HmacMD5");
+
+				String key = "123456789";
+
+				SecretKeySpec secretKeySpec = new SecretKeySpec(key.getBytes(), "HmacMD5");
+
+				mac.init(secretKeySpec);
+
+				String text = "Hello World";
+
+				mac.doFinal(text.getBytes());
+			}
+		};
+		%>
 </p>
 
 <liferay-ui:header
@@ -1588,13 +1733,13 @@
 </p>
 
 <p>
-	CompanyLocalServiceUtil#getCompany=
+	CompanyLocalServiceUtil#getCompanyByWebId=
 
 		<%
 		new SecurityExceptionTest(out, themeDisplay, true) {
 
 			protected void test() throws Exception {
-				CompanyLocalServiceUtil.getCompany(themeDisplay.getCompanyId());
+				CompanyLocalServiceUtil.getCompanyByWebId("liferay.com");
 			}
 
 		};

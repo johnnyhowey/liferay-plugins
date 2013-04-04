@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,6 +18,9 @@
 
 <div class="portlet-msg-alert">
 	<c:choose>
+		<c:when test="<%= !PluginsSecurityManagerUtil.isAllowed() %>">
+			<liferay-ui:message key="the-plugins-security-manager-is-not-active" />
+		</c:when>
 		<c:when test="<%= PluginsSecurityManagerUtil.isPACLActive() %>">
 			<liferay-ui:message key="the-plugins-security-manager-is-active-because-one-or-more-of-the-following-plugins-requests-security-management" />
 		</c:when>

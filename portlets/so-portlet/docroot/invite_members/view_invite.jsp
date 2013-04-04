@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -20,7 +20,7 @@
 <%@ include file="/init.jsp" %>
 
 <c:choose>
-	<c:when test='<%= SessionMessages.contains(renderRequest, "requestProcessed") %>'>
+	<c:when test='<%= SessionMessages.contains(renderRequest, "request_processed") %>'>
 		<div class="portlet-msg-success">
 			<liferay-ui:message key="your-request-processed-successfully" />
 		</div>

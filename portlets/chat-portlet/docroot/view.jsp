@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -38,7 +38,7 @@
 	String statusMessage = HtmlUtil.escape(status.getMessage());
 	boolean playSound = status.getPlaySound();
 
-	List<Object[]> buddies = ChatUtil.getBuddies(themeDisplay.getCompanyId(), themeDisplay.getUserId());
+	List<Object[]> buddies = BuddyFinderUtil.getBuddies(themeDisplay.getCompanyId(), themeDisplay.getUserId());
 
 	int buddiesCount = buddies.size();
 	%>

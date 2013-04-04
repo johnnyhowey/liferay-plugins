@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -120,7 +120,7 @@ public class SummaryPortlet extends MVCPortlet {
 			List<User> users = UserLocalServiceUtil.search(
 				themeDisplay.getCompanyId(), null,
 				WorkflowConstants.STATUS_APPROVED, userParams,
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS, (OrderByComparator) null);
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, (OrderByComparator)null);
 
 			for (User user : users) {
 				SocialRequestLocalServiceUtil.addRequest(
@@ -158,7 +158,7 @@ public class SummaryPortlet extends MVCPortlet {
 		List<User> users = UserLocalServiceUtil.search(
 			themeDisplay.getCompanyId(), null,
 			WorkflowConstants.STATUS_APPROVED, userParams, QueryUtil.ALL_POS,
-			QueryUtil.ALL_POS, (OrderByComparator) null);
+			QueryUtil.ALL_POS, (OrderByComparator)null);
 
 		for (User user : users) {
 			SocialRequestLocalServiceUtil.addRequest(

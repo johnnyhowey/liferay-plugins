@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2012 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -78,6 +78,12 @@ page import="com.liferay.testpacl.service.FooLocalService" %><%@
 page import="com.liferay.testpacl.service.FooLocalServiceUtil" %><%@
 page import="com.liferay.testpacl.util.TestPACLUtil" %><%@
 page import="com.liferay.util.PwdGenerator" %>
+
+<%@ page import="javax.crypto.Cipher" %><%@
+page import="javax.crypto.KeyGenerator" %><%@
+page import="javax.crypto.Mac" %><%@
+page import="javax.crypto.SecretKey" %><%@
+page import="javax.crypto.spec.SecretKeySpec" %>
 
 <%@ page import="java.io.File" %><%@
 page import="java.io.IOException" %><%@
