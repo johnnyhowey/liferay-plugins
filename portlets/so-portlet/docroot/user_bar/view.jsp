@@ -13,29 +13,15 @@
  * details.
  */
 %>
-<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-<%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
-<%@ taglib prefix="liferay-portlet" uri="http://liferay.com/tld/portlet" %>
-<%@ page import="javax.portlet.PortletPreferences" %><%@
-page import="java.util.List" %><%@
-page import="java.util.Locale" %>
 
-<%@ page import="com.liferay.portal.model.Group" %><%@
-page import="com.liferay.portal.model.Layout" %><%@
-page import="com.liferay.portal.service.GroupLocalServiceUtil" %><%@
-page import="com.liferay.portal.service.LayoutLocalServiceUtil" %><%@
-page import="com.liferay.portal.service.UserLocalServiceUtil" %><%@
-page import="com.liferay.portal.kernel.util.HtmlUtil" %>
-
-<%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
-<%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
+<%@ include file="/user_bar/init.jsp" %>
 
 <liferay-theme:defineObjects />
 
 <portlet:defineObjects />
 
 <liferay-util:html-top>
+
 <%
 	PortletPreferences prefs = renderRequest.getPreferences();
 
