@@ -26,6 +26,10 @@ int cur = ParamUtil.getInteger(request, SearchContainer.DEFAULT_CUR_PARAM);
 
 long receiverMicroblogsEntryId = ParamUtil.getLong(request, "receiverMicroblogsEntryId");
 
+if (receiverMicroblogsEntryId == 0) {
+	receiverMicroblogsEntryId = GetterUtil.getLong(request.getAttribute("receiverMicroblogsEntryId"));
+}
+
 List<MicroblogsEntry> microblogsEntries = MicroblogsEntryLocalServiceUtil.getReceiverMicroblogsEntryMicroblogsEntries(MicroblogsEntryConstants.TYPE_REPLY, receiverMicroblogsEntryId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new EntryCreateDateComparator(true));
 
 request.setAttribute(WebKeys.MICROBLOGS_ENTRIES, microblogsEntries);

@@ -26,6 +26,7 @@ int cur = ParamUtil.getInteger(request, SearchContainer.DEFAULT_CUR_PARAM);
 
 String redirect = ParamUtil.getString(request, "redirect");
 
+long displayMicroblogsEntryId = ParamUtil.getLong(request, "displayMicroblogsEntryId");
 long receiverUserId = ParamUtil.getLong(request, "receiverUserId");
 long receiverMicroblogsEntryId = ParamUtil.getLong(request, "receiverMicroblogsEntryId");
 
@@ -74,7 +75,15 @@ portletURL.setParameter("tabs1", tabs1);
 	List<MicroblogsEntry> results = null;
 	int total = 0;
 
-	if (tabs1.equals("timeline")) {
+	if (displayMicroblogsEntryId > 0) {
+		MicroblogsEntry microblogsEntry = MicroblogsEntryLocalServiceUtil.getMicroblogsEntry(displayMicroblogsEntryId);
+
+		results = new ArrayList<MicroblogsEntry>();
+		results.add(microblogsEntry);
+
+		total = 1;
+	}
+	else if (tabs1.equals("timeline")) {
 		if (userPublicPage) {
 			results = MicroblogsEntryServiceUtil.getUserMicroblogsEntries(group.getClassPK(), searchContainer.getStart(), searchContainer.getEnd());
 			total = MicroblogsEntryServiceUtil.getUserMicroblogsEntriesCount(group.getClassPK());

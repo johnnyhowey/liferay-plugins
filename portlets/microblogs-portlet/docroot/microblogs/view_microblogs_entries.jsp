@@ -51,6 +51,18 @@ PortletURL microblogsEntriesURL = (PortletURL)request.getAttribute(WebKeys.MICRO
 
 <%
 if (microblogsEntries != null) {
+	boolean showComments = false;
+
+	long displayMicroblogsEntryId = ParamUtil.getLong(request, "displayMicroblogsEntryId");
+
+	if ((microblogsEntries.size() == 1) && (displayMicroblogsEntryId > 0)) {
+		MicroblogsEntry microblogsEntry = microblogsEntries.get(0);
+
+		if (microblogsEntry.getReceiverMicroblogsEntryId() == 0) {
+			showComments = true;
+		}
+	}
+
 	for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 		String userDisplayURL = StringPool.BLANK;
 		String userFullName = PortalUtil.getUserName(microblogsEntry);
@@ -68,7 +80,7 @@ if (microblogsEntries != null) {
 		}
 %>
 
-		<div class="microblogs-entry" id="microblogsEntry<%= microblogsEntry.getMicroblogsEntryId() %>">
+<div class='microblogs-entry <%= showComments ? "show-comments" : "" %>' id="microblogsEntry<%= microblogsEntry.getMicroblogsEntryId() %>">
 			<span class="thumbnail">
 				<a href="<%= userDisplayURL %>"><img alt="<%= userFullName %>" src="<%= userPortaitURL %>" /></a>
 			</span>
@@ -204,7 +216,21 @@ if (microblogsEntries != null) {
 				</div>
 			</div>
 
-			<div class="comments-container reply" id="commentsContainer<%= microblogsEntry.getMicroblogsEntryId() %>"><!-- --></div>
+			<c:choose>
+				<c:when test="<%= showComments %>">
+					<div class="comments-container reply" id="commentsContainer<%= microblogsEntry.getMicroblogsEntryId() %>">
+
+						<%
+						request.setAttribute("receiverMicroblogsEntryId", microblogsEntry.getMicroblogsEntryId());
+						%>
+
+						<liferay-util:include page="/microblogs/view_comments.jsp" servletContext="<%= application %>" />
+					</div>
+				</c:when>
+				<c:otherwise>
+					<div class="comments-container reply" id="commentsContainer<%= microblogsEntry.getMicroblogsEntryId() %>"><!-- --></div>
+				</c:otherwise>
+			</c:choose>
 		</div>
 
 <%
