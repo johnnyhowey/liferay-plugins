@@ -24,21 +24,9 @@
 		#set ($css_class = $css_class.replaceAll("controls-visible", "controls-hidden"))
 	#end
 
-	#set ($user_group = $user.getGroup())
-
 	#set ($nav_css_class = "${nav_css_class} sort-pages modify-pages")
 
-	#set ($user_dashboard_portlet_url = $portletURLFactory.create($request, "49", $page.getPlid(), "ACTION_PHASE"))
-
-	$user_dashboard_portlet_url.setParameter("struts_action", "/my_sites/view")
-	$user_dashboard_portlet_url.setParameter("groupId", "$user_group.getGroupId()")
-	$user_dashboard_portlet_url.setParameter("privateLayout", "true")
-	$user_dashboard_portlet_url.setPortletMode("view")
-	$user_dashboard_portlet_url.setWindowState("normal")
-
-	#set ($user_dashboard_url = $htmlUtil.escape($user_dashboard_portlet_url.toString()))
-	#set ($user_profile_url = $theme_display.getURLPortal() + $theme_display.getPathFriendlyURLPublic() + "/" + $user.getScreenName())
-
+	#set ($user_group = $user.getGroup())
 	#set ($layoutLocalService = $serviceLocator.findService("com.liferay.portal.service.LayoutLocalService"))
 	#set ($user_layout = $layoutLocalService.getLayouts($user_group.getGroupId(), true))
 
@@ -90,18 +78,6 @@
 		#set ($css_class = $css_class + " profile-page")
 		#set ($user_detail_class = "user-profile-detail")
 	#end
-#end
-
-#set ($layout_fluid = $getterUtil.getBoolean($sessionClicks.get($request, "so-layout-fluid", "false")))
-
-#if ($layout_fluid == true)
-	#set ($css_class = "${css_class} so-layout-fluid")
-#end
-
-#set ($show_dockbar = $getterUtil.getBoolean($sessionClicks.get($request, "show-dockbar", "false")))
-
-#if ($show_dockbar)
-	#set ($css_class = "${css_class} show-dockbar")
 #end
 
 #if ($is_user_dashboard)
