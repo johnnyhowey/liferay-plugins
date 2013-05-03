@@ -1,0 +1,130 @@
+@import "compass";
+@import "classic-skin";
+
+body.so-classic {
+	a {
+		color: $link-color;
+	}
+
+	#banner {
+		background-color: transparent;
+		border-color: $default-border-color;
+		padding: 1.5em 2em;
+	}
+
+	#navigation {
+		background: #FFF;
+
+		&, ul, a {
+			border-color: $default-border-color;
+		}
+
+		a {
+			border: 1px solid transparent;
+			border-width: 1px 0;
+			color: $link-color;
+
+			&, &:active, &:focus, &:hover {
+				text-shadow: none;
+
+				@include remove-gradients;
+			}
+
+			&:active, &:focus, &:hover {
+				background: #F4F4F4;
+				border-bottom-color: $default-border-color;
+			}
+		}
+
+		li.selected {
+			border-left: 4px solid $red;
+			border-top-color: transparent;
+
+			a {
+				color: $red;
+				background: #F4F4F4;
+
+				@include box-shadow(none);
+			}
+		}
+	}
+
+	#content {
+		background: transparent;
+		border-width: 0;
+	}
+
+	#main-content {
+		background: transparent;
+
+		@include box-shadow(none);
+	}
+
+	.portlet-topper {
+		color: #929292;
+
+		.portlet-title {
+			font-weight: bold;
+			font-size: 1em;
+		}
+	}
+
+	.top-links-container {
+
+		.top-links {
+			background-color: #EEE;
+		}
+	}
+
+	.aui-toolbar {
+		.aui-toolbar-item {
+			border-width: 1px 0 1px 1px;
+		}
+
+		.aui-toolbar-last {
+			border-right-width: 1px;
+		}
+	}
+
+	.aui-tabview-list {
+		padding: 0;
+
+		.aui-tab:first-child, .first, .first .aui-tab-content {
+			border-left-width: 0;
+		}
+
+		.aui-tab-content {
+			border-width: 1px 1px 1px 0;
+			margin: -1px 0;
+		}
+
+		.aui-tab-label, .aui-tab-label a {
+			&:active, &:hover, &:normal, &:visited {
+				text-decoration: none;
+			}
+		}
+
+		.aui-tab-label, .aui-tab-content .aui-tab-label, .aui-tab-content:hover .aui-tab-label {
+			color: #5A5A5A;
+			font-size: .95em;
+			font-weight: bold;
+			padding: 3px 12px 2px;
+			text-shadow: none;
+		}
+
+		.aui-tab-active {
+			.aui-tab-content, .aui-tab-content:hover {
+				background: #FFF;
+				border-color: $gray $gray #FFF;
+
+				.aui-tab-label {
+					color: #5A5A5A;
+					text-shadow: none;
+				}
+			 }
+		}
+	}
+
+}
+
+@import "classic-forms";

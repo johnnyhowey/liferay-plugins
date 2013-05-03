@@ -10,13 +10,6 @@
 	$theme.include($top_head_include)
 
 	<meta name="viewport" content="user-scalable=yes, initial-scale=1.0, width=device-width" />
-
-	<script type="text/javascript">
-	lang = {
-		defaultGoTo: 'Go To ▾',
-		search: '#language("search")'
-	};
-	</script>
 </head>
 
 <body class="$css_class">
@@ -26,10 +19,6 @@ $theme.include($body_top_include)
 #if ($is_signed_in)
 	#dockbar()
 #end
-
-##if ($has_navigation || $is_signed_in)
-##	#parse ("$full_templates_path/user_bar.vm")
-##end
 
 <div id="wrapper">
 	<a class="hidden-accessible" href="#main-content" id="skip-to-content">#language("skip-to-content")</a>
@@ -105,10 +94,14 @@ $theme.include($body_top_include)
 				</div>
 			#end
 
+			#if (!$is_signed_in)
+				<a href="$sign_in_url" id="sign-in" rel="nofollow">$sign_in_text</a>
+			#end
+
 			#if ($is_user_dashboard)
 				<h2 class="page-title">
 					#if ($the_title == "Dashboard")
-						<span class="avatar" style="background-image: url($user.getPortraitURL($themeDisplay))"><img src="$user.getPortraitURL($themeDisplay)" alt="$user.getFullName()"></span>
+						<a class="avatar" href="$current_user_profile_url" style="background-image: url($user.getPortraitURL($themeDisplay))"><img src="$user.getPortraitURL($themeDisplay)" alt="$user.getFullName()"></a>
 
 						<span>$current_user.getFullName()'s</span>
 					#end

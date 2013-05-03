@@ -417,7 +417,6 @@
 	.microblogs-entry, .portlet-msg-info {
 		background-color: #FFF;
 		border: 1px solid $default-border-color;
-		margin: 10px;
 		padding: 8px 10px;
 	}
 
@@ -851,8 +850,12 @@
 		}
 	}
 
-	.contacts-action-content span {
-		padding-right: 0;
+	.contacts-action-content {
+		padding: 3px;
+
+		span, .taglib-text {
+			padding: 0;
+		}
 	}
 
 	.taglib-page-iterator {
@@ -881,6 +884,7 @@
 	}
 
 	.contacts-search {
+		float: none;
 		width: auto;
 	}
 
@@ -1288,7 +1292,7 @@
 
 			.aui-field-input {
 				margin-right: -1px;
-				width: 13em;
+				width: 9em;
 
 				@include border-radius(4px 0 0 4px);
 			}

@@ -61,6 +61,7 @@ $blue: #0E50A9;
 
 @mixin input-field-default {
 	padding: .4em 0;
+	vertical-align: middle;
 
 	@include default-border;
 	@include border-radius(4px);
