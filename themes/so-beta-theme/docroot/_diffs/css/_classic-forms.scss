@@ -2,10 +2,6 @@
 @import "classic-skin";
 
 body.so-classic {
-	fieldset {
-		@include default-border;
-	}
-
 	.aui-legend {
 		border-bottom: 1px solid $default-border-color;
 	}
@@ -28,6 +24,7 @@ body.so-classic {
 		padding: 0;
 	}
 
+	.top-links .top-links-navigation a, .portlet-message-boards .edit-controls a, .portlet-message-boards .thread-controls a,
 	a.aui-button, input[type="submit"], input[type="button"], input[type="reset"], button {
 		@include button-default;
 
@@ -49,8 +46,6 @@ body.so-classic {
 	.lfr-actions.lfr-extended {
 		&, ul {
 			@include button-default;
-
-			padding: 0;
 		}
 
 		&:focus {
