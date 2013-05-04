@@ -7,6 +7,10 @@ body {
 	font: 13px/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.so-beta-theme #dockbar {
+	margin-top: -32px;
+}
+
 a {
 	color: $blue;
 	text-decoration: none;
@@ -114,7 +118,6 @@ a {
 		left: 1px;
 	}
 }
-
 
 .hidden-accessible, #navigation h1 {
 	@include hidden-accessible;

@@ -30,7 +30,6 @@ $link-color: #2571AD;
 }
 
 @mixin input-field-default {
-	padding: .4em 0;
 	vertical-align: middle;
 	background: #FFF;
 	border: 1px solid $gray-dark;
@@ -45,7 +44,7 @@ $link-color: #2571AD;
 	}
 
 	@include default-border;
-	@include border-radius(4px);
+	@include border-radius(3px);
 }
 
 @mixin input-field-focus {
@@ -54,7 +53,8 @@ $link-color: #2571AD;
 }
 
 @mixin button-default {
-	background: #E9E8E8;
+	background-color: #E9E8E8;
+	background-image: none;
 	border: 1px solid $gray;
 	text-shadow: none;
 }
