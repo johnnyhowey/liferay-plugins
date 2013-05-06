@@ -25,6 +25,7 @@ String tabs2 = ParamUtil.getString(request, "tabs2", "open");
 
 long[] assetTagIds = StringUtil.split(ParamUtil.getString(request, "assetTagIds"), 0L);
 long groupId = ParamUtil.getLong(request, "groupId", 0);
+long tasksEntryId = ParamUtil.getLong(request, "tasksEntryId", 0);
 
 PortletURL portletURL = renderResponse.createRenderURL();
 
@@ -68,11 +69,25 @@ taskListURL.setParameter("tabs2", tabs2);
 	if (tabs2.equals("open")) {
 		status = TasksEntryConstants.STATUS_OPEN;
 	}
+
+	List<TasksEntry> tasksEntries = new ArrayList<TasksEntry>();
+	int tasksEntriesCount = 0;
+
+	if (tasksEntryId > 0) {
+		TasksEntry tasksEntry = TasksEntryLocalServiceUtil.getTasksEntry(tasksEntryId);
+		tasksEntries.add(tasksEntry);
+
+		tasksEntriesCount = 1;
+	}
+	else {
+		tasksEntries = TasksEntryLocalServiceUtil.getTasksEntries(groupId, 0, assigneeUserId, reporterUserId, status, assetTagIds, new long[0], searchContainer.getStart(), searchContainer.getEnd());
+		tasksEntriesCount = TasksEntryLocalServiceUtil.getTasksEntriesCount(groupId, 0, assigneeUserId, reporterUserId, status, assetTagIds, new long[0]);
+	}
 	%>
 
 	<liferay-ui:search-container-results
-		results="<%= TasksEntryLocalServiceUtil.getTasksEntries(groupId, 0, assigneeUserId, reporterUserId, status, assetTagIds, new long[0], searchContainer.getStart(), searchContainer.getEnd()) %>"
-		total="<%= TasksEntryLocalServiceUtil.getTasksEntriesCount(groupId, 0, assigneeUserId, reporterUserId, status, assetTagIds, new long[0]) %>"
+		results="<%= tasksEntries %>"
+		total="<%= tasksEntriesCount %>"
 	/>
 
 	<liferay-ui:search-container-row
