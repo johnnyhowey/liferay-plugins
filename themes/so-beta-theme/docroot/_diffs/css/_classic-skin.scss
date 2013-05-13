@@ -44,7 +44,6 @@ $link-color: #2571AD;
 	}
 
 	@include default-border;
-	@include border-radius(3px);
 }
 
 @mixin input-field-focus {

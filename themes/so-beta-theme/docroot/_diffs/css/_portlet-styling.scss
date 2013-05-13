@@ -1131,31 +1131,6 @@
 		padding: 10px 0;
 	}
 
-	.edit-controls, .thread-controls {
-		a {
-			display: inline-block;
-
-			@include button-default;
-			@include border-radius(4px);
-
-			&, .taglib-text {
-				text-decoration: none;
-			}
-
-			&:hover, &:focus {
-				@include button-focus;
-			}
-
-			&:active {
-				@include button-active;
-			}
-
-			img.icon {
-				vertical-align: top;
-			}
-		}
-	}
-
 	.thread-controls {
 		background: $control-bg-color;
 		padding: 5px 6px;
@@ -1321,6 +1296,29 @@
 	}
 }
 
+.portlet-message-boards .edit-controls a, .portlet-message-boards .thread-controls a, .portlet-wiki .page-actions a, .portlet-wiki .toc a.toc-trigger {
+	display: inline-block;
+
+	@include button-default;
+	@include border-radius(4px);
+
+	&, .taglib-text {
+		text-decoration: none;
+	}
+
+	&:hover, &:focus {
+		@include button-focus;
+	}
+
+	&:active {
+		@include button-active;
+	}
+
+	img.icon {
+		vertical-align: top;
+	}
+}
+
 /*  Tasks Portlet  */
 
 .tasks-portlet {
@@ -1358,6 +1356,79 @@
 
 .aui-dialog-bd .so-sites-directory {
 	.taglib-header {
+		display: none;
+	}
+}
+
+/* Wiki Portlet */
+
+.portlet-wiki {
+	.page-actions {
+		text-align: left;
+	}
+
+	.article-actions, .stats {
+		display: inline-block;
+		vertical-align: baseline;
+	}
+
+	.toc {
+		border: 1px solid $default-border-color;
+		margin-bottom: 1.5em;
+		padding: 1em;
+
+		h4 {
+			color: $red;
+			margin: 0;
+		}
+
+
+		ul, ol {
+			li {
+				margin-bottom: 0;
+			}
+
+			ul, ol {
+				margin: 0 0 0 2em;
+			}
+		}
+	}
+}
+
+/* Portlet Typography */
+
+.portlet-message-boards .thread-body, .portlet-wiki .wiki-body, .portlet-blogs .entry-body {
+	line-height: 1.5em;
+
+	&, h1, h2, h3, h4, h5, h6 {
+		color: $default-text-color;
+	}
+
+	h1, h2, h3, h4, h5, h6 {
+		font-weight: bold;
+	}
+
+	h2 {
+		border-color: $default-border-color;
+		font-size: 1.75em;
+		margin: 1em 0 .5em;
+	}
+
+	h3 {
+		font-size: 1.25em;
+	}
+
+	h4 {
+		font-size: 1.125em;
+	}
+
+	h5, h6 {
+		font-size: 1em;
+	}
+}
+
+@media print {
+	.portlet-message-boards .edit-controls a, .portlet-message-boards .thread-controls a, .portlet-wiki .page-actions a, .portlet-wiki .toc a.toc-trigger, .popup-print {
 		display: none;
 	}
 }

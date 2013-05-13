@@ -96,7 +96,7 @@ body.so-classic {
 	}
 
 	.aui-tabview-list {
-		padding: 0;
+		padding: 0 3px 0;
 
 		@include button-default;
 
@@ -164,51 +164,8 @@ body.so-classic {
 		}
 	}
 
-	.aui-dialog-content {
-		padding: 0;
-
-		.aui-dialog-hd {
-			border: 1px solid $default-border-color;
-			border-width: 0 0 1px;
-			padding: 0 0 0 0.5em;
-
-			@include border-radius(4px 4px 0 0);
-			@include box-shadow(none);
-
-			.aui-toolbar {
-				margin: -1px;
-			}
-		}
-	}
-
-	.aui-panel-hd-text {
-		font-weight: normal;
-	}
-
-	.aui-panel-bd {
-		padding: 0 1em 1em;
-	}
-
-	.aui-buttonitem-icon-only {
-		padding: 4px 5px 5px;
-	}
-
-	.aui-button-holder {
-		.aui-toolbar-item {
-			margin: 0 -1px;
-		}
-
-		.aui-toolbar-first {
-			margin-left: 0;
-		}
-	}
-
-	.aui-buttonitem-content {
-		margin-right: -1px;
-
-		&.aui-toolbar-last {
-			margin-right: 0;
-		}
+	.aui-dialog-content .aui-dialog-hd {
+		border: 1px solid $default-border-color;
 	}
 
 	.aui-tooltip-content {

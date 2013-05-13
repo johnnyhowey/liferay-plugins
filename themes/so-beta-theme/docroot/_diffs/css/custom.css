@@ -471,20 +471,26 @@ a {
 @import "ie";
 
 @media (max-width:860px) {
+	#so-portlet-user-bar {
+		// background: #333;
+		// left: 0;
+		// position: absolute;
+		// top: 0;
+		// width: 150px;
+
+		ul, li {
+			display: block;
+		}
+
+		.user-menu {
+			position: relative;
+		}
+	}
+
 	#content, #navigation, #navigation ul {
 		border-width: 0;
 	}
 
-	#navigation .avatar {
-		float: left;
-		height: 39px;
-		width: 39px;
-
-		img {
-			min-height: 39px;
-			width: 39px;
-		}
-	}
 
 	#navigation {
 		float: none;
@@ -493,13 +499,36 @@ a {
 
 		li {
 			float: left;
+
+			a {
+				@include background-image(linear, 50% 100%, 50% 0%, color-stop(0%, #252d31), color-stop(100%, #32363a));
+				display: block;
+				padding: .75em 1em;
+			}
 		}
 
 		@include subtle-gradient;
 		@include clear-both;
+
+		.avatar {
+			float: left;
+			height: 39px;
+			width: 39px;
+
+			img {
+				min-height: 39px;
+				width: 39px;
+			}
+		}
 	}
 
 	#content {
 		padding-left: 0;
+	}
+
+	.portlet-layout,
+	.portlet-column {
+		display: block;
+		width: auto;
 	}
 }
