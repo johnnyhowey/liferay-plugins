@@ -16,6 +16,7 @@ package com.liferay.wsrp.servlet;
 
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.HotDeployMessageListener;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
@@ -44,8 +45,6 @@ public class WSRPServletContextListener
 	protected void doPortalDestroy() throws Exception {
 		MessageBusUtil.unregisterMessageListener(
 			DestinationNames.HOT_DEPLOY, _hotDeployMessageListener);
-
-		WSRPConsumerPortletLocalServiceUtil.destroyWSRPConsumerPortlets();
 	}
 
 	@Override
@@ -54,13 +53,19 @@ public class WSRPServletContextListener
 			ClpSerializer.getServletContextName()) {
 
 			@Override
-			protected void onDeploy() throws Exception {
+			protected void onDeploy(Message message) throws Exception {
 				ExtensionHelperUtil.initialize();
 
 				WSRPConsumerPortletLocalServiceUtil.
 					destroyWSRPConsumerPortlets();
 
 				WSRPConsumerPortletLocalServiceUtil.initWSRPConsumerPortlets();
+			}
+
+			@Override
+			protected void onUndeploy(Message message) throws Exception {
+				WSRPConsumerPortletLocalServiceUtil.
+					destroyWSRPConsumerPortlets();
 			}
 
 		};

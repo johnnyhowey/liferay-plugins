@@ -17,9 +17,7 @@ package com.liferay.mail.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link FolderLocalService}.
- * </p>
+ * Provides a wrapper for {@link FolderLocalService}.
  *
  * @author    Brian Wing Shun Chan
  * @see       FolderLocalService
@@ -38,6 +36,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @return the folder that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Folder addFolder(
 		com.liferay.mail.model.Folder folder)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -50,6 +49,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @param folderId the primary key for the new folder
 	* @return the new folder
 	*/
+	@Override
 	public com.liferay.mail.model.Folder createFolder(long folderId) {
 		return _folderLocalService.createFolder(folderId);
 	}
@@ -62,6 +62,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @throws PortalException if a folder with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Folder deleteFolder(long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -76,6 +77,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @throws PortalException
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Folder deleteFolder(
 		com.liferay.mail.model.Folder folder)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -83,6 +85,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 		return _folderLocalService.deleteFolder(folder);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _folderLocalService.dynamicQuery();
 	}
@@ -94,6 +97,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -114,6 +118,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -135,6 +140,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -152,12 +158,14 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _folderLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder fetchFolder(long folderId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _folderLocalService.fetchFolder(folderId);
@@ -171,12 +179,14 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @throws PortalException if a folder with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Folder getFolder(long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _folderLocalService.getFolder(folderId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -196,6 +206,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @return the range of folders
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.mail.model.Folder> getFolders(int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		return _folderLocalService.getFolders(start, end);
@@ -207,6 +218,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @return the number of folders
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getFoldersCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _folderLocalService.getFoldersCount();
@@ -219,6 +231,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	* @return the folder that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Folder updateFolder(
 		com.liferay.mail.model.Folder folder)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -230,6 +243,7 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _folderLocalService.getBeanIdentifier();
 	}
@@ -239,16 +253,19 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_folderLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return _folderLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder addFolder(long userId, long accountId,
 		java.lang.String fullName, java.lang.String displayName,
 		int remoteMessageCount)
@@ -258,12 +275,14 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 			displayName, remoteMessageCount);
 	}
 
+	@Override
 	public void deleteFolders(long accountId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_folderLocalService.deleteFolders(accountId);
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder getFolder(long accountId,
 		java.lang.String fullName)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -271,29 +290,34 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 		return _folderLocalService.getFolder(accountId, fullName);
 	}
 
+	@Override
 	public java.util.List<com.liferay.mail.model.Folder> getFolders(
 		long accountId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _folderLocalService.getFolders(accountId);
 	}
 
+	@Override
 	public int getLocalPageCount(long folderId, int messagesPerPage)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _folderLocalService.getLocalPageCount(folderId, messagesPerPage);
 	}
 
+	@Override
 	public int getPercentDownloaded(long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _folderLocalService.getPercentDownloaded(folderId);
 	}
 
+	@Override
 	public int getRemotePageCount(long folderId, int messagesPerPage)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _folderLocalService.getRemotePageCount(folderId, messagesPerPage);
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder updateFolder(long folderId,
 		java.lang.String fullName, java.lang.String displayName,
 		int remoteMessageCount)
@@ -318,10 +342,12 @@ public class FolderLocalServiceWrapper implements FolderLocalService,
 		_folderLocalService = folderLocalService;
 	}
 
+	@Override
 	public FolderLocalService getWrappedService() {
 		return _folderLocalService;
 	}
 
+	@Override
 	public void setWrappedService(FolderLocalService folderLocalService) {
 		_folderLocalService = folderLocalService;
 	}

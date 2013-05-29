@@ -17,9 +17,7 @@ package com.liferay.opensocial.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link OAuthConsumerLocalService}.
- * </p>
+ * Provides a wrapper for {@link OAuthConsumerLocalService}.
  *
  * @author    Brian Wing Shun Chan
  * @see       OAuthConsumerLocalService
@@ -40,6 +38,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @return the o auth consumer that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer addOAuthConsumer(
 		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -52,6 +51,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @param oAuthConsumerId the primary key for the new o auth consumer
 	* @return the new o auth consumer
 	*/
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer createOAuthConsumer(
 		long oAuthConsumerId) {
 		return _oAuthConsumerLocalService.createOAuthConsumer(oAuthConsumerId);
@@ -65,6 +65,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @throws PortalException if a o auth consumer with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer deleteOAuthConsumer(
 		long oAuthConsumerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -79,12 +80,14 @@ public class OAuthConsumerLocalServiceWrapper
 	* @return the o auth consumer that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer deleteOAuthConsumer(
 		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _oAuthConsumerLocalService.deleteOAuthConsumer(oAuthConsumer);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _oAuthConsumerLocalService.dynamicQuery();
 	}
@@ -96,6 +99,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -116,6 +120,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -137,6 +142,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -154,12 +160,14 @@ public class OAuthConsumerLocalServiceWrapper
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _oAuthConsumerLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer fetchOAuthConsumer(
 		long oAuthConsumerId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -174,6 +182,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @throws PortalException if a o auth consumer with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer getOAuthConsumer(
 		long oAuthConsumerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -181,6 +190,7 @@ public class OAuthConsumerLocalServiceWrapper
 		return _oAuthConsumerLocalService.getOAuthConsumer(oAuthConsumerId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -200,6 +210,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @return the range of o auth consumers
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.opensocial.model.OAuthConsumer> getOAuthConsumers(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -212,6 +223,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @return the number of o auth consumers
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getOAuthConsumersCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _oAuthConsumerLocalService.getOAuthConsumersCount();
@@ -224,6 +236,7 @@ public class OAuthConsumerLocalServiceWrapper
 	* @return the o auth consumer that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer updateOAuthConsumer(
 		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -235,6 +248,7 @@ public class OAuthConsumerLocalServiceWrapper
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _oAuthConsumerLocalService.getBeanIdentifier();
 	}
@@ -244,10 +258,12 @@ public class OAuthConsumerLocalServiceWrapper
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_oAuthConsumerLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -255,6 +271,7 @@ public class OAuthConsumerLocalServiceWrapper
 			arguments);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer addOAuthConsumer(
 		long companyId, java.lang.String gadgetKey,
 		java.lang.String serviceName, java.lang.String consumerKey,
@@ -264,11 +281,13 @@ public class OAuthConsumerLocalServiceWrapper
 			gadgetKey, serviceName, consumerKey, consumerSecret, keyType);
 	}
 
+	@Override
 	public void deleteOAuthConsumers(java.lang.String gadgetKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_oAuthConsumerLocalService.deleteOAuthConsumers(gadgetKey);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer fetchOAuthConsumer(
 		java.lang.String gadgetKey, java.lang.String serviceName)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -276,6 +295,7 @@ public class OAuthConsumerLocalServiceWrapper
 			serviceName);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer getOAuthConsumer(
 		java.lang.String gadgetKey, java.lang.String serviceName)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -284,12 +304,14 @@ public class OAuthConsumerLocalServiceWrapper
 			serviceName);
 	}
 
+	@Override
 	public java.util.List<com.liferay.opensocial.model.OAuthConsumer> getOAuthConsumers(
 		java.lang.String gadgetKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _oAuthConsumerLocalService.getOAuthConsumers(gadgetKey);
 	}
 
+	@Override
 	public java.util.List<com.liferay.opensocial.model.OAuthConsumer> getOAuthConsumers(
 		java.lang.String gadgetKey, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -297,11 +319,13 @@ public class OAuthConsumerLocalServiceWrapper
 			end);
 	}
 
+	@Override
 	public int getOAuthConsumersCount(java.lang.String gadgetKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _oAuthConsumerLocalService.getOAuthConsumersCount(gadgetKey);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer updateOAuthConsumer(
 		long oAuthConsumerId, java.lang.String consumerKey,
 		java.lang.String consumerSecret, java.lang.String keyType,
@@ -327,10 +351,12 @@ public class OAuthConsumerLocalServiceWrapper
 		_oAuthConsumerLocalService = oAuthConsumerLocalService;
 	}
 
+	@Override
 	public OAuthConsumerLocalService getWrappedService() {
 		return _oAuthConsumerLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		OAuthConsumerLocalService oAuthConsumerLocalService) {
 		_oAuthConsumerLocalService = oAuthConsumerLocalService;
