@@ -17,9 +17,7 @@ package com.liferay.knowledgebase.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link KBCommentService}.
- * </p>
+ * Provides a wrapper for {@link KBCommentService}.
  *
  * @author    Brian Wing Shun Chan
  * @see       KBCommentService
@@ -36,6 +34,7 @@ public class KBCommentServiceWrapper implements KBCommentService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _kbCommentService.getBeanIdentifier();
 	}
@@ -45,16 +44,19 @@ public class KBCommentServiceWrapper implements KBCommentService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_kbCommentService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return _kbCommentService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	@Override
 	public com.liferay.knowledgebase.model.KBComment deleteKBComment(
 		com.liferay.knowledgebase.model.KBComment kbComment)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -62,6 +64,7 @@ public class KBCommentServiceWrapper implements KBCommentService,
 		return _kbCommentService.deleteKBComment(kbComment);
 	}
 
+	@Override
 	public com.liferay.knowledgebase.model.KBComment deleteKBComment(
 		long kbCommentId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -69,6 +72,7 @@ public class KBCommentServiceWrapper implements KBCommentService,
 		return _kbCommentService.deleteKBComment(kbCommentId);
 	}
 
+	@Override
 	public com.liferay.knowledgebase.model.KBComment updateKBComment(
 		long kbCommentId, long classNameId, long classPK,
 		java.lang.String content, boolean helpful,
@@ -93,10 +97,12 @@ public class KBCommentServiceWrapper implements KBCommentService,
 		_kbCommentService = kbCommentService;
 	}
 
+	@Override
 	public KBCommentService getWrappedService() {
 		return _kbCommentService;
 	}
 
+	@Override
 	public void setWrappedService(KBCommentService kbCommentService) {
 		_kbCommentService = kbCommentService;
 	}

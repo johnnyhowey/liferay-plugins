@@ -17,9 +17,7 @@ package com.liferay.ams.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link TypeLocalService}.
- * </p>
+ * Provides a wrapper for {@link TypeLocalService}.
  *
  * @author    Brian Wing Shun Chan
  * @see       TypeLocalService
@@ -38,6 +36,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @return the type that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Type addType(com.liferay.ams.model.Type type)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _typeLocalService.addType(type);
@@ -49,6 +48,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @param typeId the primary key for the new type
 	* @return the new type
 	*/
+	@Override
 	public com.liferay.ams.model.Type createType(long typeId) {
 		return _typeLocalService.createType(typeId);
 	}
@@ -61,6 +61,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @throws PortalException if a type with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Type deleteType(long typeId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -74,12 +75,14 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @return the type that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Type deleteType(
 		com.liferay.ams.model.Type type)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _typeLocalService.deleteType(type);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _typeLocalService.dynamicQuery();
 	}
@@ -91,6 +94,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -111,6 +115,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -132,6 +137,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -149,12 +155,14 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _typeLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.ams.model.Type fetchType(long typeId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _typeLocalService.fetchType(typeId);
@@ -168,12 +176,14 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @throws PortalException if a type with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Type getType(long typeId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _typeLocalService.getType(typeId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -193,6 +203,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @return the range of types
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.ams.model.Type> getTypes(int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		return _typeLocalService.getTypes(start, end);
@@ -204,6 +215,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @return the number of types
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getTypesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _typeLocalService.getTypesCount();
@@ -216,6 +228,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	* @return the type that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Type updateType(
 		com.liferay.ams.model.Type type)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -227,6 +240,7 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _typeLocalService.getBeanIdentifier();
 	}
@@ -236,10 +250,12 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_typeLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -260,10 +276,12 @@ public class TypeLocalServiceWrapper implements TypeLocalService,
 		_typeLocalService = typeLocalService;
 	}
 
+	@Override
 	public TypeLocalService getWrappedService() {
 		return _typeLocalService;
 	}
 
+	@Override
 	public void setWrappedService(TypeLocalService typeLocalService) {
 		_typeLocalService = typeLocalService;
 	}

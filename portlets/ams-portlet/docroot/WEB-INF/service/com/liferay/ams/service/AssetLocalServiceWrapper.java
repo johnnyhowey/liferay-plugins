@@ -17,9 +17,7 @@ package com.liferay.ams.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link AssetLocalService}.
- * </p>
+ * Provides a wrapper for {@link AssetLocalService}.
  *
  * @author    Brian Wing Shun Chan
  * @see       AssetLocalService
@@ -38,6 +36,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @return the asset that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Asset addAsset(
 		com.liferay.ams.model.Asset asset)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -50,6 +49,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @param assetId the primary key for the new asset
 	* @return the new asset
 	*/
+	@Override
 	public com.liferay.ams.model.Asset createAsset(long assetId) {
 		return _assetLocalService.createAsset(assetId);
 	}
@@ -62,6 +62,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @throws PortalException if a asset with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Asset deleteAsset(long assetId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -75,12 +76,14 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @return the asset that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Asset deleteAsset(
 		com.liferay.ams.model.Asset asset)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _assetLocalService.deleteAsset(asset);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _assetLocalService.dynamicQuery();
 	}
@@ -92,6 +95,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -112,6 +116,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -133,6 +138,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -150,12 +156,14 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _assetLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.ams.model.Asset fetchAsset(long assetId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _assetLocalService.fetchAsset(assetId);
@@ -169,12 +177,14 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @throws PortalException if a asset with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Asset getAsset(long assetId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _assetLocalService.getAsset(assetId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -194,6 +204,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @return the range of assets
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.ams.model.Asset> getAssets(int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		return _assetLocalService.getAssets(start, end);
@@ -205,6 +216,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @return the number of assets
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getAssetsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _assetLocalService.getAssetsCount();
@@ -217,6 +229,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	* @return the asset that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Asset updateAsset(
 		com.liferay.ams.model.Asset asset)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -228,6 +241,7 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _assetLocalService.getBeanIdentifier();
 	}
@@ -237,10 +251,12 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_assetLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -261,10 +277,12 @@ public class AssetLocalServiceWrapper implements AssetLocalService,
 		_assetLocalService = assetLocalService;
 	}
 
+	@Override
 	public AssetLocalService getWrappedService() {
 		return _assetLocalService;
 	}
 
+	@Override
 	public void setWrappedService(AssetLocalService assetLocalService) {
 		_assetLocalService = assetLocalService;
 	}
