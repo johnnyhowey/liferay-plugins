@@ -16,15 +16,12 @@ package com.liferay.portal.workflow.kaleo.runtime.node;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoNode;
 import com.liferay.portal.workflow.kaleo.model.KaleoTimer;
 import com.liferay.portal.workflow.kaleo.model.KaleoTransition;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.graph.PathElement;
-
-import java.io.Serializable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,8 +33,10 @@ import java.util.Map;
 public class ForkNodeExecutor extends BaseNodeExecutor {
 
 	@Override
-	protected void doEnter(
+	protected boolean doEnter(
 		KaleoNode currentKaleoNode, ExecutionContext executionContext) {
+
+		return true;
 	}
 
 	@Override
@@ -45,10 +44,6 @@ public class ForkNodeExecutor extends BaseNodeExecutor {
 			KaleoNode currentKaleoNode, ExecutionContext executionContext,
 			List<PathElement> remainingPathElements)
 		throws PortalException, SystemException {
-
-		Map<String, Serializable> workflowContext =
-			executionContext.getWorkflowContext();
-		ServiceContext serviceContext = executionContext.getServiceContext();
 
 		List<KaleoTransition> kaleoTransitions =
 			currentKaleoNode.getKaleoTransitions();
@@ -63,7 +58,8 @@ public class ForkNodeExecutor extends BaseNodeExecutor {
 			KaleoInstanceToken childKaleoInstanceToken =
 				kaleoInstanceTokenLocalService.addKaleoInstanceToken(
 					parentKaleoInstanceToken.getKaleoInstanceTokenId(),
-					workflowContext, serviceContext);
+					executionContext.getWorkflowContext(),
+					executionContext.getServiceContext());
 
 			childKaleoInstanceTokens.put(
 				kaleoTransition.getName(), childKaleoInstanceToken);
@@ -74,7 +70,8 @@ public class ForkNodeExecutor extends BaseNodeExecutor {
 				childKaleoInstanceTokens.get(kaleoTransition.getName());
 
 			ExecutionContext forkedExecutionContext = new ExecutionContext(
-				childKaleoInstanceToken, workflowContext, serviceContext);
+				childKaleoInstanceToken, executionContext.getWorkflowContext(),
+				executionContext.getServiceContext());
 
 			PathElement pathElement = new PathElement(
 				currentKaleoNode, kaleoTransition.getTargetKaleoNode(),

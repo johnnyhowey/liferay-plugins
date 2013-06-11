@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class SocialOfficeServiceClp implements SocialOfficeService {
 	public SocialOfficeServiceClp(InvokableService invokableService) {
@@ -40,6 +41,7 @@ public class SocialOfficeServiceClp implements SocialOfficeService {
 		_methodParameterTypes4 = new String[] { "long" };
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -62,6 +64,7 @@ public class SocialOfficeServiceClp implements SocialOfficeService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableService.invokeMethod(_methodName1,
@@ -81,12 +84,14 @@ public class SocialOfficeServiceClp implements SocialOfficeService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public long[] getUserSocialOfficeGroupIds()
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -119,6 +124,7 @@ public class SocialOfficeServiceClp implements SocialOfficeService {
 		return (long[])ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public boolean isSocialOfficeGroup(long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {

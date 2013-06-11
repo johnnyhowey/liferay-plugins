@@ -17,12 +17,10 @@ package com.liferay.calendar.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link CalendarNotificationTemplateService}.
- * </p>
+ * Provides a wrapper for {@link CalendarNotificationTemplateService}.
  *
- * @author    Eduardo Lundgren
- * @see       CalendarNotificationTemplateService
+ * @author Eduardo Lundgren
+ * @see CalendarNotificationTemplateService
  * @generated
  */
 public class CalendarNotificationTemplateServiceWrapper
@@ -38,6 +36,7 @@ public class CalendarNotificationTemplateServiceWrapper
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _calendarNotificationTemplateService.getBeanIdentifier();
 	}
@@ -47,10 +46,12 @@ public class CalendarNotificationTemplateServiceWrapper
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_calendarNotificationTemplateService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -58,6 +59,7 @@ public class CalendarNotificationTemplateServiceWrapper
 			parameterTypes, arguments);
 	}
 
+	@Override
 	public com.liferay.calendar.model.CalendarNotificationTemplate addCalendarNotificationTemplate(
 		long calendarId,
 		com.liferay.calendar.notification.NotificationType notificationType,
@@ -72,6 +74,7 @@ public class CalendarNotificationTemplateServiceWrapper
 			notificationTemplateType, subject, body, serviceContext);
 	}
 
+	@Override
 	public com.liferay.calendar.model.CalendarNotificationTemplate updateCalendarNotificationTemplate(
 		long calendarNotificationTemplateId,
 		java.lang.String notificationTypeSettings, java.lang.String subject,
@@ -98,10 +101,12 @@ public class CalendarNotificationTemplateServiceWrapper
 		_calendarNotificationTemplateService = calendarNotificationTemplateService;
 	}
 
+	@Override
 	public CalendarNotificationTemplateService getWrappedService() {
 		return _calendarNotificationTemplateService;
 	}
 
+	@Override
 	public void setWrappedService(
 		CalendarNotificationTemplateService calendarNotificationTemplateService) {
 		_calendarNotificationTemplateService = calendarNotificationTemplateService;

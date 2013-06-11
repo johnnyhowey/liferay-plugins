@@ -17,12 +17,10 @@ package com.liferay.wsrp.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link WSRPConsumerLocalService}.
- * </p>
+ * Provides a wrapper for {@link WSRPConsumerLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       WSRPConsumerLocalService
+ * @author Brian Wing Shun Chan
+ * @see WSRPConsumerLocalService
  * @generated
  */
 public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService,
@@ -39,6 +37,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @return the w s r p consumer that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer addWSRPConsumer(
 		com.liferay.wsrp.model.WSRPConsumer wsrpConsumer)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -51,6 +50,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @param wsrpConsumerId the primary key for the new w s r p consumer
 	* @return the new w s r p consumer
 	*/
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer createWSRPConsumer(
 		long wsrpConsumerId) {
 		return _wsrpConsumerLocalService.createWSRPConsumer(wsrpConsumerId);
@@ -64,6 +64,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @throws PortalException if a w s r p consumer with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer deleteWSRPConsumer(
 		long wsrpConsumerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -79,6 +80,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @throws PortalException
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer deleteWSRPConsumer(
 		com.liferay.wsrp.model.WSRPConsumer wsrpConsumer)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -86,6 +88,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 		return _wsrpConsumerLocalService.deleteWSRPConsumer(wsrpConsumer);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _wsrpConsumerLocalService.dynamicQuery();
 	}
@@ -97,6 +100,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -117,6 +121,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -138,6 +143,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -155,12 +161,14 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _wsrpConsumerLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer fetchWSRPConsumer(
 		long wsrpConsumerId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -175,6 +183,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @throws PortalException if a w s r p consumer with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer getWSRPConsumer(
 		long wsrpConsumerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -182,6 +191,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 		return _wsrpConsumerLocalService.getWSRPConsumer(wsrpConsumerId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -201,6 +211,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @return the range of w s r p consumers
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.wsrp.model.WSRPConsumer> getWSRPConsumers(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -213,6 +224,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @return the number of w s r p consumers
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getWSRPConsumersCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _wsrpConsumerLocalService.getWSRPConsumersCount();
@@ -225,6 +237,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	* @return the w s r p consumer that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer updateWSRPConsumer(
 		com.liferay.wsrp.model.WSRPConsumer wsrpConsumer)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -236,6 +249,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _wsrpConsumerLocalService.getBeanIdentifier();
 	}
@@ -245,10 +259,12 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_wsrpConsumerLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -256,6 +272,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 			arguments);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer addWSRPConsumer(long companyId,
 		java.lang.String adminPortletId, java.lang.String name,
 		java.lang.String url, java.lang.String forwardCookies,
@@ -268,6 +285,7 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 			markupCharacterSets, serviceContext);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer getWSRPConsumer(
 		java.lang.String wsrpConsumerUuid)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -275,17 +293,20 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 		return _wsrpConsumerLocalService.getWSRPConsumer(wsrpConsumerUuid);
 	}
 
+	@Override
 	public java.util.List<com.liferay.wsrp.model.WSRPConsumer> getWSRPConsumers(
 		long companyId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _wsrpConsumerLocalService.getWSRPConsumers(companyId, start, end);
 	}
 
+	@Override
 	public int getWSRPConsumersCount(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _wsrpConsumerLocalService.getWSRPConsumersCount(companyId);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer registerWSRPConsumer(
 		long wsrpConsumerId, java.lang.String adminPortletId,
 		com.liferay.portal.kernel.util.UnicodeProperties registrationProperties,
@@ -296,18 +317,21 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 			adminPortletId, registrationProperties, registrationHandle);
 	}
 
+	@Override
 	public void restartConsumer(long wsrpConsumerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_wsrpConsumerLocalService.restartConsumer(wsrpConsumerId);
 	}
 
+	@Override
 	public void updateServiceDescription(long wsrpConsumerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_wsrpConsumerLocalService.updateServiceDescription(wsrpConsumerId);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPConsumer updateWSRPConsumer(
 		long wsrpConsumerId, java.lang.String adminPortletId,
 		java.lang.String name, java.lang.String url,
@@ -335,10 +359,12 @@ public class WSRPConsumerLocalServiceWrapper implements WSRPConsumerLocalService
 		_wsrpConsumerLocalService = wsrpConsumerLocalService;
 	}
 
+	@Override
 	public WSRPConsumerLocalService getWrappedService() {
 		return _wsrpConsumerLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		WSRPConsumerLocalService wsrpConsumerLocalService) {
 		_wsrpConsumerLocalService = wsrpConsumerLocalService;

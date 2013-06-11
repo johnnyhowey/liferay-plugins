@@ -27,6 +27,7 @@ import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.social.model.SocialActivity;
 import com.liferay.portlet.social.model.SocialActivityConstants;
+import com.liferay.portlet.social.model.SocialActivityFeedEntry;
 import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
@@ -49,31 +50,55 @@ public class WikiActivityInterpreter extends SOSocialActivityInterpreter {
 		return _CLASS_NAMES;
 	}
 
+	protected String appendNodeTitlePattern(String titlePattern, long classPK) {
+		try {
+			WikiPageResource pageResource =
+				WikiPageResourceLocalServiceUtil.fetchWikiPageResource(classPK);
+
+			if (pageResource == null) {
+				return titlePattern;
+			}
+
+			WikiNode node = WikiNodeLocalServiceUtil.fetchWikiNode(
+				pageResource.getNodeId());
+
+			if (Validator.isNotNull(node)) {
+				titlePattern = titlePattern.concat("-in-the-x-wiki");
+			}
+		}
+		catch (Exception e) {
+		}
+
+		return titlePattern;
+	}
+
 	@Override
 	protected long getActivitySetId(long activityId) {
 		try {
 			SocialActivity activity =
 				SocialActivityLocalServiceUtil.getActivity(activityId);
 
-			if (activity.getType() == _ACTIVITY_KEY_ADD_COMMENT) {
-				SocialActivitySet activitySet =
-					SocialActivitySetLocalServiceUtil.getClassActivitySet(
-						activity.getClassNameId(), activity.getClassPK(),
-						activity.getType());
+			SocialActivitySet activitySet = null;
 
-				if ((activitySet != null) && !isExpired(activitySet)) {
-					return activitySet.getActivitySetId();
-				}
+			if ((activity.getType() == _ACTIVITY_KEY_ADD_COMMENT) ||
+				(activity.getType() == _ACTIVITY_KEY_ADD_PAGE) ||
+				(activity.getType() ==
+					SocialActivityConstants.TYPE_ADD_COMMENT)) {
+
+				activitySet =
+					SocialActivitySetLocalServiceUtil.getUserActivitySet(
+						activity.getGroupId(), activity.getUserId(),
+						activity.getClassNameId(), activity.getType());
 			}
 			else if (activity.getType() == _ACTIVITY_KEY_UPDATE_PAGE) {
-				SocialActivitySet activitySet =
+				activitySet =
 					SocialActivitySetLocalServiceUtil.getClassActivitySet(
 						activity.getUserId(), activity.getClassNameId(),
 						activity.getClassPK(), activity.getType());
+			}
 
-				if ((activitySet != null) && !isExpired(activitySet)) {
-					return activitySet.getActivitySetId();
-				}
+			if ((activitySet != null) && !isExpired(activitySet)) {
+				return activitySet.getActivitySetId();
 			}
 		}
 		catch (Exception e) {
@@ -87,37 +112,36 @@ public class WikiActivityInterpreter extends SOSocialActivityInterpreter {
 			SocialActivity activity, ServiceContext serviceContext)
 		throws Exception {
 
+		return getBody(
+			activity.getClassName(), activity.getClassPK(), serviceContext);
+	}
+
+	@Override
+	protected String getBody(
+			SocialActivitySet activitySet, ServiceContext serviceContext)
+		throws Exception {
+
+		if (activitySet.getType() == _ACTIVITY_KEY_UPDATE_PAGE) {
+			return getBody(
+				activitySet.getClassName(), activitySet.getClassPK(),
+				serviceContext);
+		}
+
+		return super.getBody(activitySet, serviceContext);
+	}
+
+	protected String getBody(
+			String className, long classPK, ServiceContext serviceContext)
+		throws Exception {
+
 		StringBundler sb = new StringBundler(5);
 
 		sb.append("<div class=\"activity-body\"><div class=\"title\">");
-
-		String pageTitle = StringPool.BLANK;
-
-		String linkURL = getLinkURL(activity, serviceContext);
-
-		AssetRenderer assetRenderer = getAssetRenderer(activity);
-
-		LiferayPortletRequest liferayPortletRequest =
-			serviceContext.getLiferayPortletRequest();
-
-		if (Validator.isNotNull(
-				assetRenderer.getIconPath(liferayPortletRequest))) {
-
-			pageTitle = wrapLink(
-				linkURL, assetRenderer.getIconPath(liferayPortletRequest),
-				HtmlUtil.escape(
-					assetRenderer.getTitle(serviceContext.getLocale())));
-		}
-		else {
-			pageTitle = wrapLink(
-				linkURL,
-				HtmlUtil.escape(
-					assetRenderer.getTitle(serviceContext.getLocale())));
-		}
-
-		sb.append(pageTitle);
-
+		sb.append(getPageTitle(className, classPK, serviceContext));
 		sb.append("</div><div class=\"wiki-page-content\">");
+
+		AssetRenderer assetRenderer = getAssetRenderer(className, classPK);
+
 		sb.append(
 			StringUtil.shorten(
 				assetRenderer.getSummary(serviceContext.getLocale()), 200));
@@ -132,8 +156,103 @@ public class WikiActivityInterpreter extends SOSocialActivityInterpreter {
 		throws Exception {
 
 		return wrapLink(
-			getLinkURL(activity, serviceContext),
+			getLinkURL(
+				activity.getClassName(), activity.getClassPK(), serviceContext),
 			serviceContext.translate("view-wiki"));
+	}
+
+	@Override
+	protected String getLink(
+			SocialActivitySet activitySet, ServiceContext serviceContext)
+		throws Exception {
+
+		if (activitySet.getType() == _ACTIVITY_KEY_UPDATE_PAGE) {
+			return wrapLink(
+				getLinkURL(
+					activitySet.getClassName(), activitySet.getClassPK(),
+					serviceContext),
+				serviceContext.translate("view-wiki"));
+		}
+
+		return null;
+	}
+
+	protected String getNodeTitle(
+			long classPK, long groupId, ServiceContext serviceContext)
+		throws Exception {
+
+		WikiPageResource pageResource =
+			WikiPageResourceLocalServiceUtil.fetchWikiPageResource(classPK);
+
+		if (pageResource == null) {
+			return null;
+		}
+
+		WikiNode node = WikiNodeLocalServiceUtil.fetchWikiNode(
+			pageResource.getNodeId());
+
+		if (node == null) {
+			return null;
+		}
+
+		long plid = PortalUtil.getPlidFromPortletId(
+			groupId, false, PortletKeys.WIKI);
+
+		if (plid <= 0) {
+			return HtmlUtil.escape(node.getName());
+		}
+
+		PortletURL nodeURL = PortletURLFactoryUtil.create(
+			serviceContext.getLiferayPortletRequest(), PortletKeys.WIKI, plid,
+			PortletRequest.RENDER_PHASE);
+
+		nodeURL.setParameter("struts_action", "/wiki/view");
+		nodeURL.setParameter("nodeId", String.valueOf(node.getNodeId()));
+
+		return wrapLink(nodeURL.toString(), HtmlUtil.escape(node.getName()));
+	}
+
+	protected String getPageTitle(
+			String className, long classPK, ServiceContext serviceContext)
+		throws Exception {
+
+		String linkURL = getLinkURL(className, classPK, serviceContext);
+
+		AssetRenderer assetRenderer = getAssetRenderer(className, classPK);
+
+		LiferayPortletRequest liferayPortletRequest =
+			serviceContext.getLiferayPortletRequest();
+
+		if (Validator.isNotNull(
+				assetRenderer.getIconPath(liferayPortletRequest))) {
+
+			return wrapLink(
+				linkURL, assetRenderer.getIconPath(liferayPortletRequest),
+				HtmlUtil.escape(
+					assetRenderer.getTitle(serviceContext.getLocale())));
+		}
+
+		return wrapLink(
+			linkURL,
+			HtmlUtil.escape(
+				assetRenderer.getTitle(serviceContext.getLocale())));
+	}
+
+	@Override
+	protected SocialActivityFeedEntry getSubFeedEntry(
+			SocialActivity activity, ServiceContext serviceContext)
+		throws Exception {
+
+		String title = getPageTitle(
+			activity.getClassName(), activity.getClassPK(), serviceContext);
+
+		AssetRenderer assetRenderer = getAssetRenderer(
+			activity.getClassName(), activity.getClassPK());
+
+		String body = StringUtil.shorten(
+			assetRenderer.getSummary(serviceContext.getLocale()), 50);
+
+		return new SocialActivityFeedEntry(title, body);
 	}
 
 	@Override
@@ -177,6 +296,20 @@ public class WikiActivityInterpreter extends SOSocialActivityInterpreter {
 	}
 
 	@Override
+	protected Object[] getTitleArguments(
+			String groupName, SocialActivitySet activitySet, String link,
+			String title, ServiceContext serviceContext)
+		throws Exception {
+
+		int activityCount = activitySet.getActivityCount();
+
+		String nodeTitle = getNodeTitle(
+			activitySet.getClassPK(), activitySet.getGroupId(), serviceContext);
+
+		return new Object[] {activityCount, nodeTitle};
+	}
+
+	@Override
 	protected String getTitlePattern(String groupName, SocialActivity activity)
 		throws Exception {
 
@@ -197,18 +330,33 @@ public class WikiActivityInterpreter extends SOSocialActivityInterpreter {
 			return StringPool.BLANK;
 		}
 
-		WikiPageResource pageResource =
-			WikiPageResourceLocalServiceUtil.getPageResource(
-				activity.getClassPK());
+		return appendNodeTitlePattern(titlePattern, activity.getClassPK());
+	}
 
-		WikiNode node = WikiNodeLocalServiceUtil.getNode(
-			pageResource.getNodeId());
+	@Override
+	protected String getTitlePattern(
+			String groupName, SocialActivitySet activitySet)
+		throws Exception {
 
-		if (Validator.isNotNull(node)) {
-			titlePattern = titlePattern.concat("-in-the-x-wiki");
+		String titlePattern = null;
+
+		if ((activitySet.getType() == _ACTIVITY_KEY_ADD_COMMENT) ||
+			(activitySet.getType() ==
+				SocialActivityConstants.TYPE_ADD_COMMENT)) {
+
+			titlePattern = "commented-on-x-wiki-pages";
+		}
+		else if (activitySet.getType() == _ACTIVITY_KEY_ADD_PAGE) {
+			titlePattern = "created-x-new-wiki-pages";
+		}
+		else if (activitySet.getType() == _ACTIVITY_KEY_UPDATE_PAGE) {
+			titlePattern = "made-x-updates-to-a-wiki-page";
+		}
+		else {
+			return StringPool.BLANK;
 		}
 
-		return titlePattern;
+		return appendNodeTitlePattern(titlePattern, activitySet.getClassPK());
 	}
 
 	/**

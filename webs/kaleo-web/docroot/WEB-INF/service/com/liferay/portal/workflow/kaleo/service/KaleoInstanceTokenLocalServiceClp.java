@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class KaleoInstanceTokenLocalServiceClp
 	implements KaleoInstanceTokenLocalService {
@@ -169,6 +170,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		_methodParameterTypes28 = new String[] { "long", "long" };
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken addKaleoInstanceToken(
 		com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken kaleoInstanceToken)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -200,6 +202,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken createKaleoInstanceToken(
 		long kaleoInstanceTokenId) {
 		Object returnObj = null;
@@ -224,6 +227,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken deleteKaleoInstanceToken(
 		long kaleoInstanceTokenId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -258,6 +262,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken deleteKaleoInstanceToken(
 		com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken kaleoInstanceToken)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -289,6 +294,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -311,6 +317,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -341,6 +348,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -377,6 +385,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -417,6 +426,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -446,6 +456,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken fetchKaleoInstanceToken(
 		long kaleoInstanceTokenId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -475,6 +486,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken getKaleoInstanceToken(
 		long kaleoInstanceTokenId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -509,6 +521,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -543,6 +556,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken> getKaleoInstanceTokens(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -571,6 +585,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getKaleoInstanceTokensCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -598,6 +613,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken updateKaleoInstanceToken(
 		com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken kaleoInstanceToken)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -629,6 +645,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -651,6 +668,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -670,12 +688,14 @@ public class KaleoInstanceTokenLocalServiceClp
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken addKaleoInstanceToken(
 		long parentKaleoInstanceTokenId,
 		java.util.Map<java.lang.String, java.io.Serializable> workflowContext,
@@ -718,6 +738,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken completeKaleoInstanceToken(
 		long kaleoInstanceTokenId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -752,6 +773,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void deleteCompanyKaleoInstanceTokens(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -775,6 +797,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		}
 	}
 
+	@Override
 	public void deleteKaleoDefinitionKaleoInstanceTokens(long kaleoDefinitionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -798,6 +821,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		}
 	}
 
+	@Override
 	public void deleteKaleoInstanceKaleoInstanceTokens(long kaleoInstanceId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -821,6 +845,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		}
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken> getKaleoInstanceTokens(
 		long parentKaleoInstanceTokenId, java.util.Date completionDate,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -857,6 +882,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken> getKaleoInstanceTokens(
 		long parentKaleoInstanceTokenId,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -891,6 +917,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getKaleoInstanceTokensCount(long parentKaleoInstanceTokenId,
 		java.util.Date completionDate,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -927,6 +954,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public int getKaleoInstanceTokensCount(long parentKaleoInstanceTokenId,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -960,6 +988,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken getRootKaleoInstanceToken(
 		long kaleoInstanceId,
 		java.util.Map<java.lang.String, java.io.Serializable> workflowContext,
@@ -1002,6 +1031,7 @@ public class KaleoInstanceTokenLocalServiceClp
 		return (com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken updateKaleoInstanceToken(
 		long kaleoInstanceTokenId, long currentKaleoNodeId)
 		throws com.liferay.portal.kernel.exception.PortalException,

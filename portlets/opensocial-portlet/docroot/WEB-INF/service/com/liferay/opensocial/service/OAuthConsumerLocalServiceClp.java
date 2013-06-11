@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 	public OAuthConsumerLocalServiceClp(
@@ -150,6 +151,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 			};
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer addOAuthConsumer(
 		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -179,6 +181,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer createOAuthConsumer(
 		long oAuthConsumerId) {
 		Object returnObj = null;
@@ -202,6 +205,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer deleteOAuthConsumer(
 		long oAuthConsumerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -235,6 +239,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer deleteOAuthConsumer(
 		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -264,6 +269,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -286,6 +292,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -316,6 +323,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -352,6 +360,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -392,6 +401,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -421,6 +431,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer fetchOAuthConsumer(
 		long oAuthConsumerId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -449,6 +460,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer getOAuthConsumer(
 		long oAuthConsumerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -482,6 +494,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -516,6 +529,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.opensocial.model.OAuthConsumer> getOAuthConsumers(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -544,6 +558,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (java.util.List<com.liferay.opensocial.model.OAuthConsumer>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getOAuthConsumersCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -571,6 +586,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer updateOAuthConsumer(
 		com.liferay.opensocial.model.OAuthConsumer oAuthConsumer)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -600,6 +616,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -622,6 +639,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -641,12 +659,14 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer addOAuthConsumer(
 		long companyId, java.lang.String gadgetKey,
 		java.lang.String serviceName, java.lang.String consumerKey,
@@ -690,6 +710,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void deleteOAuthConsumers(java.lang.String gadgetKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -714,6 +735,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		}
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer fetchOAuthConsumer(
 		java.lang.String gadgetKey, java.lang.String serviceName)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -747,6 +769,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer getOAuthConsumer(
 		java.lang.String gadgetKey, java.lang.String serviceName)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -785,6 +808,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (com.liferay.opensocial.model.OAuthConsumer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.opensocial.model.OAuthConsumer> getOAuthConsumers(
 		java.lang.String gadgetKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -814,6 +838,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (java.util.List<com.liferay.opensocial.model.OAuthConsumer>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.opensocial.model.OAuthConsumer> getOAuthConsumers(
 		java.lang.String gadgetKey, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -849,6 +874,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return (java.util.List<com.liferay.opensocial.model.OAuthConsumer>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getOAuthConsumersCount(java.lang.String gadgetKey)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -877,6 +903,7 @@ public class OAuthConsumerLocalServiceClp implements OAuthConsumerLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.opensocial.model.OAuthConsumer updateOAuthConsumer(
 		long oAuthConsumerId, java.lang.String consumerKey,
 		java.lang.String consumerSecret, java.lang.String keyType,

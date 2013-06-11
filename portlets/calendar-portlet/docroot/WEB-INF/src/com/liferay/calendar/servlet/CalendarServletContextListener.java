@@ -21,6 +21,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.HotDeployMessageListener;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
@@ -37,10 +38,12 @@ import org.apache.commons.lang.time.StopWatch;
 public class CalendarServletContextListener
 	extends BasePortalLifecycle implements ServletContextListener {
 
+	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		portalDestroy();
 	}
 
+	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		registerPortalLifecycle();
 	}
@@ -48,16 +51,16 @@ public class CalendarServletContextListener
 	@Override
 	protected void doPortalDestroy() throws Exception {
 		MessageBusUtil.unregisterMessageListener(
-			DestinationNames.HOT_DEPLOY, _hotDeployMessageListener);
+			DestinationNames.HOT_DEPLOY, _messageListener);
 	}
 
 	@Override
 	protected void doPortalInit() throws Exception {
-		_hotDeployMessageListener = new HotDeployMessageListener(
+		_messageListener = new HotDeployMessageListener(
 			ClpSerializer.getServletContextName()) {
 
 			@Override
-			protected void onDeploy() throws Exception {
+			protected void onDeploy(Message message) throws Exception {
 				if (!PortletPropsValues.CALENDAR_SYNC_CALEVENTS_ON_STARTUP) {
 					return;
 				}
@@ -77,7 +80,7 @@ public class CalendarServletContextListener
 
 					sb.append("Calendar events synchronization takes ");
 					sb.append(stopWatch.getTime() + " ms. Set the property ");
-					sb.append("\"calendar.sync.calevents.on.startup \"");
+					sb.append("\"calendar.sync.calevents.on.startup\" ");
 					sb.append("to \"false\" to disable calendar events ");
 					sb.append("synchronization.");
 
@@ -88,12 +91,12 @@ public class CalendarServletContextListener
 		};
 
 		MessageBusUtil.registerMessageListener(
-			DestinationNames.HOT_DEPLOY, _hotDeployMessageListener);
+			DestinationNames.HOT_DEPLOY, _messageListener);
 	}
 
 	private static Log _log = LogFactoryUtil.getLog(
 		CalendarServletContextListener.class);
 
-	private MessageListener _hotDeployMessageListener;
+	private MessageListener _messageListener;
 
 }

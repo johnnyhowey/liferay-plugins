@@ -55,6 +55,8 @@ public class NotificationRecipient {
 			(NotificationRecipient)obj;
 
 		if (Validator.equals(_companyId, notificationRecipient._companyId) &&
+			Validator.equals(
+				_emailAddress, notificationRecipient._emailAddress) &&
 			Validator.equals(_userId, notificationRecipient._userId)) {
 
 			return true;
@@ -99,7 +101,12 @@ public class NotificationRecipient {
 		HashCode hashCode = HashCodeFactoryUtil.getHashCode();
 
 		hashCode.append(_companyId);
-		hashCode.append(_companyId);
+
+		if (Validator.isNotNull(_emailAddress)) {
+			hashCode.append(_emailAddress);
+		}
+
+		hashCode.append(_userId);
 
 		return hashCode.toHashCode();
 	}

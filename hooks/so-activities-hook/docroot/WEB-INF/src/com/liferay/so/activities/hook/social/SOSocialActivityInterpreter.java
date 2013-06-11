@@ -14,24 +14,29 @@
 
 package com.liferay.so.activities.hook.social;
 
-import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.util.DateUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Time;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
 import com.liferay.portlet.social.model.BaseSocialActivityInterpreter;
 import com.liferay.portlet.social.model.SocialActivity;
+import com.liferay.portlet.social.model.SocialActivityFeedEntry;
 import com.liferay.portlet.social.model.SocialActivitySet;
+import com.liferay.portlet.social.service.SocialActivityLocalServiceUtil;
 
 import java.text.Format;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -48,14 +53,111 @@ public abstract class SOSocialActivityInterpreter
 		return _SELECTOR;
 	}
 
-	protected AssetRenderer getAssetRenderer(SocialActivity activity)
+	@Override
+	protected SocialActivityFeedEntry doInterpret(
+			SocialActivitySet activitySet, ServiceContext serviceContext)
+		throws Exception {
+
+		if (activitySet.getActivityCount() == 1) {
+			List<SocialActivity> activities =
+				SocialActivityLocalServiceUtil.getActivitySetActivities(
+					activitySet.getActivitySetId(), 0, 1);
+
+			if (!activities.isEmpty()) {
+				SocialActivity activity = activities.get(0);
+
+				return doInterpret(activity, serviceContext);
+			}
+		}
+
+		ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+
+		PermissionChecker permissionChecker =
+			themeDisplay.getPermissionChecker();
+
+		if (!hasPermissions(
+				permissionChecker, activitySet, ActionKeys.VIEW,
+				serviceContext)) {
+
+			return null;
+		}
+
+		String link = getLink(activitySet, serviceContext);
+
+		String title = getTitle(activitySet, serviceContext);
+
+		if (Validator.isNull(title)) {
+			return null;
+		}
+
+		String body = getBody(activitySet, serviceContext);
+
+		return new SocialActivityFeedEntry(link, title, body);
+	}
+
+	protected AssetRenderer getAssetRenderer(String className, long classPK)
 		throws Exception {
 
 		AssetRendererFactory assetRendererFactory =
 			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
-				activity.getClassName());
+				className);
 
-		return assetRendererFactory.getAssetRenderer(activity.getClassPK());
+		return assetRendererFactory.getAssetRenderer(classPK);
+	}
+
+	protected String getBody(
+			SocialActivitySet activitySet, ServiceContext serviceContext)
+		throws Exception {
+
+		StringBundler sb = new StringBundler();
+
+		sb.append("<div class=\"activity-body\">");
+
+		int viewableActivities = 0;
+
+		List<SocialActivity> activities =
+			SocialActivityLocalServiceUtil.getActivitySetActivities(
+				activitySet.getActivitySetId(), QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS);
+
+		for (SocialActivity activity :activities) {
+			ThemeDisplay themeDisplay = serviceContext.getThemeDisplay();
+
+			PermissionChecker permissionChecker =
+				themeDisplay.getPermissionChecker();
+
+			if (!hasPermissions(
+					permissionChecker, activity, ActionKeys.VIEW,
+					serviceContext)) {
+
+				continue;
+			}
+
+			SocialActivityFeedEntry subFeedEntry = getSubFeedEntry(
+				activity, serviceContext);
+
+			if (subFeedEntry == null) {
+				continue;
+			}
+
+			sb.append("<div class=\"activity-subentry\">");
+			sb.append("<span class=\"activity-subentry-title\">");
+			sb.append(subFeedEntry.getTitle());
+			sb.append("</span><span class=\"activity-subentry-body\">");
+			sb.append(subFeedEntry.getBody());
+			sb.append("</span></div>");
+
+			viewableActivities++;
+		}
+
+		if (viewableActivities == 0) {
+			return null;
+		}
+
+		sb.append("</div>");
+
+		return sb.toString();
+
 	}
 
 	protected Format getFormatDateTime(Locale locale, TimeZone timezone) {
@@ -63,58 +165,37 @@ public abstract class SOSocialActivityInterpreter
 			"EEEE, MMMMM dd, yyyy 'at' h:mm a", locale, timezone);
 	}
 
-	protected String getLinkURL(
-			SocialActivity activity, ServiceContext serviceContext)
+	protected String getLink(
+			SocialActivitySet activitySet, ServiceContext serviceContext)
 		throws Exception {
 
-		AssetRenderer assetRenderer = getAssetRenderer(activity);
+		return null;
+	}
+
+	protected String getLinkURL(
+			String className, long classPK, ServiceContext serviceContext)
+		throws Exception {
+
+		AssetRenderer assetRenderer = getAssetRenderer(className, classPK);
 
 		return assetRenderer.getURLViewInContext(
 			serviceContext.getLiferayPortletRequest(),
 			serviceContext.getLiferayPortletResponse(), null);
 	}
 
-	protected String getRelativeTimeDescription(
-		long milliseconds, Locale locale, TimeZone timeZone) {
-
-		Format timeFormat = FastDateFormatFactoryUtil.getTime(locale, timeZone);
-
-		int daysBetween = DateUtil.getDaysBetween(
-			new Date(milliseconds), new Date(), timeZone);
-
-		long millisAgo = System.currentTimeMillis() - milliseconds;
-
-		if (millisAgo <= Time.MINUTE) {
-			return LanguageUtil.get(locale, "about-a-minute-ago");
-		}
-		else if (millisAgo < Time.HOUR) {
-			return LanguageUtil.format(
-				locale, "x-minutes-ago", (millisAgo / Time.MINUTE));
-		}
-		else if ((millisAgo / Time.HOUR) == 1) {
-			return LanguageUtil.get(locale, "about-an-hour-ago");
-		}
-		else if ((millisAgo < Time.DAY) || (daysBetween == 0)) {
-			return LanguageUtil.format(
-				locale, "x-hours-ago", (millisAgo / Time.HOUR));
-		}
-		else if (daysBetween == 1) {
-			return LanguageUtil.format(
-				locale, "yesterday-at-x", timeFormat.format(milliseconds));
-		}
-
-		Format dateFormat = FastDateFormatFactoryUtil.getSimpleDateFormat(
-			"EEEE, MMMMM dd, yyyy", locale, timeZone);
-
-		return dateFormat.format(milliseconds);
-	}
-
-	@Override
-	protected String getTitle(
+	protected SocialActivityFeedEntry getSubFeedEntry(
 			SocialActivity activity, ServiceContext serviceContext)
 		throws Exception {
 
-		StringBundler sb = new StringBundler(10);
+		return null;
+	}
+
+	protected String getTitle(
+			long groupId, long userId, long createDate,
+			ServiceContext serviceContext)
+		throws Exception {
+
+		StringBundler sb = new StringBundler(8);
 
 		sb.append("<div class=\"activity-header\">");
 		sb.append("<div class=\"activity-time\" title=\"");
@@ -122,25 +203,24 @@ public abstract class SOSocialActivityInterpreter
 		Format dateFormatDate = getFormatDateTime(
 			serviceContext.getLocale(), serviceContext.getTimeZone());
 
-		Date activityDate = new Date(activity.getCreateDate());
+		Date activityDate = new Date(createDate);
 
 		sb.append(dateFormatDate.format(activityDate));
 
 		sb.append("\">");
 
-		String relativeTimeDescription = getRelativeTimeDescription(
-			activity.getCreateDate(), serviceContext.getLocale(),
+		String relativeTimeDescription = Time.getRelativeTimeDescription(
+			createDate, serviceContext.getLocale(),
 			serviceContext.getTimeZone());
 
 		sb.append(relativeTimeDescription);
 
 		sb.append("</div><div class=\"activity-user-name\">");
 
-		String userName = getUserName(activity.getUserId(), serviceContext);
+		String userName = getUserName(userId, serviceContext);
 
-		if (activity.getGroupId() != serviceContext.getScopeGroupId()) {
-			String groupName = getGroupName(
-				activity.getGroupId(), serviceContext);
+		if (groupId != serviceContext.getScopeGroupId()) {
+			String groupName = getGroupName(groupId, serviceContext);
 
 			Object[] userArguments = new Object[] {userName, groupName};
 
@@ -150,12 +230,52 @@ public abstract class SOSocialActivityInterpreter
 			sb.append(userName);
 		}
 
-		sb.append("</div></div><div class=\"activity-action\">");
+		sb.append("</div></div>");
+
+		return sb.toString();
+	}
+
+	@Override
+	protected String getTitle(
+			SocialActivity activity, ServiceContext serviceContext)
+		throws Exception {
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(
+			getTitle(
+				activity.getGroupId(), activity.getUserId(),
+				activity.getCreateDate(), serviceContext));
+		sb.append("<div class=\"activity-action\">");
 
 		String titlePattern = getTitlePattern(null, activity);
 
 		Object[] titleArguments = getTitleArguments(
 			null, activity, null, null, serviceContext);
+
+		sb.append(serviceContext.translate(titlePattern, titleArguments));
+
+		sb.append("</div>");
+
+		return sb.toString();
+	}
+
+	protected String getTitle(
+			SocialActivitySet activitySet, ServiceContext serviceContext)
+		throws Exception {
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append(
+			getTitle(
+				activitySet.getGroupId(), activitySet.getUserId(),
+				activitySet.getCreateDate(), serviceContext));
+		sb.append("<div class=\"activity-action\">");
+
+		String titlePattern = getTitlePattern(null, activitySet);
+
+		Object[] titleArguments = getTitleArguments(
+			null, activitySet, null, null, serviceContext);
 
 		sb.append(serviceContext.translate(titlePattern, titleArguments));
 
@@ -173,6 +293,21 @@ public abstract class SOSocialActivityInterpreter
 		return null;
 	}
 
+	protected Object[] getTitleArguments(
+			String groupName, SocialActivitySet activitySet, String link,
+			String title, ServiceContext serviceContext)
+		throws Exception {
+
+		return new Object[] {activitySet.getActivityCount()};
+	}
+
+	protected String getTitlePattern(
+			String groupName, SocialActivitySet activitySet)
+		throws Exception {
+
+		return StringPool.BLANK;
+	}
+
 	@Override
 	protected boolean hasPermissions(
 			PermissionChecker permissionChecker, SocialActivity activity,
@@ -182,6 +317,27 @@ public abstract class SOSocialActivityInterpreter
 		return permissionChecker.hasPermission(
 			activity.getGroupId(), activity.getClassName(),
 			activity.getClassPK(), ActionKeys.VIEW);
+	}
+
+	protected boolean hasPermissions(
+			PermissionChecker permissionChecker, SocialActivitySet activitySet,
+			String actionId, ServiceContext serviceContext)
+		throws Exception {
+
+		List<SocialActivity> activities =
+			SocialActivityLocalServiceUtil.getActivitySetActivities(
+				activitySet.getActivitySetId(), QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS);
+
+		for (SocialActivity activity : activities) {
+			if (hasPermissions(
+					permissionChecker, activity, actionId, serviceContext)) {
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	protected boolean isExpired(SocialActivitySet activitySet) {

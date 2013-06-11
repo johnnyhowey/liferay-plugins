@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class UserThreadLocalServiceClp implements UserThreadLocalService {
 	public UserThreadLocalServiceClp(
@@ -177,6 +178,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		_methodParameterTypes32 = new String[] { "com.liferay.portal.model.User" };
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread addUserThread(
 		com.liferay.privatemessaging.model.UserThread userThread)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -206,6 +208,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread createUserThread(
 		long userThreadId) {
 		Object returnObj = null;
@@ -229,6 +232,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread deleteUserThread(
 		long userThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -262,6 +266,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread deleteUserThread(
 		com.liferay.privatemessaging.model.UserThread userThread)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -291,6 +296,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -313,6 +319,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -343,6 +350,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -379,6 +387,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -419,6 +428,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -448,6 +458,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread fetchUserThread(
 		long userThreadId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -476,6 +487,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread getUserThread(
 		long userThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -509,6 +521,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -543,6 +556,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getUserThreads(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -571,6 +585,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getUserThreadsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -598,6 +613,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread updateUserThread(
 		com.liferay.privatemessaging.model.UserThread userThread)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -627,6 +643,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -649,6 +666,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -668,12 +686,14 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMessage addPrivateMessage(
 		long userId, long mbThreadId, java.lang.String to,
 		java.lang.String subject, java.lang.String body,
@@ -725,6 +745,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.portlet.messageboards.model.MBMessage)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portlet.messageboards.model.MBMessage addPrivateMessageBranch(
 		long userId, long parentMBMessageId, java.lang.String body,
 		java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.io.InputStream>> inputStreamOVPs,
@@ -771,6 +792,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.portlet.messageboards.model.MBMessage)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void addUserThread(long userId, long mbThreadId,
 		long topMBMessageId, boolean read, boolean deleted)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -801,6 +823,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public void deleteUser(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -829,6 +852,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public void deleteUserThread(long userId, long mbThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -857,6 +881,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getMBThreadUserThreads(
 		long mbThreadId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -885,6 +910,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.privatemessaging.model.UserThread getUserThread(
 		long userId, long mbThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -918,6 +944,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (com.liferay.privatemessaging.model.UserThread)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getUserUserThreadCount(long userId, boolean deleted)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -945,6 +972,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public int getUserUserThreadCount(long userId, boolean read, boolean deleted)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -973,6 +1001,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
 		long userId, boolean deleted)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1001,6 +1030,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
 		long userId, boolean read, boolean deleted)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1030,6 +1060,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
 		long userId, boolean deleted, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1059,6 +1090,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		return (java.util.List<com.liferay.privatemessaging.model.UserThread>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void markUserThreadAsRead(long userId, long mbThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -1087,6 +1119,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public void markUserThreadAsUnread(long userId, long mbThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -1115,6 +1148,7 @@ public class UserThreadLocalServiceClp implements UserThreadLocalService {
 		}
 	}
 
+	@Override
 	public void updateUserName(com.liferay.portal.model.User user)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {

@@ -17,12 +17,10 @@ package com.liferay.socialcoding.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link SVNRevisionLocalService}.
- * </p>
+ * Provides a wrapper for {@link SVNRevisionLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       SVNRevisionLocalService
+ * @author Brian Wing Shun Chan
+ * @see SVNRevisionLocalService
  * @generated
  */
 public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
@@ -39,6 +37,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @return the s v n revision that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision addSVNRevision(
 		com.liferay.socialcoding.model.SVNRevision svnRevision)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -51,6 +50,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @param svnRevisionId the primary key for the new s v n revision
 	* @return the new s v n revision
 	*/
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision createSVNRevision(
 		long svnRevisionId) {
 		return _svnRevisionLocalService.createSVNRevision(svnRevisionId);
@@ -64,6 +64,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @throws PortalException if a s v n revision with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision deleteSVNRevision(
 		long svnRevisionId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -78,12 +79,14 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @return the s v n revision that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision deleteSVNRevision(
 		com.liferay.socialcoding.model.SVNRevision svnRevision)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _svnRevisionLocalService.deleteSVNRevision(svnRevision);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _svnRevisionLocalService.dynamicQuery();
 	}
@@ -95,6 +98,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -115,6 +119,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -136,6 +141,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -153,12 +159,14 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _svnRevisionLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision fetchSVNRevision(
 		long svnRevisionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -173,6 +181,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @throws PortalException if a s v n revision with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision getSVNRevision(
 		long svnRevisionId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -180,6 +189,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 		return _svnRevisionLocalService.getSVNRevision(svnRevisionId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -199,6 +209,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @return the range of s v n revisions
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -211,6 +222,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @return the number of s v n revisions
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getSVNRevisionsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _svnRevisionLocalService.getSVNRevisionsCount();
@@ -223,6 +235,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	* @return the s v n revision that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision updateSVNRevision(
 		com.liferay.socialcoding.model.SVNRevision svnRevision)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -234,6 +247,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _svnRevisionLocalService.getBeanIdentifier();
 	}
@@ -243,10 +257,12 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_svnRevisionLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -254,6 +270,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 			arguments);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision addSVNRevision(
 		java.lang.String svnUserId, java.util.Date createDate,
 		long svnRepositoryId, long revisionNumber, java.lang.String comments)
@@ -263,6 +280,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 			svnRepositoryId, revisionNumber, comments);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision getFirstSVNRevision(
 		java.lang.String svnUserId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -270,6 +288,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 		return _svnRevisionLocalService.getFirstSVNRevision(svnUserId);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision getLastSVNRevision(
 		java.lang.String svnUserId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -277,6 +296,7 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 		return _svnRevisionLocalService.getLastSVNRevision(svnUserId);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
 		long svnRepositoryId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -284,12 +304,14 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 			end);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
 		java.lang.String svnUserId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _svnRevisionLocalService.getSVNRevisions(svnUserId, start, end);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
 		java.lang.String svnUserId, long svnRepositoryId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -297,16 +319,19 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 			svnRepositoryId, start, end);
 	}
 
+	@Override
 	public int getSVNRevisionsCount(long svnRepositoryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _svnRevisionLocalService.getSVNRevisionsCount(svnRepositoryId);
 	}
 
+	@Override
 	public int getSVNRevisionsCount(java.lang.String svnUserId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _svnRevisionLocalService.getSVNRevisionsCount(svnUserId);
 	}
 
+	@Override
 	public int getSVNRevisionsCount(java.lang.String svnUserId,
 		long svnRepositoryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -329,10 +354,12 @@ public class SVNRevisionLocalServiceWrapper implements SVNRevisionLocalService,
 		_svnRevisionLocalService = svnRevisionLocalService;
 	}
 
+	@Override
 	public SVNRevisionLocalService getWrappedService() {
 		return _svnRevisionLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		SVNRevisionLocalService svnRevisionLocalService) {
 		_svnRevisionLocalService = svnRevisionLocalService;

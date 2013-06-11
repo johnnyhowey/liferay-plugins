@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 	public ProjectsEntryLocalServiceClp(
@@ -130,6 +131,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 			};
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry addProjectsEntry(
 		com.liferay.so.model.ProjectsEntry projectsEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -159,6 +161,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.so.model.ProjectsEntry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry createProjectsEntry(
 		long projectsEntryId) {
 		Object returnObj = null;
@@ -182,6 +185,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.so.model.ProjectsEntry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry deleteProjectsEntry(
 		long projectsEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -215,6 +219,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.so.model.ProjectsEntry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry deleteProjectsEntry(
 		com.liferay.so.model.ProjectsEntry projectsEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -244,6 +249,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.so.model.ProjectsEntry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -266,6 +272,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -296,6 +303,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -332,6 +340,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -372,6 +381,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -401,6 +411,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry fetchProjectsEntry(
 		long projectsEntryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -429,6 +440,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.so.model.ProjectsEntry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry getProjectsEntry(
 		long projectsEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -462,6 +474,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.so.model.ProjectsEntry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -496,6 +509,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.so.model.ProjectsEntry> getProjectsEntries(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -524,6 +538,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (java.util.List<com.liferay.so.model.ProjectsEntry>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getProjectsEntriesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -551,6 +566,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry updateProjectsEntry(
 		com.liferay.so.model.ProjectsEntry projectsEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -580,6 +596,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.so.model.ProjectsEntry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -602,6 +619,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -621,12 +639,14 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry addProjectsEntry(long userId,
 		java.lang.String title, java.lang.String description,
 		int startDateMonth, int startDateDay, int startDateYear,
@@ -686,6 +706,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (com.liferay.so.model.ProjectsEntry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.so.model.ProjectsEntry> getUserProjectsEntries(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -713,6 +734,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return (java.util.List<com.liferay.so.model.ProjectsEntry>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getUserProjectsEntriesCount(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -740,6 +762,7 @@ public class ProjectsEntryLocalServiceClp implements ProjectsEntryLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry updateProjectsEntry(
 		long projectsEntryId, java.lang.String title,
 		java.lang.String description, int startDateMonth, int startDateDay,

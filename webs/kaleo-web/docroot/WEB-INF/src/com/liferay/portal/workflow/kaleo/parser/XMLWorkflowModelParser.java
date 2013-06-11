@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.workflow.kaleo.definition.Action;
 import com.liferay.portal.workflow.kaleo.definition.ActionAware;
 import com.liferay.portal.workflow.kaleo.definition.AddressRecipient;
+import com.liferay.portal.workflow.kaleo.definition.AssigneesRecipient;
 import com.liferay.portal.workflow.kaleo.definition.Assignment;
 import com.liferay.portal.workflow.kaleo.definition.Condition;
 import com.liferay.portal.workflow.kaleo.definition.Definition;
@@ -408,6 +409,15 @@ public class XMLWorkflowModelParser implements WorkflowModelParser {
 				addressRecipientElement.getText());
 
 			notification.addRecipients(addressRecipient);
+		}
+
+		Element assigneesRecipientElement = recipientsElement.element(
+			"assignees");
+
+		if (assigneesRecipientElement != null) {
+			AssigneesRecipient assigneesRecipient = new AssigneesRecipient();
+
+			notification.addRecipients(assigneesRecipient);
 		}
 
 		Element rolesElement = recipientsElement.element("roles");

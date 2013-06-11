@@ -22,6 +22,7 @@ import com.liferay.portal.kernel.template.TemplateConstants;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
+import com.liferay.portal.kernel.util.LocalizationUtil;
 import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
@@ -89,6 +90,7 @@ import javax.portlet.PortletPreferences;
  */
 public class FileSystemImporter extends BaseImporter {
 
+	@Override
 	public void importResources() throws Exception {
 		_resourcesDir = new File(resourcesDir);
 
@@ -225,12 +227,44 @@ public class FileSystemImporter extends BaseImporter {
 		}
 	}
 
-	protected void addLayout(long parentLayoutId, JSONObject layoutJSONObject)
+	protected void addLayout(
+			boolean privateLayout, long parentLayoutId,
+			JSONObject layoutJSONObject)
 		throws Exception {
 
-		String name = layoutJSONObject.getString("name");
-		String title = layoutJSONObject.getString("title");
+		Map<Locale, String> nameMap = new HashMap<Locale, String>();
+
+		JSONObject nameMapJSONObject = layoutJSONObject.getJSONObject(
+			"nameMap");
+
+		if (nameMapJSONObject != null) {
+			nameMap = (Map<Locale, String>)LocalizationUtil.deserialize(
+				nameMapJSONObject);
+		}
+		else {
+			String name = layoutJSONObject.getString("name");
+
+			nameMap.put(LocaleUtil.getDefault(), name);
+		}
+
+		Map<Locale, String> titleMap = new HashMap<Locale, String>();
+
+		JSONObject titleMapJSONObject = layoutJSONObject.getJSONObject(
+			"nameMap");
+
+		if (titleMapJSONObject != null) {
+			titleMap = (Map<Locale, String>)LocalizationUtil.deserialize(
+				titleMapJSONObject);
+		}
+		else {
+			String title = layoutJSONObject.getString("title");
+
+			titleMap.put(LocaleUtil.getDefault(), title);
+		}
+
 		boolean hidden = layoutJSONObject.getBoolean("hidden");
+
+		Map<Locale, String> friendlyURLMap = new HashMap<Locale, String>();
 
 		String friendlyURL = layoutJSONObject.getString("friendlyURL");
 
@@ -240,14 +274,14 @@ public class FileSystemImporter extends BaseImporter {
 			friendlyURL = StringPool.SLASH + friendlyURL;
 		}
 
-		Layout layout = LayoutLocalServiceUtil.addLayout(
-			userId, groupId, privateLayout, parentLayoutId, name, title,
-			StringPool.BLANK, LayoutConstants.TYPE_PORTLET, hidden, friendlyURL,
-			serviceContext);
+		friendlyURLMap.put(LocaleUtil.getDefault(), friendlyURL);
 
 		String typeSettings = layoutJSONObject.getString("typeSettings");
 
-		layout.setTypeSettings(typeSettings);
+		Layout layout = LayoutLocalServiceUtil.addLayout(
+			userId, groupId, privateLayout, parentLayoutId, nameMap, titleMap,
+			null, null, null, LayoutConstants.TYPE_PORTLET, typeSettings,
+			hidden, friendlyURLMap, serviceContext);
 
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();
@@ -271,7 +305,7 @@ public class FileSystemImporter extends BaseImporter {
 
 		JSONArray layoutsJSONArray = layoutJSONObject.getJSONArray("layouts");
 
-		addLayouts(layout.getLayoutId(), layoutsJSONArray);
+		addLayouts(privateLayout, layout.getLayoutId(), layoutsJSONArray);
 	}
 
 	protected void addLayoutColumn(
@@ -374,7 +408,9 @@ public class FileSystemImporter extends BaseImporter {
 		}
 	}
 
-	protected void addLayouts(long parentLayoutId, JSONArray layoutsJSONArray)
+	protected void addLayouts(
+			boolean privateLayout, long parentLayoutId,
+			JSONArray layoutsJSONArray)
 		throws Exception {
 
 		if (layoutsJSONArray == null) {
@@ -384,7 +420,7 @@ public class FileSystemImporter extends BaseImporter {
 		for (int i = 0; i < layoutsJSONArray.length(); i++) {
 			JSONObject layoutJSONObject = layoutsJSONArray.getJSONObject(i);
 
-			addLayout(parentLayoutId, layoutJSONObject);
+			addLayout(privateLayout, parentLayoutId, layoutJSONObject);
 		}
 	}
 
@@ -646,9 +682,7 @@ public class FileSystemImporter extends BaseImporter {
 	protected Map<Locale, String> getMap(String value) {
 		Map<Locale, String> map = new HashMap<Locale, String>();
 
-		Locale locale = LocaleUtil.getDefault();
-
-		map.put(locale, value);
+		map.put(LocaleUtil.getDefault(), value);
 
 		return map;
 	}
@@ -839,7 +873,30 @@ public class FileSystemImporter extends BaseImporter {
 
 		JSONArray layoutsJSONArray = jsonObject.getJSONArray("layouts");
 
-		addLayouts(LayoutConstants.DEFAULT_PARENT_LAYOUT_ID, layoutsJSONArray);
+		if (layoutsJSONArray != null) {
+			addLayouts(
+				false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+				layoutsJSONArray);
+		}
+		else {
+			JSONArray publicPagesJSONArray = jsonObject.getJSONArray(
+				"publicPages");
+
+			if (publicPagesJSONArray != null) {
+				addLayouts(
+					false, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+					publicPagesJSONArray);
+			}
+
+			JSONArray privatePagesJSONArray = jsonObject.getJSONArray(
+				"privatePages");
+
+			if (privatePagesJSONArray != null) {
+				addLayouts(
+					true, LayoutConstants.DEFAULT_PARENT_LAYOUT_ID,
+					privatePagesJSONArray);
+			}
+		}
 	}
 
 	protected void updateLayoutSetThemeId(JSONObject sitemapJSONObject)

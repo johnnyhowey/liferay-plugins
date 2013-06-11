@@ -17,12 +17,10 @@ package com.liferay.ams.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link DefinitionLocalService}.
- * </p>
+ * Provides a wrapper for {@link DefinitionLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       DefinitionLocalService
+ * @author Brian Wing Shun Chan
+ * @see DefinitionLocalService
  * @generated
  */
 public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
@@ -39,6 +37,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @return the definition that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Definition addDefinition(
 		com.liferay.ams.model.Definition definition)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -51,6 +50,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @param definitionId the primary key for the new definition
 	* @return the new definition
 	*/
+	@Override
 	public com.liferay.ams.model.Definition createDefinition(long definitionId) {
 		return _definitionLocalService.createDefinition(definitionId);
 	}
@@ -63,6 +63,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @throws PortalException if a definition with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Definition deleteDefinition(long definitionId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -76,12 +77,14 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @return the definition that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Definition deleteDefinition(
 		com.liferay.ams.model.Definition definition)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _definitionLocalService.deleteDefinition(definition);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _definitionLocalService.dynamicQuery();
 	}
@@ -93,6 +96,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -113,6 +117,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -134,6 +139,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -151,12 +157,14 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _definitionLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.ams.model.Definition fetchDefinition(long definitionId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _definitionLocalService.fetchDefinition(definitionId);
@@ -170,12 +178,14 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @throws PortalException if a definition with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Definition getDefinition(long definitionId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _definitionLocalService.getDefinition(definitionId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -195,6 +205,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @return the range of definitions
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.ams.model.Definition> getDefinitions(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -207,6 +218,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @return the number of definitions
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getDefinitionsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _definitionLocalService.getDefinitionsCount();
@@ -219,6 +231,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	* @return the definition that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.ams.model.Definition updateDefinition(
 		com.liferay.ams.model.Definition definition)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -230,6 +243,7 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _definitionLocalService.getBeanIdentifier();
 	}
@@ -239,10 +253,12 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_definitionLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -265,10 +281,12 @@ public class DefinitionLocalServiceWrapper implements DefinitionLocalService,
 		_definitionLocalService = definitionLocalService;
 	}
 
+	@Override
 	public DefinitionLocalService getWrappedService() {
 		return _definitionLocalService;
 	}
 
+	@Override
 	public void setWrappedService(DefinitionLocalService definitionLocalService) {
 		_definitionLocalService = definitionLocalService;
 	}

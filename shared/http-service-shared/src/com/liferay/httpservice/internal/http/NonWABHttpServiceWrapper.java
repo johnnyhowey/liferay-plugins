@@ -74,16 +74,19 @@ public class NonWABHttpServiceWrapper extends HttpServiceWrapper {
 		_registrations.add(servletName);
 	}
 
-	/**
-	 * @deprecated As of 6.2.0
-	 */
 	@Override
 	public void registerServlet(
-		String urlPattern, Servlet servlet,
-		@SuppressWarnings("rawtypes") Dictionary initParameters,
-		HttpContext httpContext) {
+			String urlPattern, Servlet servlet,
+			@SuppressWarnings("rawtypes") Dictionary initParameters,
+			HttpContext httpContext)
+		throws NamespaceException, ServletException {
 
-		throw new UnsupportedOperationException();
+		// This method is not called by Liferay directly, but is made available
+		// for other OSGi modules that depend on the HTTP service
+
+		super.registerServlet(urlPattern, servlet, initParameters, httpContext);
+
+		_registrations.add(urlPattern);
 	}
 
 	@Override

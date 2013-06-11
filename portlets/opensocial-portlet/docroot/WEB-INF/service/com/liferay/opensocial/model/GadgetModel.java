@@ -17,6 +17,7 @@ package com.liferay.opensocial.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
+import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -38,7 +39,7 @@ import java.util.Date;
  * @see com.liferay.opensocial.model.impl.GadgetModelImpl
  * @generated
  */
-public interface GadgetModel extends BaseModel<Gadget> {
+public interface GadgetModel extends BaseModel<Gadget>, StagedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -65,6 +66,7 @@ public interface GadgetModel extends BaseModel<Gadget> {
 	 * @return the uuid of this gadget
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -72,6 +74,7 @@ public interface GadgetModel extends BaseModel<Gadget> {
 	 *
 	 * @param uuid the uuid of this gadget
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -93,6 +96,7 @@ public interface GadgetModel extends BaseModel<Gadget> {
 	 *
 	 * @return the company ID of this gadget
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -100,6 +104,7 @@ public interface GadgetModel extends BaseModel<Gadget> {
 	 *
 	 * @param companyId the company ID of this gadget
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -107,6 +112,7 @@ public interface GadgetModel extends BaseModel<Gadget> {
 	 *
 	 * @return the create date of this gadget
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -114,6 +120,7 @@ public interface GadgetModel extends BaseModel<Gadget> {
 	 *
 	 * @param createDate the create date of this gadget
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -121,6 +128,7 @@ public interface GadgetModel extends BaseModel<Gadget> {
 	 *
 	 * @return the modified date of this gadget
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -128,6 +136,7 @@ public interface GadgetModel extends BaseModel<Gadget> {
 	 *
 	 * @param modifiedDate the modified date of this gadget
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -175,41 +184,60 @@ public interface GadgetModel extends BaseModel<Gadget> {
 	 */
 	public void setPortletCategoryNames(String portletCategoryNames);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(Gadget gadget);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<Gadget> toCacheModel();
 
+	@Override
 	public Gadget toEscapedModel();
 
+	@Override
 	public Gadget toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

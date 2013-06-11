@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class JIRAChangeGroupLocalServiceClp
 	implements JIRAChangeGroupLocalService {
@@ -109,6 +110,7 @@ public class JIRAChangeGroupLocalServiceClp
 		_methodParameterTypes16 = new String[] { "java.lang.String" };
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAChangeGroup addJIRAChangeGroup(
 		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -138,6 +140,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (com.liferay.socialcoding.model.JIRAChangeGroup)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAChangeGroup createJIRAChangeGroup(
 		long jiraChangeGroupId) {
 		Object returnObj = null;
@@ -161,6 +164,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (com.liferay.socialcoding.model.JIRAChangeGroup)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAChangeGroup deleteJIRAChangeGroup(
 		long jiraChangeGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -194,6 +198,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (com.liferay.socialcoding.model.JIRAChangeGroup)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAChangeGroup deleteJIRAChangeGroup(
 		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -223,6 +228,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (com.liferay.socialcoding.model.JIRAChangeGroup)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -245,6 +251,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -275,6 +282,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -311,6 +319,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -351,6 +360,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -380,6 +390,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAChangeGroup fetchJIRAChangeGroup(
 		long jiraChangeGroupId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -408,6 +419,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (com.liferay.socialcoding.model.JIRAChangeGroup)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAChangeGroup getJIRAChangeGroup(
 		long jiraChangeGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -441,6 +453,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (com.liferay.socialcoding.model.JIRAChangeGroup)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -475,6 +488,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.JIRAChangeGroup> getJIRAChangeGroups(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -503,6 +517,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (java.util.List<com.liferay.socialcoding.model.JIRAChangeGroup>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getJIRAChangeGroupsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -530,6 +545,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAChangeGroup updateJIRAChangeGroup(
 		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -559,6 +575,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (com.liferay.socialcoding.model.JIRAChangeGroup)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -581,6 +598,7 @@ public class JIRAChangeGroupLocalServiceClp
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -600,6 +618,7 @@ public class JIRAChangeGroupLocalServiceClp
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {

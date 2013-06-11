@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class FolderLocalServiceClp implements FolderLocalService {
 	public FolderLocalServiceClp(InvokableLocalService invokableLocalService) {
@@ -137,6 +138,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 			};
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder addFolder(
 		com.liferay.mail.model.Folder folder)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -166,6 +168,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder createFolder(long folderId) {
 		Object returnObj = null;
 
@@ -188,6 +191,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder deleteFolder(long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -220,6 +224,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder deleteFolder(
 		com.liferay.mail.model.Folder folder)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -254,6 +259,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -276,6 +282,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -306,6 +313,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -342,6 +350,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -382,6 +391,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -411,6 +421,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder fetchFolder(long folderId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -438,6 +449,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder getFolder(long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -470,6 +482,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -504,6 +517,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.mail.model.Folder> getFolders(int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -531,6 +545,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (java.util.List<com.liferay.mail.model.Folder>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getFoldersCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -558,6 +573,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder updateFolder(
 		com.liferay.mail.model.Folder folder)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -587,6 +603,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -609,6 +626,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -628,12 +646,14 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder addFolder(long userId, long accountId,
 		java.lang.String fullName, java.lang.String displayName,
 		int remoteMessageCount)
@@ -679,6 +699,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void deleteFolders(long accountId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -707,6 +728,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		}
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder getFolder(long accountId,
 		java.lang.String fullName)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -745,6 +767,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.mail.model.Folder> getFolders(
 		long accountId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -773,6 +796,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return (java.util.List<com.liferay.mail.model.Folder>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getLocalPageCount(long folderId, int messagesPerPage)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -801,6 +825,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public int getPercentDownloaded(long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -833,6 +858,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public int getRemotePageCount(long folderId, int messagesPerPage)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -866,6 +892,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.mail.model.Folder updateFolder(long folderId,
 		java.lang.String fullName, java.lang.String displayName,
 		int remoteMessageCount)

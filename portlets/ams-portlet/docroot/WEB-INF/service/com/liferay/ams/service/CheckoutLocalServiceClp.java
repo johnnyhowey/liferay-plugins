@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class CheckoutLocalServiceClp implements CheckoutLocalService {
 	public CheckoutLocalServiceClp(InvokableLocalService invokableLocalService) {
@@ -101,6 +102,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		_methodParameterTypes16 = new String[] { "java.lang.String" };
 	}
 
+	@Override
 	public com.liferay.ams.model.Checkout addCheckout(
 		com.liferay.ams.model.Checkout checkout)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -130,6 +132,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (com.liferay.ams.model.Checkout)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.ams.model.Checkout createCheckout(long checkoutId) {
 		Object returnObj = null;
 
@@ -152,6 +155,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (com.liferay.ams.model.Checkout)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.ams.model.Checkout deleteCheckout(long checkoutId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -184,6 +188,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (com.liferay.ams.model.Checkout)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.ams.model.Checkout deleteCheckout(
 		com.liferay.ams.model.Checkout checkout)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -213,6 +218,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (com.liferay.ams.model.Checkout)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -235,6 +241,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -265,6 +272,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -301,6 +309,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -341,6 +350,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -370,6 +380,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.ams.model.Checkout fetchCheckout(long checkoutId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -397,6 +408,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (com.liferay.ams.model.Checkout)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.ams.model.Checkout getCheckout(long checkoutId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -429,6 +441,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (com.liferay.ams.model.Checkout)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -463,6 +476,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.ams.model.Checkout> getCheckouts(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -491,6 +505,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (java.util.List<com.liferay.ams.model.Checkout>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getCheckoutsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -518,6 +533,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.ams.model.Checkout updateCheckout(
 		com.liferay.ams.model.Checkout checkout)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -547,6 +563,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (com.liferay.ams.model.Checkout)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -569,6 +586,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -588,6 +606,7 @@ public class CheckoutLocalServiceClp implements CheckoutLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {

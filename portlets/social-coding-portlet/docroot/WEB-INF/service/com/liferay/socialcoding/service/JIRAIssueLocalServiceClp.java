@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 	public JIRAIssueLocalServiceClp(InvokableLocalService invokableLocalService) {
@@ -199,6 +200,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		_methodParameterTypes35 = new String[] { "long" };
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue addJIRAIssue(
 		com.liferay.socialcoding.model.JIRAIssue jiraIssue)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -228,6 +230,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue createJIRAIssue(
 		long jiraIssueId) {
 		Object returnObj = null;
@@ -251,6 +254,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue deleteJIRAIssue(
 		long jiraIssueId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -284,6 +288,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue deleteJIRAIssue(
 		com.liferay.socialcoding.model.JIRAIssue jiraIssue)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -313,6 +318,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -335,6 +341,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -365,6 +372,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -401,6 +409,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -441,6 +450,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -470,6 +480,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue fetchJIRAIssue(
 		long jiraIssueId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -498,6 +509,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue getJIRAIssue(
 		long jiraIssueId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -531,6 +543,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -565,6 +578,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getJIRAIssues(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -593,6 +607,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List<com.liferay.socialcoding.model.JIRAIssue>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getJIRAIssuesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -620,6 +635,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue updateJIRAIssue(
 		com.liferay.socialcoding.model.JIRAIssue jiraIssue)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -649,6 +665,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -671,6 +688,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -690,12 +708,14 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
 		java.util.Date modifiedDate, long projectId,
 		java.lang.String assigneeJiraUserId, int start, int end)
@@ -736,6 +756,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List<com.liferay.socialcoding.model.JIRAIssue>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
 		long projectId, java.lang.String assigneeJiraUserId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -773,6 +794,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List<com.liferay.socialcoding.model.JIRAIssue>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
 		long projectId, java.lang.String assigneeJiraUserId,
 		java.lang.String status, int start, int end)
@@ -813,6 +835,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List<com.liferay.socialcoding.model.JIRAIssue>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getAssigneeJIRAIssuesCount(java.util.Date modifiedDate,
 		long projectId, java.lang.String assigneeJiraUserId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -848,6 +871,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public int getAssigneeJIRAIssuesCount(long projectId,
 		java.lang.String assigneeJiraUserId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -881,6 +905,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public int getAssigneeJIRAIssuesCount(long projectId,
 		java.lang.String assigneeJiraUserId, java.lang.String status)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -916,6 +941,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue getFirstAssigneeJIRAIssue(
 		long projectId, java.lang.String assigneeJiraUserId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -954,6 +980,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue getFirstReporterJIRAIssue(
 		long projectId, java.lang.String reporterJiraUserId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -992,6 +1019,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue getJIRAIssue(
 		java.lang.String key)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1026,6 +1054,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue getLastAssigneeJIRAIssue(
 		long projectId, java.lang.String assigneeJiraUserId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1064,6 +1093,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.socialcoding.model.JIRAIssue getLastreporterJIRAIssue(
 		long projectId, java.lang.String reporterJiraUserId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -1102,6 +1132,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (com.liferay.socialcoding.model.JIRAIssue)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
 		java.util.Date modifiedDate, long projectId,
 		java.lang.String reporterJiraUserId, int start, int end)
@@ -1142,6 +1173,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List<com.liferay.socialcoding.model.JIRAIssue>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
 		long projectId, java.lang.String reporterJiraUserId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1179,6 +1211,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List<com.liferay.socialcoding.model.JIRAIssue>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
 		long projectId, java.lang.String reporterJiraUserId,
 		java.lang.String status, int start, int end)
@@ -1219,6 +1252,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return (java.util.List<com.liferay.socialcoding.model.JIRAIssue>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getReporterJIRAIssuesCount(java.util.Date modifiedDate,
 		long projectId, java.lang.String reporterJiraUserId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1254,6 +1288,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public int getReporterJIRAIssuesCount(long projectId,
 		java.lang.String reporterJiraUserId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1287,6 +1322,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public int getReporterJIRAIssuesCount(long projectId,
 		java.lang.String reporterJiraUserId, java.lang.String status)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -1322,6 +1358,7 @@ public class JIRAIssueLocalServiceClp implements JIRAIssueLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public void updateJIRAIssues(long projectId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {

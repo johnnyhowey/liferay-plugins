@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * This class is used by SOAP remote services, specifically {@link com.liferay.calendar.service.http.CalendarBookingServiceSoap}.
  *
- * @author    Eduardo Lundgren
- * @see       com.liferay.calendar.service.http.CalendarBookingServiceSoap
+ * @author Eduardo Lundgren
+ * @see com.liferay.calendar.service.http.CalendarBookingServiceSoap
  * @generated
  */
 public class CalendarBookingSoap implements Serializable {
@@ -39,6 +39,7 @@ public class CalendarBookingSoap implements Serializable {
 		soapModel.setUserName(model.getUserName());
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
+		soapModel.setResourceBlockId(model.getResourceBlockId());
 		soapModel.setCalendarId(model.getCalendarId());
 		soapModel.setCalendarResourceId(model.getCalendarResourceId());
 		soapModel.setParentCalendarBookingId(model.getParentCalendarBookingId());
@@ -173,6 +174,14 @@ public class CalendarBookingSoap implements Serializable {
 
 	public void setModifiedDate(Date modifiedDate) {
 		_modifiedDate = modifiedDate;
+	}
+
+	public long getResourceBlockId() {
+		return _resourceBlockId;
+	}
+
+	public void setResourceBlockId(long resourceBlockId) {
+		_resourceBlockId = resourceBlockId;
 	}
 
 	public long getCalendarId() {
@@ -331,6 +340,7 @@ public class CalendarBookingSoap implements Serializable {
 	private String _userName;
 	private Date _createDate;
 	private Date _modifiedDate;
+	private long _resourceBlockId;
 	private long _calendarId;
 	private long _calendarResourceId;
 	private long _parentCalendarBookingId;

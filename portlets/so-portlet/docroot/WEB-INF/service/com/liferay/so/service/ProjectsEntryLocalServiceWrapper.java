@@ -17,12 +17,10 @@ package com.liferay.so.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link ProjectsEntryLocalService}.
- * </p>
+ * Provides a wrapper for {@link ProjectsEntryLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       ProjectsEntryLocalService
+ * @author Brian Wing Shun Chan
+ * @see ProjectsEntryLocalService
  * @generated
  */
 public class ProjectsEntryLocalServiceWrapper
@@ -40,6 +38,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @return the projects entry that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.so.model.ProjectsEntry addProjectsEntry(
 		com.liferay.so.model.ProjectsEntry projectsEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -52,6 +51,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @param projectsEntryId the primary key for the new projects entry
 	* @return the new projects entry
 	*/
+	@Override
 	public com.liferay.so.model.ProjectsEntry createProjectsEntry(
 		long projectsEntryId) {
 		return _projectsEntryLocalService.createProjectsEntry(projectsEntryId);
@@ -65,6 +65,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @throws PortalException if a projects entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.so.model.ProjectsEntry deleteProjectsEntry(
 		long projectsEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -79,12 +80,14 @@ public class ProjectsEntryLocalServiceWrapper
 	* @return the projects entry that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.so.model.ProjectsEntry deleteProjectsEntry(
 		com.liferay.so.model.ProjectsEntry projectsEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _projectsEntryLocalService.deleteProjectsEntry(projectsEntry);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _projectsEntryLocalService.dynamicQuery();
 	}
@@ -96,6 +99,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -116,6 +120,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -137,6 +142,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -154,12 +160,14 @@ public class ProjectsEntryLocalServiceWrapper
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _projectsEntryLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry fetchProjectsEntry(
 		long projectsEntryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -174,6 +182,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @throws PortalException if a projects entry with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.so.model.ProjectsEntry getProjectsEntry(
 		long projectsEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -181,6 +190,7 @@ public class ProjectsEntryLocalServiceWrapper
 		return _projectsEntryLocalService.getProjectsEntry(projectsEntryId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -200,6 +210,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @return the range of projects entries
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.so.model.ProjectsEntry> getProjectsEntries(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -212,6 +223,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @return the number of projects entries
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getProjectsEntriesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _projectsEntryLocalService.getProjectsEntriesCount();
@@ -224,6 +236,7 @@ public class ProjectsEntryLocalServiceWrapper
 	* @return the projects entry that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.so.model.ProjectsEntry updateProjectsEntry(
 		com.liferay.so.model.ProjectsEntry projectsEntry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -235,6 +248,7 @@ public class ProjectsEntryLocalServiceWrapper
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _projectsEntryLocalService.getBeanIdentifier();
 	}
@@ -244,10 +258,12 @@ public class ProjectsEntryLocalServiceWrapper
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_projectsEntryLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -255,6 +271,7 @@ public class ProjectsEntryLocalServiceWrapper
 			arguments);
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry addProjectsEntry(long userId,
 		java.lang.String title, java.lang.String description,
 		int startDateMonth, int startDateDay, int startDateYear,
@@ -267,16 +284,19 @@ public class ProjectsEntryLocalServiceWrapper
 			endDateMonth, endDateDay, endDateYear, current, data);
 	}
 
+	@Override
 	public java.util.List<com.liferay.so.model.ProjectsEntry> getUserProjectsEntries(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		return _projectsEntryLocalService.getUserProjectsEntries(userId);
 	}
 
+	@Override
 	public int getUserProjectsEntriesCount(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _projectsEntryLocalService.getUserProjectsEntriesCount(userId);
 	}
 
+	@Override
 	public com.liferay.so.model.ProjectsEntry updateProjectsEntry(
 		long projectsEntryId, java.lang.String title,
 		java.lang.String description, int startDateMonth, int startDateDay,
@@ -304,10 +324,12 @@ public class ProjectsEntryLocalServiceWrapper
 		_projectsEntryLocalService = projectsEntryLocalService;
 	}
 
+	@Override
 	public ProjectsEntryLocalService getWrappedService() {
 		return _projectsEntryLocalService;
 	}
 
+	@Override
 	public void setWrappedService(
 		ProjectsEntryLocalService projectsEntryLocalService) {
 		_projectsEntryLocalService = projectsEntryLocalService;

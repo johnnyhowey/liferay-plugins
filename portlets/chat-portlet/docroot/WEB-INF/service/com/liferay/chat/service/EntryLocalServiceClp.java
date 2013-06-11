@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class EntryLocalServiceClp implements EntryLocalService {
 	public EntryLocalServiceClp(InvokableLocalService invokableLocalService) {
@@ -125,6 +126,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		_methodParameterTypes22 = new String[] { "long", "int", "int" };
 	}
 
+	@Override
 	public com.liferay.chat.model.Entry addEntry(
 		com.liferay.chat.model.Entry entry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -154,6 +156,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.chat.model.Entry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.chat.model.Entry createEntry(long entryId) {
 		Object returnObj = null;
 
@@ -176,6 +179,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.chat.model.Entry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.chat.model.Entry deleteEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -208,6 +212,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.chat.model.Entry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.chat.model.Entry deleteEntry(
 		com.liferay.chat.model.Entry entry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -237,6 +242,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.chat.model.Entry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -259,6 +265,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -289,6 +296,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -325,6 +333,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -365,6 +374,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -394,6 +404,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.chat.model.Entry fetchEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -421,6 +432,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.chat.model.Entry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.chat.model.Entry getEntry(long entryId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -453,6 +465,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.chat.model.Entry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -487,6 +500,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.chat.model.Entry> getEntries(int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -514,6 +528,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (java.util.List<com.liferay.chat.model.Entry>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getEntriesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -541,6 +556,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.chat.model.Entry updateEntry(
 		com.liferay.chat.model.Entry entry)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -570,6 +586,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.chat.model.Entry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -592,6 +609,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -611,12 +629,14 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public com.liferay.chat.model.Entry addEntry(long createDate,
 		long fromUserId, long toUserId, java.lang.String content)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -654,6 +674,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.chat.model.Entry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.chat.model.Entry addEntry(long fromUserId,
 		long toUserId, java.lang.String content)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -689,6 +710,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (com.liferay.chat.model.Entry)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void deleteEntries(long userId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -712,6 +734,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		}
 	}
 
+	@Override
 	public java.util.List<com.liferay.chat.model.Entry> getNewEntries(
 		long userId, long createDate, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -741,6 +764,7 @@ public class EntryLocalServiceClp implements EntryLocalService {
 		return (java.util.List<com.liferay.chat.model.Entry>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.chat.model.Entry> getOldEntries(
 		long createDate, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {

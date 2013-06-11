@@ -221,6 +221,7 @@ public class BundleServletContext extends LiferayServletContext {
 		return _bundle;
 	}
 
+	@Override
 	public ClassLoader getClassLoader() {
 		ClassLoader classLoader = (ClassLoader)_contextAttributes.get(
 			PluginContextListener.PLUGIN_CLASS_LOADER);
@@ -1146,6 +1147,7 @@ public class BundleServletContext extends LiferayServletContext {
 	private class FilterServiceRankingComparator
 		implements Comparator<FilterServiceRanking> {
 
+		@Override
 		public int compare(
 			FilterServiceRanking filterServiceRanking1,
 			FilterServiceRanking filterServiceRanking2) {

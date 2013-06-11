@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class FeedLocalServiceClp implements FeedLocalService {
 	public FeedLocalServiceClp(InvokableLocalService invokableLocalService) {
@@ -113,6 +114,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		_methodParameterTypes20 = new String[] { "long" };
 	}
 
+	@Override
 	public com.liferay.twitter.model.Feed addFeed(
 		com.liferay.twitter.model.Feed feed)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -142,6 +144,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (com.liferay.twitter.model.Feed)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.twitter.model.Feed createFeed(long feedId) {
 		Object returnObj = null;
 
@@ -164,6 +167,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (com.liferay.twitter.model.Feed)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.twitter.model.Feed deleteFeed(long feedId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -196,6 +200,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (com.liferay.twitter.model.Feed)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.twitter.model.Feed deleteFeed(
 		com.liferay.twitter.model.Feed feed)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -225,6 +230,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (com.liferay.twitter.model.Feed)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -247,6 +253,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -277,6 +284,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -313,6 +321,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -353,6 +362,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -382,6 +392,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.twitter.model.Feed fetchFeed(long feedId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -409,6 +420,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (com.liferay.twitter.model.Feed)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.twitter.model.Feed getFeed(long feedId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -441,6 +453,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (com.liferay.twitter.model.Feed)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -475,6 +488,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.twitter.model.Feed> getFeeds(int start,
 		int end) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -502,6 +516,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (java.util.List<com.liferay.twitter.model.Feed>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getFeedsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -529,6 +544,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.twitter.model.Feed updateFeed(
 		com.liferay.twitter.model.Feed feed)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -558,6 +574,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (com.liferay.twitter.model.Feed)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -580,6 +597,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -599,12 +617,14 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public void updateFeed(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -633,6 +653,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		}
 	}
 
+	@Override
 	public void updateFeeds()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {
@@ -656,6 +677,7 @@ public class FeedLocalServiceClp implements FeedLocalService {
 		}
 	}
 
+	@Override
 	public void updateFeeds(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		try {

@@ -17,12 +17,10 @@ package com.liferay.mail.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link AccountLocalService}.
- * </p>
+ * Provides a wrapper for {@link AccountLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       AccountLocalService
+ * @author Brian Wing Shun Chan
+ * @see AccountLocalService
  * @generated
  */
 public class AccountLocalServiceWrapper implements AccountLocalService,
@@ -38,6 +36,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the account that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Account addAccount(
 		com.liferay.mail.model.Account account)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -50,6 +49,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @param accountId the primary key for the new account
 	* @return the new account
 	*/
+	@Override
 	public com.liferay.mail.model.Account createAccount(long accountId) {
 		return _accountLocalService.createAccount(accountId);
 	}
@@ -62,6 +62,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @throws PortalException if a account with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Account deleteAccount(long accountId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -76,6 +77,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @throws PortalException
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Account deleteAccount(
 		com.liferay.mail.model.Account account)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -83,6 +85,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 		return _accountLocalService.deleteAccount(account);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _accountLocalService.dynamicQuery();
 	}
@@ -94,6 +97,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -114,6 +118,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -135,6 +140,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -152,12 +158,14 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _accountLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.mail.model.Account fetchAccount(long accountId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _accountLocalService.fetchAccount(accountId);
@@ -171,12 +179,14 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @throws PortalException if a account with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Account getAccount(long accountId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _accountLocalService.getAccount(accountId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -196,6 +206,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the range of accounts
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.mail.model.Account> getAccounts(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -208,6 +219,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the number of accounts
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getAccountsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _accountLocalService.getAccountsCount();
@@ -220,6 +232,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the account that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.mail.model.Account updateAccount(
 		com.liferay.mail.model.Account account)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -231,6 +244,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _accountLocalService.getBeanIdentifier();
 	}
@@ -240,16 +254,19 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_accountLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return _accountLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	@Override
 	public com.liferay.mail.model.Account addAccount(long userId,
 		java.lang.String address, java.lang.String personalName,
 		java.lang.String protocol, java.lang.String incomingHostName,
@@ -269,12 +286,14 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 			draftFolderId, sentFolderId, trashFolderId, defaultSender);
 	}
 
+	@Override
 	public void deleteAccounts(long userId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_accountLocalService.deleteAccounts(userId);
 	}
 
+	@Override
 	public com.liferay.mail.model.Account getAccount(long userId,
 		java.lang.String address)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -282,11 +301,13 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 		return _accountLocalService.getAccount(userId, address);
 	}
 
+	@Override
 	public java.util.List<com.liferay.mail.model.Account> getAccounts(
 		long userId) throws com.liferay.portal.kernel.exception.SystemException {
 		return _accountLocalService.getAccounts(userId);
 	}
 
+	@Override
 	public com.liferay.mail.model.Account updateAccount(long accountId,
 		java.lang.String personalName, java.lang.String password,
 		boolean savePassword, java.lang.String signature, boolean useSignature,
@@ -298,6 +319,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 			defaultSender);
 	}
 
+	@Override
 	public com.liferay.mail.model.Account updateFolders(long accountId,
 		long inboxFolderId, long draftFolderId, long sentFolderId,
 		long trashFolderId)
@@ -322,10 +344,12 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 		_accountLocalService = accountLocalService;
 	}
 
+	@Override
 	public AccountLocalService getWrappedService() {
 		return _accountLocalService;
 	}
 
+	@Override
 	public void setWrappedService(AccountLocalService accountLocalService) {
 		_accountLocalService = accountLocalService;
 	}

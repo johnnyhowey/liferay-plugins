@@ -17,12 +17,10 @@ package com.liferay.marketplace.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link ModuleLocalService}.
- * </p>
+ * Provides a wrapper for {@link ModuleLocalService}.
  *
- * @author    Ryan Park
- * @see       ModuleLocalService
+ * @author Ryan Park
+ * @see ModuleLocalService
  * @generated
  */
 public class ModuleLocalServiceWrapper implements ModuleLocalService,
@@ -38,6 +36,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @return the module that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.marketplace.model.Module addModule(
 		com.liferay.marketplace.model.Module module)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -50,6 +49,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @param moduleId the primary key for the new module
 	* @return the new module
 	*/
+	@Override
 	public com.liferay.marketplace.model.Module createModule(long moduleId) {
 		return _moduleLocalService.createModule(moduleId);
 	}
@@ -62,6 +62,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @throws PortalException if a module with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.marketplace.model.Module deleteModule(long moduleId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -75,12 +76,14 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @return the module that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.marketplace.model.Module deleteModule(
 		com.liferay.marketplace.model.Module module)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _moduleLocalService.deleteModule(module);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _moduleLocalService.dynamicQuery();
 	}
@@ -92,6 +95,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -112,6 +116,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -133,6 +138,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -150,12 +156,14 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _moduleLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.marketplace.model.Module fetchModule(long moduleId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _moduleLocalService.fetchModule(moduleId);
@@ -169,12 +177,14 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @throws PortalException if a module with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.marketplace.model.Module getModule(long moduleId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _moduleLocalService.getModule(moduleId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -194,6 +204,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @return the range of modules
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.marketplace.model.Module> getModules(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -206,6 +217,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @return the number of modules
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getModulesCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _moduleLocalService.getModulesCount();
@@ -218,6 +230,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	* @return the module that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.marketplace.model.Module updateModule(
 		com.liferay.marketplace.model.Module module)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -229,6 +242,7 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _moduleLocalService.getBeanIdentifier();
 	}
@@ -238,28 +252,33 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_moduleLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return _moduleLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	@Override
 	public com.liferay.marketplace.model.Module addModule(long userId,
 		long appId, java.lang.String contextName)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _moduleLocalService.addModule(userId, appId, contextName);
 	}
 
+	@Override
 	public com.liferay.marketplace.model.Module fetchModule(long appId,
 		java.lang.String contextName)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _moduleLocalService.fetchModule(appId, contextName);
 	}
 
+	@Override
 	public java.util.List<com.liferay.marketplace.model.Module> getModules(
 		long appId) throws com.liferay.portal.kernel.exception.SystemException {
 		return _moduleLocalService.getModules(appId);
@@ -280,10 +299,12 @@ public class ModuleLocalServiceWrapper implements ModuleLocalService,
 		_moduleLocalService = moduleLocalService;
 	}
 
+	@Override
 	public ModuleLocalService getWrappedService() {
 		return _moduleLocalService;
 	}
 
+	@Override
 	public void setWrappedService(ModuleLocalService moduleLocalService) {
 		_moduleLocalService = moduleLocalService;
 	}

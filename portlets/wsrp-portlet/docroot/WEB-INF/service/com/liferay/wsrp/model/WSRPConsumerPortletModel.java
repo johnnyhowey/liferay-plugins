@@ -17,6 +17,7 @@ package com.liferay.wsrp.model;
 import com.liferay.portal.kernel.bean.AutoEscape;
 import com.liferay.portal.model.BaseModel;
 import com.liferay.portal.model.CacheModel;
+import com.liferay.portal.model.StagedModel;
 import com.liferay.portal.service.ServiceContext;
 
 import com.liferay.portlet.expando.model.ExpandoBridge;
@@ -38,7 +39,8 @@ import java.util.Date;
  * @see com.liferay.wsrp.model.impl.WSRPConsumerPortletModelImpl
  * @generated
  */
-public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet> {
+public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>,
+	StagedModel {
 	/*
 	 * NOTE FOR DEVELOPERS:
 	 *
@@ -65,6 +67,7 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	 * @return the uuid of this w s r p consumer portlet
 	 */
 	@AutoEscape
+	@Override
 	public String getUuid();
 
 	/**
@@ -72,6 +75,7 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	 *
 	 * @param uuid the uuid of this w s r p consumer portlet
 	 */
+	@Override
 	public void setUuid(String uuid);
 
 	/**
@@ -93,6 +97,7 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	 *
 	 * @return the company ID of this w s r p consumer portlet
 	 */
+	@Override
 	public long getCompanyId();
 
 	/**
@@ -100,6 +105,7 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	 *
 	 * @param companyId the company ID of this w s r p consumer portlet
 	 */
+	@Override
 	public void setCompanyId(long companyId);
 
 	/**
@@ -107,6 +113,7 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	 *
 	 * @return the create date of this w s r p consumer portlet
 	 */
+	@Override
 	public Date getCreateDate();
 
 	/**
@@ -114,6 +121,7 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	 *
 	 * @param createDate the create date of this w s r p consumer portlet
 	 */
+	@Override
 	public void setCreateDate(Date createDate);
 
 	/**
@@ -121,6 +129,7 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	 *
 	 * @return the modified date of this w s r p consumer portlet
 	 */
+	@Override
 	public Date getModifiedDate();
 
 	/**
@@ -128,6 +137,7 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	 *
 	 * @param modifiedDate the modified date of this w s r p consumer portlet
 	 */
+	@Override
 	public void setModifiedDate(Date modifiedDate);
 
 	/**
@@ -174,41 +184,60 @@ public interface WSRPConsumerPortletModel extends BaseModel<WSRPConsumerPortlet>
 	 */
 	public void setPortletHandle(String portletHandle);
 
+	@Override
 	public boolean isNew();
 
+	@Override
 	public void setNew(boolean n);
 
+	@Override
 	public boolean isCachedModel();
 
+	@Override
 	public void setCachedModel(boolean cachedModel);
 
+	@Override
 	public boolean isEscapedModel();
 
+	@Override
 	public Serializable getPrimaryKeyObj();
 
+	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj);
 
+	@Override
 	public ExpandoBridge getExpandoBridge();
 
+	@Override
 	public void setExpandoBridgeAttributes(BaseModel<?> baseModel);
 
+	@Override
 	public void setExpandoBridgeAttributes(ExpandoBridge expandoBridge);
 
+	@Override
 	public void setExpandoBridgeAttributes(ServiceContext serviceContext);
 
+	@Override
 	public Object clone();
 
+	@Override
 	public int compareTo(WSRPConsumerPortlet wsrpConsumerPortlet);
 
+	@Override
 	public int hashCode();
 
+	@Override
 	public CacheModel<WSRPConsumerPortlet> toCacheModel();
 
+	@Override
 	public WSRPConsumerPortlet toEscapedModel();
 
+	@Override
 	public WSRPConsumerPortlet toUnescapedModel();
 
+	@Override
 	public String toString();
 
+	@Override
 	public String toXmlString();
 }

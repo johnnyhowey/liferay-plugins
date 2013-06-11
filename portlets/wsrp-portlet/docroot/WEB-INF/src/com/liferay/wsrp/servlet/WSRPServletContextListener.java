@@ -16,6 +16,7 @@ package com.liferay.wsrp.servlet;
 
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.HotDeployMessageListener;
+import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.messaging.MessageListener;
 import com.liferay.portal.kernel.util.BasePortalLifecycle;
@@ -32,10 +33,12 @@ import javax.servlet.ServletContextListener;
 public class WSRPServletContextListener
 	extends BasePortalLifecycle implements ServletContextListener {
 
+	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		portalDestroy();
 	}
 
+	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
 		registerPortalLifecycle();
 	}
@@ -43,18 +46,16 @@ public class WSRPServletContextListener
 	@Override
 	protected void doPortalDestroy() throws Exception {
 		MessageBusUtil.unregisterMessageListener(
-			DestinationNames.HOT_DEPLOY, _hotDeployMessageListener);
-
-		WSRPConsumerPortletLocalServiceUtil.destroyWSRPConsumerPortlets();
+			DestinationNames.HOT_DEPLOY, _messageListener);
 	}
 
 	@Override
 	protected void doPortalInit() {
-		_hotDeployMessageListener = new HotDeployMessageListener(
+		_messageListener = new HotDeployMessageListener(
 			ClpSerializer.getServletContextName()) {
 
 			@Override
-			protected void onDeploy() throws Exception {
+			protected void onDeploy(Message message) throws Exception {
 				ExtensionHelperUtil.initialize();
 
 				WSRPConsumerPortletLocalServiceUtil.
@@ -63,12 +64,18 @@ public class WSRPServletContextListener
 				WSRPConsumerPortletLocalServiceUtil.initWSRPConsumerPortlets();
 			}
 
+			@Override
+			protected void onUndeploy(Message message) throws Exception {
+				WSRPConsumerPortletLocalServiceUtil.
+					destroyWSRPConsumerPortlets();
+			}
+
 		};
 
 		MessageBusUtil.registerMessageListener(
-			DestinationNames.HOT_DEPLOY, _hotDeployMessageListener);
+			DestinationNames.HOT_DEPLOY, _messageListener);
 	}
 
-	private MessageListener _hotDeployMessageListener;
+	private MessageListener _messageListener;
 
 }

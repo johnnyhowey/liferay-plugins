@@ -32,9 +32,9 @@ import com.liferay.knowledgebase.util.comparator.KBArticleModifiedDateComparator
 import com.liferay.knowledgebase.util.comparator.KBArticlePriorityComparator;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.lar.BasePortletDataHandler;
+import com.liferay.portal.kernel.lar.DataLevel;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.lar.PortletDataHandlerBoolean;
-import com.liferay.portal.kernel.lar.PortletDataHandlerControl;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ListUtil;
@@ -65,20 +65,12 @@ public class AdminPortletDataHandler extends BasePortletDataHandler {
 	public static final String NAMESPACE = "knowledge_base";
 
 	public AdminPortletDataHandler() {
-		setAlwaysExportable(true);
+		setDataLevel(DataLevel.SITE);
 		setExportControls(
 			new PortletDataHandlerBoolean(
 				NAMESPACE, "kb-articles", true, true),
 			new PortletDataHandlerBoolean(
 				NAMESPACE, "kb-templates-and-kb-comments", true, true));
-		setExportMetadataControls(
-			new PortletDataHandlerBoolean(
-				NAMESPACE, "kb-articles", true,
-				new PortletDataHandlerControl[] {
-					new PortletDataHandlerBoolean(NAMESPACE, "categories"),
-					new PortletDataHandlerBoolean(NAMESPACE, "ratings"),
-					new PortletDataHandlerBoolean(NAMESPACE, "tags")
-				}));
 	}
 
 	@Override

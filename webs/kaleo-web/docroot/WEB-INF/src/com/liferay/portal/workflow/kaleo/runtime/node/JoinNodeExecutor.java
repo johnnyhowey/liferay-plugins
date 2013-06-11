@@ -16,7 +16,6 @@ package com.liferay.portal.workflow.kaleo.runtime.node;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoNode;
 import com.liferay.portal.workflow.kaleo.model.KaleoTimer;
@@ -24,10 +23,7 @@ import com.liferay.portal.workflow.kaleo.model.KaleoTransition;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.graph.PathElement;
 
-import java.io.Serializable;
-
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Michael C. Han
@@ -35,16 +31,17 @@ import java.util.Map;
 public class JoinNodeExecutor extends BaseNodeExecutor {
 
 	@Override
-	protected void doEnter(
+	protected boolean doEnter(
 			KaleoNode currentKaleoNode, ExecutionContext executionContext)
 		throws PortalException, SystemException {
 
 		KaleoInstanceToken kaleoInstanceToken =
 			executionContext.getKaleoInstanceToken();
 
-		kaleoInstanceToken =
-			kaleoInstanceTokenLocalService.completeKaleoInstanceToken(
-				kaleoInstanceToken.getKaleoInstanceTokenId());
+		kaleoInstanceTokenLocalService.completeKaleoInstanceToken(
+			kaleoInstanceToken.getKaleoInstanceTokenId());
+
+		return true;
 	}
 
 	@Override
@@ -52,10 +49,6 @@ public class JoinNodeExecutor extends BaseNodeExecutor {
 			KaleoNode currentKaleoNode, ExecutionContext executionContext,
 			List<PathElement> remainingPathElements)
 		throws PortalException, SystemException {
-
-		Map<String, Serializable> workflowContext =
-			executionContext.getWorkflowContext();
-		ServiceContext serviceContext = executionContext.getServiceContext();
 
 		KaleoInstanceToken kaleoInstanceToken =
 			executionContext.getKaleoInstanceToken();
@@ -78,7 +71,8 @@ public class JoinNodeExecutor extends BaseNodeExecutor {
 			currentKaleoNode.getDefaultKaleoTransition();
 
 		ExecutionContext newExecutionContext = new ExecutionContext(
-			parentKaleoInstanceToken, workflowContext, serviceContext);
+			parentKaleoInstanceToken, executionContext.getWorkflowContext(),
+			executionContext.getServiceContext());
 
 		PathElement pathElement = new PathElement(
 			currentKaleoNode, kaleoTransition.getTargetKaleoNode(),

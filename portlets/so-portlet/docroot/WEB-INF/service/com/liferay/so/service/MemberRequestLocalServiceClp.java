@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 	public MemberRequestLocalServiceClp(
@@ -161,6 +162,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		_methodParameterTypes28 = new String[] { "java.lang.String", "long" };
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest addMemberRequest(
 		com.liferay.so.model.MemberRequest memberRequest)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -190,6 +192,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest createMemberRequest(
 		long memberRequestId) {
 		Object returnObj = null;
@@ -213,6 +216,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest deleteMemberRequest(
 		long memberRequestId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -246,6 +250,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest deleteMemberRequest(
 		com.liferay.so.model.MemberRequest memberRequest)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -275,6 +280,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -297,6 +303,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -327,6 +334,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -363,6 +371,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -403,6 +412,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -432,6 +442,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest fetchMemberRequest(
 		long memberRequestId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -460,6 +471,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest getMemberRequest(
 		long memberRequestId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -493,6 +505,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -527,6 +540,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.so.model.MemberRequest> getMemberRequests(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -555,6 +569,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (java.util.List<com.liferay.so.model.MemberRequest>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getMemberRequestsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -582,6 +597,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest updateMemberRequest(
 		com.liferay.so.model.MemberRequest memberRequest)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -611,6 +627,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -633,6 +650,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName16,
@@ -652,12 +670,14 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest addMemberRequest(long userId,
 		long groupId, long receiverUserId,
 		java.lang.String receiverEmailAddress, long invitedRoleId,
@@ -709,6 +729,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void addMemberRequests(long userId, long groupId,
 		long[] receiverUserIds, long invitedRoleId, long invitedTeamId,
 		com.liferay.portal.service.ServiceContext serviceContext)
@@ -752,6 +773,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		}
 	}
 
+	@Override
 	public void addMemberRequests(long userId, long groupId,
 		java.lang.String[] emailAddresses, long invitedRoleId,
 		long invitedTeamId,
@@ -796,6 +818,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		}
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest getMemberRequest(long groupId,
 		long receiverUserId, int status)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -830,6 +853,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.so.model.MemberRequest> getReceiverMemberRequest(
 		long receiverUserId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -859,6 +883,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (java.util.List<com.liferay.so.model.MemberRequest>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getReceiverMemberRequestCount(long receiverUserId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -886,6 +911,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public java.util.List<com.liferay.so.model.MemberRequest> getReceiverStatusMemberRequest(
 		long receiverUserId, int status, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -915,6 +941,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (java.util.List<com.liferay.so.model.MemberRequest>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getReceiverStatusMemberRequestCount(long receiverUserId,
 		int status) throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -943,6 +970,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public boolean hasPendingMemberRequest(long groupId, long receiverUserId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -971,6 +999,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return ((Boolean)returnObj).booleanValue();
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest updateMemberRequest(long userId,
 		long memberRequestId, int status) throws java.lang.Exception {
 		Object returnObj = null;
@@ -999,6 +1028,7 @@ public class MemberRequestLocalServiceClp implements MemberRequestLocalService {
 		return (com.liferay.so.model.MemberRequest)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.so.model.MemberRequest updateMemberRequest(
 		java.lang.String key, long receiverUserId)
 		throws com.liferay.portal.kernel.exception.PortalException,

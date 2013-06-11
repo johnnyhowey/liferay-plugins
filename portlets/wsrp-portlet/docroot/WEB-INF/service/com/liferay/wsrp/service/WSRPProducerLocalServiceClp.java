@@ -18,6 +18,7 @@ import com.liferay.portal.service.InvokableLocalService;
 
 /**
  * @author Brian Wing Shun Chan
+ * @generated
  */
 public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 	public WSRPProducerLocalServiceClp(
@@ -145,6 +146,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 			};
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer addWSRPProducer(
 		com.liferay.wsrp.model.WSRPProducer wsrpProducer)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -174,6 +176,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer createWSRPProducer(
 		long wsrpProducerId) {
 		Object returnObj = null;
@@ -197,6 +200,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer deleteWSRPProducer(
 		long wsrpProducerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -230,6 +234,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer deleteWSRPProducer(
 		com.liferay.wsrp.model.WSRPProducer wsrpProducer)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -264,6 +269,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
@@ -286,6 +292,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.portal.kernel.dao.orm.DynamicQuery)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -316,6 +323,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -352,6 +360,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -392,6 +401,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (java.util.List)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -421,6 +431,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return ((Long)returnObj).longValue();
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer fetchWSRPProducer(
 		long wsrpProducerId)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -449,6 +460,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer getWSRPProducer(
 		long wsrpProducerId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -482,6 +494,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -516,6 +529,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer getWSRPProducerByUuidAndGroupId(
 		java.lang.String uuid, long groupId)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -550,6 +564,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.wsrp.model.WSRPProducer> getWSRPProducers(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -578,6 +593,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (java.util.List<com.liferay.wsrp.model.WSRPProducer>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getWSRPProducersCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -605,6 +621,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer updateWSRPProducer(
 		com.liferay.wsrp.model.WSRPProducer wsrpProducer)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -634,6 +651,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
@@ -656,6 +674,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
 			_invokableLocalService.invokeMethod(_methodName17,
@@ -675,12 +694,14 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		}
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer addWSRPProducer(long userId,
 		long groupId, java.lang.String name, java.lang.String version,
 		java.lang.String portletIds,
@@ -729,6 +750,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer addWSRPProducer(long userId,
 		java.lang.String name, java.lang.String version,
 		java.lang.String portletIds,
@@ -775,6 +797,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer getWSRPProducer(
 		java.lang.String wsrpProducerUuid)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -810,6 +833,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (com.liferay.wsrp.model.WSRPProducer)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public java.util.List<com.liferay.wsrp.model.WSRPProducer> getWSRPProducers(
 		long companyId, int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -839,6 +863,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return (java.util.List<com.liferay.wsrp.model.WSRPProducer>)ClpSerializer.translateOutput(returnObj);
 	}
 
+	@Override
 	public int getWSRPProducersCount(long companyId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		Object returnObj = null;
@@ -866,6 +891,7 @@ public class WSRPProducerLocalServiceClp implements WSRPProducerLocalService {
 		return ((Integer)returnObj).intValue();
 	}
 
+	@Override
 	public com.liferay.wsrp.model.WSRPProducer updateWSRPProducer(
 		long wsrpProducerId, java.lang.String name, java.lang.String version,
 		java.lang.String portletIds)

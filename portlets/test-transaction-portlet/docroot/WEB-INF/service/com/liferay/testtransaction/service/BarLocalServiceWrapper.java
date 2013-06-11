@@ -17,12 +17,10 @@ package com.liferay.testtransaction.service;
 import com.liferay.portal.service.ServiceWrapper;
 
 /**
- * <p>
- * This class is a wrapper for {@link BarLocalService}.
- * </p>
+ * Provides a wrapper for {@link BarLocalService}.
  *
- * @author    Brian Wing Shun Chan
- * @see       BarLocalService
+ * @author Brian Wing Shun Chan
+ * @see BarLocalService
  * @generated
  */
 public class BarLocalServiceWrapper implements BarLocalService,
@@ -38,6 +36,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @return the bar that was added
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.testtransaction.model.Bar addBar(
 		com.liferay.testtransaction.model.Bar bar)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -50,6 +49,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @param barId the primary key for the new bar
 	* @return the new bar
 	*/
+	@Override
 	public com.liferay.testtransaction.model.Bar createBar(long barId) {
 		return _barLocalService.createBar(barId);
 	}
@@ -62,6 +62,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @throws PortalException if a bar with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.testtransaction.model.Bar deleteBar(long barId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
@@ -75,12 +76,14 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @return the bar that was removed
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.testtransaction.model.Bar deleteBar(
 		com.liferay.testtransaction.model.Bar bar)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _barLocalService.deleteBar(bar);
 	}
 
+	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _barLocalService.dynamicQuery();
 	}
@@ -92,6 +95,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @return the matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
@@ -112,6 +116,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @return the range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -133,6 +138,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @return the ordered range of matching rows
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	@SuppressWarnings("rawtypes")
 	public java.util.List dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
@@ -150,12 +156,14 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @return the number of rows that match the dynamic query
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public long dynamicQueryCount(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _barLocalService.dynamicQueryCount(dynamicQuery);
 	}
 
+	@Override
 	public com.liferay.testtransaction.model.Bar fetchBar(long barId)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _barLocalService.fetchBar(barId);
@@ -169,12 +177,14 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @throws PortalException if a bar with the primary key could not be found
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.testtransaction.model.Bar getBar(long barId)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _barLocalService.getBar(barId);
 	}
 
+	@Override
 	public com.liferay.portal.model.PersistedModel getPersistedModel(
 		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException,
@@ -194,6 +204,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @return the range of bars
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public java.util.List<com.liferay.testtransaction.model.Bar> getBars(
 		int start, int end)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -206,6 +217,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @return the number of bars
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public int getBarsCount()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _barLocalService.getBarsCount();
@@ -218,6 +230,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	* @return the bar that was updated
 	* @throws SystemException if a system exception occurred
 	*/
+	@Override
 	public com.liferay.testtransaction.model.Bar updateBar(
 		com.liferay.testtransaction.model.Bar bar)
 		throws com.liferay.portal.kernel.exception.SystemException {
@@ -229,6 +242,7 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	*
 	* @return the Spring bean ID for this bean
 	*/
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _barLocalService.getBeanIdentifier();
 	}
@@ -238,59 +252,70 @@ public class BarLocalServiceWrapper implements BarLocalService,
 	*
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
+	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_barLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
 		return _barLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	@Override
 	public void addBar_Rollback(java.lang.String text)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_barLocalService.addBar_Rollback(text);
 	}
 
+	@Override
 	public com.liferay.testtransaction.model.Bar addBar_Success(
 		java.lang.String text)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _barLocalService.addBar_Success(text);
 	}
 
+	@Override
 	public void addBarAndClassName_PortalRollback(java.lang.String text)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_barLocalService.addBarAndClassName_PortalRollback(text);
 	}
 
+	@Override
 	public void addBarAndClassName_PortletRollback(java.lang.String text)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_barLocalService.addBarAndClassName_PortletRollback(text);
 	}
 
+	@Override
 	public void deleteBarAndClassName(com.liferay.testtransaction.model.Bar bar)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		_barLocalService.deleteBarAndClassName(bar);
 	}
 
+	@Override
 	public com.liferay.testtransaction.model.Bar getBar(java.lang.String text)
 		throws com.liferay.portal.kernel.exception.PortalException,
 			com.liferay.portal.kernel.exception.SystemException {
 		return _barLocalService.getBar(text);
 	}
 
+	@Override
 	public boolean hasBar(java.lang.String text)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _barLocalService.hasBar(text);
 	}
 
+	@Override
 	public boolean hasClassName()
 		throws com.liferay.portal.kernel.exception.SystemException {
 		return _barLocalService.hasClassName();
 	}
 
+	@Override
 	public void testAddClassNameAndBar_Success(java.lang.String text)
 		throws com.liferay.portal.kernel.exception.SystemException {
 		_barLocalService.testAddClassNameAndBar_Success(text);
@@ -310,10 +335,12 @@ public class BarLocalServiceWrapper implements BarLocalService,
 		_barLocalService = barLocalService;
 	}
 
+	@Override
 	public BarLocalService getWrappedService() {
 		return _barLocalService;
 	}
 
+	@Override
 	public void setWrappedService(BarLocalService barLocalService) {
 		_barLocalService = barLocalService;
 	}
