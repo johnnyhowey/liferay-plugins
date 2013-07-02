@@ -112,7 +112,7 @@ to = sb.toString() + to;
 	}
 </aui:script>
 
-<aui:script use="aui-button-item,aui-io-request,aui-loading-mask,autocomplete,json-parse,io-upload-iframe">
+<aui:script use="aui-button-item-deprecated,aui-io-request,aui-loading-mask-deprecated,autocomplete,json-parse,io-upload-iframe">
 	var form = A.one('#<portlet:namespace />fm');
 
 	form.on(
@@ -155,7 +155,7 @@ to = sb.toString() + to;
 							var responseData = this.get('responseData');
 
 							if (responseData.success) {
-								submitForm(document.<portlet:namespace />fm);
+								sendMessage();
 							}
 							else {
 								<portlet:namespace />showMessage('<span class="portlet-msg-error">' + responseData.message + '</span>');
@@ -177,6 +177,27 @@ to = sb.toString() + to;
 			);
 		}
 	);
+
+	var sendMessage = function() {
+		A.io.request(
+			'<%= sendMessageURL %>',
+			{
+				after: {
+					success: function(event, id, obj) {
+						Liferay.Util.getWindow('<portlet:namespace />Dialog').hide();
+
+						var topWindow = Liferay.Util.getTop();
+
+						topWindow.document.location.reload();
+					}
+				},
+				dataType: 'json',
+				form: {
+					id: form
+				}
+			}
+		);
+	}
 
 	var to = A.one('#<portlet:namespace/>to');
 
