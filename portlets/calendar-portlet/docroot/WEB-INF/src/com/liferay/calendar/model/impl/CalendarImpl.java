@@ -20,6 +20,8 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.model.Group;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 
 /**
  * @author Eduardo Lundgren
@@ -29,6 +31,7 @@ public class CalendarImpl extends CalendarBaseImpl {
 	public CalendarImpl() {
 	}
 
+	@Override
 	public CalendarResource getCalendarResource()
 		throws PortalException, SystemException {
 
@@ -36,12 +39,19 @@ public class CalendarImpl extends CalendarBaseImpl {
 			getCalendarResourceId());
 	}
 
+	@Override
 	public long getResourceGroupId() {
 		try {
 			CalendarResource calendarResource = getCalendarResource();
 
 			if (calendarResource.isGroup()) {
 				return calendarResource.getClassPK();
+			}
+			else if (calendarResource.isUser()) {
+				Group group = GroupLocalServiceUtil.getUserGroup(
+					getCompanyId(), calendarResource.getClassPK());
+
+				return group.getGroupId();
 			}
 		}
 		catch (Exception e) {
