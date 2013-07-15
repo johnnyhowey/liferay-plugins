@@ -30,7 +30,16 @@ portletURL.setParameter("category", category);
 	</div>
 
 	<div class="apps span9">
-		<h3><liferay-ui:message key="all-apps" /></h3>
+		<h3>
+			<c:choose>
+				<c:when test="<%= Validator.isNull(category) %>">
+					<liferay-ui:message key="all-apps" />
+				</c:when>
+				<c:otherwise>
+					<%= category %>
+				</c:otherwise>
+			</c:choose>
+		</h3>
 
 		<%
 		List<App> apps = null;
@@ -209,7 +218,7 @@ portletURL.setParameter("category", category);
 	</div>
 </div>
 
-<aui:script use="anim,aui-base,aui-io,aui-url">
+<aui:script use="anim,aui-base,aui-io,aui-tooltip,aui-url">
 	var marketplacePortlet = A.one('.marketplace-portlet');
 
 	marketplacePortlet.delegate(
@@ -327,5 +336,16 @@ portletURL.setParameter("category", category);
 			);
 		},
 		'.plugin-actions .btn'
+	);
+
+	new A.TooltipDelegate(
+		{
+			formatter: function() {
+				return '<liferay-ui:message key="this-portlet-is-available-in-the-control-panel" />';
+			},
+			position: 'top',
+			trigger: '.marketplace-portlet .apps i.icon-wrench',
+			zIndex: 100
+		}
 	);
 </aui:script>
