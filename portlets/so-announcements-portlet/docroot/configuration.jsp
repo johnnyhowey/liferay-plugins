@@ -97,7 +97,7 @@ if (!roles.isEmpty()) {
 					names="<%= tabs1Names %>"
 					param="tabs1"
 					refresh="<%= false %>"
-				>
+				/>
 
 				<c:if test="<%= !groups.isEmpty() %>">
 					<liferay-ui:section>
@@ -105,26 +105,27 @@ if (!roles.isEmpty()) {
 
 							<%
 							String selectedScopeGroups;
+
 							try {
 								selectedScopeGroups = PrefsParamUtil.getString(preferences, request, "selectedScopeGroups", String.valueOf(layout.getGroupId()));
-							} catch (Exception e) {
+							}
+							catch (Exception e) {
 								selectedScopeGroups = "";
 							}
 
-							// Left list
 							List<KeyValuePair> leftList = new ArrayList<KeyValuePair>();
+
 							for (Group group : groups) {
 								if (selectedScopeGroups.contains(String.valueOf(group.getGroupId()))) {
 									leftList.add(new KeyValuePair(String.valueOf(group.getGroupId()), group.getDescriptiveName(locale)));
 								}
 							}
 
-							// Right list
 							List<KeyValuePair> rightList = new ArrayList<KeyValuePair>();
 
 							for (Group group : groups) {
-
 								KeyValuePair tempKeyValuePair = new KeyValuePair(String.valueOf(group.getGroupId()), group.getDescriptiveName(locale));
+
 								if (!leftList.contains(tempKeyValuePair)) {
 									rightList.add(tempKeyValuePair);
 								}
@@ -154,26 +155,27 @@ if (!roles.isEmpty()) {
 
 							<%
 							String selectedScopeOrganizations;
+
 							try {
 								selectedScopeOrganizations = GetterUtil.getString(PrefsParamUtil.getString(preferences, request, "selectedScopeOrganizations", ""));
-							} catch (Exception e) {
+							}
+							catch (Exception e) {
 								selectedScopeOrganizations = "";
 							}
 
-							// Left list
 							List<KeyValuePair> leftList = new ArrayList<KeyValuePair>();
+
 							for (Organization organization : organizations) {
 								if (selectedScopeOrganizations.contains(String.valueOf(organization.getOrganizationId()))) {
 									leftList.add(new KeyValuePair(String.valueOf(organization.getOrganizationId()), organization.getName()));
 								}
 							}
 
-							// Right list
 							List<KeyValuePair> rightList = new ArrayList<KeyValuePair>();
 
 							for (Organization organization : organizations) {
-
 								KeyValuePair tempKeyValuePair = new KeyValuePair(String.valueOf(organization.getOrganizationId()), organization.getName());
+
 								if (!leftList.contains(tempKeyValuePair)) {
 									rightList.add(tempKeyValuePair);
 								}
@@ -203,26 +205,27 @@ if (!roles.isEmpty()) {
 
 							<%
 							String selectedScopeUserGroups;
+
 							try {
 								selectedScopeUserGroups = GetterUtil.getString(PrefsParamUtil.getString(preferences, request, "selectedScopeUserGroups", ""));
-							} catch (Exception e) {
+							}
+							catch (Exception e) {
 								selectedScopeUserGroups = "";
 							}
 
-							// Left list
 							List<KeyValuePair> leftList = new ArrayList<KeyValuePair>();
+
 							for (UserGroup userGroup : userGroups) {
 								if (selectedScopeUserGroups.contains(String.valueOf(userGroup.getUserGroupId()))) {
 									leftList.add(new KeyValuePair(String.valueOf(userGroup.getUserGroupId()), userGroup.getName()));
 								}
 							}
 
-							// Right list
 							List<KeyValuePair> rightList = new ArrayList<KeyValuePair>();
 
 							for (UserGroup userGroup : userGroups) {
-
 								KeyValuePair tempKeyValuePair = new KeyValuePair(String.valueOf(userGroup.getUserGroupId()), userGroup.getName());
+
 								if (!leftList.contains(tempKeyValuePair)) {
 									rightList.add(tempKeyValuePair);
 								}
@@ -252,26 +255,27 @@ if (!roles.isEmpty()) {
 
 							<%
 							String selectedScopeRoles;
+
 							try {
 								selectedScopeRoles = GetterUtil.getString(PrefsParamUtil.getString(preferences, request, "selectedScopeRoles", ""));
-							} catch (Exception e) {
+							}
+							catch (Exception e) {
 								selectedScopeRoles = "";
 							}
 
-							// Left list
 							List<KeyValuePair> leftList = new ArrayList<KeyValuePair>();
+
 							for (Role role : roles) {
 								if (selectedScopeRoles.contains(String.valueOf(role.getRoleId()))) {
 									leftList.add(new KeyValuePair(String.valueOf(role.getRoleId()), role.getTitle(locale)));
 								}
 							}
 
-							// Right list
 							List<KeyValuePair> rightList = new ArrayList<KeyValuePair>();
 
 							for (Role role : roles) {
-
 								KeyValuePair tempKeyValuePair = new KeyValuePair(String.valueOf(role.getRoleId()), role.getTitle(locale));
+
 								if (!leftList.contains(tempKeyValuePair)) {
 									rightList.add(tempKeyValuePair);
 								}
@@ -294,7 +298,6 @@ if (!roles.isEmpty()) {
 						</aui:fieldset>
 					</liferay-ui:section>
 				</c:if>
-			</liferay-ui:tabs>
 			</div>
 		</liferay-ui:panel>
 	</liferay-ui:panel-container>
