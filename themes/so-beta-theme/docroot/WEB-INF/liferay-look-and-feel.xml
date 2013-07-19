@@ -8,11 +8,11 @@
 	</compatibility>
 	<theme id="sobetatheme" name="Social Office Beta Theme">
 		<color-scheme id="soClassic" name="Social Office Classic">
-			<css-class>so-beta-theme so-classic</css-class>
+			<css-class>so-classic</css-class>
 		</color-scheme>
 		<color-scheme id="normal" name="Social Office Beta">
 			<default-cs>true</default-cs>
-			<css-class>so-beta-theme so-official</css-class>
+			<css-class>normal</css-class>
 		</color-scheme>
 	</theme>
 </look-and-feel>

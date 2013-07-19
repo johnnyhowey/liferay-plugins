@@ -1,4 +1,4 @@
-<nav class="$nav_css_class" id="navigation">
+<div class="$nav_css_class" id="navigation">
 	#if ($is_profile_page)
 		<div class="avatar" id="_SO_THEME_taglibLogoSelector" style="background-image: url($current_user.getPortraitURL($themeDisplay))">
 			<div id="_SO_THEME_taglibLogoSelectorContent">
@@ -45,4 +45,4 @@
 			</li>
 		#end
 	</ul>
-</nav>
+</div>

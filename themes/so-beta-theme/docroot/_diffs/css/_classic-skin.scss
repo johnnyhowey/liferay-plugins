@@ -17,22 +17,14 @@ $link-color: #2571AD;
 	background-color: transparent;
 }
 
-@mixin button-disabled {
-
-}
-
 @mixin default-border {
 	border: 1px solid $default-border-color;
 }
 
-@mixin input-field-focus {
-
-}
-
 @mixin input-field-default {
-	vertical-align: middle;
 	background: #FFF;
 	border: 1px solid $gray-dark;
+	vertical-align: middle;
 
 	&:active, &:focus, &:hover, &.focus {
 		@include input-field-focus;
@@ -62,16 +54,4 @@ $link-color: #2571AD;
 	background: $gray-medium;
 	border-color: #AAA;
 	color: #5A5A5A;
-}
-
-@mixin button-focus {
-
-}
-
-@mixin button-active {
-
-}
-
-@mixin button-primary-gradient {
-
 }

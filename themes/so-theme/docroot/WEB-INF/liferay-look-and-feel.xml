@@ -14,11 +14,5 @@
 			<default-cs>true</default-cs>
 			<css-class>normal</css-class>
 		</color-scheme>
-		<color-scheme id="beta" name="Social Office Beta Theme">
-			<css-class>so-theme-beta</css-class>
-			<color-scheme-images-path>${images-path}/color_schemes/so-theme-beta</color-scheme-images-path>
-
-			<templates-path>${templates_path}/color-schemes/so-theme-beta</templates-path>
-		</color-scheme>
 	</theme>
 </look-and-feel>

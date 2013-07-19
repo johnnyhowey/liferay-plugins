@@ -294,7 +294,7 @@ a {
 	}
 }
 
-#navigation {
+div#navigation {
 	background: $navigation-bg-color;
 	border-right: 1px solid $default-border-color;
 	float: left;
@@ -315,9 +315,9 @@ a {
 		}
 
 		.edit-portrait {
-			position: absolute;
-			left: 10px;
 			bottom: 10px;
+			left: 10px;
+			position: absolute;
 			visibility: hidden;
 		}
 
@@ -471,28 +471,11 @@ a {
 @import "ie";
 
 @media (max-width:860px) {
-	#so-portlet-user-bar {
-		// background: #333;
-		// left: 0;
-		// position: absolute;
-		// top: 0;
-		// width: 150px;
-
-		ul, li {
-			display: block;
-		}
-
-		.user-menu {
-			position: relative;
-		}
-	}
-
 	#content, #navigation, #navigation ul {
 		border-width: 0;
 	}
 
-
-	#navigation {
+	div#navigation {
 		float: none;
 		margin-left: 0;
 		width: 100%;
@@ -502,6 +485,7 @@ a {
 
 			a {
 				@include background-image(linear, 50% 100%, 50% 0%, color-stop(0%, #252d31), color-stop(100%, #32363a));
+
 				display: block;
 				padding: .75em 1em;
 			}
@@ -526,8 +510,7 @@ a {
 		padding-left: 0;
 	}
 
-	.portlet-layout,
-	.portlet-column {
+	.portlet-layout, .portlet-column {
 		display: block;
 		width: auto;
 	}

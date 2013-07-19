@@ -50,8 +50,8 @@ body.so-classic {
 			border-top-color: transparent;
 
 			a {
-				color: $red;
 				background: #F4F4F4;
+				color: $red;
 
 				@include box-shadow(none);
 			}
@@ -73,8 +73,8 @@ body.so-classic {
 		color: #929292;
 
 		.portlet-title {
-			font-weight: bold;
 			font-size: 1em;
+			font-weight: bold;
 		}
 	}
 

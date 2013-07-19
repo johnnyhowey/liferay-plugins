@@ -10,7 +10,6 @@ AUI().ready(
 
 	function(A) {
 		var body = A.getBody();
-
 		var messageBoard = A.one('.portlet-message-boards');
 
 		if (messageBoard) {
