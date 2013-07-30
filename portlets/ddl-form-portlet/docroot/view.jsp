@@ -26,6 +26,10 @@ DDMTemplate ddmTemplate = null;
 try {
 	if (recordSetId > 0) {
 		recordSet = DDLRecordSetLocalServiceUtil.getRecordSet(recordSetId);
+
+		if (recordSet.getGroupId() != scopeGroupId) {
+			recordSet = null;
+		}
 	}
 
 	if (formDDMTemplateId > 0) {
@@ -196,6 +200,7 @@ boolean showEditTemplateIcon = (ddmTemplate != null) && (permissionChecker.hasOw
 					<portlet:param name="struts_action" value="/dynamic_data_lists/edit_record_set" />
 					<portlet:param name="redirect" value="<%= currentURL %>" />
 					<portlet:param name="portletResource" value="<%= portletDisplay.getId() %>" />
+					<portlet:param name="groupId" value="<%= String.valueOf(scopeGroupId) %>" />
 				</liferay-portlet:renderURL>
 
 				<liferay-ui:icon
