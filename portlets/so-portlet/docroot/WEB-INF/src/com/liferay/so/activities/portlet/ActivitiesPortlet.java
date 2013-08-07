@@ -23,6 +23,7 @@ import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
@@ -123,7 +124,9 @@ public class ActivitiesPortlet extends MVCPortlet {
 
 				jsonObject.put(
 					"modifiedDate",
-					dateFormatDateTime.format(mbMessage.getModifiedDate()));
+					Time.getRelativeTimeDescription(
+						mbMessage.getModifiedDate().getTime(),
+						themeDisplay.getLocale(), themeDisplay.getTimeZone()));
 
 				User user = UserLocalServiceUtil.fetchUser(
 					mbMessage.getUserId());
@@ -136,6 +139,10 @@ public class ActivitiesPortlet extends MVCPortlet {
 
 				jsonObject.put(
 					"userName", HtmlUtil.escape(mbMessage.getUserName()));
+
+				jsonObject.put(
+					"userPortraitURL", HtmlUtil.escape(
+						user.getPortraitURL(themeDisplay)));
 			}
 
 			jsonObject.put("success", Boolean.TRUE);
