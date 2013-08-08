@@ -17,80 +17,8 @@
  */
 --%>
 
-<%
-String className = activitySet.getClassName();
-long classPK = activitySet.getClassPK();
-
-if (activitySet.getActivityCount() > 1 ) {
-	className = SocialActivitySet.class.getName();
-	classPK = activitySet.getActivitySetId();
-}
-
-MBMessageDisplay messageDisplay = MBMessageLocalServiceUtil.getDiscussionMessageDisplay(user.getUserId(), themeDisplay.getScopeGroupId(), className, classPK, WorkflowConstants.STATUS_APPROVED);
-
-MBTreeWalker treeWalker = messageDisplay.getTreeWalker();
-
-List<MBMessage> messages = treeWalker.getMessages();
-
-messages = ListUtil.sort(messages, new MessageCreateDateComparator(true));
-
-int messagesCount = messages.size() - 1;
-%>
-
-<span class="view-comments">
-	<a href="javascript:;"><%= messagesCount > 0 ? messagesCount : StringPool.BLANK %> <liferay-ui:message key='<%= messagesCount > 1 ? "comments" : "comment" %>' /></a>
-</span>
-
 <div class="comments-container">
-	<div class="aui-helper-hidden comments-list">
-
-		<%
-		for (int i = 1; i < messages.size(); i++) {
-			MBMessage message = messages.get(i);
-		%>
-
-			<div class="comment-entry">
-				<div class="comment-body">
-					<span class="message"><%= HtmlUtil.escape(message.getBody()) %></span>
-				</div>
-
-				<div class="comment-info">
-
-					<%
-					User messageUser = UserLocalServiceUtil.getUser(message.getUserId());
-					%>
-
-					<c:choose>
-						<c:when test="<%= Validator.isNotNull(messageUser.getDisplayURL(themeDisplay)) %>">
-							<span class="user-name"><a href="<%= messageUser.getDisplayURL(themeDisplay) %>"><%= HtmlUtil.escape(message.getUserName()) %></a></span>
-						</c:when>
-						<c:otherwise>
-							<span class="user-name"><%= HtmlUtil.escape(message.getUserName()) %></span>
-						</c:otherwise>
-					</c:choose>
-
-					<span class="post-date"><%= dateFormatDateTime.format(message.getModifiedDate()) %></span>
-
-					<c:if test="<%= DateUtil.compareTo(message.getCreateDate(), message.getModifiedDate()) != 0 %>">
-						<span class="edit-notice"><liferay-ui:message key="modified" /></span>
-					</c:if>
-
-					<c:if test="<%= message.getUserId() == user.getUserId() %>">
-						<span class="edit-comment">
-							<a data-messageId="<%= message.getMessageId() %>" href="javascript:;"><liferay-ui:message key="edit" /></a>
-						</span>
-						<span class="delete-comment">
-							<a data-messageId="<%= message.getMessageId() %>" href="javascript:;"><liferay-ui:message key="delete" /></a>
-						</span>
-					</c:if>
-				</div>
-			</div>
-
-		<%
-		}
-		%>
-
-	</div>
+	<div class="comments-list"></div>
 
 	<portlet:actionURL name="updateComment" var="updateCommentURL" />
 
@@ -100,22 +28,18 @@ int messagesCount = messages.size() - 1;
 		<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.ADD %>" />
 		<aui:input name="className" type="hidden" value="<%= className %>" />
 		<aui:input name="classPK" type="hidden" value="<%= classPK %>" />
-		<aui:input name="messageId" type="hidden" value="" />
-
-		<%
-		MBMessage rootMessage = treeWalker.getRoot();
-		%>
-
-		<aui:input name="parentMessageId" type="hidden" value="<%= rootMessage.getMessageId() %>" />
-
-		<%
-		MBThread thread = messageDisplay.getThread();
-		%>
-
-		<aui:input name="threadId" type="hidden" value="<%= thread.getThreadId() %>" />
+		<aui:input name="entryId" type="hidden" value="" />
 
 		<div>
-			<aui:input cssClass="comment-form" label="" name="body" />
+			<div class="user-portrait">
+				<span class="avatar">
+					<a href="<%= user.getDisplayURL(themeDisplay) %>">
+						<img alt="<%= user.getFullName() %>" src="<%= user.getPortraitURL(themeDisplay) %>" />
+					</a>
+				</span>
+			</div>
+
+			<aui:input cssClass="comment-form" label="" name="body" placeholder='<%= LanguageUtil.get(pageContext, "leave-a-comment") %>'/>
 
 			<aui:input name="submit" type="hidden" value="post" />
 		</div>
@@ -123,38 +47,6 @@ int messagesCount = messages.size() - 1;
 </div>
 
 <aui:script use="aui-base">
-	var addNewComment = function(commentsList, responseData) {
-		var commentEntryTemplate =
-			'<div class="comment-entry">' +
-				'<div class="comment-body">' +
-					'<span class="message">' + '{body}' + '</span>' +
-				'</div>' +
-				'<div class="comment-info">' +
-					'<span class="user-name"><a href="' + '{userDisplayURL}' + '">' + '{userName}' + '</a></span>' +
-					'<span class="post-date">' + '{modifiedDate}' + '</span>' +
-					'<span class="edit-comment">' +
-						'<a data-messageId="' + '{messageId}' + '" href="javascript:;"><%= UnicodeLanguageUtil.get(pageContext, "edit") %></a>' +
-					'</span>' +
-					'<span class="delete-comment">' +
-						'<a data-messageId="' + '{messageId}' + '" href="javascript:;"><%= UnicodeLanguageUtil.get(pageContext, "delete") %></a>' +
-					'</span>' +
-				'</div>' +
-			'</div>';
-
-		var commentEntryHtml = A.Lang.sub(
-			commentEntryTemplate,
-			{
-				body: responseData.body,
-				messageId: responseData.messageId,
-				modifiedDate: responseData.modifiedDate,
-				userDisplayURL: responseData.userDisplayURL ? responseData.userDisplayURL : '',
-				userName: responseData.userName
-			}
-		);
-
-		commentsList.append(commentEntryHtml);
-	}
-
 	var form = A.one('#<portlet:namespace />fm<%= activitySet.getActivitySetId() %>');
 
 	if (form) {
@@ -165,7 +57,7 @@ int messagesCount = messages.size() - 1;
 
 				var currentTarget = event.currentTarget;
 
-				var activityFooterToolbar = currentTarget.ancestor('.activity-footer-toolbar');
+				var activityFooter = currentTarget.ancestor('.activity-footer');
 				var commentsContainer = currentTarget.ancestor('.comments-container');
 
 				var form = commentsContainer.one('form');
@@ -182,13 +74,13 @@ int messagesCount = messages.size() - 1;
 								var responseData = this.get('responseData');
 
 								if (responseData.success) {
-									commentsContainer.removeClass('.aui-helper-hidden');
-
 									var commentsList = commentsContainer.one('.comments-list');
 
-									addNewComment(commentsList, responseData);
+									commentsList.removeClass('aui-helper-hidden');
 
-									var viewComments = activityFooterToolbar.one('.view-comments a');
+									Liferay.SO.Activities.addNewComment(commentsList, responseData);
+
+									var viewComments = activityFooter.one('.view-comments a');
 
 									var viewCommentsHtml = viewComments.get('innerHTML');
 
@@ -202,6 +94,10 @@ int messagesCount = messages.size() - 1;
 										messagesCount +
 										(messagesCount > 1 ? ' <%= UnicodeLanguageUtil.get(pageContext, "comments") %>' : ' <%= UnicodeLanguageUtil.get(pageContext, "comment") %>')
 									);
+
+									var textInput = commentsContainer.one('.comment-form .aui-field-input-text');
+
+									textInput.attr('value', '');
 								}
 							}
 						},

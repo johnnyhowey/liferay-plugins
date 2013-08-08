@@ -46,13 +46,47 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 		function(event) {
 			var currentTarget = event.currentTarget;
 
-			var viewComments = currentTarget.ancestor();
+			var activityFooterToolbar = currentTarget.ancestor('.activity-footer-toolbar');
 
-			var commentsContainer = viewComments.siblings('.comments-container');
+			var commentsContainer = activityFooterToolbar.siblings('.comments-container');
 
 			var commentsList = commentsContainer.one('.comments-list');
 
-			commentsList.toggleClass('aui-helper-hidden');
+			var commentEntry = commentsList.one('.comment-entry');
+
+			if (commentEntry) {
+				commentsList.toggleClass('aui-helper-hidden');
+			}
+			else {
+				var uri = '<liferay-portlet:resourceURL id="getComments"></liferay-portlet:resourceURL>';
+
+				uri = Liferay.Util.addParams('activitySetId=' + currentTarget.getAttribute('data-activitySetId'), uri) || uri;
+
+				A.io.request(
+					uri,
+					{
+						after: {
+							success: function(event, id, obj) {
+								var responseData = this.get('responseData');
+
+								if (responseData) {
+									var commentsCount = responseData.commentsCount;
+
+									var comments = responseData.comments;
+
+									A.Array.map(
+										comments,
+										function(comment) {
+											Liferay.SO.Activities.addNewComment(commentsList, comment);
+										}
+									)
+								}
+							}
+						},
+						dataType: 'json',
+					}
+				);
+			}
 		},
 		'.view-comments a'
 	);
@@ -63,7 +97,7 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 			if (confirm('<%= UnicodeLanguageUtil.get(pageContext,"are-you-sure-you-want-to-delete-the-selected-entry") %>')) {
 				var currentTarget = event.currentTarget;
 
-				var activityFooterToolbar = currentTarget.ancestor('.activity-footer-toolbar');
+				var activityFooter = currentTarget.ancestor('.activity-footer');
 				var commentEntry = currentTarget.ancestor('.comment-entry')
 				var commentsContainer = currentTarget.ancestor('.comments-container');
 
@@ -73,11 +107,11 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 
 				cmdInput.val('<%= Constants.DELETE %>');
 
-				var messageId = currentTarget.getAttribute('data-messageId');
+				var entryId = currentTarget.getAttribute('data-entryId');
 
-				var messageIdInput = form.one('#<portlet:namespace />messageId');
+				var entryIdInput = form.one('#<portlet:namespace />entryId');
 
-				messageIdInput.val(messageId);
+				entryIdInput.val(entryId);
 
 				A.io.request(
 					form.attr('action'),
@@ -89,7 +123,7 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 								if (responseData.success) {
 									commentEntry.remove();
 
-									var viewComments = activityFooterToolbar.one('.view-comments a');
+									var viewComments = activityFooter.one('.view-comments a');
 
 									var viewCommentsHtml = viewComments.get('innerHTML');
 
@@ -118,9 +152,9 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 		function(event) {
 			var currentTarget = event.currentTarget;
 
-			var messageId = currentTarget.getAttribute('data-messageId');
+			var entryId = currentTarget.getAttribute('data-entryId');
 
-			var editForm = A.one('#<portlet:namespace />fm1' + messageId);
+			var editForm = A.one('#<portlet:namespace />fm1' + entryId);
 
 			var commentEntry = currentTarget.ancestor('.comment-entry');
 
@@ -138,16 +172,16 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 
 				editForm.removeClass('aui-helper-hidden');
 
-				editForm.set('id','<portlet:namespace />fm1' + messageId);
-				editForm.set('name','<portlet:namespace />fm1' + messageId);
+				editForm.set('id','<portlet:namespace />fm1' + entryId);
+				editForm.set('name','<portlet:namespace />fm1' + entryId);
 
 				var cmdInput = editForm.one('#<portlet:namespace /><%= Constants.CMD %>');
 
 				cmdInput.val('<%= Constants.EDIT %>');
 
-				var messageIdInput = editForm.one('#<portlet:namespace />messageId');
+				var entryIdInput = editForm.one('#<portlet:namespace />entryId');
 
-				messageIdInput.val(messageId);
+				entryIdInput.val(entryId);
 
 				var commentBody = commentEntry.one('.comment-body');
 
