@@ -142,6 +142,7 @@ public class BlogsActivityInterpreter extends SOSocialActivityInterpreter {
 
 		if ((activity.getType() == _ACTIVITY_KEY_ADD_COMMENT) ||
 			(activity.getType() == SocialActivityConstants.TYPE_ADD_COMMENT)) {
+
 			return "commented-on-a-blog-entry";
 		}
 		else if (activity.getType() == _ACTIVITY_KEY_ADD_ENTRY) {
@@ -161,6 +162,7 @@ public class BlogsActivityInterpreter extends SOSocialActivityInterpreter {
 		if ((activitySet.getType() == _ACTIVITY_KEY_ADD_COMMENT) ||
 			(activitySet.getType() ==
 				SocialActivityConstants.TYPE_ADD_COMMENT)) {
+
 			return "commented-on-x-blog-entries";
 		}
 		else if (activitySet.getType() == _ACTIVITY_KEY_ADD_ENTRY) {
