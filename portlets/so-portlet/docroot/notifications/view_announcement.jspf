@@ -20,7 +20,11 @@
 <%
 PortletURL portletURL = null;
 
-long portletPlid = PortalUtil.getPlidFromPortletId(notificationEventJSONObject.getLong("groupId"), false, portletId);
+long portletPlid = PortalUtil.getPlidFromPortletId(notificationEventJSONObject.getLong("groupId"), false, PortletKeys.SO_ANNOUNCEMENTS);
+
+if (portletPlid == 0) {
+	portletPlid = PortalUtil.getPlidFromPortletId(user.getGroupId(), true, PortletKeys.SO_ANNOUNCEMENTS);
+}
 
 if (portletPlid != 0) {
 	portletURL = PortletURLFactoryUtil.create(request, portletId, portletPlid, PortletRequest.RENDER_PHASE);
