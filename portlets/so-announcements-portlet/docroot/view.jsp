@@ -94,6 +94,8 @@
 				<portlet:param name="readEntries" value="true" />
 			</portlet:renderURL>
 
+			var readURL = Liferay.Announcements.appendTogglerState('<%= readURL %>');
+
 			Liferay.Announcements.loadNode(readEntriesContainer, readURL);
 		}
 	}

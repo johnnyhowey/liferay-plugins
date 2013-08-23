@@ -21,6 +21,22 @@ AUI().use(
 				}
 			},
 
+			appendTogglerState: function(url) {
+				var header = A.one('#readEntries .header');
+
+				if (header) {
+					var expanded = 'false';
+
+					if (header.hasClass('aui-toggler-header-expanded')) {
+						expanded = 'true';
+					}
+
+					url = url + '&expanded=' + expanded;
+				}
+
+				return(url);
+			},
+
 			toggleEntry: function(event, portletNamespace) {
 				var entryId = event.currentTarget.attr('data-entryId');
 
