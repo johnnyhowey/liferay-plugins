@@ -69,9 +69,7 @@
 	}
 
 	function <portlet:namespace />handleEntry(entryId) {
-		var A = AUI();
-
-		var entry = A.one('#<portlet:namespace />' + entryId);
+		var entry = AUI().one('#<portlet:namespace />' + entryId);
 
 		if (entry) {
 			var container = entry.get('parentNode');

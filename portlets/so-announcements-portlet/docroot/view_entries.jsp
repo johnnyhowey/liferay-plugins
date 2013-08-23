@@ -20,7 +20,7 @@
 <%@ include file="/init.jsp" %>
 
 <%
-boolean readEntries = ParamUtil.getBoolean(request, "readEntries", Boolean.TRUE);
+boolean readEntries = ParamUtil.getBoolean(request, "readEntries", true);
 
 int flagValue = AnnouncementsFlagConstants.NOT_HIDDEN;;
 
@@ -125,7 +125,7 @@ List<AnnouncementsEntry> results = AnnouncementsEntryLocalServiceUtil.getEntries
 			var container = A.one('#readEntriesContainer');
 		</c:when>
 		<c:otherwise>
-			var container = AUI().one('#unreadEntriesContainer');
+			var container = A.one('#unreadEntriesContainer');
 		</c:otherwise>
 	</c:choose>
 
