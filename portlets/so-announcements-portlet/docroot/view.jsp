@@ -96,6 +96,8 @@
 
 			var readURL = Liferay.Announcements.appendTogglerState('<%= readURL %>');
 
+			readURL = Liferay.Announcements.appendPageStart(readURL, '#readEntries');
+
 			Liferay.Announcements.loadNode(readEntriesContainer, readURL);
 		}
 	}
@@ -108,6 +110,8 @@
 				<portlet:param name="mvcPath" value="/view_entries.jsp" />
 				<portlet:param name="readEntries" value="false" />
 			</portlet:renderURL>
+
+			var unreadURL = Liferay.Announcements.appendPageStart('<%= unreadURL %>', '#unreadEntries');
 
 			Liferay.Announcements.loadNode(unreadEntriesContainer, unreadURL);
 		}

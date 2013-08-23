@@ -5,20 +5,16 @@ AUI().use(
 		Liferay.namespace('Announcements');
 
 		Liferay.Announcements = {
-			loadNode: function(node, uri) {
-				if (node) {
-					if (!node.io) {
-						node.plug(
-							A.Plugin.IO,
-							{
-							autoLoad: false
-							}
-						);
-					}
+			appendPageStart: function(url, id) {
+				var node = A.one(id);
 
-					node.io.set('uri', uri);
-					node.io.start();
+				if (node) {
+					var start = node.attr('data-start');
+
+					url = url + '&start=' + start;
 				}
+
+				return(url);
 			},
 
 			appendTogglerState: function(url) {
@@ -35,6 +31,22 @@ AUI().use(
 				}
 
 				return(url);
+			},
+
+			loadNode: function(node, uri) {
+				if (node) {
+					if (!node.io) {
+						node.plug(
+							A.Plugin.IO,
+							{
+							autoLoad: false
+							}
+						);
+					}
+
+					node.io.set('uri', uri);
+					node.io.start();
+				}
 			},
 
 			toggleEntry: function(event, portletNamespace) {

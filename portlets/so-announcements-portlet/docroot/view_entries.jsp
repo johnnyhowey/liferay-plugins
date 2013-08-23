@@ -58,7 +58,17 @@ else {
 
 scopes.put(new Long(0), new long[] {0});
 
+int start = ParamUtil.getInteger(request, "start", 0);
+
+int end = ParamUtil.getInteger(request, "end", start + pageDelta);
+
 int total = AnnouncementsEntryLocalServiceUtil.getEntriesCount(user.getUserId(), scopes, portletName.equals(PortletKeys.ALERTS), flagValue);
+
+if ((start >= total) && (start != 0)) {
+	start -= pageDelta;
+
+	end = start + pageDelta;
+}
 
 List<AnnouncementsEntry> results = AnnouncementsEntryLocalServiceUtil.getEntries(user.getUserId(), scopes, portletName.equals(PortletKeys.ALERTS), flagValue, start, end);
 %>
@@ -66,7 +76,7 @@ List<AnnouncementsEntry> results = AnnouncementsEntryLocalServiceUtil.getEntries
 <c:choose>
 	<c:when test="<%= readEntries %>">
 		<c:if test="<%= themeDisplay.isSignedIn() && !results.isEmpty() %>">
-			<div class="read-entries" id="readEntries">
+			<div class="read-entries" data-start="<%= start %>" id="readEntries">
 				<div class="header">
 					<span><%= LanguageUtil.get(pageContext, "read-entries") %></span>
 				</div>
@@ -108,3 +118,56 @@ List<AnnouncementsEntry> results = AnnouncementsEntryLocalServiceUtil.getEntries
 		</div>
 	</c:otherwise>
 </c:choose>
+
+<aui:script use="aui-base">
+	<c:choose>
+		<c:when test="<%= readEntries %>">
+			var container = A.one('#readEntriesContainer');
+		</c:when>
+		<c:otherwise>
+			var container = AUI().one('#unreadEntriesContainer');
+		</c:otherwise>
+	</c:choose>
+
+	container.delegate(
+		'click',
+		function(event) {
+			event.preventDefault();
+
+			if (container) {
+				var navURL = '';
+				var navLink = event.currentTarget;
+
+				var navParent = navLink.ancestor();
+
+				if (navParent.hasClass('left-nav')) {
+					<portlet:renderURL var="previousURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+						<portlet:param name="mvcPath" value="/view_entries.jsp" />
+						<portlet:param name="end" value="<%= String.valueOf(end - pageDelta) %>" />
+						<portlet:param name="readEntries" value='<%= readEntries ? "true" : "false" %>' />
+						<portlet:param name="start" value="<%= String.valueOf(start - pageDelta) %>" />
+					</portlet:renderURL>
+
+					navURL = '<%= previousURL %>';
+				}
+				else {
+					<portlet:renderURL var="nextURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+						<portlet:param name="mvcPath" value="/view_entries.jsp" />
+						<portlet:param name="end" value="<%= String.valueOf(end + pageDelta) %>" />
+						<portlet:param name="readEntries" value='<%= readEntries ? "true" : "false" %>' />
+						<portlet:param name="start" value="<%= String.valueOf(start + pageDelta) %>" />
+					</portlet:renderURL>
+
+					navURL = '<%= nextURL %>';
+				}
+
+				<c:if test="<%= readEntries %>">
+					navURL = Liferay.Announcements.appendTogglerState(navURL);
+				</c:if>
+
+				Liferay.Announcements.loadNode(container, navURL);
+			}
+		},
+		'.navigation span a'
+	);
+</aui:script>
