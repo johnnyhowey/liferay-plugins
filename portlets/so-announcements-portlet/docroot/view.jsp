@@ -31,6 +31,10 @@
 	</div>
 </c:if>
 
+<div class="unread-entries-container" id="unreadEntriesContainer"></div>
+
+<div class="read-entries-container" id="readEntriesContainer"></div>
+
 <aui:script use="aui-base">
 	var announcementEntries = A.one('#p_p_id<portlet:namespace />');
 
@@ -44,6 +48,13 @@
 </aui:script>
 
 <aui:script>
+	AUI().ready(
+		function() {
+			<portlet:namespace />loadReadEntries();
+			<portlet:namespace />loadUnreadEntries();
+		}
+	);
+
 	function <portlet:namespace />addEntry() {
 		<portlet:renderURL var="addEntryURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
 			<portlet:param name="mvcPath" value="/edit_entry.jsp" />
@@ -73,6 +84,30 @@
 					<portlet:namespace />unmarkEntry(entryId);
 				}
 			}
+
+	function <portlet:namespace />loadReadEntries() {
+		var readEntriesContainer = AUI().one('#readEntriesContainer');
+
+		if (readEntriesContainer) {
+			<portlet:renderURL var="readURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+				<portlet:param name="mvcPath" value="/view_entries.jsp" />
+				<portlet:param name="readEntries" value="true" />
+			</portlet:renderURL>
+
+			Liferay.Announcements.loadNode(readEntriesContainer, readURL);
+		}
+	}
+
+	function <portlet:namespace />loadUnreadEntries() {
+		var unreadEntriesContainer = AUI().one('#unreadEntriesContainer');
+
+		if (unreadEntriesContainer) {
+			<portlet:renderURL var="unreadURL" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>">
+				<portlet:param name="mvcPath" value="/view_entries.jsp" />
+				<portlet:param name="readEntries" value="false" />
+			</portlet:renderURL>
+
+			Liferay.Announcements.loadNode(unreadEntriesContainer, unreadURL);
 		}
 	}
 
@@ -88,10 +123,12 @@
 			{
 				entryId : entryId,
 				value: <%= AnnouncementsFlagConstants.HIDDEN %>
+			},
+			function() {
+				<portlet:namespace />loadReadEntries();
+				<portlet:namespace />loadUnreadEntries();
 			}
 		);
-
-		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
 	}
 
 	function <portlet:namespace />openWindow(url, title, modal, width) {
@@ -127,11 +164,13 @@
 					'/announcementsflag/delete-flag',
 					{
 						flagId: response.flagId
+					},
+					function() {
+						<portlet:namespace />loadReadEntries();
+						<portlet:namespace />loadUnreadEntries();
 					}
 				);
 			}
 		);
-
-		Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
 	}
 </aui:script>

@@ -5,6 +5,22 @@ AUI().use(
 		Liferay.namespace('Announcements');
 
 		Liferay.Announcements = {
+			loadNode: function(node, uri) {
+				if (node) {
+					if (!node.io) {
+						node.plug(
+							A.Plugin.IO,
+							{
+							autoLoad: false
+							}
+						);
+					}
+
+					node.io.set('uri', uri);
+					node.io.start();
+				}
+			},
+
 			toggleEntry: function(event, portletNamespace) {
 				var entryId = event.currentTarget.attr('data-entryId');
 
