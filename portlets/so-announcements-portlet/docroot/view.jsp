@@ -77,13 +77,21 @@
 			var container = entry.get('parentNode');
 
 			if (container) {
-				if (container.hasClass('unread-entries')) {
-					<portlet:namespace />markEntry(entryId);
-				}
-				else {
-					<portlet:namespace />unmarkEntry(entryId);
-				}
+				Liferay.Announcements.transitionEntry('#<portlet:namespace />' + entryId);
+
+				setTimeout(
+					function() {
+						if (container.hasClass('unread-entries')) {
+							<portlet:namespace />markEntry(entryId);
+						}
+						else {
+							<portlet:namespace />unmarkEntry(entryId);
+						}
+					},200
+				);
 			}
+		}
+	}
 
 	function <portlet:namespace />loadReadEntries() {
 		var readEntriesContainer = AUI().one('#readEntriesContainer');

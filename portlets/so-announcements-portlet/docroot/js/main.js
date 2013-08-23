@@ -87,6 +87,19 @@ AUI().use(
 						height: contentHeight
 					}
 				);
+			},
+
+			transitionEntry: function(id) {
+				var entry = A.one(id);
+
+				entry.transition(
+					{
+						opacity: {
+							duration: .5,
+							value: 0
+						}
+					}
+				);
 			}
 		};
 	}
