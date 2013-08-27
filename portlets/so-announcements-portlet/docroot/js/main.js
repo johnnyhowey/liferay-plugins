@@ -5,6 +5,50 @@ AUI().use(
 		Liferay.namespace('Announcements');
 
 		Liferay.Announcements = {
+			appendPageStart: function(url, id) {
+				var node = A.one(id);
+
+				if (node) {
+					var start = node.attr('data-start');
+
+					url = url + '&start=' + start;
+				}
+
+				return(url);
+			},
+
+			appendTogglerState: function(url) {
+				var header = A.one('#readEntries .header');
+
+				if (header) {
+					var expanded = 'false';
+
+					if (header.hasClass('aui-toggler-header-expanded')) {
+						expanded = 'true';
+					}
+
+					url = url + '&expanded=' + expanded;
+				}
+
+				return(url);
+			},
+
+			loadNode: function(node, uri) {
+				if (node) {
+					if (!node.io) {
+						node.plug(
+							A.Plugin.IO,
+							{
+							autoLoad: false
+							}
+						);
+					}
+
+					node.io.set('uri', uri);
+					node.io.start();
+				}
+			},
+
 			toggleEntry: function(event, portletNamespace) {
 				var entryId = event.currentTarget.attr('data-entryId');
 
@@ -41,6 +85,19 @@ AUI().use(
 						duration: 0.5,
 						easing: 'ease-in-out',
 						height: contentHeight
+					}
+				);
+			},
+
+			transitionEntry: function(id) {
+				var entry = A.one(id);
+
+				entry.transition(
+					{
+						opacity: {
+							duration: .5,
+							value: 0
+						}
 					}
 				);
 			}
