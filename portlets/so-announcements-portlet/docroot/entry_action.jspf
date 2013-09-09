@@ -54,7 +54,7 @@
 						</c:otherwise>
 					</c:choose>
 
-					<liferay-ui:message key='<%= (flagValue == AnnouncementsFlagConstants.HIDDEN) ? "mark-as-unread" : "mark-as-read" %>' />
+					<span><liferay-ui:message key='<%= (flagValue == AnnouncementsFlagConstants.HIDDEN) ? "mark-as-unread" : "mark-as-read" %>' /></span>
 				</a>
 			</span>
 		</c:if>
