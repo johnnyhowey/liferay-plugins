@@ -19,9 +19,11 @@ import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
+import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -168,17 +170,27 @@ public class TasksActivityInterpreter extends SOSocialActivityInterpreter {
 		sb.append(serviceContext.translate("assigned-to"));
 		sb.append(": </strong>");
 
-		User assigneeUser = UserLocalServiceUtil.fetchUser(
-			tasksEntry.getAssigneeUserId());
+		if (tasksEntry.getAssigneeUserId() > 0) {
+			String assigneeDisplayURL = null;
 
-		String assigneeDisplayURL = assigneeUser.getDisplayURL(
-			serviceContext.getThemeDisplay());
+			User assigneeUser = UserLocalServiceUtil.fetchUser(
+				tasksEntry.getAssigneeUserId());
 
-		String assigneeUserLink = wrapLink(
-			assigneeDisplayURL,
-			HtmlUtil.escape(tasksEntry.getAssigneeFullName()));
+			if (assigneeUser != null) {
+				assigneeDisplayURL = assigneeUser.getDisplayURL(
+					serviceContext.getThemeDisplay());
+			}
 
-		sb.append(assigneeUserLink);
+			String assigneeUserLink = wrapLink(
+				assigneeDisplayURL,
+				HtmlUtil.escape(tasksEntry.getAssigneeFullName()));
+
+			sb.append(assigneeUserLink);
+		}
+		else {
+			sb.append(serviceContext.translate("unassigned"));
+		}
+
 		sb.append("</span><span class=\"tasks-entry-due-date\"><strong>");
 		sb.append(serviceContext.translate("due-date"));
 		sb.append(": </strong>");
@@ -286,6 +298,12 @@ public class TasksActivityInterpreter extends SOSocialActivityInterpreter {
 			PermissionChecker permissionChecker, SocialActivity activity,
 			String actionId, ServiceContext serviceContext)
 		throws Exception {
+
+		Group group = GroupLocalServiceUtil.fetchGroup(activity.getGroupId());
+
+		if ((group != null) && group.isUser()) {
+			return false;
+		}
 
 		TasksEntry tasksEntry = TasksEntryLocalServiceUtil.fetchTasksEntry(
 			activity.getClassPK());
