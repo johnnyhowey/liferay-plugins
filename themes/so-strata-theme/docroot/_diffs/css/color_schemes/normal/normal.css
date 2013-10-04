@@ -7,6 +7,10 @@ body {
 	font: 13px/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+#wrapper {
+	padding: 0;
+}
+
 .so-strata-theme #dockbar {
 	margin-top: -32px;
 }
@@ -170,6 +174,10 @@ a {
 
 /* --------- Forms --------- */
 
+form#hrefFm {
+	margin: 0;
+}
+
 fieldset {
 	@include default-border;
 
@@ -309,6 +317,10 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 	border-left-width: 0;
 }
 
+.aui .row-fluid [class*="span"] {
+	margin-left: 0;
+}
+
 /* ---------- Breadcrumbs ---------- */
 
 .breadcrumbs-horizontal {
@@ -373,7 +385,7 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 	@include header;
 
 	border-width: 1px 0;
-	padding: 1em 1.5em;
+	padding: 0.86em 1.5em;
 
 	h1, h2 {
 		font-size: 1.8em;
@@ -445,7 +457,10 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 
 	input[type="text"] {
 		color: $defaultBorderColor;
+	}
 
+	form, input[type="text"] {
+		margin: 0;
 	}
 
 	input[type="text"]:focus, &.focus input[type="text"] {
@@ -775,8 +790,10 @@ div#navigation {
 	.portlet-title {
 		font-size: 1.5em;
 		font-weight: 200;
+		line-height: 1.25em;
+		margin: 0;
 
-		.icon {
+		.icon, img {
 			display: none;
 		}
 	}

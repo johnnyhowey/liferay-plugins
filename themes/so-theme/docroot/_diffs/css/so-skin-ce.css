@@ -857,11 +857,6 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	.so-portlet-dockbar-notifications .menu-button .notification-count {
 		background: #0070BA;
 	}
-
-	.user-avatar {
-		height: 28px;
-		overflow-y: hidden;
-	}
 }
 
 .page-customization-bar {
