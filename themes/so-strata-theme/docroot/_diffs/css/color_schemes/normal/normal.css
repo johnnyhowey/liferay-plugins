@@ -643,40 +643,9 @@ div#navigation {
 }
 
 .aui-dialog-iframe-popup #main-content {
+	@include box-shadow(none);
+
 	float: none;
-}
-
-.aui-tabview-list {
-	@include default-border;
-
-	padding: 0 0.45em;
-
-	@include normal-gradient;
-
-	.aui-tab, .aui-tab:first-child, .last, .first, .aui-tab-content {
-		border-width: 0;
-		padding: 0;
-	}
-
-	.aui-tab-content {
-		margin: -1px -1px 0 0;
-	}
-
-	.aui-tab-label {
-		font-weight: 200;
-		text-decoration: none;
-		margin-bottom: -1px;
-
-		&:hover, &:focus {
-			@include button-hover;
-
-			text-shadow: none;
-		}
-	}
-
-	.aui-tab-active .aui-tab-label, .aui-tab-label:active {
-		@include button-active;
-	}
 }
 
 /* ---------- Application CSS ---------- */
