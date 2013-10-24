@@ -134,7 +134,7 @@ html.aui {
 			width: auto;
 		}
 
-		.container {
+		.navbar-inner .container {
 			.nav-account-controls {
 				bottom: 100%;
 				left: auto;
@@ -144,6 +144,24 @@ html.aui {
 
 				.divider-vertical {
 					display: none;
+				}
+
+				li.dropdown {
+					> .dropdown-toggle {
+						background-color: rgba(0,0,0, 0);
+
+						@include transition-duration(0.5s);
+						@include transition-property(background-color);
+					}
+
+					&.open > .dropdown-toggle {
+						background-color: rgba(0,0,0, 0.48);
+					}
+				}
+
+				&.nav > li > a {
+					padding-bottom: 0.8em;
+					padding-top: 0.8em;
 				}
 			}
 		}
@@ -168,12 +186,22 @@ html.aui {
 	.dockbar.navbar-static-top .collapse .nav-account-controls {
 		position: absolute;
 		top: -42px;
+
+		.go-to .so-portlet-sites {
+			top: -3px;
+		}
 	}
 
 	.dockbar-split .dockbar .container .nav-account-controls,
 	.dockbar-split .dockbar.navbar-static-top .collapse .nav-account-controls {
 		position: absolute;
 		top: 0;
+
+
+		&.nav > li.dropdown > a {
+			padding-bottom: 0.45em;
+			padding-top: 0.45em;
+		}
 	}
 
 	.my-sites.dropdown {
@@ -202,6 +230,13 @@ html.aui {
 		}
 	}
 }
+
+.portlet-dockbar .nav-account-controls .go-to {
+	.so-portlet-sites .search .search-input {
+		border: 1px solid #1C2125;
+	}
+}
+
 
 @media (max-width:860px) {
 	.so-portlet-user-bar {
