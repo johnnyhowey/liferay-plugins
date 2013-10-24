@@ -386,7 +386,6 @@ $defaultTextColor: #202020;
 
 			.search-input {
 				background: #FFF;
-				border: 1px solid #1C2125;
 
 				@include border-radius(20px);
 				@include box-shadow(0 1px 2px rgba(0,0,0, 0.4) inset);
@@ -510,6 +509,26 @@ $defaultTextColor: #202020;
 
 		.sites-tabs, .sites-list-container, .control-container {
 			display: block;
+		}
+	}
+
+	.go-to {
+		display: block;
+		padding-left: 50px;
+		width: auto;
+
+		.so-portlet-sites {
+			top: -5px;
+		}
+	}
+}
+
+.dockbar-split {
+	.go-to {
+		height: 44px;
+
+		.so-portlet-sites {
+			top: 0;
 		}
 	}
 }
