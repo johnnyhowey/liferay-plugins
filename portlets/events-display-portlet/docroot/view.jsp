@@ -34,14 +34,14 @@ else {
 	groups.add(GroupLocalServiceUtil.getGroup(themeDisplay.getCompanyId(), GroupConstants.GUEST));
 }
 
-Calendar displayStartTimeJCal = (Calendar)jCal.clone();
+Calendar displayStartTimeJCalendar = (Calendar)jCalendar.clone();
 
-displayStartTimeJCal.set(Calendar.HOUR_OF_DAY, 0);
-displayStartTimeJCal.set(Calendar.MINUTE, 0);
-displayStartTimeJCal.set(Calendar.SECOND, 0);
-displayStartTimeJCal.set(Calendar.MILLISECOND, 0);
+displayStartTimeJCalendar.set(Calendar.HOUR_OF_DAY, 0);
+displayStartTimeJCalendar.set(Calendar.MINUTE, 0);
+displayStartTimeJCalendar.set(Calendar.SECOND, 0);
+displayStartTimeJCalendar.set(Calendar.MILLISECOND, 0);
 
-long displayEndTime = jCal.getTimeInMillis() + (Time.DAY * maxDaysDisplayed);
+long displayEndTime = jCalendar.getTimeInMillis() + (Time.DAY * maxDaysDisplayed);
 
 List<Long> calendarResourceIds = new ArrayList<Long>();
 
@@ -57,7 +57,7 @@ for (Group curGroup : groups) {
 
 int[] statuses = {WorkflowConstants.STATUS_APPROVED};
 
-List<CalendarBooking> calendarBookings = CalendarBookingServiceUtil.search(themeDisplay.getCompanyId(), null, null, ArrayUtil.toLongArray(calendarResourceIds), -1, null, displayStartTimeJCal.getTimeInMillis(), displayEndTime, true, statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
+List<CalendarBooking> calendarBookings = CalendarBookingServiceUtil.search(themeDisplay.getCompanyId(), null, null, ArrayUtil.toLongArray(calendarResourceIds), -1, null, displayStartTimeJCalendar.getTimeInMillis(), displayEndTime, true, statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
 if (calendarBookings.size() > 1) {
 	ListUtil.sort(calendarBookings, new CalendarBookingTimeComparator(locale));
@@ -67,11 +67,11 @@ List<CalendarBooking> todayBookings = new ArrayList<CalendarBooking>();
 List<CalendarBooking> upcomingBookings = new ArrayList<CalendarBooking>();
 
 for (CalendarBooking calendarBooking : calendarBookings) {
-	if (!calendarBooking.isAllDay() && (calendarBooking.getEndTime() < jCal.getTimeInMillis())) {
+	if (!calendarBooking.isAllDay() && (calendarBooking.getEndTime() < jCalendar.getTimeInMillis())) {
 		continue;
 	}
 
-	Calendar startTimeJCal = Calendar.getInstance(timeZone, locale);
+	Calendar startTimeJCalendar = Calendar.getInstance(timeZone, locale);
 
 	long startTime = calendarBooking.getStartTime();
 
@@ -83,9 +83,9 @@ for (CalendarBooking calendarBooking : calendarBookings) {
 		}
 	}
 
-	startTimeJCal.setTimeInMillis(startTime);
+	startTimeJCalendar.setTimeInMillis(startTime);
 
-	if (startTimeJCal.get(Calendar.DAY_OF_MONTH) <= jCal.get(Calendar.DAY_OF_MONTH)) {
+	if (startTimeJCalendar.get(Calendar.DAY_OF_MONTH) <= jCalendar.get(Calendar.DAY_OF_MONTH)) {
 		todayBookings.add(calendarBooking);
 	}
 	else {
