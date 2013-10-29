@@ -14,26 +14,22 @@
 
 package com.liferay.privatemessaging.service.impl;
 
+import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.security.auth.PrincipalException;
+import com.liferay.privatemessaging.model.UserThread;
 import com.liferay.privatemessaging.service.base.UserThreadServiceBaseImpl;
 
+import java.util.List;
+
 /**
- * The implementation of the user thread remote service.
- *
- * <p>
- * All custom service methods should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.privatemessaging.service.UserThreadService} interface.
- *
- * <p>
- * This is a remote service. Methods of this service are expected to have security checks based on the propagated JAAS credentials because this service can be accessed remotely.
- * </p>
- *
- * @author Brian Wing Shun Chan
- * @see com.liferay.privatemessaging.service.base.UserThreadServiceBaseImpl
- * @see com.liferay.privatemessaging.service.UserThreadServiceUtil
+ * @author Bruno Farache
  */
 public class UserThreadServiceImpl extends UserThreadServiceBaseImpl {
-	/*
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this interface directly. Always use {@link com.liferay.privatemessaging.service.UserThreadServiceUtil} to access the user thread remote service.
-	 */
+
+	public List<UserThread> getUserUserThreads(boolean deleted)
+		throws PrincipalException, SystemException {
+
+		return userThreadLocalService.getUserUserThreads(getUserId(), deleted);
+	}
+
 }
