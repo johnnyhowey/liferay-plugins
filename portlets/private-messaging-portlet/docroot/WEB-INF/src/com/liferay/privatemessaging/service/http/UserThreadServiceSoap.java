@@ -14,6 +14,13 @@
 
 package com.liferay.privatemessaging.service.http;
 
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+
+import com.liferay.privatemessaging.service.UserThreadServiceUtil;
+
+import java.rmi.RemoteException;
+
 /**
  * Provides the SOAP utility for the
  * {@link com.liferay.privatemessaging.service.UserThreadServiceUtil} service utility. The
@@ -55,4 +62,20 @@ package com.liferay.privatemessaging.service.http;
  * @generated
  */
 public class UserThreadServiceSoap {
+	public static com.liferay.privatemessaging.model.UserThreadSoap[] getUserUserThreads(
+		boolean deleted) throws RemoteException {
+		try {
+			java.util.List<com.liferay.privatemessaging.model.UserThread> returnValue =
+				UserThreadServiceUtil.getUserUserThreads(deleted);
+
+			return com.liferay.privatemessaging.model.UserThreadSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	private static Log _log = LogFactoryUtil.getLog(UserThreadServiceSoap.class);
 }

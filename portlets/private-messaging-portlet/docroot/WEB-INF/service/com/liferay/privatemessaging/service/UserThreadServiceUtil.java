@@ -63,6 +63,13 @@ public class UserThreadServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
+		boolean deleted)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.security.auth.PrincipalException {
+		return getService().getUserUserThreads(deleted);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

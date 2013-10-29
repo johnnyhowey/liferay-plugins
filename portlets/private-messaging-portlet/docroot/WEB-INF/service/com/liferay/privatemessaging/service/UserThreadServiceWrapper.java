@@ -56,6 +56,14 @@ public class UserThreadServiceWrapper implements UserThreadService,
 		return _userThreadService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	@Override
+	public java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
+		boolean deleted)
+		throws com.liferay.portal.kernel.exception.SystemException,
+			com.liferay.portal.security.auth.PrincipalException {
+		return _userThreadService.getUserUserThreads(deleted);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */
