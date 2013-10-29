@@ -62,6 +62,51 @@ import java.rmi.RemoteException;
  * @generated
  */
 public class UserThreadServiceSoap {
+	public static com.liferay.portlet.messageboards.model.MBMessage getLastThreadMessage(
+		long mbThreadId) throws RemoteException {
+		try {
+			com.liferay.portlet.messageboards.model.MBMessage returnValue = UserThreadServiceUtil.getLastThreadMessage(mbThreadId);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static com.liferay.portlet.messageboards.model.MBMessageSoap[] getThreadMessages(
+		long mbThreadId, int start, int end, boolean ascending)
+		throws RemoteException {
+		try {
+			java.util.List<com.liferay.portlet.messageboards.model.MBMessage> returnValue =
+				UserThreadServiceUtil.getThreadMessages(mbThreadId, start, end,
+					ascending);
+
+			return com.liferay.portlet.messageboards.model.MBMessageSoap.toSoapModels(returnValue);
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
+	public static int getThreadMessagesCount(long mbThreadId)
+		throws RemoteException {
+		try {
+			int returnValue = UserThreadServiceUtil.getThreadMessagesCount(mbThreadId);
+
+			return returnValue;
+		}
+		catch (Exception e) {
+			_log.error(e, e);
+
+			throw new RemoteException(e.getMessage());
+		}
+	}
+
 	public static com.liferay.privatemessaging.model.UserThreadSoap[] getUserUserThreads(
 		boolean deleted) throws RemoteException {
 		try {

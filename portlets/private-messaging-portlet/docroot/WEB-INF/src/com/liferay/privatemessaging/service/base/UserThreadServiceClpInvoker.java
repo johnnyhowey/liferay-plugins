@@ -32,9 +32,21 @@ public class UserThreadServiceClpInvoker {
 
 		_methodParameterTypes19 = new String[] { "java.lang.String" };
 
-		_methodName24 = "getUserUserThreads";
+		_methodName24 = "getLastThreadMessage";
 
-		_methodParameterTypes24 = new String[] { "boolean" };
+		_methodParameterTypes24 = new String[] { "long" };
+
+		_methodName25 = "getThreadMessages";
+
+		_methodParameterTypes25 = new String[] { "long", "int", "int", "boolean" };
+
+		_methodName26 = "getThreadMessagesCount";
+
+		_methodParameterTypes26 = new String[] { "long" };
+
+		_methodName27 = "getUserUserThreads";
+
+		_methodParameterTypes27 = new String[] { "boolean" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -53,6 +65,24 @@ public class UserThreadServiceClpInvoker {
 
 		if (_methodName24.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes24, parameterTypes)) {
+			return UserThreadServiceUtil.getLastThreadMessage(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName25.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes25, parameterTypes)) {
+			return UserThreadServiceUtil.getThreadMessages(((Long)arguments[0]).longValue(),
+				((Integer)arguments[1]).intValue(),
+				((Integer)arguments[2]).intValue(),
+				((Boolean)arguments[3]).booleanValue());
+		}
+
+		if (_methodName26.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes26, parameterTypes)) {
+			return UserThreadServiceUtil.getThreadMessagesCount(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName27.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes27, parameterTypes)) {
 			return UserThreadServiceUtil.getUserUserThreads(((Boolean)arguments[0]).booleanValue());
 		}
 
@@ -65,4 +95,10 @@ public class UserThreadServiceClpInvoker {
 	private String[] _methodParameterTypes19;
 	private String _methodName24;
 	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
+	private String _methodName26;
+	private String[] _methodParameterTypes26;
+	private String _methodName27;
+	private String[] _methodParameterTypes27;
 }
