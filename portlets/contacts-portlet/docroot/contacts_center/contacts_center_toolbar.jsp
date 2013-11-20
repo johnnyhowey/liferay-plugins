@@ -189,7 +189,7 @@ if (user2 != null) {
 					click: function(event) {
 						<portlet:renderURL var="redirectURL" windowState="<%= LiferayWindowState.NORMAL.toString() %>" />
 
-						var uri = '<liferay-portlet:renderURL portletName="1_WAR_privatemessagingportlet" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/new_message.jsp" /><portlet:param name="redirect" value="<%= redirectURL %>" /></liferay-portlet:renderURL>';
+						var uri = '<liferay-portlet:renderURL portletName="<%= PortletKeys.PRIVATE_MESSAGING %>" windowState="<%= LiferayWindowState.EXCLUSIVE.toString() %>"><portlet:param name="mvcPath" value="/new_message.jsp" /><portlet:param name="redirect" value="<%= redirectURL %>" /></liferay-portlet:renderURL>';
 
 						<c:choose>
 							<c:when test="<%= user2 != null %>">
@@ -199,6 +199,10 @@ if (user2 != null) {
 								var userIds = A.all('.lfr-contact-grid-item input').val();
 							</c:otherwise>
 						</c:choose>
+
+						var data = {};
+
+						data['<%= PortalUtil.getPortletNamespace(PortletKeys.PRIVATE_MESSAGING) %>userIds'] = userIds.join();
 
 						Liferay.Util.Window.getWindow(
 							{
@@ -214,9 +218,7 @@ if (user2 != null) {
 						).plug(
 							A.Plugin.IO,
 							{
-								data: {
-									<portlet:namespace />userIds: userIds.join()
-								},
+								data: data,
 								uri: uri
 							}
 						).render();
@@ -293,10 +295,10 @@ if (user2 != null) {
 			{
 				after: {
 					failure: function(event, id, obj) {
-						Liferay.ContactsCenter.showMessage(false);
+						Liferay.component('contactsCenter').showMessage(false);
 					},
 					success: function(event, id, obj) {
-						Liferay.ContactsCenter.renderSelectedContacts(this.get('responseData'), lastNameAnchor);
+						Liferay.component('contactsCenter').renderSelectedContacts(this.get('responseData'), lastNameAnchor);
 					}
 				},
 				data: {
