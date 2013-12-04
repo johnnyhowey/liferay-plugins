@@ -181,6 +181,24 @@ html.aui {
 						position: absolute;
 						top: 0;
 					}
+
+					.user-avatar-link {
+						.nav-item-label {
+							padding-left: 20px;
+							position: relative;
+						}
+
+						img {
+							border-width: 0;
+
+							@include border-radius(0);
+
+							clip: rect(0px, 20px, 20px, 0px);
+							left: -6px;
+							position: absolute;
+							top: 0;
+						}
+					}
 				}
 			}
 		}
