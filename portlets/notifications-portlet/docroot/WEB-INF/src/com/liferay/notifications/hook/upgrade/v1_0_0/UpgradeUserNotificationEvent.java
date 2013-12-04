@@ -103,7 +103,17 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 
 					payloadJSONObject.remove("entryId");
 				}
-				else {
+				else if (type.equals(PortletKeys.CONTACTS_CENTER)) {
+					long socialRequestId = payloadJSONObject.getLong(
+						"requestId");
+
+					if (socialRequestId > 0) {
+						payloadJSONObject.put("classPK", socialRequestId);
+
+						payloadJSONObject.remove("socialRequestId");
+					}
+				}
+				else if (type.equals(PortletKeys.SO_INVITE_MEMBERS)) {
 					long memberRequestId = payloadJSONObject.getLong(
 						"memberRequestId");
 
