@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
  *
@@ -12,23 +11,25 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/search/init.jsp" %>
+package com.liferay.samplepaypalclassic.util;
 
-<liferay-portlet:renderURL varImpl="searchURL" windowState="<%= WindowState.MAXIMIZED.toString() %>">
-	<portlet:param name="mvcPath" value="/search/search.jsp" />
-</liferay-portlet:renderURL>
+/**
+ * @author Douglas Wong
+ */
+public class PortletPropsKeys {
 
+	public static final String PAYPAL_APP_ID = "paypal.app.id";
 
-<aui:nav-bar>
-	<aui:nav-bar-search cssClass="pull-right">
-		<div class="form-search">
-			<aui:form action="<%= searchURL %>" method="get" name="searchFm">
-				<liferay-portlet:renderURLParams varImpl="searchURL" />
+	public static final String PAYPAL_PASSWORD = "paypal.password";
 
-				<liferay-ui:input-search />
-			</aui:form>
-		</div>
-	</aui:nav-bar-search>
-</aui:nav-bar>
+	public static final String PAYPAL_PRIMARY_RECEIVER_EMAIL =
+		"paypal.primary.receiver.email";
+
+	public static final String PAYPAL_SANDBOX_MODE = "paypal.sandbox.mode";
+
+	public static final String PAYPAL_SIGNATURE = "paypal.signature";
+
+	public static final String PAYPAL_USER_NAME = "paypal.user.name";
+
+}
