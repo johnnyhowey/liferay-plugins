@@ -17,6 +17,7 @@ package com.liferay.socialnetworking.summary.portlet;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -32,6 +33,7 @@ import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.MembershipRequestLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
@@ -43,8 +45,8 @@ import com.liferay.portlet.expando.service.ExpandoValueLocalServiceUtil;
 import com.liferay.portlet.social.model.SocialRelationConstants;
 import com.liferay.portlet.social.service.SocialRelationLocalServiceUtil;
 import com.liferay.portlet.social.service.SocialRequestLocalServiceUtil;
+import com.liferay.portlet.social.util.MembersRequestKeys;
 import com.liferay.socialnetworking.friends.social.FriendsRequestKeys;
-import com.liferay.socialnetworking.members.social.MembersRequestKeys;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.util.LinkedHashMap;
@@ -151,6 +153,14 @@ public class SummaryPortlet extends MVCPortlet {
 					group.getGroupId(), MembersRequestKeys.ADD_MEMBER,
 					StringPool.BLANK, user.getUserId());
 			}
+
+			ServiceContext serviceContext = ServiceContextFactory.getInstance(
+				actionRequest);
+
+			MembershipRequestLocalServiceUtil.addMembershipRequest(
+				themeDisplay.getUserId(), group.getGroupId(),
+				LanguageUtil.get(themeDisplay.getLocale(),
+				"requested-via-summary-portlet"), serviceContext);
 		}
 	}
 

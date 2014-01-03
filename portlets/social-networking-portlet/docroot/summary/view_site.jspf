@@ -21,7 +21,7 @@
 
 	<c:if test="<%= themeDisplay.isSignedIn() %>">
 		<c:choose>
-			<c:when test="<%= SocialRequestLocalServiceUtil.hasRequest(user.getUserId(), Group.class.getName(), group.getGroupId(), MembersRequestKeys.ADD_MEMBER, SocialRequestConstants.STATUS_PENDING) %>">
+			<c:when test="<%= SocialRequestLocalServiceUtil.hasRequest(user.getUserId(), Group.class.getName(), group.getGroupId(), MembersRequestKeys.ADD_MEMBER, SocialRequestConstants.STATUS_PENDING) || MembershipRequestLocalServiceUtil.hasMembershipRequest(user.getUserId(), group.getGroupId(), MembershipRequestConstants.STATUS_PENDING) %>">
 				<div class="alert alert-info join-site pending">
 					<aui:icon image="time" />
 

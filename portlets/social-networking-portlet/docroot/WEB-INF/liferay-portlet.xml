@@ -37,7 +37,7 @@
 		<portlet-name>5</portlet-name>
 		<icon>/icons/members.png</icon>
 		<social-activity-interpreter-class>com.liferay.socialnetworking.members.social.MembersActivityInterpreter</social-activity-interpreter-class>
-		<social-request-interpreter-class>com.liferay.socialnetworking.members.social.MembersRequestInterpreter</social-request-interpreter-class>
+		<social-request-interpreter-class>com.liferay.portlet.social.util.MembersRequestInterpreter</social-request-interpreter-class>
 		<header-portlet-css>/members/css/main.css</header-portlet-css>
 		<css-class-wrapper>social-networking-portlet-members</css-class-wrapper>
 	</portlet>

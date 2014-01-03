@@ -562,69 +562,6 @@
 		</field>
 	</javadoc>
 	<javadoc>
-		<name>MembersRequestInterpreter</name>
-		<type>com.liferay.socialnetworking.members.social.MembersRequestInterpreter</type>
-		<author><![CDATA[Brian Wing Shun Chan]]></author>
-		<author><![CDATA[M Murali Krishna Reddy]]></author>
-		<method>
-			<name>getClassNames</name>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-		</method>
-		<method>
-			<name>doInterpret</name>
-			<param>
-				<name>request</name>
-				<type>com.liferay.portlet.social.model.SocialRequest</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<param>
-				<name>themeDisplay</name>
-				<type>com.liferay.portal.theme.ThemeDisplay</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-			<throws>
-				<name>Exception</name>
-				<type>java.lang.Exception</type>
-				<comment><![CDATA[]]></comment>
-			</throws>
-		</method>
-		<method>
-			<name>doProcessConfirmation</name>
-			<param>
-				<name>request</name>
-				<type>com.liferay.portlet.social.model.SocialRequest</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<param>
-				<name>themeDisplay</name>
-				<type>com.liferay.portal.theme.ThemeDisplay</type>
-				<comment><![CDATA[]]></comment>
-			</param>
-			<return>
-				<comment><![CDATA[]]></comment>
-			</return>
-		</method>
-		<field>
-			<name>_CLASS_NAMES</name>
-		</field>
-		<field>
-			<name>_log</name>
-		</field>
-	</javadoc>
-	<javadoc>
-		<name>MembersRequestKeys</name>
-		<type>com.liferay.socialnetworking.members.social.MembersRequestKeys</type>
-		<author><![CDATA[Brian Wing Shun Chan]]></author>
-		<field>
-			<name>ADD_MEMBER</name>
-		</field>
-	</javadoc>
-	<javadoc>
 		<name>MeetupsEntryImpl</name>
 		<type>com.liferay.socialnetworking.model.impl.MeetupsEntryImpl</type>
 		<author><![CDATA[Brian Wing Shun Chan]]></author>
