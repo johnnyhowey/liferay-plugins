@@ -106,12 +106,6 @@ html.aui {
 			top: 56px;
 		}
 	}
-
-	.btn-group, .btn-group.open {
-		.dropdown-toggle {
-			background-image: url(../../../images/portlet/options_borderless.png);
-		}
-	}
 }
 
 .aui .dockbar-split.show-dockbar {
@@ -884,6 +878,10 @@ div#navigation {
 
 .portlet-borderless-container {
 	min-height: 0;
+}
+
+.portlet-borderless-bar .portlet-options a {
+	background-image: url(../../../images/portlet/options_borderless.png);
 }
 
 .controls-visible .portlet-borderless-container {
@@ -2301,7 +2299,7 @@ div#navigation {
 /* ---------- Responsive ---------- */
 
 html.aui {
-	@media (max-width:979px) {
+	@media (max-width: 979px) {
 		.navbar .nav-navigation {
 			display: block;
 		}
