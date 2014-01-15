@@ -106,12 +106,6 @@ html.aui {
 			top: 56px;
 		}
 	}
-
-	.btn-group, .btn-group.open {
-		.dropdown-toggle {
-			background-image: url(../../../images/portlet/options_borderless.png);
-		}
-	}
 }
 
 .aui .dockbar-split.show-dockbar {
@@ -423,6 +417,54 @@ a {
 
 .portlet-column-last .portlet-column {
 	border-left-width: 0;
+}
+
+/* ---------- Announcements ---------- */
+
+.so-announcements-portlet {
+	.unread-entries {
+		.entry-body, .entry-footer {
+			border-color: #F4A425;
+		}
+
+		.entry .title {
+			background: #F4A425;
+			color: #FFF;
+
+			a {
+				color: #FFF;
+				text-decoration: underline;
+			}
+		}
+
+		.important-entry .title {
+			background: #A20F0F;
+		}
+	}
+
+	.read-entries {
+		.title {
+			padding-bottom: 0;
+		}
+
+		.important-entry .title {
+			color: #A20F0F;
+		}
+	}
+
+	.entry-header .scope {
+		color: #8D071F;
+	}
+
+	.entry-footer-toolbar {
+		background: #E7E7E7;
+	}
+
+	.entries .important-entry {
+		.entry-body, .entry-footer {
+			border-color: #A20F0F;
+		}
+	}
 }
 
 /* ---------- Breadcrumbs ---------- */
@@ -884,6 +926,10 @@ div#navigation {
 
 .portlet-borderless-container {
 	min-height: 0;
+}
+
+.portlet-borderless-bar .portlet-options a {
+	background-image: url(../../../images/portlet/options_borderless.png);
 }
 
 .controls-visible .portlet-borderless-container {
@@ -1817,11 +1863,14 @@ div#navigation {
 
 	.answer {
 		background-color: #AAD049;
-		margin-right: 91px;
+
+		@include border-radius(4px 0 0 4px);
+
+		margin-right: 82px;
 		padding: 4px;
 		position: absolute;
 		right: 100%;
-		text-align: right;
+		text-align: center;
 		top: 0;
 		width: 79px;
 	}
@@ -1830,6 +1879,7 @@ div#navigation {
 		border-color: $defaultBorderColor;
 		border-width: 0 0 1px 1px;
 		margin: 0;
+		overflow: inherit;
 		padding: 8px 5px;
 
 		&.reply {
@@ -2301,7 +2351,7 @@ div#navigation {
 /* ---------- Responsive ---------- */
 
 html.aui {
-	@media (max-width:979px) {
+	@media (max-width: 979px) {
 		.navbar .nav-navigation {
 			display: block;
 		}
