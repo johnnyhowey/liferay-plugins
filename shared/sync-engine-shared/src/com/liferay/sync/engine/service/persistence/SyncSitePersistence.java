@@ -48,4 +48,10 @@ public class SyncSitePersistence extends BasePersistenceImpl<SyncSite, Long> {
 		return syncSites.get(0);
 	}
 
+	public List<SyncSite> findSyncSites(long syncAccountId)
+		throws SQLException {
+
+		return queryForEq("syncAccountId", syncAccountId);
+	}
+
 }

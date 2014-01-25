@@ -19,13 +19,12 @@ import com.liferay.sync.engine.model.SyncAccount;
 import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.service.SyncAccountService;
 import com.liferay.sync.engine.service.SyncFileService;
-import com.liferay.sync.engine.util.HttpUtil;
 
 import java.io.File;
-import java.io.InputStream;
+
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -33,18 +32,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.mockito.Mockito;
-
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 /**
  * @author Shinn Lok
  */
-@PowerMockIgnore({"javax.crypto.*"})
-@PrepareForTest(HttpUtil.class)
 @RunWith(PowerMockRunner.class)
 public class GetAllSyncDLObjectsEventTest extends BaseTestCase {
 
@@ -72,38 +64,25 @@ public class GetAllSyncDLObjectsEventTest extends BaseTestCase {
 
 		SyncAccountService.deleteSyncAccount(_syncAccount.getSyncAccountId());
 		SyncFileService.deleteSyncFile(_filePathSyncFile.getSyncFileId());
-		SyncFileService.deleteSyncFile(_syncFile.getSyncFileId());
+
+		for (SyncFile syncFile : _syncFiles) {
+			SyncFileService.deleteSyncFile(syncFile.getSyncFileId());
+		}
 	}
 
 	@Test
 	public void testRun() throws Exception {
-		PowerMockito.mockStatic(HttpUtil.class);
-
-		Class<?> clazz = getClass();
-
-		InputStream inputStream = clazz.getResourceAsStream(
-			"dependencies/test_1.json");
-
-		String response = IOUtils.toString(inputStream);
-
-		inputStream.close();
-
-		Mockito.when(
-			HttpUtil.executePost(
-				Mockito.anyLong(), Mockito.anyString(), Mockito.anyMap())
-		).thenReturn(
-			response
-		);
+		setMockPostResponse("dependencies/get_all_sync_dl_objects.json");
 
 		GetAllSyncDLObjectsEvent getAllSyncDLObjectsEvent =
 			new GetAllSyncDLObjectsEvent(_syncAccount.getSyncAccountId(), null);
 
 		getAllSyncDLObjectsEvent.run();
 
-		_syncFile = SyncFileService.fetchSyncFile(
-			_filePath + "/Document_1.txt", _syncAccount.getSyncAccountId());
+		_syncFiles = SyncFileService.findSyncFiles(
+			_syncAccount.getSyncAccountId());
 
-		Assert.assertNotNull(_syncFile);
+		Assert.assertEquals(_syncFiles.size(), 2);
 
 		File file = new File(_filePath + "/Document_1.txt");
 
@@ -113,6 +92,6 @@ public class GetAllSyncDLObjectsEventTest extends BaseTestCase {
 	private String _filePath;
 	private SyncFile _filePathSyncFile;
 	private SyncAccount _syncAccount;
-	private SyncFile _syncFile;
+	private List<SyncFile> _syncFiles;
 
 }
