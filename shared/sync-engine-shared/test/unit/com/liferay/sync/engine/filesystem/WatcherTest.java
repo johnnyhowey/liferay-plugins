@@ -51,10 +51,29 @@ public class WatcherTest extends BaseTestCase {
 
 		_syncSite = SyncSiteService.addSyncSite(
 			filePathName + "/test-site", 10184, syncAccount.getSyncAccountId());
+
+		SyncWatchEventProcessor syncWatchEventProcessor =
+			new SyncWatchEventProcessor();
+
+		syncWatchEventProcessor.process();
+
+		WatchEventListener watchEventListener = new SyncSiteWatchEventListener(
+			syncAccount.getSyncAccountId());
+
+		Path filePath = Paths.get(syncAccount.getFilePathName());
+
+		_watcher = new Watcher(filePath, true, watchEventListener);
+
+		Thread thread = new Thread(_watcher);
+
+		thread.start();
 	}
 
 	@After
+	@Override
 	public void tearDown() throws Exception {
+		_watcher.close();
+
 		super.tearDown();
 
 		SyncAccountService.deleteSyncAccount(syncAccount.getSyncAccountId());
@@ -72,57 +91,107 @@ public class WatcherTest extends BaseTestCase {
 	}
 
 	@Test
-	public void testRun() throws Exception {
+	public void testRunAddFile() throws Exception {
 		setMockPostResponse("dependencies/watcher_test_add_file.json");
 
-		SyncWatchEventProcessor syncWatchEventProcessor =
-			new SyncWatchEventProcessor();
+		Path filePath = Paths.get(_syncSite.getFilePathName() + "/test.txt");
 
-		syncWatchEventProcessor.process();
+		Files.createFile(filePath);
 
-		WatchEventListener watchEventListener = new SyncSiteWatchEventListener(
-			syncAccount.getSyncAccountId());
-
-		Path filePath = Paths.get(syncAccount.getFilePathName());
-
-		Watcher watcher = new Watcher(filePath, true, watchEventListener);
-
-		Thread thread = new Thread(watcher);
-
-		thread.start();
-
-		Path addFilePath = Paths.get(_syncSite.getFilePathName() + "/test.txt");
-
-		Files.createFile(addFilePath);
-
-		thread.sleep(5000);
+		Thread.sleep(5000);
 
 		_syncFiles = SyncFileService.findSyncFiles(
 			syncAccount.getSyncAccountId());
 
 		Assert.assertEquals(3, _syncFiles.size());
+	}
 
-		setMockPostResponse("dependencies/watcher_test_rename_file.json");
+	@Test
+	public void testRunDeleteFile() throws Exception {
+		setMockPostResponse("dependencies/watcher_test_delete_file.json");
 
-		Path renameFilePath = Paths.get(
-			_syncSite.getFilePathName() + "/test2.txt");
+		Path filePath = Paths.get(_syncSite.getFilePathName() + "/test.txt");
 
-		Files.move(addFilePath, renameFilePath);
+		Files.createFile(filePath);
 
-		thread.sleep(5000);
+		Thread.sleep(5000);
+
+		Files.delete(filePath);
+
+		Thread.sleep(5000);
 
 		_syncFiles = SyncFileService.findSyncFiles(
 			syncAccount.getSyncAccountId());
 
-		Assert.assertEquals(3, _syncFiles.size());
+		Assert.assertEquals(2, _syncFiles.size());
+		Assert.assertNull(
+			SyncFileService.fetchSyncFile(
+				FilePathNameUtil.getFilePathName(filePath),
+				syncAccount.getSyncAccountId()));
+	}
 
+	@Test
+	public void testRunMoveFile() throws Exception {
+		setMockPostResponse("dependencies/watcher_test_move_file.json");
+
+		Path sourceFilePath = Paths.get(
+			_syncSite.getFilePathName() + "/test.txt");
+
+		Files.createFile(sourceFilePath);
+
+		Path destinationFilePath = Paths.get(
+			_syncSite.getFilePathName() + "/test");
+
+		Files.createDirectory(destinationFilePath);
+
+		Thread.sleep(5000);
+
+		Files.move(
+			sourceFilePath,
+			destinationFilePath.resolve(sourceFilePath.getFileName()));
+
+		Thread.sleep(5000);
+
+		_syncFiles = SyncFileService.findSyncFiles(
+			syncAccount.getSyncAccountId());
+
+		Assert.assertEquals(4, _syncFiles.size());
 		Assert.assertNotNull(
 			SyncFileService.fetchSyncFile(
-				FilePathNameUtil.getFilePathName(renameFilePath),
+				FilePathNameUtil.getFilePathName(destinationFilePath),
+				syncAccount.getSyncAccountId()));
+	}
+
+	@Test
+	public void testRunRenameFile() throws Exception {
+		setMockPostResponse("dependencies/watcher_test_rename_file.json");
+
+		Path sourceFilePath = Paths.get(
+			_syncSite.getFilePathName() + "/test.txt");
+
+		Files.createFile(sourceFilePath);
+
+		Thread.sleep(5000);
+
+		Path destinationFilePath = Paths.get(
+			_syncSite.getFilePathName() + "/test2.txt");
+
+		Files.move(sourceFilePath, destinationFilePath);
+
+		Thread.sleep(5000);
+
+		_syncFiles = SyncFileService.findSyncFiles(
+			syncAccount.getSyncAccountId());
+
+		Assert.assertEquals(3, _syncFiles.size());
+		Assert.assertNotNull(
+			SyncFileService.fetchSyncFile(
+				FilePathNameUtil.getFilePathName(destinationFilePath),
 				syncAccount.getSyncAccountId()));
 	}
 
 	private List<SyncFile> _syncFiles;
 	private SyncSite _syncSite;
+	private Watcher _watcher;
 
 }
