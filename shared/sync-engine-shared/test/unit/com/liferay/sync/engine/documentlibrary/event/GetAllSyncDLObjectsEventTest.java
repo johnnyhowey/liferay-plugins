@@ -45,7 +45,7 @@ public class GetAllSyncDLObjectsEventTest extends BaseTestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 
-		_testFolderSyncFile = SyncFileService.addSyncFile(
+		SyncFileService.addSyncFile(
 			null, null, null,
 			FileUtil.getFileKey(syncAccount.getFilePathName()),
 			syncAccount.getFilePathName(), null, "test", 0, 0,
@@ -58,7 +58,6 @@ public class GetAllSyncDLObjectsEventTest extends BaseTestCase {
 		super.tearDown();
 
 		SyncAccountService.deleteSyncAccount(syncAccount.getSyncAccountId());
-		SyncFileService.deleteSyncFile(_testFolderSyncFile.getSyncFileId());
 
 		for (SyncFile syncFile : _syncFiles) {
 			SyncFileService.deleteSyncFile(syncFile.getSyncFileId());
@@ -67,7 +66,8 @@ public class GetAllSyncDLObjectsEventTest extends BaseTestCase {
 
 	@Test
 	public void testRun() throws Exception {
-		setMockPostResponse("dependencies/get_all_sync_dl_objects.json");
+		setGetResponse("dependencies/get_all_sync_dl_objects.json");
+		setPostResponse("dependencies/get_all_sync_dl_objects.json");
 
 		GetAllSyncDLObjectsEvent getAllSyncDLObjectsEvent =
 			new GetAllSyncDLObjectsEvent(syncAccount.getSyncAccountId(), null);
@@ -85,6 +85,5 @@ public class GetAllSyncDLObjectsEventTest extends BaseTestCase {
 	}
 
 	private List<SyncFile> _syncFiles;
-	private SyncFile _testFolderSyncFile;
 
 }

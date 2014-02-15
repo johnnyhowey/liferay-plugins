@@ -24,6 +24,7 @@ import com.liferay.sync.engine.service.SyncSiteService;
 import com.liferay.sync.engine.service.SyncWatchEventService;
 import com.liferay.sync.engine.util.FilePathNameUtil;
 import com.liferay.sync.engine.util.FileUtil;
+import com.liferay.sync.engine.util.OSDetector;
 
 import java.io.BufferedWriter;
 
@@ -100,13 +101,13 @@ public class WatcherTest extends BaseTestCase {
 
 	@Test
 	public void testRunAddFile() throws Exception {
-		setMockPostResponse("dependencies/watcher_test_add_file.json");
+		setPostResponse("dependencies/watcher_test_add_file.json");
 
 		Path filePath = Paths.get(_syncSite.getFilePathName() + "/test.txt");
 
 		Files.createFile(filePath);
 
-		Thread.sleep(1000);
+		sleep();
 
 		_syncFiles = SyncFileService.findSyncFiles(
 			syncAccount.getSyncAccountId());
@@ -115,18 +116,34 @@ public class WatcherTest extends BaseTestCase {
 	}
 
 	@Test
+	public void testRunAddIgnoredFile() throws Exception {
+		setPostResponse("dependencies/watcher_test_add_file.json");
+
+		Path filePath = Paths.get(_syncSite.getFilePathName() + "/.DS_Store");
+
+		Files.createFile(filePath);
+
+		sleep();
+
+		_syncFiles = SyncFileService.findSyncFiles(
+			syncAccount.getSyncAccountId());
+
+		Assert.assertEquals(2, _syncFiles.size());
+	}
+
+	@Test
 	public void testRunDeleteFile() throws Exception {
-		setMockPostResponse("dependencies/watcher_test_delete_file.json");
+		setPostResponse("dependencies/watcher_test_delete_file.json");
 
 		Path filePath = Paths.get(_syncSite.getFilePathName() + "/test.txt");
 
 		Files.createFile(filePath);
 
-		Thread.sleep(1000);
+		sleep();
 
 		Files.delete(filePath);
 
-		Thread.sleep(1000);
+		sleep();
 
 		_syncFiles = SyncFileService.findSyncFiles(
 			syncAccount.getSyncAccountId());
@@ -140,13 +157,13 @@ public class WatcherTest extends BaseTestCase {
 
 	@Test
 	public void testRunModifyFile() throws Exception {
-		setMockPostResponse("dependencies/watcher_test_modify_file.json");
+		setPostResponse("dependencies/watcher_test_modify_file.json");
 
 		Path filePath = Paths.get(_syncSite.getFilePathName() + "/test.txt");
 
 		Files.createFile(filePath);
 
-		Thread.sleep(1000);
+		sleep();
 
 		BufferedWriter bufferedWriter = Files.newBufferedWriter(
 			filePath, StandardCharsets.UTF_8);
@@ -155,7 +172,7 @@ public class WatcherTest extends BaseTestCase {
 
 		bufferedWriter.close();
 
-		Thread.sleep(1000);
+		sleep();
 
 		_syncFiles = SyncFileService.findSyncFiles(
 			syncAccount.getSyncAccountId());
@@ -173,7 +190,7 @@ public class WatcherTest extends BaseTestCase {
 
 	@Test
 	public void testRunMoveFile() throws Exception {
-		setMockPostResponse("dependencies/watcher_test_move_file.json");
+		setPostResponse("dependencies/watcher_test_move_file.json");
 
 		Path sourceFilePath = Paths.get(
 			_syncSite.getFilePathName() + "/test.txt");
@@ -185,13 +202,13 @@ public class WatcherTest extends BaseTestCase {
 
 		Files.createDirectory(destinationFilePath);
 
-		Thread.sleep(1000);
+		sleep();
 
 		Files.move(
 			sourceFilePath,
 			destinationFilePath.resolve(sourceFilePath.getFileName()));
 
-		Thread.sleep(1000);
+		sleep();
 
 		_syncFiles = SyncFileService.findSyncFiles(
 			syncAccount.getSyncAccountId());
@@ -205,21 +222,21 @@ public class WatcherTest extends BaseTestCase {
 
 	@Test
 	public void testRunRenameFile() throws Exception {
-		setMockPostResponse("dependencies/watcher_test_rename_file.json");
+		setPostResponse("dependencies/watcher_test_rename_file.json");
 
 		Path sourceFilePath = Paths.get(
 			_syncSite.getFilePathName() + "/test.txt");
 
 		Files.createFile(sourceFilePath);
 
-		Thread.sleep(1000);
+		sleep();
 
 		Path destinationFilePath = Paths.get(
 			_syncSite.getFilePathName() + "/test2.txt");
 
 		Files.move(sourceFilePath, destinationFilePath);
 
-		Thread.sleep(1000);
+		sleep();
 
 		_syncFiles = SyncFileService.findSyncFiles(
 			syncAccount.getSyncAccountId());
@@ -229,6 +246,15 @@ public class WatcherTest extends BaseTestCase {
 			SyncFileService.fetchSyncFile(
 				FilePathNameUtil.getFilePathName(destinationFilePath),
 				syncAccount.getSyncAccountId()));
+	}
+
+	protected void sleep() throws InterruptedException {
+		if (OSDetector.isApple()) {
+			Thread.sleep(3000);
+		}
+		else {
+			Thread.sleep(1000);
+		}
 	}
 
 	private List<SyncFile> _syncFiles;
