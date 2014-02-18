@@ -405,6 +405,10 @@ html.aui {
 	}
 }
 
+.aui .dockbar .navbar-inner ul.nav-account-controls > li:hover {
+	background-color: rgba(0, 0, 0, 0.48);
+}
+
 /* ---------- Forms ---------- */
 
 .aui {
