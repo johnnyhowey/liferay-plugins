@@ -389,24 +389,28 @@ html.aui {
 	}
 }
 
-.aui .dockbar-split.show-dockbar {
-	#wrapper, .so-portlet-user-bar {
-		border-left: 63px solid $controlBgColor;
+.aui {
+	.dockbar-split.show-dockbar {
+		#wrapper, .so-portlet-user-bar {
+			border-left: 63px solid $controlBgColor;
 
-		@include transition-duration(0.2s);
-		@include transition-property(border-left);
+			@include transition-duration(0.2s);
+			@include transition-property(border-left);
+		}
+
+		.dockbar .navbar-inner {
+			.nav-add-controls {
+				background: $controlBgColor;
+				bottom: 0;
+				margin-left: 0;
+				top: 0;
+			}
+
+			ul.nav-account-controls > li:hover {
+				background-color: rgba(0, 0, 0, 0.48);
+			}
+		}
 	}
-
-	.dockbar .navbar-inner .nav-add-controls {
-		background: $controlBgColor;
-		bottom: 0;
-		margin-left: 0;
-		top: 0;
-	}
-}
-
-.aui .dockbar .navbar-inner ul.nav-account-controls > li:hover {
-	background-color: rgba(0, 0, 0, 0.48);
 }
 
 /* ---------- Forms ---------- */
