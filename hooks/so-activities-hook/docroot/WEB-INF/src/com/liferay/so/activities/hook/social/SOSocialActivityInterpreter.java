@@ -122,12 +122,11 @@ public abstract class SOSocialActivityInterpreter
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil.forClass(
 			SocialActivity.class);
 
+		dynamicQuery.add(
+			RestrictionsFactoryUtil.eq("activitySetId", activitySetId));
 		dynamicQuery.setProjection(
 			ProjectionFactoryUtil.distinct(
 				ProjectionFactoryUtil.property("userId")));
-
-		dynamicQuery.add(
-			RestrictionsFactoryUtil.eq("activitySetId", activitySetId));
 
 		return SocialActivityLocalServiceUtil.dynamicQuery(dynamicQuery);
 	}
@@ -353,6 +352,10 @@ public abstract class SOSocialActivityInterpreter
 
 		String titlePattern = getTitlePattern(null, activity);
 
+		if (Validator.isNull(titlePattern)) {
+			return null;
+		}
+
 		Object[] titleArguments = getTitleArguments(
 			null, activity, null, null, serviceContext);
 
@@ -377,6 +380,10 @@ public abstract class SOSocialActivityInterpreter
 		sb.append("<div class=\"activity-action\">");
 
 		String titlePattern = getTitlePattern(null, activitySet);
+
+		if (Validator.isNull(titlePattern)) {
+			return null;
+		}
 
 		Object[] titleArguments = getTitleArguments(
 			null, activitySet, null, null, serviceContext);
