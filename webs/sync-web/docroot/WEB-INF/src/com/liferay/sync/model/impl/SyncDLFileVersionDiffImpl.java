@@ -12,23 +12,14 @@
  * details.
  */
 
-package com.liferay.sync.util;
+package com.liferay.sync.model.impl;
 
 /**
- * @author Dennis Ju
+ * @author Brian Wing Shun Chan
  */
-public class PortletPropsKeys {
+public class SyncDLFileVersionDiffImpl extends SyncDLFileVersionDiffBaseImpl {
 
-	public static final String SYNC_AUTH_VERIFIER_PIPELINE =
-		"sync.auth.verifier.pipeline";
-
-	public static final String SYNC_FILE_DIFF_CACHE_DELETE_INTERVAL =
-		"sync.file.diff.cache.delete.interval";
-
-	public static final String SYNC_FILE_DIFF_CACHE_ENABLED =
-		"sync.file.diff.cache.enabled";
-
-	public static final String SYNC_FILE_DIFF_CACHE_EXPIRATION_TIME =
-		"sync.file.diff.cache.expiration.time";
+	public SyncDLFileVersionDiffImpl() {
+	}
 
 }
