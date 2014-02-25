@@ -402,7 +402,8 @@ public class SyncFileService {
 
 		// Local sync file
 
-		String changeLog = String.valueOf(syncFile.getVersion() + .1);
+		String changeLog = String.valueOf(
+			Double.valueOf(syncFile.getVersion()) + .1);
 		String checksum = FileUtil.getChecksum(filePath);
 		String name = String.valueOf(filePath.getFileName());
 
