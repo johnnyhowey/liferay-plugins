@@ -137,8 +137,23 @@ for (UserNotificationEvent userNotificationEvent : userNotificationEvents) {
 </c:if>
 
 <c:if test="<%= !fullView %>">
+
+	<%
+	long notificationsPlid = themeDisplay.getPlid();
+
+	if (layout.isTypeControlPanel()) {
+		notificationsPlid = LayoutLocalServiceUtil.getDefaultPlid(user.getGroupId());
+	}
+
+	if (notificationsPlid == LayoutConstants.DEFAULT_PLID) {
+		Group guestGroup = GroupLocalServiceUtil.fetchGroup(user.getCompanyId(), GroupConstants.GUEST);
+
+		notificationsPlid = guestGroup.getDefaultPublicPlid();
+	}
+	%>
+
 	<li class="bottom message">
-		<liferay-portlet:renderURL portletName="<%= PortletKeys.NOTIFICATIONS %>" var="viewAllNotifications" windowState="<%= LiferayWindowState.MAXIMIZED.toString() %>">
+		<liferay-portlet:renderURL plid="<%= notificationsPlid %>" portletName="<%= PortletKeys.NOTIFICATIONS %>" var="viewAllNotifications" windowState="<%= LiferayWindowState.MAXIMIZED.toString() %>">
 			<portlet:param name="mvcPath" value="/notifications/view.jsp" />
 		</liferay-portlet:renderURL>
 
