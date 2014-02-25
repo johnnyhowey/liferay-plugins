@@ -14,15 +14,23 @@
 
 package com.liferay.chat.video;
 
+import com.liferay.portal.kernel.json.JSONFactoryUtil;
+import com.liferay.portal.kernel.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Philippe Proulx
  */
 public class WebRTCManager {
+
+	public WebRTCManager() {
+		_webRTCManagers.add(this);
+	}
 
 	public List<Long> getAvailableWebRTCClientIds() {
 		List<Long> availableUserIds = new ArrayList<Long>();
@@ -51,6 +59,25 @@ public class WebRTCManager {
 	}
 
 	public void removeWebRTCClient(long userId) {
+		WebRTCClient webRTCClient = getWebRTCClient(userId);
+
+		if (webRTCClient == null) {
+			return;
+		}
+
+		webRTCClient.removeBilateralWebRTCConnections();
+
+		_webRTCClients.remove(userId);
+	}
+
+	public void updateWebRTCClientPresence(long userId) {
+		WebRTCClient webRTCClient = getWebRTCClient(userId);
+
+		if (webRTCClient == null) {
+			return;
+		}
+
+		webRTCClient.updatePresenceTime();
 	}
 
 	protected void addWebRTCClient(long userId) {
@@ -58,6 +85,64 @@ public class WebRTCManager {
 			_webRTCClients.put(userId, new WebRTCClient(userId));
 		}
 	}
+
+	protected void checkWebRTCConnectionsStates() {
+		for (WebRTCClient webRTCClient : _webRTCClients.values()) {
+			for (WebRTCClient otherWebRTCClient :
+					webRTCClient.getWebRTCClients()) {
+
+				WebRTCConnection webRTCConnection =
+					webRTCClient.getWebRTCConnection(otherWebRTCClient);
+
+				if (webRTCConnection.getState() !=
+						WebRTCConnection.State.INITIATED) {
+
+					continue;
+				}
+
+				long initiatedDurationTime =
+					webRTCConnection.getInitiatedDurationTime();
+
+				if (initiatedDurationTime <= _CONNECTION_TIMEOUT_TIME) {
+					continue;
+				}
+
+				webRTCClient.removeBilateralWebRTCConnection(otherWebRTCClient);
+
+				JSONObject messageJSONObject =
+					JSONFactoryUtil.createJSONObject();
+
+				messageJSONObject.put("reason", "timeout");
+				messageJSONObject.put("status", "lost");
+				messageJSONObject.put("type", "status");
+
+				pushConnectionStateWebRTCMail(
+					webRTCClient, otherWebRTCClient, messageJSONObject);
+
+				pushConnectionStateWebRTCMail(
+					otherWebRTCClient, webRTCClient, messageJSONObject);
+			}
+		}
+	}
+
+	protected void pushConnectionStateWebRTCMail(
+		WebRTCClient sourceWebRTCClient, WebRTCClient destinationWebRTCClient,
+		JSONObject messageJSONObject) {
+
+		ConnectionStateWebRTCMail connectionStateWebRTCMail =
+			new ConnectionStateWebRTCMail(
+				sourceWebRTCClient.getUserId(), messageJSONObject);
+
+		WebRTCMailbox destinationWebRTCMailbox =
+			destinationWebRTCClient.getOutgoingWebRTCMailbox();
+
+		destinationWebRTCMailbox.pushWebRTCMail(connectionStateWebRTCMail);
+	}
+
+	private static long _CONNECTION_TIMEOUT_TIME = 60000;
+
+	private static List<WebRTCManager> _webRTCManagers =
+		new CopyOnWriteArrayList<WebRTCManager>();
 
 	private Map<Long, WebRTCClient> _webRTCClients =
 		new ConcurrentHashMap<Long, WebRTCClient>();

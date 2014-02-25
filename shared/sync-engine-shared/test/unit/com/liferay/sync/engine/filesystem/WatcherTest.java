@@ -120,9 +120,30 @@ public class WatcherTest extends BaseTestCase {
 	public void testRunAddIgnoredFile() throws Exception {
 		setPostResponse("dependencies/watcher_test_add_file.json");
 
-		Path filePath = Paths.get(_syncSite.getFilePathName() + "/.DS_Store");
+		if (OSDetector.isWindows()) {
+			Path hiddenFilePath = Paths.get(
+				_syncSite.getFilePathName() + "/hidden_file.txt");
 
-		Files.createFile(filePath);
+			Files.createFile(hiddenFilePath);
+
+			Files.setAttribute(hiddenFilePath, "dos:hidden", true);
+
+			Path shortcutFilePath = Paths.get(
+				_syncSite.getFilePathName() + "/test.txt - Shortcut.lnk");
+
+			Files.createFile(shortcutFilePath);
+		}
+		else {
+			Path ignoredFilePath = Paths.get(
+				_syncSite.getFilePathName() + "/.DS_Store");
+
+			Files.createFile(ignoredFilePath);
+
+			Path symbolicLinkFilePath = Paths.get(
+				_syncSite.getFilePathName() + "/symbolic_link");
+
+			Files.createSymbolicLink(symbolicLinkFilePath, ignoredFilePath);
+		}
 
 		sleep();
 
@@ -198,16 +219,15 @@ public class WatcherTest extends BaseTestCase {
 
 		Files.createFile(sourceFilePath);
 
-		Path destinationFilePath = Paths.get(
-			_syncSite.getFilePathName() + "/test");
+		Path targetFilePath = Paths.get(_syncSite.getFilePathName() + "/test");
 
-		Files.createDirectory(destinationFilePath);
+		Files.createDirectory(targetFilePath);
 
 		sleep();
 
 		Files.move(
 			sourceFilePath,
-			destinationFilePath.resolve(sourceFilePath.getFileName()));
+			targetFilePath.resolve(sourceFilePath.getFileName()));
 
 		sleep();
 
@@ -217,7 +237,7 @@ public class WatcherTest extends BaseTestCase {
 		Assert.assertEquals(4, _syncFiles.size());
 		Assert.assertNotNull(
 			SyncFileService.fetchSyncFile(
-				FilePathNameUtil.getFilePathName(destinationFilePath),
+				FilePathNameUtil.getFilePathName(targetFilePath),
 				syncAccount.getSyncAccountId()));
 	}
 
@@ -232,10 +252,10 @@ public class WatcherTest extends BaseTestCase {
 
 		sleep();
 
-		Path destinationFilePath = Paths.get(
+		Path targetFilePath = Paths.get(
 			_syncSite.getFilePathName() + "/test2.txt");
 
-		Files.move(sourceFilePath, destinationFilePath);
+		Files.move(sourceFilePath, targetFilePath);
 
 		sleep();
 
@@ -245,7 +265,7 @@ public class WatcherTest extends BaseTestCase {
 		Assert.assertEquals(3, _syncFiles.size());
 		Assert.assertNotNull(
 			SyncFileService.fetchSyncFile(
-				FilePathNameUtil.getFilePathName(destinationFilePath),
+				FilePathNameUtil.getFilePathName(targetFilePath),
 				syncAccount.getSyncAccountId()));
 	}
 

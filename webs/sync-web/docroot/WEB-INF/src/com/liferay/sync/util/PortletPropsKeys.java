@@ -22,4 +22,13 @@ public class PortletPropsKeys {
 	public static final String SYNC_AUTH_VERIFIER_PIPELINE =
 		"sync.auth.verifier.pipeline";
 
+	public static final String SYNC_FILE_DIFF_CACHE_DELETE_INTERVAL =
+		"sync.file.diff.cache.delete.interval";
+
+	public static final String SYNC_FILE_DIFF_CACHE_ENABLED =
+		"sync.file.diff.cache.enabled";
+
+	public static final String SYNC_FILE_DIFF_CACHE_EXPIRATION_TIME =
+		"sync.file.diff.cache.expiration.time";
+
 }
