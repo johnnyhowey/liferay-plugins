@@ -14,6 +14,8 @@
 
 package com.liferay.portal.settings;
 
+import com.liferay.portal.settings.impl.ServiceCompanySettings;
+
 import java.util.Properties;
 
 import org.junit.Assert;

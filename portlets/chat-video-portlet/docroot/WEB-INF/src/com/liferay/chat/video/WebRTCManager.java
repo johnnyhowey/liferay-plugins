@@ -22,15 +22,70 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author Philippe Proulx
  */
 public class WebRTCManager {
 
-	public WebRTCManager() {
-		_webRTCManagers.add(this);
+	public void answer(
+		long sourceUserId, long destinationUserId, boolean answer) {
+
+		addWebRTCClient(sourceUserId);
+
+		if (!hasAvailableWebRTCClient(sourceUserId)) {
+			return;
+		}
+
+		if (!hasAvailableWebRTCClient(destinationUserId)) {
+			pushErrorWebRTCMail(
+				destinationUserId, sourceUserId, "unavailable_user");
+
+			return;
+		}
+
+		WebRTCClient sourceWebRTCClient = getWebRTCClient(sourceUserId);
+		WebRTCClient destinationWebRTCClient = getWebRTCClient(
+			destinationUserId);
+
+		if (!isValidWebRTCConnectionState(
+				sourceWebRTCClient, destinationWebRTCClient,
+				WebRTCConnection.State.INITIATED)) {
+
+			pushErrorWebRTCMail(
+				destinationUserId, sourceUserId, "invalid_state");
+
+			return;
+		}
+
+		WebRTCConnection webRTCConnection =
+			sourceWebRTCClient.getWebRTCConnection(destinationWebRTCClient);
+
+		WebRTCClient webRTCConnectionSourceWebRTCClient =
+			webRTCConnection.getSourceWebRTCClient();
+
+		if (webRTCConnectionSourceWebRTCClient == sourceWebRTCClient) {
+			pushErrorWebRTCMail(
+				destinationUserId, sourceUserId, "cannot_answer");
+
+			return;
+		}
+
+		if (answer) {
+			webRTCConnection.setState(WebRTCConnection.State.CONNECTED);
+		}
+		else {
+			sourceWebRTCClient.removeBilateralWebRTCConnection(
+				destinationWebRTCClient);
+		}
+
+		JSONObject messageJSONObject = JSONFactoryUtil.createJSONObject();
+
+		messageJSONObject.put("type", "answer");
+		messageJSONObject.put("answer", answer);
+
+		pushConnectionStateWebRTCMail(
+			sourceWebRTCClient, destinationWebRTCClient, messageJSONObject);
 	}
 
 	public void call(long sourceUserId, long destinationUserId) {
@@ -93,6 +148,32 @@ public class WebRTCManager {
 
 	public WebRTCClient getWebRTCClient(long userId) {
 		return _webRTCClients.get(userId);
+	}
+
+	public void hangUp(long sourceUserId, long destinationUserId) {
+		WebRTCClient sourceWebRTCClient = getWebRTCClient(sourceUserId);
+
+		if (sourceWebRTCClient == null) {
+			return;
+		}
+
+		WebRTCClient destinationWebRTCClient = getWebRTCClient(
+			destinationUserId);
+
+		if (destinationWebRTCClient == null) {
+			return;
+		}
+
+		if (sourceWebRTCClient.hasWebRTCConnection(destinationWebRTCClient)) {
+			sourceWebRTCClient.removeBilateralWebRTCConnection(
+				destinationWebRTCClient);
+
+			pushLostConnectionStateWebRTCMail(
+				sourceWebRTCClient, destinationWebRTCClient, "hang_up");
+
+			pushLostConnectionStateWebRTCMail(
+				destinationWebRTCClient, sourceWebRTCClient, "hang_up");
+		}
 	}
 
 	public boolean hasAvailableWebRTCClient(long userId) {
@@ -353,9 +434,6 @@ public class WebRTCManager {
 	private static long _CONNECTION_TIMEOUT_DURATION_TIME = 60000;
 
 	private static long _PRESENCE_TIMEOUT_DURATION_TIME = 30000;
-
-	private static List<WebRTCManager> _webRTCManagers =
-		new CopyOnWriteArrayList<WebRTCManager>();
 
 	private Map<Long, WebRTCClient> _webRTCClients =
 		new ConcurrentHashMap<Long, WebRTCClient>();
