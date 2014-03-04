@@ -27,6 +27,8 @@ import com.liferay.so.activities.util.PortletPropsKeys;
 import com.liferay.so.activities.util.PortletPropsValues;
 import com.liferay.util.portlet.PortletProps;
 
+import java.util.List;
+
 /**
  * @author Brian Wing Shun Chan
  * @author Jonathan Lee
@@ -48,6 +50,19 @@ public class StartupAction extends SimpleAction {
 	}
 
 	protected void initSocialActivityInterpreters() {
+
+		List<SocialActivityInterpreter> socialActivityInterpreters =
+			SocialActivityInterpreterLocalServiceUtil.getActivityInterpreters(
+				"SO");
+
+		if(socialActivityInterpreters != null) {
+			while (socialActivityInterpreters.iterator().hasNext()) {
+				SocialActivityInterpreterLocalServiceUtil.
+					deleteActivityInterpreter(
+						socialActivityInterpreters.iterator().next());
+			}
+		}
+
 		String[] portletIds =
 			PortletPropsValues.SOCIAL_ACTIVITY_INTERPRETER_PORTLET_IDS;
 
