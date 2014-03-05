@@ -14,12 +14,12 @@
 
 package com.liferay.sync.engine.documentlibrary.event;
 
+import com.liferay.sync.engine.documentlibrary.handler.BaseHandler;
 import com.liferay.sync.engine.model.SyncAccount;
 import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.service.SyncAccountService;
 import com.liferay.sync.engine.service.SyncFileService;
 import com.liferay.sync.engine.util.FileUtil;
-import com.liferay.sync.engine.util.HttpUtil;
 import com.liferay.sync.engine.util.StreamUtil;
 
 import java.io.OutputStream;
@@ -47,9 +47,14 @@ public class DownloadFileEvent extends BaseEvent {
 	protected String processRequest() throws Exception {
 		SyncFile syncFile = (SyncFile)getParameterValue("syncFile");
 
+		syncFile.setState(SyncFile.STATE_IN_PROGRESS);
+		syncFile.setUiEvent(SyncFile.UI_EVENT_DOWNLOADING);
+
+		SyncFileService.update(syncFile);
+
 		StringBuilder sb = new StringBuilder(7);
 
-		sb.append(replaceUrlPath(getSyncAccountId()));
+		sb.append(replaceURLPath(getSyncAccountId()));
 		sb.append("/");
 		sb.append(syncFile.getRepositoryId());
 		sb.append("/");
@@ -57,7 +62,7 @@ public class DownloadFileEvent extends BaseEvent {
 		sb.append("/");
 		sb.append(getParameterValue("patch"));
 
-		return HttpUtil.executeGet(getSyncAccountId(), sb.toString());
+		return executeGet(sb.toString(), new BaseHandler());
 	}
 
 	@Override
@@ -74,6 +79,8 @@ public class DownloadFileEvent extends BaseEvent {
 			outputStream.write(response.getBytes());
 
 			syncFile.setFileKey(FileUtil.getFileKey(filePath));
+			syncFile.setState(SyncFile.STATE_SYNCED);
+			syncFile.setUiEvent(SyncFile.UI_EVENT_DOWNLOADED);
 
 			SyncFileService.update(syncFile);
 		}
@@ -82,7 +89,7 @@ public class DownloadFileEvent extends BaseEvent {
 		}
 	}
 
-	protected String replaceUrlPath(long syncAccountId) throws Exception {
+	protected String replaceURLPath(long syncAccountId) throws Exception {
 		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
 			syncAccountId);
 
