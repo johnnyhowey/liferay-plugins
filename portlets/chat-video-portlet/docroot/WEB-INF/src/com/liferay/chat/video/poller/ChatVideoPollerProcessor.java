@@ -54,9 +54,9 @@ public class ChatVideoPollerProcessor extends BasePollerProcessor {
 		WebRTCClient webRTCClient = _webRTCManager.getWebRTCClient(
 			pollerRequest.getUserId());
 
-		if (webRTCClient != null) {
-			JSONArray webRTCMailsJSONArray = JSONFactoryUtil.createJSONArray();
+		JSONArray webRTCMailsJSONArray = JSONFactoryUtil.createJSONArray();
 
+		if (webRTCClient != null) {
 			WebRTCMailbox webRTCMailbox =
 				webRTCClient.getOutgoingWebRTCMailbox();
 
@@ -65,16 +65,17 @@ public class ChatVideoPollerProcessor extends BasePollerProcessor {
 			for (WebRTCMail webRTCMail : webRTCMails) {
 				JSONObject mailJSONObject = JSONFactoryUtil.createJSONObject();
 
-				mailJSONObject.put("message", webRTCMail.getMessageJSON());
+				mailJSONObject.put(
+					"message", webRTCMail.getMessageJSONObject());
 				mailJSONObject.put(
 					"sourceUserId", webRTCMail.getSourceUserId());
 				mailJSONObject.put("type", webRTCMail.getMessageType());
 
 				webRTCMailsJSONArray.put(mailJSONObject);
 			}
-
-			webRTCResponseJSONObject.put("mails", webRTCMailsJSONArray);
 		}
+
+		webRTCResponseJSONObject.put("mails", webRTCMailsJSONArray);
 
 		pollerResponse.setParameter("webRTCResponse", webRTCResponseJSONObject);
 	}
