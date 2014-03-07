@@ -47,6 +47,14 @@ $defaultTextColor: #202020;
 				float: right;
 			}
 
+			.favorite-not-allowed {
+				background: url(../images/star_empty.png) no-repeat 0 50%;
+				float: right;
+				height: 16px;
+				margin: 10px 5px;
+				width: 16px;
+			}
+
 			.unfavorite a {
 				background: url(../images/star.png) no-repeat 0 50%;
 				float: right;
@@ -174,7 +182,6 @@ $defaultTextColor: #202020;
 
 			.delete-not-allowed {
 				background: url(@theme_image_path@/common/delete.png) no-repeat 0 50%;
-				cursor: default;
 				float: right;
 				height: 16px;
 				margin: 0 5px;
@@ -187,6 +194,14 @@ $defaultTextColor: #202020;
 				display: block;
 				font-size: 11px;
 				padding-right: 75px;
+			}
+
+			.favorite-not-allowed {
+				background: url(../images/star_empty.png) no-repeat 0 50%;
+				float: right;
+				height: 16px;
+				margin: 0 5px;
+				width: 16px;
 			}
 
 			.private-pages {

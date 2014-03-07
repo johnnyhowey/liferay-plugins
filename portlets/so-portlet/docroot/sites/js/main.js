@@ -349,6 +349,8 @@ AUI().use(
 									classNames.push('member');
 								}
 
+								var favoriteHtml = result.favoriteURL ? '<span class="action favorite" title="' + Liferay.Language.get("add-this-site-into-my-favorites") + '"><a href="' + result.favoriteURL + '">' + Liferay.Language.get('favorite') + '</a></span>' : '<span class="action unfavorite" title="' + Liferay.Language.get("remove-this-site-from-my-favorites") + '"><a href="' + result.unfavoriteURL + '">' + Liferay.Language.get('unfavorite') + '</a></span>';
+
 								var name = result.name;
 
 								if (result.publicLayoutsURL) {
@@ -361,12 +363,15 @@ AUI().use(
 								else if (!result.publicLayoutsURL && result.privateLayoutsURL) {
 									name = '<a href="' + result.privateLayoutsURL + '">' + name + '</a>';
 								}
+								else {
+									favoriteHtml = '<span class="action favorite-not-allowed" title="' + Liferay.Language.get("favorite-is-not-allowed-unless-you-have-a-membership") + '"></span>';
+								}
 
 								return A.Lang.sub(
 									siteTemplate,
 									{
 										classNames: classNames.join(' '),
-										favoriteHtml: (result.favoriteURL ? '<span class="action favorite" title="' + Liferay.Language.get("add-this-site-into-my-favorites") + '"><a href="' + result.favoriteURL + '">' + Liferay.Language.get('favorite') + '</a></span>' : '<span class="action unfavorite" title="' + Liferay.Language.get("remove-this-site-from-my-favorites") + '"><a href="' + result.unfavoriteURL + '">' + Liferay.Language.get('unfavorite') + '</a></span>'),
+										favoriteHtml: favoriteHtml,
 										siteName: name
 									}
 								);
