@@ -92,14 +92,41 @@ $theme.include($body_top_include)
 				#end
 			#end
 
-			#if ($is_signed_in)
-				<a class="config-icon" href="javascript:;" id="toggleDockbar">
-					<img alt="#language("configuration") #language("icon")" height="16" src="$images_folder/custom/cog.png" width="16" />
+			#set ($group_permission = $groupPermssion)
+			#set ($layout_permission = $layoutPermission)
+			#set ($layout_type_portlet = $layoutTypePortlet)
+			#set ($permission_checker = $permissionChecker)
+			#set ($portlet_permission = $portletPermission)
 
-					<span class="aui-helper-hidden">
-						#language("toggle") #language("javax.portlet.title.145")
-					</span>
-				</a>
+			#set ($layout = $theme_display.getLayout())
+			#set ($group = $layout.getGroup())
+
+			#set ($has_layout_add_permission = false)
+
+			#if ($layout.getParentLayoutId() == 0)
+				#set ($has_layout_add_permission = $group_permission.contains($permission_checker, $group.getGroupId(), "ADD_LAYOUT"))
+			#else
+				#set ($has_layout_add_permission = $layout_permission.contains($permission_checker, $layout, "ADD_LAYOUT"))
+			#end
+
+			#set ($has_layout_customize_permission = $layout_permission.contains($permission_checker, $layout, "CUSTOMIZE"))
+			#set ($has_layout_update_permission = $layout_permission.contains($permission_checker, $layout, "UPDATE"))
+
+			#set ($show_add_controls = $has_layout_add_permission || $has_layout_update_permission || ($layout_type_portlet.isCustomizable() && $layout_type_portlet.isCustomizedView() && $has_layout_customize_permission))
+			#set ($show_edit_controls = $theme_display.isShowLayoutTemplatesIcon() || $theme_display.isShowPageSettingsIcon())
+			#set ($show_preview_controls = $has_layout_update_permission || $group_permission.contains($permission_checker, $group.getGroupId(), "PREVIEW_IN_DEVICE"))
+			#set ($show_toggle_controls = ((!$group.hasStagingGroup) || $group.isStagingGroup()) && ($has_layout_update_permission || ($layout_type_portlet.isCustomizable() && $layout_type_portlet.isCustomizedView()) || $portlet_permission.hasConfigurationPermission($permission_checker, $theme_display.getSiteGroupId(), $layout, "CONFIGURATION")))
+
+			#if ($is_signed_in)
+				#if ($member && ((!$group.isControlPanel()) && $user.isSetupComplete() && ($show_add_controls || $show_preview_controls || $show_edit_controls || $show_toggle_controls)))
+					<a class="config-icon" href="javascript:;" id="toggleDockbar">
+						<img alt="#language("configuration") #language("icon")" height="16" src="$images_folder/custom/cog.png" width="16" />
+
+						<span class="aui-helper-hidden">
+							#language("toggle") #language("javax.portlet.title.145")
+						</span>
+					</a>
+				#end
 
 				<div id="page-search">
 					$theme.search()
