@@ -891,16 +891,9 @@ html.aui {
 			margin-left: 0;
 
 			li:before {
-				-webkit-font-smoothing: antialiased;
 				color: #DDD;
-				content: "\f0ac";
-				font-family: 'fontawesome-alloy';
-				font-style: normal;
-				font-variant: normal;
-				font-weight: normal;
-				line-height: 1;
-				speak: none;
-				text-transform: none;
+
+				@include font-awesome("\f0ac");
 			}
 
 			a {
@@ -1105,15 +1098,7 @@ html.aui {
 		margin-bottom: 10px;
 
 		.accordion-toggle:before {
-			-webkit-font-smoothing: antialiased;
-			content: "\f0da";
-			font-family: 'fontawesome-alloy';
-			font-style: normal;
-			font-variant: normal;
-			font-weight: normal;
-			line-height: 1;
-			speak: none;
-			text-transform: none;
+			@include font-awesome("\f0da");
 		}
 
 		.toggler-header-expanded .accordion-toggle:before {
