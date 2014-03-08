@@ -182,6 +182,7 @@ $defaultTextColor: #202020;
 
 			.delete-not-allowed {
 				background: url(@theme_image_path@/common/delete.png) no-repeat 0 50%;
+				filter: alpha(opacity=20);
 				float: right;
 				height: 16px;
 				margin: 0 5px;
