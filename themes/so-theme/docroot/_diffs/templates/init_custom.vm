@@ -24,6 +24,7 @@
 
 #if ($is_signed_in)
 	#set ($has_layout_add_permission = false)
+	#set ($member = true)
 
 	#if ($layout.getParentLayoutId() == 0)
 		#set ($has_layout_add_permission = $groupPermission.contains($permissionChecker, $page_group.getGroupId(), "ADD_LAYOUT"))
