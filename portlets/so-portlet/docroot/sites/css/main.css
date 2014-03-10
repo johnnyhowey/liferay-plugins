@@ -18,10 +18,28 @@ $defaultTextColor: #202020;
 		margin: 1em 0;
 
 		li {
-			background: url(@portal_ctx@/html/icons/sites_admin.png) no-repeat 10px 50%;
+			background: no-repeat 10px 50%;
 			border: 1px solid #E8EFF4;
 			margin: 4px;
 			padding: 3px 10px 3px 30px;
+			position: relative;
+
+			&:before {
+				-webkit-font-smoothing: antialiased;
+				color: #DDD;
+				content: "\f0ac";
+				font-family: 'fontawesome-alloy';
+				font-size: 18px;
+				font-style: normal;
+				font-variant: normal;
+				font-weight: normal;
+				left: 10px;
+				line-height: 1;
+				position: absolute;
+				speak: none;
+				text-transform: none;
+				top: 7px;
+			}
 
 			span {
 				display: block;
@@ -73,6 +91,10 @@ $defaultTextColor: #202020;
 					background-color: transparent;
 					border: 1px solid #E8EFF4;
 				}
+
+				&:before {
+					display: none;
+				}
 			}
 
 			&.more {
@@ -84,10 +106,18 @@ $defaultTextColor: #202020;
 					display: block;
 					padding: 0.5em 33px;
 				}
+
+				&:before {
+					display: none;
+				}
 			}
 
 			&.social-office-enabled {
 				background-image: url(@portal_ctx@/html/icons/social_office.png);
+
+				&:before {
+					display: none;
+				}
 			}
 		}
 
@@ -351,8 +381,10 @@ $defaultTextColor: #202020;
 			@include menu-mix;
 
 			padding: 3.4em 0 0;
+			position: absolute;
 			right: 0;
 			visibility: hidden;
+			width: 100px;
 			z-index: 1;
 
 			a, a:hover, li.has-menu:hover a {
@@ -376,7 +408,7 @@ $defaultTextColor: #202020;
 			position: absolute;
 			right: 0;
 			text-align: right;
-			top: 0.5em;
+			top: 0.6em;
 			visibility: visible;
 			width: auto;
 
@@ -394,6 +426,10 @@ $defaultTextColor: #202020;
 				text-align: left;
 				text-indent: 0.5em;
 				width: 75%;
+
+				&:hover {
+					border-color: #2571AD;
+				}
 			}
 
 			input[type=image] {
@@ -409,6 +445,10 @@ $defaultTextColor: #202020;
 			border-top: 1px solid rgba(0,0,0, 0.1);
 			float: none;
 			padding: 1em;
+
+			.control-group, select {
+				margin-bottom: 0;
+			}
 
 			select {
 				display: block;
@@ -523,6 +563,28 @@ $defaultTextColor: #202020;
 		display: block;
 		height: 43px;
 		width: auto;
+	}
+}
+
+.ie7 .portlet-dockbar .so-portlet-sites {
+	.site-list-container {
+		.member {
+			height: 32px;
+		}
+
+		.favorite, .name {
+			position: absolute;
+			top: 0;
+		}
+
+		.name a {
+			width: 280px;
+		}
+	}
+
+	.toolbar-content button {
+		display: inline;
+		width: 49%;
 	}
 }
 
