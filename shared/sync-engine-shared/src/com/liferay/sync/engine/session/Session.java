@@ -14,6 +14,9 @@
 
 package com.liferay.sync.engine.session;
 
+import com.btr.proxy.search.ProxySearch;
+
+import java.net.ProxySelector;
 import java.net.URL;
 
 import java.nio.charset.Charset;
@@ -36,6 +39,7 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.conn.routing.HttpRoutePlanner;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.ContentBody;
@@ -45,6 +49,7 @@ import org.apache.http.impl.auth.BasicScheme;
 import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.SystemDefaultRoutePlanner;
 import org.apache.http.protocol.BasicHttpContext;
 
 /**
@@ -68,6 +73,7 @@ public class Session {
 		httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
 
 		httpClientBuilder.setMaxConnPerRoute(2);
+		httpClientBuilder.setRoutePlanner(_getHttpRoutePlanner());
 
 		_httpClient = httpClientBuilder.build();
 
@@ -162,6 +168,24 @@ public class Session {
 			filePath.toFile(), ContentType.create(mimeType), fileName);
 	}
 
+	private HttpRoutePlanner _getHttpRoutePlanner() {
+		if (_httpRoutePlanner != null) {
+			return _httpRoutePlanner;
+		}
+
+		ProxySearch proxySearch = ProxySearch.getDefaultProxySearch();
+
+		ProxySelector proxySelector = proxySearch.getProxySelector();
+
+		if (proxySelector == null) {
+			proxySelector = ProxySelector.getDefault();
+		}
+
+		_httpRoutePlanner = new SystemDefaultRoutePlanner(proxySelector);
+
+		return _httpRoutePlanner;
+	}
+
 	private MultipartEntityBuilder _getMultipartEntityBuilder(
 		Map<String, Object> parameters) {
 
@@ -185,6 +209,8 @@ public class Session {
 			String.valueOf(value),
 			ContentType.create(MediaType.TEXT_PLAIN, Charset.defaultCharset()));
 	}
+
+	private static HttpRoutePlanner _httpRoutePlanner;
 
 	private HttpClient _httpClient;
 	private HttpHost _httpHost;
