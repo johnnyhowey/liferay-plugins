@@ -490,6 +490,12 @@ html.aui {
 	}
 }
 
+/* ---------- HTML editor ---------- */
+
+body.html-editor {
+	word-wrap: break-word;
+}
+
 /* ---------- Layout ---------- */
 
 .aui .row-fluid {
