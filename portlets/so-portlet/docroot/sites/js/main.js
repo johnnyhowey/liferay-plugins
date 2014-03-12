@@ -349,7 +349,7 @@ AUI().use(
 									classNames.push('member');
 								}
 
-								var name = result.name;
+								var name = Liferay.Util.escapeHTML(result.name);
 
 								if (result.publicLayoutsURL) {
 									name = '<a href="' + result.publicLayoutsURL + '">' + name + '</a>';
