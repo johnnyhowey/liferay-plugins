@@ -351,55 +351,20 @@ public class SitesPortlet extends MVCPortlet {
 					groupJSONObject.put("membershipRequested", true);
 				}
 			}
-			else if (member) {
-				boolean memberOfOrganization = false;
-				boolean memberOfUserGroup = false;
+			else if (member &&
+					 !isOrganizationOrUserGroupMember(
+						 themeDisplay.getUserId(), group.getGroupId())) {
 
-				List<Organization> siteOrganizations =
-					OrganizationLocalServiceUtil.getGroupOrganizations(
-						group.getGroupId());
+				siteAssignmentsPortletURL.setParameter(
+					"removeUserIds", String.valueOf(themeDisplay.getUserId()));
 
-				for (Organization siteOrganization : siteOrganizations) {
-					memberOfOrganization =
-						OrganizationLocalServiceUtil.hasUserOrganization(
-							themeDisplay.getUserId(),
-							siteOrganization.getOrganizationId());
+				if ((group.getType() != GroupConstants.TYPE_SITE_PRIVATE) ||
+					GroupPermissionUtil.contains(
+						permissionChecker, group.getGroupId(),
+						ActionKeys.ASSIGN_MEMBERS)) {
 
-					if (memberOfOrganization) {
-						break;
-					}
-				}
-
-				if (!memberOfOrganization) {
-					List<UserGroup> siteUserGroups =
-						UserGroupLocalServiceUtil.getGroupUserGroups(
-							group.getGroupId());
-
-					for (UserGroup siteUserGroup : siteUserGroups) {
-						memberOfUserGroup =
-							UserGroupLocalServiceUtil.hasUserUserGroup(
-								themeDisplay.getUserId(),
-								siteUserGroup.getUserGroupId());
-
-						if (memberOfUserGroup) {
-							break;
-						}
-					}
-				}
-
-				if (!memberOfOrganization && !memberOfUserGroup) {
-					siteAssignmentsPortletURL.setParameter(
-						"removeUserIds",
-						String.valueOf(themeDisplay.getUserId()));
-
-					if ((group.getType() != GroupConstants.TYPE_SITE_PRIVATE) ||
-						GroupPermissionUtil.contains(
-							permissionChecker, group.getGroupId(),
-							ActionKeys.ASSIGN_MEMBERS)) {
-
-						groupJSONObject.put(
-							"leaveUrl", siteAssignmentsPortletURL.toString());
-					}
+					groupJSONObject.put(
+						"leaveUrl", siteAssignmentsPortletURL.toString());
 				}
 			}
 
@@ -639,6 +604,34 @@ public class SitesPortlet extends MVCPortlet {
 		}
 
 		return StringUtil.split(GetterUtil.getString(value), 0L);
+	}
+
+	protected boolean isOrganizationOrUserGroupMember(long userId, long groupId)
+		throws Exception {
+
+		List<Organization> organizations =
+			OrganizationLocalServiceUtil.getGroupOrganizations(groupId);
+
+		for (Organization organization : organizations) {
+			if (OrganizationLocalServiceUtil.hasUserOrganization(
+					userId, organization.getOrganizationId())) {
+
+				return true;
+			}
+		}
+
+		List<UserGroup> userGroups =
+			UserGroupLocalServiceUtil.getGroupUserGroups(groupId);
+
+		for (UserGroup userGroup : userGroups) {
+			if (UserGroupLocalServiceUtil.hasUserUserGroup(
+					userId, userGroup.getUserGroupId())) {
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	protected void setCustomJspServletContextName(Group group)
