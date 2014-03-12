@@ -27,6 +27,7 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.util.ClassResolverUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassInvoker;
@@ -246,7 +247,8 @@ public class SitesPortlet extends MVCPortlet {
 
 			groupJSONObject.put("description", group.getDescription());
 			groupJSONObject.put(
-				"name", group.getDescriptiveName(themeDisplay.getLocale()));
+				"name", HtmlUtil.escape(
+					group.getDescriptiveName(themeDisplay.getLocale())));
 
 			boolean member = GroupLocalServiceUtil.hasUserGroup(
 				themeDisplay.getUserId(), group.getGroupId());
@@ -366,21 +368,28 @@ public class SitesPortlet extends MVCPortlet {
 			if (GroupPermissionUtil.contains(
 					permissionChecker, group.getGroupId(), ActionKeys.DELETE)) {
 
-				PortletURL deletePortletURL =
-					liferayPortletResponse.createActionURL(
-						PortletKeys.SITES_ADMIN);
+				if (group.getGroupId() == themeDisplay.getSiteGroupId()) {
+					groupJSONObject.put("deleteURL", StringPool.FALSE);
+				}
+				else {
+					PortletURL deletePortletURL =
+						liferayPortletResponse.createActionURL(
+							PortletKeys.SITES_ADMIN);
 
-				deletePortletURL.setWindowState(WindowState.NORMAL);
+					deletePortletURL.setWindowState(WindowState.NORMAL);
 
-				deletePortletURL.setParameter(
-					"struts_action", "/sites_admin/edit_site");
-				deletePortletURL.setParameter(Constants.CMD, Constants.DELETE);
-				deletePortletURL.setParameter(
-					"redirect", themeDisplay.getURLCurrent());
-				deletePortletURL.setParameter(
-					"groupId", String.valueOf(group.getGroupId()));
+					deletePortletURL.setParameter(
+						"struts_action", "/sites_admin/edit_site");
+					deletePortletURL.setParameter(
+						Constants.CMD, Constants.DELETE);
+					deletePortletURL.setParameter(
+						"redirect", themeDisplay.getURLCurrent());
+					deletePortletURL.setParameter(
+						"groupId", String.valueOf(group.getGroupId()));
 
-				groupJSONObject.put("deleteURL", deletePortletURL.toString());
+					groupJSONObject.put(
+						"deleteURL", deletePortletURL.toString());
+				}
 			}
 
 			PortletURL favoritePortletURL = resourceResponse.createActionURL();
@@ -394,20 +403,26 @@ public class SitesPortlet extends MVCPortlet {
 			favoritePortletURL.setParameter(
 				"groupId", String.valueOf(group.getGroupId()));
 
-			if (!FavoriteSiteLocalServiceUtil.isFavoriteSite(
-					themeDisplay.getUserId(), group.getGroupId())) {
-
-				favoritePortletURL.setParameter(Constants.CMD, Constants.ADD);
-
-				groupJSONObject.put(
-					"favoriteURL", favoritePortletURL.toString());
+			if (!member && !group.hasPublicLayouts()) {
+				groupJSONObject.put("favoriteURL", StringPool.BLANK);
 			}
 			else {
-				favoritePortletURL.setParameter(
-					Constants.CMD, Constants.DELETE);
+				if (!FavoriteSiteLocalServiceUtil.isFavoriteSite(
+						themeDisplay.getUserId(), group.getGroupId())) {
 
-				groupJSONObject.put(
-					"unfavoriteURL", favoritePortletURL.toString());
+					favoritePortletURL.setParameter(
+						Constants.CMD, Constants.ADD);
+
+					groupJSONObject.put(
+						"favoriteURL", favoritePortletURL.toString());
+				}
+				else {
+					favoritePortletURL.setParameter(
+						Constants.CMD, Constants.DELETE);
+
+					groupJSONObject.put(
+						"unfavoriteURL", favoritePortletURL.toString());
+				}
 			}
 
 			jsonArray.put(groupJSONObject);
