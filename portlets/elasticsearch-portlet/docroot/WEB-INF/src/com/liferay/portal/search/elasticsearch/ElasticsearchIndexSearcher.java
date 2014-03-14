@@ -38,6 +38,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch.connection.ElasticsearchConnectionManager;
 import com.liferay.portal.search.elasticsearch.facet.ElasticsearchFacetFieldCollector;
 import com.liferay.portal.search.elasticsearch.facet.FacetProcessorUtil;
+import com.liferay.portal.search.elasticsearch.util.DocumentTypes;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -98,6 +99,8 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 		QueryBuilder queryBuilder = QueryBuilders.queryString(query.toString());
 
 		searchRequestBuilder.setQuery(queryBuilder);
+
+		searchRequestBuilder.setTypes(DocumentTypes.LIFERAY);
 
 		SearchRequest searchRequest = searchRequestBuilder.request();
 
@@ -209,8 +212,16 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 		String localizedContentName = DocumentImpl.getLocalizedName(
 			locale, fieldName);
 
+		String snippetFieldName = localizedContentName;
+
 		HighlightField highlightField = highlightFields.get(
 			localizedContentName);
+
+		if (highlightField == null) {
+			highlightField = highlightFields.get(fieldName);
+
+			snippetFieldName = fieldName;
+		}
 
 		if (highlightField != null) {
 			Text[] texts = highlightField.fragments();
@@ -233,14 +244,6 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 
 		snippet = StringUtil.replace(snippet, "<em>", StringPool.BLANK);
 		snippet = StringUtil.replace(snippet, "</em>", StringPool.BLANK);
-
-		String snippetFieldName = localizedContentName;
-
-		if (highlightField == null) {
-			highlightField = highlightFields.get(fieldName);
-
-			snippetFieldName = fieldName;
-		}
 
 		document.addText(
 			Field.SNIPPET.concat(StringPool.UNDERLINE).concat(snippetFieldName),
@@ -352,7 +355,6 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 				scores.add(searchHit.getScore());
 
 				addSnippets(searchHit, document, queryConfig, queryTerms);
-
 			}
 		}
 

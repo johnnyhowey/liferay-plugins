@@ -51,6 +51,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.portlet.PortletConfig;
 
@@ -796,10 +797,12 @@ public class MailManager {
 
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
+		ResourceBundle resourceBundle = _portletConfig.getResourceBundle(
+			_user.getLocale());
+
+		jsonObject.put("message", LanguageUtil.get(resourceBundle, message));
+
 		jsonObject.put("status", status);
-		jsonObject.put(
-			"message",
-			LanguageUtil.get(_portletConfig, _user.getLocale(), message));
 
 		if (Validator.isNotNull(value)) {
 			jsonObject.put("value", value);
