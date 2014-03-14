@@ -323,6 +323,24 @@ AUI().use(
 
 				var buffer = [];
 
+				var getSiteActionHtml = function(actionClassNames, actionLinkClassName, actionTitle, actionURL) {
+					var siteActionTemplate =
+						'<span class="{actionClassNames}" title="{actionTitle}">' +
+							'<a class="{actionLinkClassName}" href="{actionURL}">' +
+							'</a>' +
+						'</span>';
+
+					return 	A.Lang.sub(
+						siteActionTemplate,
+						{
+							actionClassNames: actionClassNames,
+							actionLinkClassName: actionLinkClassName,
+							actionTitle: actionTitle,
+							actionURL: actionURL,
+						}
+					);
+				};
+
 				if (results.length == 0) {
 					buffer.push(
 						'<li class="empty">' + Liferay.Language.get('there-are-no-results') + '</li>'
@@ -331,7 +349,7 @@ AUI().use(
 				else {
 					var siteTemplate =
 						'<li class="{classNames}">' +
-							'{favoriteHtml}' +
+							'{favoriteHTML}' +
 							'<span class="name">{siteName}</span>' +
 						'</li>';
 
@@ -345,8 +363,22 @@ AUI().use(
 									classNames.push('social-office-enabled');
 								}
 
-								if (!result.joinUrl) {
+								if (!result.joinURL) {
 									classNames.push('member');
+								}
+
+								var favoriteHTML;
+
+								if (result.favoriteURL == '') {
+									favoriteHTML = getSiteActionHtml('favorite', 'disabled', Liferay.Language.get("you-must-be-a-member-of-the-site-to-add-to-favorites"), '#');
+								}
+								else {
+									if (result.favoriteURL) {
+										favoriteHTML = getSiteActionHtml('action favorite', '', Liferay.Language.get("add-to-favorites"), result.favoriteURL);
+									}
+									else {
+										favoriteHTML = getSiteActionHtml('action unfavorite', '', Liferay.Language.get("remove-from-favorites"), result.unfavoriteURL);
+									}
 								}
 
 								var name = result.name;
@@ -366,7 +398,7 @@ AUI().use(
 									siteTemplate,
 									{
 										classNames: classNames.join(' '),
-										favoriteHtml: (result.favoriteURL ? '<span class="action favorite"><a href="' + result.favoriteURL + '">' + Liferay.Language.get('favorite') + '</a></span>' : '<span class="action unfavorite"><a href="' + result.unfavoriteURL + '">' + Liferay.Language.get('unfavorite') + '</a></span>'),
+										favoriteHTML: favoriteHTML,
 										siteName: name
 									}
 								);
