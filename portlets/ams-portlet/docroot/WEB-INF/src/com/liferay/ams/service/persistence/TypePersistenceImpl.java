@@ -36,7 +36,6 @@ import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringUtil;
-import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -518,7 +517,7 @@ public class TypePersistenceImpl extends BasePersistenceImpl<Type>
 
 					Collections.sort(list);
 
-					list = new UnmodifiableList<Type>(list);
+					list = Collections.unmodifiableList(list);
 				}
 				else {
 					list = (List<Type>)QueryUtil.list(q, getDialect(), start,
