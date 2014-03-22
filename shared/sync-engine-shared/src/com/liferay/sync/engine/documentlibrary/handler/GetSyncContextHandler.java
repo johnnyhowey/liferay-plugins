@@ -12,37 +12,33 @@
  * details.
  */
 
-package com.liferay.sync.engine.documentlibrary.event;
+package com.liferay.sync.engine.documentlibrary.handler;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import com.liferay.sync.engine.model.SyncFile;
-
-import java.util.Map;
+import com.liferay.sync.engine.documentlibrary.event.Event;
+import com.liferay.sync.engine.model.SyncAccount;
+import com.liferay.sync.engine.service.SyncAccountService;
 
 /**
  * @author Shinn Lok
  */
-public class GetFileEntrySyncDLObjectEvent extends BaseEvent {
+public class GetSyncContextHandler extends BaseJSONHandler {
 
-	public GetFileEntrySyncDLObjectEvent(
-		long syncAccountId, Map<String, Object> parameters) {
+	public GetSyncContextHandler(Event event) {
+		super(event);
+	}
 
-		super(syncAccountId, _URL_PATH, parameters);
+	@Override
+	public void handleException(Exception e) {
 	}
 
 	@Override
 	protected void processResponse(String response) throws Exception {
-		ObjectMapper objectMapper = new ObjectMapper();
+		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
+			getSyncAccountId());
 
-		SyncFile syncFile = objectMapper.readValue(
-			response, new TypeReference<SyncFile>() {});
+		syncAccount.setState(SyncAccount.STATE_CONNECTED);
 
-		System.out.println(syncFile);
+		SyncAccountService.update(syncAccount);
 	}
-
-	private static final String _URL_PATH =
-		"/sync-web.syncdlobject/get-file-entry-sync-dl-object";
 
 }
