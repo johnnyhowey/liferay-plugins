@@ -12,27 +12,18 @@
  * details.
  */
 
-package com.liferay.sync.engine.documentlibrary.event;
+package com.liferay.customsql.user;
 
-import java.util.Map;
+import com.liferay.customsql.CustomSQL;
 
 /**
- * @author Shinn Lok
+ * @author Brian Wing Shun Chan
  */
-public class GetLatestModifiedTimeEvent extends BaseEvent {
-
-	public GetLatestModifiedTimeEvent(
-		long syncAccountId, Map<String, Object> parameters) {
-
-		super(syncAccountId, _URL_PATH, parameters);
-	}
+public class UserCustomSQL extends CustomSQL {
 
 	@Override
-	protected void processResponse(String response) throws Exception {
-		System.out.println(response);
+	protected String[] getConfigs() {
+		return new String[] {"com/liferay/customsql/user/dependencies/sql.xml"};
 	}
-
-	private static final String _URL_PATH =
-		"/sync-web.syncdlobject/get-latest-modified-time";
 
 }

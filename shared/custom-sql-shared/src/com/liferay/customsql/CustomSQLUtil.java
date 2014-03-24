@@ -17,6 +17,7 @@ package com.liferay.customsql;
 import com.liferay.portal.kernel.dao.orm.QueryDefinition;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
 
 import java.sql.SQLException;
@@ -134,9 +135,14 @@ public class CustomSQLUtil {
 		return _instance._customSQL.replaceOrderBy(sql, obc);
 	}
 
-	private CustomSQLUtil() {
+	protected CustomSQLUtil() {
 		try {
-			_customSQL = new CustomSQL();
+			Class<?> clazz = getClass();
+
+			String className = clazz.getName();
+
+			_customSQL = (CustomSQL)InstanceFactory.newInstance(
+				className.substring(0, className.length() - 4));
 		}
 		catch (Exception e) {
 			_log.error(e, e);

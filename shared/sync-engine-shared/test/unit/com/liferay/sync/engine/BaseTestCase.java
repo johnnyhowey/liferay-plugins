@@ -16,8 +16,6 @@ package com.liferay.sync.engine;
 
 import com.liferay.sync.engine.model.SyncAccount;
 import com.liferay.sync.engine.service.SyncAccountService;
-import com.liferay.sync.engine.session.Session;
-import com.liferay.sync.engine.session.SessionManager;
 import com.liferay.sync.engine.upgrade.util.UpgradeUtil;
 import com.liferay.sync.engine.util.FilePathNameUtil;
 import com.liferay.sync.engine.util.LoggerUtil;
@@ -33,7 +31,17 @@ import java.nio.file.Paths;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 
 import org.junit.After;
 import org.junit.Before;
@@ -51,7 +59,7 @@ import org.slf4j.LoggerFactory;
  * @author Shinn Lok
  */
 @PowerMockIgnore("javax.crypto.*")
-@PrepareForTest(SessionManager.class)
+@PrepareForTest({EntityUtils.class, HttpClientBuilder.class})
 public abstract class BaseTestCase {
 
 	@Before
@@ -75,10 +83,6 @@ public abstract class BaseTestCase {
 		syncAccount.setState(SyncAccount.STATE_CONNECTED);
 
 		SyncAccountService.update(syncAccount);
-
-		PowerMockito.mockStatic(SessionManager.class);
-
-		_session = Mockito.mock(Session.class);
 	}
 
 	@After
@@ -90,13 +94,123 @@ public abstract class BaseTestCase {
 		SyncAccountService.deleteSyncAccount(syncAccount.getSyncAccountId());
 	}
 
+	protected InputStream getInputStream(String fileName) {
+		Class<?> clazz = getClass();
+
+		return clazz.getResourceAsStream(fileName);
+	}
+
+	protected CloseableHttpClient mockCloseableHttpClient(String fileName)
+		throws Exception {
+
+		CloseableHttpClient closeableHttpClient = Mockito.mock(
+			CloseableHttpClient.class);
+
+		Mockito.when(
+			closeableHttpClient.execute(
+				Mockito.any(HttpHost.class), Mockito.any(HttpRequest.class),
+				Mockito.any(ResponseHandler.class),
+				Mockito.any(HttpContext.class))
+		).thenCallRealMethod();
+
+		CloseableHttpResponse closeableHttpResponse = mockCloseableHttpResponse(
+			mockHttpEntity(fileName));
+
+		Mockito.when(
+			closeableHttpClient.execute(
+				Mockito.any(HttpHost.class), Mockito.any(HttpRequest.class),
+				Mockito.any(HttpContext.class))
+		).thenReturn(
+			closeableHttpResponse
+		);
+
+		return closeableHttpClient;
+	}
+
+	protected CloseableHttpResponse mockCloseableHttpResponse(
+		HttpEntity httpEntity) {
+
+		CloseableHttpResponse closeableHttpResponse = Mockito.mock(
+			CloseableHttpResponse.class);
+
+		Mockito.when(
+			closeableHttpResponse.getEntity()
+		).thenReturn(
+			httpEntity
+		);
+
+		StatusLine statusLine = mockStatusLine();
+
+		Mockito.when(
+			closeableHttpResponse.getStatusLine()
+		).thenReturn(
+			statusLine
+		);
+
+		return closeableHttpResponse;
+	}
+
+	protected void mockEntityUtils(String fileName) throws Exception {
+		PowerMockito.mockStatic(EntityUtils.class);
+
+		Mockito.when(
+			EntityUtils.toString(Mockito.any(HttpEntity.class))
+		).thenReturn(
+			readResponse(fileName)
+		);
+	}
+
+	protected void mockHttpClientBuilder(String fileName) throws Exception {
+		PowerMockito.mockStatic(HttpClientBuilder.class);
+
+		HttpClientBuilder httpClientbuilder = Mockito.mock(
+			HttpClientBuilder.class);
+
+		CloseableHttpClient closeableHttpClient = mockCloseableHttpClient(
+			fileName);
+
+		Mockito.when(
+			httpClientbuilder.build()
+		).thenReturn(
+			closeableHttpClient
+		);
+
+		Mockito.when(
+			HttpClientBuilder.create()
+		).thenReturn(
+			httpClientbuilder
+		);
+	}
+
+	protected HttpEntity mockHttpEntity(String fileName) throws Exception {
+		HttpEntity httpEntity = Mockito.mock(HttpEntity.class);
+
+		Mockito.when(
+			httpEntity.getContent()
+		).thenReturn(
+			getInputStream(fileName)
+		);
+
+		return httpEntity;
+	}
+
+	protected StatusLine mockStatusLine() {
+		StatusLine statusLine = Mockito.mock(StatusLine.class);
+
+		Mockito.when(
+			statusLine.getStatusCode()
+		).thenReturn(
+			HttpStatus.SC_OK
+		);
+
+		return statusLine;
+	}
+
 	protected String readResponse(String fileName) {
 		InputStream inputStream = null;
 
 		try {
-			Class<?> clazz = getClass();
-
-			inputStream = clazz.getResourceAsStream(fileName);
+			inputStream = getInputStream(fileName);
 
 			return IOUtils.toString(inputStream);
 		}
@@ -110,42 +224,14 @@ public abstract class BaseTestCase {
 		}
 	}
 
-	protected void setGetResponse(String fileName) throws Exception {
-		Mockito.when(
-			SessionManager.getSession(Mockito.anyLong())
-		).thenReturn(
-			_session
-		);
-
-		Mockito.when(
-			_session.executeGet(
-				Mockito.anyString(), Mockito.any(ResponseHandler.class))
-		).thenReturn(
-			readResponse(fileName)
-		);
-	}
-
-	protected void setPostResponse(String fileName) throws Exception {
-		Mockito.when(
-			SessionManager.getSession(Mockito.anyLong())
-		).thenReturn(
-			_session
-		);
-
-		Mockito.when(
-			_session.executePost(
-				Mockito.anyString(), Mockito.anyMap(),
-				Mockito.any(ResponseHandler.class))
-		).thenReturn(
-			readResponse(fileName)
-		);
+	protected void setResponse(String fileName) throws Exception {
+		mockEntityUtils(fileName);
+		mockHttpClientBuilder(fileName);
 	}
 
 	protected String filePathName;
 	protected SyncAccount syncAccount;
 
 	private static Logger _logger = LoggerFactory.getLogger(BaseTestCase.class);
-
-	private Session _session;
 
 }
