@@ -28,11 +28,14 @@ import com.liferay.sync.engine.documentlibrary.event.UpdateFileEntryEvent;
 import com.liferay.sync.engine.documentlibrary.event.UpdateFolderEvent;
 import com.liferay.sync.engine.model.ModelListener;
 import com.liferay.sync.engine.model.SyncFile;
+import com.liferay.sync.engine.model.SyncSite;
 import com.liferay.sync.engine.service.persistence.SyncFilePersistence;
 import com.liferay.sync.engine.util.FilePathNameUtil;
 import com.liferay.sync.engine.util.FileUtil;
 import com.liferay.sync.engine.util.IODeltaUtil;
 import com.liferay.sync.engine.util.PropsValues;
+
+import java.math.BigDecimal;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -59,6 +62,10 @@ public class SyncFileService {
 
 		// Local sync file
 
+		if (Files.notExists(filePath)) {
+			return null;
+		}
+
 		String checksum = FileUtil.getChecksum(filePath);
 		String name = String.valueOf(filePath.getFileName());
 		String mimeType = Files.probeContentType(filePath);
@@ -79,6 +86,18 @@ public class SyncFileService {
 		parameters.put("folderId", folderId);
 		parameters.put("mimeType", mimeType);
 		parameters.put("repositoryId", repositoryId);
+
+		SyncSite syncSite = SyncSiteService.fetchSyncSite(
+			repositoryId, syncAccountId);
+
+		if (syncSite.getType() != SyncSite.TYPE_SYSTEM) {
+			parameters.put("serviceContext.addGroupPermissions", true);
+		}
+
+		if (syncSite.getType() == SyncSite.TYPE_OPEN) {
+			parameters.put("serviceContext.addGuestPermissions", true);
+		}
+
 		parameters.put("sourceFileName", name);
 		parameters.put("syncFile", syncFile);
 		parameters.put("title", name);
@@ -114,6 +133,18 @@ public class SyncFileService {
 		parameters.put("name", name);
 		parameters.put("parentFolderId", parentFolderId);
 		parameters.put("repositoryId", repositoryId);
+
+		SyncSite syncSite = SyncSiteService.fetchSyncSite(
+			repositoryId, syncAccountId);
+
+		if (syncSite.getType() != SyncSite.TYPE_SYSTEM) {
+			parameters.put("serviceContext.addGroupPermissions", true);
+		}
+
+		if (syncSite.getType() == SyncSite.TYPE_OPEN) {
+			parameters.put("serviceContext.addGuestPermissions", true);
+		}
+
 		parameters.put("syncFile", syncFile);
 
 		AddFolderEvent addFolderEvent = new AddFolderEvent(
@@ -290,15 +321,14 @@ public class SyncFileService {
 			// Sync files
 
 			List<SyncFile> childSyncFiles = _syncFilePersistence.queryForEq(
-				"parentFolderId", syncFile.getSyncFileId());
+				"parentFolderId", syncFile.getTypePK());
 
 			for (SyncFile childSyncFile : childSyncFiles) {
 				if (childSyncFile.isFolder()) {
 					deleteSyncFile(childSyncFile);
 				}
 				else {
-					_syncFilePersistence.deleteById(
-						childSyncFile.getSyncFileId());
+					_syncFilePersistence.delete(childSyncFile);
 				}
 			}
 		}
@@ -495,8 +525,7 @@ public class SyncFileService {
 
 		Path deltaFilePath = null;
 
-		String changeLog = String.valueOf(
-			Double.valueOf(syncFile.getVersion()) + .1);
+		String changeLog = incrementChangeLog(syncFile.getVersion());
 		String name = String.valueOf(filePath.getFileName());
 		String sourceChecksum = syncFile.getChecksum();
 		String sourceFileName = syncFile.getName();
@@ -507,9 +536,9 @@ public class SyncFileService {
 			!IODeltaUtil.isIgnoredFilePatchingExtension(syncFile)) {
 
 			deltaFilePath = Files.createTempFile(
-				String.valueOf(filePath.getFileName()), "tmp");
+				String.valueOf(filePath.getFileName()), ".tmp");
 
-			IODeltaUtil.delta(
+			deltaFilePath = IODeltaUtil.delta(
 				filePath, IODeltaUtil.getChecksumsFilePath(syncFile),
 				deltaFilePath);
 		}
@@ -536,7 +565,10 @@ public class SyncFileService {
 		parameters.put("syncFile", syncFile);
 		parameters.put("title", name);
 
-		if (!sourceChecksum.equals(targetChecksum)) {
+		if (sourceChecksum.equals(targetChecksum)) {
+			parameters.put("-file", null);
+		}
+		else {
 			if ((deltaFilePath != null) &&
 				(Files.size(filePath) / Files.size(deltaFilePath)) >=
 					PropsValues.SYNC_FILE_PATCHING_SIZE_RATIO_THRESHOLD) {
@@ -642,6 +674,17 @@ public class SyncFileService {
 			return null;
 		}
 	}
+
+	protected static String incrementChangeLog(String versionString) {
+		BigDecimal versionBigDecimal = new BigDecimal(versionString);
+
+		versionBigDecimal = versionBigDecimal.add(_CHANGE_LOG_INCREMENT);
+
+		return versionBigDecimal.toString();
+	}
+
+	private static final BigDecimal _CHANGE_LOG_INCREMENT = new BigDecimal(
+		".1");
 
 	private static final String _VERSION_DEFAULT = "1.0";
 

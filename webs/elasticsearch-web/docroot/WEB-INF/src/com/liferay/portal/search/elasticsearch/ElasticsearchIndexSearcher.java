@@ -66,6 +66,9 @@ import org.elasticsearch.search.SearchHitField;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.facet.Facets;
 import org.elasticsearch.search.highlight.HighlightField;
+import org.elasticsearch.search.sort.FieldSortBuilder;
+import org.elasticsearch.search.sort.ScoreSortBuilder;
+import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortOrder;
 
 /**
@@ -308,7 +311,23 @@ public class ElasticsearchIndexSearcher extends BaseIndexSearcher {
 				sortOrder = SortOrder.DESC;
 			}
 
-			searchRequestBuilder.addSort(sortFieldName, sortOrder);
+			SortBuilder sortBuilder = null;
+
+			if (sortFieldName.equals("_score")) {
+				sortBuilder = new ScoreSortBuilder();
+			}
+			else {
+				FieldSortBuilder fieldSortBuilder = new FieldSortBuilder(
+					sortFieldName);
+
+				fieldSortBuilder.ignoreUnmapped(true);
+
+				sortBuilder = fieldSortBuilder;
+			}
+
+			sortBuilder.order(sortOrder);
+
+			searchRequestBuilder.addSort(sortBuilder);
 		}
 	}
 
