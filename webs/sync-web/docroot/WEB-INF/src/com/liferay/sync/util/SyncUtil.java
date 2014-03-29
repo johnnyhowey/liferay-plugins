@@ -27,9 +27,12 @@ import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Lock;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.model.DLFileVersion;
-import com.liferay.portlet.documentlibrary.model.DLSyncConstants;
+import com.liferay.portlet.documentlibrary.model.DLFolder;
 import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil;
+import com.liferay.sync.model.SyncConstants;
 import com.liferay.sync.model.SyncDLObject;
 import com.liferay.sync.model.impl.SyncDLObjectImpl;
 
@@ -43,6 +46,8 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
+
+import java.util.Date;
 
 /**
  * @author Dennis Ju
@@ -166,12 +171,22 @@ public class SyncUtil {
 		return deltaFile;
 	}
 
-	public static boolean isSupportedFolder(Folder folder) {
-		if (folder.isMountPoint()) {
+	public static boolean isSupportedFolder(DLFolder dlFolder) {
+		if (dlFolder.isHidden() || dlFolder.isMountPoint()) {
 			return false;
 		}
 
 		return true;
+	}
+
+	public static boolean isSupportedFolder(Folder folder) {
+		if (!(folder.getModel() instanceof DLFolder)) {
+			return false;
+		}
+
+		DLFolder dlFolder = (DLFolder)folder.getModel();
+
+		return isSupportedFolder(dlFolder);
 	}
 
 	public static void patchFile(
@@ -217,79 +232,121 @@ public class SyncUtil {
 		}
 	}
 
-	public static SyncDLObject toSyncDLObject(FileEntry fileEntry, String event)
+	public static SyncDLObject toSyncDLObject(
+			DLFileEntry dlFileEntry, String event)
 		throws PortalException, SystemException {
+
+		return toSyncDLObject(dlFileEntry, event, false);
+	}
+
+	public static SyncDLObject toSyncDLObject(
+			DLFileEntry dlFileEntry, String event, boolean excludeWorkingCopy)
+		throws PortalException, SystemException {
+
+		DLFileVersion dlFileVersion = null;
+
+		Date lockExpirationDate = null;
+		long lockUserId = 0;
+		String lockUserName = StringPool.BLANK;
+		String type = null;
+
+		Lock lock = dlFileEntry.getLock();
+
+		if ((lock == null) || excludeWorkingCopy) {
+			dlFileVersion = DLFileVersionLocalServiceUtil.getFileVersion(
+				dlFileEntry.getFileEntryId(), dlFileEntry.getVersion());
+
+			type = SyncConstants.TYPE_FILE;
+		}
+		else {
+			dlFileVersion = DLFileVersionLocalServiceUtil.getFileVersion(
+				dlFileEntry.getFileEntryId(),
+				DLFileEntryConstants.PRIVATE_WORKING_COPY_VERSION);
+
+			lockExpirationDate = lock.getExpirationDate();
+			lockUserId = lock.getUserId();
+			lockUserName = lock.getUserName();
+			type = SyncConstants.TYPE_PRIVATE_WORKING_COPY;
+		}
 
 		SyncDLObject syncDLObject = new SyncDLObjectImpl();
 
-		syncDLObject.setCompanyId(fileEntry.getCompanyId());
-		syncDLObject.setCreateDate(fileEntry.getCreateDate());
-		syncDLObject.setModifiedDate(fileEntry.getModifiedDate());
-		syncDLObject.setRepositoryId(fileEntry.getRepositoryId());
-		syncDLObject.setParentFolderId(fileEntry.getFolderId());
-		syncDLObject.setName(fileEntry.getTitle());
-		syncDLObject.setExtension(fileEntry.getExtension());
-		syncDLObject.setMimeType(fileEntry.getMimeType());
-		syncDLObject.setDescription(fileEntry.getDescription());
-
-		DLFileVersion dlFileVersion =
-			DLFileVersionLocalServiceUtil.getLatestFileVersion(
-				fileEntry.getFileEntryId(), false);
-
+		syncDLObject.setCompanyId(dlFileVersion.getCompanyId());
+		syncDLObject.setCreateDate(dlFileVersion.getCreateDate());
+		syncDLObject.setModifiedDate(dlFileVersion.getModifiedDate());
+		syncDLObject.setRepositoryId(dlFileVersion.getRepositoryId());
+		syncDLObject.setParentFolderId(dlFileVersion.getFolderId());
+		syncDLObject.setName(dlFileVersion.getTitle());
+		syncDLObject.setExtension(dlFileVersion.getExtension());
+		syncDLObject.setMimeType(dlFileVersion.getMimeType());
+		syncDLObject.setDescription(dlFileVersion.getDescription());
 		syncDLObject.setChangeLog(dlFileVersion.getChangeLog());
 		syncDLObject.setExtraSettings(dlFileVersion.getExtraSettings());
-
-		syncDLObject.setVersion(fileEntry.getVersion());
-		syncDLObject.setSize(fileEntry.getSize());
+		syncDLObject.setVersion(dlFileVersion.getVersion());
+		syncDLObject.setSize(dlFileVersion.getSize());
 		syncDLObject.setChecksum(getChecksum(dlFileVersion));
 		syncDLObject.setEvent(event);
-
-		Lock lock = fileEntry.getLock();
-
-		if (lock != null) {
-			syncDLObject.setLockExpirationDate(lock.getExpirationDate());
-			syncDLObject.setLockUserId(lock.getUserId());
-			syncDLObject.setLockUserName(lock.getUserName());
-		}
-		else {
-			syncDLObject.setLockExpirationDate(null);
-			syncDLObject.setLockUserId(0);
-			syncDLObject.setLockUserName(StringPool.BLANK);
-		}
-
-		syncDLObject.setType(DLSyncConstants.TYPE_FILE);
-		syncDLObject.setTypePK(fileEntry.getFileEntryId());
-		syncDLObject.setTypeUuid(fileEntry.getUuid());
+		syncDLObject.setLockExpirationDate(lockExpirationDate);
+		syncDLObject.setLockUserId(lockUserId);
+		syncDLObject.setLockUserName(lockUserName);
+		syncDLObject.setType(type);
+		syncDLObject.setTypePK(dlFileEntry.getFileEntryId());
+		syncDLObject.setTypeUuid(dlFileEntry.getUuid());
 
 		return syncDLObject;
 	}
 
-	public static SyncDLObject toSyncDLObject(Folder folder, String event) {
+	public static SyncDLObject toSyncDLObject(DLFolder dlFolder, String event) {
 		SyncDLObject syncDLObject = new SyncDLObjectImpl();
 
-		syncDLObject.setCompanyId(folder.getCompanyId());
-		syncDLObject.setCreateDate(folder.getCreateDate());
-		syncDLObject.setModifiedDate(folder.getModifiedDate());
-		syncDLObject.setRepositoryId(folder.getRepositoryId());
-		syncDLObject.setParentFolderId(folder.getParentFolderId());
-		syncDLObject.setName(folder.getName());
+		syncDLObject.setCompanyId(dlFolder.getCompanyId());
+		syncDLObject.setCreateDate(dlFolder.getCreateDate());
+		syncDLObject.setModifiedDate(dlFolder.getModifiedDate());
+		syncDLObject.setRepositoryId(dlFolder.getRepositoryId());
+		syncDLObject.setParentFolderId(dlFolder.getParentFolderId());
+		syncDLObject.setName(dlFolder.getName());
 		syncDLObject.setExtension(StringPool.BLANK);
 		syncDLObject.setMimeType(StringPool.BLANK);
-		syncDLObject.setDescription(folder.getDescription());
+		syncDLObject.setDescription(dlFolder.getDescription());
 		syncDLObject.setChangeLog(StringPool.BLANK);
 		syncDLObject.setExtraSettings(StringPool.BLANK);
 		syncDLObject.setVersion(StringPool.BLANK);
-		syncDLObject.setSize(-1);
+		syncDLObject.setSize(0);
 		syncDLObject.setChecksum(StringPool.BLANK);
 		syncDLObject.setEvent(event);
 		syncDLObject.setLockExpirationDate(null);
 		syncDLObject.setLockUserId(0);
 		syncDLObject.setLockUserName(StringPool.BLANK);
-		syncDLObject.setType(DLSyncConstants.TYPE_FOLDER);
-		syncDLObject.setTypePK(folder.getFolderId());
-		syncDLObject.setTypeUuid(folder.getUuid());
+		syncDLObject.setType(SyncConstants.TYPE_FOLDER);
+		syncDLObject.setTypePK(dlFolder.getFolderId());
+		syncDLObject.setTypeUuid(dlFolder.getUuid());
 
 		return syncDLObject;
+	}
+
+	public static SyncDLObject toSyncDLObject(FileEntry fileEntry, String event)
+		throws PortalException, SystemException {
+
+		if (fileEntry.getModel() instanceof DLFileEntry) {
+			DLFileEntry dlFileEntry = (DLFileEntry)fileEntry.getModel();
+
+			return toSyncDLObject(dlFileEntry, event);
+		}
+
+		throw new PortalException(
+			"FileEntry must be an instance of DLFileEntry");
+	}
+
+	public static SyncDLObject toSyncDLObject(Folder folder, String event)
+		throws PortalException, SystemException {
+
+		if (folder.getModel() instanceof DLFolder) {
+			DLFolder dlFolder = (DLFolder)folder.getModel();
+
+			return toSyncDLObject(dlFolder, event);
+		}
+
+		throw new PortalException("Folder must be an instance of DLFolder");
 	}
 
 }

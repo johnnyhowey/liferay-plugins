@@ -44,6 +44,10 @@ public class CalendarBookingAssetRendererFactory
 
 	public static final String TYPE = "calendar";
 
+	public CalendarBookingAssetRendererFactory() {
+		setLinkable(true);
+	}
+
 	@Override
 	public AssetRenderer getAssetRenderer(long classPK, int type)
 		throws PortalException, SystemException {
@@ -80,7 +84,7 @@ public class CalendarBookingAssetRendererFactory
 				WebKeys.THEME_DISPLAY);
 
 		CalendarResource calendarResource =
-			CalendarResourceUtil.getGroupCalendarResource(
+			CalendarResourceUtil.getScopeGroupCalendarResource(
 				liferayPortletRequest, themeDisplay.getScopeGroupId());
 
 		if (calendarResource == null) {
@@ -105,9 +109,13 @@ public class CalendarBookingAssetRendererFactory
 			PermissionChecker permissionChecker, long groupId, long classTypeId)
 		throws Exception {
 
+		ServiceContext serviceContext = new ServiceContext();
+
+		serviceContext.setCompanyId(permissionChecker.getCompanyId());
+
 		CalendarResource calendarResource =
-			CalendarResourceUtil.getGroupCalendarResource(
-				groupId, new ServiceContext());
+			CalendarResourceUtil.getScopeGroupCalendarResource(
+				groupId, serviceContext);
 
 		if (calendarResource == null) {
 			return false;
@@ -139,15 +147,8 @@ public class CalendarBookingAssetRendererFactory
 	}
 
 	@Override
-	public boolean isLinkable() {
-		return _LINKABLE;
-	}
-
-	@Override
 	protected String getIconPath(ThemeDisplay themeDisplay) {
 		return themeDisplay.getPathThemeImages() + "/common/date.png";
 	}
-
-	private static final boolean _LINKABLE = true;
 
 }

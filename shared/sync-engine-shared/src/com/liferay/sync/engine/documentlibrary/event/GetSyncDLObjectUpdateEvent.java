@@ -14,9 +14,16 @@
 
 package com.liferay.sync.engine.documentlibrary.event;
 
-import com.liferay.sync.engine.documentlibrary.handler.BaseHandler;
+import com.liferay.sync.engine.documentlibrary.handler.GetSyncDLObjectUpdateHandler;
+import com.liferay.sync.engine.documentlibrary.handler.Handler;
+import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.model.SyncSite;
+import com.liferay.sync.engine.service.SyncFileService;
 import com.liferay.sync.engine.service.SyncSiteService;
+import com.liferay.sync.engine.util.FileUtil;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +31,7 @@ import java.util.Map;
 /**
  * @author Shinn Lok
  */
-public class GetSyncDLObjectUpdateEvent extends BaseSyncDLObjectUpdateEvent {
+public class GetSyncDLObjectUpdateEvent extends BaseEvent {
 
 	public GetSyncDLObjectUpdateEvent(
 		long syncAccountId, Map<String, Object> parameters) {
@@ -33,7 +40,12 @@ public class GetSyncDLObjectUpdateEvent extends BaseSyncDLObjectUpdateEvent {
 	}
 
 	@Override
-	protected String processRequest() throws Exception {
+	protected Handler<?> getHandler() {
+		return new GetSyncDLObjectUpdateHandler(this);
+	}
+
+	@Override
+	protected void processRequest() throws Exception {
 		SyncSite syncSite = (SyncSite)getParameterValue("syncSite");
 
 		// Refetch for updated last remote sync time
@@ -41,28 +53,29 @@ public class GetSyncDLObjectUpdateEvent extends BaseSyncDLObjectUpdateEvent {
 		syncSite = SyncSiteService.fetchSyncSite(
 			syncSite.getGroupId(), syncSite.getSyncAccountId());
 
-		if (syncSite.getLastRemoteSyncTime() == 0) {
-			Map<String, Object> parameters = new HashMap<String, Object>();
+		if (syncSite.getRemoteSyncTime() == 0) {
+			String filePathName = syncSite.getFilePathName();
 
-			parameters.put("folderId", 0);
-			parameters.put("repositoryId", syncSite.getGroupId());
-			parameters.put("syncSite", syncSite);
+			SyncFile syncFile = SyncFileService.fetchSyncFile(
+				filePathName, getSyncAccountId());
 
-			GetAllSyncDLObjectsEvent getAllSyncDLObjectsEvent =
-				new GetAllSyncDLObjectsEvent(getSyncAccountId(), parameters);
+			if (syncFile == null) {
+				Files.createDirectories(Paths.get(filePathName));
 
-			getAllSyncDLObjectsEvent.run();
-
-			return null;
+				SyncFileService.addSyncFile(
+					null, null, filePathName, FileUtil.getFileKey(filePathName),
+					filePathName, null, filePathName, 0, syncSite.getGroupId(),
+					syncSite.getSyncAccountId(), SyncFile.TYPE_FOLDER);
+			}
 		}
 
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("companyId", syncSite.getCompanyId());
-		parameters.put("lastAccessTime", syncSite.getLastRemoteSyncTime());
+		parameters.put("lastAccessTime", syncSite.getRemoteSyncTime());
 		parameters.put("repositoryId", syncSite.getGroupId());
 
-		return executePost(_URL_PATH, parameters, new BaseHandler());
+		executePost(_URL_PATH, parameters);
 	}
 
 	private static final String _URL_PATH =

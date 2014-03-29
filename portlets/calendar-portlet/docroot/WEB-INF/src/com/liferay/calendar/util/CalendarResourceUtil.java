@@ -130,6 +130,30 @@ public class CalendarResourceUtil {
 		return orderByComparator;
 	}
 
+	public static CalendarResource getScopeGroupCalendarResource(
+			long groupId, ServiceContext serviceContext)
+		throws PortalException, SystemException {
+
+		Group group = GroupLocalServiceUtil.getGroup(groupId);
+
+		if (group.isUser()) {
+			return getUserCalendarResource(group.getClassPK(), serviceContext);
+		}
+		else {
+			return getGroupCalendarResource(groupId, serviceContext);
+		}
+	}
+
+	public static CalendarResource getScopeGroupCalendarResource(
+			PortletRequest portletRequest, long groupId)
+		throws PortalException, SystemException {
+
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			portletRequest);
+
+		return getScopeGroupCalendarResource(groupId, serviceContext);
+	}
+
 	public static CalendarResource getUserCalendarResource(
 			long userId, ServiceContext serviceContext)
 		throws PortalException, SystemException {

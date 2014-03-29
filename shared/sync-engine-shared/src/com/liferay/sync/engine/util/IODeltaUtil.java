@@ -128,7 +128,7 @@ public class IODeltaUtil {
 			ByteChannelReader checksumsByteChannelReader =
 				new ByteChannelReader(checksumsReadableByteChannel);
 
-			deltaFilePath = Paths.get(checksumsFilePath.toString() + ".tmp");
+			deltaOutputStream = Files.newOutputStream(deltaFilePath);
 
 			deltaWritableByteChannel = Channels.newChannel(deltaOutputStream);
 
@@ -166,7 +166,7 @@ public class IODeltaUtil {
 
 	public static boolean isIgnoredFilePatchingExtension(SyncFile syncFile) {
 		return _syncFilePatchingIgnoreFileExtensions.contains(
-				syncFile.getExtension());
+			syncFile.getExtension());
 	}
 
 	public static Path patch(
@@ -189,7 +189,7 @@ public class IODeltaUtil {
 			targetFileChannel = targetInputStream.getChannel();
 
 			Path patchedFilePath = Files.createTempFile(
-				String.valueOf(targetFilePath.getFileName()), "tmp");
+				String.valueOf(targetFilePath.getFileName()), ".tmp");
 
 			patchedFileOutputStream = Files.newOutputStream(patchedFilePath);
 

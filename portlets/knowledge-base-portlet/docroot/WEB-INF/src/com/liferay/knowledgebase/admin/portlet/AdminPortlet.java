@@ -33,13 +33,18 @@ import com.liferay.knowledgebase.service.KBTemplateServiceUtil;
 import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.knowledgebase.util.WebKeys;
 import com.liferay.portal.NoSuchSubscriptionException;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.upload.UploadException;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.Constants;
+import com.liferay.portal.kernel.util.FileUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
+import com.liferay.portal.kernel.util.MimeTypesUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -58,6 +63,7 @@ import com.liferay.portlet.documentlibrary.FileSizeException;
 import com.liferay.portlet.documentlibrary.NoSuchFileException;
 import com.liferay.util.bridges.mvc.MVCPortlet;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -73,6 +79,8 @@ import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author Peter Shin
  * @author Brian Wing Shun Chan
@@ -86,6 +94,8 @@ public class AdminPortlet extends MVCPortlet {
 
 		UploadPortletRequest uploadPortletRequest =
 			PortalUtil.getUploadPortletRequest(actionRequest);
+
+		checkExceededSizeLimit(uploadPortletRequest);
 
 		String portletId = PortalUtil.getPortletId(actionRequest);
 
@@ -263,14 +273,40 @@ public class AdminPortlet extends MVCPortlet {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String portletId = PortalUtil.getPortletId(resourceRequest);
+
+		long resourcePrimKey = ParamUtil.getLong(
+			resourceRequest, "resourcePrimKey");
+
 		long fileEntryId = ParamUtil.getLong(resourceRequest, "fileEntryId");
+		String fileName = ParamUtil.getString(resourceRequest, "fileName");
 
-		FileEntry fileEntry = PortletFileRepositoryUtil.getPortletFileEntry(
-			fileEntryId);
+		if (fileEntryId <= 0) {
+			File attachmentFile = KBArticleServiceUtil.getAttachment(
+				themeDisplay.getCompanyId(), themeDisplay.getScopeGroupId(),
+				portletId, resourcePrimKey, fileName);
 
-		PortletResponseUtil.sendFile(
-			resourceRequest, resourceResponse, fileEntry.getTitle(),
-			fileEntry.getContentStream(), fileEntry.getMimeType());
+			String attachmentFileName = fileName.substring(
+				fileName.lastIndexOf(CharPool.SLASH) + 1);
+
+			String contentType = MimeTypesUtil.getContentType(
+				attachmentFile, attachmentFileName);
+
+			PortletResponseUtil.sendFile(
+				resourceRequest, resourceResponse, attachmentFileName,
+				FileUtil.getBytes(attachmentFile), contentType);
+		}
+		else {
+			FileEntry fileEntry = PortletFileRepositoryUtil.getPortletFileEntry(
+				fileEntryId);
+
+			PortletResponseUtil.sendFile(
+				resourceRequest, resourceResponse, fileEntry.getTitle(),
+				fileEntry.getContentStream(), fileEntry.getMimeType());
+		}
 	}
 
 	@Override
@@ -539,6 +575,21 @@ public class AdminPortlet extends MVCPortlet {
 		}
 
 		super.addSuccessMessage(actionRequest, actionResponse);
+	}
+
+	protected void checkExceededSizeLimit(HttpServletRequest request)
+		throws PortalException {
+
+		UploadException uploadException = (UploadException)request.getAttribute(
+			WebKeys.UPLOAD_EXCEPTION);
+
+		if (uploadException != null) {
+			if (uploadException.isExceededSizeLimit()) {
+				throw new FileSizeException(uploadException.getCause());
+			}
+
+			throw new PortalException(uploadException.getCause());
+		}
 	}
 
 	@Override

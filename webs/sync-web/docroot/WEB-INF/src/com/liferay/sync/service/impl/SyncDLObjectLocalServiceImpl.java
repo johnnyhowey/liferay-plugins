@@ -21,7 +21,9 @@ import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.repository.model.Folder;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.documentlibrary.model.DLFolderConstants;
+import com.liferay.sync.model.SyncConstants;
 import com.liferay.sync.model.SyncDLObject;
 import com.liferay.sync.service.base.SyncDLObjectLocalServiceBaseImpl;
 
@@ -49,8 +51,8 @@ public class SyncDLObjectLocalServiceImpl
 			return null;
 		}
 
-		SyncDLObject syncDLObject = syncDLObjectPersistence.fetchByTypePK(
-			typePK);
+		SyncDLObject syncDLObject = syncDLObjectPersistence.fetchByT_T(
+			type, typePK);
 
 		if (syncDLObject == null) {
 			long syncDLObjectId = counterLocalService.increment();
@@ -64,8 +66,21 @@ public class SyncDLObjectLocalServiceImpl
 			syncDLObject.setTypePK(typePK);
 			syncDLObject.setTypeUuid(typeUuid);
 		}
-		else if (syncDLObject.getModifiedTime() > modifiedTime) {
+		else if (syncDLObject.getModifiedTime() >= modifiedTime) {
 			return null;
+		}
+		else if (type.equals(SyncConstants.TYPE_FILE)) {
+			SyncDLObject pwcSyncDLObject = syncDLObjectPersistence.fetchByT_T(
+				SyncConstants.TYPE_PRIVATE_WORKING_COPY, typePK);
+
+			if (pwcSyncDLObject != null) {
+				DLFileEntry dlFileEntry =
+					dlFileEntryLocalService.fetchDLFileEntry(typePK);
+
+				if ((dlFileEntry != null) && !dlFileEntry.isCheckedOut()) {
+					syncDLObjectPersistence.remove(pwcSyncDLObject);
+				}
+			}
 		}
 
 		syncDLObject.setModifiedTime(modifiedTime);
@@ -85,11 +100,6 @@ public class SyncDLObjectLocalServiceImpl
 		syncDLObject.setLockUserName(lockUserName);
 
 		return syncDLObjectPersistence.update(syncDLObject);
-	}
-
-	@Override
-	public SyncDLObject fetchSyncDLObject(long typePK) throws SystemException {
-		return syncDLObjectPersistence.fetchByTypePK(typePK);
 	}
 
 	@Override
