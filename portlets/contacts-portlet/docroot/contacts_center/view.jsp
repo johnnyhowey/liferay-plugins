@@ -452,6 +452,22 @@ portletURL.setWindowState(WindowState.NORMAL);
 								success: function(event, id, obj) {
 									contactsCenter.renderContent(this.get('responseData'), true);
 
+									var editToolbar = contactsCenterNode.one('.edit-toolbar');
+
+									editToolbar.toggleClass('hide-more-buttons', true);
+
+									var viewMoreButton = contactsCenterNode.one('.view-more-button');
+
+									A.one('#<portlet:namespace />contactsToolbar').delegate(
+										'click',
+										function(event) {
+											editToolbar.toggleClass('hide-more-buttons', false);
+
+											viewMoreButton.hide();
+										},
+										'.view-more-button'
+									);
+
 									window.scrollTo(0,0);
 
 									contactsContainer.loadingmask.hide();
