@@ -65,6 +65,12 @@ if (user2 != null) {
 <div class="lfr-button-column">
 	<div class="lfr-button-column-content">
 		<aui:button-row cssClass="edit-toolbar" id='<%= renderResponse.getNamespace() + "userToolbar" %>' />
+
+		<div class="btn view-more-button">
+			<i class="icon-ellipsis-horizontal"></i>
+
+			<liferay-ui:message key="more" />
+		</div>
 	</div>
 </div>
 
@@ -110,6 +116,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		new A.Button(
 			{
+				cssClass: 'more',
 				on: {
 					click: function(event) {
 						<portlet:namespace />relationAction(event, '<portlet:actionURL name="addSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_FOLLOWER) %>" /></portlet:actionURL>');
@@ -127,6 +134,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		new A.Button(
 			{
+				cssClass: 'more',
 				on: {
 					click: function(event) {
 						<portlet:namespace />relationAction(event, '<portlet:actionURL name="deleteSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_FOLLOWER) %>" /></portlet:actionURL>');
@@ -144,6 +152,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		new A.Button(
 			{
+				cssClass: 'more',
 				on: {
 					click: function(event) {
 						<portlet:namespace />relationAction(event, '<portlet:actionURL name="addSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_ENEMY) %>" /></portlet:actionURL>');
@@ -161,6 +170,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		new A.Button(
 			{
+				cssClass: 'more',
 				on: {
 					click: function(event) {
 						<portlet:namespace />relationAction(event, '<portlet:actionURL name="deleteSocialRelation" windowState="<%= LiferayWindowState.NORMAL.toString() %>"><portlet:param name="type" value="<%= String.valueOf(SocialRelationConstants.TYPE_UNI_ENEMY) %>" /></portlet:actionURL>');
@@ -228,6 +238,7 @@ if (user2 != null) {
 	contactsToolbarChildren.push(
 		new A.Button(
 			{
+				cssClass: 'more',
 				icon: 'icon-save',
 				id: '<portlet:namespace />exportButton',
 				label: '<%= UnicodeLanguageUtil.get(pageContext, "vcard") %>',
