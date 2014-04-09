@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -218,7 +218,7 @@ public class MembersActivitiesPortlet extends MVCPortlet {
 		throws Exception {
 
 		String feedTitle = ParamUtil.getString(resourceRequest, "feedTitle");
-		String format = ParamUtil.getString(
+		String type = ParamUtil.getString(
 			resourceRequest, "type", RSSUtil.FORMAT_DEFAULT);
 		double version = ParamUtil.getDouble(
 			resourceRequest, "version", RSSUtil.VERSION_DEFAULT);
@@ -234,7 +234,7 @@ public class MembersActivitiesPortlet extends MVCPortlet {
 			resourceRequest);
 
 		String rss = exportToRSS(
-			resourceRequest, feedTitle, null, format, version, displayStyle,
+			resourceRequest, feedTitle, null, type, version, displayStyle,
 			activities, serviceContext);
 
 		return rss.getBytes(StringPool.UTF8);
