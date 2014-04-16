@@ -68,8 +68,10 @@ long maxFileSize = PrefsPropsUtil.getLong(PropsKeys.USERS_IMAGE_MAX_SIZE) / 1024
 		<aui:script use="liferay-logo-editor">
 			var logoEditor = new Liferay.LogoEditor(
 				{
+					aspectRatio: 1,
 					maxFileSize: '<%= maxFileSize %>',
 					namespace: '<portlet:namespace />',
+					preserveRatio: true,
 					previewURL: '<portlet:resourceURL><portlet:param name="struts_action" value="/users_admin/edit_user_portrait" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.GET_TEMP %>" /><portlet:param name="p_u_i_d" value="<%= String.valueOf(selUser.getUserId()) %>" /></portlet:resourceURL>',
 					uploadURL: '<portlet:actionURL><portlet:param name="struts_action" value="/users_admin/edit_user_portrait" /><portlet:param name="<%= Constants.CMD %>" value="<%= Constants.ADD_TEMP %>" /><portlet:param name="p_u_i_d" value="<%= String.valueOf(selUser.getUserId()) %>" /></portlet:actionURL>'
 				}
