@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="so-benchmark" basedir=".">
+	<import file="../build.xml" />
+
+	<path id="benchmark.classpath">
+		<path refid="portal.classpath" />
+		<fileset dir="../docroot/WEB-INF/lib" includes="*.jar" />
+		<pathelement location="../docroot/WEB-INF/classes" />
+		<pathelement location="classes" />
+	</path>
+
+	<target name="compile">
+		<copy todir="classes">
+			<fileset dir="src" excludes="**/*.java" />
+		</copy>
+
+		<javac srcdir="src"
+			destdir="classes"
+			classpathref="benchmark.classpath"
+			compiler="${javac.compiler}"
+			includeAntRuntime="false"
+		/>
+	</target>
+
+	<target name="build-sample-sql" depends="compile">
+		<property name="sample.sql.properties.file" value="${basedir}/so-benchmarks.properties" />
+		<property name="sql.dir" value="../docroot/WEB-INF/sql" />
+
+		<copy file="${sample.sql.properties.file}" tofile="temp.properties" overwrite="true" />
+
+		<concat destfile="temp.properties" append="true">
+			sql.dir=${sql.dir}
+		</concat>
+
+		<java
+			classname="com.liferay.so.tools.SOSampleSQLBuilder"
+			classpathref="benchmark.classpath"
+		>
+			<sysproperty key="external-properties" value="com/liferay/portal/tools/dependencies/portal-tools.properties" />
+			<arg value="${basedir}/temp.properties" />
+		</java>
+
+		<delete file="temp.properties" />
+	</target>
+</project>
