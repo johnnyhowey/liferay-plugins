@@ -5,6 +5,92 @@ AUI().use(
 		Liferay.namespace('Notifications');
 
 		Liferay.Notifications = {
+			dismissNotifications: function(event, markAllAsRead, fullviewUri, dockbarUri) {
+				event.preventDefault();
+
+				var dismissNotifications = A.one('.dismiss-notifications');
+
+				var dockbarUserNotifications = A.one('.dockbar-user-notifications');
+				var dockbarUserNotificationsCount = dockbarUserNotifications.one('.user-notifications-count');
+				var dockbarUserNotificationsList = dockbarUserNotifications.one('.dropdown-menu');
+
+				var loadingRow = A.Node.create('<div class="loading-animation"></div>');
+
+				var row;
+
+				var sidebarUserNotifications = A.one('.user-notifications-sidebar');
+
+				var userNotificationsList = A.one('.user-notifications-list-container .user-notifications-list');
+
+				var refreshNotificationsResult = function(notificationsList, uri) {
+					if (notificationsList) {
+						if (!notificationsList.io) {
+							notificationsList.plug(
+								A.Plugin.IO,
+								{
+									autoLoad: false
+								}
+							);
+						}
+
+						notificationsList.io.set('uri', uri);
+						notificationsList.io.start();
+					}
+				}
+
+				var updateNotificationsCount = function(newUserNotificationsCount, unreadUserNotificationsCount) {
+					if (dockbarUserNotifications) {
+						if (dockbarUserNotificationsCount) {
+							dockbarUserNotificationsCount.toggleClass('alert', (newUserNotificationsCount > 0));
+
+							dockbarUserNotificationsCount.setHTML(unreadUserNotificationsCount);
+						}
+					}
+
+					if (sidebarUserNotifications) {
+						var sidebarUnreadCount = sidebarUserNotifications.one('.count');
+
+						if (sidebarUnreadCount) {
+							sidebarUnreadCount.setHTML(unreadUserNotificationsCount);
+						}
+					}
+				};
+
+				if (!markAllAsRead) {
+					row = event.currentTarget.ancestor('.user-notification');
+					row.hide().placeAfter(loadingRow);
+				}
+
+				A.io.request(
+					event.currentTarget.attr('href'),
+					{
+						on: {
+							success: function(event) {
+								var response = this.get('responseData');
+
+								if (response.success) {
+									updateNotificationsCount(response["newUserNotificationsCount"], response["unreadUserNotificationsCount"]);
+
+									if (!markAllAsRead) {
+										loadingRow.remove();
+										row.remove();
+									}
+
+									if (fullviewUri) {
+										refreshNotificationsResult(userNotificationsList, fullviewUri);
+									}
+
+									if (dockbarUri) {
+										refreshNotificationsResult(dockbarUserNotificationsList, dockbarUri);
+									}
+								}
+							}
+						},
+						dataType: 'json'
+					}
+				);
+			},
+
 			viewNotification: function(event) {
 				var instance = this;
 

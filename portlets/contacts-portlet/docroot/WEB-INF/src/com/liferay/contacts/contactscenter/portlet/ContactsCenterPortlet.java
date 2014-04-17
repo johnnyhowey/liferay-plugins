@@ -608,29 +608,54 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		long userNotificationEventId = ParamUtil.getLong(
 			actionRequest, "userNotificationEventId");
 
-		SocialRequest socialRequest =
-			SocialRequestLocalServiceUtil.getSocialRequest(socialRequestId);
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
-		if (SocialRelationLocalServiceUtil.hasRelation(
-				socialRequest.getReceiverUserId(), socialRequest.getUserId(),
-				SocialRelationConstants.TYPE_UNI_ENEMY)) {
+		try {
+			SocialRequest socialRequest =
+				SocialRequestLocalServiceUtil.getSocialRequest(socialRequestId);
 
-			status = SocialRequestConstants.STATUS_IGNORE;
+			if (SocialRelationLocalServiceUtil.hasRelation(
+					socialRequest.getReceiverUserId(),
+					socialRequest.getUserId(),
+					SocialRelationConstants.TYPE_UNI_ENEMY)) {
+
+				status = SocialRequestConstants.STATUS_IGNORE;
+			}
+
+			SocialRequestLocalServiceUtil.updateRequest(
+				socialRequestId, status, themeDisplay);
+
+			if (status == SocialRequestConstants.STATUS_CONFIRM) {
+				SocialRelationLocalServiceUtil.addRelation(
+					socialRequest.getUserId(),
+					socialRequest.getReceiverUserId(), socialRequest.getType());
+			}
+
+			UserNotificationEventLocalServiceUtil.deleteUserNotificationEvent(
+				userNotificationEventId);
+
+			int newUserNotificationsCount =
+					UserNotificationEventLocalServiceUtil.
+						getDeliveredUserNotificationEventsCount(
+							themeDisplay.getUserId(), false);
+
+			int unreadUserNotificationsCount =
+				UserNotificationEventLocalServiceUtil.
+					getArchivedUserNotificationEventsCount(
+						themeDisplay.getUserId(), false);
+
+			jsonObject.put("success", Boolean.TRUE);
+
+			jsonObject.put(
+				"newUserNotificationsCount", newUserNotificationsCount);
+			jsonObject.put(
+				"unreadUserNotificationsCount", unreadUserNotificationsCount);
+		}
+		catch (Exception e) {
+			jsonObject.put("success", Boolean.FALSE);
 		}
 
-		SocialRequestLocalServiceUtil.updateRequest(
-			socialRequestId, status, themeDisplay);
-
-		if (status == SocialRequestConstants.STATUS_CONFIRM) {
-			SocialRelationLocalServiceUtil.addRelation(
-				socialRequest.getUserId(), socialRequest.getReceiverUserId(),
-				socialRequest.getType());
-		}
-
-		UserNotificationEventLocalServiceUtil.deleteUserNotificationEvent(
-			userNotificationEventId);
-
-		sendRedirect(actionRequest, actionResponse);
+		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
 	protected void deleteEntry(

@@ -16,7 +16,9 @@ package com.liferay.notifications.notifications.portlet;
 
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.UserNotificationDeliveryLocalServiceUtil;
@@ -35,6 +37,51 @@ import javax.portlet.PortletException;
  */
 public class NotificationsPortlet extends MVCPortlet {
 
+	public void dismissNotifications(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		String userNotificationEventIdsStr = ParamUtil.getString(
+			actionRequest, "userNotificationEventIds");
+
+		String[] userNotificationEventIds = StringUtil.split(
+			userNotificationEventIdsStr);
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		try {
+			for (String userNotificationEventId : userNotificationEventIds) {
+				setUserNotificationEventAsArchived(
+					GetterUtil.getLong(userNotificationEventId));
+			}
+
+			int newUserNotificationsCount =
+				UserNotificationEventLocalServiceUtil.
+					getDeliveredUserNotificationEventsCount(
+						themeDisplay.getUserId(), false);
+
+			int unreadUserNotificationsCount =
+				UserNotificationEventLocalServiceUtil.
+					getArchivedUserNotificationEventsCount(
+						themeDisplay.getUserId(), false);
+
+			jsonObject.put(
+				"newUserNotificationsCount", newUserNotificationsCount);
+			jsonObject.put(
+				"unreadUserNotificationsCount", unreadUserNotificationsCount);
+
+			jsonObject.put("success", Boolean.TRUE);
+		}
+		catch (Exception e) {
+			jsonObject.put("success", Boolean.FALSE);
+		}
+
+		writeJSON(actionRequest, actionResponse, jsonObject);
+	}
+
 	public void markAsRead(
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
@@ -45,14 +92,7 @@ public class NotificationsPortlet extends MVCPortlet {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		try {
-			UserNotificationEvent userNotificationEvent =
-				UserNotificationEventLocalServiceUtil.getUserNotificationEvent(
-					userNotificationEventId);
-
-			userNotificationEvent.setArchived(true);
-
-			UserNotificationEventLocalServiceUtil.updateUserNotificationEvent(
-				userNotificationEvent);
+			setUserNotificationEventAsArchived(userNotificationEventId);
 
 			jsonObject.put("success", Boolean.TRUE);
 		}
@@ -151,6 +191,20 @@ public class NotificationsPortlet extends MVCPortlet {
 		catch (Exception e) {
 			jsonObject.put("success", Boolean.FALSE);
 		}
+	}
+
+	protected void setUserNotificationEventAsArchived(
+			long userNotificationEventId)
+		throws Exception {
+
+		UserNotificationEvent userNotificationEvent =
+			UserNotificationEventLocalServiceUtil.getUserNotificationEvent(
+				userNotificationEventId);
+
+		userNotificationEvent.setArchived(true);
+
+		UserNotificationEventLocalServiceUtil.updateUserNotificationEvent(
+			userNotificationEvent);
 	}
 
 }

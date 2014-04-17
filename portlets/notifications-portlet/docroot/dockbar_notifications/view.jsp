@@ -68,6 +68,8 @@
 				<portlet:param name="fullView" value="false" />
 			</portlet:renderURL>
 
+			<liferay-portlet:actionURL name="setDelivered" var="setDeliveredURL" />
+
 			new Liferay.MenuToggle(
 				{
 					after: {
@@ -76,7 +78,7 @@
 								userNotificationsList.io.set('uri', '<%= unreadURL %>');
 								userNotificationsList.io.start();
 
-								A.io.request('<liferay-portlet:actionURL name="setDelivered" />');
+								A.io.request('<%= setDeliveredURL %>');
 
 								userNotificationsCount.removeClass('alert');
 							}
@@ -94,6 +96,22 @@
 					Liferay.Notifications.viewNotification(event);
 				},
 				'.user-notification .user-notification-link'
+			);
+
+			userNotificationsList.delegate(
+				'click',
+				function(event) {
+					Liferay.Notifications.dismissNotifications(event, false, null, '<%= unreadURL %>');
+				},
+				'.user-notification .btn-action'
+			);
+
+			userNotificationsList.delegate(
+				'click',
+				function(event) {
+					Liferay.Notifications.dismissNotifications(event, true, null, '<%= unreadURL %>');
+				},
+				'.dismiss-notifications'
 			);
 		</aui:script>
 	</li>
