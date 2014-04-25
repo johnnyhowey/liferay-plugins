@@ -23,8 +23,10 @@ import java.awt.Desktop;
 
 import java.net.URI;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
@@ -264,6 +266,8 @@ public class AsgardAMIDeployer extends BaseAMITool {
 	protected boolean isInService(
 		JSONObject loadBalancerJSONObject, String autoScalingGroupName) {
 
+		List<JSONObject> instanceStateJSONObjects = new ArrayList<JSONObject>();
+
 		JSONArray instanceStatesJSONArray = loadBalancerJSONObject.getJSONArray(
 			"instanceStates");
 
@@ -274,11 +278,20 @@ public class AsgardAMIDeployer extends BaseAMITool {
 			String instanceStateAutoScalingGroupName =
 				instanceStateJSONObject.getString("autoScalingGroupName");
 
-			if (!autoScalingGroupName.equals(
+			if (autoScalingGroupName.equals(
 					instanceStateAutoScalingGroupName)) {
 
-				continue;
+				instanceStateJSONObjects.add(instanceStateJSONObject);
 			}
+		}
+
+		if (instanceStateJSONObjects.isEmpty()) {
+			return false;
+		}
+
+		for (int i = 0; i < instanceStateJSONObjects.size(); i++) {
+			JSONObject instanceStateJSONObject = instanceStateJSONObjects.get(
+				i);
 
 			String state = instanceStateJSONObject.getString("state");
 

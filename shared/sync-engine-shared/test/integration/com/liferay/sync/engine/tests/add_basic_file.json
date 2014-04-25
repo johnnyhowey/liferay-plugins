@@ -21,7 +21,7 @@
 		},
 		{
 			"action": "addFile",
-			"dependency": "Test.txt",
+			"dependency": "common/Test.txt",
 			"doAsSyncAccount": "test1"
 		},
 		{
