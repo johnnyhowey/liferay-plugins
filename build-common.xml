@@ -161,10 +161,6 @@ Error-Prone was automatically installed. Please rerun your task.
 		<attribute name="module.dir" />
 
 		<sequential>
-			<pathconvert property="module.dir.unix" targetos="unix">
-				<path location="@{module.dir}" />
-			</pathconvert>
-
 			<java
 				classname="com.liferay.portal.tools.SassToCssBuilder"
 				classpathref="portal.classpath"
@@ -177,8 +173,6 @@ Error-Prone was automatically installed. Please rerun your task.
 				<arg value="sass.docroot.dir=${module.dir.unix}/docroot" />
 				<arg value="sass.portal.common.dir=${app.server.portal.dir}/html/css/common" />
 			</java>
-
-			<var name="module.dir.unix" unset="true" />
 		</sequential>
 	</macrodef>
 
@@ -187,10 +181,11 @@ Error-Prone was automatically installed. Please rerun your task.
 		<attribute name="module.dir" />
 
 		<sequential>
-			<loadfile property="call-macrodef-or-target.build.xml.content" srcFile="@{module.dir}/build.xml" />
-
 			<if>
-				<contains string="${call-macrodef-or-target.build.xml.content}" substring="&lt;target name=&quot;@{macrodef.name}&quot;&gt;" />
+				<resourcecontains
+					resource="${module.dir.unix}/build.xml"
+					substring="&lt;target name=&quot;@{macrodef.name}&quot;&gt;"
+				/>
 				<then>
 					<ant dir="@{module.dir}" target="@{macrodef.name}" inheritAll="false" />
 				</then>
@@ -325,8 +320,6 @@ Error-Prone was automatically installed. Please rerun your task.
 					</if>
 				</else>
 			</if>
-
-			<var name="call-macrodef-or-target.build.xml.content" unset="true" />
 		</sequential>
 	</macrodef>
 
@@ -344,16 +337,15 @@ Error-Prone was automatically installed. Please rerun your task.
 			<if>
 				<available file="@{module.dir}/docroot/WEB-INF/.gitignore" />
 				<then>
-					<loadfile property=".gitignore.content" srcFile="@{module.dir}/docroot/WEB-INF/.gitignore" />
-
 					<if>
-						<contains string="${.gitignore.content}" substring="/lib" />
+						<resourcecontains
+							resource="${module.dir.unix}/docroot/WEB-INF/.gitignore"
+							substring="/lib"
+						/>
 						<then>
 							<delete dir="@{module.dir}/docroot/WEB-INF/lib" />
 						</then>
 					</if>
-
-					<var name=".gitignore.content" unset="true" />
 				</then>
 			</if>
 
@@ -777,10 +769,11 @@ Please find a solution that does not require portal-impl.jar.
 					<available file="@{module.dir}/docroot/WEB-INF/src/content" />
 				</and>
 				<then>
-					<loadfile property="liferay-hook.xml.content" srcFile="@{module.dir}/docroot/WEB-INF/liferay-hook.xml" />
-
 					<if>
-						<contains string="${liferay-hook.xml.content}" substring="&lt;language-properties&gt;content/Language*.properties&lt;/language-properties&gt;" />
+						<resourcecontains
+							resource="${module.dir.unix}/docroot/WEB-INF/liferay-hook.xml"
+							substring="&lt;language-properties&gt;content/Language*.properties&lt;/language-properties&gt;"
+						/>
 						<then>
 							<pathconvert pathsep="${line.separator}&#x9;" property="language.properties.elements">
 								<fileset dir="@{module.dir}/docroot/WEB-INF/src/content">
@@ -804,8 +797,6 @@ Please find a solution that does not require portal-impl.jar.
 									</tokenfilter>
 								</filterchain>
 							</copy>
-
-							<var name="language.properties.elements" unset="true" />
 						</then>
 					</if>
 				</then>
@@ -1095,10 +1086,11 @@ Please find a solution that does not require portal-impl.jar.
 						module.dir="@{module.dir}"
 					/>
 
-					<loadfile property="deploy.build.xml.content" srcFile="@{module.dir}/build.xml" />
-
 					<if>
-						<contains string="${deploy.build.xml.content}" substring="import file=&quot;../../build-common-osgi-plugin.xml&quot;" />
+						<resourcecontains
+							resource="${module.dir.unix}/build.xml"
+							substring="import file=&quot;../../build-common-osgi-plugin.xml&quot;"
+						/>
 						<then>
 							<copy failonerror="false" todir="${auto.deploy.dir}">
 								<fileset dir="@{module.dir}/lib" includes="${osgi.dependencies}" />
@@ -1107,8 +1099,6 @@ Please find a solution that does not require portal-impl.jar.
 							<copy file="${plugin.file}" todir="${auto.deploy.dir}" />
 						</then>
 					</if>
-
-					<var name="deploy.build.xml.content" unset="true" />
 				</else>
 			</if>
 		</sequential>
@@ -1375,10 +1365,11 @@ Please find a solution that does not require portal-impl.jar.
 
 			<mkdir dir="${sdk.dir}/dist" />
 
-			<loadfile property="jar-macro.build.xml.content" srcFile="@{module.dir}/build.xml" />
-
 			<if>
-				<contains string="${jar-macro.build.xml.content}" substring="import file=&quot;../../build-common-osgi-plugin.xml&quot;" />
+				<resourcecontains
+					resource="${module.dir.unix}/build.xml"
+					substring="import file=&quot;../../build-common-osgi-plugin.xml&quot;"
+				/>
 				<then>
 					<if>
 						<not>
@@ -1444,8 +1435,6 @@ Please find a solution that does not require portal-impl.jar.
 					/>
 				</else>
 			</if>
-
-			<var name="jar-macro.build.xml.content" unset="true" />
 		</sequential>
 	</macrodef>
 
@@ -1626,7 +1615,11 @@ Please find a solution that does not require portal-impl.jar.
 		<attribute name="module.dir" />
 
 		<sequential>
-			<loadfile property="set-module-properties.build.xml.content" srcFile="@{module.dir}/build.xml" />
+			<var name="module.dir.unix" unset="true" />
+
+			<pathconvert property="module.dir.unix" targetos="unix">
+				<path location="@{module.dir}" />
+			</pathconvert>
 
 			<var name="plugin.jars" unset="true" />
 			<var name="plugin.required.contexts" unset="true" />
@@ -1792,7 +1785,10 @@ Please find a solution that does not require portal-impl.jar.
 			</if>
 
 			<if>
-				<contains string="${set-module-properties.build.xml.content}" substring="import file=&quot;../../build-common-osgi-plugin.xml&quot;" />
+				<resourcecontains
+					resource="${module.dir.unix}/build.xml"
+					substring="import file=&quot;../../build-common-osgi-plugin.xml&quot;"
+				/>
 				<then>
 					<property name="plugin-lib.classpath.path" refid="plugin-lib.classpath" />
 
@@ -1825,7 +1821,6 @@ Please find a solution that does not require portal-impl.jar.
 				</then>
 			</if>
 
-			<var name="set-module-properties.build.xml.content" unset="true" />
 			<var name="set-module-properties.plugin.version" unset="true" />
 		</sequential>
 	</macrodef>

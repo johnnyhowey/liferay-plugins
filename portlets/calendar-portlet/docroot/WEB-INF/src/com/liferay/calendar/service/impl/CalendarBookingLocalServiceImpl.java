@@ -242,7 +242,7 @@ public class CalendarBookingLocalServiceImpl
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	@SystemEvent(
-		action = SystemEventConstants.ACTION_SKIP, send = false,
+		action = SystemEventConstants.ACTION_SKIP,
 		type = SystemEventConstants.TYPE_DELETE)
 	public CalendarBooking deleteCalendarBooking(
 			CalendarBooking calendarBooking)
@@ -318,6 +318,8 @@ public class CalendarBookingLocalServiceImpl
 			boolean allFollowing)
 		throws PortalException, SystemException {
 
+		Date now = new Date();
+
 		java.util.Calendar startTimeJCalendar = JCalendarUtil.getJCalendar(
 			startTime);
 
@@ -349,6 +351,7 @@ public class CalendarBookingLocalServiceImpl
 			calendarBooking.getCalendarBookingId());
 
 		for (CalendarBooking childCalendarBooking : childCalendarBookings) {
+			childCalendarBooking.setModifiedDate(now);
 			childCalendarBooking.setRecurrence(recurrence);
 
 			calendarBookingPersistence.update(childCalendarBooking);

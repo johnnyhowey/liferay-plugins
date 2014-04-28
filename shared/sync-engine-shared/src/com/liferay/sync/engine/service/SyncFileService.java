@@ -275,6 +275,7 @@ public class SyncFileService {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("fileEntryId", syncFile.getTypePK());
+		parameters.put("syncFile", syncFile);
 
 		MoveFileEntryToTrashEvent moveFileEntryToTrashEvent =
 			new MoveFileEntryToTrashEvent(syncAccountId, parameters);
@@ -299,6 +300,7 @@ public class SyncFileService {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("folderId", syncFile.getTypePK());
+		parameters.put("syncFile", syncFile);
 
 		MoveFolderToTrashEvent moveFolderToTrashEvent =
 			new MoveFolderToTrashEvent(syncAccountId, parameters);
@@ -535,7 +537,7 @@ public class SyncFileService {
 	}
 
 	public static SyncFile updateFileSyncFile(
-			Path filePath, long syncAccountId, SyncFile syncFile)
+			Path filePath, long syncAccountId, SyncFile syncFile, boolean force)
 		throws Exception {
 
 		// Local sync file
@@ -582,7 +584,7 @@ public class SyncFileService {
 		parameters.put("syncFile", syncFile);
 		parameters.put("title", name);
 
-		if (sourceChecksum.equals(targetChecksum)) {
+		if (sourceChecksum.equals(targetChecksum) && !force) {
 			parameters.put("-file", null);
 		}
 		else {

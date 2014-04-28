@@ -14,7 +14,10 @@
 
 package com.liferay.sync.engine.documentlibrary.event;
 
+import com.liferay.sync.engine.SyncEngine;
 import com.liferay.sync.engine.documentlibrary.handler.Handler;
+import com.liferay.sync.engine.model.SyncAccount;
+import com.liferay.sync.engine.service.SyncAccountService;
 import com.liferay.sync.engine.session.Session;
 import com.liferay.sync.engine.session.SessionManager;
 
@@ -36,7 +39,11 @@ public abstract class BaseEvent implements Event {
 	public <T> T executeGet(String urlPath) throws Exception {
 		Session session = SessionManager.getSession(_syncAccountId);
 
-		return session.executeGet(urlPath, (Handler<? extends T>)_handler);
+		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
+			getSyncAccountId());
+
+		return session.executeGet(
+			syncAccount.getUrl() + urlPath, (Handler<? extends T>)_handler);
 	}
 
 	public <T> T executePost(String urlPath, Map<String, Object> parameters)
@@ -44,8 +51,12 @@ public abstract class BaseEvent implements Event {
 
 		Session session = SessionManager.getSession(_syncAccountId);
 
+		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
+			getSyncAccountId());
+
 		return session.executePost(
-			urlPath, parameters, (Handler<? extends T>)_handler);
+			syncAccount.getUrl() + "/api/jsonws" + urlPath, parameters,
+			(Handler<? extends T>)_handler);
 	}
 
 	@Override
@@ -65,6 +76,10 @@ public abstract class BaseEvent implements Event {
 
 	@Override
 	public void run() {
+		if (!SyncEngine.isRunning()) {
+			return;
+		}
+
 		_handler = getHandler();
 
 		try {
