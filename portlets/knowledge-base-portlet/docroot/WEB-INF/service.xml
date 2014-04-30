@@ -31,6 +31,7 @@
 		<column name="parentResourcePrimKey" type="long" />
 		<column name="version" type="int" />
 		<column name="title" type="String" />
+		<column name="urlTitle" type="String" />
 		<column name="content" type="String" />
 		<column name="description" type="String" />
 		<column name="priority" type="double" />
@@ -73,6 +74,10 @@
 		<finder name="R_S" return-type="Collection">
 			<finder-column name="resourcePrimKey" arrayable-operator="OR" />
 			<finder-column name="status" />
+		</finder>
+		<finder name="G_UT" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="urlTitle" />
 		</finder>
 		<finder name="G_L" return-type="Collection">
 			<finder-column name="groupId" />
@@ -138,6 +143,11 @@
 		<finder name="G_P_S" return-type="Collection">
 			<finder-column name="groupId" />
 			<finder-column name="parentResourcePrimKey" arrayable-operator="OR" />
+			<finder-column name="status" />
+		</finder>
+		<finder name="G_UT_ST" return-type="Collection">
+			<finder-column name="groupId" />
+			<finder-column name="urlTitle" />
 			<finder-column name="status" />
 		</finder>
 		<finder name="G_P_S_L" return-type="Collection" db-index="false">

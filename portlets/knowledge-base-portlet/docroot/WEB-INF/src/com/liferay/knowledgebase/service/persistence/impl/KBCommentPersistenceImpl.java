@@ -12,12 +12,13 @@
  * details.
  */
 
-package com.liferay.knowledgebase.service.persistence;
+package com.liferay.knowledgebase.service.persistence.impl;
 
 import com.liferay.knowledgebase.NoSuchCommentException;
 import com.liferay.knowledgebase.model.KBComment;
 import com.liferay.knowledgebase.model.impl.KBCommentImpl;
 import com.liferay.knowledgebase.model.impl.KBCommentModelImpl;
+import com.liferay.knowledgebase.service.persistence.KBCommentPersistence;
 
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;

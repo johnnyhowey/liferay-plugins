@@ -12,12 +12,13 @@
  * details.
  */
 
-package com.liferay.knowledgebase.service.persistence;
+package com.liferay.knowledgebase.service.persistence.impl;
 
 import com.liferay.knowledgebase.NoSuchTemplateException;
 import com.liferay.knowledgebase.model.KBTemplate;
 import com.liferay.knowledgebase.model.impl.KBTemplateImpl;
 import com.liferay.knowledgebase.model.impl.KBTemplateModelImpl;
+import com.liferay.knowledgebase.service.persistence.KBTemplatePersistence;
 
 import com.liferay.portal.kernel.cache.CacheRegistryUtil;
 import com.liferay.portal.kernel.dao.orm.EntityCacheUtil;

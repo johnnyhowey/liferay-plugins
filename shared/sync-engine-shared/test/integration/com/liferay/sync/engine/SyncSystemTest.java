@@ -47,7 +47,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -505,11 +504,7 @@ public class SyncSystemTest {
 
 			JsonNode filesJsonNode = stepJsonNode.get("files");
 
-			Iterator<JsonNode> iterator = filesJsonNode.elements();
-
-			while (iterator.hasNext()) {
-				JsonNode fileJsonNode = iterator.next();
-
+			for (JsonNode fileJsonNode : filesJsonNode) {
 				Path targetFilePath = getTargetFilePath(fileJsonNode);
 
 				files.add(targetFilePath.toFile());
