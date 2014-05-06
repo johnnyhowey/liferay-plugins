@@ -65,7 +65,9 @@ page import="com.liferay.portlet.eventsdisplay.util.comparator.CalendarBookingTi
 <%@ page import="java.util.ArrayList" %><%@
 page import="java.util.Calendar" %><%@
 page import="java.util.Date" %><%@
-page import="java.util.List" %>
+page import="java.util.HashMap" %><%@
+page import="java.util.List" %><%@
+page import="java.util.Map" %>
 
 <%@ page import="javax.portlet.PortletMode" %><%@
 page import="javax.portlet.PortletRequest" %>
@@ -80,5 +82,6 @@ int maxDaysDisplayed = PrefsParamUtil.getInteger(portletPreferences, request, "m
 
 Calendar jCalendar = CalendarFactoryUtil.getCalendar(timeZone, locale);
 
+Format dateFormatDate = FastDateFormatFactoryUtil.getSimpleDateFormat("EEE, MMM dd", locale, timeZone);
 Format dateFormatTime = FastDateFormatFactoryUtil.getTime(locale, timeZone);
 %>
