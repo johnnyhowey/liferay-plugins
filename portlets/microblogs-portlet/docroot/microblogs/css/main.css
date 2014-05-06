@@ -321,3 +321,17 @@ $microblogs-border-color: #EAEAEA;
 		padding: 5px 25px;
 	}
 }
+
+/* ---------- Responsive ---------- */
+
+@include respond-to(phone, tablet) {
+	.microblogs-portlet .microblogs-entry .footer .action {
+		display: inline-block;
+	}
+}
+
+@include respond-to(phone) {
+	.microblogs-portlet .microblogs-post {
+		width: auto;
+	}
+}
