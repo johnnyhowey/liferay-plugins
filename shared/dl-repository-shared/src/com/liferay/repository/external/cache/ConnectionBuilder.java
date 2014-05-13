@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,22 +11,16 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/html/taglib/ui/social_bookmark/init.jsp" %>
+package com.liferay.repository.external.cache;
 
-<%
-String slashdotDisplayStyle = StringPool.BLANK;
+import com.liferay.portal.kernel.repository.RepositoryException;
 
-if (displayStyle.equals("vertical")) {
-	slashdotDisplayStyle = "slashdot_badge_style='v0'";
+/**
+ * @author Iván Zaera
+ */
+public interface ConnectionBuilder<T> {
+
+	public T buildConnection() throws RepositoryException;
+
 }
-%>
-
-<script type="text/javascript">
-	slashdot_title='<%= HtmlUtil.escapeJS(title) %>';
-	slashdot_url='<%= url %>';
-	<%= slashdotDisplayStyle %>
-</script>
-
-<script src="<%= HttpUtil.getProtocol(request) %>://slashdot.org/slashdot-it.js" type="text/javascript"></script>
