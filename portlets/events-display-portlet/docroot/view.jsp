@@ -71,12 +71,19 @@ int[] statuses = {WorkflowConstants.STATUS_APPROVED};
 
 List<CalendarBooking> calendarBookings = CalendarBookingServiceUtil.search(themeDisplay.getCompanyId(), ArrayUtil.toLongArray(groupIds), null, ArrayUtil.toLongArray(calendarResourceIds), -1, null, displayStartTimeJCalendar.getTimeInMillis(), displayEndTime, true, statuses, QueryUtil.ALL_POS, QueryUtil.ALL_POS, null);
 
-if (calendarBookings.size() > 1) {
-	ListUtil.sort(calendarBookings, new CalendarBookingTimeComparator(locale));
-}
+Map<Integer, List<CalendarBooking>> bookings = new HashMap<Integer, List<CalendarBooking>>();
+Map<Integer, Object[]> days = new HashMap<Integer, Object[]>();
 
-List<CalendarBooking> todayBookings = new ArrayList<CalendarBooking>();
-List<CalendarBooking> upcomingBookings = new ArrayList<CalendarBooking>();
+for (int i = 0; i < maxDaysDisplayed; i++) {
+	bookings.put(i, new ArrayList<CalendarBooking>());
+
+	Calendar dayCalendar = (Calendar)displayStartTimeJCalendar.clone();
+	dayCalendar.set(Calendar.DAY_OF_YEAR, dayCalendar.get(Calendar.DAY_OF_YEAR) + i);
+
+	Object[] dayAndYear = new Object[] {dayCalendar.get(Calendar.DAY_OF_YEAR), dayCalendar.get(Calendar.YEAR), dateFormatDate.format(dayCalendar.getTimeInMillis())};
+
+	days.put(i, dayAndYear);
+}
 
 for (CalendarBooking calendarBooking : calendarBookings) {
 	if (Validator.isNull(calendarBooking.getTitle())) {
@@ -101,44 +108,61 @@ for (CalendarBooking calendarBooking : calendarBookings) {
 
 	startTimeJCalendar.setTimeInMillis(startTime);
 
-	if ((startTimeJCalendar.get(Calendar.DAY_OF_YEAR) <= jCalendar.get(Calendar.DAY_OF_YEAR)) && (startTimeJCalendar.get(Calendar.YEAR) <= jCalendar.get(Calendar.YEAR))) {
-		todayBookings.add(calendarBooking);
-	}
-	else {
-		upcomingBookings.add(calendarBooking);
+	for (int i = 0; i < maxDaysDisplayed; i++) {
+		if ((i == 0) && (startTimeJCalendar.get(Calendar.DAY_OF_YEAR) <= (Integer)days.get(i)[0]) && (startTimeJCalendar.get(Calendar.YEAR) <= (Integer)days.get(i)[1])) {
+			bookings.get(i).add(calendarBooking);
+
+			break;
+		}
+		else if ((startTimeJCalendar.get(Calendar.DAY_OF_YEAR) == (Integer)days.get(i)[0]) && (startTimeJCalendar.get(Calendar.YEAR) == (Integer)days.get(i)[1])) {
+			bookings.get(i).add(calendarBooking);
+
+			break;
+		}
 	}
 }
 %>
 
 <c:choose>
-	<c:when test="<%= todayBookings.isEmpty() && upcomingBookings.isEmpty() %>">
+	<c:when test="<%= calendarBookings.isEmpty() %>">
 		<liferay-ui:message key="there-are-no-more-events-today" />
 	</c:when>
 	<c:otherwise>
-		<c:if test="<%= !todayBookings.isEmpty() %>">
-			<div class="today-events">
 
-				<%
-				request.setAttribute("view.jsp-calendarBookings", todayBookings);
-				%>
+		<%
+		for (int i = 0 ; i < maxDaysDisplayed; i++) {
+			List<CalendarBooking> calendarBookingsOfDay = bookings.get(i);
 
-				<liferay-util:include page="/view_events.jsp" servletContext="<%= application %>">
-					<liferay-util:param name="searchContainerName" value="todays-events" />
-				</liferay-util:include>
-			</div>
-		</c:if>
+			if (!calendarBookingsOfDay.isEmpty()) {
 
-		<c:if test="<%= !upcomingBookings.isEmpty() %>">
-			<div class="upcoming-events">
+				ListUtil.sort(calendarBookingsOfDay, new CalendarBookingTimeComparator(locale));
 
-				<%
-				request.setAttribute("view.jsp-calendarBookings", upcomingBookings);
-				%>
+				request.setAttribute("view.jsp-calendarBookings", calendarBookingsOfDay);
+		%>
 
 				<liferay-util:include page="/view_events.jsp" servletContext="<%= application %>">
-					<liferay-util:param name="searchContainerName" value="upcoming-events" />
+					<c:choose>
+						<c:when test="<%= i == 0 %>">
+							<liferay-util:param name="searchContainerName" value="todays-events" />
+						</c:when>
+						<c:when test="<%= i == 1 %>">
+							<liferay-util:param name="searchContainerName" value="tomorrows-events" />
+						</c:when>
+						<c:otherwise>
+
+							<%
+								String eventDay = LanguageUtil.format(pageContext, "x's-events", (String)days.get(i)[2], false);
+							%>
+
+							<liferay-util:param name="searchContainerName" value="<%= eventDay %>" />
+						</c:otherwise>
+					</c:choose>
 				</liferay-util:include>
-			</div>
-		</c:if>
+
+		<%
+			}
+		}
+		%>
+
 	</c:otherwise>
 </c:choose>
