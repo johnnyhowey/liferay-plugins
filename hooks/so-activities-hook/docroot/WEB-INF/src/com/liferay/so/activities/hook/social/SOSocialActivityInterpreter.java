@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.ProjectionFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.parsers.bbcode.BBCodeTranslatorUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletRequest;
@@ -175,11 +176,7 @@ public abstract class SOSocialActivityInterpreter
 				SocialActivitySetLocalServiceUtil.fetchSocialActivitySet(
 					activitySetId);
 
-			if ((socialActivitySet != null) &&
-				(socialActivitySet.getActivityCount() == 1) &&
-				(socialActivitySet.getModifiedDate() >
-					socialActivitySet.getCreateDate())) {
-
+			if (socialActivitySet != null) {
 				return socialActivitySet.getModifiedDate();
 			}
 		}
@@ -421,6 +418,8 @@ public abstract class SOSocialActivityInterpreter
 			SocialActivitySet activitySet, ServiceContext serviceContext)
 		throws Exception {
 
+		setDisplayTime(activitySet.getClassNameId(), activitySet.getClassPK());
+
 		List<SocialActivity> viewableActivities =
 			new ArrayList<SocialActivity>();
 
@@ -531,6 +530,12 @@ public abstract class SOSocialActivityInterpreter
 		}
 
 		return false;
+	}
+
+	protected void setDisplayTime(long classNameId, long classPK)
+		throws PortalException, SystemException {
+
+		return;
 	}
 
 	protected String wrapLink(String link, String iconPath, String text) {
