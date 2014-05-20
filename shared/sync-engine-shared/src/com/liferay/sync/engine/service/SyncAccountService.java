@@ -43,10 +43,32 @@ import org.slf4j.LoggerFactory;
  */
 public class SyncAccountService {
 
+	public static SyncAccount activateSyncAccount(
+		long syncAccountId, boolean reset) {
+
+		SyncAccount syncAccount = fetchSyncAccount(syncAccountId);
+
+		syncAccount.setActive(true);
+
+		update(syncAccount);
+
+		if (reset) {
+			List<SyncSite> syncSites = SyncSiteService.findSyncSites(
+				syncAccountId);
+
+			for (SyncSite syncSite : syncSites) {
+				syncSite.setRemoteSyncTime(0);
+
+				SyncSiteService.update(syncSite);
+			}
+		}
+
+		return syncAccount;
+	}
+
 	public static SyncAccount addSyncAccount(
-			String filePathName, int interval, String login, String name,
-			String password, SyncSite[] syncSites, boolean trustSelfSigned,
-			String url)
+			String filePathName, String login, String name, String password,
+			SyncSite[] syncSites, boolean trustSelfSigned, String url)
 		throws Exception {
 
 		// Sync account
@@ -54,7 +76,6 @@ public class SyncAccountService {
 		SyncAccount syncAccount = new SyncAccount();
 
 		syncAccount.setFilePathName(filePathName);
-		syncAccount.setInterval(interval);
 		syncAccount.setLogin(login);
 		syncAccount.setName(name);
 		syncAccount.setPassword(Encryptor.encrypt(password));
