@@ -48,11 +48,25 @@
 
 	<taskdef classpathref="ivy.lib.path" resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" />
 
+	<pathconvert property="sdk.dir.unix" targetos="unix">
+		<path location="${sdk.dir}" />
+	</pathconvert>
+
+	<pathconvert property="sdk.dependencies.dir.unix" targetos="unix">
+		<path location="${sdk.dir}/dependencies" />
+	</pathconvert>
+
+	<path id="sdk.dependencies.path">
+		<dirset dir="${sdk.dir}" includes="dependencies/*" />
+	</path>
+
+	<pathconvert pathsep="," property="sdk.dependencies.path" refid="sdk.dependencies.path" targetos="unix" />
+
 	<macrodef name="process-ivy">
 		<attribute default="${basedir}" name="module.dir" />
 
 		<sequential>
-			<for list="@{module.dir},${sdk.dir}" param="ivy.xml.dir">
+			<for list="@{module.dir},${sdk.dir},${sdk.dependencies.path}" param="ivy.xml.dir">
 				<sequential>
 					<if>
 						<available file="@{ivy.xml.dir}/ivy.xml" />
@@ -72,7 +86,8 @@
 
 									<if>
 										<or>
-											<equals arg1="@{ivy.xml.dir}" arg2="${sdk.dir}" />
+											<equals arg1="@{ivy.xml.dir}" arg2="${sdk.dir.unix}" />
+											<contains string="@{ivy.xml.dir}" substring="${sdk.dependencies.dir.unix}" />
 											<antelope:endswith string="${ant.project.name}" with="-shared" />
 											<available file="@{ivy.xml.dir}/bnd.bnd" />
 										</or>
@@ -134,11 +149,16 @@
 		<property name="ivy.pom.version" value="${plugin.full.version}${plugin.release.qualifier}" />
 
 		<ivy:makepom
+			conf="default,provided,runtime"
 			description="${ivy.pom.description}"
 			ivyfile="ivy.xml"
 			pomfile="${plugin.pom.file}"
 			templatefile="${sdk.dir}/tools/pom_tmpl/template.pom"
-		/>
+		>
+			<mapping conf="default" scope="compile" />
+			<mapping conf="provided" scope="provided" />
+			<mapping conf="runtime" scope="runtime" />
+		</ivy:makepom>
 
 		<ivy:publish
 			forcedeliver="true"
