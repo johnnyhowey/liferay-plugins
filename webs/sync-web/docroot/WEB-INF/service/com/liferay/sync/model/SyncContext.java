@@ -18,6 +18,7 @@ import com.liferay.portal.kernel.json.JSON;
 import com.liferay.portal.model.Group;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Dennis Ju
@@ -31,6 +32,11 @@ public class SyncContext {
 
 	public int getPortalBuildNumber() {
 		return _portalBuildNumber;
+	}
+
+	@JSON
+	public Map<String, String> getPortletPreferencesMap() {
+		return _portletPreferencesMap;
 	}
 
 	public long getUserId() {
@@ -54,6 +60,12 @@ public class SyncContext {
 		_portalBuildNumber = portalBuildNumber;
 	}
 
+	public void setPortletPreferencesMap(
+		Map<String, String> portletPreferencesMap) {
+
+		_portletPreferencesMap = portletPreferencesMap;
+	}
+
 	public void setSocialOfficeInstalled(boolean socialOfficeInstalled) {
 		_socialOfficeInstalled = socialOfficeInstalled;
 	}
@@ -68,6 +80,7 @@ public class SyncContext {
 
 	private String _pluginVersion;
 	private int _portalBuildNumber;
+	private Map<String, String> _portletPreferencesMap;
 	private boolean _socialOfficeInstalled;
 	private long _userId;
 	private List<Group> _userSitesGroups;

@@ -33,7 +33,9 @@ public class SyncAccount extends StateAwareModel {
 
 	public static final int UI_EVENT_CONNECTION_EXCEPTION = 2;
 
-	public static final int UI_EVENT_SYNC_WEB_MISSING = 3;
+	public static final int UI_EVENT_SYNC_ACCOUNT_FOLDER_MISSING = 3;
+
+	public static final int UI_EVENT_SYNC_WEB_MISSING = 4;
 
 	public boolean getActive() {
 		return active;
@@ -41,10 +43,6 @@ public class SyncAccount extends StateAwareModel {
 
 	public String getFilePathName() {
 		return filePathName;
-	}
-
-	public int getInterval() {
-		return interval;
 	}
 
 	public String getLogin() {
@@ -57,6 +55,10 @@ public class SyncAccount extends StateAwareModel {
 
 	public String getPassword() {
 		return password;
+	}
+
+	public int getPollInterval() {
+		return pollInterval;
 	}
 
 	public boolean getSocialOfficeInstalled() {
@@ -99,10 +101,6 @@ public class SyncAccount extends StateAwareModel {
 		this.filePathName = filePathName;
 	}
 
-	public void setInterval(int interval) {
-		this.interval = interval;
-	}
-
 	public void setLogin(String login) {
 		this.login = login;
 	}
@@ -113,6 +111,10 @@ public class SyncAccount extends StateAwareModel {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public void setPollInterval(int pollInterval) {
+		this.pollInterval = pollInterval;
 	}
 
 	public void setSocialOfficeInstalled(boolean socialOfficeInstalled) {
@@ -141,9 +143,6 @@ public class SyncAccount extends StateAwareModel {
 	@DatabaseField(useGetSet = true, width = 16777216)
 	protected String filePathName;
 
-	@DatabaseField(useGetSet = true)
-	protected int interval;
-
 	@DatabaseField(useGetSet = true, width = 16777216)
 	protected String login;
 
@@ -152,6 +151,9 @@ public class SyncAccount extends StateAwareModel {
 
 	@DatabaseField(useGetSet = true, width = 16777216)
 	protected String password;
+
+	@DatabaseField(useGetSet = true)
+	protected int pollInterval;
 
 	@DatabaseField(useGetSet = true)
 	protected boolean socialOfficeInstalled;
