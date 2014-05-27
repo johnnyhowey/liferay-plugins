@@ -44,7 +44,7 @@ public class BaseAMITool {
 		amazonEC2Client = getAmazonEC2Client(
 			properties.getProperty("access.key"),
 			properties.getProperty("secret.key"),
-			properties.getProperty("endpoint"));
+			properties.getProperty("ec2.endpoint"));
 	}
 
 	protected AmazonEC2Client getAmazonEC2Client(
@@ -64,33 +64,45 @@ public class BaseAMITool {
 		DescribeImagesRequest describeImagesRequest =
 			new DescribeImagesRequest();
 
-		List<Filter> filters = new ArrayList<Filter>();
+		Image image = null;
 
-		Filter filter = new Filter();
+		for (int i = 0; i < 6; i++) {
+			List<Filter> filters = new ArrayList<Filter>();
 
-		filter.setName("name");
+			Filter filter = new Filter();
 
-		List<String> values = new ArrayList<String>();
+			filter.setName("name");
 
-		values.add(imageName);
+			List<String> values = new ArrayList<String>();
 
-		filter.setValues(values);
+			values.add(imageName);
 
-		filters.add(filter);
+			filter.setValues(values);
 
-		describeImagesRequest.setFilters(filters);
+			filters.add(filter);
 
-		DescribeImagesResult describeImagesResult =
-			amazonEC2Client.describeImages(describeImagesRequest);
+			describeImagesRequest.setFilters(filters);
 
-		List<Image> images = describeImagesResult.getImages();
+			DescribeImagesResult describeImagesResult =
+				amazonEC2Client.describeImages(describeImagesRequest);
 
-		if (images.isEmpty()) {
-			throw new RuntimeException(
-				"Image "  + imageName + " does not exist");
+			List<Image> images = describeImagesResult.getImages();
+
+			if (images.isEmpty()) {
+				sleep(30);
+
+				continue;
+			}
+
+			image = images.get(0);
+
+			break;
 		}
 
-		Image image = images.get(0);
+		if (image == null) {
+			throw new RuntimeException(
+				"Image " + imageName + " does not exist");
+		}
 
 		return image.getImageId();
 	}
