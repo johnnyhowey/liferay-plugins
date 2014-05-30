@@ -20,18 +20,23 @@
 			"action": "pause"
 		},
 		{
-			"action": "addFile",
-			"dependency": "common/Test.txt",
+			"action": "addFolder",
+			"dependency": "common/Parent Folder",
 			"doAsSyncAccount": "test1"
+		},
+		{
+			"action": "addFolder",
+			"dependency": "common/Parent Folder",
+			"doAsSyncAccount": "test2"
 		},
 		{
 			"action": "pause"
 		},
 		{
-			"action": "moveFile",
+			"action": "addFile",
+			"dependency": "common/Test.txt",
 			"doAsSyncAccount": "test1",
-			"source": "Test.txt",
-			"target": "Test2.txt"
+			"target": "Parent Folder/Test.txt"
 		},
 		{
 			"action": "pause",
@@ -40,13 +45,7 @@
 		{
 			"action": "verifyFile",
 			"doAsSyncAccount": "test2",
-			"source": "Test.txt",
-			"operation": "notExists"
-		},
-		{
-			"action": "verifyFile",
-			"doAsSyncAccount": "test2",
-			"source": "Test2.txt"
+			"source": "Parent Folder/Test.txt"
 		},
 		{
 			"action": "cleanUp"
