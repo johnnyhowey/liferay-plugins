@@ -56,6 +56,8 @@ public class AsgardAMIDeployer extends BaseAMITool {
 
 		CmdLineParser.Option imageNameOption = cmdLineParser.addStringOption(
 			"image.name");
+		CmdLineParser.Option parallelDeploymentOption =
+			cmdLineParser.addBooleanOption("parallel.deployment");
 		CmdLineParser.Option propertiesFileNameOption =
 			cmdLineParser.addStringOption("properties.file.name");
 
@@ -64,6 +66,8 @@ public class AsgardAMIDeployer extends BaseAMITool {
 		try {
 			new AsgardAMIDeployer(
 				(String)cmdLineParser.getOptionValue(imageNameOption),
+				(Boolean)cmdLineParser.getOptionValue(
+					parallelDeploymentOption, Boolean.FALSE),
 				(String)cmdLineParser.getOptionValue(propertiesFileNameOption));
 		}
 		catch (Exception e) {
@@ -73,12 +77,15 @@ public class AsgardAMIDeployer extends BaseAMITool {
 		}
 	}
 
-	public AsgardAMIDeployer(String imageName, String propertiesFileName)
+	public AsgardAMIDeployer(
+			String imageName, boolean parallelDeployment,
+			String propertiesFileName)
 		throws Exception {
 
 		super(propertiesFileName);
 
 		_imageName = imageName;
+		_parallelDeployment = parallelDeployment;
 
 		_amazonAutoScalingClient = getAmazonAutoScalingClient(
 			properties.getProperty("access.key"),
@@ -90,18 +97,39 @@ public class AsgardAMIDeployer extends BaseAMITool {
 			properties.getProperty("asgard.login"),
 			properties.getProperty("asgard.password"));
 
+		System.out.println("Deleting available Volumes");
+
+		deleteAvailableVolumes();
+
+		System.out.println("Creating Auto Scaling Group");
+
 		String autoScalingGroupName = createAutoScalingGroup();
 
-		if (autoScalingGroupName != null) {
-			checkAutoScalingGroup(autoScalingGroupName);
-		}
-	}
+		System.out.println(
+			"Created Auto Scaling Group " + autoScalingGroupName);
 
-	protected void checkAutoScalingGroup(String autoScalingGroupName)
-		throws Exception {
+		int minSize = -1;
+
+		if (!_parallelDeployment) {
+			minSize = Integer.parseInt(
+				properties.getProperty("instance.min.size"));
+		}
 
 		System.out.println(
 			"Checking Auto Scaling Group " + autoScalingGroupName);
+
+		checkAutoScalingGroup(autoScalingGroupName, minSize);
+
+		deactivateOldScalingGroup(autoScalingGroupName);
+
+		openAsgardURL();
+
+		System.out.println(
+			"Deployed Auto Scaling Group " + autoScalingGroupName);
+	}
+
+	protected void checkAutoScalingGroup(String autoScalingGroupName, int size)
+		throws Exception {
 
 		String asgardClusterName = properties.getProperty(
 			"asgard.cluster.name");
@@ -116,8 +144,20 @@ public class AsgardAMIDeployer extends BaseAMITool {
 
 			JSONObject loadBalancerJSONObject = new JSONObject(json);
 
+			List<JSONObject> instanceStateJSONObjects =
+				getInstanceStateJSONObjects(
+					loadBalancerJSONObject, autoScalingGroupName);
+
+			if (size != -1) {
+				if (instanceStateJSONObjects.size() < size) {
+					sleep(15);
+
+					continue;
+				}
+			}
+
 			if (!isInService(loadBalancerJSONObject, autoScalingGroupName)) {
-				sleep(30);
+				sleep(15);
 			}
 			else {
 				deployed = true;
@@ -137,59 +177,9 @@ public class AsgardAMIDeployer extends BaseAMITool {
 			throw new RuntimeException(
 				"Unable to deploy Auto Scaling Group " + autoScalingGroupName);
 		}
-
-		String json = _jsonWebServiceClient.doGet(
-			"/" + availabilityZone + "/cluster/list.json",
-			Collections.<String, String>emptyMap());
-
-		JSONArray clustersJSONArray = new JSONArray(json);
-
-		for (int i = 0; i < clustersJSONArray.length(); i++) {
-			JSONObject clusterJSONObject = clustersJSONArray.getJSONObject(i);
-
-			String curAsgardClusterName = clusterJSONObject.getString(
-				"cluster");
-
-			if (!asgardClusterName.equals(curAsgardClusterName)) {
-				continue;
-			}
-
-			JSONArray autoScalingGroupsJSONArray =
-				clusterJSONObject.getJSONArray("autoScalingGroups");
-
-			for (int j = 0; j < autoScalingGroupsJSONArray.length(); j++) {
-				String curAutoScalingGroupName =
-					autoScalingGroupsJSONArray.getString(j);
-
-				if (autoScalingGroupName.equals(curAutoScalingGroupName)) {
-					continue;
-				}
-
-				Map<String, String> parameters = new HashMap<String, String>();
-
-				parameters.put("name", curAutoScalingGroupName);
-
-				_jsonWebServiceClient.doPost(
-					"/" + availabilityZone + "/cluster/deactivate", parameters);
-			}
-		}
-
-		System.out.println(
-			"Deployed Auto Scaling Group " + autoScalingGroupName);
-
-		Desktop desktop = Desktop.getDesktop();
-
-		String asgardClusterURL =
-			"http://" + properties.getProperty("asgard.host.name") + ":" +
-				properties.getProperty("asgard.host.port") + "/" +
-					availabilityZone + "/cluster/show/" + asgardClusterName;
-
-		desktop.browse(URI.create(asgardClusterURL));
 	}
 
 	protected String createAutoScalingGroup() throws Exception {
-		System.out.println("Creating Auto Scaling Group");
-
 		DescribeAutoScalingGroupsResult describeAutoScalingGroupsResult =
 			_amazonAutoScalingClient.describeAutoScalingGroups();
 
@@ -203,9 +193,7 @@ public class AsgardAMIDeployer extends BaseAMITool {
 		Map<String, String> parameters = new HashMap<String, String>();
 
 		parameters.put("checkHealth", "true");
-		parameters.put("desiredCapacity", "1");
 		parameters.put("imageId", getImageId(_imageName));
-		parameters.put("min", "1");
 
 		String asgardClusterName = properties.getProperty(
 			"asgard.cluster.name");
@@ -213,6 +201,11 @@ public class AsgardAMIDeployer extends BaseAMITool {
 		parameters.put("name", asgardClusterName);
 
 		parameters.put("trafficAllowed", "true");
+
+		if (!_parallelDeployment) {
+			parameters.put("desiredCapacity", "1");
+			parameters.put("min", "1");
+		}
 
 		_jsonWebServiceClient.doPost(
 			"/" + availabilityZone + "/cluster/createNextGroup", parameters);
@@ -318,43 +311,95 @@ public class AsgardAMIDeployer extends BaseAMITool {
 				"Unable to create Auto Scaling Group " + autoScalingGroupName);
 		}
 
-		int minSize = Integer.parseInt(
-			properties.getProperty("instance.min.size"));
+		if (!_parallelDeployment) {
+			int minSize = Integer.parseInt(
+				properties.getProperty("instance.min.size"));
 
-		if (minSize > 1) {
-			parameters.clear();
+			if (minSize > 1) {
+				checkAutoScalingGroup(autoScalingGroupName, 1);
 
-			parameters.put("maxSize", String.valueOf(maxSize));
-			parameters.put("minSize", String.valueOf(minSize));
-			parameters.put("name", autoScalingGroupName);
+				parameters.clear();
 
-			_jsonWebServiceClient.doPost(
-				"/" + availabilityZone + "/cluster/resize", parameters);
+				parameters.put("maxSize", String.valueOf(maxSize));
+				parameters.put("minSize", String.valueOf(minSize));
+				parameters.put("name", autoScalingGroupName);
 
-			for (int i = 0; i < 12; i++) {
-				String json = _jsonWebServiceClient.doGet(
-					"/" + availabilityZone + "/cluster/show/" +
-						asgardClusterName + ".json",
-					Collections.<String, String>emptyMap());
+				_jsonWebServiceClient.doPost(
+					"/" + availabilityZone + "/cluster/resize", parameters);
 
-				JSONArray autoScalingGroupsJSONArray = new JSONArray(json);
+				for (int i = 0; i < 12; i++) {
+					String json = _jsonWebServiceClient.doGet(
+						"/" + availabilityZone + "/cluster/show/" +
+							asgardClusterName + ".json",
+						Collections.<String, String>emptyMap());
 
-				JSONObject autoScalingGroupJSONObject =
-					autoScalingGroupsJSONArray.getJSONObject(
-						autoScalingGroupsJSONArray.length() - 1);
+					JSONArray autoScalingGroupsJSONArray = new JSONArray(json);
 
-				JSONArray instancesJSONArray =
-					autoScalingGroupJSONObject.getJSONArray("instances");
+					JSONObject autoScalingGroupJSONObject =
+						autoScalingGroupsJSONArray.getJSONObject(
+							autoScalingGroupsJSONArray.length() - 1);
 
-				if (instancesJSONArray.length() == 1) {
-					sleep(15);
-				}
-				else {
-					break;
+					JSONArray instancesJSONArray =
+						autoScalingGroupJSONObject.getJSONArray("instances");
+
+					if (instancesJSONArray.length() == 1) {
+						sleep(15);
+					}
+					else {
+						break;
+					}
 				}
 			}
 		}
 
+		return autoScalingGroupName;
+	}
+
+	protected void deactivateOldScalingGroup(String autoScalingGroupName)
+		throws Exception {
+
+		String asgardClusterName = properties.getProperty(
+			"asgard.cluster.name");
+		String availabilityZone = properties.getProperty("availability.zone");
+
+		String json = _jsonWebServiceClient.doGet(
+			"/" + availabilityZone + "/cluster/list.json",
+			Collections.<String, String>emptyMap());
+
+		JSONArray clustersJSONArray = new JSONArray(json);
+
+		for (int i = 0; i < clustersJSONArray.length(); i++) {
+			JSONObject clusterJSONObject = clustersJSONArray.getJSONObject(i);
+
+			String curAsgardClusterName = clusterJSONObject.getString(
+				"cluster");
+
+			if (!asgardClusterName.equals(curAsgardClusterName)) {
+				continue;
+			}
+
+			JSONArray autoScalingGroupsJSONArray =
+				clusterJSONObject.getJSONArray("autoScalingGroups");
+
+			for (int j = 0; j < autoScalingGroupsJSONArray.length(); j++) {
+				String curAutoScalingGroupName =
+					autoScalingGroupsJSONArray.getString(j);
+
+				if (autoScalingGroupName.equals(curAutoScalingGroupName)) {
+					continue;
+				}
+
+				Map<String, String> parameters = new HashMap<String, String>();
+
+				parameters.put("name", curAutoScalingGroupName);
+
+				_jsonWebServiceClient.doPost(
+					"/" + availabilityZone + "/cluster/deactivate", parameters);
+			}
+		}
+	}
+
+	protected void deleteAvailableVolumes() {
 		DescribeVolumesRequest describeVolumesRequest =
 			new DescribeVolumesRequest();
 
@@ -380,11 +425,6 @@ public class AsgardAMIDeployer extends BaseAMITool {
 
 			amazonEC2Client.deleteVolume(deleteVolumeRequest);
 		}
-
-		System.out.println(
-			"Created Auto Scaling Group " + autoScalingGroupName);
-
-		return autoScalingGroupName;
 	}
 
 	protected AmazonAutoScalingClient getAmazonAutoScalingClient(
@@ -399,6 +439,31 @@ public class AsgardAMIDeployer extends BaseAMITool {
 		amazonAutoScalingClient.setEndpoint(endpoint);
 
 		return amazonAutoScalingClient;
+	}
+
+	protected List<JSONObject> getInstanceStateJSONObjects(
+		JSONObject loadBalancerJSONObject, String autoScalingGroupName) {
+
+		List<JSONObject> instanceStateJSONObjects = new ArrayList<JSONObject>();
+
+		JSONArray instanceStatesJSONArray = loadBalancerJSONObject.getJSONArray(
+			"instanceStates");
+
+		for (int i = 0; i < instanceStatesJSONArray.length(); i++) {
+			JSONObject instanceStateJSONObject =
+				instanceStatesJSONArray.getJSONObject(i);
+
+			Object instanceStateAutoScalingGroupName =
+				instanceStateJSONObject.get("autoScalingGroupName");
+
+			if (autoScalingGroupName.equals(
+					instanceStateAutoScalingGroupName)) {
+
+				instanceStateJSONObjects.add(instanceStateJSONObject);
+			}
+		}
+
+		return instanceStateJSONObjects;
 	}
 
 	protected JSONWebServiceClient getJSONWebServiceClient(
@@ -437,24 +502,9 @@ public class AsgardAMIDeployer extends BaseAMITool {
 	protected boolean isInService(
 		JSONObject loadBalancerJSONObject, String autoScalingGroupName) {
 
-		List<JSONObject> instanceStateJSONObjects = new ArrayList<JSONObject>();
-
-		JSONArray instanceStatesJSONArray = loadBalancerJSONObject.getJSONArray(
-			"instanceStates");
-
-		for (int i = 0; i < instanceStatesJSONArray.length(); i++) {
-			JSONObject instanceStateJSONObject =
-				instanceStatesJSONArray.getJSONObject(i);
-
-			Object instanceStateAutoScalingGroupName =
-				instanceStateJSONObject.get("autoScalingGroupName");
-
-			if (autoScalingGroupName.equals(
-					instanceStateAutoScalingGroupName)) {
-
-				instanceStateJSONObjects.add(instanceStateJSONObject);
-			}
-		}
+		List<JSONObject> instanceStateJSONObjects =
+			getInstanceStateJSONObjects(
+				loadBalancerJSONObject, autoScalingGroupName);
 
 		if (instanceStateJSONObjects.isEmpty()) {
 			return false;
@@ -474,8 +524,24 @@ public class AsgardAMIDeployer extends BaseAMITool {
 		return true;
 	}
 
+	protected void openAsgardURL() throws Exception {
+		Desktop desktop = Desktop.getDesktop();
+
+		String asgardClusterName = properties.getProperty(
+			"asgard.cluster.name");
+		String availabilityZone = properties.getProperty("availability.zone");
+
+		String asgardURL =
+			"http://" + properties.getProperty("asgard.host.name") + ":" +
+				properties.getProperty("asgard.host.port") + "/" +
+					availabilityZone + "/cluster/show/" + asgardClusterName;
+
+		desktop.browse(URI.create(asgardURL));
+	}
+
 	private AmazonAutoScalingClient _amazonAutoScalingClient;
 	private String _imageName;
 	private JSONWebServiceClient _jsonWebServiceClient;
+	private boolean _parallelDeployment;
 
 }

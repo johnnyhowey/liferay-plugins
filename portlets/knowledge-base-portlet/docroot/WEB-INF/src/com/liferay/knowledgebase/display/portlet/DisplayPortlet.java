@@ -22,6 +22,7 @@ import com.liferay.knowledgebase.NoSuchArticleException;
 import com.liferay.knowledgebase.NoSuchCommentException;
 import com.liferay.knowledgebase.model.KBArticle;
 import com.liferay.knowledgebase.model.KBComment;
+import com.liferay.knowledgebase.service.KBArticleLocalServiceUtil;
 import com.liferay.knowledgebase.service.KBArticleServiceUtil;
 import com.liferay.knowledgebase.service.KBCommentLocalServiceUtil;
 import com.liferay.knowledgebase.service.KBCommentServiceUtil;
@@ -29,6 +30,7 @@ import com.liferay.knowledgebase.service.permission.KBArticlePermission;
 import com.liferay.knowledgebase.util.ActionKeys;
 import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.knowledgebase.util.WebKeys;
+import com.liferay.knowledgebase.util.comparator.KBArticlePriorityComparator;
 import com.liferay.portal.NoSuchSubscriptionException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
@@ -62,6 +64,8 @@ import com.liferay.util.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -181,6 +185,9 @@ public class DisplayPortlet extends MVCPortlet {
 		throws IOException, PortletException {
 
 		try {
+			ThemeDisplay themeDisplay =
+				(ThemeDisplay)renderRequest.getAttribute(WebKeys.THEME_DISPLAY);
+
 			int status = getStatus(renderRequest);
 
 			renderRequest.setAttribute(WebKeys.KNOWLEDGE_BASE_STATUS, status);
@@ -192,6 +199,16 @@ public class DisplayPortlet extends MVCPortlet {
 			if (resourcePrimKey > 0) {
 				kbArticle = KBArticleServiceUtil.getLatestKBArticle(
 					resourcePrimKey, status);
+			}
+			else {
+				List<KBArticle> kbArticles =
+					KBArticleLocalServiceUtil.getGroupKBArticles(
+						themeDisplay.getScopeGroupId(), status, 0, 1,
+						new KBArticlePriorityComparator());
+
+				if (!kbArticles.isEmpty()) {
+					kbArticle = kbArticles.get(0);
+				}
 			}
 
 			renderRequest.setAttribute(

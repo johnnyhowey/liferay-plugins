@@ -133,11 +133,13 @@ if (userCalendarResource != null) {
 }
 
 int defaultDuration = GetterUtil.getInteger(portletPreferences.getValue("defaultDuration", null), 60);
-String defaultView = SessionClicks.get(request, "calendar-portlet-default-view", portletPreferences.getValue("defaultView", "week"));
+String defaultView = portletPreferences.getValue("defaultView", "week");
 boolean isoTimeFormat = GetterUtil.getBoolean(portletPreferences.getValue("isoTimeFormat", null));
 String timeZoneId = portletPreferences.getValue("timeZoneId", user.getTimeZoneId());
 boolean usePortalTimeZone = GetterUtil.getBoolean(portletPreferences.getValue("usePortalTimeZone", Boolean.TRUE.toString()));
 int weekStartsOn = GetterUtil.getInteger(portletPreferences.getValue("weekStartsOn", null), 0);
+
+String sessionClicksDefaultView = SessionClicks.get(request, "calendar-portlet-default-view", defaultView);
 
 if (usePortalTimeZone) {
 	timeZoneId = user.getTimeZoneId();

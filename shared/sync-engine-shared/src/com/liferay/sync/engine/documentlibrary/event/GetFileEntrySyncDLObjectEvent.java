@@ -14,7 +14,7 @@
 
 package com.liferay.sync.engine.documentlibrary.event;
 
-import com.liferay.sync.engine.documentlibrary.handler.GetFileEntrySyncDLObjectHandler;
+import com.liferay.sync.engine.documentlibrary.handler.GetSyncDLObjectHandler;
 import com.liferay.sync.engine.documentlibrary.handler.Handler;
 
 import java.util.Map;
@@ -32,7 +32,7 @@ public class GetFileEntrySyncDLObjectEvent extends BaseEvent {
 
 	@Override
 	protected Handler<?> getHandler() {
-		return new GetFileEntrySyncDLObjectHandler(this);
+		return new GetSyncDLObjectHandler(this);
 	}
 
 	private static final String _URL_PATH =
