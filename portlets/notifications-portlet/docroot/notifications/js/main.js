@@ -19,7 +19,13 @@ AUI().use(
 				instance._fullviewNotificationsURL = instance._getRenderURL('/notifications/view_entries.jsp', config.filter, config.start.toString(), config.end.toString(), 'true');
 				instance._lastPage = config.userNotificationEventsCount <= config.end;
 				instance._nextPageNotificationsURL = instance._getRenderURL('/notifications/view_entries.jsp', config.filter, (config.start + config.delta).toString(), (config.end + config.delta).toString(), 'true');
-				instance._previousPageNotificationsURL = instance._getRenderURL('/notifications/view_entries.jsp', config.filter, (config.start - config.delta).toString(), (config.end - config.delta).toString(), 'true');
+
+				if ((config.end - config.delta) <= 0) {
+					instance._previousPageNotificationsURL = instance._getRenderURL('/notifications/view_entries.jsp', config.filter, '0', config.delta.toString(), 'true');
+				}
+				else {
+					instance._previousPageNotificationsURL = instance._getRenderURL('/notifications/view_entries.jsp', config.filter, (config.start - config.delta).toString(), (config.end - config.delta).toString(), 'true');
+				}
 
 				instance._createMarkAllAsReadNode(config);
 
@@ -410,7 +416,7 @@ AUI().use(
 			_onPollerUpdate: function(response) {
 				var instance = this;
 
-				instance._updateDockbarNotificationsCount(response.newUserNotificationsCount, response.unreadUserNotificationsCount);
+				instance._updateDockbarNotificationsCount(response.newUserNotificationsCount, response.timestamp, response.unreadUserNotificationsCount);
 			},
 
 			_openWindow: function(uri) {
@@ -445,13 +451,19 @@ AUI().use(
 				A.io.request(instance._getActionURL('setDelivered'));
 			},
 
-			_updateDockbarNotificationsCount: function(newUserNotificationsCount, unreadUserNotificationsCount) {
-				var dockbarUserNotificationsCount = A.one('.dockbar-user-notifications .user-notifications-count');
+			_updateDockbarNotificationsCount: function(newUserNotificationsCount, timestamp, unreadUserNotificationsCount) {
+				var instance = this;
 
-				if (dockbarUserNotificationsCount) {
-					dockbarUserNotificationsCount.toggleClass('alert', (newUserNotificationsCount > 0));
+				if (!instance._previousTimestamp || (instance._previousTimestamp < timestamp)) {
+					instance._previousTimestamp = timestamp;
 
-					dockbarUserNotificationsCount.setHTML(unreadUserNotificationsCount);
+					var dockbarUserNotificationsCount = A.one('.dockbar-user-notifications .user-notifications-count');
+
+					if (dockbarUserNotificationsCount) {
+						dockbarUserNotificationsCount.toggleClass('alert', (newUserNotificationsCount > 0));
+
+						dockbarUserNotificationsCount.setHTML(unreadUserNotificationsCount);
+					}
 				}
 			},
 
@@ -493,7 +505,7 @@ AUI().use(
 										}
 									}
 
-									instance._updateNotificationsCount(response['newUserNotificationsCount'], response['unreadUserNotificationsCount']);
+									instance._updateNotificationsCount(response['timestamp'], response['newUserNotificationsCount'], response['unreadUserNotificationsCount']);
 								}
 							}
 						},
@@ -502,10 +514,10 @@ AUI().use(
 				);
 			},
 
-			_updateNotificationsCount: function(newUserNotificationsCount, unreadUserNotificationsCount) {
+			_updateNotificationsCount: function(timestamp, newUserNotificationsCount, unreadUserNotificationsCount) {
 				var instance = this;
 
-				instance._updateDockbarNotificationsCount(newUserNotificationsCount, unreadUserNotificationsCount);
+				instance._updateDockbarNotificationsCount(timestamp, newUserNotificationsCount, unreadUserNotificationsCount);
 				instance._updateFullviewNotificationsCount('unread', unreadUserNotificationsCount);
 			},
 
