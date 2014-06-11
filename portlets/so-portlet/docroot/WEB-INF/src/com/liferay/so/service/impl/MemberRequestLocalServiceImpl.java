@@ -24,8 +24,6 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.mail.MailMessage;
-import com.liferay.portal.kernel.notifications.NotificationEvent;
-import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
@@ -37,8 +35,11 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.MembershipRequestConstants;
+import com.liferay.portal.model.NotificationEvent;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
+import com.liferay.portal.service.NotificationEventLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.WorkflowDefinitionLinkLocalServiceUtil;
@@ -431,14 +432,18 @@ public class MemberRequestLocalServiceImpl
 				"userId", memberRequest.getUserId());
 
 			NotificationEvent notificationEvent =
-				NotificationEventFactoryUtil.createNotificationEvent(
-					System.currentTimeMillis(), PortletKeys.SO_INVITE_MEMBERS,
-					notificationEventJSONObject);
-
-			notificationEvent.setDeliveryRequired(0);
+				NotificationEventLocalServiceUtil.addNotificationEvent(
+					memberRequest.getUserId(),
+					ClassNameLocalServiceUtil.getClassNameId(
+						memberRequest.getClass()),
+					memberRequest.getPrimaryKey(),
+					notificationEventJSONObject.toString(),
+					System.currentTimeMillis(), PortletKeys.SO_INVITE_MEMBERS);
 
 			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
-				memberRequest.getReceiverUserId(), notificationEvent);
+				memberRequest.getReceiverUserId(),
+				notificationEvent.getNotificationEventId(),
+				UserNotificationDeliveryConstants.TYPE_WEBSITE);
 		}
 	}
 

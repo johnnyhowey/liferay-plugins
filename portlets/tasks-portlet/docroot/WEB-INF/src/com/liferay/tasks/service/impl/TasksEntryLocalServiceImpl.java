@@ -22,13 +22,14 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.notifications.NotificationEvent;
-import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
+import com.liferay.portal.model.NotificationEvent;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
+import com.liferay.portal.service.NotificationEventLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
@@ -490,14 +491,17 @@ public class TasksEntryLocalServiceImpl extends TasksEntryLocalServiceBaseImpl {
 			notificationEventJSONObject.put("title", title);
 
 			NotificationEvent notificationEvent =
-				NotificationEventFactoryUtil.createNotificationEvent(
-					System.currentTimeMillis(), PortletKeys.TASKS,
-					notificationEventJSONObject);
-
-			notificationEvent.setDeliveryRequired(0);
+				NotificationEventLocalServiceUtil.addNotificationEvent(
+					tasksEntry.getUserId(),
+					ClassNameLocalServiceUtil.getClassNameId(
+						tasksEntry.getClass()),
+					tasksEntry.getPrimaryKey(),
+					notificationEventJSONObject.toString(),
+					System.currentTimeMillis(), PortletKeys.TASKS);
 
 			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
-				receiverUserId, notificationEvent);
+				receiverUserId, notificationEvent.getNotificationEventId(),
+				UserNotificationDeliveryConstants.TYPE_WEBSITE);
 		}
 	}
 

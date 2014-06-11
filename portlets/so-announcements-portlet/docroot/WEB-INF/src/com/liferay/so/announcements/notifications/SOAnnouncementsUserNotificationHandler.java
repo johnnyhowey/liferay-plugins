@@ -17,7 +17,6 @@
 
 package com.liferay.so.announcements.notifications;
 
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.notifications.BaseUserNotificationHandler;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
@@ -56,8 +55,8 @@ public class SOAnnouncementsUserNotificationHandler
 			ServiceContext serviceContext)
 		throws Exception {
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			userNotificationEvent.getPayload());
+		JSONObject jsonObject = getNotificationEventPayload(
+			userNotificationEvent);
 
 		long announcementEntryId = jsonObject.getLong("classPK");
 
@@ -91,8 +90,8 @@ public class SOAnnouncementsUserNotificationHandler
 			ServiceContext serviceContext)
 		throws Exception {
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			userNotificationEvent.getPayload());
+		JSONObject jsonObject = getNotificationEventPayload(
+			userNotificationEvent);
 
 		long announcementEntryId = jsonObject.getLong("classPK");
 

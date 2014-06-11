@@ -24,8 +24,6 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.mail.MailMessage;
-import com.liferay.portal.kernel.notifications.NotificationEvent;
-import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.FastDateFormatConstants;
@@ -37,11 +35,13 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Company;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.NotificationEvent;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.service.CompanyLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
+import com.liferay.portal.service.NotificationEventLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
@@ -511,6 +511,12 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			UserThreadLocalServiceUtil.getMBThreadUserThreads(
 				mbMessage.getThreadId());
 
+		NotificationEvent notificationEvent =
+			NotificationEventLocalServiceUtil.addNotificationEvent(
+				mbMessage.getUserId(), mbMessage.getClassNameId(),
+				mbMessage.getClassPK(), notificationEventJSONObject.toString(),
+				System.currentTimeMillis(), PortletKeys.PRIVATE_MESSAGING);
+
 		for (UserThread userThread : userThreads) {
 			if ((userThread.getUserId() == mbMessage.getUserId()) ||
 				((userThread.getUserId() != mbMessage.getUserId()) &&
@@ -522,15 +528,10 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 				continue;
 			}
 
-			NotificationEvent notificationEvent =
-				NotificationEventFactoryUtil.createNotificationEvent(
-					System.currentTimeMillis(), PortletKeys.PRIVATE_MESSAGING,
-					notificationEventJSONObject);
-
-			notificationEvent.setDeliveryRequired(0);
-
 			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
-				userThread.getUserId(), notificationEvent);
+				userThread.getUserId(),
+				notificationEvent.getNotificationEventId(),
+				UserNotificationDeliveryConstants.TYPE_WEBSITE);
 		}
 	}
 

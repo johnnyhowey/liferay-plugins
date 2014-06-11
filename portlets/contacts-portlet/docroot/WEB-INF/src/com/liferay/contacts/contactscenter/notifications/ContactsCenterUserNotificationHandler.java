@@ -19,7 +19,6 @@ package com.liferay.contacts.contactscenter.notifications;
 
 import com.liferay.contacts.util.PortletKeys;
 import com.liferay.contacts.util.SocialRelationConstants;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.notifications.BaseUserNotificationHandler;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
@@ -56,8 +55,8 @@ public class ContactsCenterUserNotificationHandler
 			ServiceContext serviceContext)
 		throws Exception {
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			userNotificationEvent.getPayload());
+		JSONObject jsonObject = getNotificationEventPayload(
+			userNotificationEvent);
 
 		long socialRequestId = jsonObject.getLong("classPK");
 

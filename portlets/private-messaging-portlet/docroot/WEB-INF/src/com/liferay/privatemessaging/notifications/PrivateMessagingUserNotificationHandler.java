@@ -17,7 +17,6 @@
 
 package com.liferay.privatemessaging.notifications;
 
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.notifications.BaseUserNotificationHandler;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
@@ -64,8 +63,8 @@ public class PrivateMessagingUserNotificationHandler
 		String body = null;
 		long userId = 0;
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			userNotificationEvent.getPayload());
+		JSONObject jsonObject = getNotificationEventPayload(
+			userNotificationEvent);
 
 		long classPK = jsonObject.getLong("classPK");
 
@@ -119,8 +118,8 @@ public class PrivateMessagingUserNotificationHandler
 
 		long mbThreadId = 0;
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			userNotificationEvent.getPayload());
+		JSONObject jsonObject = getNotificationEventPayload(
+			userNotificationEvent);
 
 		long classPK = jsonObject.getLong("classPK");
 

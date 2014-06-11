@@ -26,8 +26,8 @@ List<UserNotificationEvent> userNotificationEvents = null;
 int userNotificationEventsCount = 0;
 
 if (filter.equals("unread")) {
-	userNotificationEvents = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEvents(themeDisplay.getUserId(), false, start, end);
-	userNotificationEventsCount = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsCount(themeDisplay.getUserId(), false);
+	userNotificationEvents = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsByType(themeDisplay.getUserId(), UserNotificationDeliveryConstants.TYPE_WEBSITE, false, start, end);
+	userNotificationEventsCount = UserNotificationEventLocalServiceUtil.getArchivedUserNotificationEventsCountByType(themeDisplay.getUserId(), UserNotificationDeliveryConstants.TYPE_WEBSITE, false);
 }
 else {
 	userNotificationEvents = UserNotificationEventLocalServiceUtil.getUserNotificationEvents(themeDisplay.getUserId(), start, end);
@@ -71,7 +71,13 @@ for (UserNotificationEvent userNotificationEvent : userNotificationEvents) {
 		continue;
 	}
 
-	JSONObject userNotificationEventJSONObject = JSONFactoryUtil.createJSONObject(userNotificationEvent.getPayload());
+	NotificationEvent notificationEvent = NotificationEventLocalServiceUtil.fetchNotificationEvent(userNotificationEvent.getNotificationEventId());
+
+	if (notificationEvent == null) {
+		continue;
+	}
+
+	JSONObject userNotificationEventJSONObject = JSONFactoryUtil.createJSONObject(notificationEvent.getPayload());
 
 	long userId = userNotificationEventJSONObject.getLong("userId");
 
@@ -119,11 +125,11 @@ for (UserNotificationEvent userNotificationEvent : userNotificationEvents) {
 			<div class="timestamp">
 				<span class="portlet-icon">
 					<liferay-portlet:icon-portlet
-						portlet="<%= PortletLocalServiceUtil.getPortletById(company.getCompanyId(), userNotificationEvent.getType()) %>"
+						portlet="<%= PortletLocalServiceUtil.getPortletById(company.getCompanyId(), notificationEvent.getType()) %>"
 					/>
 				</span>
 
-				<%= simpleDateFormat.format(userNotificationEvent.getTimestamp()) %>
+				<%= simpleDateFormat.format(notificationEvent.getTimestamp()) %>
 			</div>
 
 			<c:if test='<%= !filter.equals("unread") %>'>

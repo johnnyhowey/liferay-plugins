@@ -49,8 +49,6 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.notifications.NotificationEvent;
-import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
@@ -70,12 +68,14 @@ import com.liferay.portal.model.Contact;
 import com.liferay.portal.model.EmailAddress;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.NotificationEvent;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.model.Website;
+import com.liferay.portal.service.NotificationEventLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -1017,14 +1017,16 @@ public class ContactsCenterPortlet extends MVCPortlet {
 				"userId", socialRequest.getUserId());
 
 			NotificationEvent notificationEvent =
-				NotificationEventFactoryUtil.createNotificationEvent(
-					System.currentTimeMillis(), PortletKeys.CONTACTS_CENTER,
-					notificationEventJSONObject);
-
-			notificationEvent.setDeliveryRequired(0);
+				NotificationEventLocalServiceUtil.addNotificationEvent(
+					socialRequest.getUserId(), socialRequest.getClassNameId(),
+					socialRequest.getClassPK(),
+					notificationEventJSONObject.toString(),
+					System.currentTimeMillis(), PortletKeys.CONTACTS_CENTER);
 
 			UserNotificationEventLocalServiceUtil.addUserNotificationEvent(
-				socialRequest.getReceiverUserId(), notificationEvent);
+				socialRequest.getReceiverUserId(),
+				notificationEvent.getNotificationEventId(),
+				UserNotificationDeliveryConstants.TYPE_WEBSITE);
 		}
 	}
 

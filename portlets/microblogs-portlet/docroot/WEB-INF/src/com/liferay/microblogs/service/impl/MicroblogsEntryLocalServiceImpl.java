@@ -32,9 +32,12 @@ import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.NotificationEvent;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.GroupLocalServiceUtil;
+import com.liferay.portal.service.NotificationEventLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
@@ -337,26 +340,39 @@ public class MicroblogsEntryLocalServiceImpl
 			"notificationType", microblogsEntry.getType());
 		notificationEventJSONObject.put("userId", microblogsEntry.getUserId());
 
+		long receiverUserId = microblogsEntry.getReceiverUserId();
+
+		if (receiverUserId == 0) {
+			receiverUserId = microblogsEntry.getUserId();
+		}
+
+		NotificationEvent notificationEvent =
+			NotificationEventLocalServiceUtil.addNotificationEvent(
+				microblogsEntry.getUserId(),
+				ClassNameLocalServiceUtil.getClassNameId(
+					microblogsEntry.getClass()),
+				microblogsEntry.getPrimaryKey(),
+				notificationEventJSONObject.toString(),
+				System.currentTimeMillis(), PortletKeys.MICROBLOGS);
+
 		if (UserNotificationManagerUtil.isDeliver(
 				microblogsEntry.getUserId(), PortletKeys.MICROBLOGS, 0,
-			MicroblogsEntryConstants.TYPE_REPLY,
-			UserNotificationDeliveryConstants.TYPE_PUSH)) {
+				MicroblogsEntryConstants.TYPE_REPLY,
+				UserNotificationDeliveryConstants.TYPE_PUSH)) {
 
 			UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(
-				microblogsEntry.getUserId(), PortletKeys.MICROBLOGS,
-				UserNotificationDeliveryConstants.TYPE_PUSH,
-				notificationEventJSONObject);
+				receiverUserId, notificationEvent.getNotificationEventId(),
+				UserNotificationDeliveryConstants.TYPE_PUSH);
 		}
 
 		if (UserNotificationManagerUtil.isDeliver(
 				microblogsEntry.getUserId(), PortletKeys.MICROBLOGS, 0,
-			MicroblogsEntryConstants.TYPE_REPLY,
-			UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
+				MicroblogsEntryConstants.TYPE_REPLY,
+				UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
 
 			UserNotificationEventLocalServiceUtil.sendUserNotificationEvents(
-				microblogsEntry.getUserId(), PortletKeys.MICROBLOGS,
-				UserNotificationDeliveryConstants.TYPE_WEBSITE,
-				notificationEventJSONObject);
+				receiverUserId, notificationEvent.getNotificationEventId(),
+				UserNotificationDeliveryConstants.TYPE_WEBSITE);
 		}
 	}
 

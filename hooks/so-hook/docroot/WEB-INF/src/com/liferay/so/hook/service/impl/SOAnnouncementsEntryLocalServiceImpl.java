@@ -25,8 +25,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.DestinationNames;
 import com.liferay.portal.kernel.messaging.MessageBusUtil;
-import com.liferay.portal.kernel.notifications.NotificationEvent;
-import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.process.ProcessCallable;
 import com.liferay.portal.kernel.process.ProcessException;
@@ -39,12 +37,15 @@ import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
+import com.liferay.portal.model.NotificationEvent;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.model.UserNotificationDeliveryConstants;
+import com.liferay.portal.service.ClassNameLocalServiceUtil;
+import com.liferay.portal.service.NotificationEventLocalServiceUtil;
 import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
@@ -284,24 +285,27 @@ public class SOAnnouncementsEntryLocalServiceImpl
 						(OrderByComparator)null);
 				}
 
+				NotificationEvent notificationEvent =
+					NotificationEventLocalServiceUtil.addNotificationEvent(
+						announcementEntry.getUserId(),
+						ClassNameLocalServiceUtil.getClassNameId(
+							announcementEntry.getClass()),
+						announcementEntry.getEntryId(),
+						notificationEventJSONObject.toString(),
+						System.currentTimeMillis(), PortletKeys.SO_ANNOUNCEMENTS
+						);
+
 				for (User user : users) {
 					if (UserNotificationManagerUtil.isDeliver(
 							user.getUserId(), PortletKeys.SO_ANNOUNCEMENTS, 0,
 							0,
 							UserNotificationDeliveryConstants.TYPE_WEBSITE)) {
 
-						NotificationEvent notificationEvent =
-							NotificationEventFactoryUtil.
-								createNotificationEvent(
-									System.currentTimeMillis(),
-									PortletKeys.SO_ANNOUNCEMENTS,
-									notificationEventJSONObject);
-
-						notificationEvent.setDeliveryRequired(0);
-
 						UserNotificationEventLocalServiceUtil.
 							addUserNotificationEvent(
-								user.getUserId(), notificationEvent);
+								user.getUserId(),
+								notificationEvent.getNotificationEventId(),
+								UserNotificationDeliveryConstants.TYPE_WEBSITE);
 					}
 				}
 			}

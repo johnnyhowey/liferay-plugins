@@ -17,7 +17,6 @@
 
 package com.liferay.tasks.notifications;
 
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.notifications.BaseUserNotificationHandler;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -49,8 +48,8 @@ public class TasksUserNotificationHandler extends BaseUserNotificationHandler {
 			ServiceContext serviceContext)
 		throws Exception {
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			userNotificationEvent.getPayload());
+		JSONObject jsonObject = getNotificationEventPayload(
+			userNotificationEvent);
 
 		long tasksEntryId = jsonObject.getLong("classPK");
 
@@ -85,8 +84,8 @@ public class TasksUserNotificationHandler extends BaseUserNotificationHandler {
 			ServiceContext serviceContext)
 		throws Exception {
 
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			userNotificationEvent.getPayload());
+		JSONObject jsonObject = getNotificationEventPayload(
+			userNotificationEvent);
 
 		long tasksEntryId = jsonObject.getLong("classPK");
 
