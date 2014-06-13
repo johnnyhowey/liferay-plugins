@@ -76,10 +76,6 @@
 
 	<taskdef classpathref="classpath.aQute.bnd" resource="aQute/bnd/ant/taskdef.properties" />
 
-	<path id="classpath.com.liferay.ant.arquillian">
-		<fileset dir="${sdk.dir}/dependencies/com.liferay.ant.arquillian/lib" includes="*.jar" />
-	</path>
-
 	<path id="classpath.com.liferay.ant.bnd">
 		<fileset dir="${sdk.dir}/dependencies/com.liferay.ant.bnd/lib" includes="*.jar" />
 	</path>
@@ -2048,24 +2044,20 @@ Please find a solution that does not require portal-impl.jar.
 						tofile="${app.server.tomcat.dir}/conf/tomcat-users.xml.orig"
 					/>
 
-					<echo file="${app.server.tomcat.dir}/conf/tomcat-users.xml">
-						<![CDATA[
-							<?xml version="1.0"?>
+					<echo file="${app.server.tomcat.dir}/conf/tomcat-users.xml"><![CDATA[<?xml version="1.0"?>
 
-							<tomcat-users>
-								<role rolename="tomcat" />
-								<role rolename="manager-gui" />
-								<role rolename="manager-script" />
-								<role rolename="manager-jmx" />
-								<role rolename="manager-status" />
-								<user
-									password="${app.server.tomcat.manager.password}"
-									roles="tomcat,manager-gui,manager-script,manager-jmx,manager-status"
-									username="${app.server.tomcat.manager.user}"
-								/>
-							</tomcat-users>
-						]]>
-					</echo>
+<tomcat-users>
+	<role rolename="tomcat" />
+	<role rolename="manager-gui" />
+	<role rolename="manager-script" />
+	<role rolename="manager-jmx" />
+	<role rolename="manager-status" />
+	<user
+		password="${app.server.tomcat.manager.password}"
+		roles="tomcat,manager-gui,manager-script,manager-jmx,manager-status"
+		username="${app.server.tomcat.manager.user}"
+	/>
+</tomcat-users>]]></echo>
 				</then>
 			</if>
 		</sequential>
@@ -2112,6 +2104,8 @@ Please find a solution that does not require portal-impl.jar.
 				<equals arg1="${test.integration.count}" arg2="1" />
 				<then>
 					<var name="test.type" value="integration" />
+
+					<setup-arquillian module.dir="@{module.dir}" />
 				</then>
 				<elseif>
 					<equals arg1="${test.unit.count}" arg2="1" />
@@ -2187,7 +2181,7 @@ Please find a solution that does not require portal-impl.jar.
 					<if>
 						<available file="@{module.dir}/test/@{test.type}" type="dir" />
 						<then>
-							<junit dir="@{module.dir}" fork="on" forkmode="@{junit.forkmode}" outputtoformatters="false" printsummary="on" showoutput="true">
+							<junit dir="@{module.dir}" fork="on" forkmode="@{junit.forkmode}" jvm="${junit.jvm}" outputtoformatters="false" printsummary="on" showoutput="true">
 								<sysproperty key="app.server.tomcat.dir" value="${app.server.tomcat.dir}" />
 								<sysproperty key="net.sourceforge.cobertura.datafile" file="@{module.dir}/test-coverage/cobertura.ser" />
 								<jvmarg line="${junit.debug.jpda}" />
@@ -2218,6 +2212,8 @@ Please find a solution that does not require portal-impl.jar.
 		<attribute name="module.dir" />
 
 		<sequential>
+			<setup-arquillian module.dir="@{module.dir}" />
+
 			<test-cmd
 				junit.forkmode="once"
 				module.dir="@{module.dir}"
@@ -2671,6 +2667,12 @@ for (String path : paths) {
 				</replace>
 			</then>
 		</if>
+	</target>
+
+	<target name="setup-testable-tomcat">
+		<setup-tomcat-jmx />
+
+		<setup-tomcat-manager />
 	</target>
 
 	<target name="sort-xml-attributes">
