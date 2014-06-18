@@ -250,7 +250,9 @@ AUI().use(
 						after: {
 							openChange: function(event) {
 								if (event.newVal) {
-									instance._setDelivered();
+									if (instance._lastActionUri == null) {
+										instance._setDelivered();
+									}
 
 									instance.renderNotificationsList(instance._getDockbarNotificationsList(), instance._dockbarNotificationsURL);
 
@@ -272,45 +274,6 @@ AUI().use(
 						content: A.one('.dockbar-user-notifications'),
 						toggleTouch: true,
 						trigger: '.dockbar-user-notifications .dropdown-toggle'
-					}
-				);
-			},
-
-			_markAsRead: function(event, fullView, markAllAsRead) {
-				event.preventDefault();
-
-				var instance = this;
-
-				var currentRow;
-
-				var currentTarget = event.currentTarget;
-
-				var loadingRow = A.Node.create('<div class="loading-animation"></div>');
-
-				if (!markAllAsRead) {
-					currentRow = currentTarget.ancestor('.user-notification');
-					currentRow.hide().placeAfter(loadingRow);
-				}
-
-				A.io.request(
-					currentTarget.attr('href'),
-					{
-						after: {
-							success: function() {
-								var response = this.get('responseData');
-
-								if (response.success) {
-
-									if (!markAllAsRead) {
-										currentRow.remove();
-										loadingRow.remove();
-									}
-
-									instance._updateNotifications(fullView, markAllAsRead);
-								}
-							}
-						},
-						dataType: 'JSON'
 					}
 				);
 			},
@@ -396,21 +359,81 @@ AUI().use(
 			_hasRequestSent: function(node, uri) {
 				var instance = this;
 
-				if ((instance._lastNode == node) && (instance._lastUri == uri)) {
-					return true;
+				if (node == null) {
+					if (instance._lastActionUri == uri) {
+						return true;
+					}
+					else {
+						instance._lastActionUri = uri;
+
+						setTimeout(
+							function() {
+								instance._lastActionUri = null;
+							}, 300);
+
+						return false;
+					}
 				}
 				else {
-					instance._lastNode = node;
-					instance._lastUri = uri;
+					if ((instance._lastNode == node) && (instance._lastUri == uri)) {
+						return true;
+					}
+					else {
+						instance._lastNode = node;
+						instance._lastUri = uri;
 
-					setTimeout(
-						function() {
-							instance._lastNode = null;
-							instance._lastUri = null;
-						}, 300);
+						setTimeout(
+							function() {
+								instance._lastNode = null;
+								instance._lastUri = null;
+							}, 300);
 
-					return false;
+						return false;
+					}
 				}
+			},
+
+			_markAsRead: function(event, fullView, markAllAsRead) {
+				event.preventDefault();
+
+				var instance = this;
+
+				var currentRow;
+
+				var currentTarget = event.currentTarget;
+
+				if (instance._hasRequestSent(null, currentTarget.attr('href'))) {
+					return;
+				}
+
+				var loadingRow = A.Node.create('<div class="loading-animation"></div>');
+
+				if (!markAllAsRead) {
+					currentRow = currentTarget.ancestor('.user-notification');
+					currentRow.hide().placeAfter(loadingRow);
+				}
+
+				A.io.request(
+					currentTarget.attr('href'),
+					{
+						after: {
+							success: function() {
+								var response = this.get('responseData');
+
+								if (response.success) {
+
+									if (!markAllAsRead) {
+										currentRow.remove();
+										loadingRow.remove();
+									}
+
+									instance._updateNotifications(fullView, markAllAsRead);
+								}
+							}
+						},
+						dataType: 'JSON'
+					}
+				);
 			},
 
 			_onPollerUpdate: function(response) {
@@ -517,7 +540,7 @@ AUI().use(
 			_updateNotificationsCount: function(timestamp, newUserNotificationsCount, unreadUserNotificationsCount) {
 				var instance = this;
 
-				instance._updateDockbarNotificationsCount(timestamp, newUserNotificationsCount, unreadUserNotificationsCount);
+				instance._updateDockbarNotificationsCount(newUserNotificationsCount, timestamp, unreadUserNotificationsCount);
 				instance._updateFullViewNotificationsCount('unread', unreadUserNotificationsCount);
 			},
 

@@ -19,9 +19,6 @@ import com.liferay.sync.engine.documentlibrary.event.AddFolderEvent;
 import com.liferay.sync.engine.documentlibrary.event.CancelCheckOutEvent;
 import com.liferay.sync.engine.documentlibrary.event.CheckInFileEntryEvent;
 import com.liferay.sync.engine.documentlibrary.event.CheckOutFileEntryEvent;
-import com.liferay.sync.engine.documentlibrary.event.Event;
-import com.liferay.sync.engine.documentlibrary.event.GetFileEntrySyncDLObjectEvent;
-import com.liferay.sync.engine.documentlibrary.event.GetFolderSyncDLObjectEvent;
 import com.liferay.sync.engine.documentlibrary.event.MoveFileEntryEvent;
 import com.liferay.sync.engine.documentlibrary.event.MoveFileEntryToTrashEvent;
 import com.liferay.sync.engine.documentlibrary.event.MoveFolderEvent;
@@ -101,6 +98,7 @@ public class SyncFileService {
 			parameters.put("serviceContext.addGuestPermissions", true);
 		}
 
+		parameters.put("serviceContext.attributes.overwrite", true);
 		parameters.put("sourceFileName", name);
 		parameters.put("syncFile", syncFile);
 		parameters.put("title", name);
@@ -152,6 +150,7 @@ public class SyncFileService {
 			parameters.put("serviceContext.addGuestPermissions", true);
 		}
 
+		parameters.put("serviceContext.attributes.overwrite", true);
 		parameters.put("syncFile", syncFile);
 
 		AddFolderEvent addFolderEvent = new AddFolderEvent(
@@ -430,6 +429,19 @@ public class SyncFileService {
 		}
 	}
 
+	public static List<SyncFile> findSyncFiles(String filePathName) {
+		try {
+			return _syncFilePersistence.findByFilePathName(filePathName);
+		}
+		catch (SQLException sqle) {
+			if (_logger.isDebugEnabled()) {
+				_logger.debug(sqle.getMessage(), sqle);
+			}
+
+			return Collections.emptyList();
+		}
+	}
+
 	public static List<SyncFile> findSyncFiles(
 		String checksum, long syncAccountId) {
 
@@ -549,44 +561,6 @@ public class SyncFileService {
 		ModelListener<SyncFile> modelListener) {
 
 		_syncFilePersistence.registerModelListener(modelListener);
-	}
-
-	public static SyncFile synchronizeSyncFile(
-		long syncAccountId, SyncFile syncFile) {
-
-		Path filePath = Paths.get(syncFile.getFilePathName());
-
-		String parentFilePathName = FilePathNameUtil.getFilePathName(
-			filePath.getParent());
-
-		SyncFile parentSyncFile = SyncFileService.fetchSyncFile(
-			parentFilePathName, syncAccountId);
-
-		Map<String, Object> parameters = new HashMap<String, Object>();
-
-		parameters.put("syncFile", syncFile);
-
-		Event event = null;
-
-		if (syncFile.isFolder()) {
-			parameters.put("name", syncFile.getName());
-			parameters.put("parentFolderId", parentSyncFile.getTypePK());
-			parameters.put("repositoryId", parentSyncFile.getRepositoryId());
-
-			event = new GetFolderSyncDLObjectEvent(syncAccountId, parameters);
-		}
-		else {
-			parameters.put("folderId", parentSyncFile.getTypePK());
-			parameters.put("groupId", parentSyncFile.getRepositoryId());
-			parameters.put("title", syncFile.getName());
-
-			event = new GetFileEntrySyncDLObjectEvent(
-				syncAccountId, parameters);
-		}
-
-		event.run();
-
-		return syncFile;
 	}
 
 	public static void unregisterModelListener(
