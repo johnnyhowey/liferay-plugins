@@ -36,12 +36,19 @@ else {
 <div class="kbarticle-navigation">
 
 	<%
-	List<KBArticle> kbArticles = KBArticleLocalServiceUtil.getKBArticles(themeDisplay.getScopeGroupId(), KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY, WorkflowConstants.STATUS_APPROVED, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new KBArticlePriorityComparator());
+	List<KBArticle> kbArticles = KBArticleLocalServiceUtil.getKBArticles(themeDisplay.getScopeGroupId(), KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY, WorkflowConstants.STATUS_APPROVED, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new KBArticlePriorityComparator(true));
 
 	for (KBArticle curKBArticle : kbArticles) {
 		PortletURL viewURL = renderResponse.createRenderURL();
 
-		viewURL.setParameter("resourcePrimKey", String.valueOf(curKBArticle.getResourcePrimKey()));
+		String urlTitle = curKBArticle.getUrlTitle();
+
+		if (Validator.isNotNull(urlTitle)) {
+			viewURL.setParameter("urlTitle", urlTitle);
+		}
+		else {
+			viewURL.setParameter("resourcePrimKey", String.valueOf(curKBArticle.getResourcePrimKey()));
+		}
 	%>
 
 		<ul>
@@ -69,12 +76,19 @@ else {
 				<c:if test="<%= kbArticleExpanded %>">
 
 					<%
-					List<KBArticle> childKBArticles = KBArticleLocalServiceUtil.getKBArticles(themeDisplay.getScopeGroupId(), curKBArticle.getResourcePrimKey(), WorkflowConstants.STATUS_APPROVED, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new KBArticlePriorityComparator());
+					List<KBArticle> childKBArticles = KBArticleLocalServiceUtil.getKBArticles(themeDisplay.getScopeGroupId(), curKBArticle.getResourcePrimKey(), WorkflowConstants.STATUS_APPROVED, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new KBArticlePriorityComparator(true));
 
 					for (KBArticle childKBArticle : childKBArticles) {
 						PortletURL viewChildURL = renderResponse.createRenderURL();
 
-						viewChildURL.setParameter("resourcePrimKey", String.valueOf(childKBArticle.getResourcePrimKey()));
+						urlTitle = childKBArticle.getUrlTitle();
+
+						if (Validator.isNotNull(urlTitle)) {
+							viewChildURL.setParameter("urlTitle", urlTitle);
+						}
+						else {
+							viewChildURL.setParameter("resourcePrimKey", String.valueOf(childKBArticle.getResourcePrimKey()));
+						}
 					%>
 
 						<ul>
@@ -102,12 +116,19 @@ else {
 								<c:if test="<%= childKBArticleExpanded %>">
 
 									<%
-									List<KBArticle> allDescendantKBArticles = KBArticleLocalServiceUtil.getAllDescendantKBArticles(childKBArticle.getResourcePrimKey(), WorkflowConstants.STATUS_APPROVED, new KBArticlePriorityComparator());
+									List<KBArticle> allDescendantKBArticles = KBArticleLocalServiceUtil.getAllDescendantKBArticles(childKBArticle.getResourcePrimKey(), WorkflowConstants.STATUS_APPROVED, new KBArticlePriorityComparator(true));
 
 									for (KBArticle descendantKBArticle : allDescendantKBArticles) {
 										PortletURL viewCurKBArticleURL = renderResponse.createRenderURL();
 
-										viewCurKBArticleURL.setParameter("resourcePrimKey", String.valueOf(descendantKBArticle.getResourcePrimKey()));
+										urlTitle = descendantKBArticle.getUrlTitle();
+
+										if (Validator.isNotNull(urlTitle)) {
+											viewCurKBArticleURL.setParameter("urlTitle", urlTitle);
+										}
+										else {
+											viewCurKBArticleURL.setParameter("resourcePrimKey", String.valueOf(descendantKBArticle.getResourcePrimKey()));
+										}
 									%>
 
 										<ul>

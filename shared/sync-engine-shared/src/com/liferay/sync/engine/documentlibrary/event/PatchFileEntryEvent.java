@@ -33,7 +33,7 @@ public class PatchFileEntryEvent extends BaseEvent {
 	}
 
 	@Override
-	protected Handler<?> getHandler() {
+	protected Handler<Void> getHandler() {
 		return new PatchFileEntryHandler(this);
 	}
 
@@ -46,7 +46,7 @@ public class PatchFileEntryEvent extends BaseEvent {
 
 		SyncFileService.update(syncFile);
 
-		super.processRequest();
+		super.processAsynchronousRequest();
 	}
 
 	private static final String _URL_PATH =

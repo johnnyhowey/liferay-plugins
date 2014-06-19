@@ -33,7 +33,7 @@ public class DownloadFileEvent extends BaseEvent {
 	}
 
 	@Override
-	protected Handler<?> getHandler() {
+	protected Handler<Void> getHandler() {
 		return new DownloadFileHandler(this);
 	}
 
@@ -65,7 +65,7 @@ public class DownloadFileEvent extends BaseEvent {
 			sb.append(syncFile.getVersion());
 		}
 
-		executeGet(sb.toString());
+		executeAsynchronousGet(sb.toString());
 	}
 
 	private static final String _URL_PATH = "/sync-web/download";
