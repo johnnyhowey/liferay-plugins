@@ -14,23 +14,47 @@
 
 package com.liferay.notifications.notifications.portlet;
 
+import com.liferay.notifications.util.PortletKeys;
+import com.liferay.notifications.util.PortletPropsKeys;
+import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.notifications.UserNotificationFeedEntry;
+import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
+import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
+import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Portlet;
+import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserNotificationEvent;
+import com.liferay.portal.service.PortletLocalServiceUtil;
+import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationDeliveryLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portal.util.PortalUtil;
+import com.liferay.util.ContentUtil;
 import com.liferay.util.bridges.mvc.MVCPortlet;
+import com.liferay.util.portlet.PortletProps;
 
+import java.text.Format;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletURL;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
+import javax.portlet.WindowState;
 
 /**
  * @author Jonathan Lee
@@ -126,6 +150,9 @@ public class NotificationsPortlet extends MVCPortlet {
 			if (resourceId.equals("notifcationsCount")) {
 				getNotificationsCount(resourceRequest, resourceResponse);
 			}
+			else if (resourceId.equals("userNotificationEvents")) {
+				getUserNotificationEvents(resourceRequest, resourceResponse);
+			}
 		}
 		catch (Exception e) {
 			throw new PortletException(e);
@@ -188,6 +215,56 @@ public class NotificationsPortlet extends MVCPortlet {
 		}
 	}
 
+	protected JSONArray getEntriesJSONArray(
+			List<UserNotificationEvent> actionableUserNotificationEvents,
+			List<UserNotificationEvent> regularUserNotificationEvents,
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			ThemeDisplay themeDisplay)
+		throws Exception {
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		boolean needSeperator =
+			((regularUserNotificationEvents == null) ||
+				(regularUserNotificationEvents.isEmpty())) ? false : true;
+
+		for (int i = 0; i < actionableUserNotificationEvents.size(); i++) {
+			boolean seperator = false;
+
+			if (needSeperator &&
+				(i == (actionableUserNotificationEvents.size() - 1))) {
+
+				seperator = true;
+			}
+
+			String entry = renderEntry(
+				resourceRequest, resourceResponse, seperator, themeDisplay,
+				actionableUserNotificationEvents.get(i));
+
+			if (Validator.isNotNull(entry)) {
+				jsonArray.put(entry);
+			}
+		}
+
+		if (regularUserNotificationEvents == null) {
+			return jsonArray;
+		}
+
+		for (UserNotificationEvent userNotificationEvent :
+				regularUserNotificationEvents) {
+
+			String entry = renderEntry(
+				resourceRequest, resourceResponse, false, themeDisplay,
+				userNotificationEvent);
+
+			if (Validator.isNotNull(entry)) {
+				jsonArray.put(entry);
+			}
+		}
+
+		return jsonArray;
+	}
+
 	protected void getNotificationsCount(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
@@ -209,6 +286,24 @@ public class NotificationsPortlet extends MVCPortlet {
 			jsonObject.put(
 				"timestamp", String.valueOf(System.currentTimeMillis()));
 
+			int unreadActionableUserNotificationsCount =
+				UserNotificationEventLocalServiceUtil.
+					getArchivedUserNotificationEventsCount(
+						themeDisplay.getUserId(), true, false);
+
+			jsonObject.put(
+				"unreadActionableUserNotificationsCount",
+				String.valueOf(unreadActionableUserNotificationsCount));
+
+			int unreadRegularUserNotificationsCount =
+				UserNotificationEventLocalServiceUtil.
+					getArchivedUserNotificationEventsCount(
+						themeDisplay.getUserId(), false, false);
+
+			jsonObject.put(
+				"unreadRegularUserNotificationsCount",
+				String.valueOf(unreadRegularUserNotificationsCount));
+
 			int unreadUserNotificationsCount =
 				UserNotificationEventLocalServiceUtil.
 					getArchivedUserNotificationEventsCount(
@@ -224,6 +319,168 @@ public class NotificationsPortlet extends MVCPortlet {
 		}
 
 		writeJSON(resourceRequest, resourceResponse, jsonObject);
+	}
+
+	protected void getUserNotificationEvents(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		int dockbarViewDelta = ParamUtil.getInteger(
+			resourceRequest, "dockbarViewDelta");
+
+		int actionableNotificationsCount =
+			UserNotificationEventLocalServiceUtil.
+				getArchivedUserNotificationEventsCount(
+					themeDisplay.getUserId(), true, false);
+
+		List<UserNotificationEvent> actionableUserNotificationEvents =
+			UserNotificationEventLocalServiceUtil.
+				getArchivedUserNotificationEvents(
+					themeDisplay.getUserId(), true, false, 0, dockbarViewDelta);
+
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		if (dockbarViewDelta <= actionableNotificationsCount) {
+			jsonArray = getEntriesJSONArray(
+				actionableUserNotificationEvents, null, resourceRequest,
+				resourceResponse, themeDisplay);
+		}
+		else {
+			int shiftInCount = dockbarViewDelta - actionableNotificationsCount;
+
+			int regularNotificationsCount =
+				UserNotificationEventLocalServiceUtil.
+					getArchivedUserNotificationEventsCount(
+						themeDisplay.getUserId(), false, false);
+
+			if (regularNotificationsCount == 0) {
+				jsonArray = getEntriesJSONArray(
+					actionableUserNotificationEvents, null, resourceRequest,
+					resourceResponse, themeDisplay);
+			}
+			else {
+				List<UserNotificationEvent> regularUserNotificationEvents =
+					UserNotificationEventLocalServiceUtil.
+						getArchivedUserNotificationEvents(
+							themeDisplay.getUserId(), false, false, 0,
+							shiftInCount);
+
+				jsonArray = getEntriesJSONArray(
+					actionableUserNotificationEvents,
+					regularUserNotificationEvents, resourceRequest,
+					resourceResponse, themeDisplay);
+
+				jsonObject.put(
+					"markAsReadCount", regularUserNotificationEvents.size());
+
+				List<Long> userNotificationEventIds = new ArrayList<Long>();
+
+				for (UserNotificationEvent userNotificationEvent :
+						regularUserNotificationEvents) {
+
+					userNotificationEventIds.add(
+						userNotificationEvent.getUserNotificationEventId());
+				}
+
+				jsonObject.put(
+					"userNotificationEventIds",
+					StringUtil.merge(userNotificationEventIds));
+			}
+		}
+
+		if (jsonArray.length() > 0) {
+			jsonObject.put("entries", jsonArray);
+		}
+		else {
+			jsonObject.put("noResult", Boolean.TRUE);
+		}
+
+		writeJSON(resourceRequest, resourceResponse, jsonObject);
+	}
+
+	protected String renderEntry(
+			ResourceRequest resourceRequest, ResourceResponse resourceResponse,
+			boolean seperator, ThemeDisplay themeDisplay,
+			UserNotificationEvent userNotificationEvent)
+		throws Exception {
+
+		UserNotificationFeedEntry userNotificationFeedEntry =
+			UserNotificationManagerUtil.interpret(
+				StringPool.BLANK, userNotificationEvent,
+				ServiceContextFactory.getInstance(resourceRequest));
+
+		if (userNotificationFeedEntry == null) {
+			return null;
+		}
+
+		String body = userNotificationFeedEntry.getBody();
+
+		Portlet portlet =
+			PortletLocalServiceUtil.getPortletById(
+				themeDisplay.getCompanyId(), userNotificationEvent.getType());
+
+		String portletName = portlet.getDisplayName();
+		String portletIcon = portlet.getContextPath() + portlet.getIcon();
+
+		String link = userNotificationFeedEntry.getLink();
+
+		LiferayPortletResponse liferayPortletResponse =
+			(LiferayPortletResponse)resourceResponse;
+
+		PortletURL markAsReadURL = liferayPortletResponse.createActionURL(
+			PortletKeys.NOTIFICATIONS);
+
+		markAsReadURL.setParameter(
+			"userNotificationEventId",
+			String.valueOf(userNotificationEvent.getUserNotificationEventId()));
+
+		markAsReadURL.setWindowState(WindowState.NORMAL);
+
+		String seperatorValue = "<hr>";
+
+		Format simpleDateFormat =
+			FastDateFormatFactoryUtil.getSimpleDateFormat(
+				"EEEE, MMMMM dd, yyyy 'at' h:mm a", themeDisplay.getLocale(),
+				themeDisplay.getTimeZone());
+
+		String timeStamp = simpleDateFormat.format(
+			userNotificationEvent.getTimestamp());
+
+		JSONObject userNotificationEventJSONObject =
+			JSONFactoryUtil.createJSONObject(
+				userNotificationEvent.getPayload());
+
+		long userId = userNotificationEventJSONObject.getLong("userId");
+
+		String userFullName = HtmlUtil.escape(
+			PortalUtil.getUserName(userId, StringPool.BLANK));
+
+		String userPortraitURL = StringPool.BLANK;
+
+		User user = UserLocalServiceUtil.fetchUserById(userId);
+
+		if (user != null) {
+			userPortraitURL = user.getPortraitURL(
+				(ThemeDisplay)resourceRequest.getAttribute(
+					WebKeys.THEME_DISPLAY));
+		}
+
+		return StringUtil.replace(
+			ContentUtil.get(
+				PortletProps.get(PortletPropsKeys.NOTIFICATION_ENTRY)),
+			new String[] {
+				"[$BODY$]", "[$LINK$]", "[$MARK_AS_READ_URL$]",
+				"[$PORTLET_ICON$]", "[$PORTLET_NAME$]", "[$SEPERATOR$]",
+				"[$TIMESTAMP$]", "[$USER_FULL_NAME$]", "[$USER_PORTRAIT_URL$]"},
+			new String[] {
+				body, link, markAsReadURL.toString(), portletIcon, portletName,
+				seperator ? seperatorValue : StringPool.BLANK, timeStamp,
+				userFullName, userPortraitURL});
 	}
 
 	protected void updateArchived(long userNotificationEventId)
