@@ -20,27 +20,33 @@
 <%@ include file="/sites/init.jsp" %>
 
 <%
-String tabs1 = ParamUtil.getString(request, "tabs1", "my-sites");
-
 String name = ParamUtil.getString(request, "name");
+
+int favoriteSitesGroupsCount = SitesUtil.getFavoriteSitesGroupsCount(themeDisplay.getUserId(), name);
+int mySitesGroupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, true);
+
+String defaultTabs1Name = "my-favorites";
+
+if (favoriteSitesGroupsCount == 0) {
+	defaultTabs1Name = "my-sites";
+
+	if (mySitesGroupsCount == 0) {
+		defaultTabs1Name = "all-sites";
+	}
+}
+
+String tabs1 = ParamUtil.getString(request, "tabs1", defaultTabs1Name);
 
 List<Group> groups = null;
 int groupsCount = 0;
 
-if (tabs1.equals("my-sites")) {
-	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, true, 0, maxResultSize);
-	groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, true);
-
-	if (groupsCount == 0) {
-		tabs1 = "all-sites";
-
-		groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, false, 0, maxResultSize);
-		groupsCount = SitesUtil.getVisibleSitesCount(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, false);
-	}
-}
-else if (tabs1.equals("my-favorites")) {
+if (tabs1.equals("my-favorites")) {
 	groups = SitesUtil.getFavoriteSitesGroups(themeDisplay.getUserId(), name, 0, maxResultSize);
-	groupsCount = SitesUtil.getFavoriteSitesGroupsCount(themeDisplay.getUserId(), name);
+	groupsCount = favoriteSitesGroupsCount;
+}
+else if (tabs1.equals("my-sites")) {
+	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, true, 0, maxResultSize);
+	groupsCount = mySitesGroupsCount;
 }
 else {
 	groups = SitesUtil.getVisibleSites(themeDisplay.getCompanyId(), themeDisplay.getUserId(), name, false, 0, maxResultSize);

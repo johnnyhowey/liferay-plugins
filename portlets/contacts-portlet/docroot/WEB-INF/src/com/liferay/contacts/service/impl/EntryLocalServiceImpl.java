@@ -24,7 +24,6 @@ import com.liferay.contacts.model.Entry;
 import com.liferay.contacts.service.base.EntryLocalServiceBaseImpl;
 import com.liferay.portal.ContactFullNameException;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.BaseModel;
@@ -40,12 +39,12 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 
 	public Entry addEntry(
 			long userId, String fullName, String emailAddress, String comments)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		User user = userPersistence.findByPrimaryKey(userId);
 		Date now = new Date();
 
-		validate(0, userId, fullName, emailAddress);
+		validate(user.getCompanyId(), 0, userId, fullName, emailAddress);
 
 		long contactId = counterLocalService.increment();
 
@@ -65,50 +64,44 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		return entry;
 	}
 
-	public List<Entry> getEntries(long userId, int start, int end)
-		throws SystemException {
-
+	public List<Entry> getEntries(long userId, int start, int end) {
 		return entryPersistence.findByUserId(userId);
 	}
 
-	public int getEntriesCount(long userId) throws SystemException {
+	public int getEntriesCount(long userId) {
 		return entryPersistence.countByUserId(userId);
 	}
 
-	public List<Entry> search(long userId, String keywords, int start, int end)
-		throws SystemException {
-
+	public List<Entry> search(long userId, String keywords, int start, int end) {
 		return entryFinder.findByKeywords(userId, keywords, start, end);
 	}
 
-	public int searchCount(long userId, String keywords)
-		throws SystemException {
-
+	public int searchCount(long userId, String keywords) {
 		return entryFinder.countByKeywords(userId, keywords);
 	}
 
 	public List<BaseModel<?>> searchUsersAndContacts(
-			long companyId, long userId, String keywords, int start, int end)
-		throws SystemException {
+		long companyId, long userId, String keywords, int start, int end) {
 
 		return entryFinder.findByKeywords(
 			companyId, userId, keywords, start, end);
 	}
 
 	public int searchUsersAndContactsCount(
-			long companyId, long userId, String keywords)
-		throws SystemException {
+		long companyId, long userId, String keywords) {
 
 		return entryFinder.countByKeywords(companyId, userId, keywords);
 	}
 
 	public Entry updateEntry(
 			long entryId, String fullName, String emailAddress, String comments)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		Entry entry = entryPersistence.findByPrimaryKey(entryId);
 
-		validate(entryId, entry.getUserId(), fullName, emailAddress);
+		validate(
+			entry.getCompanyId(), entryId, entry.getUserId(), fullName,
+			emailAddress);
 
 		entry.setModifiedDate(new Date());
 		entry.setFullName(fullName);
@@ -121,8 +114,9 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 	}
 
 	protected void validate(
-			long entryId, long userId, String fullName, String emailAddress)
-		throws PortalException, SystemException {
+			long companyId, long entryId, long userId, String fullName,
+			String emailAddress)
+		throws PortalException {
 
 		if (Validator.isNull(fullName)) {
 			throw new ContactFullNameException();
@@ -142,20 +136,27 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 			if (!StringUtil.equalsIgnoreCase(
 					emailAddress, entry.getEmailAddress())) {
 
-				validateEmailAddress(userId, emailAddress);
+				validateEmailAddress(companyId, userId, emailAddress);
 			}
 		}
 		else {
-			validateEmailAddress(userId, emailAddress);
+			validateEmailAddress(companyId, userId, emailAddress);
 		}
 	}
 
-	protected void validateEmailAddress(long userId, String emailAddress)
-		throws PortalException, SystemException {
+	protected void validateEmailAddress(
+			long companyId, long userId, String emailAddress)
+		throws PortalException {
 
 		Entry entry = entryPersistence.fetchByU_EA(userId, emailAddress);
 
 		if (entry != null) {
+			throw new DuplicateEntryEmailAddressException();
+		}
+
+		User user = userPersistence.fetchByC_EA(companyId, emailAddress);
+
+		if (user != null) {
 			throw new DuplicateEntryEmailAddressException();
 		}
 	}
