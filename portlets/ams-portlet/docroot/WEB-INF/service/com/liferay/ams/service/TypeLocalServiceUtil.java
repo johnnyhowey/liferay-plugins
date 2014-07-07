@@ -61,15 +61,12 @@ public class TypeLocalServiceUtil {
 	}
 
 	/**
-	* Deletes the type with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param typeId the primary key of the type
-	* @return the type that was removed
-	* @throws PortalException if a type with the primary key could not be found
+	* @throws PortalException
 	*/
-	public static com.liferay.ams.model.Type deleteType(long typeId)
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deleteType(typeId);
+		return getService().deletePersistedModel(persistedModel);
 	}
 
 	/**
@@ -83,6 +80,18 @@ public class TypeLocalServiceUtil {
 		return getService().deleteType(type);
 	}
 
+	/**
+	* Deletes the type with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param typeId the primary key of the type
+	* @return the type that was removed
+	* @throws PortalException if a type with the primary key could not be found
+	*/
+	public static com.liferay.ams.model.Type deleteType(long typeId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deleteType(typeId);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return getService().dynamicQuery();
 	}
@@ -93,8 +102,7 @@ public class TypeLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -111,8 +119,7 @@ public class TypeLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -131,11 +138,10 @@ public class TypeLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -168,6 +174,25 @@ public class TypeLocalServiceUtil {
 		return getService().fetchType(typeId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the type with the primary key.
 	*
@@ -178,25 +203,6 @@ public class TypeLocalServiceUtil {
 	public static com.liferay.ams.model.Type getType(long typeId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getType(typeId);
-	}
-
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -224,24 +230,10 @@ public class TypeLocalServiceUtil {
 		return getService().getTypesCount();
 	}
 
-	/**
-	* Updates the type in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param type the type
-	* @return the type that was updated
-	*/
-	public static com.liferay.ams.model.Type updateType(
-		com.liferay.ams.model.Type type) {
-		return getService().updateType(type);
-	}
-
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -253,10 +245,15 @@ public class TypeLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
+	/**
+	* Updates the type in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param type the type
+	* @return the type that was updated
+	*/
+	public static com.liferay.ams.model.Type updateType(
+		com.liferay.ams.model.Type type) {
+		return getService().updateType(type);
 	}
 
 	public static void clearService() {

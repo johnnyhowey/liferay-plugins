@@ -50,6 +50,25 @@ public class AccountLocalServiceUtil {
 		return getService().addAccount(account);
 	}
 
+	public static com.liferay.mail.model.Account addAccount(long userId,
+		java.lang.String address, java.lang.String personalName,
+		java.lang.String protocol, java.lang.String incomingHostName,
+		int incomingPort, boolean incomingSecure,
+		java.lang.String outgoingHostName, int outgoingPort,
+		boolean outgoingSecure, java.lang.String login,
+		java.lang.String password, boolean savePassword,
+		java.lang.String signature, boolean useSignature,
+		java.lang.String folderPrefix, long inboxFolderId, long draftFolderId,
+		long sentFolderId, long trashFolderId, boolean defaultSender)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addAccount(userId, address, personalName, protocol,
+			incomingHostName, incomingPort, incomingSecure, outgoingHostName,
+			outgoingPort, outgoingSecure, login, password, savePassword,
+			signature, useSignature, folderPrefix, inboxFolderId,
+			draftFolderId, sentFolderId, trashFolderId, defaultSender);
+	}
+
 	/**
 	* Creates a new account with the primary key. Does not add the account to the database.
 	*
@@ -61,32 +80,42 @@ public class AccountLocalServiceUtil {
 	}
 
 	/**
-	* Deletes the account with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param accountId the primary key of the account
-	* @return the account that was removed
-	* @throws PortalException if a account with the primary key could not be found
-	* @throws SystemException
-	*/
-	public static com.liferay.mail.model.Account deleteAccount(long accountId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().deleteAccount(accountId);
-	}
-
-	/**
 	* Deletes the account from the database. Also notifies the appropriate model listeners.
 	*
 	* @param account the account
 	* @return the account that was removed
 	* @throws PortalException
-	* @throws SystemException
 	*/
 	public static com.liferay.mail.model.Account deleteAccount(
 		com.liferay.mail.model.Account account)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().deleteAccount(account);
+	}
+
+	/**
+	* Deletes the account with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param accountId the primary key of the account
+	* @return the account that was removed
+	* @throws PortalException if a account with the primary key could not be found
+	*/
+	public static com.liferay.mail.model.Account deleteAccount(long accountId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deleteAccount(accountId);
+	}
+
+	public static void deleteAccounts(long userId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().deleteAccounts(userId);
+	}
+
+	/**
+	* @throws PortalException
+	*/
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deletePersistedModel(persistedModel);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
@@ -99,8 +128,7 @@ public class AccountLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -117,8 +145,7 @@ public class AccountLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -137,11 +164,10 @@ public class AccountLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -186,23 +212,10 @@ public class AccountLocalServiceUtil {
 		return getService().getAccount(accountId);
 	}
 
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
+	public static com.liferay.mail.model.Account getAccount(long userId,
+		java.lang.String address)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
+		return getService().getAccount(userId, address);
 	}
 
 	/**
@@ -221,6 +234,11 @@ public class AccountLocalServiceUtil {
 		return getService().getAccounts(start, end);
 	}
 
+	public static java.util.List<com.liferay.mail.model.Account> getAccounts(
+		long userId) {
+		return getService().getAccounts(userId);
+	}
+
 	/**
 	* Returns the number of accounts.
 	*
@@ -228,6 +246,40 @@ public class AccountLocalServiceUtil {
 	*/
 	public static int getAccountsCount() {
 		return getService().getAccountsCount();
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
@@ -241,74 +293,11 @@ public class AccountLocalServiceUtil {
 		return getService().updateAccount(account);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
-	}
-
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.mail.model.Account addAccount(long userId,
-		java.lang.String address, java.lang.String personalName,
-		java.lang.String protocol, java.lang.String incomingHostName,
-		int incomingPort, boolean incomingSecure,
-		java.lang.String outgoingHostName, int outgoingPort,
-		boolean outgoingSecure, java.lang.String login,
-		java.lang.String password, boolean savePassword,
-		java.lang.String signature, boolean useSignature,
-		java.lang.String folderPrefix, long inboxFolderId, long draftFolderId,
-		long sentFolderId, long trashFolderId, boolean defaultSender)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addAccount(userId, address, personalName, protocol,
-			incomingHostName, incomingPort, incomingSecure, outgoingHostName,
-			outgoingPort, outgoingSecure, login, password, savePassword,
-			signature, useSignature, folderPrefix, inboxFolderId,
-			draftFolderId, sentFolderId, trashFolderId, defaultSender);
-	}
-
-	public static void deleteAccounts(long userId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteAccounts(userId);
-	}
-
-	public static com.liferay.mail.model.Account getAccount(long userId,
-		java.lang.String address)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getAccount(userId, address);
-	}
-
-	public static java.util.List<com.liferay.mail.model.Account> getAccounts(
-		long userId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getAccounts(userId);
-	}
-
 	public static com.liferay.mail.model.Account updateAccount(long accountId,
 		java.lang.String personalName, java.lang.String password,
 		boolean savePassword, java.lang.String signature, boolean useSignature,
 		java.lang.String folderPrefix, boolean defaultSender)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateAccount(accountId, personalName, password,
 			savePassword, signature, useSignature, folderPrefix, defaultSender);
@@ -317,8 +306,7 @@ public class AccountLocalServiceUtil {
 	public static com.liferay.mail.model.Account updateFolders(long accountId,
 		long inboxFolderId, long draftFolderId, long sentFolderId,
 		long trashFolderId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateFolders(accountId, inboxFolderId, draftFolderId,
 			sentFolderId, trashFolderId);

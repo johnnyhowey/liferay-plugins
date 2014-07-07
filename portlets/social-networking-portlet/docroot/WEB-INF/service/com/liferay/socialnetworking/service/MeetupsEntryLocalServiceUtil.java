@@ -50,6 +50,20 @@ public class MeetupsEntryLocalServiceUtil {
 		return getService().addMeetupsEntry(meetupsEntry);
 	}
 
+	public static com.liferay.socialnetworking.model.MeetupsEntry addMeetupsEntry(
+		long userId, java.lang.String title, java.lang.String description,
+		int startDateMonth, int startDateDay, int startDateYear,
+		int startDateHour, int startDateMinute, int endDateMonth,
+		int endDateDay, int endDateYear, int endDateHour, int endDateMinute,
+		int totalAttendees, int maxAttendees, double price, byte[] thumbnail)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addMeetupsEntry(userId, title, description, startDateMonth,
+			startDateDay, startDateYear, startDateHour, startDateMinute,
+			endDateMonth, endDateDay, endDateYear, endDateHour, endDateMinute,
+			totalAttendees, maxAttendees, price, thumbnail);
+	}
+
 	/**
 	* Creates a new meetups entry with the primary key. Does not add the meetups entry to the database.
 	*
@@ -59,21 +73,6 @@ public class MeetupsEntryLocalServiceUtil {
 	public static com.liferay.socialnetworking.model.MeetupsEntry createMeetupsEntry(
 		long meetupsEntryId) {
 		return getService().createMeetupsEntry(meetupsEntryId);
-	}
-
-	/**
-	* Deletes the meetups entry with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param meetupsEntryId the primary key of the meetups entry
-	* @return the meetups entry that was removed
-	* @throws PortalException if a meetups entry with the primary key could not be found
-	* @throws SystemException
-	*/
-	public static com.liferay.socialnetworking.model.MeetupsEntry deleteMeetupsEntry(
-		long meetupsEntryId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().deleteMeetupsEntry(meetupsEntryId);
 	}
 
 	/**
@@ -87,6 +86,28 @@ public class MeetupsEntryLocalServiceUtil {
 		return getService().deleteMeetupsEntry(meetupsEntry);
 	}
 
+	/**
+	* Deletes the meetups entry with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param meetupsEntryId the primary key of the meetups entry
+	* @return the meetups entry that was removed
+	* @throws PortalException if a meetups entry with the primary key could not be found
+	*/
+	public static com.liferay.socialnetworking.model.MeetupsEntry deleteMeetupsEntry(
+		long meetupsEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deleteMeetupsEntry(meetupsEntryId);
+	}
+
+	/**
+	* @throws PortalException
+	*/
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deletePersistedModel(persistedModel);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return getService().dynamicQuery();
 	}
@@ -97,8 +118,7 @@ public class MeetupsEntryLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -115,8 +135,7 @@ public class MeetupsEntryLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -135,11 +154,10 @@ public class MeetupsEntryLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -173,36 +191,17 @@ public class MeetupsEntryLocalServiceUtil {
 		return getService().fetchMeetupsEntry(meetupsEntryId);
 	}
 
-	/**
-	* Returns the meetups entry with the primary key.
-	*
-	* @param meetupsEntryId the primary key of the meetups entry
-	* @return the meetups entry
-	* @throws PortalException if a meetups entry with the primary key could not be found
-	*/
-	public static com.liferay.socialnetworking.model.MeetupsEntry getMeetupsEntry(
-		long meetupsEntryId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getMeetupsEntry(meetupsEntryId);
-	}
-
 	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
 		return getService().getActionableDynamicQuery();
 	}
 
 	/**
-	* @throws PortalException
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
 	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
 	}
 
 	/**
@@ -221,6 +220,16 @@ public class MeetupsEntryLocalServiceUtil {
 		return getService().getMeetupsEntries(start, end);
 	}
 
+	public static java.util.List<com.liferay.socialnetworking.model.MeetupsEntry> getMeetupsEntriesByCompany(
+		long companyId) {
+		return getService().getMeetupsEntriesByCompany(companyId);
+	}
+
+	public static java.util.List<com.liferay.socialnetworking.model.MeetupsEntry> getMeetupsEntriesByUser(
+		long userId) {
+		return getService().getMeetupsEntriesByUser(userId);
+	}
+
 	/**
 	* Returns the number of meetups entries.
 	*
@@ -228,6 +237,40 @@ public class MeetupsEntryLocalServiceUtil {
 	*/
 	public static int getMeetupsEntriesCount() {
 		return getService().getMeetupsEntriesCount();
+	}
+
+	/**
+	* Returns the meetups entry with the primary key.
+	*
+	* @param meetupsEntryId the primary key of the meetups entry
+	* @return the meetups entry
+	* @throws PortalException if a meetups entry with the primary key could not be found
+	*/
+	public static com.liferay.socialnetworking.model.MeetupsEntry getMeetupsEntry(
+		long meetupsEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getMeetupsEntry(meetupsEntryId);
+	}
+
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
@@ -241,56 +284,6 @@ public class MeetupsEntryLocalServiceUtil {
 		return getService().updateMeetupsEntry(meetupsEntry);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
-	}
-
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.socialnetworking.model.MeetupsEntry addMeetupsEntry(
-		long userId, java.lang.String title, java.lang.String description,
-		int startDateMonth, int startDateDay, int startDateYear,
-		int startDateHour, int startDateMinute, int endDateMonth,
-		int endDateDay, int endDateYear, int endDateHour, int endDateMinute,
-		int totalAttendees, int maxAttendees, double price, byte[] thumbnail)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addMeetupsEntry(userId, title, description, startDateMonth,
-			startDateDay, startDateYear, startDateHour, startDateMinute,
-			endDateMonth, endDateDay, endDateYear, endDateHour, endDateMinute,
-			totalAttendees, maxAttendees, price, thumbnail);
-	}
-
-	public static java.util.List<com.liferay.socialnetworking.model.MeetupsEntry> getMeetupsEntriesByCompany(
-		long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getMeetupsEntriesByCompany(companyId);
-	}
-
-	public static java.util.List<com.liferay.socialnetworking.model.MeetupsEntry> getMeetupsEntriesByUser(
-		long userId) throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getMeetupsEntriesByUser(userId);
-	}
-
 	public static com.liferay.socialnetworking.model.MeetupsEntry updateMeetupsEntry(
 		long userId, long meetupsEntryId, java.lang.String title,
 		java.lang.String description, int startDateMonth, int startDateDay,
@@ -298,8 +291,7 @@ public class MeetupsEntryLocalServiceUtil {
 		int endDateMonth, int endDateDay, int endDateYear, int endDateHour,
 		int endDateMinute, int totalAttendees, int maxAttendees, double price,
 		byte[] thumbnail)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateMeetupsEntry(userId, meetupsEntryId, title,
 			description, startDateMonth, startDateDay, startDateYear,

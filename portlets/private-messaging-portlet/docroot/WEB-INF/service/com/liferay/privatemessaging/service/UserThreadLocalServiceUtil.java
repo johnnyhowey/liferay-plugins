@@ -38,6 +38,33 @@ public class UserThreadLocalServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.privatemessaging.service.impl.UserThreadLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static com.liferay.portlet.messageboards.model.MBMessage addPrivateMessage(
+		long userId, long mbThreadId, java.lang.String to,
+		java.lang.String subject, java.lang.String body,
+		java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.io.InputStream>> inputStreamOVPs,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addPrivateMessage(userId, mbThreadId, to, subject, body,
+			inputStreamOVPs, themeDisplay);
+	}
+
+	public static com.liferay.portlet.messageboards.model.MBMessage addPrivateMessageBranch(
+		long userId, long parentMBMessageId, java.lang.String body,
+		java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.io.InputStream>> inputStreamOVPs,
+		com.liferay.portal.theme.ThemeDisplay themeDisplay)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addPrivateMessageBranch(userId, parentMBMessageId, body,
+			inputStreamOVPs, themeDisplay);
+	}
+
+	public static void addUserThread(long userId, long mbThreadId,
+		long topMBMessageId, boolean read, boolean deleted)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService()
+			.addUserThread(userId, mbThreadId, topMBMessageId, read, deleted);
+	}
 
 	/**
 	* Adds the user thread to the database. Also notifies the appropriate model listeners.
@@ -62,16 +89,22 @@ public class UserThreadLocalServiceUtil {
 	}
 
 	/**
-	* Deletes the user thread with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param userThreadId the primary key of the user thread
-	* @return the user thread that was removed
-	* @throws PortalException if a user thread with the primary key could not be found
+	* @throws PortalException
 	*/
-	public static com.liferay.privatemessaging.model.UserThread deleteUserThread(
-		long userThreadId)
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deleteUserThread(userThreadId);
+		return getService().deletePersistedModel(persistedModel);
+	}
+
+	public static void deleteUser(long userId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().deleteUser(userId);
+	}
+
+	public static void deleteUserThread(long userId, long mbThreadId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().deleteUserThread(userId, mbThreadId);
 	}
 
 	/**
@@ -85,6 +118,19 @@ public class UserThreadLocalServiceUtil {
 		return getService().deleteUserThread(userThread);
 	}
 
+	/**
+	* Deletes the user thread with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param userThreadId the primary key of the user thread
+	* @return the user thread that was removed
+	* @throws PortalException if a user thread with the primary key could not be found
+	*/
+	public static com.liferay.privatemessaging.model.UserThread deleteUserThread(
+		long userThreadId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deleteUserThread(userThreadId);
+	}
+
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return getService().dynamicQuery();
 	}
@@ -95,8 +141,7 @@ public class UserThreadLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -113,8 +158,7 @@ public class UserThreadLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -133,11 +177,10 @@ public class UserThreadLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -167,8 +210,44 @@ public class UserThreadLocalServiceUtil {
 	}
 
 	public static com.liferay.privatemessaging.model.UserThread fetchUserThread(
+		long userId, long mbThreadId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().fetchUserThread(userId, mbThreadId);
+	}
+
+	public static com.liferay.privatemessaging.model.UserThread fetchUserThread(
 		long userThreadId) {
 		return getService().fetchUserThread(userThreadId);
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getMBThreadUserThreads(
+		long mbThreadId) {
+		return getService().getMBThreadUserThreads(mbThreadId);
+	}
+
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static com.liferay.privatemessaging.model.UserThread getUserThread(
+		long userId, long mbThreadId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getUserThread(userId, mbThreadId);
 	}
 
 	/**
@@ -182,25 +261,6 @@ public class UserThreadLocalServiceUtil {
 		long userThreadId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getUserThread(userThreadId);
-	}
-
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -228,24 +288,44 @@ public class UserThreadLocalServiceUtil {
 		return getService().getUserThreadsCount();
 	}
 
-	/**
-	* Updates the user thread in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param userThread the user thread
-	* @return the user thread that was updated
-	*/
-	public static com.liferay.privatemessaging.model.UserThread updateUserThread(
-		com.liferay.privatemessaging.model.UserThread userThread) {
-		return getService().updateUserThread(userThread);
+	public static int getUserUserThreadCount(long userId, boolean deleted) {
+		return getService().getUserUserThreadCount(userId, deleted);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
+	public static int getUserUserThreadCount(long userId, boolean read,
+		boolean deleted) {
+		return getService().getUserUserThreadCount(userId, read, deleted);
+	}
+
+	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
+		long userId, boolean deleted) {
+		return getService().getUserUserThreads(userId, deleted);
+	}
+
+	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
+		long userId, boolean deleted, int start, int end) {
+		return getService().getUserUserThreads(userId, deleted, start, end);
+	}
+
+	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
+		long userId, boolean read, boolean deleted) {
+		return getService().getUserUserThreads(userId, read, deleted);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
+	public static void markUserThreadAsRead(long userId, long mbThreadId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().markUserThreadAsRead(userId, mbThreadId);
+	}
+
+	public static void markUserThreadAsUnread(long userId, long mbThreadId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().markUserThreadAsUnread(userId, mbThreadId);
 	}
 
 	/**
@@ -257,119 +337,19 @@ public class UserThreadLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.portlet.messageboards.model.MBMessage addPrivateMessage(
-		long userId, long mbThreadId, java.lang.String to,
-		java.lang.String subject, java.lang.String body,
-		java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.io.InputStream>> inputStreamOVPs,
-		com.liferay.portal.theme.ThemeDisplay themeDisplay)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addPrivateMessage(userId, mbThreadId, to, subject, body,
-			inputStreamOVPs, themeDisplay);
-	}
-
-	public static com.liferay.portlet.messageboards.model.MBMessage addPrivateMessageBranch(
-		long userId, long parentMBMessageId, java.lang.String body,
-		java.util.List<com.liferay.portal.kernel.util.ObjectValuePair<java.lang.String, java.io.InputStream>> inputStreamOVPs,
-		com.liferay.portal.theme.ThemeDisplay themeDisplay)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addPrivateMessageBranch(userId, parentMBMessageId, body,
-			inputStreamOVPs, themeDisplay);
-	}
-
-	public static void addUserThread(long userId, long mbThreadId,
-		long topMBMessageId, boolean read, boolean deleted)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService()
-			.addUserThread(userId, mbThreadId, topMBMessageId, read, deleted);
-	}
-
-	public static void deleteUser(long userId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteUser(userId);
-	}
-
-	public static void deleteUserThread(long userId, long mbThreadId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteUserThread(userId, mbThreadId);
-	}
-
-	public static com.liferay.privatemessaging.model.UserThread fetchUserThread(
-		long userId, long mbThreadId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().fetchUserThread(userId, mbThreadId);
-	}
-
-	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getMBThreadUserThreads(
-		long mbThreadId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getMBThreadUserThreads(mbThreadId);
-	}
-
-	public static com.liferay.privatemessaging.model.UserThread getUserThread(
-		long userId, long mbThreadId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getUserThread(userId, mbThreadId);
-	}
-
-	public static int getUserUserThreadCount(long userId, boolean deleted)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getUserUserThreadCount(userId, deleted);
-	}
-
-	public static int getUserUserThreadCount(long userId, boolean read,
-		boolean deleted)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getUserUserThreadCount(userId, read, deleted);
-	}
-
-	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
-		long userId, boolean deleted)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getUserUserThreads(userId, deleted);
-	}
-
-	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
-		long userId, boolean read, boolean deleted)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getUserUserThreads(userId, read, deleted);
-	}
-
-	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
-		long userId, boolean deleted, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getUserUserThreads(userId, deleted, start, end);
-	}
-
-	public static void markUserThreadAsRead(long userId, long mbThreadId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().markUserThreadAsRead(userId, mbThreadId);
-	}
-
-	public static void markUserThreadAsUnread(long userId, long mbThreadId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().markUserThreadAsUnread(userId, mbThreadId);
-	}
-
-	public static void updateUserName(com.liferay.portal.model.User user)
-		throws com.liferay.portal.kernel.exception.SystemException {
+	public static void updateUserName(com.liferay.portal.model.User user) {
 		getService().updateUserName(user);
+	}
+
+	/**
+	* Updates the user thread in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param userThread the user thread
+	* @return the user thread that was updated
+	*/
+	public static com.liferay.privatemessaging.model.UserThread updateUserThread(
+		com.liferay.privatemessaging.model.UserThread userThread) {
+		return getService().updateUserThread(userThread);
 	}
 
 	public static void clearService() {

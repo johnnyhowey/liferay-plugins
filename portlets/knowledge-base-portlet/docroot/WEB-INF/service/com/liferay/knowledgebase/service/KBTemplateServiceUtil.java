@@ -38,6 +38,25 @@ public class KBTemplateServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.knowledgebase.service.impl.KBTemplateServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static com.liferay.knowledgebase.model.KBTemplate addKBTemplate(
+		java.lang.String portletId, java.lang.String title,
+		java.lang.String content,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addKBTemplate(portletId, title, content, serviceContext);
+	}
+
+	public static com.liferay.knowledgebase.model.KBTemplate deleteKBTemplate(
+		long kbTemplateId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deleteKBTemplate(kbTemplateId);
+	}
+
+	public static void deleteKBTemplates(long groupId, long[] kbTemplateIds)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().deleteKBTemplates(groupId, kbTemplateIds);
+	}
 
 	/**
 	* Returns the Spring bean ID for this bean.
@@ -46,6 +65,41 @@ public class KBTemplateServiceUtil {
 	*/
 	public static java.lang.String getBeanIdentifier() {
 		return getService().getBeanIdentifier();
+	}
+
+	public static java.util.List<com.liferay.knowledgebase.model.KBTemplate> getGroupKBTemplates(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.knowledgebase.model.KBTemplate> orderByComparator) {
+		return getService()
+				   .getGroupKBTemplates(groupId, start, end, orderByComparator);
+	}
+
+	public static int getGroupKBTemplatesCount(long groupId) {
+		return getService().getGroupKBTemplatesCount(groupId);
+	}
+
+	public static com.liferay.knowledgebase.model.KBTemplate getKBTemplate(
+		long kbTemplateId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getKBTemplate(kbTemplateId);
+	}
+
+	public static com.liferay.knowledgebase.model.KBTemplateSearchDisplay getKBTemplateSearchDisplay(
+		long groupId, java.lang.String title, java.lang.String content,
+		java.util.Date startDate, java.util.Date endDate, boolean andOperator,
+		int[] curStartValues, int cur, int delta,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.knowledgebase.model.KBTemplate> orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .getKBTemplateSearchDisplay(groupId, title, content,
+			startDate, endDate, andOperator, curStartValues, cur, delta,
+			orderByComparator);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -57,73 +111,10 @@ public class KBTemplateServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.knowledgebase.model.KBTemplate addKBTemplate(
-		java.lang.String portletId, java.lang.String title,
-		java.lang.String content,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addKBTemplate(portletId, title, content, serviceContext);
-	}
-
-	public static com.liferay.knowledgebase.model.KBTemplate deleteKBTemplate(
-		long kbTemplateId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().deleteKBTemplate(kbTemplateId);
-	}
-
-	public static void deleteKBTemplates(long groupId, long[] kbTemplateIds)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteKBTemplates(groupId, kbTemplateIds);
-	}
-
-	public static java.util.List<com.liferay.knowledgebase.model.KBTemplate> getGroupKBTemplates(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getGroupKBTemplates(groupId, start, end, orderByComparator);
-	}
-
-	public static int getGroupKBTemplatesCount(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getGroupKBTemplatesCount(groupId);
-	}
-
-	public static com.liferay.knowledgebase.model.KBTemplate getKBTemplate(
-		long kbTemplateId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getKBTemplate(kbTemplateId);
-	}
-
-	public static com.liferay.knowledgebase.model.KBTemplateSearchDisplay getKBTemplateSearchDisplay(
-		long groupId, java.lang.String title, java.lang.String content,
-		java.util.Date startDate, java.util.Date endDate, boolean andOperator,
-		int[] curStartValues, int cur, int delta,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getKBTemplateSearchDisplay(groupId, title, content,
-			startDate, endDate, andOperator, curStartValues, cur, delta,
-			orderByComparator);
-	}
-
 	public static com.liferay.knowledgebase.model.KBTemplate updateKBTemplate(
 		long kbTemplateId, java.lang.String title, java.lang.String content,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateKBTemplate(kbTemplateId, title, content,
 			serviceContext);

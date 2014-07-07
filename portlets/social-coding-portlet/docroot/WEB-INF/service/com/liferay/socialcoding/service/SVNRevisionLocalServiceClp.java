@@ -31,140 +31,140 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 				"com.liferay.socialcoding.model.SVNRevision"
 			};
 
-		_methodName1 = "createSVNRevision";
+		_methodName1 = "addSVNRevision";
 
-		_methodParameterTypes1 = new String[] { "long" };
-
-		_methodName2 = "deleteSVNRevision";
-
-		_methodParameterTypes2 = new String[] { "long" };
-
-		_methodName3 = "deleteSVNRevision";
-
-		_methodParameterTypes3 = new String[] {
-				"com.liferay.socialcoding.model.SVNRevision"
-			};
-
-		_methodName4 = "dynamicQuery";
-
-		_methodParameterTypes4 = new String[] {  };
-
-		_methodName5 = "dynamicQuery";
-
-		_methodParameterTypes5 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
-			};
-
-		_methodName6 = "dynamicQuery";
-
-		_methodParameterTypes6 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
-			};
-
-		_methodName7 = "dynamicQuery";
-
-		_methodParameterTypes7 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			};
-
-		_methodName8 = "dynamicQueryCount";
-
-		_methodParameterTypes8 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
-			};
-
-		_methodName9 = "dynamicQueryCount";
-
-		_methodParameterTypes9 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery",
-				"com.liferay.portal.kernel.dao.orm.Projection"
-			};
-
-		_methodName10 = "fetchSVNRevision";
-
-		_methodParameterTypes10 = new String[] { "long" };
-
-		_methodName11 = "getSVNRevision";
-
-		_methodParameterTypes11 = new String[] { "long" };
-
-		_methodName12 = "getActionableDynamicQuery";
-
-		_methodParameterTypes12 = new String[] {  };
-
-		_methodName13 = "deletePersistedModel";
-
-		_methodParameterTypes13 = new String[] {
-				"com.liferay.portal.model.PersistedModel"
-			};
-
-		_methodName14 = "getPersistedModel";
-
-		_methodParameterTypes14 = new String[] { "java.io.Serializable" };
-
-		_methodName15 = "getSVNRevisions";
-
-		_methodParameterTypes15 = new String[] { "int", "int" };
-
-		_methodName16 = "getSVNRevisionsCount";
-
-		_methodParameterTypes16 = new String[] {  };
-
-		_methodName17 = "updateSVNRevision";
-
-		_methodParameterTypes17 = new String[] {
-				"com.liferay.socialcoding.model.SVNRevision"
-			};
-
-		_methodName18 = "getBeanIdentifier";
-
-		_methodParameterTypes18 = new String[] {  };
-
-		_methodName19 = "setBeanIdentifier";
-
-		_methodParameterTypes19 = new String[] { "java.lang.String" };
-
-		_methodName21 = "addSVNRevision";
-
-		_methodParameterTypes21 = new String[] {
+		_methodParameterTypes1 = new String[] {
 				"java.lang.String", "java.util.Date", "long", "long",
 				"java.lang.String"
 			};
 
-		_methodName22 = "getFirstSVNRevision";
+		_methodName2 = "createSVNRevision";
 
-		_methodParameterTypes22 = new String[] { "java.lang.String" };
+		_methodParameterTypes2 = new String[] { "long" };
 
-		_methodName23 = "getLastSVNRevision";
+		_methodName3 = "deletePersistedModel";
 
-		_methodParameterTypes23 = new String[] { "java.lang.String" };
+		_methodParameterTypes3 = new String[] {
+				"com.liferay.portal.model.PersistedModel"
+			};
 
-		_methodName24 = "getSVNRevisions";
+		_methodName4 = "deleteSVNRevision";
 
-		_methodParameterTypes24 = new String[] { "long", "int", "int" };
+		_methodParameterTypes4 = new String[] {
+				"com.liferay.socialcoding.model.SVNRevision"
+			};
 
-		_methodName25 = "getSVNRevisions";
+		_methodName5 = "deleteSVNRevision";
 
-		_methodParameterTypes25 = new String[] { "java.lang.String", "int", "int" };
+		_methodParameterTypes5 = new String[] { "long" };
 
-		_methodName26 = "getSVNRevisions";
+		_methodName6 = "dynamicQuery";
 
-		_methodParameterTypes26 = new String[] {
+		_methodParameterTypes6 = new String[] {  };
+
+		_methodName7 = "dynamicQuery";
+
+		_methodParameterTypes7 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+			};
+
+		_methodName8 = "dynamicQuery";
+
+		_methodParameterTypes8 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
+			};
+
+		_methodName9 = "dynamicQuery";
+
+		_methodParameterTypes9 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName10 = "dynamicQueryCount";
+
+		_methodParameterTypes10 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+			};
+
+		_methodName11 = "dynamicQueryCount";
+
+		_methodParameterTypes11 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery",
+				"com.liferay.portal.kernel.dao.orm.Projection"
+			};
+
+		_methodName12 = "fetchSVNRevision";
+
+		_methodParameterTypes12 = new String[] { "long" };
+
+		_methodName13 = "getActionableDynamicQuery";
+
+		_methodParameterTypes13 = new String[] {  };
+
+		_methodName14 = "getBeanIdentifier";
+
+		_methodParameterTypes14 = new String[] {  };
+
+		_methodName15 = "getFirstSVNRevision";
+
+		_methodParameterTypes15 = new String[] { "java.lang.String" };
+
+		_methodName16 = "getLastSVNRevision";
+
+		_methodParameterTypes16 = new String[] { "java.lang.String" };
+
+		_methodName17 = "getPersistedModel";
+
+		_methodParameterTypes17 = new String[] { "java.io.Serializable" };
+
+		_methodName18 = "getSVNRevision";
+
+		_methodParameterTypes18 = new String[] { "long" };
+
+		_methodName19 = "getSVNRevisions";
+
+		_methodParameterTypes19 = new String[] { "int", "int" };
+
+		_methodName20 = "getSVNRevisions";
+
+		_methodParameterTypes20 = new String[] { "long", "int", "int" };
+
+		_methodName21 = "getSVNRevisions";
+
+		_methodParameterTypes21 = new String[] { "java.lang.String", "int", "int" };
+
+		_methodName22 = "getSVNRevisions";
+
+		_methodParameterTypes22 = new String[] {
 				"java.lang.String", "long", "int", "int"
 			};
 
-		_methodName27 = "getSVNRevisionsCount";
+		_methodName23 = "getSVNRevisionsCount";
 
-		_methodParameterTypes27 = new String[] { "long" };
+		_methodParameterTypes23 = new String[] {  };
 
-		_methodName28 = "getSVNRevisionsCount";
+		_methodName24 = "getSVNRevisionsCount";
+
+		_methodParameterTypes24 = new String[] { "long" };
+
+		_methodName25 = "getSVNRevisionsCount";
+
+		_methodParameterTypes25 = new String[] { "java.lang.String" };
+
+		_methodName26 = "getSVNRevisionsCount";
+
+		_methodParameterTypes26 = new String[] { "java.lang.String", "long" };
+
+		_methodName28 = "setBeanIdentifier";
 
 		_methodParameterTypes28 = new String[] { "java.lang.String" };
 
-		_methodName29 = "getSVNRevisionsCount";
+		_methodName29 = "updateSVNRevision";
 
-		_methodParameterTypes29 = new String[] { "java.lang.String", "long" };
+		_methodParameterTypes29 = new String[] {
+				"com.liferay.socialcoding.model.SVNRevision"
+			};
 	}
 
 	@Override
@@ -193,13 +193,109 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 	}
 
 	@Override
+	public com.liferay.socialcoding.model.SVNRevision addSVNRevision(
+		java.lang.String svnUserId, java.util.Date createDate,
+		long svnRepositoryId, long revisionNumber, java.lang.String comments)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName1,
+					_methodParameterTypes1,
+					new Object[] {
+						ClpSerializer.translateInput(svnUserId),
+						
+					ClpSerializer.translateInput(createDate),
+						
+					svnRepositoryId,
+						
+					revisionNumber,
+						
+					ClpSerializer.translateInput(comments)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public com.liferay.socialcoding.model.SVNRevision createSVNRevision(
 		long svnRevisionId) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName1,
-					_methodParameterTypes1, new Object[] { svnRevisionId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName2,
+					_methodParameterTypes2, new Object[] { svnRevisionId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName3,
+					_methodParameterTypes3,
+					new Object[] { ClpSerializer.translateInput(persistedModel) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.socialcoding.model.SVNRevision deleteSVNRevision(
+		com.liferay.socialcoding.model.SVNRevision svnRevision) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName4,
+					_methodParameterTypes4,
+					new Object[] { ClpSerializer.translateInput(svnRevision) });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -223,8 +319,8 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName2,
-					_methodParameterTypes2, new Object[] { svnRevisionId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName5,
+					_methodParameterTypes5, new Object[] { svnRevisionId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -246,37 +342,12 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 	}
 
 	@Override
-	public com.liferay.socialcoding.model.SVNRevision deleteSVNRevision(
-		com.liferay.socialcoding.model.SVNRevision svnRevision) {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName3,
-					_methodParameterTypes3,
-					new Object[] { ClpSerializer.translateInput(svnRevision) });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName4,
-					_methodParameterTypes4, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName6,
+					_methodParameterTypes6, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -294,14 +365,13 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName5,
-					_methodParameterTypes5,
+			returnObj = _invokableLocalService.invokeMethod(_methodName7,
+					_methodParameterTypes7,
 					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
@@ -316,19 +386,18 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 			}
 		}
 
-		return (java.util.List)ClpSerializer.translateOutput(returnObj);
+		return (java.util.List<T>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName6,
-					_methodParameterTypes6,
+			returnObj = _invokableLocalService.invokeMethod(_methodName8,
+					_methodParameterTypes8,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -349,20 +418,19 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 			}
 		}
 
-		return (java.util.List)ClpSerializer.translateOutput(returnObj);
+		return (java.util.List<T>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName7,
-					_methodParameterTypes7,
+			returnObj = _invokableLocalService.invokeMethod(_methodName9,
+					_methodParameterTypes9,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -385,7 +453,7 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 			}
 		}
 
-		return (java.util.List)ClpSerializer.translateOutput(returnObj);
+		return (java.util.List<T>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
@@ -394,8 +462,8 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName8,
-					_methodParameterTypes8,
+			returnObj = _invokableLocalService.invokeMethod(_methodName10,
+					_methodParameterTypes10,
 					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
@@ -420,8 +488,8 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName9,
-					_methodParameterTypes9,
+			returnObj = _invokableLocalService.invokeMethod(_methodName11,
+					_methodParameterTypes11,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -449,45 +517,11 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName10,
-					_methodParameterTypes10, new Object[] { svnRevisionId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName12,
+					_methodParameterTypes12, new Object[] { svnRevisionId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public com.liferay.socialcoding.model.SVNRevision getSVNRevision(
-		long svnRevisionId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName11,
-					_methodParameterTypes11, new Object[] { svnRevisionId });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -506,8 +540,8 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName12,
-					_methodParameterTypes12, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName13,
+					_methodParameterTypes13, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -525,15 +559,38 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 	}
 
 	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
+	public java.lang.String getBeanIdentifier() {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName14,
+					_methodParameterTypes14, new Object[] {  });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.socialcoding.model.SVNRevision getFirstSVNRevision(
+		java.lang.String svnUserId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName13,
-					_methodParameterTypes13,
-					new Object[] { ClpSerializer.translateInput(persistedModel) });
+			returnObj = _invokableLocalService.invokeMethod(_methodName15,
+					_methodParameterTypes15,
+					new Object[] { ClpSerializer.translateInput(svnUserId) });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -551,7 +608,37 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 			}
 		}
 
-		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
+		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.socialcoding.model.SVNRevision getLastSVNRevision(
+		java.lang.String svnUserId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName16,
+					_methodParameterTypes16,
+					new Object[] { ClpSerializer.translateInput(svnUserId) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
@@ -561,8 +648,8 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName14,
-					_methodParameterTypes14,
+			returnObj = _invokableLocalService.invokeMethod(_methodName17,
+					_methodParameterTypes17,
 					new Object[] { ClpSerializer.translateInput(primaryKeyObj) });
 		}
 		catch (Throwable t) {
@@ -585,13 +672,131 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 	}
 
 	@Override
+	public com.liferay.socialcoding.model.SVNRevision getSVNRevision(
+		long svnRevisionId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName18,
+					_methodParameterTypes18, new Object[] { svnRevisionId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
 		int start, int end) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName15,
-					_methodParameterTypes15, new Object[] { start, end });
+			returnObj = _invokableLocalService.invokeMethod(_methodName19,
+					_methodParameterTypes19, new Object[] { start, end });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.socialcoding.model.SVNRevision>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
+		long svnRepositoryId, int start, int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20,
+					new Object[] { svnRepositoryId, start, end });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.socialcoding.model.SVNRevision>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
+		java.lang.String svnUserId, int start, int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21,
+					new Object[] {
+						ClpSerializer.translateInput(svnUserId),
+						
+					start,
+						
+					end
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.socialcoding.model.SVNRevision>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
+		java.lang.String svnUserId, long svnRepositoryId, int start, int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22,
+					new Object[] {
+						ClpSerializer.translateInput(svnUserId),
+						
+					svnRepositoryId,
+						
+					start,
+						
+					end
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -613,8 +818,8 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName16,
-					_methodParameterTypes16, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -632,14 +837,12 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 	}
 
 	@Override
-	public com.liferay.socialcoding.model.SVNRevision updateSVNRevision(
-		com.liferay.socialcoding.model.SVNRevision svnRevision) {
+	public int getSVNRevisionsCount(long svnRepositoryId) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName17,
-					_methodParameterTypes17,
-					new Object[] { ClpSerializer.translateInput(svnRevision) });
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24, new Object[] { svnRepositoryId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -653,16 +856,17 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 			}
 		}
 
-		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
+		return ((Integer)returnObj).intValue();
 	}
 
 	@Override
-	public java.lang.String getBeanIdentifier() {
+	public int getSVNRevisionsCount(java.lang.String svnUserId) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName18,
-					_methodParameterTypes18, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
+					new Object[] { ClpSerializer.translateInput(svnUserId) });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -676,14 +880,50 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 			}
 		}
 
-		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public int getSVNRevisionsCount(java.lang.String svnUserId,
+		long svnRepositoryId) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26,
+					new Object[] {
+						ClpSerializer.translateInput(svnUserId),
+						
+					svnRepositoryId
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
-			_invokableLocalService.invokeMethod(_methodName19,
-				_methodParameterTypes19,
+			_invokableLocalService.invokeMethod(_methodName28,
+				_methodParameterTypes28,
 				new Object[] { ClpSerializer.translateInput(beanIdentifier) });
 		}
 		catch (Throwable t) {
@@ -700,310 +940,17 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 	}
 
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public com.liferay.socialcoding.model.SVNRevision addSVNRevision(
-		java.lang.String svnUserId, java.util.Date createDate,
-		long svnRepositoryId, long revisionNumber, java.lang.String comments)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName21,
-					_methodParameterTypes21,
-					new Object[] {
-						ClpSerializer.translateInput(svnUserId),
-						
-					ClpSerializer.translateInput(createDate),
-						
-					svnRepositoryId,
-						
-					revisionNumber,
-						
-					ClpSerializer.translateInput(comments)
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public com.liferay.socialcoding.model.SVNRevision getFirstSVNRevision(
-		java.lang.String svnUserId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName22,
-					_methodParameterTypes22,
-					new Object[] { ClpSerializer.translateInput(svnUserId) });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public com.liferay.socialcoding.model.SVNRevision getLastSVNRevision(
-		java.lang.String svnUserId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23,
-					new Object[] { ClpSerializer.translateInput(svnUserId) });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
-		long svnRepositoryId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24,
-					new Object[] { svnRepositoryId, start, end });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<com.liferay.socialcoding.model.SVNRevision>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
-		java.lang.String svnUserId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25,
-					new Object[] {
-						ClpSerializer.translateInput(svnUserId),
-						
-					start,
-						
-					end
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<com.liferay.socialcoding.model.SVNRevision>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.util.List<com.liferay.socialcoding.model.SVNRevision> getSVNRevisions(
-		java.lang.String svnUserId, long svnRepositoryId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26,
-					new Object[] {
-						ClpSerializer.translateInput(svnUserId),
-						
-					svnRepositoryId,
-						
-					start,
-						
-					end
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<com.liferay.socialcoding.model.SVNRevision>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public int getSVNRevisionsCount(long svnRepositoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27, new Object[] { svnRepositoryId });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return ((Integer)returnObj).intValue();
-	}
-
-	@Override
-	public int getSVNRevisionsCount(java.lang.String svnUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName28,
-					_methodParameterTypes28,
-					new Object[] { ClpSerializer.translateInput(svnUserId) });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return ((Integer)returnObj).intValue();
-	}
-
-	@Override
-	public int getSVNRevisionsCount(java.lang.String svnUserId,
-		long svnRepositoryId)
-		throws com.liferay.portal.kernel.exception.SystemException {
+	public com.liferay.socialcoding.model.SVNRevision updateSVNRevision(
+		com.liferay.socialcoding.model.SVNRevision svnRevision) {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName29,
 					_methodParameterTypes29,
-					new Object[] {
-						ClpSerializer.translateInput(svnUserId),
-						
-					svnRepositoryId
-					});
+					new Object[] { ClpSerializer.translateInput(svnRevision) });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -1014,7 +961,7 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 			}
 		}
 
-		return ((Integer)returnObj).intValue();
+		return (com.liferay.socialcoding.model.SVNRevision)ClpSerializer.translateOutput(returnObj);
 	}
 
 	private InvokableLocalService _invokableLocalService;
@@ -1058,6 +1005,8 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 	private String[] _methodParameterTypes18;
 	private String _methodName19;
 	private String[] _methodParameterTypes19;
+	private String _methodName20;
+	private String[] _methodParameterTypes20;
 	private String _methodName21;
 	private String[] _methodParameterTypes21;
 	private String _methodName22;
@@ -1070,8 +1019,6 @@ public class SVNRevisionLocalServiceClp implements SVNRevisionLocalService {
 	private String[] _methodParameterTypes25;
 	private String _methodName26;
 	private String[] _methodParameterTypes26;
-	private String _methodName27;
-	private String[] _methodParameterTypes27;
 	private String _methodName28;
 	private String[] _methodParameterTypes28;
 	private String _methodName29;

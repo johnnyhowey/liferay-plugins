@@ -41,14 +41,17 @@ public class CalendarImporterLocalServiceWrapper
 		return _calendarImporterLocalService.getBeanIdentifier();
 	}
 
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
 	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_calendarImporterLocalService.setBeanIdentifier(beanIdentifier);
+	public void importCalEvent(
+		com.liferay.portlet.calendar.model.CalEvent calEvent)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_calendarImporterLocalService.importCalEvent(calEvent);
+	}
+
+	@Override
+	public void importCalEvents()
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_calendarImporterLocalService.importCalEvents();
 	}
 
 	@Override
@@ -59,19 +62,14 @@ public class CalendarImporterLocalServiceWrapper
 			arguments);
 	}
 
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
 	@Override
-	public void importCalEvent(
-		com.liferay.portlet.calendar.model.CalEvent calEvent)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_calendarImporterLocalService.importCalEvent(calEvent);
-	}
-
-	@Override
-	public void importCalEvents()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_calendarImporterLocalService.importCalEvents();
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_calendarImporterLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**

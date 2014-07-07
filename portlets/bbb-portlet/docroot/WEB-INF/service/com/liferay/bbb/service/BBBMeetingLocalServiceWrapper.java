@@ -42,6 +42,19 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 		return _bbbMeetingLocalService.addBBBMeeting(bbbMeeting);
 	}
 
+	@Override
+	public com.liferay.bbb.model.BBBMeeting addBBBMeeting(long userId,
+		long groupId, long bbbServerId, java.lang.String name,
+		java.lang.String description, java.lang.String attendeePassword,
+		java.lang.String moderatorPassword, int status,
+		java.util.List<com.liferay.bbb.model.BBBParticipant> bbbParticipants,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbMeetingLocalService.addBBBMeeting(userId, groupId,
+			bbbServerId, name, description, attendeePassword,
+			moderatorPassword, status, bbbParticipants, serviceContext);
+	}
+
 	/**
 	* Creates a new b b b meeting with the primary key. Does not add the b b b meeting to the database.
 	*
@@ -54,34 +67,40 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 	}
 
 	/**
-	* Deletes the b b b meeting with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param bbbMeetingId the primary key of the b b b meeting
-	* @return the b b b meeting that was removed
-	* @throws PortalException if a b b b meeting with the primary key could not be found
-	* @throws SystemException
-	*/
-	@Override
-	public com.liferay.bbb.model.BBBMeeting deleteBBBMeeting(long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingLocalService.deleteBBBMeeting(bbbMeetingId);
-	}
-
-	/**
 	* Deletes the b b b meeting from the database. Also notifies the appropriate model listeners.
 	*
 	* @param bbbMeeting the b b b meeting
 	* @return the b b b meeting that was removed
 	* @throws PortalException
-	* @throws SystemException
 	*/
 	@Override
 	public com.liferay.bbb.model.BBBMeeting deleteBBBMeeting(
 		com.liferay.bbb.model.BBBMeeting bbbMeeting)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _bbbMeetingLocalService.deleteBBBMeeting(bbbMeeting);
+	}
+
+	/**
+	* Deletes the b b b meeting with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param bbbMeetingId the primary key of the b b b meeting
+	* @return the b b b meeting that was removed
+	* @throws PortalException if a b b b meeting with the primary key could not be found
+	*/
+	@Override
+	public com.liferay.bbb.model.BBBMeeting deleteBBBMeeting(long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbMeetingLocalService.deleteBBBMeeting(bbbMeetingId);
+	}
+
+	/**
+	* @throws PortalException
+	*/
+	@Override
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbMeetingLocalService.deletePersistedModel(persistedModel);
 	}
 
 	@Override
@@ -96,8 +115,7 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _bbbMeetingLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -115,8 +133,7 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _bbbMeetingLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -136,11 +153,10 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _bbbMeetingLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -177,41 +193,39 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 		return _bbbMeetingLocalService.fetchBBBMeeting(bbbMeetingId);
 	}
 
-	/**
-	* Returns the b b b meeting with the primary key.
-	*
-	* @param bbbMeetingId the primary key of the b b b meeting
-	* @return the b b b meeting
-	* @throws PortalException if a b b b meeting with the primary key could not be found
-	* @throws SystemException
-	*/
-	@Override
-	public com.liferay.bbb.model.BBBMeeting getBBBMeeting(long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingLocalService.getBBBMeeting(bbbMeetingId);
-	}
-
 	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
 		return _bbbMeetingLocalService.getActionableDynamicQuery();
 	}
 
 	/**
-	* @throws PortalException
+	* Returns the b b b meeting with the primary key.
+	*
+	* @param bbbMeetingId the primary key of the b b b meeting
+	* @return the b b b meeting
+	* @throws PortalException if a b b b meeting with the primary key could not be found
 	*/
 	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
+	public com.liferay.bbb.model.BBBMeeting getBBBMeeting(long bbbMeetingId)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _bbbMeetingLocalService.deletePersistedModel(persistedModel);
+		return _bbbMeetingLocalService.getBBBMeeting(bbbMeetingId);
 	}
 
 	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _bbbMeetingLocalService.getPersistedModel(primaryKeyObj);
+	public java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc) {
+		return _bbbMeetingLocalService.getBBBMeetings(groupId, start, end, obc);
+	}
+
+	@Override
+	public java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
+		long groupId, long userId, java.lang.String name,
+		java.lang.String description, int status, boolean andSearch, int start,
+		int end, java.lang.String orderByField, java.lang.String orderByType) {
+		return _bbbMeetingLocalService.getBBBMeetings(groupId, userId, name,
+			description, status, andSearch, start, end, orderByField,
+			orderByType);
 	}
 
 	/**
@@ -231,6 +245,12 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 		return _bbbMeetingLocalService.getBBBMeetings(start, end);
 	}
 
+	@Override
+	public java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
+		int status) {
+		return _bbbMeetingLocalService.getBBBMeetings(status);
+	}
+
 	/**
 	* Returns the number of b b b meetings.
 	*
@@ -239,6 +259,59 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 	@Override
 	public int getBBBMeetingsCount() {
 		return _bbbMeetingLocalService.getBBBMeetingsCount();
+	}
+
+	@Override
+	public int getBBBMeetingsCount(long bbbServerId, int status) {
+		return _bbbMeetingLocalService.getBBBMeetingsCount(bbbServerId, status);
+	}
+
+	@Override
+	public int getBBBMeetingsCount(long groupId) {
+		return _bbbMeetingLocalService.getBBBMeetingsCount(groupId);
+	}
+
+	@Override
+	public int getBBBMeetingsCount(long groupId, long userId,
+		java.lang.String name, java.lang.String description, int status,
+		boolean andSearch) {
+		return _bbbMeetingLocalService.getBBBMeetingsCount(groupId, userId,
+			name, description, status, andSearch);
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _bbbMeetingLocalService.getBeanIdentifier();
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbMeetingLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _bbbMeetingLocalService.invokeMethod(name, parameterTypes,
+			arguments);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_bbbMeetingLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
@@ -253,94 +326,6 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 		return _bbbMeetingLocalService.updateBBBMeeting(bbbMeeting);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _bbbMeetingLocalService.getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_bbbMeetingLocalService.setBeanIdentifier(beanIdentifier);
-	}
-
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _bbbMeetingLocalService.invokeMethod(name, parameterTypes,
-			arguments);
-	}
-
-	@Override
-	public com.liferay.bbb.model.BBBMeeting addBBBMeeting(long userId,
-		long groupId, long bbbServerId, java.lang.String name,
-		java.lang.String description, java.lang.String attendeePassword,
-		java.lang.String moderatorPassword, int status,
-		java.util.List<com.liferay.bbb.model.BBBParticipant> bbbParticipants,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingLocalService.addBBBMeeting(userId, groupId,
-			bbbServerId, name, description, attendeePassword,
-			moderatorPassword, status, bbbParticipants, serviceContext);
-	}
-
-	@Override
-	public java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingLocalService.getBBBMeetings(status);
-	}
-
-	@Override
-	public java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingLocalService.getBBBMeetings(groupId, start, end, obc);
-	}
-
-	@Override
-	public java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
-		long groupId, long userId, java.lang.String name,
-		java.lang.String description, int status, boolean andSearch, int start,
-		int end, java.lang.String orderByField, java.lang.String orderByType)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingLocalService.getBBBMeetings(groupId, userId, name,
-			description, status, andSearch, start, end, orderByField,
-			orderByType);
-	}
-
-	@Override
-	public int getBBBMeetingsCount(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingLocalService.getBBBMeetingsCount(groupId);
-	}
-
-	@Override
-	public int getBBBMeetingsCount(long bbbServerId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingLocalService.getBBBMeetingsCount(bbbServerId, status);
-	}
-
-	@Override
-	public int getBBBMeetingsCount(long groupId, long userId,
-		java.lang.String name, java.lang.String description, int status,
-		boolean andSearch)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingLocalService.getBBBMeetingsCount(groupId, userId,
-			name, description, status, andSearch);
-	}
-
 	@Override
 	public com.liferay.bbb.model.BBBMeeting updateBBBMeeting(
 		long bbbMeetingId, long bbbServerId, java.lang.String name,
@@ -348,8 +333,7 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 		java.lang.String moderatorPassword,
 		java.util.List<com.liferay.bbb.model.BBBParticipant> bbbParticipants,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _bbbMeetingLocalService.updateBBBMeeting(bbbMeetingId,
 			bbbServerId, name, description, attendeePassword,
 			moderatorPassword, bbbParticipants, serviceContext);
@@ -357,9 +341,7 @@ public class BBBMeetingLocalServiceWrapper implements BBBMeetingLocalService,
 
 	@Override
 	public com.liferay.bbb.model.BBBMeeting updateStatus(long bbbMeetingId,
-		int status)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		int status) throws com.liferay.portal.kernel.exception.PortalException {
 		return _bbbMeetingLocalService.updateStatus(bbbMeetingId, status);
 	}
 

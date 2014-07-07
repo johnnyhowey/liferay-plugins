@@ -104,12 +104,11 @@ public abstract class FavoriteSiteLocalServiceBaseImpl
 	 * @param favoriteSiteId the primary key of the favorite site
 	 * @return the favorite site that was removed
 	 * @throws PortalException if a favorite site with the primary key could not be found
-	 * @throws SystemException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public FavoriteSite deleteFavoriteSite(long favoriteSiteId)
-		throws PortalException, SystemException {
+		throws PortalException {
 		return favoriteSitePersistence.remove(favoriteSiteId);
 	}
 
@@ -140,8 +139,7 @@ public abstract class FavoriteSiteLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return favoriteSitePersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -158,8 +156,8 @@ public abstract class FavoriteSiteLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return favoriteSitePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -178,9 +176,8 @@ public abstract class FavoriteSiteLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return favoriteSitePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -256,7 +253,7 @@ public abstract class FavoriteSiteLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteFavoriteSite((FavoriteSite)persistedModel);
+		return favoriteSiteLocalService.deleteFavoriteSite((FavoriteSite)persistedModel);
 	}
 
 	@Override

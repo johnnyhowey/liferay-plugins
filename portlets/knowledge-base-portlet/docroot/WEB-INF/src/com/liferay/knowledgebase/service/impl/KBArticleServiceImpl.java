@@ -70,11 +70,12 @@ import java.util.Map;
  */
 public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 
+	@Override
 	public void addAttachment(
 			String portletId, long resourcePrimKey, String dirName,
 			String shortFileName, InputStream inputStream,
 			ServiceContext serviceContext)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		checkAttachmentPermissions(
 			serviceContext.getScopeGroupId(), portletId, resourcePrimKey);
@@ -83,11 +84,12 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			dirName, shortFileName, inputStream, serviceContext);
 	}
 
+	@Override
 	public KBArticle addKBArticle(
 			String portletId, long parentResourcePrimKey, String title,
 			String urlTitle, String content, String description,
 			String[] sections, String dirName, ServiceContext serviceContext)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		if (portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
 			AdminPermission.check(
@@ -105,10 +107,24 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			description, sections, dirName, serviceContext);
 	}
 
+	@Override
+	public void addKBArticlesMarkdown(
+			long groupId, String fileName, InputStream inputStream,
+			ServiceContext serviceContext)
+		throws PortalException {
+
+		AdminPermission.check(
+			getPermissionChecker(), groupId, ActionKeys.ADD_KB_ARTICLE);
+
+		kbArticleLocalService.addKBArticlesMarkdown(
+			getUserId(), groupId, fileName, inputStream, serviceContext);
+	}
+
+	@Override
 	public void deleteAttachment(
 			long companyId, long groupId, String portletId,
 			long resourcePrimKey, String fileName)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		if ((resourcePrimKey <= 0) &&
 			portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
@@ -130,8 +146,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		kbArticleLocalService.deleteAttachment(companyId, fileName);
 	}
 
+	@Override
 	public KBArticle deleteKBArticle(long resourcePrimKey)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBArticlePermission.check(
 			getPermissionChecker(), resourcePrimKey, ActionKeys.DELETE);
@@ -139,8 +156,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		return kbArticleLocalService.deleteKBArticle(resourcePrimKey);
 	}
 
+	@Override
 	public void deleteKBArticles(long groupId, long[] resourcePrimKeys)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		AdminPermission.check(
 			getPermissionChecker(), groupId, ActionKeys.DELETE_KB_ARTICLES);
@@ -148,20 +166,21 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		kbArticleLocalService.deleteKBArticles(resourcePrimKeys);
 	}
 
+	@Override
 	public File getAttachment(
 			long companyId, long groupId, String portletId,
 			long resourcePrimKey, String fileName)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		checkAttachmentPermissions(groupId, portletId, resourcePrimKey);
 
 		return kbArticleLocalService.getAttachment(companyId, fileName);
 	}
 
+	@Override
 	public List<KBArticle> getGroupKBArticles(
-			long groupId, int status, int start, int end,
-			OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, int status, int start, int end,
+		OrderByComparator<KBArticle> orderByComparator) {
 
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return kbArticlePersistence.filterFindByG_L(
@@ -176,9 +195,8 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			groupId, status, start, end, orderByComparator);
 	}
 
-	public int getGroupKBArticlesCount(long groupId, int status)
-		throws SystemException {
-
+	@Override
+	public int getGroupKBArticlesCount(long groupId, int status) {
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return kbArticlePersistence.filterCountByG_L(groupId, true);
 		}
@@ -189,10 +207,11 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		return kbArticlePersistence.filterCountByG_S(groupId, status);
 	}
 
+	@Override
 	public String getGroupKBArticlesRSS(
 			int status, int rssDelta, String rssDisplayStyle, String rssFormat,
 			ThemeDisplay themeDisplay)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		Group group = themeDisplay.getScopeGroup();
 
@@ -213,8 +232,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			themeDisplay);
 	}
 
+	@Override
 	public KBArticle getKBArticle(long resourcePrimKey, int version)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBArticlePermission.check(
 			getPermissionChecker(), resourcePrimKey, ActionKeys.VIEW);
@@ -222,10 +242,10 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		return kbArticleLocalService.getKBArticle(resourcePrimKey, version);
 	}
 
+	@Override
 	public List<KBArticle> getKBArticleAndAllDescendantKBArticles(
-			long groupId, long resourcePrimKey, int status,
-			OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, long resourcePrimKey, int status,
+		OrderByComparator<KBArticle> orderByComparator) {
 
 		List<KBArticle> kbArticles = getKBArticles(
 			groupId, new long[] {resourcePrimKey}, status, null);
@@ -271,19 +291,20 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 	 *             {@link #getKBArticleAndAllDescendantKBArticles(long, long,
 	 *             int, com.liferay.portal.kernel.util.OrderByComparator)}
 	 */
+	@Override
 	public List<KBArticle> getKBArticleAndAllDescendants(
-			long groupId, long resourcePrimKey, int status,
-			OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, long resourcePrimKey, int status,
+		OrderByComparator<KBArticle> orderByComparator) {
 
 		return getKBArticleAndAllDescendantKBArticles(
 			groupId, resourcePrimKey, status, orderByComparator);
 	}
 
+	@Override
 	public String getKBArticleRSS(
 			long resourcePrimKey, int status, int rssDelta,
 			String rssDisplayStyle, String rssFormat, ThemeDisplay themeDisplay)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBArticle kbArticle = kbArticleLocalService.getLatestKBArticle(
 			resourcePrimKey, status);
@@ -304,10 +325,10 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			ListUtil.subList(kbArticles, 0, rssDelta), themeDisplay);
 	}
 
+	@Override
 	public List<KBArticle> getKBArticles(
-			long groupId, long parentResourcePrimKey, int status, int start,
-			int end, OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, long parentResourcePrimKey, int status, int start,
+		int end, OrderByComparator<KBArticle> orderByComparator) {
 
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return kbArticlePersistence.filterFindByG_P_L(
@@ -325,10 +346,10 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			orderByComparator);
 	}
 
+	@Override
 	public List<KBArticle> getKBArticles(
-			long groupId, long[] resourcePrimKeys, int status, int start,
-			int end, OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, long[] resourcePrimKeys, int status, int start, int end,
+		OrderByComparator<KBArticle> orderByComparator) {
 
 		List<KBArticle> kbArticles = new ArrayList<KBArticle>();
 
@@ -363,19 +384,19 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		return Collections.unmodifiableList(kbArticles);
 	}
 
+	@Override
 	public List<KBArticle> getKBArticles(
-			long groupId, long[] resourcePrimKeys, int status,
-			OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, long[] resourcePrimKeys, int status,
+		OrderByComparator<KBArticle> orderByComparator) {
 
 		return getKBArticles(
 			groupId, resourcePrimKeys, status, QueryUtil.ALL_POS,
 			QueryUtil.ALL_POS, orderByComparator);
 	}
 
+	@Override
 	public int getKBArticlesCount(
-			long groupId, long parentResourcePrimKey, int status)
-		throws SystemException {
+		long groupId, long parentResourcePrimKey, int status) {
 
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return kbArticlePersistence.filterCountByG_P_L(
@@ -390,9 +411,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			groupId, parentResourcePrimKey, status);
 	}
 
+	@Override
 	public int getKBArticlesCount(
-			long groupId, long[] resourcePrimKeys, int status)
-		throws SystemException {
+		long groupId, long[] resourcePrimKeys, int status) {
 
 		int count = 0;
 
@@ -416,12 +437,13 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		return count;
 	}
 
+	@Override
 	public KBArticleSearchDisplay getKBArticleSearchDisplay(
 			long groupId, String title, String content, int status,
 			Date startDate, Date endDate, boolean andOperator,
 			int[] curStartValues, int cur, int delta,
-			OrderByComparator orderByComparator)
-		throws PortalException, SystemException {
+			OrderByComparator<KBArticle> orderByComparator)
+		throws PortalException {
 
 		// See LPS-9546
 
@@ -489,10 +511,10 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			kbArticles, total, curStartValues);
 	}
 
+	@Override
 	public List<KBArticle> getKBArticleVersions(
-			long groupId, long resourcePrimKey, int status, int start, int end,
-			OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, long resourcePrimKey, int status, int start, int end,
+		OrderByComparator<KBArticle> orderByComparator) {
 
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return kbArticlePersistence.filterFindByR_G(
@@ -503,9 +525,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			resourcePrimKey, groupId, status, start, end, orderByComparator);
 	}
 
+	@Override
 	public int getKBArticleVersionsCount(
-			long groupId, long resourcePrimKey, int status)
-		throws SystemException {
+		long groupId, long resourcePrimKey, int status) {
 
 		if (status == WorkflowConstants.STATUS_ANY) {
 			return kbArticlePersistence.filterCountByR_G(
@@ -516,8 +538,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			resourcePrimKey, groupId, status);
 	}
 
+	@Override
 	public KBArticle getLatestKBArticle(long resourcePrimKey, int status)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBArticlePermission.check(
 			getPermissionChecker(), resourcePrimKey, ActionKeys.VIEW);
@@ -526,10 +549,10 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			resourcePrimKey, status);
 	}
 
+	@Override
 	public List<KBArticle> getSectionsKBArticles(
-			long groupId, String[] sections, int status, int start, int end,
-			OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, String[] sections, int status, int start, int end,
+		OrderByComparator<KBArticle> orderByComparator) {
 
 		String[] array = AdminUtil.escapeSections(sections);
 
@@ -553,9 +576,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			status, start, end, orderByComparator);
 	}
 
+	@Override
 	public int getSectionsKBArticlesCount(
-			long groupId, String[] sections, int status)
-		throws SystemException {
+		long groupId, String[] sections, int status) {
 
 		String[] array = AdminUtil.escapeSections(sections);
 
@@ -584,10 +607,10 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 	 *             int, int, int,
 	 *             com.liferay.portal.kernel.util.OrderByComparator)}
 	 */
+	@Override
 	public List<KBArticle> getSiblingKBArticles(
-			long groupId, long parentResourcePrimKey, int status, int start,
-			int end, OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, long parentResourcePrimKey, int status, int start,
+		int end, OrderByComparator<KBArticle> orderByComparator) {
 
 		return getKBArticles(
 			groupId, parentResourcePrimKey, status, start, end,
@@ -598,16 +621,17 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 	 * @deprecated As of 7.0.0, replaced by {@link #getKBArticlesCount(long,
 	 *             long, int)}
 	 */
+	@Override
 	public int getSiblingKBArticlesCount(
-			long groupId, long parentResourcePrimKey, int status)
-		throws SystemException {
+		long groupId, long parentResourcePrimKey, int status) {
 
 		return getKBArticlesCount(groupId, parentResourcePrimKey, status);
 	}
 
+	@Override
 	public void moveKBArticle(
 			long resourcePrimKey, long parentResourcePrimKey, double priority)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBArticlePermission.check(
 			getPermissionChecker(), resourcePrimKey,
@@ -617,8 +641,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			getUserId(), resourcePrimKey, parentResourcePrimKey, priority);
 	}
 
+	@Override
 	public void subscribeGroupKBArticles(long groupId, String portletId)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		if (portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
 			AdminPermission.check(
@@ -632,8 +657,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		kbArticleLocalService.subscribeGroupKBArticles(getUserId(), groupId);
 	}
 
+	@Override
 	public void subscribeKBArticle(long groupId, long resourcePrimKey)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBArticlePermission.check(
 			getPermissionChecker(), resourcePrimKey, ActionKeys.SUBSCRIBE);
@@ -642,8 +668,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			getUserId(), groupId, resourcePrimKey);
 	}
 
+	@Override
 	public void unsubscribeGroupKBArticles(long groupId, String portletId)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		if (portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
 			AdminPermission.check(
@@ -657,8 +684,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 		kbArticleLocalService.unsubscribeGroupKBArticles(getUserId(), groupId);
 	}
 
+	@Override
 	public void unsubscribeKBArticle(long resourcePrimKey)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBArticlePermission.check(
 			getPermissionChecker(), resourcePrimKey, ActionKeys.SUBSCRIBE);
@@ -667,10 +695,11 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			getUserId(), resourcePrimKey);
 	}
 
+	@Override
 	public String updateAttachments(
 			String portletId, long resourcePrimKey, String dirName,
 			ServiceContext serviceContext)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		if ((resourcePrimKey <= 0) &&
 			portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {
@@ -695,11 +724,12 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			resourcePrimKey, dirName, serviceContext);
 	}
 
+	@Override
 	public KBArticle updateKBArticle(
 			long resourcePrimKey, String title, String content,
 			String description, String[] sections, String dirName,
 			ServiceContext serviceContext)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBArticlePermission.check(
 			getPermissionChecker(), resourcePrimKey, ActionKeys.UPDATE);
@@ -709,9 +739,10 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 			dirName, serviceContext);
 	}
 
+	@Override
 	public void updateKBArticlesPriorities(
 			long groupId, Map<Long, Double> resourcePrimKeyToPriorityMap)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		AdminPermission.check(
 			getPermissionChecker(), groupId,
@@ -722,10 +753,9 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 	}
 
 	protected String exportToRSS(
-			String rssDisplayStyle, String rssFormat, String name,
-			String description, String feedURL, List<KBArticle> kbArticles,
-			ThemeDisplay themeDisplay)
-		throws SystemException {
+		String rssDisplayStyle, String rssFormat, String name,
+		String description, String feedURL, List<KBArticle> kbArticles,
+		ThemeDisplay themeDisplay) {
 
 		SyndFeed syndFeed = new SyndFeedImpl();
 
@@ -819,7 +849,7 @@ public class KBArticleServiceImpl extends KBArticleServiceBaseImpl {
 
 	private void checkAttachmentPermissions(
 			long groupId, String portletId, long resourcePrimKey)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		if ((resourcePrimKey <= 0) &&
 			portletId.equals(PortletKeys.KNOWLEDGE_BASE_ADMIN)) {

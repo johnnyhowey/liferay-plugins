@@ -19,7 +19,6 @@ import com.liferay.knowledgebase.service.base.KBCommentServiceBaseImpl;
 import com.liferay.knowledgebase.service.permission.KBCommentPermission;
 import com.liferay.knowledgebase.util.ActionKeys;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.service.ServiceContext;
 
 /**
@@ -27,8 +26,9 @@ import com.liferay.portal.service.ServiceContext;
  */
 public class KBCommentServiceImpl extends KBCommentServiceBaseImpl {
 
+	@Override
 	public KBComment deleteKBComment(KBComment kbComment)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBCommentPermission.check(
 			getPermissionChecker(), kbComment, ActionKeys.DELETE);
@@ -36,19 +36,19 @@ public class KBCommentServiceImpl extends KBCommentServiceBaseImpl {
 		return kbCommentLocalService.deleteKBComment(kbComment);
 	}
 
-	public KBComment deleteKBComment(long kbCommentId)
-		throws PortalException, SystemException {
-
+	@Override
+	public KBComment deleteKBComment(long kbCommentId) throws PortalException {
 		KBComment kbComment = kbCommentPersistence.findByPrimaryKey(
 			kbCommentId);
 
 		return deleteKBComment(kbComment);
 	}
 
+	@Override
 	public KBComment updateKBComment(
 			long kbCommentId, long classNameId, long classPK, String content,
 			boolean helpful, ServiceContext serviceContext)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBComment kbComment = kbCommentPersistence.findByPrimaryKey(
 			kbCommentId);

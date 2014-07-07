@@ -45,6 +45,24 @@ public interface CalendarService extends BaseService, InvokableService {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link CalendarServiceUtil} to access the calendar remote service. Add custom service methods to {@link com.liferay.calendar.service.impl.CalendarServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public com.liferay.calendar.model.Calendar addCalendar(long groupId,
+		long calendarResourceId,
+		java.util.Map<java.util.Locale, java.lang.String> nameMap,
+		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
+		int color, boolean defaultCalendar, boolean enableComments,
+		boolean enableRatings,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	public com.liferay.calendar.model.Calendar deleteCalendar(long calendarId)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	public java.lang.String exportCalendar(long calendarId,
+		java.lang.String type) throws java.lang.Exception;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.calendar.model.Calendar fetchCalendar(long calendarId)
+		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
 	* Returns the Spring bean ID for this bean.
@@ -53,6 +71,85 @@ public interface CalendarService extends BaseService, InvokableService {
 	*/
 	public java.lang.String getBeanIdentifier();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.calendar.model.Calendar getCalendar(long calendarId)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.calendar.model.Calendar> getCalendarResourceCalendars(
+		long groupId, long calendarResourceId)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.calendar.model.Calendar> getCalendarResourceCalendars(
+		long groupId, long calendarResourceId, boolean defaultCalendar)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	public void importCalendar(long calendarId, java.lang.String data,
+		java.lang.String type) throws java.lang.Exception;
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.calendar.model.Calendar> search(
+		long companyId, long[] groupIds, long[] calendarResourceIds,
+		java.lang.String keywords, boolean andOperator, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.calendar.model.Calendar> search(
+		long companyId, long[] groupIds, long[] calendarResourceIds,
+		java.lang.String keywords, boolean andOperator, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator,
+		java.lang.String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.calendar.model.Calendar> search(
+		long companyId, long[] groupIds, long[] calendarResourceIds,
+		java.lang.String name, java.lang.String description,
+		boolean andOperator, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.calendar.model.Calendar> search(
+		long companyId, long[] groupIds, long[] calendarResourceIds,
+		java.lang.String name, java.lang.String description,
+		boolean andOperator, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator,
+		java.lang.String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int searchCount(long companyId, long[] groupIds,
+		long[] calendarResourceIds, java.lang.String keywords,
+		boolean andOperator)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int searchCount(long companyId, long[] groupIds,
+		long[] calendarResourceIds, java.lang.String keywords,
+		boolean andOperator, java.lang.String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int searchCount(long companyId, long[] groupIds,
+		long[] calendarResourceIds, java.lang.String name,
+		java.lang.String description, boolean andOperator)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int searchCount(long companyId, long[] groupIds,
+		long[] calendarResourceIds, java.lang.String name,
+		java.lang.String description, boolean andOperator,
+		java.lang.String actionId)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
 	/**
 	* Sets the Spring bean ID for this bean.
 	*
@@ -60,136 +157,21 @@ public interface CalendarService extends BaseService, InvokableService {
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable;
-
-	public com.liferay.calendar.model.Calendar addCalendar(long groupId,
-		long calendarResourceId,
-		java.util.Map<java.util.Locale, java.lang.String> nameMap,
-		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
-		int color, boolean defaultCalendar, boolean enableComments,
-		boolean enableRatings,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public com.liferay.calendar.model.Calendar deleteCalendar(long calendarId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public java.lang.String exportCalendar(long calendarId,
-		java.lang.String type) throws java.lang.Exception;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.calendar.model.Calendar fetchCalendar(long calendarId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.calendar.model.Calendar getCalendar(long calendarId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.calendar.model.Calendar> getCalendarResourceCalendars(
-		long groupId, long calendarResourceId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.calendar.model.Calendar> getCalendarResourceCalendars(
-		long groupId, long calendarResourceId, boolean defaultCalendar)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	public void importCalendar(long calendarId, java.lang.String data,
-		java.lang.String type) throws java.lang.Exception;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.calendar.model.Calendar> search(
-		long companyId, long[] groupIds, long[] calendarResourceIds,
-		java.lang.String keywords, boolean andOperator, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.calendar.model.Calendar> search(
-		long companyId, long[] groupIds, long[] calendarResourceIds,
-		java.lang.String keywords, boolean andOperator, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator,
-		java.lang.String actionId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.calendar.model.Calendar> search(
-		long companyId, long[] groupIds, long[] calendarResourceIds,
-		java.lang.String name, java.lang.String description,
-		boolean andOperator, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.calendar.model.Calendar> search(
-		long companyId, long[] groupIds, long[] calendarResourceIds,
-		java.lang.String name, java.lang.String description,
-		boolean andOperator, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator,
-		java.lang.String actionId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int searchCount(long companyId, long[] groupIds,
-		long[] calendarResourceIds, java.lang.String keywords,
-		boolean andOperator)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int searchCount(long companyId, long[] groupIds,
-		long[] calendarResourceIds, java.lang.String keywords,
-		boolean andOperator, java.lang.String actionId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int searchCount(long companyId, long[] groupIds,
-		long[] calendarResourceIds, java.lang.String name,
-		java.lang.String description, boolean andOperator)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int searchCount(long companyId, long[] groupIds,
-		long[] calendarResourceIds, java.lang.String name,
-		java.lang.String description, boolean andOperator,
-		java.lang.String actionId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
 	public com.liferay.calendar.model.Calendar updateCalendar(long calendarId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		int color, boolean defaultCalendar, boolean enableComments,
 		boolean enableRatings,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.PortalException;
 
 	public com.liferay.calendar.model.Calendar updateCalendar(long calendarId,
 		java.util.Map<java.util.Locale, java.lang.String> nameMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		int color, com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.PortalException;
 
 	public com.liferay.calendar.model.Calendar updateColor(long calendarId,
 		int color, com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.PortalException;
 }

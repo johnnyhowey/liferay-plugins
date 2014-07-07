@@ -50,6 +50,15 @@ public class SampleLARBookingLocalServiceUtil {
 		return getService().addSampleLARBooking(sampleLARBooking);
 	}
 
+	public static com.liferay.samplelar.model.SampleLARBooking addSampleLARBooking(
+		long userId, long groupId, java.lang.String bookingNumber,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addSampleLARBooking(userId, groupId, bookingNumber,
+			serviceContext);
+	}
+
 	/**
 	* Creates a new sample l a r booking with the primary key. Does not add the sample l a r booking to the database.
 	*
@@ -62,18 +71,12 @@ public class SampleLARBookingLocalServiceUtil {
 	}
 
 	/**
-	* Deletes the sample l a r booking with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param sampleLARBookingId the primary key of the sample l a r booking
-	* @return the sample l a r booking that was removed
-	* @throws PortalException if a sample l a r booking with the primary key could not be found
-	* @throws SystemException
+	* @throws PortalException
 	*/
-	public static com.liferay.samplelar.model.SampleLARBooking deleteSampleLARBooking(
-		long sampleLARBookingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().deleteSampleLARBooking(sampleLARBookingId);
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deletePersistedModel(persistedModel);
 	}
 
 	/**
@@ -81,12 +84,27 @@ public class SampleLARBookingLocalServiceUtil {
 	*
 	* @param sampleLARBooking the sample l a r booking
 	* @return the sample l a r booking that was removed
-	* @throws SystemException
 	*/
 	public static com.liferay.samplelar.model.SampleLARBooking deleteSampleLARBooking(
-		com.liferay.samplelar.model.SampleLARBooking sampleLARBooking)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		com.liferay.samplelar.model.SampleLARBooking sampleLARBooking) {
 		return getService().deleteSampleLARBooking(sampleLARBooking);
+	}
+
+	/**
+	* Deletes the sample l a r booking with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param sampleLARBookingId the primary key of the sample l a r booking
+	* @return the sample l a r booking that was removed
+	* @throws PortalException if a sample l a r booking with the primary key could not be found
+	*/
+	public static com.liferay.samplelar.model.SampleLARBooking deleteSampleLARBooking(
+		long sampleLARBookingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deleteSampleLARBooking(sampleLARBookingId);
+	}
+
+	public static void deleteSampleLARBookings(long groupId) {
+		getService().deleteSampleLARBookings(groupId);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
@@ -99,8 +117,7 @@ public class SampleLARBookingLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -117,8 +134,7 @@ public class SampleLARBookingLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -137,11 +153,10 @@ public class SampleLARBookingLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -200,6 +215,30 @@ public class SampleLARBookingLocalServiceUtil {
 		return getService().fetchSampleLARBookingByUuidAndGroupId(uuid, groupId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	public static com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
+		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext) {
+		return getService().getExportActionableDynamicQuery(portletDataContext);
+	}
+
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the sample l a r booking with the primary key.
 	*
@@ -211,30 +250,6 @@ public class SampleLARBookingLocalServiceUtil {
 		long sampleLARBookingId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getSampleLARBooking(sampleLARBookingId);
-	}
-
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
-	}
-
-	public static com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
-		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext) {
-		return getService().getExportActionableDynamicQuery(portletDataContext);
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -266,6 +281,11 @@ public class SampleLARBookingLocalServiceUtil {
 		return getService().getSampleLARBookingByUuidAndGroupId(uuid, groupId);
 	}
 
+	public static java.util.List<com.liferay.samplelar.model.SampleLARBooking> getSampleLARBookings(
+		long groupId, int start, int end) {
+		return getService().getSampleLARBookings(groupId, start, end);
+	}
+
 	/**
 	* Returns a range of all the sample l a r bookings.
 	*
@@ -291,24 +311,14 @@ public class SampleLARBookingLocalServiceUtil {
 		return getService().getSampleLARBookingsCount();
 	}
 
-	/**
-	* Updates the sample l a r booking in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param sampleLARBooking the sample l a r booking
-	* @return the sample l a r booking that was updated
-	*/
-	public static com.liferay.samplelar.model.SampleLARBooking updateSampleLARBooking(
-		com.liferay.samplelar.model.SampleLARBooking sampleLARBooking) {
-		return getService().updateSampleLARBooking(sampleLARBooking);
+	public static int getSampleLARBookingsCount(long groupId) {
+		return getService().getSampleLARBookingsCount(groupId);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -320,43 +330,21 @@ public class SampleLARBookingLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.samplelar.model.SampleLARBooking addSampleLARBooking(
-		long userId, long groupId, java.lang.String bookingNumber,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addSampleLARBooking(userId, groupId, bookingNumber,
-			serviceContext);
-	}
-
-	public static void deleteSampleLARBookings(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteSampleLARBookings(groupId);
-	}
-
-	public static java.util.List<com.liferay.samplelar.model.SampleLARBooking> getSampleLARBookings(
-		long groupId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getSampleLARBookings(groupId, start, end);
-	}
-
-	public static int getSampleLARBookingsCount(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getSampleLARBookingsCount(groupId);
+	/**
+	* Updates the sample l a r booking in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param sampleLARBooking the sample l a r booking
+	* @return the sample l a r booking that was updated
+	*/
+	public static com.liferay.samplelar.model.SampleLARBooking updateSampleLARBooking(
+		com.liferay.samplelar.model.SampleLARBooking sampleLARBooking) {
+		return getService().updateSampleLARBooking(sampleLARBooking);
 	}
 
 	public static com.liferay.samplelar.model.SampleLARBooking updateSampleLARBooking(
 		long userId, long sampleLARBookingId, java.lang.String bookingNumber,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateSampleLARBooking(userId, sampleLARBookingId,
 			bookingNumber, serviceContext);

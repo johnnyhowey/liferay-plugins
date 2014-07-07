@@ -50,6 +50,19 @@ public class BBBServerLocalServiceUtil {
 		return getService().addBBBServer(bbbServer);
 	}
 
+	public static com.liferay.bbb.model.BBBServer addBBBServer(long userId,
+		java.lang.String name, java.lang.String url, java.lang.String secret,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addBBBServer(userId, name, url, secret, serviceContext);
+	}
+
+	public static void checkBBBServers()
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService().checkBBBServers();
+	}
+
 	/**
 	* Creates a new b b b server with the primary key. Does not add the b b b server to the database.
 	*
@@ -62,31 +75,36 @@ public class BBBServerLocalServiceUtil {
 	}
 
 	/**
+	* Deletes the b b b server from the database. Also notifies the appropriate model listeners.
+	*
+	* @param bbbServer the b b b server
+	* @return the b b b server that was removed
+	*/
+	public static com.liferay.bbb.model.BBBServer deleteBBBServer(
+		com.liferay.bbb.model.BBBServer bbbServer) {
+		return getService().deleteBBBServer(bbbServer);
+	}
+
+	/**
 	* Deletes the b b b server with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param bbbServerId the primary key of the b b b server
 	* @return the b b b server that was removed
 	* @throws PortalException if a b b b server with the primary key could not be found
-	* @throws SystemException
 	*/
 	public static com.liferay.bbb.model.BBBServer deleteBBBServer(
 		long bbbServerId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().deleteBBBServer(bbbServerId);
 	}
 
 	/**
-	* Deletes the b b b server from the database. Also notifies the appropriate model listeners.
-	*
-	* @param bbbServer the b b b server
-	* @return the b b b server that was removed
-	* @throws SystemException
+	* @throws PortalException
 	*/
-	public static com.liferay.bbb.model.BBBServer deleteBBBServer(
-		com.liferay.bbb.model.BBBServer bbbServer)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().deleteBBBServer(bbbServer);
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deletePersistedModel(persistedModel);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
@@ -99,8 +117,7 @@ public class BBBServerLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -117,8 +134,7 @@ public class BBBServerLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -137,11 +153,10 @@ public class BBBServerLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -175,6 +190,10 @@ public class BBBServerLocalServiceUtil {
 		return getService().fetchBBBServer(bbbServerId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
 	/**
 	* Returns the b b b server with the primary key.
 	*
@@ -187,23 +206,9 @@ public class BBBServerLocalServiceUtil {
 		return getService().getBBBServer(bbbServerId);
 	}
 
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
+	public static java.util.List<com.liferay.bbb.model.BBBServer> getBBBServers(
+		boolean active) {
+		return getService().getBBBServers(active);
 	}
 
 	/**
@@ -222,6 +227,11 @@ public class BBBServerLocalServiceUtil {
 		return getService().getBBBServers(start, end);
 	}
 
+	public static java.util.List<com.liferay.bbb.model.BBBServer> getBBBServers(
+		int start, int end, com.liferay.portal.kernel.util.OrderByComparator obc) {
+		return getService().getBBBServers(start, end, obc);
+	}
+
 	/**
 	* Returns the number of b b b servers.
 	*
@@ -229,6 +239,36 @@ public class BBBServerLocalServiceUtil {
 	*/
 	public static int getBBBServersCount() {
 		return getService().getBBBServersCount();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
@@ -242,63 +282,11 @@ public class BBBServerLocalServiceUtil {
 		return getService().updateBBBServer(bbbServer);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
-	}
-
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.bbb.model.BBBServer addBBBServer(long userId,
-		java.lang.String name, java.lang.String url, java.lang.String secret,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addBBBServer(userId, name, url, secret, serviceContext);
-	}
-
-	public static void checkBBBServers()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		getService().checkBBBServers();
-	}
-
-	public static java.util.List<com.liferay.bbb.model.BBBServer> getBBBServers(
-		boolean active)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getBBBServers(active);
-	}
-
-	public static java.util.List<com.liferay.bbb.model.BBBServer> getBBBServers(
-		int start, int end, com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getBBBServers(start, end, obc);
-	}
-
 	public static com.liferay.bbb.model.BBBServer updateBBBServer(
 		long bbbServerId, java.lang.String name, java.lang.String url,
 		java.lang.String secret,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateBBBServer(bbbServerId, name, url, secret,
 			serviceContext);

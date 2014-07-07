@@ -30,6 +30,26 @@ public class BBBParticipantServiceWrapper implements BBBParticipantService,
 		_bbbParticipantService = bbbParticipantService;
 	}
 
+	@Override
+	public com.liferay.bbb.model.BBBParticipant deleteBBBParticipant(
+		com.liferay.bbb.model.BBBParticipant bbbParticipant)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbParticipantService.deleteBBBParticipant(bbbParticipant);
+	}
+
+	@Override
+	public java.util.List<com.liferay.bbb.model.BBBParticipant> getBBBParticipants(
+		long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbParticipantService.getBBBParticipants(bbbMeetingId);
+	}
+
+	@Override
+	public int getBBBParticipantsCount(long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbParticipantService.getBBBParticipantsCount(bbbMeetingId);
+	}
+
 	/**
 	* Returns the Spring bean ID for this bean.
 	*
@@ -38,6 +58,14 @@ public class BBBParticipantServiceWrapper implements BBBParticipantService,
 	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _bbbParticipantService.getBeanIdentifier();
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _bbbParticipantService.invokeMethod(name, parameterTypes,
+			arguments);
 	}
 
 	/**
@@ -51,43 +79,11 @@ public class BBBParticipantServiceWrapper implements BBBParticipantService,
 	}
 
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _bbbParticipantService.invokeMethod(name, parameterTypes,
-			arguments);
-	}
-
-	@Override
-	public com.liferay.bbb.model.BBBParticipant deleteBBBParticipant(
-		com.liferay.bbb.model.BBBParticipant bbbParticipant)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbParticipantService.deleteBBBParticipant(bbbParticipant);
-	}
-
-	@Override
-	public java.util.List<com.liferay.bbb.model.BBBParticipant> getBBBParticipants(
-		long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbParticipantService.getBBBParticipants(bbbMeetingId);
-	}
-
-	@Override
-	public int getBBBParticipantsCount(long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbParticipantService.getBBBParticipantsCount(bbbMeetingId);
-	}
-
-	@Override
 	public com.liferay.bbb.model.BBBParticipant updateBBBParticipant(
 		long bbbParticipantId, long bbbMeetingId, java.lang.String name,
 		java.lang.String emailAddress, int type,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _bbbParticipantService.updateBBBParticipant(bbbParticipantId,
 			bbbMeetingId, name, emailAddress, type, serviceContext);
 	}

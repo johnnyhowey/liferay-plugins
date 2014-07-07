@@ -38,6 +38,19 @@ public class CalendarNotificationTemplateServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.calendar.service.impl.CalendarNotificationTemplateServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static com.liferay.calendar.model.CalendarNotificationTemplate addCalendarNotificationTemplate(
+		long calendarId,
+		com.liferay.calendar.notification.NotificationType notificationType,
+		java.lang.String notificationTypeSettings,
+		com.liferay.calendar.notification.NotificationTemplateType notificationTemplateType,
+		java.lang.String subject, java.lang.String body,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addCalendarNotificationTemplate(calendarId,
+			notificationType, notificationTypeSettings,
+			notificationTemplateType, subject, body, serviceContext);
+	}
 
 	/**
 	* Returns the Spring bean ID for this bean.
@@ -46,6 +59,12 @@ public class CalendarNotificationTemplateServiceUtil {
 	*/
 	public static java.lang.String getBeanIdentifier() {
 		return getService().getBeanIdentifier();
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -57,34 +76,12 @@ public class CalendarNotificationTemplateServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.calendar.model.CalendarNotificationTemplate addCalendarNotificationTemplate(
-		long calendarId,
-		com.liferay.calendar.notification.NotificationType notificationType,
-		java.lang.String notificationTypeSettings,
-		com.liferay.calendar.notification.NotificationTemplateType notificationTemplateType,
-		java.lang.String subject, java.lang.String body,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addCalendarNotificationTemplate(calendarId,
-			notificationType, notificationTypeSettings,
-			notificationTemplateType, subject, body, serviceContext);
-	}
-
 	public static com.liferay.calendar.model.CalendarNotificationTemplate updateCalendarNotificationTemplate(
 		long calendarNotificationTemplateId,
 		java.lang.String notificationTypeSettings, java.lang.String subject,
 		java.lang.String body,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateCalendarNotificationTemplate(calendarNotificationTemplateId,
 			notificationTypeSettings, subject, body, serviceContext);

@@ -31,6 +31,16 @@ public class WSRPConsumerPortletLocalServiceWrapper
 		_wsrpConsumerPortletLocalService = wsrpConsumerPortletLocalService;
 	}
 
+	@Override
+	public com.liferay.wsrp.model.WSRPConsumerPortlet addWSRPConsumerPortlet(
+		long wsrpConsumerId, java.lang.String name,
+		java.lang.String portletHandle,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _wsrpConsumerPortletLocalService.addWSRPConsumerPortlet(wsrpConsumerId,
+			name, portletHandle, serviceContext);
+	}
+
 	/**
 	* Adds the w s r p consumer portlet to the database. Also notifies the appropriate model listeners.
 	*
@@ -41,6 +51,16 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	public com.liferay.wsrp.model.WSRPConsumerPortlet addWSRPConsumerPortlet(
 		com.liferay.wsrp.model.WSRPConsumerPortlet wsrpConsumerPortlet) {
 		return _wsrpConsumerPortletLocalService.addWSRPConsumerPortlet(wsrpConsumerPortlet);
+	}
+
+	@Override
+	public com.liferay.wsrp.model.WSRPConsumerPortlet addWSRPConsumerPortlet(
+		java.lang.String wsrpConsumerUuid, java.lang.String name,
+		java.lang.String portletHandle,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _wsrpConsumerPortletLocalService.addWSRPConsumerPortlet(wsrpConsumerUuid,
+			name, portletHandle, serviceContext);
 	}
 
 	/**
@@ -56,19 +76,13 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	}
 
 	/**
-	* Deletes the w s r p consumer portlet with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param wsrpConsumerPortletId the primary key of the w s r p consumer portlet
-	* @return the w s r p consumer portlet that was removed
-	* @throws PortalException if a w s r p consumer portlet with the primary key could not be found
-	* @throws SystemException
+	* @throws PortalException
 	*/
 	@Override
-	public com.liferay.wsrp.model.WSRPConsumerPortlet deleteWSRPConsumerPortlet(
-		long wsrpConsumerPortletId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _wsrpConsumerPortletLocalService.deleteWSRPConsumerPortlet(wsrpConsumerPortletId);
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _wsrpConsumerPortletLocalService.deletePersistedModel(persistedModel);
 	}
 
 	/**
@@ -77,14 +91,52 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	* @param wsrpConsumerPortlet the w s r p consumer portlet
 	* @return the w s r p consumer portlet that was removed
 	* @throws PortalException
-	* @throws SystemException
 	*/
 	@Override
 	public com.liferay.wsrp.model.WSRPConsumerPortlet deleteWSRPConsumerPortlet(
 		com.liferay.wsrp.model.WSRPConsumerPortlet wsrpConsumerPortlet)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _wsrpConsumerPortletLocalService.deleteWSRPConsumerPortlet(wsrpConsumerPortlet);
+	}
+
+	/**
+	* Deletes the w s r p consumer portlet with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param wsrpConsumerPortletId the primary key of the w s r p consumer portlet
+	* @return the w s r p consumer portlet that was removed
+	* @throws PortalException if a w s r p consumer portlet with the primary key could not be found
+	*/
+	@Override
+	public com.liferay.wsrp.model.WSRPConsumerPortlet deleteWSRPConsumerPortlet(
+		long wsrpConsumerPortletId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _wsrpConsumerPortletLocalService.deleteWSRPConsumerPortlet(wsrpConsumerPortletId);
+	}
+
+	@Override
+	public void deleteWSRPConsumerPortlet(
+		java.lang.String wsrpConsumerPortletUuid)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_wsrpConsumerPortletLocalService.deleteWSRPConsumerPortlet(wsrpConsumerPortletUuid);
+	}
+
+	@Override
+	public void deleteWSRPConsumerPortlets(long wsrpConsumerId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_wsrpConsumerPortletLocalService.deleteWSRPConsumerPortlets(wsrpConsumerId);
+	}
+
+	@Override
+	public void destroyWSRPConsumerPortlet(long wsrpConsumerPortletId,
+		java.lang.String wsrpConsumerPortletUuid, java.lang.String url) {
+		_wsrpConsumerPortletLocalService.destroyWSRPConsumerPortlet(wsrpConsumerPortletId,
+			wsrpConsumerPortletUuid, url);
+	}
+
+	@Override
+	public void destroyWSRPConsumerPortlets()
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_wsrpConsumerPortletLocalService.destroyWSRPConsumerPortlets();
 	}
 
 	@Override
@@ -99,8 +151,7 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _wsrpConsumerPortletLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -118,8 +169,7 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _wsrpConsumerPortletLocalService.dynamicQuery(dynamicQuery,
@@ -140,11 +190,10 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _wsrpConsumerPortletLocalService.dynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -196,6 +245,42 @@ public class WSRPConsumerPortletLocalServiceWrapper
 			companyId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _wsrpConsumerPortletLocalService.getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _wsrpConsumerPortletLocalService.getBeanIdentifier();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
+		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext) {
+		return _wsrpConsumerPortletLocalService.getExportActionableDynamicQuery(portletDataContext);
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _wsrpConsumerPortletLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public com.liferay.wsrp.model.WSRPConsumerPortlet getWSRPConsumerPortlet(
+		long wsrpConsumerId, java.lang.String portletHandle)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortlet(wsrpConsumerId,
+			portletHandle);
+	}
+
 	/**
 	* Returns the w s r p consumer portlet with the primary key.
 	*
@@ -211,31 +296,10 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	}
 
 	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _wsrpConsumerPortletLocalService.getActionableDynamicQuery();
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
-		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext) {
-		return _wsrpConsumerPortletLocalService.getExportActionableDynamicQuery(portletDataContext);
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
+	public com.liferay.wsrp.model.WSRPConsumerPortlet getWSRPConsumerPortlet(
+		java.lang.String wsrpConsumerPortletUuid)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _wsrpConsumerPortletLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _wsrpConsumerPortletLocalService.getPersistedModel(primaryKeyObj);
+		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortlet(wsrpConsumerPortletUuid);
 	}
 
 	/**
@@ -272,6 +336,13 @@ public class WSRPConsumerPortletLocalServiceWrapper
 			end);
 	}
 
+	@Override
+	public java.util.List<com.liferay.wsrp.model.WSRPConsumerPortlet> getWSRPConsumerPortlets(
+		long wsrpConsumerId, int start, int end) {
+		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortlets(wsrpConsumerId,
+			start, end);
+	}
+
 	/**
 	* Returns the number of w s r p consumer portlets.
 	*
@@ -280,6 +351,49 @@ public class WSRPConsumerPortletLocalServiceWrapper
 	@Override
 	public int getWSRPConsumerPortletsCount() {
 		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortletsCount();
+	}
+
+	@Override
+	public int getWSRPConsumerPortletsCount(long wsrpConsumerId) {
+		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortletsCount(wsrpConsumerId);
+	}
+
+	@Override
+	public void initFailedWSRPConsumerPortlets() {
+		_wsrpConsumerPortletLocalService.initFailedWSRPConsumerPortlets();
+	}
+
+	@Override
+	public void initWSRPConsumerPortlet(long companyId, long wsrpConsumerId,
+		long wsrpConsumerPortletId, java.lang.String wsrpConsumerPortletUuid,
+		java.lang.String name, java.lang.String portletHandle)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_wsrpConsumerPortletLocalService.initWSRPConsumerPortlet(companyId,
+			wsrpConsumerId, wsrpConsumerPortletId, wsrpConsumerPortletUuid,
+			name, portletHandle);
+	}
+
+	@Override
+	public void initWSRPConsumerPortlets() {
+		_wsrpConsumerPortletLocalService.initWSRPConsumerPortlets();
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _wsrpConsumerPortletLocalService.invokeMethod(name,
+			parameterTypes, arguments);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_wsrpConsumerPortletLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
@@ -294,143 +408,10 @@ public class WSRPConsumerPortletLocalServiceWrapper
 		return _wsrpConsumerPortletLocalService.updateWSRPConsumerPortlet(wsrpConsumerPortlet);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _wsrpConsumerPortletLocalService.getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_wsrpConsumerPortletLocalService.setBeanIdentifier(beanIdentifier);
-	}
-
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _wsrpConsumerPortletLocalService.invokeMethod(name,
-			parameterTypes, arguments);
-	}
-
-	@Override
-	public com.liferay.wsrp.model.WSRPConsumerPortlet addWSRPConsumerPortlet(
-		long wsrpConsumerId, java.lang.String name,
-		java.lang.String portletHandle,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _wsrpConsumerPortletLocalService.addWSRPConsumerPortlet(wsrpConsumerId,
-			name, portletHandle, serviceContext);
-	}
-
-	@Override
-	public com.liferay.wsrp.model.WSRPConsumerPortlet addWSRPConsumerPortlet(
-		java.lang.String wsrpConsumerUuid, java.lang.String name,
-		java.lang.String portletHandle,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _wsrpConsumerPortletLocalService.addWSRPConsumerPortlet(wsrpConsumerUuid,
-			name, portletHandle, serviceContext);
-	}
-
-	@Override
-	public void deleteWSRPConsumerPortlet(
-		java.lang.String wsrpConsumerPortletUuid)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_wsrpConsumerPortletLocalService.deleteWSRPConsumerPortlet(wsrpConsumerPortletUuid);
-	}
-
-	@Override
-	public void deleteWSRPConsumerPortlets(long wsrpConsumerId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_wsrpConsumerPortletLocalService.deleteWSRPConsumerPortlets(wsrpConsumerId);
-	}
-
-	@Override
-	public void destroyWSRPConsumerPortlet(long wsrpConsumerPortletId,
-		java.lang.String wsrpConsumerPortletUuid, java.lang.String url) {
-		_wsrpConsumerPortletLocalService.destroyWSRPConsumerPortlet(wsrpConsumerPortletId,
-			wsrpConsumerPortletUuid, url);
-	}
-
-	@Override
-	public void destroyWSRPConsumerPortlets()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_wsrpConsumerPortletLocalService.destroyWSRPConsumerPortlets();
-	}
-
-	@Override
-	public com.liferay.wsrp.model.WSRPConsumerPortlet getWSRPConsumerPortlet(
-		long wsrpConsumerId, java.lang.String portletHandle)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortlet(wsrpConsumerId,
-			portletHandle);
-	}
-
-	@Override
-	public com.liferay.wsrp.model.WSRPConsumerPortlet getWSRPConsumerPortlet(
-		java.lang.String wsrpConsumerPortletUuid)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortlet(wsrpConsumerPortletUuid);
-	}
-
-	@Override
-	public java.util.List<com.liferay.wsrp.model.WSRPConsumerPortlet> getWSRPConsumerPortlets(
-		long wsrpConsumerId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortlets(wsrpConsumerId,
-			start, end);
-	}
-
-	@Override
-	public int getWSRPConsumerPortletsCount(long wsrpConsumerId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _wsrpConsumerPortletLocalService.getWSRPConsumerPortletsCount(wsrpConsumerId);
-	}
-
-	@Override
-	public void initFailedWSRPConsumerPortlets() {
-		_wsrpConsumerPortletLocalService.initFailedWSRPConsumerPortlets();
-	}
-
-	@Override
-	public void initWSRPConsumerPortlet(long companyId, long wsrpConsumerId,
-		long wsrpConsumerPortletId, java.lang.String wsrpConsumerPortletUuid,
-		java.lang.String name, java.lang.String portletHandle)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_wsrpConsumerPortletLocalService.initWSRPConsumerPortlet(companyId,
-			wsrpConsumerId, wsrpConsumerPortletId, wsrpConsumerPortletUuid,
-			name, portletHandle);
-	}
-
-	@Override
-	public void initWSRPConsumerPortlets()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		_wsrpConsumerPortletLocalService.initWSRPConsumerPortlets();
-	}
-
 	@Override
 	public com.liferay.wsrp.model.WSRPConsumerPortlet updateWSRPConsumerPortlet(
 		long wsrpConsumerPortletId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _wsrpConsumerPortletLocalService.updateWSRPConsumerPortlet(wsrpConsumerPortletId,
 			name);
 	}

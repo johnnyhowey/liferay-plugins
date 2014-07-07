@@ -53,6 +53,18 @@ public class FeedLocalServiceWrapper implements FeedLocalService,
 	}
 
 	/**
+	* Deletes the feed from the database. Also notifies the appropriate model listeners.
+	*
+	* @param feed the feed
+	* @return the feed that was removed
+	*/
+	@Override
+	public com.liferay.twitter.model.Feed deleteFeed(
+		com.liferay.twitter.model.Feed feed) {
+		return _feedLocalService.deleteFeed(feed);
+	}
+
+	/**
 	* Deletes the feed with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param feedId the primary key of the feed
@@ -66,15 +78,13 @@ public class FeedLocalServiceWrapper implements FeedLocalService,
 	}
 
 	/**
-	* Deletes the feed from the database. Also notifies the appropriate model listeners.
-	*
-	* @param feed the feed
-	* @return the feed that was removed
+	* @throws PortalException
 	*/
 	@Override
-	public com.liferay.twitter.model.Feed deleteFeed(
-		com.liferay.twitter.model.Feed feed) {
-		return _feedLocalService.deleteFeed(feed);
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _feedLocalService.deletePersistedModel(persistedModel);
 	}
 
 	@Override
@@ -89,8 +99,7 @@ public class FeedLocalServiceWrapper implements FeedLocalService,
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _feedLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -108,8 +117,7 @@ public class FeedLocalServiceWrapper implements FeedLocalService,
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _feedLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -129,11 +137,10 @@ public class FeedLocalServiceWrapper implements FeedLocalService,
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _feedLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -169,6 +176,21 @@ public class FeedLocalServiceWrapper implements FeedLocalService,
 		return _feedLocalService.fetchFeed(feedId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _feedLocalService.getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _feedLocalService.getBeanIdentifier();
+	}
+
 	/**
 	* Returns the feed with the primary key.
 	*
@@ -180,28 +202,6 @@ public class FeedLocalServiceWrapper implements FeedLocalService,
 	public com.liferay.twitter.model.Feed getFeed(long feedId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _feedLocalService.getFeed(feedId);
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _feedLocalService.getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _feedLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _feedLocalService.getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -231,26 +231,18 @@ public class FeedLocalServiceWrapper implements FeedLocalService,
 		return _feedLocalService.getFeedsCount();
 	}
 
-	/**
-	* Updates the feed in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param feed the feed
-	* @return the feed that was updated
-	*/
 	@Override
-	public com.liferay.twitter.model.Feed updateFeed(
-		com.liferay.twitter.model.Feed feed) {
-		return _feedLocalService.updateFeed(feed);
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _feedLocalService.getPersistedModel(primaryKeyObj);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
 	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _feedLocalService.getBeanIdentifier();
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _feedLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -263,29 +255,31 @@ public class FeedLocalServiceWrapper implements FeedLocalService,
 		_feedLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	/**
+	* Updates the feed in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param feed the feed
+	* @return the feed that was updated
+	*/
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _feedLocalService.invokeMethod(name, parameterTypes, arguments);
+	public com.liferay.twitter.model.Feed updateFeed(
+		com.liferay.twitter.model.Feed feed) {
+		return _feedLocalService.updateFeed(feed);
 	}
 
 	@Override
 	public void updateFeed(long userId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		_feedLocalService.updateFeed(userId);
 	}
 
 	@Override
-	public void updateFeeds()
-		throws com.liferay.portal.kernel.exception.SystemException {
+	public void updateFeeds() {
 		_feedLocalService.updateFeeds();
 	}
 
 	@Override
-	public void updateFeeds(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
+	public void updateFeeds(long companyId) {
 		_feedLocalService.updateFeeds(companyId);
 	}
 

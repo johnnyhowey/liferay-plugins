@@ -43,6 +43,16 @@ public class BBBParticipantLocalServiceWrapper
 		return _bbbParticipantLocalService.addBBBParticipant(bbbParticipant);
 	}
 
+	@Override
+	public com.liferay.bbb.model.BBBParticipant addBBBParticipant(long userId,
+		long groupId, long bbbMeetingId, java.lang.String name,
+		java.lang.String emailAddress, int type, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbParticipantLocalService.addBBBParticipant(userId, groupId,
+			bbbMeetingId, name, emailAddress, type, status, serviceContext);
+	}
+
 	/**
 	* Creates a new b b b participant with the primary key. Does not add the b b b participant to the database.
 	*
@@ -53,6 +63,18 @@ public class BBBParticipantLocalServiceWrapper
 	public com.liferay.bbb.model.BBBParticipant createBBBParticipant(
 		long bbbParticipantId) {
 		return _bbbParticipantLocalService.createBBBParticipant(bbbParticipantId);
+	}
+
+	/**
+	* Deletes the b b b participant from the database. Also notifies the appropriate model listeners.
+	*
+	* @param bbbParticipant the b b b participant
+	* @return the b b b participant that was removed
+	*/
+	@Override
+	public com.liferay.bbb.model.BBBParticipant deleteBBBParticipant(
+		com.liferay.bbb.model.BBBParticipant bbbParticipant) {
+		return _bbbParticipantLocalService.deleteBBBParticipant(bbbParticipant);
 	}
 
 	/**
@@ -70,17 +92,13 @@ public class BBBParticipantLocalServiceWrapper
 	}
 
 	/**
-	* Deletes the b b b participant from the database. Also notifies the appropriate model listeners.
-	*
-	* @param bbbParticipant the b b b participant
-	* @return the b b b participant that was removed
-	* @throws SystemException
+	* @throws PortalException
 	*/
 	@Override
-	public com.liferay.bbb.model.BBBParticipant deleteBBBParticipant(
-		com.liferay.bbb.model.BBBParticipant bbbParticipant)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbParticipantLocalService.deleteBBBParticipant(bbbParticipant);
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbParticipantLocalService.deletePersistedModel(persistedModel);
 	}
 
 	@Override
@@ -95,8 +113,7 @@ public class BBBParticipantLocalServiceWrapper
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _bbbParticipantLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -114,8 +131,7 @@ public class BBBParticipantLocalServiceWrapper
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _bbbParticipantLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -135,11 +151,10 @@ public class BBBParticipantLocalServiceWrapper
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _bbbParticipantLocalService.dynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
 	}
@@ -173,8 +188,20 @@ public class BBBParticipantLocalServiceWrapper
 
 	@Override
 	public com.liferay.bbb.model.BBBParticipant fetchBBBParticipant(
+		long bbbMeetingId, java.lang.String emailAddress) {
+		return _bbbParticipantLocalService.fetchBBBParticipant(bbbMeetingId,
+			emailAddress);
+	}
+
+	@Override
+	public com.liferay.bbb.model.BBBParticipant fetchBBBParticipant(
 		long bbbParticipantId) {
 		return _bbbParticipantLocalService.fetchBBBParticipant(bbbParticipantId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _bbbParticipantLocalService.getActionableDynamicQuery();
 	}
 
 	/**
@@ -192,25 +219,9 @@ public class BBBParticipantLocalServiceWrapper
 	}
 
 	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _bbbParticipantLocalService.getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _bbbParticipantLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _bbbParticipantLocalService.getPersistedModel(primaryKeyObj);
+	public java.util.List<com.liferay.bbb.model.BBBParticipant> getBBBParticipants(
+		long bbbMeetingId) {
+		return _bbbParticipantLocalService.getBBBParticipants(bbbMeetingId);
 	}
 
 	/**
@@ -240,16 +251,9 @@ public class BBBParticipantLocalServiceWrapper
 		return _bbbParticipantLocalService.getBBBParticipantsCount();
 	}
 
-	/**
-	* Updates the b b b participant in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param bbbParticipant the b b b participant
-	* @return the b b b participant that was updated
-	*/
 	@Override
-	public com.liferay.bbb.model.BBBParticipant updateBBBParticipant(
-		com.liferay.bbb.model.BBBParticipant bbbParticipant) {
-		return _bbbParticipantLocalService.updateBBBParticipant(bbbParticipant);
+	public int getBBBParticipantsCount(long bbbMeetingId) {
+		return _bbbParticipantLocalService.getBBBParticipantsCount(bbbMeetingId);
 	}
 
 	/**
@@ -262,14 +266,11 @@ public class BBBParticipantLocalServiceWrapper
 		return _bbbParticipantLocalService.getBeanIdentifier();
 	}
 
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
 	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_bbbParticipantLocalService.setBeanIdentifier(beanIdentifier);
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbParticipantLocalService.getPersistedModel(primaryKeyObj);
 	}
 
 	@Override
@@ -280,36 +281,26 @@ public class BBBParticipantLocalServiceWrapper
 			arguments);
 	}
 
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
 	@Override
-	public com.liferay.bbb.model.BBBParticipant addBBBParticipant(long userId,
-		long groupId, long bbbMeetingId, java.lang.String name,
-		java.lang.String emailAddress, int type, int status,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbParticipantLocalService.addBBBParticipant(userId, groupId,
-			bbbMeetingId, name, emailAddress, type, status, serviceContext);
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_bbbParticipantLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	/**
+	* Updates the b b b participant in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param bbbParticipant the b b b participant
+	* @return the b b b participant that was updated
+	*/
 	@Override
-	public com.liferay.bbb.model.BBBParticipant fetchBBBParticipant(
-		long bbbMeetingId, java.lang.String emailAddress)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbParticipantLocalService.fetchBBBParticipant(bbbMeetingId,
-			emailAddress);
-	}
-
-	@Override
-	public java.util.List<com.liferay.bbb.model.BBBParticipant> getBBBParticipants(
-		long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbParticipantLocalService.getBBBParticipants(bbbMeetingId);
-	}
-
-	@Override
-	public int getBBBParticipantsCount(long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbParticipantLocalService.getBBBParticipantsCount(bbbMeetingId);
+	public com.liferay.bbb.model.BBBParticipant updateBBBParticipant(
+		com.liferay.bbb.model.BBBParticipant bbbParticipant) {
+		return _bbbParticipantLocalService.updateBBBParticipant(bbbParticipant);
 	}
 
 	@Override
@@ -317,8 +308,7 @@ public class BBBParticipantLocalServiceWrapper
 		long bbbParticipantId, long bbbMeetingId, java.lang.String name,
 		java.lang.String emailAddress, int type,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _bbbParticipantLocalService.updateBBBParticipant(bbbParticipantId,
 			bbbMeetingId, name, emailAddress, type, serviceContext);
 	}
@@ -326,8 +316,7 @@ public class BBBParticipantLocalServiceWrapper
 	@Override
 	public com.liferay.bbb.model.BBBParticipant updateStatus(
 		long bbbParticipantId, int status)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _bbbParticipantLocalService.updateStatus(bbbParticipantId, status);
 	}
 

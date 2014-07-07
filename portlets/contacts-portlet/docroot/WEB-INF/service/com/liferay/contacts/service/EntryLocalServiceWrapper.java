@@ -41,6 +41,15 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 		return _entryLocalService.addEntry(entry);
 	}
 
+	@Override
+	public com.liferay.contacts.model.Entry addEntry(long userId,
+		java.lang.String fullName, java.lang.String emailAddress,
+		java.lang.String comments)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _entryLocalService.addEntry(userId, fullName, emailAddress,
+			comments);
+	}
+
 	/**
 	* Creates a new entry with the primary key. Does not add the entry to the database.
 	*
@@ -50,6 +59,18 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	@Override
 	public com.liferay.contacts.model.Entry createEntry(long entryId) {
 		return _entryLocalService.createEntry(entryId);
+	}
+
+	/**
+	* Deletes the entry from the database. Also notifies the appropriate model listeners.
+	*
+	* @param entry the entry
+	* @return the entry that was removed
+	*/
+	@Override
+	public com.liferay.contacts.model.Entry deleteEntry(
+		com.liferay.contacts.model.Entry entry) {
+		return _entryLocalService.deleteEntry(entry);
 	}
 
 	/**
@@ -66,15 +87,13 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	}
 
 	/**
-	* Deletes the entry from the database. Also notifies the appropriate model listeners.
-	*
-	* @param entry the entry
-	* @return the entry that was removed
+	* @throws PortalException
 	*/
 	@Override
-	public com.liferay.contacts.model.Entry deleteEntry(
-		com.liferay.contacts.model.Entry entry) {
-		return _entryLocalService.deleteEntry(entry);
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _entryLocalService.deletePersistedModel(persistedModel);
 	}
 
 	@Override
@@ -89,8 +108,7 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _entryLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -108,8 +126,7 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _entryLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -129,11 +146,10 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _entryLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -169,39 +185,19 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 		return _entryLocalService.fetchEntry(entryId);
 	}
 
-	/**
-	* Returns the entry with the primary key.
-	*
-	* @param entryId the primary key of the entry
-	* @return the entry
-	* @throws PortalException if a entry with the primary key could not be found
-	*/
-	@Override
-	public com.liferay.contacts.model.Entry getEntry(long entryId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _entryLocalService.getEntry(entryId);
-	}
-
 	@Override
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
 		return _entryLocalService.getActionableDynamicQuery();
 	}
 
 	/**
-	* @throws PortalException
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
 	*/
 	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _entryLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _entryLocalService.getPersistedModel(primaryKeyObj);
+	public java.lang.String getBeanIdentifier() {
+		return _entryLocalService.getBeanIdentifier();
 	}
 
 	/**
@@ -221,6 +217,12 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 		return _entryLocalService.getEntries(start, end);
 	}
 
+	@Override
+	public java.util.List<com.liferay.contacts.model.Entry> getEntries(
+		long userId, int start, int end) {
+		return _entryLocalService.getEntries(userId, start, end);
+	}
+
 	/**
 	* Returns the number of entries.
 	*
@@ -229,6 +231,74 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 	@Override
 	public int getEntriesCount() {
 		return _entryLocalService.getEntriesCount();
+	}
+
+	@Override
+	public int getEntriesCount(long userId) {
+		return _entryLocalService.getEntriesCount(userId);
+	}
+
+	/**
+	* Returns the entry with the primary key.
+	*
+	* @param entryId the primary key of the entry
+	* @return the entry
+	* @throws PortalException if a entry with the primary key could not be found
+	*/
+	@Override
+	public com.liferay.contacts.model.Entry getEntry(long entryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _entryLocalService.getEntry(entryId);
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _entryLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _entryLocalService.invokeMethod(name, parameterTypes, arguments);
+	}
+
+	@Override
+	public java.util.List<com.liferay.contacts.model.Entry> search(
+		long userId, java.lang.String keywords, int start, int end) {
+		return _entryLocalService.search(userId, keywords, start, end);
+	}
+
+	@Override
+	public int searchCount(long userId, java.lang.String keywords) {
+		return _entryLocalService.searchCount(userId, keywords);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portal.model.BaseModel<?>> searchUsersAndContacts(
+		long companyId, long userId, java.lang.String keywords, int start,
+		int end) {
+		return _entryLocalService.searchUsersAndContacts(companyId, userId,
+			keywords, start, end);
+	}
+
+	@Override
+	public int searchUsersAndContactsCount(long companyId, long userId,
+		java.lang.String keywords) {
+		return _entryLocalService.searchUsersAndContactsCount(companyId,
+			userId, keywords);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_entryLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
@@ -243,91 +313,11 @@ public class EntryLocalServiceWrapper implements EntryLocalService,
 		return _entryLocalService.updateEntry(entry);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _entryLocalService.getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_entryLocalService.setBeanIdentifier(beanIdentifier);
-	}
-
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _entryLocalService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	@Override
-	public com.liferay.contacts.model.Entry addEntry(long userId,
-		java.lang.String fullName, java.lang.String emailAddress,
-		java.lang.String comments)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _entryLocalService.addEntry(userId, fullName, emailAddress,
-			comments);
-	}
-
-	@Override
-	public java.util.List<com.liferay.contacts.model.Entry> getEntries(
-		long userId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _entryLocalService.getEntries(userId, start, end);
-	}
-
-	@Override
-	public int getEntriesCount(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _entryLocalService.getEntriesCount(userId);
-	}
-
-	@Override
-	public java.util.List<com.liferay.contacts.model.Entry> search(
-		long userId, java.lang.String keywords, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _entryLocalService.search(userId, keywords, start, end);
-	}
-
-	@Override
-	public int searchCount(long userId, java.lang.String keywords)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _entryLocalService.searchCount(userId, keywords);
-	}
-
-	@Override
-	public java.util.List<com.liferay.portal.model.BaseModel<?>> searchUsersAndContacts(
-		long companyId, long userId, java.lang.String keywords, int start,
-		int end) throws com.liferay.portal.kernel.exception.SystemException {
-		return _entryLocalService.searchUsersAndContacts(companyId, userId,
-			keywords, start, end);
-	}
-
-	@Override
-	public int searchUsersAndContactsCount(long companyId, long userId,
-		java.lang.String keywords)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _entryLocalService.searchUsersAndContactsCount(companyId,
-			userId, keywords);
-	}
-
 	@Override
 	public com.liferay.contacts.model.Entry updateEntry(long entryId,
 		java.lang.String fullName, java.lang.String emailAddress,
 		java.lang.String comments)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _entryLocalService.updateEntry(entryId, fullName, emailAddress,
 			comments);
 	}

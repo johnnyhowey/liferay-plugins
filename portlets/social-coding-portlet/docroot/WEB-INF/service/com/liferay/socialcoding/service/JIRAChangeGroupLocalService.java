@@ -16,6 +16,7 @@ package com.liferay.socialcoding.service;
 
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
+import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.transaction.Isolation;
 import com.liferay.portal.kernel.transaction.Propagation;
 import com.liferay.portal.kernel.transaction.Transactional;
@@ -51,6 +52,7 @@ public interface JIRAChangeGroupLocalService extends BaseLocalService,
 	* @param jiraChangeGroup the j i r a change group
 	* @return the j i r a change group that was added
 	*/
+	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.REINDEX)
 	public com.liferay.socialcoding.model.JIRAChangeGroup addJIRAChangeGroup(
 		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup);
 
@@ -64,24 +66,34 @@ public interface JIRAChangeGroupLocalService extends BaseLocalService,
 		long jiraChangeGroupId);
 
 	/**
+	* Deletes the j i r a change group from the database. Also notifies the appropriate model listeners.
+	*
+	* @param jiraChangeGroup the j i r a change group
+	* @return the j i r a change group that was removed
+	*/
+	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.DELETE)
+	public com.liferay.socialcoding.model.JIRAChangeGroup deleteJIRAChangeGroup(
+		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup);
+
+	/**
 	* Deletes the j i r a change group with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param jiraChangeGroupId the primary key of the j i r a change group
 	* @return the j i r a change group that was removed
 	* @throws PortalException if a j i r a change group with the primary key could not be found
 	*/
+	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.DELETE)
 	public com.liferay.socialcoding.model.JIRAChangeGroup deleteJIRAChangeGroup(
 		long jiraChangeGroupId)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
-	* Deletes the j i r a change group from the database. Also notifies the appropriate model listeners.
-	*
-	* @param jiraChangeGroup the j i r a change group
-	* @return the j i r a change group that was removed
+	* @throws PortalException
 	*/
-	public com.liferay.socialcoding.model.JIRAChangeGroup deleteJIRAChangeGroup(
-		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup);
+	@Override
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException;
 
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery();
 
@@ -91,8 +103,7 @@ public interface JIRAChangeGroupLocalService extends BaseLocalService,
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery);
 
 	/**
@@ -107,8 +118,7 @@ public interface JIRAChangeGroupLocalService extends BaseLocalService,
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end);
 
@@ -125,11 +135,10 @@ public interface JIRAChangeGroupLocalService extends BaseLocalService,
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator);
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator);
 
 	/**
 	* Returns the number of rows that match the dynamic query.
@@ -155,35 +164,26 @@ public interface JIRAChangeGroupLocalService extends BaseLocalService,
 	public com.liferay.socialcoding.model.JIRAChangeGroup fetchJIRAChangeGroup(
 		long jiraChangeGroupId);
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery();
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public java.lang.String getBeanIdentifier();
+
 	/**
 	* Returns the j i r a change group with the primary key.
 	*
 	* @param jiraChangeGroupId the primary key of the j i r a change group
 	* @return the j i r a change group
 	* @throws PortalException if a j i r a change group with the primary key could not be found
-	* @throws SystemException
 	*/
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.socialcoding.model.JIRAChangeGroup getJIRAChangeGroup(
 		long jiraChangeGroupId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery();
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException;
-
-	@Override
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
@@ -209,21 +209,16 @@ public interface JIRAChangeGroupLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getJIRAChangeGroupsCount();
 
-	/**
-	* Updates the j i r a change group in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param jiraChangeGroup the j i r a change group
-	* @return the j i r a change group that was updated
-	*/
-	public com.liferay.socialcoding.model.JIRAChangeGroup updateJIRAChangeGroup(
-		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup);
+	@Override
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException;
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public java.lang.String getBeanIdentifier();
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable;
 
 	/**
 	* Sets the Spring bean ID for this bean.
@@ -232,8 +227,13 @@ public interface JIRAChangeGroupLocalService extends BaseLocalService,
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable;
+	/**
+	* Updates the j i r a change group in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param jiraChangeGroup the j i r a change group
+	* @return the j i r a change group that was updated
+	*/
+	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.REINDEX)
+	public com.liferay.socialcoding.model.JIRAChangeGroup updateJIRAChangeGroup(
+		com.liferay.socialcoding.model.JIRAChangeGroup jiraChangeGroup);
 }

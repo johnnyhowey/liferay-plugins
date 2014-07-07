@@ -864,15 +864,15 @@ public class CalendarResourceClp extends BaseModelImpl<CalendarResource>
 	}
 
 	@Override
-	public boolean isGroup() {
+	public long getDefaultCalendarId() {
 		try {
-			String methodName = "isGroup";
+			String methodName = "getDefaultCalendarId";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
 			Object[] parameterValues = new Object[] {  };
 
-			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+			Long returnObj = (Long)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
@@ -883,15 +883,15 @@ public class CalendarResourceClp extends BaseModelImpl<CalendarResource>
 	}
 
 	@Override
-	public long getDefaultCalendarId() {
+	public boolean isGroup() {
 		try {
-			String methodName = "getDefaultCalendarId";
+			String methodName = "isGroup";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
 			Object[] parameterValues = new Object[] {  };
 
-			Long returnObj = (Long)invokeOnRemoteModel(methodName,
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
@@ -1127,6 +1127,10 @@ public class CalendarResourceClp extends BaseModelImpl<CalendarResource>
 		}
 	}
 
+	public Class<?> getClpSerializerClass() {
+		return _clpSerializerClass;
+	}
+
 	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
@@ -1280,6 +1284,7 @@ public class CalendarResourceClp extends BaseModelImpl<CalendarResource>
 	private String _descriptionCurrentLanguageId;
 	private boolean _active;
 	private BaseModel<?> _calendarResourceRemoteModel;
+	private Class<?> _clpSerializerClass = com.liferay.calendar.service.ClpSerializer.class;
 	private boolean _entityCacheEnabled;
 	private boolean _finderCacheEnabled;
 }

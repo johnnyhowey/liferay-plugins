@@ -61,6 +61,17 @@ public class CheckoutLocalServiceUtil {
 	}
 
 	/**
+	* Deletes the checkout from the database. Also notifies the appropriate model listeners.
+	*
+	* @param checkout the checkout
+	* @return the checkout that was removed
+	*/
+	public static com.liferay.ams.model.Checkout deleteCheckout(
+		com.liferay.ams.model.Checkout checkout) {
+		return getService().deleteCheckout(checkout);
+	}
+
+	/**
 	* Deletes the checkout with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param checkoutId the primary key of the checkout
@@ -73,14 +84,12 @@ public class CheckoutLocalServiceUtil {
 	}
 
 	/**
-	* Deletes the checkout from the database. Also notifies the appropriate model listeners.
-	*
-	* @param checkout the checkout
-	* @return the checkout that was removed
+	* @throws PortalException
 	*/
-	public static com.liferay.ams.model.Checkout deleteCheckout(
-		com.liferay.ams.model.Checkout checkout) {
-		return getService().deleteCheckout(checkout);
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deletePersistedModel(persistedModel);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
@@ -93,8 +102,7 @@ public class CheckoutLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -111,8 +119,7 @@ public class CheckoutLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -131,11 +138,10 @@ public class CheckoutLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -168,6 +174,19 @@ public class CheckoutLocalServiceUtil {
 		return getService().fetchCheckout(checkoutId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
 	/**
 	* Returns the checkout with the primary key.
 	*
@@ -178,25 +197,6 @@ public class CheckoutLocalServiceUtil {
 	public static com.liferay.ams.model.Checkout getCheckout(long checkoutId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getCheckout(checkoutId);
-	}
-
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -224,24 +224,16 @@ public class CheckoutLocalServiceUtil {
 		return getService().getCheckoutsCount();
 	}
 
-	/**
-	* Updates the checkout in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param checkout the checkout
-	* @return the checkout that was updated
-	*/
-	public static com.liferay.ams.model.Checkout updateCheckout(
-		com.liferay.ams.model.Checkout checkout) {
-		return getService().updateCheckout(checkout);
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -253,10 +245,15 @@ public class CheckoutLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
+	/**
+	* Updates the checkout in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param checkout the checkout
+	* @return the checkout that was updated
+	*/
+	public static com.liferay.ams.model.Checkout updateCheckout(
+		com.liferay.ams.model.Checkout checkout) {
+		return getService().updateCheckout(checkout);
 	}
 
 	public static void clearService() {

@@ -45,6 +45,18 @@ public interface BBBParticipantService extends BaseService, InvokableService {
 	 *
 	 * Never modify or reference this interface directly. Always use {@link BBBParticipantServiceUtil} to access the b b b participant remote service. Add custom service methods to {@link com.liferay.bbb.service.impl.BBBParticipantServiceImpl} and rerun ServiceBuilder to automatically copy the method declarations to this interface.
 	 */
+	public com.liferay.bbb.model.BBBParticipant deleteBBBParticipant(
+		com.liferay.bbb.model.BBBParticipant bbbParticipant)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.bbb.model.BBBParticipant> getBBBParticipants(
+		long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getBBBParticipantsCount(long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
 	* Returns the Spring bean ID for this bean.
@@ -53,6 +65,11 @@ public interface BBBParticipantService extends BaseService, InvokableService {
 	*/
 	public java.lang.String getBeanIdentifier();
 
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable;
+
 	/**
 	* Sets the Spring bean ID for this bean.
 	*
@@ -60,31 +77,9 @@ public interface BBBParticipantService extends BaseService, InvokableService {
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
 
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable;
-
-	public com.liferay.bbb.model.BBBParticipant deleteBBBParticipant(
-		com.liferay.bbb.model.BBBParticipant bbbParticipant)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public java.util.List<com.liferay.bbb.model.BBBParticipant> getBBBParticipants(
-		long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
-	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-	public int getBBBParticipantsCount(long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
-
 	public com.liferay.bbb.model.BBBParticipant updateBBBParticipant(
 		long bbbParticipantId, long bbbMeetingId, java.lang.String name,
 		java.lang.String emailAddress, int type,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException;
+		throws com.liferay.portal.kernel.exception.PortalException;
 }

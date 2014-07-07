@@ -55,6 +55,18 @@ public class JIRAIssueLocalServiceWrapper implements JIRAIssueLocalService,
 	}
 
 	/**
+	* Deletes the j i r a issue from the database. Also notifies the appropriate model listeners.
+	*
+	* @param jiraIssue the j i r a issue
+	* @return the j i r a issue that was removed
+	*/
+	@Override
+	public com.liferay.socialcoding.model.JIRAIssue deleteJIRAIssue(
+		com.liferay.socialcoding.model.JIRAIssue jiraIssue) {
+		return _jiraIssueLocalService.deleteJIRAIssue(jiraIssue);
+	}
+
+	/**
 	* Deletes the j i r a issue with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param jiraIssueId the primary key of the j i r a issue
@@ -69,15 +81,13 @@ public class JIRAIssueLocalServiceWrapper implements JIRAIssueLocalService,
 	}
 
 	/**
-	* Deletes the j i r a issue from the database. Also notifies the appropriate model listeners.
-	*
-	* @param jiraIssue the j i r a issue
-	* @return the j i r a issue that was removed
+	* @throws PortalException
 	*/
 	@Override
-	public com.liferay.socialcoding.model.JIRAIssue deleteJIRAIssue(
-		com.liferay.socialcoding.model.JIRAIssue jiraIssue) {
-		return _jiraIssueLocalService.deleteJIRAIssue(jiraIssue);
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _jiraIssueLocalService.deletePersistedModel(persistedModel);
 	}
 
 	@Override
@@ -92,8 +102,7 @@ public class JIRAIssueLocalServiceWrapper implements JIRAIssueLocalService,
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _jiraIssueLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -111,8 +120,7 @@ public class JIRAIssueLocalServiceWrapper implements JIRAIssueLocalService,
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _jiraIssueLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -132,11 +140,10 @@ public class JIRAIssueLocalServiceWrapper implements JIRAIssueLocalService,
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _jiraIssueLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -173,42 +180,100 @@ public class JIRAIssueLocalServiceWrapper implements JIRAIssueLocalService,
 		return _jiraIssueLocalService.fetchJIRAIssue(jiraIssueId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _jiraIssueLocalService.getActionableDynamicQuery();
+	}
+
+	@Override
+	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
+		java.util.Date modifiedDate, long projectId,
+		java.lang.String assigneeJiraUserId, int start, int end) {
+		return _jiraIssueLocalService.getAssigneeJIRAIssues(modifiedDate,
+			projectId, assigneeJiraUserId, start, end);
+	}
+
+	@Override
+	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
+		long projectId, java.lang.String assigneeJiraUserId, int start, int end) {
+		return _jiraIssueLocalService.getAssigneeJIRAIssues(projectId,
+			assigneeJiraUserId, start, end);
+	}
+
+	@Override
+	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
+		long projectId, java.lang.String assigneeJiraUserId,
+		java.lang.String status, int start, int end) {
+		return _jiraIssueLocalService.getAssigneeJIRAIssues(projectId,
+			assigneeJiraUserId, status, start, end);
+	}
+
+	@Override
+	public int getAssigneeJIRAIssuesCount(java.util.Date modifiedDate,
+		long projectId, java.lang.String assigneeJiraUserId) {
+		return _jiraIssueLocalService.getAssigneeJIRAIssuesCount(modifiedDate,
+			projectId, assigneeJiraUserId);
+	}
+
+	@Override
+	public int getAssigneeJIRAIssuesCount(long projectId,
+		java.lang.String assigneeJiraUserId) {
+		return _jiraIssueLocalService.getAssigneeJIRAIssuesCount(projectId,
+			assigneeJiraUserId);
+	}
+
+	@Override
+	public int getAssigneeJIRAIssuesCount(long projectId,
+		java.lang.String assigneeJiraUserId, java.lang.String status) {
+		return _jiraIssueLocalService.getAssigneeJIRAIssuesCount(projectId,
+			assigneeJiraUserId, status);
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _jiraIssueLocalService.getBeanIdentifier();
+	}
+
+	@Override
+	public com.liferay.socialcoding.model.JIRAIssue getFirstAssigneeJIRAIssue(
+		long projectId, java.lang.String assigneeJiraUserId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _jiraIssueLocalService.getFirstAssigneeJIRAIssue(projectId,
+			assigneeJiraUserId);
+	}
+
+	@Override
+	public com.liferay.socialcoding.model.JIRAIssue getFirstReporterJIRAIssue(
+		long projectId, java.lang.String reporterJiraUserId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _jiraIssueLocalService.getFirstReporterJIRAIssue(projectId,
+			reporterJiraUserId);
+	}
+
 	/**
 	* Returns the j i r a issue with the primary key.
 	*
 	* @param jiraIssueId the primary key of the j i r a issue
 	* @return the j i r a issue
 	* @throws PortalException if a j i r a issue with the primary key could not be found
-	* @throws SystemException
 	*/
 	@Override
 	public com.liferay.socialcoding.model.JIRAIssue getJIRAIssue(
 		long jiraIssueId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _jiraIssueLocalService.getJIRAIssue(jiraIssueId);
 	}
 
 	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _jiraIssueLocalService.getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
+	public com.liferay.socialcoding.model.JIRAIssue getJIRAIssue(
+		java.lang.String key)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _jiraIssueLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _jiraIssueLocalService.getPersistedModel(primaryKeyObj);
+		return _jiraIssueLocalService.getJIRAIssue(key);
 	}
 
 	/**
@@ -238,26 +303,79 @@ public class JIRAIssueLocalServiceWrapper implements JIRAIssueLocalService,
 		return _jiraIssueLocalService.getJIRAIssuesCount();
 	}
 
-	/**
-	* Updates the j i r a issue in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param jiraIssue the j i r a issue
-	* @return the j i r a issue that was updated
-	*/
 	@Override
-	public com.liferay.socialcoding.model.JIRAIssue updateJIRAIssue(
-		com.liferay.socialcoding.model.JIRAIssue jiraIssue) {
-		return _jiraIssueLocalService.updateJIRAIssue(jiraIssue);
+	public com.liferay.socialcoding.model.JIRAIssue getLastAssigneeJIRAIssue(
+		long projectId, java.lang.String assigneeJiraUserId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _jiraIssueLocalService.getLastAssigneeJIRAIssue(projectId,
+			assigneeJiraUserId);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
 	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _jiraIssueLocalService.getBeanIdentifier();
+	public com.liferay.socialcoding.model.JIRAIssue getLastreporterJIRAIssue(
+		long projectId, java.lang.String reporterJiraUserId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _jiraIssueLocalService.getLastreporterJIRAIssue(projectId,
+			reporterJiraUserId);
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _jiraIssueLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
+		java.util.Date modifiedDate, long projectId,
+		java.lang.String reporterJiraUserId, int start, int end) {
+		return _jiraIssueLocalService.getReporterJIRAIssues(modifiedDate,
+			projectId, reporterJiraUserId, start, end);
+	}
+
+	@Override
+	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
+		long projectId, java.lang.String reporterJiraUserId, int start, int end) {
+		return _jiraIssueLocalService.getReporterJIRAIssues(projectId,
+			reporterJiraUserId, start, end);
+	}
+
+	@Override
+	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
+		long projectId, java.lang.String reporterJiraUserId,
+		java.lang.String status, int start, int end) {
+		return _jiraIssueLocalService.getReporterJIRAIssues(projectId,
+			reporterJiraUserId, status, start, end);
+	}
+
+	@Override
+	public int getReporterJIRAIssuesCount(java.util.Date modifiedDate,
+		long projectId, java.lang.String reporterJiraUserId) {
+		return _jiraIssueLocalService.getReporterJIRAIssuesCount(modifiedDate,
+			projectId, reporterJiraUserId);
+	}
+
+	@Override
+	public int getReporterJIRAIssuesCount(long projectId,
+		java.lang.String reporterJiraUserId) {
+		return _jiraIssueLocalService.getReporterJIRAIssuesCount(projectId,
+			reporterJiraUserId);
+	}
+
+	@Override
+	public int getReporterJIRAIssuesCount(long projectId,
+		java.lang.String reporterJiraUserId, java.lang.String status) {
+		return _jiraIssueLocalService.getReporterJIRAIssuesCount(projectId,
+			reporterJiraUserId, status);
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _jiraIssueLocalService.invokeMethod(name, parameterTypes,
+			arguments);
 	}
 
 	/**
@@ -270,162 +388,21 @@ public class JIRAIssueLocalServiceWrapper implements JIRAIssueLocalService,
 		_jiraIssueLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	/**
+	* Updates the j i r a issue in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param jiraIssue the j i r a issue
+	* @return the j i r a issue that was updated
+	*/
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _jiraIssueLocalService.invokeMethod(name, parameterTypes,
-			arguments);
-	}
-
-	@Override
-	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
-		java.util.Date modifiedDate, long projectId,
-		java.lang.String assigneeJiraUserId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getAssigneeJIRAIssues(modifiedDate,
-			projectId, assigneeJiraUserId, start, end);
-	}
-
-	@Override
-	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
-		long projectId, java.lang.String assigneeJiraUserId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getAssigneeJIRAIssues(projectId,
-			assigneeJiraUserId, start, end);
-	}
-
-	@Override
-	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getAssigneeJIRAIssues(
-		long projectId, java.lang.String assigneeJiraUserId,
-		java.lang.String status, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getAssigneeJIRAIssues(projectId,
-			assigneeJiraUserId, status, start, end);
-	}
-
-	@Override
-	public int getAssigneeJIRAIssuesCount(java.util.Date modifiedDate,
-		long projectId, java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getAssigneeJIRAIssuesCount(modifiedDate,
-			projectId, assigneeJiraUserId);
-	}
-
-	@Override
-	public int getAssigneeJIRAIssuesCount(long projectId,
-		java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getAssigneeJIRAIssuesCount(projectId,
-			assigneeJiraUserId);
-	}
-
-	@Override
-	public int getAssigneeJIRAIssuesCount(long projectId,
-		java.lang.String assigneeJiraUserId, java.lang.String status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getAssigneeJIRAIssuesCount(projectId,
-			assigneeJiraUserId, status);
-	}
-
-	@Override
-	public com.liferay.socialcoding.model.JIRAIssue getFirstAssigneeJIRAIssue(
-		long projectId, java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getFirstAssigneeJIRAIssue(projectId,
-			assigneeJiraUserId);
-	}
-
-	@Override
-	public com.liferay.socialcoding.model.JIRAIssue getFirstReporterJIRAIssue(
-		long projectId, java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getFirstReporterJIRAIssue(projectId,
-			reporterJiraUserId);
-	}
-
-	@Override
-	public com.liferay.socialcoding.model.JIRAIssue getJIRAIssue(
-		java.lang.String key)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getJIRAIssue(key);
-	}
-
-	@Override
-	public com.liferay.socialcoding.model.JIRAIssue getLastAssigneeJIRAIssue(
-		long projectId, java.lang.String assigneeJiraUserId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getLastAssigneeJIRAIssue(projectId,
-			assigneeJiraUserId);
-	}
-
-	@Override
-	public com.liferay.socialcoding.model.JIRAIssue getLastreporterJIRAIssue(
-		long projectId, java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getLastreporterJIRAIssue(projectId,
-			reporterJiraUserId);
-	}
-
-	@Override
-	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
-		java.util.Date modifiedDate, long projectId,
-		java.lang.String reporterJiraUserId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getReporterJIRAIssues(modifiedDate,
-			projectId, reporterJiraUserId, start, end);
-	}
-
-	@Override
-	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
-		long projectId, java.lang.String reporterJiraUserId, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getReporterJIRAIssues(projectId,
-			reporterJiraUserId, start, end);
-	}
-
-	@Override
-	public java.util.List<com.liferay.socialcoding.model.JIRAIssue> getReporterJIRAIssues(
-		long projectId, java.lang.String reporterJiraUserId,
-		java.lang.String status, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getReporterJIRAIssues(projectId,
-			reporterJiraUserId, status, start, end);
-	}
-
-	@Override
-	public int getReporterJIRAIssuesCount(java.util.Date modifiedDate,
-		long projectId, java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getReporterJIRAIssuesCount(modifiedDate,
-			projectId, reporterJiraUserId);
-	}
-
-	@Override
-	public int getReporterJIRAIssuesCount(long projectId,
-		java.lang.String reporterJiraUserId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getReporterJIRAIssuesCount(projectId,
-			reporterJiraUserId);
-	}
-
-	@Override
-	public int getReporterJIRAIssuesCount(long projectId,
-		java.lang.String reporterJiraUserId, java.lang.String status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _jiraIssueLocalService.getReporterJIRAIssuesCount(projectId,
-			reporterJiraUserId, status);
+	public com.liferay.socialcoding.model.JIRAIssue updateJIRAIssue(
+		com.liferay.socialcoding.model.JIRAIssue jiraIssue) {
+		return _jiraIssueLocalService.updateJIRAIssue(jiraIssue);
 	}
 
 	@Override
 	public void updateJIRAIssues(long projectId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		_jiraIssueLocalService.updateJIRAIssues(projectId);
 	}
 

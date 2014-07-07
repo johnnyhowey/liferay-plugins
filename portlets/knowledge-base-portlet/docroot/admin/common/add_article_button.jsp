@@ -17,23 +17,28 @@
 <%@ include file="/admin/init.jsp" %>
 
 <%
-List<KBTemplate> kbTemplates = KBTemplateServiceUtil.getGroupKBTemplates(scopeGroupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, OrderByComparatorFactoryUtil.create("KBTemplate", "title", false));
+OrderByComparator<KBTemplate> obc = OrderByComparatorFactoryUtil.create("KBTemplate", "title", false);
+
+List<KBTemplate> kbTemplates = KBTemplateServiceUtil.getGroupKBTemplates(scopeGroupId, QueryUtil.ALL_POS, QueryUtil.ALL_POS, obc);
+
+long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey", KBArticleConstants.DEFAULT_PARENT_RESOURCE_PRIM_KEY);
 %>
 
 <liferay-portlet:renderURL var="addBasicKBArticleURL">
 	<portlet:param name="mvcPath" value='<%= templatePath + "edit_article.jsp" %>' />
 	<portlet:param name="redirect" value="<%= redirect %>" />
+	<portlet:param name="parentResourcePrimKey" value="<%= String.valueOf(parentResourcePrimKey) %>" />
 </liferay-portlet:renderURL>
 
 <c:choose>
 	<c:when test="<%= kbTemplates.isEmpty() %>">
-		<aui:button href="<%= addBasicKBArticleURL %>" value="add-article" />
+		<aui:nav-item href="<%= addBasicKBArticleURL %>" label="add-article" />
 	</c:when>
 	<c:otherwise>
-		<liferay-ui:icon-menu direction="down" extended="<%= false %>" icon="<%= StringPool.BLANK %>" message="add-article" showWhenSingleIcon="<%= true %>" triggerCssClass="btn kb-add-article-button">
-			<liferay-ui:icon
-				message="basic-article"
-				url="<%= addBasicKBArticleURL %>"
+		<aui:nav-item dropdown="<%= true %>" label="add">
+			<aui:nav-item
+				href="<%= addBasicKBArticleURL %>"
+				label="basic-article"
 			/>
 
 			<%
@@ -43,18 +48,19 @@ List<KBTemplate> kbTemplates = KBTemplateServiceUtil.getGroupKBTemplates(scopeGr
 				<liferay-portlet:renderURL var="addKBArticleURL">
 					<portlet:param name="mvcPath" value='<%= templatePath + "edit_article.jsp" %>' />
 					<portlet:param name="redirect" value="<%= redirect %>" />
+					<portlet:param name="parentResourcePrimKey" value="<%= String.valueOf(parentResourcePrimKey) %>" />
 					<portlet:param name="kbTemplateId" value="<%= String.valueOf(kbTemplate.getKbTemplateId()) %>" />
 				</liferay-portlet:renderURL>
 
-				<liferay-ui:icon
-					message="<%= HtmlUtil.escape(kbTemplate.getTitle()) %>"
-					url="<%= addKBArticleURL %>"
+				<aui:nav-item
+					href="<%= addKBArticleURL %>"
+					label="<%= HtmlUtil.escape(kbTemplate.getTitle()) %>"
 				/>
 
 			<%
 			}
 			%>
 
-		</liferay-ui:icon-menu>
+		</aui:nav-item>
 	</c:otherwise>
 </c:choose>

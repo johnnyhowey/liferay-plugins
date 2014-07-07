@@ -28,11 +28,13 @@ public class FolderLocalServiceClp implements FolderLocalService {
 
 		_methodParameterTypes0 = new String[] { "com.liferay.mail.model.Folder" };
 
-		_methodName1 = "createFolder";
+		_methodName1 = "addFolder";
 
-		_methodParameterTypes1 = new String[] { "long" };
+		_methodParameterTypes1 = new String[] {
+				"long", "long", "java.lang.String", "java.lang.String", "int"
+			};
 
-		_methodName2 = "deleteFolder";
+		_methodName2 = "createFolder";
 
 		_methodParameterTypes2 = new String[] { "long" };
 
@@ -40,113 +42,111 @@ public class FolderLocalServiceClp implements FolderLocalService {
 
 		_methodParameterTypes3 = new String[] { "com.liferay.mail.model.Folder" };
 
-		_methodName4 = "dynamicQuery";
+		_methodName4 = "deleteFolder";
 
-		_methodParameterTypes4 = new String[] {  };
+		_methodParameterTypes4 = new String[] { "long" };
 
-		_methodName5 = "dynamicQuery";
+		_methodName5 = "deleteFolders";
 
-		_methodParameterTypes5 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
-			};
+		_methodParameterTypes5 = new String[] { "long" };
 
-		_methodName6 = "dynamicQuery";
+		_methodName6 = "deletePersistedModel";
 
 		_methodParameterTypes6 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
+				"com.liferay.portal.model.PersistedModel"
 			};
 
 		_methodName7 = "dynamicQuery";
 
-		_methodParameterTypes7 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			};
+		_methodParameterTypes7 = new String[] {  };
 
-		_methodName8 = "dynamicQueryCount";
+		_methodName8 = "dynamicQuery";
 
 		_methodParameterTypes8 = new String[] {
 				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
 			};
 
-		_methodName9 = "dynamicQueryCount";
+		_methodName9 = "dynamicQuery";
 
 		_methodParameterTypes9 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
+			};
+
+		_methodName10 = "dynamicQuery";
+
+		_methodParameterTypes10 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName11 = "dynamicQueryCount";
+
+		_methodParameterTypes11 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+			};
+
+		_methodName12 = "dynamicQueryCount";
+
+		_methodParameterTypes12 = new String[] {
 				"com.liferay.portal.kernel.dao.orm.DynamicQuery",
 				"com.liferay.portal.kernel.dao.orm.Projection"
 			};
 
-		_methodName10 = "fetchFolder";
+		_methodName13 = "fetchFolder";
 
-		_methodParameterTypes10 = new String[] { "long" };
+		_methodParameterTypes13 = new String[] { "long" };
 
-		_methodName11 = "getFolder";
+		_methodName14 = "getActionableDynamicQuery";
 
-		_methodParameterTypes11 = new String[] { "long" };
+		_methodParameterTypes14 = new String[] {  };
 
-		_methodName12 = "getActionableDynamicQuery";
+		_methodName15 = "getBeanIdentifier";
 
-		_methodParameterTypes12 = new String[] {  };
+		_methodParameterTypes15 = new String[] {  };
 
-		_methodName13 = "deletePersistedModel";
+		_methodName16 = "getFolder";
 
-		_methodParameterTypes13 = new String[] {
-				"com.liferay.portal.model.PersistedModel"
-			};
+		_methodParameterTypes16 = new String[] { "long", "java.lang.String" };
 
-		_methodName14 = "getPersistedModel";
+		_methodName17 = "getFolder";
 
-		_methodParameterTypes14 = new String[] { "java.io.Serializable" };
+		_methodParameterTypes17 = new String[] { "long" };
 
-		_methodName15 = "getFolders";
+		_methodName18 = "getFolders";
 
-		_methodParameterTypes15 = new String[] { "int", "int" };
+		_methodParameterTypes18 = new String[] { "long" };
 
-		_methodName16 = "getFoldersCount";
+		_methodName19 = "getFolders";
 
-		_methodParameterTypes16 = new String[] {  };
+		_methodParameterTypes19 = new String[] { "int", "int" };
 
-		_methodName17 = "updateFolder";
+		_methodName20 = "getFoldersCount";
 
-		_methodParameterTypes17 = new String[] { "com.liferay.mail.model.Folder" };
+		_methodParameterTypes20 = new String[] {  };
 
-		_methodName18 = "getBeanIdentifier";
+		_methodName21 = "getLocalPageCount";
 
-		_methodParameterTypes18 = new String[] {  };
+		_methodParameterTypes21 = new String[] { "long", "int" };
 
-		_methodName19 = "setBeanIdentifier";
-
-		_methodParameterTypes19 = new String[] { "java.lang.String" };
-
-		_methodName21 = "addFolder";
-
-		_methodParameterTypes21 = new String[] {
-				"long", "long", "java.lang.String", "java.lang.String", "int"
-			};
-
-		_methodName22 = "deleteFolders";
+		_methodName22 = "getPercentDownloaded";
 
 		_methodParameterTypes22 = new String[] { "long" };
 
-		_methodName23 = "getFolder";
+		_methodName23 = "getPersistedModel";
 
-		_methodParameterTypes23 = new String[] { "long", "java.lang.String" };
+		_methodParameterTypes23 = new String[] { "java.io.Serializable" };
 
-		_methodName24 = "getFolders";
+		_methodName24 = "getRemotePageCount";
 
-		_methodParameterTypes24 = new String[] { "long" };
+		_methodParameterTypes24 = new String[] { "long", "int" };
 
-		_methodName25 = "getLocalPageCount";
+		_methodName26 = "setBeanIdentifier";
 
-		_methodParameterTypes25 = new String[] { "long", "int" };
+		_methodParameterTypes26 = new String[] { "java.lang.String" };
 
-		_methodName26 = "getPercentDownloaded";
+		_methodName27 = "updateFolder";
 
-		_methodParameterTypes26 = new String[] { "long" };
-
-		_methodName27 = "getRemotePageCount";
-
-		_methodParameterTypes27 = new String[] { "long", "int" };
+		_methodParameterTypes27 = new String[] { "com.liferay.mail.model.Folder" };
 
 		_methodName28 = "updateFolder";
 
@@ -181,15 +181,33 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	}
 
 	@Override
-	public com.liferay.mail.model.Folder createFolder(long folderId) {
+	public com.liferay.mail.model.Folder addFolder(long userId, long accountId,
+		java.lang.String fullName, java.lang.String displayName,
+		int remoteMessageCount)
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName1,
-					_methodParameterTypes1, new Object[] { folderId });
+					_methodParameterTypes1,
+					new Object[] {
+						userId,
+						
+					accountId,
+						
+					ClpSerializer.translateInput(fullName),
+						
+					ClpSerializer.translateInput(displayName),
+						
+					remoteMessageCount
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -204,9 +222,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	}
 
 	@Override
-	public com.liferay.mail.model.Folder deleteFolder(long folderId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+	public com.liferay.mail.model.Folder createFolder(long folderId) {
 		Object returnObj = null;
 
 		try {
@@ -215,14 +231,6 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -239,8 +247,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	@Override
 	public com.liferay.mail.model.Folder deleteFolder(
 		com.liferay.mail.model.Folder folder)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -253,10 +260,6 @@ public class FolderLocalServiceClp implements FolderLocalService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -272,12 +275,94 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	}
 
 	@Override
-	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+	public com.liferay.mail.model.Folder deleteFolder(long folderId)
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName4,
-					_methodParameterTypes4, new Object[] {  });
+					_methodParameterTypes4, new Object[] { folderId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public void deleteFolders(long accountId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		try {
+			_invokableLocalService.invokeMethod(_methodName5,
+				_methodParameterTypes5, new Object[] { accountId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName6,
+					_methodParameterTypes6,
+					new Object[] { ClpSerializer.translateInput(persistedModel) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName7,
+					_methodParameterTypes7, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -295,14 +380,13 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName5,
-					_methodParameterTypes5,
+			returnObj = _invokableLocalService.invokeMethod(_methodName8,
+					_methodParameterTypes8,
 					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
@@ -317,19 +401,18 @@ public class FolderLocalServiceClp implements FolderLocalService {
 			}
 		}
 
-		return (java.util.List)ClpSerializer.translateOutput(returnObj);
+		return (java.util.List<T>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName6,
-					_methodParameterTypes6,
+			returnObj = _invokableLocalService.invokeMethod(_methodName9,
+					_methodParameterTypes9,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -350,20 +433,19 @@ public class FolderLocalServiceClp implements FolderLocalService {
 			}
 		}
 
-		return (java.util.List)ClpSerializer.translateOutput(returnObj);
+		return (java.util.List<T>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName7,
-					_methodParameterTypes7,
+			returnObj = _invokableLocalService.invokeMethod(_methodName10,
+					_methodParameterTypes10,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -386,7 +468,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 			}
 		}
 
-		return (java.util.List)ClpSerializer.translateOutput(returnObj);
+		return (java.util.List<T>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
@@ -395,8 +477,8 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName8,
-					_methodParameterTypes8,
+			returnObj = _invokableLocalService.invokeMethod(_methodName11,
+					_methodParameterTypes11,
 					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
@@ -421,8 +503,8 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName9,
-					_methodParameterTypes9,
+			returnObj = _invokableLocalService.invokeMethod(_methodName12,
+					_methodParameterTypes12,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -449,11 +531,91 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName10,
-					_methodParameterTypes10, new Object[] { folderId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName13,
+					_methodParameterTypes13, new Object[] { folderId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName14,
+					_methodParameterTypes14, new Object[] {  });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName15,
+					_methodParameterTypes15, new Object[] {  });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.mail.model.Folder getFolder(long accountId,
+		java.lang.String fullName)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName16,
+					_methodParameterTypes16,
+					new Object[] {
+						accountId,
+						
+					ClpSerializer.translateInput(fullName)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -473,8 +635,8 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName11,
-					_methodParameterTypes11, new Object[] { folderId });
+			returnObj = _invokableLocalService.invokeMethod(_methodName17,
+					_methodParameterTypes17, new Object[] { folderId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -496,12 +658,13 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	}
 
 	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+	public java.util.List<com.liferay.mail.model.Folder> getFolders(
+		long accountId) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName12,
-					_methodParameterTypes12, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName18,
+					_methodParameterTypes18, new Object[] { accountId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -515,19 +678,88 @@ public class FolderLocalServiceClp implements FolderLocalService {
 			}
 		}
 
-		return (com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery)ClpSerializer.translateOutput(returnObj);
+		return (java.util.List<com.liferay.mail.model.Folder>)ClpSerializer.translateOutput(returnObj);
 	}
 
 	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
+	public java.util.List<com.liferay.mail.model.Folder> getFolders(int start,
+		int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName19,
+					_methodParameterTypes19, new Object[] { start, end });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.mail.model.Folder>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public int getFoldersCount() {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20, new Object[] {  });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public int getLocalPageCount(long folderId, int messagesPerPage) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21,
+					new Object[] { folderId, messagesPerPage });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public int getPercentDownloaded(long folderId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName13,
-					_methodParameterTypes13,
-					new Object[] { ClpSerializer.translateInput(persistedModel) });
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22, new Object[] { folderId });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -545,7 +777,7 @@ public class FolderLocalServiceClp implements FolderLocalService {
 			}
 		}
 
-		return (com.liferay.portal.model.PersistedModel)ClpSerializer.translateOutput(returnObj);
+		return ((Integer)returnObj).intValue();
 	}
 
 	@Override
@@ -555,8 +787,8 @@ public class FolderLocalServiceClp implements FolderLocalService {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName14,
-					_methodParameterTypes14,
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23,
 					new Object[] { ClpSerializer.translateInput(primaryKeyObj) });
 		}
 		catch (Throwable t) {
@@ -579,39 +811,21 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	}
 
 	@Override
-	public java.util.List<com.liferay.mail.model.Folder> getFolders(int start,
-		int end) {
+	public int getRemotePageCount(long folderId, int messagesPerPage)
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName15,
-					_methodParameterTypes15, new Object[] { start, end });
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
+					new Object[] { folderId, messagesPerPage });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
 
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
 			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<com.liferay.mail.model.Folder>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public int getFoldersCount() {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName16,
-					_methodParameterTypes16, new Object[] {  });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -626,13 +840,40 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	}
 
 	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		try {
+			_invokableLocalService.invokeMethod(_methodName26,
+				_methodParameterTypes26,
+				new Object[] { ClpSerializer.translateInput(beanIdentifier) });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
 	public com.liferay.mail.model.Folder updateFolder(
 		com.liferay.mail.model.Folder folder) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName17,
-					_methodParameterTypes17,
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
 					new Object[] { ClpSerializer.translateInput(folder) });
 		}
 		catch (Throwable t) {
@@ -651,300 +892,10 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	}
 
 	@Override
-	public java.lang.String getBeanIdentifier() {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName18,
-					_methodParameterTypes18, new Object[] {  });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.lang.String)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		try {
-			_invokableLocalService.invokeMethod(_methodName19,
-				_methodParameterTypes19,
-				new Object[] { ClpSerializer.translateInput(beanIdentifier) });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-	}
-
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public com.liferay.mail.model.Folder addFolder(long userId, long accountId,
-		java.lang.String fullName, java.lang.String displayName,
-		int remoteMessageCount)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName21,
-					_methodParameterTypes21,
-					new Object[] {
-						userId,
-						
-					accountId,
-						
-					ClpSerializer.translateInput(fullName),
-						
-					ClpSerializer.translateInput(displayName),
-						
-					remoteMessageCount
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public void deleteFolders(long accountId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		try {
-			_invokableLocalService.invokeMethod(_methodName22,
-				_methodParameterTypes22, new Object[] { accountId });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-	}
-
-	@Override
-	public com.liferay.mail.model.Folder getFolder(long accountId,
-		java.lang.String fullName)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName23,
-					_methodParameterTypes23,
-					new Object[] {
-						accountId,
-						
-					ClpSerializer.translateInput(fullName)
-					});
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (com.liferay.mail.model.Folder)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public java.util.List<com.liferay.mail.model.Folder> getFolders(
-		long accountId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName24,
-					_methodParameterTypes24, new Object[] { accountId });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return (java.util.List<com.liferay.mail.model.Folder>)ClpSerializer.translateOutput(returnObj);
-	}
-
-	@Override
-	public int getLocalPageCount(long folderId, int messagesPerPage)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName25,
-					_methodParameterTypes25,
-					new Object[] { folderId, messagesPerPage });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return ((Integer)returnObj).intValue();
-	}
-
-	@Override
-	public int getPercentDownloaded(long folderId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName26,
-					_methodParameterTypes26, new Object[] { folderId });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return ((Integer)returnObj).intValue();
-	}
-
-	@Override
-	public int getRemotePageCount(long folderId, int messagesPerPage)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		Object returnObj = null;
-
-		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName27,
-					_methodParameterTypes27,
-					new Object[] { folderId, messagesPerPage });
-		}
-		catch (Throwable t) {
-			t = ClpSerializer.translateThrowable(t);
-
-			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
-				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
-			}
-
-			if (t instanceof RuntimeException) {
-				throw (RuntimeException)t;
-			}
-			else {
-				throw new RuntimeException(t.getClass().getName() +
-					" is not a valid exception");
-			}
-		}
-
-		return ((Integer)returnObj).intValue();
-	}
-
-	@Override
 	public com.liferay.mail.model.Folder updateFolder(long folderId,
 		java.lang.String fullName, java.lang.String displayName,
 		int remoteMessageCount)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -965,10 +916,6 @@ public class FolderLocalServiceClp implements FolderLocalService {
 
 			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
 				throw (com.liferay.portal.kernel.exception.PortalException)t;
-			}
-
-			if (t instanceof com.liferay.portal.kernel.exception.SystemException) {
-				throw (com.liferay.portal.kernel.exception.SystemException)t;
 			}
 
 			if (t instanceof RuntimeException) {
@@ -1024,6 +971,8 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	private String[] _methodParameterTypes18;
 	private String _methodName19;
 	private String[] _methodParameterTypes19;
+	private String _methodName20;
+	private String[] _methodParameterTypes20;
 	private String _methodName21;
 	private String[] _methodParameterTypes21;
 	private String _methodName22;
@@ -1032,8 +981,6 @@ public class FolderLocalServiceClp implements FolderLocalService {
 	private String[] _methodParameterTypes23;
 	private String _methodName24;
 	private String[] _methodParameterTypes24;
-	private String _methodName25;
-	private String[] _methodParameterTypes25;
 	private String _methodName26;
 	private String[] _methodParameterTypes26;
 	private String _methodName27;

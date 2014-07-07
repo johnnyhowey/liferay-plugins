@@ -102,12 +102,11 @@ public abstract class MeetupsEntryLocalServiceBaseImpl
 	 * @param meetupsEntryId the primary key of the meetups entry
 	 * @return the meetups entry that was removed
 	 * @throws PortalException if a meetups entry with the primary key could not be found
-	 * @throws SystemException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public MeetupsEntry deleteMeetupsEntry(long meetupsEntryId)
-		throws PortalException, SystemException {
+		throws PortalException {
 		return meetupsEntryPersistence.remove(meetupsEntryId);
 	}
 
@@ -138,8 +137,7 @@ public abstract class MeetupsEntryLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return meetupsEntryPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -156,8 +154,8 @@ public abstract class MeetupsEntryLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return meetupsEntryPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -176,9 +174,8 @@ public abstract class MeetupsEntryLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return meetupsEntryPersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -254,7 +251,7 @@ public abstract class MeetupsEntryLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteMeetupsEntry((MeetupsEntry)persistedModel);
+		return meetupsEntryLocalService.deleteMeetupsEntry((MeetupsEntry)persistedModel);
 	}
 
 	@Override

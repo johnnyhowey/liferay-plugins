@@ -48,13 +48,27 @@ public class UserThreadServiceUtil {
 		return getService().getBeanIdentifier();
 	}
 
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
+	public static com.liferay.portlet.messageboards.model.MBMessage getLastThreadMessage(
+		long mbThreadId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getLastThreadMessage(mbThreadId);
+	}
+
+	public static java.util.List<com.liferay.portlet.messageboards.model.MBMessage> getThreadMessages(
+		long mbThreadId, int start, int end, boolean ascending)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getThreadMessages(mbThreadId, start, end, ascending);
+	}
+
+	public static int getThreadMessagesCount(long mbThreadId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getThreadMessagesCount(mbThreadId);
+	}
+
+	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
+		boolean deleted)
+		throws com.liferay.portal.security.auth.PrincipalException {
+		return getService().getUserUserThreads(deleted);
 	}
 
 	public static java.lang.Object invokeMethod(java.lang.String name,
@@ -63,31 +77,13 @@ public class UserThreadServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
-	public static com.liferay.portlet.messageboards.model.MBMessage getLastThreadMessage(
-		long mbThreadId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getLastThreadMessage(mbThreadId);
-	}
-
-	public static java.util.List<com.liferay.portlet.messageboards.model.MBMessage> getThreadMessages(
-		long mbThreadId, int start, int end, boolean ascending)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getThreadMessages(mbThreadId, start, end, ascending);
-	}
-
-	public static int getThreadMessagesCount(long mbThreadId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getThreadMessagesCount(mbThreadId);
-	}
-
-	public static java.util.List<com.liferay.privatemessaging.model.UserThread> getUserUserThreads(
-		boolean deleted)
-		throws com.liferay.portal.kernel.exception.SystemException,
-			com.liferay.portal.security.auth.PrincipalException {
-		return getService().getUserUserThreads(deleted);
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
 	}
 
 	public static void clearService() {

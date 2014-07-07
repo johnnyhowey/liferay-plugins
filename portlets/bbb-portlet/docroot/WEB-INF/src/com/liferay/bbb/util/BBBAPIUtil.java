@@ -35,6 +35,7 @@ import com.liferay.portal.kernel.xml.DocumentException;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.kernel.xml.SAXReaderUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.util.ContentUtil;
 
 import java.io.IOException;
 
@@ -51,7 +52,7 @@ import java.util.TreeMap;
 public class BBBAPIUtil {
 
 	public static BBBMeeting endMeeting(long bbbMeetingId)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		BBBMeeting bbbMeeting = BBBMeetingLocalServiceUtil.getBBBMeeting(
 			bbbMeetingId);
@@ -76,7 +77,7 @@ public class BBBAPIUtil {
 
 	public static String getJoinURL(
 			BBBParticipant bbbParticipant, String userName)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		if (!userName.equals(bbbParticipant.getName())) {
 			bbbParticipant = BBBParticipantLocalServiceUtil.addBBBParticipant(
@@ -120,7 +121,7 @@ public class BBBAPIUtil {
 	}
 
 	public static Document getMeetingInfoDocument(long bbbMeetingId)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		BBBMeeting bbbMeeting = BBBMeetingLocalServiceUtil.getBBBMeeting(
 			bbbMeetingId);
@@ -152,7 +153,7 @@ public class BBBAPIUtil {
 	}
 
 	public static List<String> getMeetingRecordings(long bbbMeetingId)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		BBBMeeting bbbMeeting = BBBMeetingLocalServiceUtil.getBBBMeeting(
 			bbbMeetingId);
@@ -212,7 +213,7 @@ public class BBBAPIUtil {
 	}
 
 	public static boolean isServerActive(BBBServer bbbServer)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		try {
 			Document document = execute(
@@ -236,7 +237,7 @@ public class BBBAPIUtil {
 
 	public static BBBMeeting startMeeting(
 			long bbbMeetingId, boolean recordMeeting)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		BBBMeeting bbbMeeting = BBBMeetingLocalServiceUtil.getBBBMeeting(
 			bbbMeetingId);
@@ -245,14 +246,11 @@ public class BBBAPIUtil {
 			return bbbMeeting;
 		}
 
-		StringBundler sb = new StringBundler(11);
+		StringBundler sb = new StringBundler(15);
 
 		sb.append(BBBConstants.API_PARAMETER_MEETING_ID);
 		sb.append(StringPool.EQUAL);
-		bbbMeeting.setBbbServerId(getBbbServerId());
-
 		sb.append(bbbMeeting.getBbbMeetingId());
-
 		sb.append(StringPool.AMPERSAND);
 		sb.append(BBBConstants.API_PARAMETER_NAME);
 		sb.append(StringPool.EQUAL);
@@ -264,6 +262,17 @@ public class BBBAPIUtil {
 			sb.append(StringPool.EQUAL);
 			sb.append(StringPool.TRUE);
 		}
+
+		sb.append(StringPool.AMPERSAND);
+		sb.append(BBBConstants.API_PARAMETER_WELCOME);
+		sb.append(StringPool.EQUAL);
+
+		String welcomeMessage = ContentUtil.get(
+			"com/liferay/bbb/dependencies/meeting_welcome_message.tmpl");
+
+		sb.append(HtmlUtil.escapeURL(welcomeMessage));
+
+		bbbMeeting.setBbbServerId(getBbbServerId());
 
 		Document document = execute(
 			bbbMeeting, BBBConstants.API_METHOD_CREATE, sb.toString());
@@ -290,7 +299,7 @@ public class BBBAPIUtil {
 
 	protected static Document execute(
 			BBBMeeting bbbMeeting, String methodName, String queryString)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		BBBServer bbbServer = BBBServerLocalServiceUtil.getBBBServer(
 			bbbMeeting.getBbbServerId());
@@ -300,7 +309,7 @@ public class BBBAPIUtil {
 
 	protected static Document execute(
 			BBBServer bbbServer, String methodName, String queryString)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		try {
 			String url = getURL(bbbServer, methodName, queryString);
@@ -317,9 +326,7 @@ public class BBBAPIUtil {
 		}
 	}
 
-	protected static long getBbbServerId()
-		throws PortalException, SystemException {
-
+	protected static long getBbbServerId() throws PortalException {
 		TreeMap<Integer, Long> bbbServersMap = new TreeMap<Integer, Long>();
 
 		BBBServerLocalServiceUtil.checkBBBServers();
@@ -356,7 +363,7 @@ public class BBBAPIUtil {
 
 	protected static String getURL(
 			BBBServer bbbServer, String methodName, String queryString)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		StringBundler sb = new StringBundler(6);
 

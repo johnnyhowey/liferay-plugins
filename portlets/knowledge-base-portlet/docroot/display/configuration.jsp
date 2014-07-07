@@ -46,7 +46,7 @@ if (PortalUtil.isRSSFeedsEnabled()) {
 	<aui:fieldset>
 		<c:choose>
 			<c:when test='<%= tabs2.equals("general") %>'>
-				<div class="control-group kb-field-wrapper">
+				<div class="form-group kb-field-wrapper">
 
 					<%
 					KBArticle kbArticle = null;
@@ -78,9 +78,9 @@ if (PortalUtil.isRSSFeedsEnabled()) {
 
 				<aui:input label="show-asset-entries" name="preferences--showKBArticleAssetEntries--" type="checkbox" value="<%= showKBArticleAssetEntries %>" />
 
-				<aui:input label="enable-comments" name="preferences--enableKBArticleKBComments--" type="checkbox" value="<%= enableKBArticleKBComments %>" />
+				<aui:input label="enable-feedback" name="preferences--enableKBArticleKBComments--" type="checkbox" value="<%= enableKBArticleKBComments %>" />
 
-				<aui:input label="show-comments" name="preferences--showKBArticleKBComments--" type="checkbox" value="<%= showKBArticleKBComments %>" />
+				<aui:input label="show-feedback" name="preferences--showKBArticleKBComments--" type="checkbox" value="<%= showKBArticleKBComments %>" />
 
 				<aui:input label="enable-view-count-increment" name="preferences--enableKBArticleViewCountIncrement--" type="checkbox" value="<%= enableKBArticleViewCountIncrement %>" />
 
@@ -89,6 +89,8 @@ if (PortalUtil.isRSSFeedsEnabled()) {
 				<aui:input label="enable-history" name="preferences--enableKBArticleHistory--" type="checkbox" value="<%= enableKBArticleHistory %>" />
 
 				<aui:input label="enable-print" name="preferences--enableKBArticlePrint--" type="checkbox" value="<%= enableKBArticlePrint %>" />
+
+				<aui:input label="enable-social-bookmarks" name="preferences--enableSocialBookmarks--" type="checkbox" value="<%= enableSocialBookmarks %>" />
 			</c:when>
 			<c:when test='<%= tabs2.equals("rss") %>'>
 				<liferay-ui:rss-settings
