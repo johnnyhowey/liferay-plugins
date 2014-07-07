@@ -621,19 +621,15 @@ public class KaleoInstanceClp extends BaseModelImpl<KaleoInstance>
 
 	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken getRootKaleoInstanceToken(
-		java.util.Map<java.lang.String, java.io.Serializable> workflowContext,
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		try {
 			String methodName = "getRootKaleoInstanceToken";
 
 			Class<?>[] parameterTypes = new Class<?>[] {
-					java.util.Map.class,
 					com.liferay.portal.service.ServiceContext.class
 				};
 
-			Object[] parameterValues = new Object[] {
-					workflowContext, serviceContext
-				};
+			Object[] parameterValues = new Object[] { serviceContext };
 
 			com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken returnObj =
 				(com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)invokeOnRemoteModel(methodName,
@@ -648,15 +644,19 @@ public class KaleoInstanceClp extends BaseModelImpl<KaleoInstance>
 
 	@Override
 	public com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken getRootKaleoInstanceToken(
+		java.util.Map<java.lang.String, java.io.Serializable> workflowContext,
 		com.liferay.portal.service.ServiceContext serviceContext) {
 		try {
 			String methodName = "getRootKaleoInstanceToken";
 
 			Class<?>[] parameterTypes = new Class<?>[] {
+					java.util.Map.class,
 					com.liferay.portal.service.ServiceContext.class
 				};
 
-			Object[] parameterValues = new Object[] { serviceContext };
+			Object[] parameterValues = new Object[] {
+					workflowContext, serviceContext
+				};
 
 			com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken returnObj =
 				(com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken)invokeOnRemoteModel(methodName,
@@ -800,6 +800,10 @@ public class KaleoInstanceClp extends BaseModelImpl<KaleoInstance>
 		else {
 			return false;
 		}
+	}
+
+	public Class<?> getClpSerializerClass() {
+		return _clpSerializerClass;
 	}
 
 	@Override
@@ -953,6 +957,7 @@ public class KaleoInstanceClp extends BaseModelImpl<KaleoInstance>
 	private Date _completionDate;
 	private String _workflowContext;
 	private BaseModel<?> _kaleoInstanceRemoteModel;
+	private Class<?> _clpSerializerClass = com.liferay.portal.workflow.kaleo.service.ClpSerializer.class;
 	private boolean _entityCacheEnabled;
 	private boolean _finderCacheEnabled;
 }

@@ -29,6 +29,15 @@ public class FooLocalServiceWrapper implements FooLocalService,
 		_fooLocalService = fooLocalService;
 	}
 
+	@Override
+	public void addFoo(java.lang.String field1, boolean field2, int field3,
+		java.util.Date field4, java.lang.String field5,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_fooLocalService.addFoo(field1, field2, field3, field4, field5,
+			serviceContext);
+	}
+
 	/**
 	* Adds the foo to the database. Also notifies the appropriate model listeners.
 	*
@@ -53,32 +62,38 @@ public class FooLocalServiceWrapper implements FooLocalService,
 	}
 
 	/**
+	* Deletes the foo from the database. Also notifies the appropriate model listeners.
+	*
+	* @param foo the foo
+	* @return the foo that was removed
+	*/
+	@Override
+	public com.liferay.sampleservicebuilder.model.Foo deleteFoo(
+		com.liferay.sampleservicebuilder.model.Foo foo) {
+		return _fooLocalService.deleteFoo(foo);
+	}
+
+	/**
 	* Deletes the foo with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param fooId the primary key of the foo
 	* @return the foo that was removed
 	* @throws PortalException if a foo with the primary key could not be found
-	* @throws SystemException
 	*/
 	@Override
 	public com.liferay.sampleservicebuilder.model.Foo deleteFoo(long fooId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _fooLocalService.deleteFoo(fooId);
 	}
 
 	/**
-	* Deletes the foo from the database. Also notifies the appropriate model listeners.
-	*
-	* @param foo the foo
-	* @return the foo that was removed
-	* @throws SystemException
+	* @throws PortalException
 	*/
 	@Override
-	public com.liferay.sampleservicebuilder.model.Foo deleteFoo(
-		com.liferay.sampleservicebuilder.model.Foo foo)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _fooLocalService.deleteFoo(foo);
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _fooLocalService.deletePersistedModel(persistedModel);
 	}
 
 	@Override
@@ -93,8 +108,7 @@ public class FooLocalServiceWrapper implements FooLocalService,
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _fooLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -112,8 +126,7 @@ public class FooLocalServiceWrapper implements FooLocalService,
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _fooLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -133,11 +146,10 @@ public class FooLocalServiceWrapper implements FooLocalService,
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _fooLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -199,6 +211,27 @@ public class FooLocalServiceWrapper implements FooLocalService,
 		return _fooLocalService.fetchFooByUuidAndGroupId(uuid, groupId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _fooLocalService.getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _fooLocalService.getBeanIdentifier();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
+		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext) {
+		return _fooLocalService.getExportActionableDynamicQuery(portletDataContext);
+	}
+
 	/**
 	* Returns the foo with the primary key.
 	*
@@ -210,34 +243,6 @@ public class FooLocalServiceWrapper implements FooLocalService,
 	public com.liferay.sampleservicebuilder.model.Foo getFoo(long fooId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _fooLocalService.getFoo(fooId);
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _fooLocalService.getActionableDynamicQuery();
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
-		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext) {
-		return _fooLocalService.getExportActionableDynamicQuery(portletDataContext);
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _fooLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _fooLocalService.getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -270,6 +275,12 @@ public class FooLocalServiceWrapper implements FooLocalService,
 		return _fooLocalService.getFooByUuidAndGroupId(uuid, groupId);
 	}
 
+	@Override
+	public java.util.List<com.liferay.sampleservicebuilder.model.Foo> getFoos(
+		com.liferay.portal.kernel.util.OrderByComparator obc) {
+		return _fooLocalService.getFoos(obc);
+	}
+
 	/**
 	* Returns a range of all the foos.
 	*
@@ -287,6 +298,12 @@ public class FooLocalServiceWrapper implements FooLocalService,
 		return _fooLocalService.getFoos(start, end);
 	}
 
+	@Override
+	public java.util.List<com.liferay.sampleservicebuilder.model.Foo> getFoos(
+		int start, int end, com.liferay.portal.kernel.util.OrderByComparator obc) {
+		return _fooLocalService.getFoos(start, end, obc);
+	}
+
 	/**
 	* Returns the number of foos.
 	*
@@ -295,6 +312,44 @@ public class FooLocalServiceWrapper implements FooLocalService,
 	@Override
 	public int getFoosCount() {
 		return _fooLocalService.getFoosCount();
+	}
+
+	@Override
+	public java.lang.Object getLocalObject() throws java.lang.Exception {
+		return _fooLocalService.getLocalObject();
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _fooLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _fooLocalService.invokeMethod(name, parameterTypes, arguments);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_fooLocalService.setBeanIdentifier(beanIdentifier);
+	}
+
+	@Override
+	public void updateAsset(long userId,
+		com.liferay.sampleservicebuilder.model.Foo foo,
+		long[] assetCategoryIds, java.lang.String[] assetTagNames)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_fooLocalService.updateAsset(userId, foo, assetCategoryIds,
+			assetTagNames);
 	}
 
 	/**
@@ -309,78 +364,11 @@ public class FooLocalServiceWrapper implements FooLocalService,
 		return _fooLocalService.updateFoo(foo);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _fooLocalService.getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_fooLocalService.setBeanIdentifier(beanIdentifier);
-	}
-
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _fooLocalService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	@Override
-	public void addFoo(java.lang.String field1, boolean field2, int field3,
-		java.util.Date field4, java.lang.String field5,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_fooLocalService.addFoo(field1, field2, field3, field4, field5,
-			serviceContext);
-	}
-
-	@Override
-	public java.util.List<com.liferay.sampleservicebuilder.model.Foo> getFoos(
-		int start, int end, com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _fooLocalService.getFoos(start, end, obc);
-	}
-
-	@Override
-	public java.util.List<com.liferay.sampleservicebuilder.model.Foo> getFoos(
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _fooLocalService.getFoos(obc);
-	}
-
-	@Override
-	public java.lang.Object getLocalObject() throws java.lang.Exception {
-		return _fooLocalService.getLocalObject();
-	}
-
-	@Override
-	public void updateAsset(long userId,
-		com.liferay.sampleservicebuilder.model.Foo foo,
-		long[] assetCategoryIds, java.lang.String[] assetTagNames)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_fooLocalService.updateAsset(userId, foo, assetCategoryIds,
-			assetTagNames);
-	}
-
 	@Override
 	public void updateFoo(long fooId, java.lang.String field1, boolean field2,
 		int field3, java.util.Date field4, java.lang.String field5,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		_fooLocalService.updateFoo(fooId, field1, field2, field3, field4,
 			field5, serviceContext);
 	}

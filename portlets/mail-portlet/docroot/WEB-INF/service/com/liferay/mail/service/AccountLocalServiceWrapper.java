@@ -41,6 +41,25 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 		return _accountLocalService.addAccount(account);
 	}
 
+	@Override
+	public com.liferay.mail.model.Account addAccount(long userId,
+		java.lang.String address, java.lang.String personalName,
+		java.lang.String protocol, java.lang.String incomingHostName,
+		int incomingPort, boolean incomingSecure,
+		java.lang.String outgoingHostName, int outgoingPort,
+		boolean outgoingSecure, java.lang.String login,
+		java.lang.String password, boolean savePassword,
+		java.lang.String signature, boolean useSignature,
+		java.lang.String folderPrefix, long inboxFolderId, long draftFolderId,
+		long sentFolderId, long trashFolderId, boolean defaultSender)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _accountLocalService.addAccount(userId, address, personalName,
+			protocol, incomingHostName, incomingPort, incomingSecure,
+			outgoingHostName, outgoingPort, outgoingSecure, login, password,
+			savePassword, signature, useSignature, folderPrefix, inboxFolderId,
+			draftFolderId, sentFolderId, trashFolderId, defaultSender);
+	}
+
 	/**
 	* Creates a new account with the primary key. Does not add the account to the database.
 	*
@@ -53,34 +72,46 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	}
 
 	/**
-	* Deletes the account with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param accountId the primary key of the account
-	* @return the account that was removed
-	* @throws PortalException if a account with the primary key could not be found
-	* @throws SystemException
-	*/
-	@Override
-	public com.liferay.mail.model.Account deleteAccount(long accountId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _accountLocalService.deleteAccount(accountId);
-	}
-
-	/**
 	* Deletes the account from the database. Also notifies the appropriate model listeners.
 	*
 	* @param account the account
 	* @return the account that was removed
 	* @throws PortalException
-	* @throws SystemException
 	*/
 	@Override
 	public com.liferay.mail.model.Account deleteAccount(
 		com.liferay.mail.model.Account account)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _accountLocalService.deleteAccount(account);
+	}
+
+	/**
+	* Deletes the account with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param accountId the primary key of the account
+	* @return the account that was removed
+	* @throws PortalException if a account with the primary key could not be found
+	*/
+	@Override
+	public com.liferay.mail.model.Account deleteAccount(long accountId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _accountLocalService.deleteAccount(accountId);
+	}
+
+	@Override
+	public void deleteAccounts(long userId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_accountLocalService.deleteAccounts(userId);
+	}
+
+	/**
+	* @throws PortalException
+	*/
+	@Override
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _accountLocalService.deletePersistedModel(persistedModel);
 	}
 
 	@Override
@@ -95,8 +126,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _accountLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -114,8 +144,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _accountLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -135,11 +164,10 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _accountLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -189,25 +217,10 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	}
 
 	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _accountLocalService.getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
+	public com.liferay.mail.model.Account getAccount(long userId,
+		java.lang.String address)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _accountLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _accountLocalService.getPersistedModel(primaryKeyObj);
+		return _accountLocalService.getAccount(userId, address);
 	}
 
 	/**
@@ -227,6 +240,12 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 		return _accountLocalService.getAccounts(start, end);
 	}
 
+	@Override
+	public java.util.List<com.liferay.mail.model.Account> getAccounts(
+		long userId) {
+		return _accountLocalService.getAccounts(userId);
+	}
+
 	/**
 	* Returns the number of accounts.
 	*
@@ -235,6 +254,45 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	@Override
 	public int getAccountsCount() {
 		return _accountLocalService.getAccountsCount();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _accountLocalService.getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _accountLocalService.getBeanIdentifier();
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _accountLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _accountLocalService.invokeMethod(name, parameterTypes, arguments);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	@Override
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_accountLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
@@ -249,81 +307,12 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 		return _accountLocalService.updateAccount(account);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _accountLocalService.getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_accountLocalService.setBeanIdentifier(beanIdentifier);
-	}
-
-	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _accountLocalService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	@Override
-	public com.liferay.mail.model.Account addAccount(long userId,
-		java.lang.String address, java.lang.String personalName,
-		java.lang.String protocol, java.lang.String incomingHostName,
-		int incomingPort, boolean incomingSecure,
-		java.lang.String outgoingHostName, int outgoingPort,
-		boolean outgoingSecure, java.lang.String login,
-		java.lang.String password, boolean savePassword,
-		java.lang.String signature, boolean useSignature,
-		java.lang.String folderPrefix, long inboxFolderId, long draftFolderId,
-		long sentFolderId, long trashFolderId, boolean defaultSender)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _accountLocalService.addAccount(userId, address, personalName,
-			protocol, incomingHostName, incomingPort, incomingSecure,
-			outgoingHostName, outgoingPort, outgoingSecure, login, password,
-			savePassword, signature, useSignature, folderPrefix, inboxFolderId,
-			draftFolderId, sentFolderId, trashFolderId, defaultSender);
-	}
-
-	@Override
-	public void deleteAccounts(long userId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_accountLocalService.deleteAccounts(userId);
-	}
-
-	@Override
-	public com.liferay.mail.model.Account getAccount(long userId,
-		java.lang.String address)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _accountLocalService.getAccount(userId, address);
-	}
-
-	@Override
-	public java.util.List<com.liferay.mail.model.Account> getAccounts(
-		long userId) throws com.liferay.portal.kernel.exception.SystemException {
-		return _accountLocalService.getAccounts(userId);
-	}
-
 	@Override
 	public com.liferay.mail.model.Account updateAccount(long accountId,
 		java.lang.String personalName, java.lang.String password,
 		boolean savePassword, java.lang.String signature, boolean useSignature,
 		java.lang.String folderPrefix, boolean defaultSender)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _accountLocalService.updateAccount(accountId, personalName,
 			password, savePassword, signature, useSignature, folderPrefix,
 			defaultSender);
@@ -333,8 +322,7 @@ public class AccountLocalServiceWrapper implements AccountLocalService,
 	public com.liferay.mail.model.Account updateFolders(long accountId,
 		long inboxFolderId, long draftFolderId, long sentFolderId,
 		long trashFolderId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _accountLocalService.updateFolders(accountId, inboxFolderId,
 			draftFolderId, sentFolderId, trashFolderId);
 	}

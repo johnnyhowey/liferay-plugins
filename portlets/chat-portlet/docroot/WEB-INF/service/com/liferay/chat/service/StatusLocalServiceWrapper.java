@@ -53,16 +53,13 @@ public class StatusLocalServiceWrapper implements StatusLocalService,
 	}
 
 	/**
-	* Deletes the status with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param statusId the primary key of the status
-	* @return the status that was removed
-	* @throws PortalException if a status with the primary key could not be found
+	* @throws PortalException
 	*/
 	@Override
-	public com.liferay.chat.model.Status deleteStatus(long statusId)
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _statusLocalService.deleteStatus(statusId);
+		return _statusLocalService.deletePersistedModel(persistedModel);
 	}
 
 	/**
@@ -77,6 +74,19 @@ public class StatusLocalServiceWrapper implements StatusLocalService,
 		return _statusLocalService.deleteStatus(status);
 	}
 
+	/**
+	* Deletes the status with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param statusId the primary key of the status
+	* @return the status that was removed
+	* @throws PortalException if a status with the primary key could not be found
+	*/
+	@Override
+	public com.liferay.chat.model.Status deleteStatus(long statusId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _statusLocalService.deleteStatus(statusId);
+	}
+
 	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _statusLocalService.dynamicQuery();
@@ -89,8 +99,7 @@ public class StatusLocalServiceWrapper implements StatusLocalService,
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _statusLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -108,8 +117,7 @@ public class StatusLocalServiceWrapper implements StatusLocalService,
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _statusLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -129,11 +137,10 @@ public class StatusLocalServiceWrapper implements StatusLocalService,
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _statusLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -169,6 +176,56 @@ public class StatusLocalServiceWrapper implements StatusLocalService,
 		return _statusLocalService.fetchStatus(statusId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _statusLocalService.getActionableDynamicQuery();
+	}
+
+	@Override
+	public java.util.List<java.lang.Object[]> getAllStatuses(long companyId,
+		long userId, long modifiedDate, int start, int end) {
+		return _statusLocalService.getAllStatuses(companyId, userId,
+			modifiedDate, start, end);
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _statusLocalService.getBeanIdentifier();
+	}
+
+	@Override
+	public java.util.List<java.lang.Object[]> getGroupStatuses(long userId,
+		long modifiedDate, java.lang.String[] groupNames, int start, int end) {
+		return _statusLocalService.getGroupStatuses(userId, modifiedDate,
+			groupNames, start, end);
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _statusLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public java.util.List<java.lang.Object[]> getSocialStatuses(long userId,
+		int type, long modifiedDate, int start, int end) {
+		return _statusLocalService.getSocialStatuses(userId, type,
+			modifiedDate, start, end);
+	}
+
+	@Override
+	public java.util.List<java.lang.Object[]> getSocialStatuses(long userId,
+		int[] types, long modifiedDate, int start, int end) {
+		return _statusLocalService.getSocialStatuses(userId, types,
+			modifiedDate, start, end);
+	}
+
 	/**
 	* Returns the status with the primary key.
 	*
@@ -180,28 +237,6 @@ public class StatusLocalServiceWrapper implements StatusLocalService,
 	public com.liferay.chat.model.Status getStatus(long statusId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _statusLocalService.getStatus(statusId);
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _statusLocalService.getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _statusLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _statusLocalService.getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -231,26 +266,16 @@ public class StatusLocalServiceWrapper implements StatusLocalService,
 		return _statusLocalService.getStatusesCount();
 	}
 
-	/**
-	* Updates the status in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param status the status
-	* @return the status that was updated
-	*/
 	@Override
-	public com.liferay.chat.model.Status updateStatus(
-		com.liferay.chat.model.Status status) {
-		return _statusLocalService.updateStatus(status);
+	public com.liferay.chat.model.Status getUserStatus(long userId) {
+		return _statusLocalService.getUserStatus(userId);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
 	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _statusLocalService.getBeanIdentifier();
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _statusLocalService.invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -263,63 +288,28 @@ public class StatusLocalServiceWrapper implements StatusLocalService,
 		_statusLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	/**
+	* Updates the status in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param status the status
+	* @return the status that was updated
+	*/
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _statusLocalService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	@Override
-	public java.util.List<java.lang.Object[]> getAllStatuses(long companyId,
-		long userId, long modifiedDate, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _statusLocalService.getAllStatuses(companyId, userId,
-			modifiedDate, start, end);
-	}
-
-	@Override
-	public java.util.List<java.lang.Object[]> getGroupStatuses(long userId,
-		long modifiedDate, java.lang.String[] groupNames, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _statusLocalService.getGroupStatuses(userId, modifiedDate,
-			groupNames, start, end);
-	}
-
-	@Override
-	public java.util.List<java.lang.Object[]> getSocialStatuses(long userId,
-		int type, long modifiedDate, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _statusLocalService.getSocialStatuses(userId, type,
-			modifiedDate, start, end);
-	}
-
-	@Override
-	public java.util.List<java.lang.Object[]> getSocialStatuses(long userId,
-		int[] types, long modifiedDate, int start, int end)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _statusLocalService.getSocialStatuses(userId, types,
-			modifiedDate, start, end);
-	}
-
-	@Override
-	public com.liferay.chat.model.Status getUserStatus(long userId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _statusLocalService.getUserStatus(userId);
+	public com.liferay.chat.model.Status updateStatus(
+		com.liferay.chat.model.Status status) {
+		return _statusLocalService.updateStatus(status);
 	}
 
 	@Override
 	public com.liferay.chat.model.Status updateStatus(long userId,
-		long modifiedDate)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		long modifiedDate) {
 		return _statusLocalService.updateStatus(userId, modifiedDate);
 	}
 
 	@Override
 	public com.liferay.chat.model.Status updateStatus(long userId,
 		long modifiedDate, int online, int awake,
-		java.lang.String activePanelIds, java.lang.String message, int playSound)
-		throws com.liferay.portal.kernel.exception.SystemException {
+		java.lang.String activePanelIds, java.lang.String message, int playSound) {
 		return _statusLocalService.updateStatus(userId, modifiedDate, online,
 			awake, activePanelIds, message, playSound);
 	}

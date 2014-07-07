@@ -29,6 +29,20 @@ public class KBCommentServiceWrapper implements KBCommentService,
 		_kbCommentService = kbCommentService;
 	}
 
+	@Override
+	public com.liferay.knowledgebase.model.KBComment deleteKBComment(
+		com.liferay.knowledgebase.model.KBComment kbComment)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _kbCommentService.deleteKBComment(kbComment);
+	}
+
+	@Override
+	public com.liferay.knowledgebase.model.KBComment deleteKBComment(
+		long kbCommentId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _kbCommentService.deleteKBComment(kbCommentId);
+	}
+
 	/**
 	* Returns the Spring bean ID for this bean.
 	*
@@ -37,6 +51,13 @@ public class KBCommentServiceWrapper implements KBCommentService,
 	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _kbCommentService.getBeanIdentifier();
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _kbCommentService.invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -50,35 +71,11 @@ public class KBCommentServiceWrapper implements KBCommentService,
 	}
 
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _kbCommentService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	@Override
-	public com.liferay.knowledgebase.model.KBComment deleteKBComment(
-		com.liferay.knowledgebase.model.KBComment kbComment)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _kbCommentService.deleteKBComment(kbComment);
-	}
-
-	@Override
-	public com.liferay.knowledgebase.model.KBComment deleteKBComment(
-		long kbCommentId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _kbCommentService.deleteKBComment(kbCommentId);
-	}
-
-	@Override
 	public com.liferay.knowledgebase.model.KBComment updateKBComment(
 		long kbCommentId, long classNameId, long classPK,
 		java.lang.String content, boolean helpful,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _kbCommentService.updateKBComment(kbCommentId, classNameId,
 			classPK, content, helpful, serviceContext);
 	}

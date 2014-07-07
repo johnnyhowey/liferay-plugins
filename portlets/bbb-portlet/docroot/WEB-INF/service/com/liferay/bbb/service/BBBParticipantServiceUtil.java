@@ -38,6 +38,22 @@ public class BBBParticipantServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.bbb.service.impl.BBBParticipantServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static com.liferay.bbb.model.BBBParticipant deleteBBBParticipant(
+		com.liferay.bbb.model.BBBParticipant bbbParticipant)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deleteBBBParticipant(bbbParticipant);
+	}
+
+	public static java.util.List<com.liferay.bbb.model.BBBParticipant> getBBBParticipants(
+		long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getBBBParticipants(bbbMeetingId);
+	}
+
+	public static int getBBBParticipantsCount(long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getBBBParticipantsCount(bbbMeetingId);
+	}
 
 	/**
 	* Returns the Spring bean ID for this bean.
@@ -46,6 +62,12 @@ public class BBBParticipantServiceUtil {
 	*/
 	public static java.lang.String getBeanIdentifier() {
 		return getService().getBeanIdentifier();
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -57,38 +79,11 @@ public class BBBParticipantServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.bbb.model.BBBParticipant deleteBBBParticipant(
-		com.liferay.bbb.model.BBBParticipant bbbParticipant)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().deleteBBBParticipant(bbbParticipant);
-	}
-
-	public static java.util.List<com.liferay.bbb.model.BBBParticipant> getBBBParticipants(
-		long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getBBBParticipants(bbbMeetingId);
-	}
-
-	public static int getBBBParticipantsCount(long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getBBBParticipantsCount(bbbMeetingId);
-	}
-
 	public static com.liferay.bbb.model.BBBParticipant updateBBBParticipant(
 		long bbbParticipantId, long bbbMeetingId, java.lang.String name,
 		java.lang.String emailAddress, int type,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateBBBParticipant(bbbParticipantId, bbbMeetingId, name,
 			emailAddress, type, serviceContext);

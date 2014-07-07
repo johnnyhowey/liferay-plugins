@@ -50,6 +50,19 @@ public class BBBMeetingLocalServiceUtil {
 		return getService().addBBBMeeting(bbbMeeting);
 	}
 
+	public static com.liferay.bbb.model.BBBMeeting addBBBMeeting(long userId,
+		long groupId, long bbbServerId, java.lang.String name,
+		java.lang.String description, java.lang.String attendeePassword,
+		java.lang.String moderatorPassword, int status,
+		java.util.List<com.liferay.bbb.model.BBBParticipant> bbbParticipants,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addBBBMeeting(userId, groupId, bbbServerId, name,
+			description, attendeePassword, moderatorPassword, status,
+			bbbParticipants, serviceContext);
+	}
+
 	/**
 	* Creates a new b b b meeting with the primary key. Does not add the b b b meeting to the database.
 	*
@@ -62,33 +75,38 @@ public class BBBMeetingLocalServiceUtil {
 	}
 
 	/**
-	* Deletes the b b b meeting with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param bbbMeetingId the primary key of the b b b meeting
-	* @return the b b b meeting that was removed
-	* @throws PortalException if a b b b meeting with the primary key could not be found
-	* @throws SystemException
-	*/
-	public static com.liferay.bbb.model.BBBMeeting deleteBBBMeeting(
-		long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().deleteBBBMeeting(bbbMeetingId);
-	}
-
-	/**
 	* Deletes the b b b meeting from the database. Also notifies the appropriate model listeners.
 	*
 	* @param bbbMeeting the b b b meeting
 	* @return the b b b meeting that was removed
 	* @throws PortalException
-	* @throws SystemException
 	*/
 	public static com.liferay.bbb.model.BBBMeeting deleteBBBMeeting(
 		com.liferay.bbb.model.BBBMeeting bbbMeeting)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().deleteBBBMeeting(bbbMeeting);
+	}
+
+	/**
+	* Deletes the b b b meeting with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param bbbMeetingId the primary key of the b b b meeting
+	* @return the b b b meeting that was removed
+	* @throws PortalException if a b b b meeting with the primary key could not be found
+	*/
+	public static com.liferay.bbb.model.BBBMeeting deleteBBBMeeting(
+		long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deleteBBBMeeting(bbbMeetingId);
+	}
+
+	/**
+	* @throws PortalException
+	*/
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deletePersistedModel(persistedModel);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
@@ -101,8 +119,7 @@ public class BBBMeetingLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -119,8 +136,7 @@ public class BBBMeetingLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -139,11 +155,10 @@ public class BBBMeetingLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -177,38 +192,36 @@ public class BBBMeetingLocalServiceUtil {
 		return getService().fetchBBBMeeting(bbbMeetingId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
 	/**
 	* Returns the b b b meeting with the primary key.
 	*
 	* @param bbbMeetingId the primary key of the b b b meeting
 	* @return the b b b meeting
 	* @throws PortalException if a b b b meeting with the primary key could not be found
-	* @throws SystemException
 	*/
 	public static com.liferay.bbb.model.BBBMeeting getBBBMeeting(
 		long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getBBBMeeting(bbbMeetingId);
 	}
 
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
+	public static java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc) {
+		return getService().getBBBMeetings(groupId, start, end, obc);
 	}
 
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
+	public static java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
+		long groupId, long userId, java.lang.String name,
+		java.lang.String description, int status, boolean andSearch, int start,
+		int end, java.lang.String orderByField, java.lang.String orderByType) {
+		return getService()
+				   .getBBBMeetings(groupId, userId, name, description, status,
+			andSearch, start, end, orderByField, orderByType);
 	}
 
 	/**
@@ -227,6 +240,11 @@ public class BBBMeetingLocalServiceUtil {
 		return getService().getBBBMeetings(start, end);
 	}
 
+	public static java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
+		int status) {
+		return getService().getBBBMeetings(status);
+	}
+
 	/**
 	* Returns the number of b b b meetings.
 	*
@@ -234,6 +252,52 @@ public class BBBMeetingLocalServiceUtil {
 	*/
 	public static int getBBBMeetingsCount() {
 		return getService().getBBBMeetingsCount();
+	}
+
+	public static int getBBBMeetingsCount(long bbbServerId, int status) {
+		return getService().getBBBMeetingsCount(bbbServerId, status);
+	}
+
+	public static int getBBBMeetingsCount(long groupId) {
+		return getService().getBBBMeetingsCount(groupId);
+	}
+
+	public static int getBBBMeetingsCount(long groupId, long userId,
+		java.lang.String name, java.lang.String description, int status,
+		boolean andSearch) {
+		return getService()
+				   .getBBBMeetingsCount(groupId, userId, name, description,
+			status, andSearch);
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
+	}
+
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
+	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
+		getService().setBeanIdentifier(beanIdentifier);
 	}
 
 	/**
@@ -247,93 +311,13 @@ public class BBBMeetingLocalServiceUtil {
 		return getService().updateBBBMeeting(bbbMeeting);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
-	}
-
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
-	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
-		getService().setBeanIdentifier(beanIdentifier);
-	}
-
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.bbb.model.BBBMeeting addBBBMeeting(long userId,
-		long groupId, long bbbServerId, java.lang.String name,
-		java.lang.String description, java.lang.String attendeePassword,
-		java.lang.String moderatorPassword, int status,
-		java.util.List<com.liferay.bbb.model.BBBParticipant> bbbParticipants,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addBBBMeeting(userId, groupId, bbbServerId, name,
-			description, attendeePassword, moderatorPassword, status,
-			bbbParticipants, serviceContext);
-	}
-
-	public static java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
-		int status) throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getBBBMeetings(status);
-	}
-
-	public static java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getBBBMeetings(groupId, start, end, obc);
-	}
-
-	public static java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
-		long groupId, long userId, java.lang.String name,
-		java.lang.String description, int status, boolean andSearch, int start,
-		int end, java.lang.String orderByField, java.lang.String orderByType)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getBBBMeetings(groupId, userId, name, description, status,
-			andSearch, start, end, orderByField, orderByType);
-	}
-
-	public static int getBBBMeetingsCount(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getBBBMeetingsCount(groupId);
-	}
-
-	public static int getBBBMeetingsCount(long bbbServerId, int status)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getBBBMeetingsCount(bbbServerId, status);
-	}
-
-	public static int getBBBMeetingsCount(long groupId, long userId,
-		java.lang.String name, java.lang.String description, int status,
-		boolean andSearch)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .getBBBMeetingsCount(groupId, userId, name, description,
-			status, andSearch);
-	}
-
 	public static com.liferay.bbb.model.BBBMeeting updateBBBMeeting(
 		long bbbMeetingId, long bbbServerId, java.lang.String name,
 		java.lang.String description, java.lang.String attendeePassword,
 		java.lang.String moderatorPassword,
 		java.util.List<com.liferay.bbb.model.BBBParticipant> bbbParticipants,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateBBBMeeting(bbbMeetingId, bbbServerId, name,
 			description, attendeePassword, moderatorPassword, bbbParticipants,
@@ -342,8 +326,7 @@ public class BBBMeetingLocalServiceUtil {
 
 	public static com.liferay.bbb.model.BBBMeeting updateStatus(
 		long bbbMeetingId, int status)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().updateStatus(bbbMeetingId, status);
 	}
 

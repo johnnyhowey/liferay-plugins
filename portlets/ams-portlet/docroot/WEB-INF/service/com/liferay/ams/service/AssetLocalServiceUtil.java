@@ -61,6 +61,17 @@ public class AssetLocalServiceUtil {
 	}
 
 	/**
+	* Deletes the asset from the database. Also notifies the appropriate model listeners.
+	*
+	* @param asset the asset
+	* @return the asset that was removed
+	*/
+	public static com.liferay.ams.model.Asset deleteAsset(
+		com.liferay.ams.model.Asset asset) {
+		return getService().deleteAsset(asset);
+	}
+
+	/**
 	* Deletes the asset with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param assetId the primary key of the asset
@@ -73,14 +84,12 @@ public class AssetLocalServiceUtil {
 	}
 
 	/**
-	* Deletes the asset from the database. Also notifies the appropriate model listeners.
-	*
-	* @param asset the asset
-	* @return the asset that was removed
+	* @throws PortalException
 	*/
-	public static com.liferay.ams.model.Asset deleteAsset(
-		com.liferay.ams.model.Asset asset) {
-		return getService().deleteAsset(asset);
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deletePersistedModel(persistedModel);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
@@ -93,8 +102,7 @@ public class AssetLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -111,8 +119,7 @@ public class AssetLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -131,11 +138,10 @@ public class AssetLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -168,6 +174,10 @@ public class AssetLocalServiceUtil {
 		return getService().fetchAsset(assetId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
 	/**
 	* Returns the asset with the primary key.
 	*
@@ -178,25 +188,6 @@ public class AssetLocalServiceUtil {
 	public static com.liferay.ams.model.Asset getAsset(long assetId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getAsset(assetId);
-	}
-
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -225,23 +216,24 @@ public class AssetLocalServiceUtil {
 	}
 
 	/**
-	* Updates the asset in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param asset the asset
-	* @return the asset that was updated
-	*/
-	public static com.liferay.ams.model.Asset updateAsset(
-		com.liferay.ams.model.Asset asset) {
-		return getService().updateAsset(asset);
-	}
-
-	/**
 	* Returns the Spring bean ID for this bean.
 	*
 	* @return the Spring bean ID for this bean
 	*/
 	public static java.lang.String getBeanIdentifier() {
 		return getService().getBeanIdentifier();
+	}
+
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -253,10 +245,15 @@ public class AssetLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
+	/**
+	* Updates the asset in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param asset the asset
+	* @return the asset that was updated
+	*/
+	public static com.liferay.ams.model.Asset updateAsset(
+		com.liferay.ams.model.Asset asset) {
+		return getService().updateAsset(asset);
 	}
 
 	public static void clearService() {

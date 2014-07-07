@@ -29,6 +29,18 @@ public class TasksEntryServiceWrapper implements TasksEntryService,
 		_tasksEntryService = tasksEntryService;
 	}
 
+	@Override
+	public com.liferay.tasks.model.TasksEntry addTasksEntry(
+		java.lang.String title, int priority, long assigneeUserId,
+		int dueDateMonth, int dueDateDay, int dueDateYear, int dueDateHour,
+		int dueDateMinute, boolean neverDue,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _tasksEntryService.addTasksEntry(title, priority,
+			assigneeUserId, dueDateMonth, dueDateDay, dueDateYear, dueDateHour,
+			dueDateMinute, neverDue, serviceContext);
+	}
+
 	/**
 	* Returns the Spring bean ID for this bean.
 	*
@@ -37,6 +49,19 @@ public class TasksEntryServiceWrapper implements TasksEntryService,
 	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _tasksEntryService.getBeanIdentifier();
+	}
+
+	@Override
+	public com.liferay.tasks.model.TasksEntry getTasksEntry(long tasksEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _tasksEntryService.getTasksEntry(tasksEntryId);
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _tasksEntryService.invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -50,41 +75,13 @@ public class TasksEntryServiceWrapper implements TasksEntryService,
 	}
 
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _tasksEntryService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	@Override
-	public com.liferay.tasks.model.TasksEntry addTasksEntry(
-		java.lang.String title, int priority, long assigneeUserId,
-		int dueDateMonth, int dueDateDay, int dueDateYear, int dueDateHour,
-		int dueDateMinute, boolean neverDue,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _tasksEntryService.addTasksEntry(title, priority,
-			assigneeUserId, dueDateMonth, dueDateDay, dueDateYear, dueDateHour,
-			dueDateMinute, neverDue, serviceContext);
-	}
-
-	@Override
-	public com.liferay.tasks.model.TasksEntry getTasksEntry(long tasksEntryId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _tasksEntryService.getTasksEntry(tasksEntryId);
-	}
-
-	@Override
 	public com.liferay.tasks.model.TasksEntry updateTasksEntry(
 		long tasksEntryId, java.lang.String title, int priority,
 		long assigneeUserId, long resolverUserId, int dueDateMonth,
 		int dueDateDay, int dueDateYear, int dueDateHour, int dueDateMinute,
 		boolean neverDue, int status,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _tasksEntryService.updateTasksEntry(tasksEntryId, title,
 			priority, assigneeUserId, resolverUserId, dueDateMonth, dueDateDay,
 			dueDateYear, dueDateHour, dueDateMinute, neverDue, status,

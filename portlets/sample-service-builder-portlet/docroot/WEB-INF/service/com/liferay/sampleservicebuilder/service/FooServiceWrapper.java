@@ -39,14 +39,16 @@ public class FooServiceWrapper implements FooService,
 		return _fooService.getBeanIdentifier();
 	}
 
-	/**
-	* Sets the Spring bean ID for this bean.
-	*
-	* @param beanIdentifier the Spring bean ID for this bean
-	*/
 	@Override
-	public void setBeanIdentifier(java.lang.String beanIdentifier) {
-		_fooService.setBeanIdentifier(beanIdentifier);
+	public com.liferay.portal.model.User getUser(long userId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _fooService.getUser(userId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.portal.model.Group> getUserSitesGroups()
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _fooService.getUserSitesGroups();
 	}
 
 	@Override
@@ -56,18 +58,14 @@ public class FooServiceWrapper implements FooService,
 		return _fooService.invokeMethod(name, parameterTypes, arguments);
 	}
 
+	/**
+	* Sets the Spring bean ID for this bean.
+	*
+	* @param beanIdentifier the Spring bean ID for this bean
+	*/
 	@Override
-	public com.liferay.portal.model.User getUser(long userId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _fooService.getUser(userId);
-	}
-
-	@Override
-	public java.util.List<com.liferay.portal.model.Group> getUserSitesGroups()
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _fooService.getUserSitesGroups();
+	public void setBeanIdentifier(java.lang.String beanIdentifier) {
+		_fooService.setBeanIdentifier(beanIdentifier);
 	}
 
 	/**

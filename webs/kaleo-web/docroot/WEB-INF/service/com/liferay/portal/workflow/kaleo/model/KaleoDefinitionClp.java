@@ -641,15 +641,15 @@ public class KaleoDefinitionClp extends BaseModelImpl<KaleoDefinition>
 	}
 
 	@Override
-	public boolean hasIncompleteKaleoInstances() {
+	public com.liferay.portal.workflow.kaleo.model.KaleoNode getKaleoStartNode() {
 		try {
-			String methodName = "hasIncompleteKaleoInstances";
+			String methodName = "getKaleoStartNode";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
 			Object[] parameterValues = new Object[] {  };
 
-			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
+			com.liferay.portal.workflow.kaleo.model.KaleoNode returnObj = (com.liferay.portal.workflow.kaleo.model.KaleoNode)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
@@ -660,15 +660,15 @@ public class KaleoDefinitionClp extends BaseModelImpl<KaleoDefinition>
 	}
 
 	@Override
-	public com.liferay.portal.workflow.kaleo.model.KaleoNode getKaleoStartNode() {
+	public boolean hasIncompleteKaleoInstances() {
 		try {
-			String methodName = "getKaleoStartNode";
+			String methodName = "hasIncompleteKaleoInstances";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
 			Object[] parameterValues = new Object[] {  };
 
-			com.liferay.portal.workflow.kaleo.model.KaleoNode returnObj = (com.liferay.portal.workflow.kaleo.model.KaleoNode)invokeOnRemoteModel(methodName,
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
@@ -866,6 +866,10 @@ public class KaleoDefinitionClp extends BaseModelImpl<KaleoDefinition>
 		}
 	}
 
+	public Class<?> getClpSerializerClass() {
+		return _clpSerializerClass;
+	}
+
 	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
@@ -1004,6 +1008,7 @@ public class KaleoDefinitionClp extends BaseModelImpl<KaleoDefinition>
 	private boolean _active;
 	private long _startKaleoNodeId;
 	private BaseModel<?> _kaleoDefinitionRemoteModel;
+	private Class<?> _clpSerializerClass = com.liferay.portal.workflow.kaleo.service.ClpSerializer.class;
 	private boolean _entityCacheEnabled;
 	private boolean _finderCacheEnabled;
 }

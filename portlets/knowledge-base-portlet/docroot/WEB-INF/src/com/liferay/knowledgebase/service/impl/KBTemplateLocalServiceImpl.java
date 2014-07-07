@@ -31,7 +31,6 @@ import com.liferay.portal.kernel.dao.orm.Property;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
@@ -55,10 +54,11 @@ import java.util.Map;
  */
 public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 
+	@Override
 	public KBTemplate addKBTemplate(
 			long userId, String title, String content,
 			ServiceContext serviceContext)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		// KB template
 
@@ -102,9 +102,8 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 		return kbTemplate;
 	}
 
-	public void deleteGroupKBTemplates(long groupId)
-		throws PortalException, SystemException {
-
+	@Override
+	public void deleteGroupKBTemplates(long groupId) throws PortalException {
 		List<KBTemplate> kbTemplates = kbTemplatePersistence.findByGroupId(
 			groupId);
 
@@ -118,7 +117,7 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 		action = SystemEventConstants.ACTION_SKIP,
 		type = SystemEventConstants.TYPE_DELETE)
 	public KBTemplate deleteKBTemplate(KBTemplate kbTemplate)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		// KB template
 
@@ -145,7 +144,7 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 
 	@Override
 	public KBTemplate deleteKBTemplate(long kbTemplateId)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		KBTemplate kbTemplate = kbTemplatePersistence.findByPrimaryKey(
 			kbTemplateId);
@@ -153,9 +152,8 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 		return kbTemplateLocalService.deleteKBTemplate(kbTemplate);
 	}
 
-	public void deleteKBTemplates(long[] kbTemplateIds)
-		throws PortalException, SystemException {
-
+	@Override
+	public void deleteKBTemplates(long[] kbTemplateIds) throws PortalException {
 		for (long kbTemplateId : kbTemplateIds) {
 			KBTemplate kbTemplate = null;
 
@@ -171,24 +169,25 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 		}
 	}
 
+	@Override
 	public List<KBTemplate> getGroupKBTemplates(
-			long groupId, int start, int end,
-			OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, int start, int end,
+		OrderByComparator<KBTemplate> orderByComparator) {
 
 		return kbTemplatePersistence.findByGroupId(
 			groupId, start, end, orderByComparator);
 	}
 
-	public int getGroupKBTemplatesCount(long groupId) throws SystemException {
+	@Override
+	public int getGroupKBTemplatesCount(long groupId) {
 		return kbTemplatePersistence.countByGroupId(groupId);
 	}
 
+	@Override
 	public List<KBTemplate> search(
-			long groupId, String title, String content, Date startDate,
-			Date endDate, boolean andOperator, int start, int end,
-			OrderByComparator orderByComparator)
-		throws SystemException {
+		long groupId, String title, String content, Date startDate,
+		Date endDate, boolean andOperator, int start, int end,
+		OrderByComparator<KBTemplate> orderByComparator) {
 
 		DynamicQuery dynamicQuery = buildDynamicQuery(
 			groupId, title, content, startDate, endDate, andOperator);
@@ -196,10 +195,11 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 		return dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
 
+	@Override
 	public KBTemplate updateKBTemplate(
 			long kbTemplateId, String title, String content,
 			ServiceContext serviceContext)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		// KB template
 
@@ -239,10 +239,11 @@ public class KBTemplateLocalServiceImpl extends KBTemplateLocalServiceBaseImpl {
 		return kbTemplate;
 	}
 
+	@Override
 	public void updateKBTemplateResources(
 			KBTemplate kbTemplate, String[] groupPermissions,
 			String[] guestPermissions)
-		throws PortalException, SystemException {
+		throws PortalException {
 
 		resourceLocalService.updateResources(
 			kbTemplate.getCompanyId(), kbTemplate.getGroupId(),

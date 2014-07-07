@@ -26,6 +26,7 @@
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
 <%@ page import="com.liferay.knowledgebase.KBArticleContentException" %><%@
+page import="com.liferay.knowledgebase.KBArticleImportException" %><%@
 page import="com.liferay.knowledgebase.KBArticlePriorityException" %><%@
 page import="com.liferay.knowledgebase.KBArticleTitleException" %><%@
 page import="com.liferay.knowledgebase.KBCommentContentException" %><%@
@@ -82,6 +83,7 @@ page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.HttpUtil" %><%@
 page import="com.liferay.portal.kernel.util.ListUtil" %><%@
+page import="com.liferay.portal.kernel.util.OrderByComparator" %><%@
 page import="com.liferay.portal.kernel.util.OrderByComparatorFactoryUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.PrefsPropsUtil" %><%@

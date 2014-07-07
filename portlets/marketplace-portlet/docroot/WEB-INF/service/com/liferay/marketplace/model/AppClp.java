@@ -499,25 +499,6 @@ public class AppClp extends BaseModelImpl<App> implements App {
 	}
 
 	@Override
-	public boolean isDownloaded() {
-		try {
-			String methodName = "isDownloaded";
-
-			Class<?>[] parameterTypes = new Class<?>[] {  };
-
-			Object[] parameterValues = new Object[] {  };
-
-			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
-					parameterTypes, parameterValues);
-
-			return returnObj;
-		}
-		catch (Exception e) {
-			throw new UnsupportedOperationException(e);
-		}
-	}
-
-	@Override
 	public java.lang.String getFileDir() {
 		try {
 			String methodName = "getFileDir";
@@ -556,9 +537,9 @@ public class AppClp extends BaseModelImpl<App> implements App {
 	}
 
 	@Override
-	public boolean isInstalled() {
+	public boolean isDownloaded() {
 		try {
-			String methodName = "isInstalled";
+			String methodName = "isDownloaded";
 
 			Class<?>[] parameterTypes = new Class<?>[] {  };
 
@@ -584,6 +565,25 @@ public class AppClp extends BaseModelImpl<App> implements App {
 			Object[] parameterValues = new Object[] { contextName };
 
 			java.lang.String[] returnObj = (java.lang.String[])invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
+		}
+	}
+
+	@Override
+	public boolean isInstalled() {
+		try {
+			String methodName = "isInstalled";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			Boolean returnObj = (Boolean)invokeOnRemoteModel(methodName,
 					parameterTypes, parameterValues);
 
 			return returnObj;
@@ -760,6 +760,10 @@ public class AppClp extends BaseModelImpl<App> implements App {
 		}
 	}
 
+	public Class<?> getClpSerializerClass() {
+		return _clpSerializerClass;
+	}
+
 	@Override
 	public int hashCode() {
 		return (int)getPrimaryKey();
@@ -890,6 +894,7 @@ public class AppClp extends BaseModelImpl<App> implements App {
 	private String _iconURL;
 	private String _version;
 	private BaseModel<?> _appRemoteModel;
+	private Class<?> _clpSerializerClass = com.liferay.marketplace.service.ClpSerializer.class;
 	private boolean _entityCacheEnabled;
 	private boolean _finderCacheEnabled;
 }

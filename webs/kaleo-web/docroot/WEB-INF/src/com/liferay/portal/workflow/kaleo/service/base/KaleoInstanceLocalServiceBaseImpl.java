@@ -114,12 +114,11 @@ public abstract class KaleoInstanceLocalServiceBaseImpl
 	 * @param kaleoInstanceId the primary key of the kaleo instance
 	 * @return the kaleo instance that was removed
 	 * @throws PortalException if a kaleo instance with the primary key could not be found
-	 * @throws SystemException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public KaleoInstance deleteKaleoInstance(long kaleoInstanceId)
-		throws PortalException, SystemException {
+		throws PortalException {
 		return kaleoInstancePersistence.remove(kaleoInstanceId);
 	}
 
@@ -150,8 +149,7 @@ public abstract class KaleoInstanceLocalServiceBaseImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return kaleoInstancePersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -168,8 +166,8 @@ public abstract class KaleoInstanceLocalServiceBaseImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return kaleoInstancePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end);
 	}
@@ -188,9 +186,8 @@ public abstract class KaleoInstanceLocalServiceBaseImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return kaleoInstancePersistence.findWithDynamicQuery(dynamicQuery,
 			start, end, orderByComparator);
 	}
@@ -266,7 +263,7 @@ public abstract class KaleoInstanceLocalServiceBaseImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteKaleoInstance((KaleoInstance)persistedModel);
+		return kaleoInstanceLocalService.deleteKaleoInstance((KaleoInstance)persistedModel);
 	}
 
 	@Override

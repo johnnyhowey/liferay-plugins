@@ -41,6 +41,11 @@ public class AppLocalServiceWrapper implements AppLocalService,
 		return _appLocalService.addApp(app);
 	}
 
+	@Override
+	public void clearInstalledAppsCache() {
+		_appLocalService.clearInstalledAppsCache();
+	}
+
 	/**
 	* Creates a new app with the primary key. Does not add the app to the database.
 	*
@@ -53,32 +58,38 @@ public class AppLocalServiceWrapper implements AppLocalService,
 	}
 
 	/**
+	* Deletes the app from the database. Also notifies the appropriate model listeners.
+	*
+	* @param app the app
+	* @return the app that was removed
+	*/
+	@Override
+	public com.liferay.marketplace.model.App deleteApp(
+		com.liferay.marketplace.model.App app) {
+		return _appLocalService.deleteApp(app);
+	}
+
+	/**
 	* Deletes the app with the primary key from the database. Also notifies the appropriate model listeners.
 	*
 	* @param appId the primary key of the app
 	* @return the app that was removed
 	* @throws PortalException if a app with the primary key could not be found
-	* @throws SystemException
 	*/
 	@Override
 	public com.liferay.marketplace.model.App deleteApp(long appId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _appLocalService.deleteApp(appId);
 	}
 
 	/**
-	* Deletes the app from the database. Also notifies the appropriate model listeners.
-	*
-	* @param app the app
-	* @return the app that was removed
-	* @throws SystemException
+	* @throws PortalException
 	*/
 	@Override
-	public com.liferay.marketplace.model.App deleteApp(
-		com.liferay.marketplace.model.App app)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _appLocalService.deleteApp(app);
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _appLocalService.deletePersistedModel(persistedModel);
 	}
 
 	@Override
@@ -93,8 +104,7 @@ public class AppLocalServiceWrapper implements AppLocalService,
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _appLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -112,8 +122,7 @@ public class AppLocalServiceWrapper implements AppLocalService,
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _appLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -133,11 +142,10 @@ public class AppLocalServiceWrapper implements AppLocalService,
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _appLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -186,6 +194,16 @@ public class AppLocalServiceWrapper implements AppLocalService,
 		return _appLocalService.fetchAppByUuidAndCompanyId(uuid, companyId);
 	}
 
+	@Override
+	public com.liferay.marketplace.model.App fetchRemoteApp(long remoteAppId) {
+		return _appLocalService.fetchRemoteApp(remoteAppId);
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _appLocalService.getActionableDynamicQuery();
+	}
+
 	/**
 	* Returns the app with the primary key.
 	*
@@ -197,34 +215,6 @@ public class AppLocalServiceWrapper implements AppLocalService,
 	public com.liferay.marketplace.model.App getApp(long appId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _appLocalService.getApp(appId);
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _appLocalService.getActionableDynamicQuery();
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
-		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext) {
-		return _appLocalService.getExportActionableDynamicQuery(portletDataContext);
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _appLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _appLocalService.getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -240,6 +230,12 @@ public class AppLocalServiceWrapper implements AppLocalService,
 		java.lang.String uuid, long companyId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _appLocalService.getAppByUuidAndCompanyId(uuid, companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.marketplace.model.App> getApps(
+		java.lang.String category) {
+		return _appLocalService.getApps(category);
 	}
 
 	/**
@@ -270,18 +266,6 @@ public class AppLocalServiceWrapper implements AppLocalService,
 	}
 
 	/**
-	* Updates the app in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param app the app
-	* @return the app that was updated
-	*/
-	@Override
-	public com.liferay.marketplace.model.App updateApp(
-		com.liferay.marketplace.model.App app) {
-		return _appLocalService.updateApp(app);
-	}
-
-	/**
 	* Returns the Spring bean ID for this bean.
 	*
 	* @return the Spring bean ID for this bean
@@ -289,6 +273,48 @@ public class AppLocalServiceWrapper implements AppLocalService,
 	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _appLocalService.getBeanIdentifier();
+	}
+
+	@Override
+	public java.util.Map<java.lang.String, java.lang.String> getBundledApps() {
+		return _appLocalService.getBundledApps();
+	}
+
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ExportActionableDynamicQuery getExportActionableDynamicQuery(
+		com.liferay.portal.kernel.lar.PortletDataContext portletDataContext) {
+		return _appLocalService.getExportActionableDynamicQuery(portletDataContext);
+	}
+
+	@Override
+	public java.util.List<com.liferay.marketplace.model.App> getInstalledApps() {
+		return _appLocalService.getInstalledApps();
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _appLocalService.getPersistedModel(primaryKeyObj);
+	}
+
+	@Override
+	public void installApp(long remoteAppId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_appLocalService.installApp(remoteAppId);
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _appLocalService.invokeMethod(name, parameterTypes, arguments);
+	}
+
+	@Override
+	public void processMarketplaceProperties(java.util.Properties properties)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		_appLocalService.processMarketplaceProperties(properties);
 	}
 
 	/**
@@ -302,68 +328,21 @@ public class AppLocalServiceWrapper implements AppLocalService,
 	}
 
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _appLocalService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	@Override
-	public void clearInstalledAppsCache() {
-		_appLocalService.clearInstalledAppsCache();
-	}
-
-	@Override
-	public com.liferay.marketplace.model.App fetchRemoteApp(long remoteAppId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _appLocalService.fetchRemoteApp(remoteAppId);
-	}
-
-	@Override
-	public java.util.List<com.liferay.marketplace.model.App> getApps(
-		java.lang.String category)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _appLocalService.getApps(category);
-	}
-
-	@Override
-	public java.util.Map<java.lang.String, java.lang.String> getBundledApps() {
-		return _appLocalService.getBundledApps();
-	}
-
-	@Override
-	public java.util.List<com.liferay.marketplace.model.App> getInstalledApps()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _appLocalService.getInstalledApps();
-	}
-
-	@Override
-	public void installApp(long remoteAppId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_appLocalService.installApp(remoteAppId);
-	}
-
-	@Override
-	public void processMarketplaceProperties(java.util.Properties properties)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		_appLocalService.processMarketplaceProperties(properties);
-	}
-
-	@Override
 	public void uninstallApp(long remoteAppId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		_appLocalService.uninstallApp(remoteAppId);
 	}
 
+	/**
+	* Updates the app in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param app the app
+	* @return the app that was updated
+	*/
 	@Override
-	public com.liferay.marketplace.model.App updateApp(long userId,
-		long remoteAppId, java.lang.String version, java.io.File file)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _appLocalService.updateApp(userId, remoteAppId, version, file);
+	public com.liferay.marketplace.model.App updateApp(
+		com.liferay.marketplace.model.App app) {
+		return _appLocalService.updateApp(app);
 	}
 
 	@Override
@@ -371,10 +350,16 @@ public class AppLocalServiceWrapper implements AppLocalService,
 		long remoteAppId, java.lang.String title, java.lang.String description,
 		java.lang.String category, java.lang.String iconURL,
 		java.lang.String version, java.io.File file)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _appLocalService.updateApp(userId, remoteAppId, title,
 			description, category, iconURL, version, file);
+	}
+
+	@Override
+	public com.liferay.marketplace.model.App updateApp(long userId,
+		long remoteAppId, java.lang.String version, java.io.File file)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _appLocalService.updateApp(userId, remoteAppId, version, file);
 	}
 
 	/**

@@ -29,6 +29,43 @@ public class BBBMeetingServiceWrapper implements BBBMeetingService,
 		_bbbMeetingService = bbbMeetingService;
 	}
 
+	@Override
+	public com.liferay.bbb.model.BBBMeeting addBBBMeeting(long groupId,
+		java.lang.String portletId, long bbbServerId, java.lang.String name,
+		java.lang.String description, java.lang.String attendeePassword,
+		java.lang.String moderatorPassword, int status,
+		java.util.List<com.liferay.bbb.model.BBBParticipant> bbbParticipants,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbMeetingService.addBBBMeeting(groupId, portletId,
+			bbbServerId, name, description, attendeePassword,
+			moderatorPassword, status, bbbParticipants, serviceContext);
+	}
+
+	@Override
+	public com.liferay.bbb.model.BBBMeeting deleteBBBMeeting(long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbMeetingService.deleteBBBMeeting(bbbMeetingId);
+	}
+
+	@Override
+	public com.liferay.bbb.model.BBBMeeting getBBBMeeting(long bbbMeetingId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _bbbMeetingService.getBBBMeeting(bbbMeetingId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
+		long groupId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator obc) {
+		return _bbbMeetingService.getBBBMeetings(groupId, start, end, obc);
+	}
+
+	@Override
+	public int getBBBMeetingsCount(long groupId) {
+		return _bbbMeetingService.getBBBMeetingsCount(groupId);
+	}
+
 	/**
 	* Returns the Spring bean ID for this bean.
 	*
@@ -37,6 +74,13 @@ public class BBBMeetingServiceWrapper implements BBBMeetingService,
 	@Override
 	public java.lang.String getBeanIdentifier() {
 		return _bbbMeetingService.getBeanIdentifier();
+	}
+
+	@Override
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _bbbMeetingService.invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -50,63 +94,13 @@ public class BBBMeetingServiceWrapper implements BBBMeetingService,
 	}
 
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _bbbMeetingService.invokeMethod(name, parameterTypes, arguments);
-	}
-
-	@Override
-	public com.liferay.bbb.model.BBBMeeting addBBBMeeting(long groupId,
-		java.lang.String portletId, long bbbServerId, java.lang.String name,
-		java.lang.String description, java.lang.String attendeePassword,
-		java.lang.String moderatorPassword, int status,
-		java.util.List<com.liferay.bbb.model.BBBParticipant> bbbParticipants,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingService.addBBBMeeting(groupId, portletId,
-			bbbServerId, name, description, attendeePassword,
-			moderatorPassword, status, bbbParticipants, serviceContext);
-	}
-
-	@Override
-	public com.liferay.bbb.model.BBBMeeting deleteBBBMeeting(long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingService.deleteBBBMeeting(bbbMeetingId);
-	}
-
-	@Override
-	public com.liferay.bbb.model.BBBMeeting getBBBMeeting(long bbbMeetingId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingService.getBBBMeeting(bbbMeetingId);
-	}
-
-	@Override
-	public java.util.List<com.liferay.bbb.model.BBBMeeting> getBBBMeetings(
-		long groupId, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator obc)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingService.getBBBMeetings(groupId, start, end, obc);
-	}
-
-	@Override
-	public int getBBBMeetingsCount(long groupId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _bbbMeetingService.getBBBMeetingsCount(groupId);
-	}
-
-	@Override
 	public com.liferay.bbb.model.BBBMeeting updateBBBMeeting(
 		long bbbMeetingId, long bbbServerId, java.lang.String name,
 		java.lang.String description, java.lang.String attendeePassword,
 		java.lang.String moderatorPassword,
 		java.util.List<com.liferay.bbb.model.BBBParticipant> bbbParticipants,
 		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _bbbMeetingService.updateBBBMeeting(bbbMeetingId, bbbServerId,
 			name, description, attendeePassword, moderatorPassword,
 			bbbParticipants, serviceContext);

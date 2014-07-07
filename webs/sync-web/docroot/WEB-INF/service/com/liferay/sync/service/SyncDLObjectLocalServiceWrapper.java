@@ -30,6 +30,25 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 		_syncDLObjectLocalService = syncDLObjectLocalService;
 	}
 
+	@Override
+	public com.liferay.sync.model.SyncDLObject addSyncDLObject(long companyId,
+		long modifiedTime, long repositoryId, long parentFolderId,
+		java.lang.String name, java.lang.String extension,
+		java.lang.String mimeType, java.lang.String description,
+		java.lang.String changeLog, java.lang.String extraSettings,
+		java.lang.String version, long size, java.lang.String checksum,
+		java.lang.String event, java.util.Date lockExpirationDate,
+		long lockUserId, java.lang.String lockUserName, java.lang.String type,
+		long typePK, java.lang.String typeUuid)
+		throws com.liferay.portal.kernel.exception.PortalException,
+			com.liferay.portal.kernel.exception.SystemException {
+		return _syncDLObjectLocalService.addSyncDLObject(companyId,
+			modifiedTime, repositoryId, parentFolderId, name, extension,
+			mimeType, description, changeLog, extraSettings, version, size,
+			checksum, event, lockExpirationDate, lockUserId, lockUserName,
+			type, typePK, typeUuid);
+	}
+
 	/**
 	* Adds the sync d l object to the database. Also notifies the appropriate model listeners.
 	*
@@ -55,17 +74,13 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 	}
 
 	/**
-	* Deletes the sync d l object with the primary key from the database. Also notifies the appropriate model listeners.
-	*
-	* @param syncDLObjectId the primary key of the sync d l object
-	* @return the sync d l object that was removed
-	* @throws PortalException if a sync d l object with the primary key could not be found
+	* @throws PortalException
 	*/
 	@Override
-	public com.liferay.sync.model.SyncDLObject deleteSyncDLObject(
-		long syncDLObjectId)
+	public com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _syncDLObjectLocalService.deleteSyncDLObject(syncDLObjectId);
+		return _syncDLObjectLocalService.deletePersistedModel(persistedModel);
 	}
 
 	/**
@@ -80,6 +95,20 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 		return _syncDLObjectLocalService.deleteSyncDLObject(syncDLObject);
 	}
 
+	/**
+	* Deletes the sync d l object with the primary key from the database. Also notifies the appropriate model listeners.
+	*
+	* @param syncDLObjectId the primary key of the sync d l object
+	* @return the sync d l object that was removed
+	* @throws PortalException if a sync d l object with the primary key could not be found
+	*/
+	@Override
+	public com.liferay.sync.model.SyncDLObject deleteSyncDLObject(
+		long syncDLObjectId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _syncDLObjectLocalService.deleteSyncDLObject(syncDLObjectId);
+	}
+
 	@Override
 	public com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
 		return _syncDLObjectLocalService.dynamicQuery();
@@ -92,8 +121,7 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 	* @return the matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return _syncDLObjectLocalService.dynamicQuery(dynamicQuery);
 	}
@@ -111,8 +139,7 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 	* @return the range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return _syncDLObjectLocalService.dynamicQuery(dynamicQuery, start, end);
@@ -132,11 +159,10 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 	* @return the ordered range of matching rows
 	*/
 	@Override
-	@SuppressWarnings("rawtypes")
-	public java.util.List dynamicQuery(
+	public <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return _syncDLObjectLocalService.dynamicQuery(dynamicQuery, start, end,
 			orderByComparator);
 	}
@@ -174,6 +200,34 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 		return _syncDLObjectLocalService.fetchSyncDLObject(syncDLObjectId);
 	}
 
+	@Override
+	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return _syncDLObjectLocalService.getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	@Override
+	public java.lang.String getBeanIdentifier() {
+		return _syncDLObjectLocalService.getBeanIdentifier();
+	}
+
+	@Override
+	public long getLatestModifiedTime()
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _syncDLObjectLocalService.getLatestModifiedTime();
+	}
+
+	@Override
+	public com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _syncDLObjectLocalService.getPersistedModel(primaryKeyObj);
+	}
+
 	/**
 	* Returns the sync d l object with the primary key.
 	*
@@ -186,28 +240,6 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 		long syncDLObjectId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _syncDLObjectLocalService.getSyncDLObject(syncDLObjectId);
-	}
-
-	@Override
-	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return _syncDLObjectLocalService.getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	@Override
-	public com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _syncDLObjectLocalService.deletePersistedModel(persistedModel);
-	}
-
-	@Override
-	public com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _syncDLObjectLocalService.getPersistedModel(primaryKeyObj);
 	}
 
 	/**
@@ -237,26 +269,12 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 		return _syncDLObjectLocalService.getSyncDLObjectsCount();
 	}
 
-	/**
-	* Updates the sync d l object in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param syncDLObject the sync d l object
-	* @return the sync d l object that was updated
-	*/
 	@Override
-	public com.liferay.sync.model.SyncDLObject updateSyncDLObject(
-		com.liferay.sync.model.SyncDLObject syncDLObject) {
-		return _syncDLObjectLocalService.updateSyncDLObject(syncDLObject);
-	}
-
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	@Override
-	public java.lang.String getBeanIdentifier() {
-		return _syncDLObjectLocalService.getBeanIdentifier();
+	public java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return _syncDLObjectLocalService.invokeMethod(name, parameterTypes,
+			arguments);
 	}
 
 	/**
@@ -269,37 +287,16 @@ public class SyncDLObjectLocalServiceWrapper implements SyncDLObjectLocalService
 		_syncDLObjectLocalService.setBeanIdentifier(beanIdentifier);
 	}
 
+	/**
+	* Updates the sync d l object in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param syncDLObject the sync d l object
+	* @return the sync d l object that was updated
+	*/
 	@Override
-	public java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return _syncDLObjectLocalService.invokeMethod(name, parameterTypes,
-			arguments);
-	}
-
-	@Override
-	public com.liferay.sync.model.SyncDLObject addSyncDLObject(long companyId,
-		long modifiedTime, long repositoryId, long parentFolderId,
-		java.lang.String name, java.lang.String extension,
-		java.lang.String mimeType, java.lang.String description,
-		java.lang.String changeLog, java.lang.String extraSettings,
-		java.lang.String version, long size, java.lang.String checksum,
-		java.lang.String event, java.util.Date lockExpirationDate,
-		long lockUserId, java.lang.String lockUserName, java.lang.String type,
-		long typePK, java.lang.String typeUuid)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return _syncDLObjectLocalService.addSyncDLObject(companyId,
-			modifiedTime, repositoryId, parentFolderId, name, extension,
-			mimeType, description, changeLog, extraSettings, version, size,
-			checksum, event, lockExpirationDate, lockUserId, lockUserName,
-			type, typePK, typeUuid);
-	}
-
-	@Override
-	public long getLatestModifiedTime()
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return _syncDLObjectLocalService.getLatestModifiedTime();
+	public com.liferay.sync.model.SyncDLObject updateSyncDLObject(
+		com.liferay.sync.model.SyncDLObject syncDLObject) {
+		return _syncDLObjectLocalService.updateSyncDLObject(syncDLObject);
 	}
 
 	/**

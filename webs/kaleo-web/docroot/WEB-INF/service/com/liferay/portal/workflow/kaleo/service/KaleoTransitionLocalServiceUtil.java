@@ -38,6 +38,17 @@ public class KaleoTransitionLocalServiceUtil {
 	 *
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.portal.workflow.kaleo.service.impl.KaleoTransitionLocalServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition addKaleoTransition(
+		long kaleoDefinitionId, long kaleoNodeId,
+		com.liferay.portal.workflow.kaleo.definition.Transition transition,
+		com.liferay.portal.workflow.kaleo.model.KaleoNode sourceKaleoNode,
+		com.liferay.portal.workflow.kaleo.model.KaleoNode targetKaleoNode,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .addKaleoTransition(kaleoDefinitionId, kaleoNodeId,
+			transition, sourceKaleoNode, targetKaleoNode, serviceContext);
+	}
 
 	/**
 	* Adds the kaleo transition to the database. Also notifies the appropriate model listeners.
@@ -61,6 +72,26 @@ public class KaleoTransitionLocalServiceUtil {
 		return getService().createKaleoTransition(kaleoTransitionId);
 	}
 
+	public static void deleteCompanyKaleoTransitions(long companyId) {
+		getService().deleteCompanyKaleoTransitions(companyId);
+	}
+
+	public static void deleteKaleoDefinitionKaleoTransitions(
+		long kaleoDefinitionId) {
+		getService().deleteKaleoDefinitionKaleoTransitions(kaleoDefinitionId);
+	}
+
+	/**
+	* Deletes the kaleo transition from the database. Also notifies the appropriate model listeners.
+	*
+	* @param kaleoTransition the kaleo transition
+	* @return the kaleo transition that was removed
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition deleteKaleoTransition(
+		com.liferay.portal.workflow.kaleo.model.KaleoTransition kaleoTransition) {
+		return getService().deleteKaleoTransition(kaleoTransition);
+	}
+
 	/**
 	* Deletes the kaleo transition with the primary key from the database. Also notifies the appropriate model listeners.
 	*
@@ -75,14 +106,12 @@ public class KaleoTransitionLocalServiceUtil {
 	}
 
 	/**
-	* Deletes the kaleo transition from the database. Also notifies the appropriate model listeners.
-	*
-	* @param kaleoTransition the kaleo transition
-	* @return the kaleo transition that was removed
+	* @throws PortalException
 	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition deleteKaleoTransition(
-		com.liferay.portal.workflow.kaleo.model.KaleoTransition kaleoTransition) {
-		return getService().deleteKaleoTransition(kaleoTransition);
+	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
+		com.liferay.portal.model.PersistedModel persistedModel)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().deletePersistedModel(persistedModel);
 	}
 
 	public static com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery() {
@@ -95,8 +124,7 @@ public class KaleoTransitionLocalServiceUtil {
 	* @param dynamicQuery the dynamic query
 	* @return the matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery) {
 		return getService().dynamicQuery(dynamicQuery);
 	}
@@ -113,8 +141,7 @@ public class KaleoTransitionLocalServiceUtil {
 	* @param end the upper bound of the range of model instances (not inclusive)
 	* @return the range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end) {
 		return getService().dynamicQuery(dynamicQuery, start, end);
@@ -133,11 +160,10 @@ public class KaleoTransitionLocalServiceUtil {
 	* @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
 	* @return the ordered range of matching rows
 	*/
-	@SuppressWarnings("rawtypes")
-	public static java.util.List dynamicQuery(
+	public static <T> java.util.List<T> dynamicQuery(
 		com.liferay.portal.kernel.dao.orm.DynamicQuery dynamicQuery, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<T> orderByComparator) {
 		return getService()
 				   .dynamicQuery(dynamicQuery, start, end, orderByComparator);
 	}
@@ -171,6 +197,36 @@ public class KaleoTransitionLocalServiceUtil {
 		return getService().fetchKaleoTransition(kaleoTransitionId);
 	}
 
+	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
+		return getService().getActionableDynamicQuery();
+	}
+
+	/**
+	* Returns the Spring bean ID for this bean.
+	*
+	* @return the Spring bean ID for this bean
+	*/
+	public static java.lang.String getBeanIdentifier() {
+		return getService().getBeanIdentifier();
+	}
+
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition getDefaultKaleoTransition(
+		long kaleoNodeId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getDefaultKaleoTransition(kaleoNodeId);
+	}
+
+	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> getKaleoDefinitionKaleoTransitions(
+		long kaleoDefinitionId) {
+		return getService().getKaleoDefinitionKaleoTransitions(kaleoDefinitionId);
+	}
+
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition getKaleoTransition(
+		long kaleoNodeId, java.lang.String name)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getKaleoTransition(kaleoNodeId, name);
+	}
+
 	/**
 	* Returns the kaleo transition with the primary key.
 	*
@@ -184,23 +240,9 @@ public class KaleoTransitionLocalServiceUtil {
 		return getService().getKaleoTransition(kaleoTransitionId);
 	}
 
-	public static com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery() {
-		return getService().getActionableDynamicQuery();
-	}
-
-	/**
-	* @throws PortalException
-	*/
-	public static com.liferay.portal.model.PersistedModel deletePersistedModel(
-		com.liferay.portal.model.PersistedModel persistedModel)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().deletePersistedModel(persistedModel);
-	}
-
-	public static com.liferay.portal.model.PersistedModel getPersistedModel(
-		java.io.Serializable primaryKeyObj)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return getService().getPersistedModel(primaryKeyObj);
+	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> getKaleoTransitions(
+		long kaleoNodeId) {
+		return getService().getKaleoTransitions(kaleoNodeId);
 	}
 
 	/**
@@ -228,24 +270,20 @@ public class KaleoTransitionLocalServiceUtil {
 		return getService().getKaleoTransitionsCount();
 	}
 
-	/**
-	* Updates the kaleo transition in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
-	*
-	* @param kaleoTransition the kaleo transition
-	* @return the kaleo transition that was updated
-	*/
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition updateKaleoTransition(
-		com.liferay.portal.workflow.kaleo.model.KaleoTransition kaleoTransition) {
-		return getService().updateKaleoTransition(kaleoTransition);
+	public static int getKaleoTransitionsCount(long kaleoNodeId) {
+		return getService().getKaleoTransitionsCount(kaleoNodeId);
 	}
 
-	/**
-	* Returns the Spring bean ID for this bean.
-	*
-	* @return the Spring bean ID for this bean
-	*/
-	public static java.lang.String getBeanIdentifier() {
-		return getService().getBeanIdentifier();
+	public static com.liferay.portal.model.PersistedModel getPersistedModel(
+		java.io.Serializable primaryKeyObj)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getPersistedModel(primaryKeyObj);
+	}
+
+	public static java.lang.Object invokeMethod(java.lang.String name,
+		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
+		throws java.lang.Throwable {
+		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
 	/**
@@ -257,65 +295,15 @@ public class KaleoTransitionLocalServiceUtil {
 		getService().setBeanIdentifier(beanIdentifier);
 	}
 
-	public static java.lang.Object invokeMethod(java.lang.String name,
-		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
-		throws java.lang.Throwable {
-		return getService().invokeMethod(name, parameterTypes, arguments);
-	}
-
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition addKaleoTransition(
-		long kaleoDefinitionId, long kaleoNodeId,
-		com.liferay.portal.workflow.kaleo.definition.Transition transition,
-		com.liferay.portal.workflow.kaleo.model.KaleoNode sourceKaleoNode,
-		com.liferay.portal.workflow.kaleo.model.KaleoNode targetKaleoNode,
-		com.liferay.portal.service.ServiceContext serviceContext)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService()
-				   .addKaleoTransition(kaleoDefinitionId, kaleoNodeId,
-			transition, sourceKaleoNode, targetKaleoNode, serviceContext);
-	}
-
-	public static void deleteCompanyKaleoTransitions(long companyId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteCompanyKaleoTransitions(companyId);
-	}
-
-	public static void deleteKaleoDefinitionKaleoTransitions(
-		long kaleoDefinitionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		getService().deleteKaleoDefinitionKaleoTransitions(kaleoDefinitionId);
-	}
-
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition getDefaultKaleoTransition(
-		long kaleoNodeId)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getDefaultKaleoTransition(kaleoNodeId);
-	}
-
-	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> getKaleoDefinitionKaleoTransitions(
-		long kaleoDefinitionId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getKaleoDefinitionKaleoTransitions(kaleoDefinitionId);
-	}
-
-	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition getKaleoTransition(
-		long kaleoNodeId, java.lang.String name)
-		throws com.liferay.portal.kernel.exception.PortalException,
-			com.liferay.portal.kernel.exception.SystemException {
-		return getService().getKaleoTransition(kaleoNodeId, name);
-	}
-
-	public static java.util.List<com.liferay.portal.workflow.kaleo.model.KaleoTransition> getKaleoTransitions(
-		long kaleoNodeId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getKaleoTransitions(kaleoNodeId);
-	}
-
-	public static int getKaleoTransitionsCount(long kaleoNodeId)
-		throws com.liferay.portal.kernel.exception.SystemException {
-		return getService().getKaleoTransitionsCount(kaleoNodeId);
+	/**
+	* Updates the kaleo transition in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
+	*
+	* @param kaleoTransition the kaleo transition
+	* @return the kaleo transition that was updated
+	*/
+	public static com.liferay.portal.workflow.kaleo.model.KaleoTransition updateKaleoTransition(
+		com.liferay.portal.workflow.kaleo.model.KaleoTransition kaleoTransition) {
+		return getService().updateKaleoTransition(kaleoTransition);
 	}
 
 	public static void clearService() {

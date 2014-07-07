@@ -41,14 +41,18 @@ public class MentionsUserNotificationHandler
 		MBMessage mbMessage = MBMessageLocalServiceUtil.fetchMBMessage(
 			jsonObject.getLong("classPK"));
 
-		if (mbMessage != null) {
+		if ((mbMessage != null) && mbMessage.isDiscussion()) {
 			return getAssetRenderer(
 				mbMessage.getClassName(), mbMessage.getClassPK());
 		}
-
-		return null;
+		else {
+			return getAssetRenderer(
+				jsonObject.getString("className"),
+				jsonObject.getLong("classPK"));
+		}
 	}
 
+	@Override
 	protected String getTitle(
 		JSONObject jsonObject, AssetRenderer assetRenderer,
 		ServiceContext serviceContext) {

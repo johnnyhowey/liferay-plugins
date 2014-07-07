@@ -179,6 +179,7 @@
 		<reference package-path="com.liferay.portal" entity="Ticket" />
 		<reference package-path="com.liferay.portal" entity="WorkflowInstanceLink" />
 		<reference package-path="com.liferay.portlet.asset" entity="AssetEntry" />
+		<reference package-path="com.liferay.portlet.asset" entity="AssetLink" />
 		<reference package-path="com.liferay.portlet.ratings" entity="RatingsStats" />
 		<reference package-path="com.liferay.portlet.social" entity="SocialActivity" />
 	</entity>
@@ -278,6 +279,7 @@
 	</entity>
 	<exceptions>
 		<exception>KBArticleContent</exception>
+		<exception>KBArticleImport</exception>
 		<exception>KBArticlePriority</exception>
 		<exception>KBArticleTitle</exception>
 		<exception>KBCommentContent</exception>

@@ -101,12 +101,11 @@ public abstract class WallEntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @param wallEntryId the primary key of the wall entry
 	 * @return the wall entry that was removed
 	 * @throws PortalException if a wall entry with the primary key could not be found
-	 * @throws SystemException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public WallEntry deleteWallEntry(long wallEntryId)
-		throws PortalException, SystemException {
+		throws PortalException {
 		return wallEntryPersistence.remove(wallEntryId);
 	}
 
@@ -116,12 +115,11 @@ public abstract class WallEntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @param wallEntry the wall entry
 	 * @return the wall entry that was removed
 	 * @throws PortalException
-	 * @throws SystemException
 	 */
 	@Indexable(type = IndexableType.DELETE)
 	@Override
 	public WallEntry deleteWallEntry(WallEntry wallEntry)
-		throws PortalException, SystemException {
+		throws PortalException {
 		return wallEntryPersistence.remove(wallEntry);
 	}
 
@@ -140,8 +138,7 @@ public abstract class WallEntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery) {
 		return wallEntryPersistence.findWithDynamicQuery(dynamicQuery);
 	}
 
@@ -158,8 +155,8 @@ public abstract class WallEntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end) {
 		return wallEntryPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end);
 	}
@@ -178,9 +175,8 @@ public abstract class WallEntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @return the ordered range of matching rows
 	 */
 	@Override
-	@SuppressWarnings("rawtypes")
-	public List dynamicQuery(DynamicQuery dynamicQuery, int start, int end,
-		OrderByComparator orderByComparator) {
+	public <T> List<T> dynamicQuery(DynamicQuery dynamicQuery, int start,
+		int end, OrderByComparator<T> orderByComparator) {
 		return wallEntryPersistence.findWithDynamicQuery(dynamicQuery, start,
 			end, orderByComparator);
 	}
@@ -221,11 +217,9 @@ public abstract class WallEntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	 * @param wallEntryId the primary key of the wall entry
 	 * @return the wall entry
 	 * @throws PortalException if a wall entry with the primary key could not be found
-	 * @throws SystemException
 	 */
 	@Override
-	public WallEntry getWallEntry(long wallEntryId)
-		throws PortalException, SystemException {
+	public WallEntry getWallEntry(long wallEntryId) throws PortalException {
 		return wallEntryPersistence.findByPrimaryKey(wallEntryId);
 	}
 
@@ -257,7 +251,7 @@ public abstract class WallEntryLocalServiceBaseImpl extends BaseLocalServiceImpl
 	@Override
 	public PersistedModel deletePersistedModel(PersistedModel persistedModel)
 		throws PortalException {
-		return deleteWallEntry((WallEntry)persistedModel);
+		return wallEntryLocalService.deleteWallEntry((WallEntry)persistedModel);
 	}
 
 	@Override
