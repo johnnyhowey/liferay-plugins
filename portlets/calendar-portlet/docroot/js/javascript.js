@@ -727,6 +727,7 @@ AUI.add(
 							endTimeYear: endDate.getFullYear(),
 							firstReminder: schedulerEvent.get('firstReminder'),
 							firstReminderType: schedulerEvent.get('firstReminderType'),
+							instanceIndex: schedulerEvent.get('instanceIndex'),
 							location: schedulerEvent.get('location'),
 							recurrence: schedulerEvent.get('recurrence'),
 							secondReminder: schedulerEvent.get('secondReminder'),
@@ -2088,6 +2089,7 @@ AUI.add(
 						var schedulerEvent = instance.get('event');
 
 						data.calendarBookingId = schedulerEvent.get('calendarBookingId');
+						data.instanceIndex = schedulerEvent.get('instanceIndex');
 
 						Liferay.Util.openWindow(
 							{

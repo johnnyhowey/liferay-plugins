@@ -859,11 +859,11 @@ Please find a solution that does not require portal-impl.jar.
 
 						<!-- SDK dependencies -->
 
-						<ivy:resources module="com.liferay.sdk" />
+						<ivy:resources module="com.liferay.sdk" type="bundle,jar,orbit" />
 
 						<!-- Module dependencies -->
 
-						<ivy:resources />
+						<ivy:resources type="bundle,jar,orbit" />
 					</path>
 
 					<compile-java
@@ -1581,6 +1581,55 @@ Please find a solution that does not require portal-impl.jar.
 							/>
 						</then>
 					</if>
+
+					<if>
+						<available file="@{module.dir}/docroot/WEB-INF/portlet.xml" />
+						<then>
+							<tstamp>
+								<format property="tstamp.value" pattern="yyyyMMddkkmmssSSS" />
+							</tstamp>
+
+							<move file="${plugin.file}" tofile="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" />
+
+							<direct-deploy-portlet-cmd
+								direct.deploy.dir="${tstamp.value}"
+								module.dir="@{module.dir}"
+							/>
+
+							<var name="temp.deployed.plugin.dir" value="${tstamp.value}/${plugin.name}-${plugin.full.version}" />
+
+							<if>
+								<not>
+									<available file="${temp.deployed.plugin.dir}" />
+								</not>
+								<then>
+									<var name="temp.deployed.plugin.dir" value="${tstamp.value}/${plugin.name}" />
+								</then>
+							</if>
+
+							<if>
+								<available file="${temp.deployed.plugin.dir}" />
+								<then>
+									<zip destfile="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" update="true">
+										<zipfileset
+											dir="${temp.deployed.plugin.dir}"
+											fullpath="WEB-INF/web.xml"
+											includes="WEB-INF/web.xml"
+										/>
+									</zip>
+								</then>
+								<else>
+									<echo>Unable to automatically update web.xml.</echo>
+								</else>
+							</if>
+
+							<var name="temp.deployed.plugin.dir" unset="true" />
+
+							<move file="${sdk.dir}/dist/${plugin.name}-${plugin.full.version}.war" tofile="${plugin.file}" />
+
+							<delete dir="${tstamp.value}" />
+						</then>
+					</if>
 				</then>
 				<else>
 					<jar
@@ -2151,7 +2200,7 @@ Please find a solution that does not require portal-impl.jar.
 							includes="apache-tomcat-${tomcat.version}/webapps/manager/**/*"
 						/>
 						<mapper>
-							<globmapper from="apache-tomcat-${tomcat.version}/webapps/*" to="*"/>
+							<globmapper from="apache-tomcat-${tomcat.version}/webapps/*" to="*" />
 						</mapper>
 			        </unzip>
 

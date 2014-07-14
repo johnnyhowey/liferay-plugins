@@ -64,7 +64,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 
 				<aui:input name="preferences--requireCaptcha--" type="checkbox" value="<%= requireCaptcha %>" />
 
-				<aui:input cssClass="lfr-input-text-container" label="redirect-url-on-success" name="preferences--successURL--" value="<%= HtmlUtil.toInputSafe(successURL) %>" />
+				<aui:input label="redirect-url-on-success" name="preferences--successURL--" value="<%= HtmlUtil.toInputSafe(successURL) %>" wrapperCssClass="lfr-input-text-container" />
 			</aui:fieldset>
 		</liferay-ui:panel>
 
@@ -79,14 +79,14 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 				<aui:input label="send-as-email" name="preferences--sendAsEmail--" type="checkbox" value="<%= sendAsEmail %>" />
 
 				<aui:fieldset>
-					<aui:input cssClass="lfr-input-text-container" label="name-from" name="preferences--emailFromName--" value="<%= emailFromName %>" />
+					<aui:input label="name-from" name="preferences--emailFromName--" value="<%= emailFromName %>" wrapperCssClass="lfr-input-text-container" />
 
-					<aui:input cssClass="lfr-input-text-container" label="address-from" name="preferences--emailFromAddress--" value="<%= emailFromAddress %>" />
+					<aui:input label="address-from" name="preferences--emailFromAddress--" value="<%= emailFromAddress %>" wrapperCssClass="lfr-input-text-container" />
 				</aui:fieldset>
 
-				<aui:input cssClass="lfr-input-text-container" helpMessage="add-email-addresses-separated-by-commas" label="addresses-to" name="preferences--emailAddress--" value="<%= emailAddress %>" />
+				<aui:input helpMessage="add-email-addresses-separated-by-commas" label="addresses-to" name="preferences--emailAddress--" value="<%= emailAddress %>" wrapperCssClass="lfr-input-text-container" />
 
-				<aui:input cssClass="lfr-input-text-container" name="preferences--subject--" value="<%= subject %>" />
+				<aui:input name="preferences--subject--" value="<%= subject %>" wrapperCssClass="lfr-input-text-container" />
 
 			</aui:fieldset>
 
@@ -97,7 +97,7 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			<aui:fieldset cssClass="handle-data" label="file">
 				<aui:input name="preferences--saveToFile--" type="checkbox" value="<%= saveToFile %>" />
 
-				<aui:input cssClass="lfr-input-text-container" label="path-and-file-name" name="preferences--fileName--" value="<%= fileName %>" />
+				<aui:input label="path-and-file-name" name="preferences--fileName--" value="<%= fileName %>" wrapperCssClass="lfr-input-text-container" />
 			</aui:fieldset>
 		</liferay-ui:panel>
 
@@ -190,74 +190,68 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 	</aui:button-row>
 </aui:form>
 
-<%
-String modules = "aui-base";
+<c:if test="<%= !fieldsEditingDisabled %>">
+	<aui:script use="aui-base,liferay-auto-fields">
+		var toggleOptions = function(event) {
+			var select = this;
 
-if (!fieldsEditingDisabled) {
-	modules += ",liferay-auto-fields";
-}
-%>
+			var formRow = select.ancestor('.lfr-form-row');
+			var value = select.val();
 
-<aui:script use="<%= modules %>">
-	var toggleOptions = function(event) {
-		var select = this;
+			var optionsDiv = formRow.one('.options');
 
-		var formRow = select.ancestor('.lfr-form-row');
-		var value = select.val();
+			if ((value == 'options') || (value == 'radio')) {
+				optionsDiv.all('label').show();
+				optionsDiv.show();
+			}
+			else if (value == 'paragraph') {
 
-		var optionsDiv = formRow.one('.options');
+				// Show just the text field and not the labels since there
+				// are multiple choice inputs
 
-		if ((value == 'options') || (value == 'radio')) {
-			optionsDiv.all('label').show();
-			optionsDiv.show();
-		}
-		else if (value == 'paragraph') {
+				optionsDiv.all('label').hide();
+				optionsDiv.show();
+			}
+			else {
+				optionsDiv.hide();
+			}
 
-			// Show just the text field and not the labels since there
-			// are multiple choice inputs
+			var optionalControl = formRow.one('.optional-control').ancestor();
+			var labelName = formRow.one('.label-name');
 
-			optionsDiv.all('label').hide();
-			optionsDiv.show();
-		}
-		else {
-			optionsDiv.hide();
-		}
+			if (value == 'paragraph') {
+				var inputName = labelName.one('input.field');
 
-		var optionalControl = formRow.one('.optional-control').ancestor();
-		var labelName = formRow.one('.label-name');
+				var formFieldsIndex = select.attr('id').match(/\d+$/);
 
-		if (value == 'paragraph') {
-			var inputName = labelName.one('input.field');
+				inputName.val('<liferay-ui:message key="paragraph" />' + formFieldsIndex);
+				inputName.fire('change');
 
-			var formFieldsIndex = select.attr('id').match(/\d+$/);
+				labelName.hide();
+				optionalControl.hide();
 
-			inputName.val('<liferay-ui:message key="paragraph" />' + formFieldsIndex);
-			inputName.fire('change');
+				optionalControl.all('input[type="checkbox"]').attr('checked', 'true');
+				optionalControl.all('input[type="hidden"]').attr('value', 'true');
+			}
+			else {
+				optionalControl.show();
+				labelName.show();
+			}
+		};
 
-			labelName.hide();
-			optionalControl.hide();
+		var webFields = A.one('.webFields');
 
-			optionalControl.all('input[type="checkbox"]').attr('checked', 'true');
-			optionalControl.all('input[type="hidden"]').attr('value', 'true');
-		}
-		else {
-			optionalControl.show();
-			labelName.show();
-		}
-	};
+		webFields.all('select').each(toggleOptions);
 
-	var toggleValidationOptions = function(event) {
-		this.next().toggle();
-	};
-
-	var webFields = A.one('.webFields');
-
-	webFields.all('select').each(toggleOptions);
-
-	<c:if test="<%= !fieldsEditingDisabled %>">
 		webFields.delegate(['change', 'click', 'keydown'], toggleOptions, 'select');
 
-		webFields.delegate('click', toggleValidationOptions, '.validation-link');
+		<c:if test="<%= PortletPropsValues.VALIDATION_SCRIPT_ENABLED %>">
+			var toggleValidationOptions = function(event) {
+				this.next().toggle();
+			};
+
+			webFields.delegate('click', toggleValidationOptions, '.validation-link');
+		</c:if>
 
 		webFields.delegate(
 			'change',
@@ -287,5 +281,5 @@ if (!fieldsEditingDisabled) {
 				url: '<%= editFieldURL %>'
 			}
 		).render();
-	</c:if>
-</aui:script>
+	</aui:script>
+</c:if>

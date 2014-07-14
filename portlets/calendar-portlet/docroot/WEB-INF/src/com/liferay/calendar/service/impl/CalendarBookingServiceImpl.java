@@ -363,7 +363,7 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 			long[] calendarResourceIds, long parentCalendarBookingId,
 			String keywords, long startTime, long endTime, boolean recurring,
 			int[] statuses, int start, int end,
-			OrderByComparator orderByComparator)
+			OrderByComparator<CalendarBooking> orderByComparator)
 		throws PortalException {
 
 		List<CalendarBooking> calendarBookings =
@@ -382,7 +382,7 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 			String title, String description, String location, long startTime,
 			long endTime, boolean recurring, int[] statuses,
 			boolean andOperator, int start, int end,
-			OrderByComparator orderByComparator)
+			OrderByComparator<CalendarBooking> orderByComparator)
 		throws PortalException {
 
 		List<CalendarBooking> calendarBookings =
@@ -472,12 +472,12 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 
 	@Override
 	public CalendarBooking updateCalendarBookingInstance(
-			long calendarBookingId, long calendarId, long[] childCalendarIds,
-			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
-			String location, long startTime, long endTime, boolean allDay,
-			String recurrence, boolean allFollowing, long firstReminder,
-			String firstReminderType, long secondReminder,
-			String secondReminderType, int status,
+			long calendarBookingId, int instanceIndex, long calendarId,
+			long[] childCalendarIds, Map<Locale, String> titleMap,
+			Map<Locale, String> descriptionMap, String location, long startTime,
+			long endTime, boolean allDay, String recurrence,
+			boolean allFollowing, long firstReminder, String firstReminderType,
+			long secondReminder, String secondReminderType, int status,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -485,15 +485,16 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 			getPermissionChecker(), calendarId, ActionKeys.MANAGE_BOOKINGS);
 
 		return calendarBookingLocalService.updateCalendarBookingInstance(
-			getUserId(), calendarBookingId, calendarId, childCalendarIds,
-			titleMap, descriptionMap, location, startTime, endTime, allDay,
-			recurrence, allFollowing, firstReminder, firstReminderType,
-			secondReminder, secondReminderType, status, serviceContext);
+			getUserId(), calendarBookingId, instanceIndex, calendarId,
+			childCalendarIds, titleMap, descriptionMap, location, startTime,
+			endTime, allDay, recurrence, allFollowing, firstReminder,
+			firstReminderType, secondReminder, secondReminderType, status,
+			serviceContext);
 	}
 
 	@Override
 	public CalendarBooking updateCalendarBookingInstance(
-			long calendarBookingId, long calendarId,
+			long calendarBookingId, int instanceIndex, long calendarId,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
 			String location, int startTimeYear, int startTimeMonth,
 			int startTimeDay, int startTimeHour, int startTimeMinute,
@@ -514,13 +515,14 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 		java.util.Calendar startTimeJCalendar = JCalendarUtil.getJCalendar(
 			startTimeYear, startTimeMonth, startTimeDay, startTimeHour,
 			startTimeMinute, 0, 0, timeZone);
+
 		java.util.Calendar endTimeJCalendar = JCalendarUtil.getJCalendar(
 			endTimeYear, endTimeMonth, endTimeDay, endTimeHour, endTimeMinute,
 			0, 0, timeZone);
 
 		return calendarBookingService.updateCalendarBookingInstance(
-			calendarBookingId, calendarId, titleMap, descriptionMap, location,
-			startTimeJCalendar.getTimeInMillis(),
+			calendarBookingId, instanceIndex, calendarId, titleMap,
+			descriptionMap, location, startTimeJCalendar.getTimeInMillis(),
 			endTimeJCalendar.getTimeInMillis(), allDay, recurrence,
 			allFollowing, firstReminder, firstReminderType, secondReminder,
 			secondReminderType, status, serviceContext);
@@ -528,7 +530,7 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 
 	@Override
 	public CalendarBooking updateCalendarBookingInstance(
-			long calendarBookingId, long calendarId,
+			long calendarBookingId, int instanceIndex, long calendarId,
 			Map<Locale, String> titleMap, Map<Locale, String> descriptionMap,
 			String location, long startTime, long endTime, boolean allDay,
 			String recurrence, boolean allFollowing, long firstReminder,
@@ -541,7 +543,7 @@ public class CalendarBookingServiceImpl extends CalendarBookingServiceBaseImpl {
 			getPermissionChecker(), calendarId, ActionKeys.MANAGE_BOOKINGS);
 
 		return calendarBookingLocalService.updateCalendarBookingInstance(
-			getUserId(), calendarBookingId, calendarId, titleMap,
+			getUserId(), calendarBookingId, instanceIndex, calendarId, titleMap,
 			descriptionMap, location, startTime, endTime, allDay, recurrence,
 			allFollowing, firstReminder, firstReminderType, secondReminder,
 			secondReminderType, status, serviceContext);

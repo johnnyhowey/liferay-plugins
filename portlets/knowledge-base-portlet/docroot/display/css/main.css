@@ -8,17 +8,22 @@
 
 .knowledge-base-portlet-display {
 	.kbarticle-navigation {
+		li {
+			line-height: inherit;
+			margin: 15px 0;
+		}
+
 		li, ul {
 			list-style: none;
 		}
 
 		.kbarticle-expanded {
-			color: #555;
 			font-weight: bold;
 		}
 
 		.kbarticle-selected {
 			color: #555;
+			font-weight: bold;
 		}
 	}
 }
