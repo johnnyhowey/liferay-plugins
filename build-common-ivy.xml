@@ -82,23 +82,21 @@
 
 									<if>
 										<or>
-											<equals arg1="@{ivy.xml.dir}" arg2="${sdk.dir}" />
-											<contains string="@{ivy.xml.dir}" substring="${sdk.dependencies.dir}" />
-											<antelope:endswith string="${ant.project.name}" with="-shared" />
-											<available file="@{ivy.xml.dir}/bnd.bnd" />
+											<antelope:endswith string="${plugin.name}" with="-portlet" />
+											<antelope:endswith string="${plugin.name}" with="-web" />
 										</or>
 										<then>
 											<ivy:retrieve
 												conf="default"
 												overwriteMode="always"
-												pattern="@{ivy.xml.dir}/lib/[artifact].[ext]"
-												type="bundle,jar,orbit"
+												pattern="@{ivy.xml.dir}/docroot/WEB-INF/lib/[artifact].[ext]"
+												type="bundle,eclipse-plugin,jar,orbit"
 											/>
 
 											<ivy:retrieve
 												conf="default"
 												overwriteMode="always"
-												pattern="@{ivy.xml.dir}/lib/[artifact]-[type]s.[ext]"
+												pattern="@{ivy.xml.dir}/docroot/WEB-INF/lib/[artifact]-[type]s.[ext]"
 												type="source"
 											/>
 										</then>
@@ -106,14 +104,14 @@
 											<ivy:retrieve
 												conf="default"
 												overwriteMode="always"
-												pattern="@{ivy.xml.dir}/docroot/WEB-INF/lib/[artifact].[ext]"
-												type="bundle,jar,orbit"
+												pattern="@{ivy.xml.dir}/lib/[artifact].[ext]"
+												type="bundle,eclipse-plugin,jar,orbit"
 											/>
 
 											<ivy:retrieve
 												conf="default"
 												overwriteMode="always"
-												pattern="@{ivy.xml.dir}/docroot/WEB-INF/lib/[artifact]-[type]s.[ext]"
+												pattern="@{ivy.xml.dir}/lib/[artifact]-[type]s.[ext]"
 												type="source"
 											/>
 										</else>

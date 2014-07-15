@@ -113,6 +113,15 @@ public class CalendarBookingLocalServiceUtil {
 
 	public static void deleteCalendarBookingInstance(
 		com.liferay.calendar.model.CalendarBooking calendarBooking,
+		int instanceIndex, boolean allFollowing)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		getService()
+			.deleteCalendarBookingInstance(calendarBooking, instanceIndex,
+			allFollowing);
+	}
+
+	public static void deleteCalendarBookingInstance(
+		com.liferay.calendar.model.CalendarBooking calendarBooking,
 		long startTime, boolean allFollowing)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		getService()
@@ -432,7 +441,7 @@ public class CalendarBookingLocalServiceUtil {
 		long[] calendarResourceIds, long parentCalendarBookingId,
 		java.lang.String keywords, long startTime, long endTime,
 		boolean recurring, int[] statuses, int start, int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.calendar.model.CalendarBooking> orderByComparator) {
 		return getService()
 				   .search(companyId, groupIds, calendarIds,
 			calendarResourceIds, parentCalendarBookingId, keywords, startTime,
@@ -446,7 +455,7 @@ public class CalendarBookingLocalServiceUtil {
 		java.lang.String location, long startTime, long endTime,
 		boolean recurring, int[] statuses, boolean andOperator, int start,
 		int end,
-		com.liferay.portal.kernel.util.OrderByComparator orderByComparator) {
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.calendar.model.CalendarBooking> orderByComparator) {
 		return getService()
 				   .search(companyId, groupIds, calendarIds,
 			calendarResourceIds, parentCalendarBookingId, title, description,
@@ -542,8 +551,8 @@ public class CalendarBookingLocalServiceUtil {
 	}
 
 	public static com.liferay.calendar.model.CalendarBooking updateCalendarBookingInstance(
-		long userId, long calendarBookingId, long calendarId,
-		long[] childCalendarIds,
+		long userId, long calendarBookingId, int instanceIndex,
+		long calendarId, long[] childCalendarIds,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		java.lang.String location, long startTime, long endTime,
@@ -554,14 +563,15 @@ public class CalendarBookingLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateCalendarBookingInstance(userId, calendarBookingId,
-			calendarId, childCalendarIds, titleMap, descriptionMap, location,
-			startTime, endTime, allDay, recurrence, allFollowing,
-			firstReminder, firstReminderType, secondReminder,
+			instanceIndex, calendarId, childCalendarIds, titleMap,
+			descriptionMap, location, startTime, endTime, allDay, recurrence,
+			allFollowing, firstReminder, firstReminderType, secondReminder,
 			secondReminderType, status, serviceContext);
 	}
 
 	public static com.liferay.calendar.model.CalendarBooking updateCalendarBookingInstance(
-		long userId, long calendarBookingId, long calendarId,
+		long userId, long calendarBookingId, int instanceIndex,
+		long calendarId,
 		java.util.Map<java.util.Locale, java.lang.String> titleMap,
 		java.util.Map<java.util.Locale, java.lang.String> descriptionMap,
 		java.lang.String location, long startTime, long endTime,
@@ -572,9 +582,10 @@ public class CalendarBookingLocalServiceUtil {
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .updateCalendarBookingInstance(userId, calendarBookingId,
-			calendarId, titleMap, descriptionMap, location, startTime, endTime,
-			allDay, recurrence, allFollowing, firstReminder, firstReminderType,
-			secondReminder, secondReminderType, status, serviceContext);
+			instanceIndex, calendarId, titleMap, descriptionMap, location,
+			startTime, endTime, allDay, recurrence, allFollowing,
+			firstReminder, firstReminderType, secondReminder,
+			secondReminderType, status, serviceContext);
 	}
 
 	public static com.liferay.calendar.model.CalendarBooking updateStatus(

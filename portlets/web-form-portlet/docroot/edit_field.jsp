@@ -119,7 +119,7 @@ boolean ignoreRequestValue = (index != formFieldsIndex);
 		</c:when>
 	</c:choose>
 
-	<c:if test="<%= true %>">
+	<c:if test="<%= PortletPropsValues.VALIDATION_SCRIPT_ENABLED %>">
 		<c:choose>
 			<c:when test="<%= !fieldsEditingDisabled %>">
 				<div class="validation">
@@ -131,7 +131,7 @@ boolean ignoreRequestValue = (index != formFieldsIndex);
 						<aui:column columnWidth="50">
 							<aui:input cols="80" cssClass="validation-script" ignoreRequestValue="<%= ignoreRequestValue %>" label="validation-script" name='<%= "fieldValidationScript" + index %>' style="width: 95%" type="textarea" value="<%= fieldValidationScript %>" wrap="off" />
 
-							<aui:input cols="80" cssClass="lfr-input-text-container" ignoreRequestValue="<%= ignoreRequestValue %>" label="validation-error-message" name='<%= "fieldValidationErrorMessage" + index %>' size="80" value="<%= fieldValidationErrorMessage %>" />
+							<aui:input cols="80" ignoreRequestValue="<%= ignoreRequestValue %>" label="validation-error-message" name='<%= "fieldValidationErrorMessage" + index %>' size="80" value="<%= fieldValidationErrorMessage %>" wrapperCssClass="lfr-input-text-container" />
 						</aui:column>
 						<aui:column columnWidth="50">
 							<div class="syntax-help">

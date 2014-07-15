@@ -133,6 +133,10 @@ public class SyncFilePersistence extends BasePersistenceImpl<SyncFile, Long> {
 		return query(queryBuilder.prepare());
 	}
 
+	public List<SyncFile> findByState(int state) throws SQLException {
+		return queryForEq("state", state);
+	}
+
 	public List<SyncFile> findBySyncAccountId(long syncAccountId)
 		throws SQLException {
 

@@ -14,14 +14,15 @@
  */
 --%>
 
-<%@ include file="/html/js/editor/ckeditor/ckconfig_bbcode.portal.jsp" %>
+<%@ include file="/admin/init.jsp" %>
 
 <%
-String portletId = ParamUtil.getString(request, "p_p_id");
+KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_ARTICLE);
 %>
 
-<c:if test="<%= portletId.equals(PortletKeys.MESSAGE_BOARDS) || portletId.equals(PortletKeys.MESSAGE_BOARDS_ADMIN) %>">
-	var ckEditor = CKEDITOR.instances['<%= HtmlUtil.escapeJS(name) %>'];
-
-	ckEditor.config.extraPlugins += ',autocomplete';
+<c:if test="<%= enableKBArticleAssetLinks %>">
+	<liferay-ui:asset-links
+		className="<%= KBArticle.class.getName() %>"
+		classPK="<%= kbArticle.getClassPK() %>"
+	/>
 </c:if>
