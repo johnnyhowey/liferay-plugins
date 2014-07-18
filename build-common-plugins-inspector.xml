@@ -37,13 +37,83 @@
 				</if>
 
 				<if>
+					<available file="@{module.name}/docroot/WEB-INF/liferay-hook.xml" />
+					<then>
+						<if>
+							<and>
+								<resourcecontains resource="@{module.name}/docroot/WEB-INF/liferay-hook.xml" substring="&lt;language-properties&gt;" />
+								<not>
+									<resourcecontains resource="@{module.name}/docroot/WEB-INF/liferay-hook.xml" substring="&lt;language-properties&gt;content/Language*.properties&lt;/language-properties&gt;" />
+								</not>
+							</and>
+							<then>
+								<fail>@{module.name}/docroot/WEB-INF/liferay-hook.xml has an nonstandard language-properties element.</fail>
+							</then>
+						</if>
+
+						<if>
+							<and>
+								<resourcecontains resource="@{module.name}/docroot/WEB-INF/liferay-hook.xml" substring="&lt;custom-jsp-dir&gt;" />
+								<not>
+									<resourcecontains resource="@{module.name}/docroot/WEB-INF/liferay-hook.xml" substring="&lt;custom-jsp-dir&gt;/META-INF/custom_jsps&lt;/custom-jsp-dir&gt;" />
+								</not>
+							</and>
+							<then>
+								<fail>@{module.name}/docroot/WEB-INF/liferay-hook.xml has a nonstandard custom-jsp-dir element.</fail>
+							</then>
+						</if>
+					</then>
+				</if>
+
+				<if>
 					<resourcecontains resource="@{module.name}/docroot/WEB-INF/web.xml" substring="Invoker Filter" />
 					<then>
-						<fail>@{module.name}/docroot/WEB-INF/web.xml contains generated code.</fail>						
+						<fail>@{module.name}/docroot/WEB-INF/web.xml contains generated code.</fail>
+					</then>
+				</if>
+
+				<if>
+					<available file="@{module.name}/ivy.xml.MD5" />
+					<then>
+						<fail>@{module.name}/ivy.xml.MD5 must not be checked into source control.</fail>
+					</then>
+				</if>
+
+				<if>
+					<available file="@{module.name}/docroot/WEB-INF/lib" />
+					<then>
+						<fail>@{module.name}/docroot/WEB-INF/lib must not be checked into source control.</fail>
+					</then>
+				</if>
+
+				<if>
+					<available file="@{module.name}/docroot/WEB-INF/tld" />
+					<then>
+						<fail>@{module.name}/docroot/WEB-INF/tld must not be checked into source control.</fail>
+					</then>
+				</if>
+
+				<if>
+					<available file="@{module.name}/lib" />
+					<then>
+						<fail>@{module.name}/lib must not be checked into source control.</fail>
 					</then>
 				</if>
 			</sequential>
 		</for>
+
+		<if>
+			<available file=".gitignore" />
+			<then>
+				<echo file=".gitignore">/*/bin
+/*/classes
+/*/ivy.xml.MD5
+/*/javadoc
+/*/lib
+/*/test-classes
+/*/test-results</echo>
+			</then>
+		</if>
 
 		<antcall target="clean" />
 
@@ -64,7 +134,7 @@
 		</if>
 
 		<resourcecount property="gitignore.count">
-			<fileset defaultexcludes="false" dir="." includes=".gitignore,**/.gitignore" />
+			<fileset defaultexcludes="false" dir="." includes="**/.gitignore" />
 		</resourcecount>
 
 		<if>
@@ -72,7 +142,7 @@
 				<equals arg1="${gitignore.count}" arg2="0" />
 			</not>
 			<then>
-				<fail>Plugins must not have custom .gitignore files.</fail>				
+				<fail>Plugins must not have custom .gitignore files.</fail>
 			</then>
 		</if>
 	</target>
