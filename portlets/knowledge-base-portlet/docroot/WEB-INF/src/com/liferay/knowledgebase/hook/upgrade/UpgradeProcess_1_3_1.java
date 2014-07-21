@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,8 +11,25 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/search/init.jsp" %>
+package com.liferay.knowledgebase.hook.upgrade;
 
-<liferay-util:include page="/admin/common/select_attachments.jsp" servletContext="<%= application %>" />
+import com.liferay.knowledgebase.hook.upgrade.v1_3_1.UpgradeKBComment;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+
+/**
+ * @author Sergio González
+ */
+public class UpgradeProcess_1_3_1 extends UpgradeProcess {
+
+	@Override
+	public int getThreshold() {
+		return 131;
+	}
+
+	@Override
+	protected void doUpgrade() throws Exception {
+		upgrade(UpgradeKBComment.class);
+	}
+
+}

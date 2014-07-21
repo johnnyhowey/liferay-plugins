@@ -14,6 +14,8 @@
  */
 --%>
 
-<%@ include file="/section/init.jsp" %>
+<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 
-<liferay-util:include page="/admin/common/select_attachments.jsp" servletContext="<%= application %>" />
+<%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
+
+<portlet:defineObjects />

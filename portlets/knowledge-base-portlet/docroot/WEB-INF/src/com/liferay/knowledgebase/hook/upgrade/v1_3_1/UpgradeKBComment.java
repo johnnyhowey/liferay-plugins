@@ -1,4 +1,3 @@
-<%--
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -12,8 +11,27 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
---%>
 
-<%@ include file="/article/init.jsp" %>
+package com.liferay.knowledgebase.hook.upgrade.v1_3_1;
 
-<liferay-util:include page="/admin/common/select_attachments.jsp" servletContext="<%= application %>" />
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+
+/**
+ * @author Adolfo Pérez
+ */
+public class UpgradeKBComment extends UpgradeProcess {
+
+	@Override
+	protected void doUpgrade() throws Exception {
+		upgradeIndexes();
+	}
+
+	protected void upgradeIndexes() throws Exception {
+		runSQL("drop index IX_FD56A55D on KBComment");
+
+		runSQL(
+			"create index IX_FD56A55D on KBComment(userId, classNameId, " +
+				"classPK)");
+	}
+
+}
