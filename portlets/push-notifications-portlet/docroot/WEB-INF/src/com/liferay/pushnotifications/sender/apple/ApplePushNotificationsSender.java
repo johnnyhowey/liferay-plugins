@@ -15,6 +15,9 @@
 package com.liferay.pushnotifications.sender.apple;
 
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.pushnotifications.sender.PushNotificationsSender;
 import com.liferay.pushnotifications.util.PortletPropsValues;
 
@@ -34,9 +37,31 @@ public class ApplePushNotificationsSender implements PushNotificationsSender {
 	public ApplePushNotificationsSender() {
 		ApnsServiceBuilder appleServiceBuilder = APNS.newService();
 
-		appleServiceBuilder.withCert(
-			PortletPropsValues.APPLE_CERTIFICATE_PATH,
-			PortletPropsValues.APPLE_CERTIFICATE_PASSWORD);
+		String path = PortletPropsValues.APPLE_CERTIFICATE_PATH;
+
+		if (Validator.isNull(path)) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"The property \"apple.certificate.path\" is not set in " +
+						"portlet.properties");
+			}
+
+			return;
+		}
+
+		String password = PortletPropsValues.APPLE_CERTIFICATE_PASSWORD;
+
+		if (Validator.isNull(path)) {
+			if (_log.isWarnEnabled()) {
+				_log.warn(
+					"The property \"apple.certificate.password\" is not set " +
+						"in portlet.properties");
+			}
+
+			return;
+		}
+
+		appleServiceBuilder.withCert(path, password);
 
 		if (PortletPropsValues.APPLE_SANDBOX) {
 			appleServiceBuilder.withSandboxDestination();
@@ -49,6 +74,10 @@ public class ApplePushNotificationsSender implements PushNotificationsSender {
 	public void send(List<String> tokens, JSONObject jsonObject)
 		throws Exception {
 
+		if (_apnsService == null) {
+			return;
+		}
+
 		String payload = buildPayload(jsonObject);
 
 		_apnsService.push(tokens, payload);
@@ -57,14 +86,17 @@ public class ApplePushNotificationsSender implements PushNotificationsSender {
 	protected String buildPayload(JSONObject jsonObject) {
 		PayloadBuilder builder = PayloadBuilder.newPayload();
 
-		String entryTitle = jsonObject.getString("entryTitle");
+		String message = jsonObject.getString("message");
 
-		if (entryTitle != null) {
-			builder.alertBody(entryTitle);
+		if (message != null) {
+			builder.alertBody(message);
 		}
 
 		return builder.build();
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		ApplePushNotificationsSender.class);
 
 	private ApnsService _apnsService;
 
