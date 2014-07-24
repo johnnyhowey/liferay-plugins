@@ -27,6 +27,18 @@ boolean emailKBArticleAddedEnabled = ParamUtil.getBoolean(request, "emailKBArtic
 String emailKBArticleAddedSubject = ParamUtil.getString(request, "emailKBArticleAddedSubject", AdminUtil.getEmailKBArticleAddedSubject(portletPreferences));
 String emailKBArticleAddedBody = ParamUtil.getString(request, "emailKBArticleAddedBody", AdminUtil.getEmailKBArticleAddedBody(portletPreferences));
 
+boolean emailKBArticleFeedbackInProgressEnabled = ParamUtil.getBoolean(request, "emailKBArticleFeedbackInProgressEnabled", AdminUtil.getEmailKBArticleFeedbackInProgressEnabled(portletPreferences));
+String emailKBArticleFeedbackInProgressSubject = ParamUtil.getString(request, "emailKBArticleFeedbackInProgressSubject", AdminUtil.getEmailKBArticleFeedbackInProgressSubject(portletPreferences));
+String emailKBArticleFeedbackInProgressBody = ParamUtil.getString(request, "emailKBArticleFeedbackInProgressBody", AdminUtil.getEmailKBArticleFeedbackInProgressBody(portletPreferences));
+
+boolean emailKBArticleFeedbackReceivedEnabled = ParamUtil.getBoolean(request, "emailKBArticleFeedbackReceivedEnabled", AdminUtil.getEmailKBArticleFeedbackReceivedEnabled(portletPreferences));
+String emailKBArticleFeedbackReceivedSubject = ParamUtil.getString(request, "emailKBArticleFeedbackReceivedSubject", AdminUtil.getEmailKBArticleFeedbackReceivedSubject(portletPreferences));
+String emailKBArticleFeedbackReceivedBody = ParamUtil.getString(request, "emailKBArticleFeedbackReceivedBody", AdminUtil.getEmailKBArticleFeedbackReceivedBody(portletPreferences));
+
+boolean emailKBArticleFeedbackResolvedEnabled = ParamUtil.getBoolean(request, "emailKBArticleFeedbackResolvedEnabled", AdminUtil.getEmailKBArticleFeedbackResolvedEnabled(portletPreferences));
+String emailKBArticleFeedbackResolvedSubject = ParamUtil.getString(request, "emailKBArticleFeedbackResolvedSubject", AdminUtil.getEmailKBArticleFeedbackResolvedSubject(portletPreferences));
+String emailKBArticleFeedbackResolvedBody = ParamUtil.getString(request, "emailKBArticleFeedbackResolvedBody", AdminUtil.getEmailKBArticleFeedbackResolvedBody(portletPreferences));
+
 boolean emailKBArticleUpdatedEnabled = ParamUtil.getBoolean(request, "emailKBArticleUpdatedEnabled", AdminUtil.getEmailKBArticleUpdatedEnabled(portletPreferences));
 String emailKBArticleUpdatedSubject = ParamUtil.getString(request, "emailKBArticleUpdatedSubject", AdminUtil.getEmailKBArticleUpdatedSubject(portletPreferences));
 String emailKBArticleUpdatedBody = ParamUtil.getString(request, "emailKBArticleUpdatedBody", AdminUtil.getEmailKBArticleUpdatedBody(portletPreferences));
@@ -42,6 +54,18 @@ else if (tabs2.equals("article-updated-email")) {
 	editorParam = "emailKBArticleUpdatedBody";
 	editorBody = emailKBArticleUpdatedBody;
 }
+else if (tabs2.equals("feedback-in-progress-email")) {
+	editorParam = "emailKBArticleFeedbackInProgressBody";
+	editorBody = emailKBArticleFeedbackInProgressBody;
+}
+else if (tabs2.equals("feedback-received-email")) {
+	editorParam = "emailKBArticleFeedbackReceivedBody";
+	editorBody = emailKBArticleFeedbackReceivedBody;
+}
+else if (tabs2.equals("feedback-resolved-email")) {
+	editorParam = "emailKBArticleFeedbackResolvedBody";
+	editorBody = emailKBArticleFeedbackResolvedBody;
+}
 %>
 
 <liferay-portlet:actionURL portletConfiguration="true" var="configurationActionURL" />
@@ -52,7 +76,7 @@ else if (tabs2.equals("article-updated-email")) {
 </liferay-portlet:renderURL>
 
 <liferay-ui:tabs
-	names="general,email-from,article-added-email,article-updated-email,display-settings"
+	names="general,email-from,article-added-email,article-updated-email,feedback-received-email,feedback-in-progress-email,feedback-resolved-email,display-settings"
 	param="tabs2"
 	url="<%= configurationRenderURL %>"
 />
@@ -287,6 +311,70 @@ else if (tabs2.equals("article-updated-email")) {
 					</dl>
 				</div>
 			</c:when>
+			<c:when test='<%= tabs2.startsWith("feedback-") %>'>
+				<c:choose>
+					<c:when test='<%= tabs2.equals("feedback-in-progress-email") %>'>
+						<aui:input label="enabled" name="preferences--emailKBArticleFeedbackInProgressEnabled--" type="checkbox" value="<%= emailKBArticleFeedbackInProgressEnabled %>" />
+					</c:when>
+					<c:when test='<%= tabs2.equals("feedback-received-email") %>'>
+						<aui:input label="enabled" name="preferences--emailKBArticleFeedbackReceivedEnabled--" type="checkbox" value="<%= emailKBArticleFeedbackReceivedEnabled %>" />
+					</c:when>
+					<c:when test='<%= tabs2.equals("feedback-resolved-email") %>'>
+						<aui:input label="enabled" name="preferences--emailKBArticleFeedbackResolvedEnabled--" type="checkbox" value="<%= emailKBArticleFeedbackResolvedEnabled %>" />
+					</c:when>
+				</c:choose>
+
+				<c:choose>
+					<c:when test='<%= tabs2.equals("feedback-in-progress-email") %>'>
+						<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleFeedbackInProgressSubject--" value="<%= emailKBArticleFeedbackInProgressSubject %>" />
+					</c:when>
+					<c:when test='<%= tabs2.equals("feedback-received-email") %>'>
+						<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleFeedbackReceivedSubject--" value="<%= emailKBArticleFeedbackReceivedSubject %>" />
+					</c:when>
+					<c:when test='<%= tabs2.equals("feedback-resolved-email") %>'>
+						<aui:input cssClass="lfr-input-text-container" label="subject" name="preferences--emailKBArticleFeedbackResolvedSubject--" value="<%= emailKBArticleFeedbackResolvedSubject %>" />
+					</c:when>
+				</c:choose>
+
+				<aui:input cssClass="lfr-textarea-container" label="body" name='<%= "preferences--".concat(editorParam).concat("--") %>' type="textarea" value="<%= editorBody %>" />
+
+				<div class="definition-of-terms">
+					<h4><liferay-ui:message key="definition-of-terms" /></h4>
+
+					<dl>
+						<dt>
+							[$ARTICLE_CONTENT$]
+						</dt>
+						<dd>
+							<liferay-ui:message key="the-article-content" />
+						</dd>
+						<dt>
+							[$ARTICLE_TITLE$]
+						</dt>
+						<dd>
+							<liferay-ui:message key="the-article-title" />
+						</dd>
+						<dt>
+							[$ARTICLE_URL$]
+						</dt>
+						<dd>
+							<liferay-ui:message key="the-article-url" />
+						</dd>
+						<dt>
+							[$TO_ADDRESS$]
+						</dt>
+						<dd>
+							<liferay-ui:message key="the-address-of-the-email-recipient" />
+						</dd>
+						<dt>
+							[$TO_NAME$]
+						</dt>
+						<dd>
+							<liferay-ui:message key="the-name-of-the-email-recipient" />
+						</dd>
+					</dl>
+				</div>
+			</c:when>
 			<c:when test='<%= tabs2.equals("display-settings") %>'>
 				<liferay-ui:tabs
 					names="article,template"
@@ -300,13 +388,14 @@ else if (tabs2.equals("article-updated-email")) {
 
 						<aui:input label="enable-ratings" name="preferences--enableKBArticleRatings--" type="checkbox" value="<%= enableKBArticleRatings %>" />
 
+						<div class="kb-ratings-type" id="<portlet:namespace />ratingsType">
+							<aui:input checked='<%= kbArticleRatingsType.equals("stars") %>' label="use-star-ratings" name="preferences--kbArticleRatingsType--" type="radio" value="stars" />
+							<aui:input checked='<%= kbArticleRatingsType.equals("thumbs") %>' label="use-thumbs-up-thumbs-down" name="preferences--kbArticleRatingsType--" type="radio" value="thumbs" />
+						</div>
+
 						<aui:input label="show-asset-entries" name="preferences--showKBArticleAssetEntries--" type="checkbox" value="<%= showKBArticleAssetEntries %>" />
 
 						<aui:input label="enable-related-assets" name="preferences--enableKBArticleAssetLinks--" type="checkbox" value="<%= enableKBArticleAssetLinks %>" />
-
-						<aui:input label="enable-feedback" name="preferences--enableKBArticleKBComments--" type="checkbox" value="<%= enableKBArticleKBComments %>" />
-
-						<aui:input label="show-feedback" name="preferences--showKBArticleKBComments--" type="checkbox" value="<%= showKBArticleKBComments %>" />
 
 						<aui:input label="enable-view-count-increment" name="preferences--enableKBArticleViewCountIncrement--" type="checkbox" value="<%= enableKBArticleViewCountIncrement %>" />
 					</c:when>
@@ -324,3 +413,9 @@ else if (tabs2.equals("article-updated-email")) {
 		</aui:button-row>
 	</aui:fieldset>
 </aui:form>
+
+<c:if test='<%= tabs2.equals("display-settings") && tabs3.equals("article") %>'>
+	<aui:script>
+		Liferay.Util.toggleBoxes('<portlet:namespace />enableKBArticleRatingsCheckbox', '<portlet:namespace />ratingsType');
+	</aui:script>
+</c:if>

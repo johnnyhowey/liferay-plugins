@@ -199,20 +199,6 @@ public class KBCommentLocalServiceWrapper implements KBCommentLocalService,
 	}
 
 	/**
-	* Returns the k b comment with the matching UUID and company.
-	*
-	* @param uuid the k b comment's UUID
-	* @param companyId the primary key of the company
-	* @return the matching k b comment, or <code>null</code> if a matching k b comment could not be found
-	*/
-	@Override
-	public com.liferay.knowledgebase.model.KBComment fetchKBCommentByUuidAndCompanyId(
-		java.lang.String uuid, long companyId) {
-		return _kbCommentLocalService.fetchKBCommentByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the k b comment matching the UUID and group.
 	*
 	* @param uuid the k b comment's UUID
@@ -269,22 +255,6 @@ public class KBCommentLocalServiceWrapper implements KBCommentLocalService,
 	}
 
 	/**
-	* Returns the k b comment with the matching UUID and company.
-	*
-	* @param uuid the k b comment's UUID
-	* @param companyId the primary key of the company
-	* @return the matching k b comment
-	* @throws PortalException if a matching k b comment could not be found
-	*/
-	@Override
-	public com.liferay.knowledgebase.model.KBComment getKBCommentByUuidAndCompanyId(
-		java.lang.String uuid, long companyId)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		return _kbCommentLocalService.getKBCommentByUuidAndCompanyId(uuid,
-			companyId);
-	}
-
-	/**
 	* Returns the k b comment matching the UUID and group.
 	*
 	* @param uuid the k b comment's UUID
@@ -307,6 +277,12 @@ public class KBCommentLocalServiceWrapper implements KBCommentLocalService,
 			end, orderByComparator);
 	}
 
+	@Override
+	public java.util.List<com.liferay.knowledgebase.model.KBComment> getKBComments(
+		long groupId, int status, int start, int end) {
+		return _kbCommentLocalService.getKBComments(groupId, status, start, end);
+	}
+
 	/**
 	* Returns a range of all the k b comments.
 	*
@@ -324,6 +300,30 @@ public class KBCommentLocalServiceWrapper implements KBCommentLocalService,
 		return _kbCommentLocalService.getKBComments(start, end);
 	}
 
+	@Override
+	public java.util.List<com.liferay.knowledgebase.model.KBComment> getKBComments(
+		long userId, java.lang.String className, long classPK, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.knowledgebase.model.KBComment> orderByComparator) {
+		return _kbCommentLocalService.getKBComments(userId, className, classPK,
+			start, end, orderByComparator);
+	}
+
+	@Override
+	public java.util.List<com.liferay.knowledgebase.model.KBComment> getKBCommentsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId) {
+		return _kbCommentLocalService.getKBCommentsByUuidAndCompanyId(uuid,
+			companyId);
+	}
+
+	@Override
+	public java.util.List<com.liferay.knowledgebase.model.KBComment> getKBCommentsByUuidAndCompanyId(
+		java.lang.String uuid, long companyId, int start, int end,
+		com.liferay.portal.kernel.util.OrderByComparator<com.liferay.knowledgebase.model.KBComment> orderByComparator) {
+		return _kbCommentLocalService.getKBCommentsByUuidAndCompanyId(uuid,
+			companyId, start, end, orderByComparator);
+	}
+
 	/**
 	* Returns the number of k b comments.
 	*
@@ -337,6 +337,18 @@ public class KBCommentLocalServiceWrapper implements KBCommentLocalService,
 	@Override
 	public int getKBCommentsCount(java.lang.String className, long classPK) {
 		return _kbCommentLocalService.getKBCommentsCount(className, classPK);
+	}
+
+	@Override
+	public int getKBCommentsCount(long groupId, int status) {
+		return _kbCommentLocalService.getKBCommentsCount(groupId, status);
+	}
+
+	@Override
+	public int getKBCommentsCount(long userId, java.lang.String className,
+		long classPK) {
+		return _kbCommentLocalService.getKBCommentsCount(userId, className,
+			classPK);
 	}
 
 	@Override
@@ -379,11 +391,20 @@ public class KBCommentLocalServiceWrapper implements KBCommentLocalService,
 	@Override
 	public com.liferay.knowledgebase.model.KBComment updateKBComment(
 		long kbCommentId, long classNameId, long classPK,
-		java.lang.String content, boolean helpful,
+		java.lang.String content, boolean helpful, int status,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _kbCommentLocalService.updateKBComment(kbCommentId, classNameId,
-			classPK, content, helpful, serviceContext);
+			classPK, content, helpful, status, serviceContext);
+	}
+
+	@Override
+	public com.liferay.knowledgebase.model.KBComment updateStatus(
+		long kbCommentId, int status,
+		com.liferay.portal.service.ServiceContext serviceContext)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _kbCommentLocalService.updateStatus(kbCommentId, status,
+			serviceContext);
 	}
 
 	/**
