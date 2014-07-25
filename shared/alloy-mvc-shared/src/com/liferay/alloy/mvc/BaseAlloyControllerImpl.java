@@ -750,6 +750,10 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		user = themeDisplay.getUser();
 	}
 
+	protected String processDataRequest(ActionRequest actionRequest) {
+		return null;
+	}
+
 	protected void redirectTo(PortletURL portletURL) {
 		redirectTo(portletURL.toString());
 	}
@@ -789,13 +793,17 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	}
 
 	protected AlloySearchResult search(
-			Map<String, Serializable> attributes, String keywords, Sort sort)
+			HttpServletRequest request, PortletRequest portletRequest,
+			Map<String, Serializable> attributes, String keywords, Sort[] sorts)
 		throws Exception {
 
-		return search(attributes, keywords, new Sort[] {sort});
+		return search(
+			request, portletRequest, null, attributes, keywords, sorts);
 	}
 
 	protected AlloySearchResult search(
+			HttpServletRequest request, PortletRequest portletRequest,
+			SearchContainer<? extends BaseModel<?>> searchContainer,
 			Map<String, Serializable> attributes, String keywords, Sort[] sorts)
 		throws Exception {
 
@@ -807,9 +815,10 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 
 		alloySearchResult.setAlloyServiceInvoker(alloyServiceInvoker);
 
-		SearchContainer<BaseModel<?>> searchContainer =
-			new SearchContainer<BaseModel<?>>(
+		if (searchContainer == null) {
+			searchContainer = new SearchContainer<BaseModel<?>>(
 				portletRequest, portletURL, null, null);
+		}
 
 		SearchContext searchContext = SearchContextFactory.getInstance(request);
 
@@ -855,6 +864,20 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		alloySearchResult.afterPropertiesSet();
 
 		return alloySearchResult;
+	}
+
+	protected AlloySearchResult search(
+			Map<String, Serializable> attributes, String keywords, Sort sort)
+		throws Exception {
+
+		return search(attributes, keywords, new Sort[] {sort});
+	}
+
+	protected AlloySearchResult search(
+			Map<String, Serializable> attributes, String keywords, Sort[] sorts)
+		throws Exception {
+
+		return search(request, portletRequest, attributes, keywords, sorts);
 	}
 
 	protected AlloySearchResult search(String keywords) throws Exception {

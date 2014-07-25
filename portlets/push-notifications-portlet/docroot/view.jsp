@@ -14,8 +14,30 @@
  */
 --%>
 
-<%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
+<%@ include file="/init.jsp" %>
 
-<portlet:defineObjects />
+<aui:form name="fm">
+	<aui:input label="message" name="message" type="textarea" />
 
-This is the <b>Push Notifications</b> portlet.
+	<aui:button type="submit" value="send" />
+</aui:form>
+
+<aui:script use="aui-base">
+	var form = A.one('#<portlet:namespace />fm');
+
+	form.on(
+		'submit',
+		function(event) {
+			event.halt();
+
+			var message = form.one('textarea[name="<portlet:namespace />message"]').val();
+
+			Liferay.Service(
+				'/push-notifications-portlet.pushnotificationsdevice/send-push-notification',
+				{
+					message: message
+				}
+			);
+		}
+	);
+</aui:script>

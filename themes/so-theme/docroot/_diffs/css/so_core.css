@@ -22,7 +22,6 @@
 
 	.site-title {
 		display: inline-block;
-		float: left;
 
 		&, a {
 			color: $red;
@@ -43,6 +42,10 @@
 			vertical-align: middle;
 			width: auto;
 		}
+	}
+
+	.member-link {
+		margin: 0 1em;
 	}
 
 	.avatar {
@@ -868,17 +871,15 @@ html.aui {
 		padding: 0;
 	}
 
-	.abstract, .entry-categories, .entry-tags {
-		display: none;
+	.abstract img {
+		margin-right: 10px;
 	}
 
-	.comments {
-		display: inline;
-		margin: 0.5em 0;
-	}
-
-	.comments a {
-		white-space: nowrap;
+	.entry-tags {
+		border-left-width: 0;
+		margin-bottom: 0.5em;
+		padding-left: 0;
+		padding-right: 0;
 	}
 }
 
@@ -966,17 +967,7 @@ html.aui {
 			}
 
 			a {
-				background-color: #EEE;
-
-				@include border-radius(4px);
-
-				display: inline-block;
-				padding: 4px 6px;
-
-				&:hover {
-					background-color: #DDD;
-					text-decoration: none;
-				}
+				@include tag(true);
 			}
 		}
 	}
@@ -1279,17 +1270,6 @@ html.aui {
 
 	.tags {
 		margin-bottom: 0.5em;
-
-		.tag {
-			background-color: #EEE;
-			background-position-x: 7px;
-
-			@include border-radius(4px);
-
-			color: #2571AD;
-			display: inline-block;
-			padding: 7px 7px 7px 27px;
-		}
 	}
 
 	/* ---------- Thread ---------- */
@@ -1301,8 +1281,10 @@ html.aui {
 	.thread-message-view {
 		position: relative;
 
-		td, tr {
-			display: block;
+		> tbody > {
+			tr, tr > td {
+				display: block;
+			}
 		}
 	}
 
@@ -1389,6 +1371,7 @@ html.aui {
 		.user-profile-image {
 			height: 55px;
 			max-width: 55px;
+			overflow: hidden;
 
 			.avatar {
 				width: 55px;
@@ -1766,6 +1749,10 @@ html.aui {
 	.thumbrating .rating-label {
 		display: inline-block;
 	}
+}
+
+.taglib-asset-tags-summary .tag {
+	@include tag(false);
 }
 
 /* ---------- Top links component ---------- */

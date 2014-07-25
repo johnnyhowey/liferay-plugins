@@ -2415,6 +2415,520 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 
 	private static final String _FINDER_COLUMN_G_C_GROUPID_2 = "kbComment.groupId = ? AND ";
 	private static final String _FINDER_COLUMN_G_C_CLASSNAMEID_2 = "kbComment.classNameId = ?";
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S = new FinderPath(KBCommentModelImpl.ENTITY_CACHE_ENABLED,
+			KBCommentModelImpl.FINDER_CACHE_ENABLED, KBCommentImpl.class,
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByG_S",
+			new String[] {
+				Long.class.getName(), Integer.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S = new FinderPath(KBCommentModelImpl.ENTITY_CACHE_ENABLED,
+			KBCommentModelImpl.FINDER_CACHE_ENABLED, KBCommentImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByG_S",
+			new String[] { Long.class.getName(), Integer.class.getName() },
+			KBCommentModelImpl.GROUPID_COLUMN_BITMASK |
+			KBCommentModelImpl.STATUS_COLUMN_BITMASK |
+			KBCommentModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
+	public static final FinderPath FINDER_PATH_COUNT_BY_G_S = new FinderPath(KBCommentModelImpl.ENTITY_CACHE_ENABLED,
+			KBCommentModelImpl.FINDER_CACHE_ENABLED, Long.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByG_S",
+			new String[] { Long.class.getName(), Integer.class.getName() });
+
+	/**
+	 * Returns all the k b comments where groupId = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the matching k b comments
+	 */
+	@Override
+	public List<KBComment> findByG_S(long groupId, int status) {
+		return findByG_S(groupId, status, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+			null);
+	}
+
+	/**
+	 * Returns a range of all the k b comments where groupId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBCommentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param start the lower bound of the range of k b comments
+	 * @param end the upper bound of the range of k b comments (not inclusive)
+	 * @return the range of matching k b comments
+	 */
+	@Override
+	public List<KBComment> findByG_S(long groupId, int status, int start,
+		int end) {
+		return findByG_S(groupId, status, start, end, null);
+	}
+
+	/**
+	 * Returns an ordered range of all the k b comments where groupId = &#63; and status = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBCommentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param start the lower bound of the range of k b comments
+	 * @param end the upper bound of the range of k b comments (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b comments
+	 */
+	@Override
+	public List<KBComment> findByG_S(long groupId, int status, int start,
+		int end, OrderByComparator<KBComment> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
+
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S;
+			finderArgs = new Object[] { groupId, status };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_G_S;
+			finderArgs = new Object[] {
+					groupId, status,
+					
+					start, end, orderByComparator
+				};
+		}
+
+		List<KBComment> list = (List<KBComment>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
+
+		if ((list != null) && !list.isEmpty()) {
+			for (KBComment kbComment : list) {
+				if ((groupId != kbComment.getGroupId()) ||
+						(status != kbComment.getStatus())) {
+					list = null;
+
+					break;
+				}
+			}
+		}
+
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(4 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(4);
+			}
+
+			query.append(_SQL_SELECT_KBCOMMENT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_S_STATUS_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBCommentModelImpl.ORDER_BY_JPQL);
+			}
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(status);
+
+				if (!pagination) {
+					list = (List<KBComment>)QueryUtil.list(q, getDialect(),
+							start, end, false);
+
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
+				}
+				else {
+					list = (List<KBComment>)QueryUtil.list(q, getDialect(),
+							start, end);
+				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns the first k b comment in the ordered set where groupId = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching k b comment
+	 * @throws com.liferay.knowledgebase.NoSuchCommentException if a matching k b comment could not be found
+	 */
+	@Override
+	public KBComment findByG_S_First(long groupId, int status,
+		OrderByComparator<KBComment> orderByComparator)
+		throws NoSuchCommentException {
+		KBComment kbComment = fetchByG_S_First(groupId, status,
+				orderByComparator);
+
+		if (kbComment != null) {
+			return kbComment;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCommentException(msg.toString());
+	}
+
+	/**
+	 * Returns the first k b comment in the ordered set where groupId = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching k b comment, or <code>null</code> if a matching k b comment could not be found
+	 */
+	@Override
+	public KBComment fetchByG_S_First(long groupId, int status,
+		OrderByComparator<KBComment> orderByComparator) {
+		List<KBComment> list = findByG_S(groupId, status, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last k b comment in the ordered set where groupId = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching k b comment
+	 * @throws com.liferay.knowledgebase.NoSuchCommentException if a matching k b comment could not be found
+	 */
+	@Override
+	public KBComment findByG_S_Last(long groupId, int status,
+		OrderByComparator<KBComment> orderByComparator)
+		throws NoSuchCommentException {
+		KBComment kbComment = fetchByG_S_Last(groupId, status, orderByComparator);
+
+		if (kbComment != null) {
+			return kbComment;
+		}
+
+		StringBundler msg = new StringBundler(6);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("groupId=");
+		msg.append(groupId);
+
+		msg.append(", status=");
+		msg.append(status);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCommentException(msg.toString());
+	}
+
+	/**
+	 * Returns the last k b comment in the ordered set where groupId = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching k b comment, or <code>null</code> if a matching k b comment could not be found
+	 */
+	@Override
+	public KBComment fetchByG_S_Last(long groupId, int status,
+		OrderByComparator<KBComment> orderByComparator) {
+		int count = countByG_S(groupId, status);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<KBComment> list = findByG_S(groupId, status, count - 1, count,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the k b comments before and after the current k b comment in the ordered set where groupId = &#63; and status = &#63;.
+	 *
+	 * @param kbCommentId the primary key of the current k b comment
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next k b comment
+	 * @throws com.liferay.knowledgebase.NoSuchCommentException if a k b comment with the primary key could not be found
+	 */
+	@Override
+	public KBComment[] findByG_S_PrevAndNext(long kbCommentId, long groupId,
+		int status, OrderByComparator<KBComment> orderByComparator)
+		throws NoSuchCommentException {
+		KBComment kbComment = findByPrimaryKey(kbCommentId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			KBComment[] array = new KBCommentImpl[3];
+
+			array[0] = getByG_S_PrevAndNext(session, kbComment, groupId,
+					status, orderByComparator, true);
+
+			array[1] = kbComment;
+
+			array[2] = getByG_S_PrevAndNext(session, kbComment, groupId,
+					status, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected KBComment getByG_S_PrevAndNext(Session session,
+		KBComment kbComment, long groupId, int status,
+		OrderByComparator<KBComment> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_KBCOMMENT_WHERE);
+
+		query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+		query.append(_FINDER_COLUMN_G_S_STATUS_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(KBCommentModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(groupId);
+
+		qPos.add(status);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(kbComment);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<KBComment> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the k b comments where groupId = &#63; and status = &#63; from the database.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 */
+	@Override
+	public void removeByG_S(long groupId, int status) {
+		for (KBComment kbComment : findByG_S(groupId, status,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbComment);
+		}
+	}
+
+	/**
+	 * Returns the number of k b comments where groupId = &#63; and status = &#63;.
+	 *
+	 * @param groupId the group ID
+	 * @param status the status
+	 * @return the number of matching k b comments
+	 */
+	@Override
+	public int countByG_S(long groupId, int status) {
+		FinderPath finderPath = FINDER_PATH_COUNT_BY_G_S;
+
+		Object[] finderArgs = new Object[] { groupId, status };
+
+		Long count = (Long)FinderCacheUtil.getResult(finderPath, finderArgs,
+				this);
+
+		if (count == null) {
+			StringBundler query = new StringBundler(3);
+
+			query.append(_SQL_COUNT_KBCOMMENT_WHERE);
+
+			query.append(_FINDER_COLUMN_G_S_GROUPID_2);
+
+			query.append(_FINDER_COLUMN_G_S_STATUS_2);
+
+			String sql = query.toString();
+
+			Session session = null;
+
+			try {
+				session = openSession();
+
+				Query q = session.createQuery(sql);
+
+				QueryPos qPos = QueryPos.getInstance(q);
+
+				qPos.add(groupId);
+
+				qPos.add(status);
+
+				count = (Long)q.uniqueResult();
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, count);
+			}
+			catch (Exception e) {
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
+
+				throw processException(e);
+			}
+			finally {
+				closeSession(session);
+			}
+		}
+
+		return count.intValue();
+	}
+
+	private static final String _FINDER_COLUMN_G_S_GROUPID_2 = "kbComment.groupId = ? AND ";
+	private static final String _FINDER_COLUMN_G_S_STATUS_2 = "kbComment.status = ?";
 	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_C_C = new FinderPath(KBCommentModelImpl.ENTITY_CACHE_ENABLED,
 			KBCommentModelImpl.FINDER_CACHE_ENABLED, KBCommentImpl.class,
 			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByC_C",
@@ -2931,15 +3445,25 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 
 	private static final String _FINDER_COLUMN_C_C_CLASSNAMEID_2 = "kbComment.classNameId = ? AND ";
 	private static final String _FINDER_COLUMN_C_C_CLASSPK_2 = "kbComment.classPK = ?";
-	public static final FinderPath FINDER_PATH_FETCH_BY_U_C_C = new FinderPath(KBCommentModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_FIND_BY_U_C_C = new FinderPath(KBCommentModelImpl.ENTITY_CACHE_ENABLED,
 			KBCommentModelImpl.FINDER_CACHE_ENABLED, KBCommentImpl.class,
-			FINDER_CLASS_NAME_ENTITY, "fetchByU_C_C",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "findByU_C_C",
+			new String[] {
+				Long.class.getName(), Long.class.getName(), Long.class.getName(),
+				
+			Integer.class.getName(), Integer.class.getName(),
+				OrderByComparator.class.getName()
+			});
+	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C_C = new FinderPath(KBCommentModelImpl.ENTITY_CACHE_ENABLED,
+			KBCommentModelImpl.FINDER_CACHE_ENABLED, KBCommentImpl.class,
+			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByU_C_C",
 			new String[] {
 				Long.class.getName(), Long.class.getName(), Long.class.getName()
 			},
 			KBCommentModelImpl.USERID_COLUMN_BITMASK |
 			KBCommentModelImpl.CLASSNAMEID_COLUMN_BITMASK |
-			KBCommentModelImpl.CLASSPK_COLUMN_BITMASK);
+			KBCommentModelImpl.CLASSPK_COLUMN_BITMASK |
+			KBCommentModelImpl.MODIFIEDDATE_COLUMN_BITMASK);
 	public static final FinderPath FINDER_PATH_COUNT_BY_U_C_C = new FinderPath(KBCommentModelImpl.ENTITY_CACHE_ENABLED,
 			KBCommentModelImpl.FINDER_CACHE_ENABLED, Long.class,
 			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByU_C_C",
@@ -2948,91 +3472,103 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 			});
 
 	/**
-	 * Returns the k b comment where userId = &#63; and classNameId = &#63; and classPK = &#63; or throws a {@link com.liferay.knowledgebase.NoSuchCommentException} if it could not be found.
+	 * Returns all the k b comments where userId = &#63; and classNameId = &#63; and classPK = &#63;.
 	 *
 	 * @param userId the user ID
 	 * @param classNameId the class name ID
 	 * @param classPK the class p k
-	 * @return the matching k b comment
-	 * @throws com.liferay.knowledgebase.NoSuchCommentException if a matching k b comment could not be found
+	 * @return the matching k b comments
 	 */
 	@Override
-	public KBComment findByU_C_C(long userId, long classNameId, long classPK)
-		throws NoSuchCommentException {
-		KBComment kbComment = fetchByU_C_C(userId, classNameId, classPK);
-
-		if (kbComment == null) {
-			StringBundler msg = new StringBundler(8);
-
-			msg.append(_NO_SUCH_ENTITY_WITH_KEY);
-
-			msg.append("userId=");
-			msg.append(userId);
-
-			msg.append(", classNameId=");
-			msg.append(classNameId);
-
-			msg.append(", classPK=");
-			msg.append(classPK);
-
-			msg.append(StringPool.CLOSE_CURLY_BRACE);
-
-			if (_log.isWarnEnabled()) {
-				_log.warn(msg.toString());
-			}
-
-			throw new NoSuchCommentException(msg.toString());
-		}
-
-		return kbComment;
+	public List<KBComment> findByU_C_C(long userId, long classNameId,
+		long classPK) {
+		return findByU_C_C(userId, classNameId, classPK, QueryUtil.ALL_POS,
+			QueryUtil.ALL_POS, null);
 	}
 
 	/**
-	 * Returns the k b comment where userId = &#63; and classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found. Uses the finder cache.
+	 * Returns a range of all the k b comments where userId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBCommentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
 	 *
 	 * @param userId the user ID
 	 * @param classNameId the class name ID
 	 * @param classPK the class p k
-	 * @return the matching k b comment, or <code>null</code> if a matching k b comment could not be found
+	 * @param start the lower bound of the range of k b comments
+	 * @param end the upper bound of the range of k b comments (not inclusive)
+	 * @return the range of matching k b comments
 	 */
 	@Override
-	public KBComment fetchByU_C_C(long userId, long classNameId, long classPK) {
-		return fetchByU_C_C(userId, classNameId, classPK, true);
+	public List<KBComment> findByU_C_C(long userId, long classNameId,
+		long classPK, int start, int end) {
+		return findByU_C_C(userId, classNameId, classPK, start, end, null);
 	}
 
 	/**
-	 * Returns the k b comment where userId = &#63; and classNameId = &#63; and classPK = &#63; or returns <code>null</code> if it could not be found, optionally using the finder cache.
+	 * Returns an ordered range of all the k b comments where userId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * <p>
+	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link com.liferay.knowledgebase.model.impl.KBCommentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
+	 * </p>
 	 *
 	 * @param userId the user ID
 	 * @param classNameId the class name ID
 	 * @param classPK the class p k
-	 * @param retrieveFromCache whether to use the finder cache
-	 * @return the matching k b comment, or <code>null</code> if a matching k b comment could not be found
+	 * @param start the lower bound of the range of k b comments
+	 * @param end the upper bound of the range of k b comments (not inclusive)
+	 * @param orderByComparator the comparator to order the results by (optionally <code>null</code>)
+	 * @return the ordered range of matching k b comments
 	 */
 	@Override
-	public KBComment fetchByU_C_C(long userId, long classNameId, long classPK,
-		boolean retrieveFromCache) {
-		Object[] finderArgs = new Object[] { userId, classNameId, classPK };
+	public List<KBComment> findByU_C_C(long userId, long classNameId,
+		long classPK, int start, int end,
+		OrderByComparator<KBComment> orderByComparator) {
+		boolean pagination = true;
+		FinderPath finderPath = null;
+		Object[] finderArgs = null;
 
-		Object result = null;
-
-		if (retrieveFromCache) {
-			result = FinderCacheUtil.getResult(FINDER_PATH_FETCH_BY_U_C_C,
-					finderArgs, this);
+		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
+				(orderByComparator == null)) {
+			pagination = false;
+			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C_C;
+			finderArgs = new Object[] { userId, classNameId, classPK };
+		}
+		else {
+			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_U_C_C;
+			finderArgs = new Object[] {
+					userId, classNameId, classPK,
+					
+					start, end, orderByComparator
+				};
 		}
 
-		if (result instanceof KBComment) {
-			KBComment kbComment = (KBComment)result;
+		List<KBComment> list = (List<KBComment>)FinderCacheUtil.getResult(finderPath,
+				finderArgs, this);
 
-			if ((userId != kbComment.getUserId()) ||
-					(classNameId != kbComment.getClassNameId()) ||
-					(classPK != kbComment.getClassPK())) {
-				result = null;
+		if ((list != null) && !list.isEmpty()) {
+			for (KBComment kbComment : list) {
+				if ((userId != kbComment.getUserId()) ||
+						(classNameId != kbComment.getClassNameId()) ||
+						(classPK != kbComment.getClassPK())) {
+					list = null;
+
+					break;
+				}
 			}
 		}
 
-		if (result == null) {
-			StringBundler query = new StringBundler(5);
+		if (list == null) {
+			StringBundler query = null;
+
+			if (orderByComparator != null) {
+				query = new StringBundler(5 +
+						(orderByComparator.getOrderByFields().length * 3));
+			}
+			else {
+				query = new StringBundler(5);
+			}
 
 			query.append(_SQL_SELECT_KBCOMMENT_WHERE);
 
@@ -3041,6 +3577,15 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 			query.append(_FINDER_COLUMN_U_C_C_CLASSNAMEID_2);
 
 			query.append(_FINDER_COLUMN_U_C_C_CLASSPK_2);
+
+			if (orderByComparator != null) {
+				appendOrderByComparator(query, _ORDER_BY_ENTITY_ALIAS,
+					orderByComparator);
+			}
+			else
+			 if (pagination) {
+				query.append(KBCommentModelImpl.ORDER_BY_JPQL);
+			}
 
 			String sql = query.toString();
 
@@ -3059,30 +3604,25 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 
 				qPos.add(classPK);
 
-				List<KBComment> list = q.list();
+				if (!pagination) {
+					list = (List<KBComment>)QueryUtil.list(q, getDialect(),
+							start, end, false);
 
-				if (list.isEmpty()) {
-					FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_C_C,
-						finderArgs, list);
+					Collections.sort(list);
+
+					list = Collections.unmodifiableList(list);
 				}
 				else {
-					KBComment kbComment = list.get(0);
-
-					result = kbComment;
-
-					cacheResult(kbComment);
-
-					if ((kbComment.getUserId() != userId) ||
-							(kbComment.getClassNameId() != classNameId) ||
-							(kbComment.getClassPK() != classPK)) {
-						FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_C_C,
-							finderArgs, kbComment);
-					}
+					list = (List<KBComment>)QueryUtil.list(q, getDialect(),
+							start, end);
 				}
+
+				cacheResult(list);
+
+				FinderCacheUtil.putResult(finderPath, finderArgs, list);
 			}
 			catch (Exception e) {
-				FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_C_C,
-					finderArgs);
+				FinderCacheUtil.removeResult(finderPath, finderArgs);
 
 				throw processException(e);
 			}
@@ -3091,28 +3631,306 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 			}
 		}
 
-		if (result instanceof List<?>) {
-			return null;
-		}
-		else {
-			return (KBComment)result;
-		}
+		return list;
 	}
 
 	/**
-	 * Removes the k b comment where userId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	 * Returns the first k b comment in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63;.
 	 *
 	 * @param userId the user ID
 	 * @param classNameId the class name ID
 	 * @param classPK the class p k
-	 * @return the k b comment that was removed
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching k b comment
+	 * @throws com.liferay.knowledgebase.NoSuchCommentException if a matching k b comment could not be found
 	 */
 	@Override
-	public KBComment removeByU_C_C(long userId, long classNameId, long classPK)
+	public KBComment findByU_C_C_First(long userId, long classNameId,
+		long classPK, OrderByComparator<KBComment> orderByComparator)
 		throws NoSuchCommentException {
-		KBComment kbComment = findByU_C_C(userId, classNameId, classPK);
+		KBComment kbComment = fetchByU_C_C_First(userId, classNameId, classPK,
+				orderByComparator);
 
-		return remove(kbComment);
+		if (kbComment != null) {
+			return kbComment;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCommentException(msg.toString());
+	}
+
+	/**
+	 * Returns the first k b comment in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the first matching k b comment, or <code>null</code> if a matching k b comment could not be found
+	 */
+	@Override
+	public KBComment fetchByU_C_C_First(long userId, long classNameId,
+		long classPK, OrderByComparator<KBComment> orderByComparator) {
+		List<KBComment> list = findByU_C_C(userId, classNameId, classPK, 0, 1,
+				orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the last k b comment in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching k b comment
+	 * @throws com.liferay.knowledgebase.NoSuchCommentException if a matching k b comment could not be found
+	 */
+	@Override
+	public KBComment findByU_C_C_Last(long userId, long classNameId,
+		long classPK, OrderByComparator<KBComment> orderByComparator)
+		throws NoSuchCommentException {
+		KBComment kbComment = fetchByU_C_C_Last(userId, classNameId, classPK,
+				orderByComparator);
+
+		if (kbComment != null) {
+			return kbComment;
+		}
+
+		StringBundler msg = new StringBundler(8);
+
+		msg.append(_NO_SUCH_ENTITY_WITH_KEY);
+
+		msg.append("userId=");
+		msg.append(userId);
+
+		msg.append(", classNameId=");
+		msg.append(classNameId);
+
+		msg.append(", classPK=");
+		msg.append(classPK);
+
+		msg.append(StringPool.CLOSE_CURLY_BRACE);
+
+		throw new NoSuchCommentException(msg.toString());
+	}
+
+	/**
+	 * Returns the last k b comment in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the last matching k b comment, or <code>null</code> if a matching k b comment could not be found
+	 */
+	@Override
+	public KBComment fetchByU_C_C_Last(long userId, long classNameId,
+		long classPK, OrderByComparator<KBComment> orderByComparator) {
+		int count = countByU_C_C(userId, classNameId, classPK);
+
+		if (count == 0) {
+			return null;
+		}
+
+		List<KBComment> list = findByU_C_C(userId, classNameId, classPK,
+				count - 1, count, orderByComparator);
+
+		if (!list.isEmpty()) {
+			return list.get(0);
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the k b comments before and after the current k b comment in the ordered set where userId = &#63; and classNameId = &#63; and classPK = &#63;.
+	 *
+	 * @param kbCommentId the primary key of the current k b comment
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
+	 * @return the previous, current, and next k b comment
+	 * @throws com.liferay.knowledgebase.NoSuchCommentException if a k b comment with the primary key could not be found
+	 */
+	@Override
+	public KBComment[] findByU_C_C_PrevAndNext(long kbCommentId, long userId,
+		long classNameId, long classPK,
+		OrderByComparator<KBComment> orderByComparator)
+		throws NoSuchCommentException {
+		KBComment kbComment = findByPrimaryKey(kbCommentId);
+
+		Session session = null;
+
+		try {
+			session = openSession();
+
+			KBComment[] array = new KBCommentImpl[3];
+
+			array[0] = getByU_C_C_PrevAndNext(session, kbComment, userId,
+					classNameId, classPK, orderByComparator, true);
+
+			array[1] = kbComment;
+
+			array[2] = getByU_C_C_PrevAndNext(session, kbComment, userId,
+					classNameId, classPK, orderByComparator, false);
+
+			return array;
+		}
+		catch (Exception e) {
+			throw processException(e);
+		}
+		finally {
+			closeSession(session);
+		}
+	}
+
+	protected KBComment getByU_C_C_PrevAndNext(Session session,
+		KBComment kbComment, long userId, long classNameId, long classPK,
+		OrderByComparator<KBComment> orderByComparator, boolean previous) {
+		StringBundler query = null;
+
+		if (orderByComparator != null) {
+			query = new StringBundler(6 +
+					(orderByComparator.getOrderByFields().length * 6));
+		}
+		else {
+			query = new StringBundler(3);
+		}
+
+		query.append(_SQL_SELECT_KBCOMMENT_WHERE);
+
+		query.append(_FINDER_COLUMN_U_C_C_USERID_2);
+
+		query.append(_FINDER_COLUMN_U_C_C_CLASSNAMEID_2);
+
+		query.append(_FINDER_COLUMN_U_C_C_CLASSPK_2);
+
+		if (orderByComparator != null) {
+			String[] orderByConditionFields = orderByComparator.getOrderByConditionFields();
+
+			if (orderByConditionFields.length > 0) {
+				query.append(WHERE_AND);
+			}
+
+			for (int i = 0; i < orderByConditionFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByConditionFields[i]);
+
+				if ((i + 1) < orderByConditionFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN_HAS_NEXT);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(WHERE_GREATER_THAN);
+					}
+					else {
+						query.append(WHERE_LESSER_THAN);
+					}
+				}
+			}
+
+			query.append(ORDER_BY_CLAUSE);
+
+			String[] orderByFields = orderByComparator.getOrderByFields();
+
+			for (int i = 0; i < orderByFields.length; i++) {
+				query.append(_ORDER_BY_ENTITY_ALIAS);
+				query.append(orderByFields[i]);
+
+				if ((i + 1) < orderByFields.length) {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC_HAS_NEXT);
+					}
+					else {
+						query.append(ORDER_BY_DESC_HAS_NEXT);
+					}
+				}
+				else {
+					if (orderByComparator.isAscending() ^ previous) {
+						query.append(ORDER_BY_ASC);
+					}
+					else {
+						query.append(ORDER_BY_DESC);
+					}
+				}
+			}
+		}
+		else {
+			query.append(KBCommentModelImpl.ORDER_BY_JPQL);
+		}
+
+		String sql = query.toString();
+
+		Query q = session.createQuery(sql);
+
+		q.setFirstResult(0);
+		q.setMaxResults(2);
+
+		QueryPos qPos = QueryPos.getInstance(q);
+
+		qPos.add(userId);
+
+		qPos.add(classNameId);
+
+		qPos.add(classPK);
+
+		if (orderByComparator != null) {
+			Object[] values = orderByComparator.getOrderByConditionValues(kbComment);
+
+			for (Object value : values) {
+				qPos.add(value);
+			}
+		}
+
+		List<KBComment> list = q.list();
+
+		if (list.size() == 2) {
+			return list.get(1);
+		}
+		else {
+			return null;
+		}
+	}
+
+	/**
+	 * Removes all the k b comments where userId = &#63; and classNameId = &#63; and classPK = &#63; from the database.
+	 *
+	 * @param userId the user ID
+	 * @param classNameId the class name ID
+	 * @param classPK the class p k
+	 */
+	@Override
+	public void removeByU_C_C(long userId, long classNameId, long classPK) {
+		for (KBComment kbComment : findByU_C_C(userId, classNameId, classPK,
+				QueryUtil.ALL_POS, QueryUtil.ALL_POS, null)) {
+			remove(kbComment);
+		}
 	}
 
 	/**
@@ -3199,12 +4017,6 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 			new Object[] { kbComment.getUuid(), kbComment.getGroupId() },
 			kbComment);
 
-		FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_C_C,
-			new Object[] {
-				kbComment.getUserId(), kbComment.getClassNameId(),
-				kbComment.getClassPK()
-			}, kbComment);
-
 		kbComment.resetOriginalValues();
 	}
 
@@ -3288,16 +4100,6 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 				Long.valueOf(1));
 			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G, args,
 				kbComment);
-
-			args = new Object[] {
-					kbComment.getUserId(), kbComment.getClassNameId(),
-					kbComment.getClassPK()
-				};
-
-			FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_C_C, args,
-				Long.valueOf(1));
-			FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_C_C, args,
-				kbComment);
 		}
 		else {
 			KBCommentModelImpl kbCommentModelImpl = (KBCommentModelImpl)kbComment;
@@ -3311,19 +4113,6 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_UUID_G, args,
 					Long.valueOf(1));
 				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_UUID_G, args,
-					kbComment);
-			}
-
-			if ((kbCommentModelImpl.getColumnBitmask() &
-					FINDER_PATH_FETCH_BY_U_C_C.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] {
-						kbComment.getUserId(), kbComment.getClassNameId(),
-						kbComment.getClassPK()
-					};
-
-				FinderCacheUtil.putResult(FINDER_PATH_COUNT_BY_U_C_C, args,
-					Long.valueOf(1));
-				FinderCacheUtil.putResult(FINDER_PATH_FETCH_BY_U_C_C, args,
 					kbComment);
 			}
 		}
@@ -3346,26 +4135,6 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 
 			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_UUID_G, args);
 			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_UUID_G, args);
-		}
-
-		args = new Object[] {
-				kbComment.getUserId(), kbComment.getClassNameId(),
-				kbComment.getClassPK()
-			};
-
-		FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_C_C, args);
-		FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_C_C, args);
-
-		if ((kbCommentModelImpl.getColumnBitmask() &
-				FINDER_PATH_FETCH_BY_U_C_C.getColumnBitmask()) != 0) {
-			args = new Object[] {
-					kbCommentModelImpl.getOriginalUserId(),
-					kbCommentModelImpl.getOriginalClassNameId(),
-					kbCommentModelImpl.getOriginalClassPK()
-				};
-
-			FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_C_C, args);
-			FinderCacheUtil.removeResult(FINDER_PATH_FETCH_BY_U_C_C, args);
 		}
 	}
 
@@ -3593,6 +4362,27 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 			}
 
 			if ((kbCommentModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbCommentModelImpl.getOriginalGroupId(),
+						kbCommentModelImpl.getOriginalStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+
+				args = new Object[] {
+						kbCommentModelImpl.getGroupId(),
+						kbCommentModelImpl.getStatus()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_G_S, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_G_S,
+					args);
+			}
+
+			if ((kbCommentModelImpl.getColumnBitmask() &
 					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C.getColumnBitmask()) != 0) {
 				Object[] args = new Object[] {
 						kbCommentModelImpl.getOriginalClassNameId(),
@@ -3610,6 +4400,29 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 
 				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_C_C, args);
 				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_C_C,
+					args);
+			}
+
+			if ((kbCommentModelImpl.getColumnBitmask() &
+					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C_C.getColumnBitmask()) != 0) {
+				Object[] args = new Object[] {
+						kbCommentModelImpl.getOriginalUserId(),
+						kbCommentModelImpl.getOriginalClassNameId(),
+						kbCommentModelImpl.getOriginalClassPK()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C_C,
+					args);
+
+				args = new Object[] {
+						kbCommentModelImpl.getUserId(),
+						kbCommentModelImpl.getClassNameId(),
+						kbCommentModelImpl.getClassPK()
+					};
+
+				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_U_C_C, args);
+				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_U_C_C,
 					args);
 			}
 		}
@@ -3647,6 +4460,7 @@ public class KBCommentPersistenceImpl extends BasePersistenceImpl<KBComment>
 		kbCommentImpl.setClassPK(kbComment.getClassPK());
 		kbCommentImpl.setContent(kbComment.getContent());
 		kbCommentImpl.setHelpful(kbComment.isHelpful());
+		kbCommentImpl.setStatus(kbComment.getStatus());
 
 		return kbCommentImpl;
 	}

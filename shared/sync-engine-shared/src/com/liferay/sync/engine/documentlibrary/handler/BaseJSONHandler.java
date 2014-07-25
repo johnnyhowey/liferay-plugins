@@ -95,7 +95,8 @@ public class BaseJSONHandler extends BaseHandler {
 			SyncFileService.update(syncFile);
 		}
 		else if (exception.equals(
-					"com.liferay.portal.kernel.upload.UploadException")) {
+					"com.liferay.portal.kernel.upload.UploadException") ||
+				 exception.contains("SizeLimitExceededException")) {
 
 			SyncFile syncFile = (SyncFile)getParameterValue("syncFile");
 
@@ -136,15 +137,30 @@ public class BaseJSONHandler extends BaseHandler {
 
 			SyncFileService.deleteSyncFile(syncFile);
 		}
+		else if (exception.equals(
+					"com.liferay.sync.SyncServicesUnavailableException")) {
+
+			SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
+				getSyncAccountId());
+
+			syncAccount.setState(SyncAccount.STATE_DISCONNECTED);
+			syncAccount.setUiEvent(
+				SyncAccount.UI_EVENT_SYNC_SERVICES_NOT_ACTIVE);
+
+			SyncAccountService.update(syncAccount);
+
+			retryServerConnection();
+		}
 		else if (exception.equals("java.lang.RuntimeException")) {
 			SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
 				getSyncAccountId());
 
-			syncAccount.setActive(false);
 			syncAccount.setState(SyncAccount.STATE_DISCONNECTED);
 			syncAccount.setUiEvent(SyncAccount.UI_EVENT_SYNC_WEB_MISSING);
 
 			SyncAccountService.update(syncAccount);
+
+			retryServerConnection();
 		}
 		else if (exception.equals("java.lang.SecurityException")) {
 			throw new HttpResponseException(
