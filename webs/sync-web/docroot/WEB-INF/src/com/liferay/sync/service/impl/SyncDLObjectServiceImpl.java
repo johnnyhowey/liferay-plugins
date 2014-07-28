@@ -17,6 +17,8 @@ package com.liferay.sync.service.impl;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.deploy.DeployManagerUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.plugin.PluginPackage;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.repository.model.Folder;
@@ -25,6 +27,7 @@ import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.ReleaseInfo;
 import com.liferay.portal.kernel.util.StringBundler;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
@@ -41,6 +44,7 @@ import com.liferay.sync.service.base.SyncDLObjectServiceBaseImpl;
 import com.liferay.sync.util.PortletPropsKeys;
 import com.liferay.sync.util.PortletPropsValues;
 import com.liferay.sync.util.SyncUtil;
+import com.liferay.util.portlet.PortletProps;
 
 import java.io.File;
 
@@ -48,6 +52,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.portlet.PortletPreferences;
 
@@ -351,6 +356,34 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	}
 
 	@Override
+	public PortletPreferences getPortletPreferences() throws PortalException {
+		User user = getUser();
+
+		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
+			user.getCompanyId());
+
+		Properties properties = PortletProps.getProperties();
+
+		for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+			String key = String.valueOf(entry.getKey());
+			String value = String.valueOf(entry.getValue());
+
+			if (portletPreferences.getValue(key, null) != null) {
+				continue;
+			}
+
+			try {
+				portletPreferences.setValue(key, value);
+			}
+			catch (Exception e) {
+				_log.error(e, e);
+			}
+		}
+
+		return portletPreferences;
+	}
+
+	@Override
 	public SyncContext getSyncContext(String uuid) throws PortalException {
 		try {
 			SyncContext syncContext = new SyncContext();
@@ -645,14 +678,8 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 
 		User user = getUser();
 
-		long companyId = user.getCompanyId();
-
-		PortletPreferences portletPreferences = PrefsPropsUtil.getPreferences(
-			companyId);
-
 		int maxConnections = PrefsPropsUtil.getInteger(
-			portletPreferences, companyId,
-			PortletPropsKeys.SYNC_CLIENT_MAX_CONNECTIONS,
+			user.getCompanyId(), PortletPropsKeys.SYNC_CLIENT_MAX_CONNECTIONS,
 			PortletPropsValues.SYNC_CLIENT_MAX_CONNECTIONS);
 
 		portletPreferencesMap.put(
@@ -660,8 +687,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 			String.valueOf(maxConnections));
 
 		int pollInterval = PrefsPropsUtil.getInteger(
-			portletPreferences, companyId,
-			PortletPropsKeys.SYNC_CLIENT_POLL_INTERVAL,
+			user.getCompanyId(), PortletPropsKeys.SYNC_CLIENT_POLL_INTERVAL,
 			PortletPropsValues.SYNC_CLIENT_POLL_INTERVAL);
 
 		portletPreferencesMap.put(
@@ -674,18 +700,27 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	protected void validateChecksum(File file, String checksum)
 		throws PortalException {
 
+		if (Validator.isNull(checksum)) {
+			return;
+		}
+
 		String fileChecksum = SyncUtil.getChecksum(file);
 
-		if (!fileChecksum.equals(checksum)) {
-			StringBundler sb = new StringBundler(4);
-
-			sb.append("Expected checksum ");
-			sb.append(checksum);
-			sb.append(" does not match actual checksum ");
-			sb.append(fileChecksum);
-
-			throw new SyncDLObjectChecksumException(sb.toString());
+		if (Validator.isNull(fileChecksum) || fileChecksum.equals(checksum)) {
+			return;
 		}
+
+		StringBundler sb = new StringBundler(4);
+
+		sb.append("Expected checksum ");
+		sb.append(checksum);
+		sb.append(" does not match actual checksum ");
+		sb.append(fileChecksum);
+
+		throw new SyncDLObjectChecksumException(sb.toString());
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(
+		SyncDLObjectServiceImpl.class);
 
 }
