@@ -63,9 +63,15 @@ public class BasePersistenceImpl<TT extends BaseModel, TID>
 
 	@Override
 	public int delete(TT model) throws SQLException {
+		return delete(model, true);
+	}
+
+	public int delete(TT model, boolean notify) throws SQLException {
 		int count = super.delete(model);
 
-		notifyModelListenersOnRemove(model);
+		if (notify) {
+			notifyModelListenersOnRemove(model);
+		}
 
 		return count;
 	}
@@ -74,7 +80,7 @@ public class BasePersistenceImpl<TT extends BaseModel, TID>
 	public int deleteById(TID tid) throws SQLException {
 		TT model = queryForId(tid);
 
-		return delete(model);
+		return delete(model, true);
 	}
 
 	public void registerModelListener(ModelListener<TT> modelListener) {
