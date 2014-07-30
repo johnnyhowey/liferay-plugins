@@ -53,7 +53,7 @@ public class BaseJSONHandler extends BaseHandler {
 
 		String response = EntityUtils.toString(httpEntity);
 
-		if (!handlePortalException(response)) {
+		if (!handlePortalException(getException(response))) {
 			if (_logger.isTraceEnabled()) {
 				_logger.trace("Handling response {}", response);
 			}
@@ -62,7 +62,7 @@ public class BaseJSONHandler extends BaseHandler {
 		}
 	}
 
-	protected boolean handlePortalException(String response) throws Exception {
+	protected String getException(String response) {
 		ObjectMapper objectMapper = new ObjectMapper();
 
 		JsonNode responseJsonNode = null;
@@ -71,16 +71,22 @@ public class BaseJSONHandler extends BaseHandler {
 			responseJsonNode = objectMapper.readTree(response);
 		}
 		catch (Exception e) {
-			return false;
+			return "";
 		}
 
 		JsonNode exceptionJsonNode = responseJsonNode.get("exception");
 
 		if (exceptionJsonNode == null) {
-			return false;
+			return "";
 		}
 
-		String exception = exceptionJsonNode.asText();
+		return exceptionJsonNode.asText();
+	}
+
+	protected boolean handlePortalException(String exception) throws Exception {
+		if (exception.equals("")) {
+			return false;
+		}
 
 		if (_logger.isDebugEnabled()) {
 			_logger.debug("Handling exception {}", exception);
@@ -95,7 +101,8 @@ public class BaseJSONHandler extends BaseHandler {
 			SyncFileService.update(syncFile);
 		}
 		else if (exception.equals(
-					"com.liferay.portal.kernel.upload.UploadException")) {
+					"com.liferay.portal.kernel.upload.UploadException") ||
+				 exception.contains("SizeLimitExceededException")) {
 
 			SyncFile syncFile = (SyncFile)getParameterValue("syncFile");
 
@@ -136,15 +143,30 @@ public class BaseJSONHandler extends BaseHandler {
 
 			SyncFileService.deleteSyncFile(syncFile);
 		}
+		else if (exception.equals(
+					"com.liferay.sync.SyncServicesUnavailableException")) {
+
+			SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
+				getSyncAccountId());
+
+			syncAccount.setState(SyncAccount.STATE_DISCONNECTED);
+			syncAccount.setUiEvent(
+				SyncAccount.UI_EVENT_SYNC_SERVICES_NOT_ACTIVE);
+
+			SyncAccountService.update(syncAccount);
+
+			retryServerConnection();
+		}
 		else if (exception.equals("java.lang.RuntimeException")) {
 			SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
 				getSyncAccountId());
 
-			syncAccount.setActive(false);
 			syncAccount.setState(SyncAccount.STATE_DISCONNECTED);
 			syncAccount.setUiEvent(SyncAccount.UI_EVENT_SYNC_WEB_MISSING);
 
 			SyncAccountService.update(syncAccount);
+
+			retryServerConnection();
 		}
 		else if (exception.equals("java.lang.SecurityException")) {
 			throw new HttpResponseException(

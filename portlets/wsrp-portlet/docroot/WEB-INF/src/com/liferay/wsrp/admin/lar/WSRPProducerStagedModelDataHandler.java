@@ -19,8 +19,6 @@ import com.liferay.portal.kernel.lar.BaseStagedModelDataHandler;
 import com.liferay.portal.kernel.lar.ExportImportPathUtil;
 import com.liferay.portal.kernel.lar.PortletDataContext;
 import com.liferay.portal.kernel.xml.Element;
-import com.liferay.portal.model.Group;
-import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.wsrp.model.WSRPProducer;
 import com.liferay.wsrp.service.WSRPProducerLocalServiceUtil;
@@ -38,11 +36,9 @@ public class WSRPProducerStagedModelDataHandler
 			String uuid, long groupId, String className, String extraData)
 		throws PortalException {
 
-		Group group = GroupLocalServiceUtil.getGroup(groupId);
-
 		WSRPProducer wsrpProducer =
-			WSRPProducerLocalServiceUtil.fetchWSRPProducerByUuidAndCompanyId(
-				uuid, group.getCompanyId());
+			WSRPProducerLocalServiceUtil.fetchWSRPProducerByUuidAndGroupId(
+				uuid, groupId);
 
 		if (wsrpProducer != null) {
 			WSRPProducerLocalServiceUtil.deleteWSRPProducer(wsrpProducer);
@@ -85,9 +81,9 @@ public class WSRPProducerStagedModelDataHandler
 		if (portletDataContext.isDataStrategyMirror()) {
 			WSRPProducer existingWSRPProducer =
 				WSRPProducerLocalServiceUtil.
-					fetchWSRPProducerByUuidAndCompanyId(
+					fetchWSRPProducerByUuidAndGroupId(
 						wsrpProducer.getUuid(),
-						portletDataContext.getCompanyId());
+						portletDataContext.getScopeGroupId());
 
 			if (existingWSRPProducer == null) {
 				serviceContext.setUuid(wsrpProducer.getUuid());
