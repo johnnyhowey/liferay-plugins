@@ -16,8 +16,11 @@ package com.liferay.sync.engine.util;
 
 import com.liferay.sync.engine.model.SyncFile;
 
+import java.io.IOException;
 import java.io.InputStream;
 
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -41,30 +44,22 @@ import org.slf4j.LoggerFactory;
  */
 public class FileUtil {
 
-	public static String getChecksum(Path filePath) {
-		if (!Files.exists(filePath)) {
+	public static String getChecksum(Path filePath) throws IOException {
+		if (!Files.exists(filePath) ||
+			(Files.size(filePath) >
+				PropsValues.SYNC_FILE_CHECKSUM_THRESHOLD_SIZE)) {
+
 			return "";
 		}
 
 		InputStream fileInputStream = null;
 
 		try {
-			if (Files.size(filePath) >
-					PropsValues.SYNC_FILE_CHECKSUM_THRESHOLD_SIZE) {
-
-				return "";
-			}
-
 			fileInputStream = Files.newInputStream(filePath);
 
 			byte[] bytes = DigestUtils.sha1(fileInputStream);
 
 			return Base64.encodeBase64String(bytes);
-		}
-		catch (Exception e) {
-			_logger.error(e.getMessage(), e);
-
-			return "";
 		}
 		finally {
 			StreamUtil.cleanUp(fileInputStream);
@@ -102,24 +97,32 @@ public class FileUtil {
 		return getFileKey(filePath);
 	}
 
-	public static boolean hasFileChanged(SyncFile syncFile) {
+	public static String getFilePathName(String first, String... more) {
+		FileSystem fileSystem = FileSystems.getDefault();
+
+		Path filePath = fileSystem.getPath(first, more);
+
+		return filePath.toString();
+	}
+
+	public static boolean hasFileChanged(SyncFile syncFile) throws IOException {
 		if (syncFile.getFilePathName() == null) {
 			return true;
 		}
 
 		Path filePath = Paths.get(syncFile.getFilePathName());
 
+		return hasFileChanged(syncFile, filePath);
+	}
+
+	public static boolean hasFileChanged(SyncFile syncFile, Path filePath)
+		throws IOException {
+
 		if (filePath == null) {
 			return true;
 		}
 
-		String checksum = getChecksum(filePath);
-
-		return !checksum.equals(syncFile.getChecksum());
-	}
-
-	public static boolean hasFileChanged(SyncFile syncFile, Path filePath) {
-		if (filePath == null) {
+		if (syncFile.getSize() != Files.size(filePath)) {
 			return true;
 		}
 

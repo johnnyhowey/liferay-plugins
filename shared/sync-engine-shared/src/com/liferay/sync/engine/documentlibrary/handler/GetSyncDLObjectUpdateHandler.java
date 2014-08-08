@@ -24,7 +24,6 @@ import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.model.SyncSite;
 import com.liferay.sync.engine.service.SyncFileService;
 import com.liferay.sync.engine.service.SyncSiteService;
-import com.liferay.sync.engine.util.FilePathNameUtil;
 import com.liferay.sync.engine.util.FileUtil;
 import com.liferay.sync.engine.util.IODeltaUtil;
 
@@ -152,6 +151,13 @@ public class GetSyncDLObjectUpdateHandler extends BaseSyncDLObjectHandler {
 			parameters.put("patch", false);
 		}
 
+		if (sourceVersion == null) {
+			parameters.put("uiEvent", SyncFile.UI_EVENT_DOWNLOADED_NEW);
+		}
+		else {
+			parameters.put("uiEvent", SyncFile.UI_EVENT_DOWNLOADED_UPDATE);
+		}
+
 		DownloadFileEvent downloadFileEvent = new DownloadFileEvent(
 			getSyncAccountId(), parameters);
 
@@ -203,7 +209,7 @@ public class GetSyncDLObjectUpdateHandler extends BaseSyncDLObjectHandler {
 				continue;
 			}
 
-			String filePathName = FilePathNameUtil.getFilePathName(
+			String filePathName = FileUtil.getFilePathName(
 				parentSyncFile.getFilePathName(), syncFile.getName());
 
 			String event = syncFile.getEvent();
