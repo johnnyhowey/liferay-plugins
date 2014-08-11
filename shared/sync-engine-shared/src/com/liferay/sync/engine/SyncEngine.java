@@ -28,8 +28,8 @@ import com.liferay.sync.engine.service.SyncAccountService;
 import com.liferay.sync.engine.service.SyncFileService;
 import com.liferay.sync.engine.service.SyncPropService;
 import com.liferay.sync.engine.service.SyncSiteService;
+import com.liferay.sync.engine.service.SyncWatchEventService;
 import com.liferay.sync.engine.upgrade.util.UpgradeUtil;
-import com.liferay.sync.engine.util.FilePathNameUtil;
 import com.liferay.sync.engine.util.LoggerUtil;
 import com.liferay.sync.engine.util.PropsValues;
 import com.liferay.sync.engine.util.SyncClientUpdater;
@@ -144,6 +144,8 @@ public class SyncEngine {
 
 		SyncSiteService.synchronizeSyncSites(syncAccountId);
 
+		SyncWatchEventService.deleteSyncWatchEvents(syncAccountId);
+
 		SyncAccount syncAccount = SyncAccountService.synchronizeSyncAccount(
 			syncAccountId);
 
@@ -239,8 +241,7 @@ public class SyncEngine {
 					throws IOException {
 
 					SyncFile syncFile = SyncFileService.fetchSyncFile(
-						FilePathNameUtil.getFilePathName(filePath),
-						syncAccountId);
+						filePath.toString(), syncAccountId);
 
 					if (syncFile != null) {
 						syncFile.setLocalSyncTime(System.currentTimeMillis());
@@ -256,8 +257,7 @@ public class SyncEngine {
 					Path filePath, BasicFileAttributes basicFileAttributes) {
 
 					SyncFile syncFile = SyncFileService.fetchSyncFile(
-						FilePathNameUtil.getFilePathName(filePath),
-						syncAccountId);
+						filePath.toString(), syncAccountId);
 
 					if (syncFile != null) {
 						syncFile.setLocalSyncTime(System.currentTimeMillis());
@@ -272,8 +272,7 @@ public class SyncEngine {
 		);
 
 		List<SyncFile> deletedSyncFiles = SyncFileService.findSyncFiles(
-			FilePathNameUtil.getFilePathName(filePath), startTime,
-			syncAccountId);
+			filePath.toString(), startTime, syncAccountId);
 
 		for (SyncFile deletedSyncFile : deletedSyncFiles) {
 			watchEventListener.watchEvent(
@@ -282,11 +281,9 @@ public class SyncEngine {
 		}
 	}
 
-	protected static void retryFileTransfers(
-		Path filePath, long syncAccountId) {
-
+	protected static void retryFileTransfers(long syncAccountId) {
 		List<SyncFile> downloadingSyncFiles = SyncFileService.findSyncFiles(
-			SyncFile.STATE_IN_PROGRESS_DOWNLOADING, syncAccountId);
+			syncAccountId, SyncFile.UI_EVENT_DOWNLOADING);
 
 		for (SyncFile downloadingSyncFile : downloadingSyncFiles) {
 			Map<String, Object> parameters = new HashMap<String, Object>();
@@ -301,7 +298,7 @@ public class SyncEngine {
 		}
 
 		List<SyncFile> uploadingSyncFiles = SyncFileService.findSyncFiles(
-			SyncFile.STATE_IN_PROGRESS_UPLOADING, syncAccountId);
+			syncAccountId, SyncFile.UI_EVENT_UPLOADING);
 
 		for (SyncFile uploadingSyncFile : uploadingSyncFiles) {
 			if (uploadingSyncFile.getTypePK() > 0) {
@@ -333,8 +330,8 @@ public class SyncEngine {
 					SyncAccountService.fetchSyncAccount(
 						syncAccount.getSyncAccountId());
 
-				if (updatedSyncAccount.getState() ==
-						SyncAccount.STATE_DISCONNECTED) {
+				if (updatedSyncAccount.getState() !=
+						SyncAccount.STATE_CONNECTED) {
 
 					return;
 				}
@@ -379,7 +376,7 @@ public class SyncEngine {
 
 		fireDeleteEvents(filePath, syncAccountId, watchEventListener);
 
-		retryFileTransfers(filePath, syncAccountId);
+		retryFileTransfers(syncAccountId);
 	}
 
 	private static Logger _logger = LoggerFactory.getLogger(SyncEngine.class);

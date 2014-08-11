@@ -160,8 +160,9 @@ public class IODeltaUtil {
 
 	public static Path getChecksumsFilePath(SyncFile syncFile) {
 		return Paths.get(
-			PropsValues.SYNC_CONFIGURATION_DIRECTORY + "/files/" +
-				syncFile.getSyncFileId());
+			FileUtil.getFilePathName(
+				PropsValues.SYNC_CONFIGURATION_DIRECTORY, "files",
+				String.valueOf(syncFile.getSyncFileId())));
 	}
 
 	public static boolean isIgnoredFilePatchingExtension(SyncFile syncFile) {
@@ -178,17 +179,17 @@ public class IODeltaUtil {
 
 		FileInputStream targetInputStream = null;
 		FileChannel targetFileChannel = null;
+		Path patchedFilePath = null;
 		OutputStream patchedFileOutputStream = null;
 		WritableByteChannel patchedWritableByteChannel = null;
 		ReadableByteChannel deltaReadableByteChannel = null;
 
 		try {
-			targetInputStream = new FileInputStream(
-				FilePathNameUtil.getFilePathName(targetFilePath));
+			targetInputStream = new FileInputStream(targetFilePath.toString());
 
 			targetFileChannel = targetInputStream.getChannel();
 
-			Path patchedFilePath = Files.createTempFile(
+			patchedFilePath = Files.createTempFile(
 				String.valueOf(targetFilePath.getFileName()), ".tmp");
 
 			patchedFileOutputStream = Files.newOutputStream(patchedFilePath);
@@ -204,12 +205,6 @@ public class IODeltaUtil {
 			DeltaUtil.patch(
 				targetFileChannel, patchedWritableByteChannel,
 				deltaByteChannelReader);
-
-			Files.move(
-				patchedFilePath, targetFilePath,
-				StandardCopyOption.REPLACE_EXISTING);
-
-			return targetFilePath;
 		}
 		catch (IOException ioe) {
 			_logger.error(ioe.getMessage(), ioe);
@@ -222,6 +217,19 @@ public class IODeltaUtil {
 			StreamUtil.cleanUp(patchedFileOutputStream);
 			StreamUtil.cleanUp(patchedWritableByteChannel);
 			StreamUtil.cleanUp(deltaReadableByteChannel);
+		}
+
+		try {
+			Files.move(
+				patchedFilePath, targetFilePath,
+				StandardCopyOption.REPLACE_EXISTING);
+
+			return targetFilePath;
+		}
+		catch (IOException ioe) {
+			_logger.error(ioe.getMessage(), ioe);
+
+			return null;
 		}
 	}
 
