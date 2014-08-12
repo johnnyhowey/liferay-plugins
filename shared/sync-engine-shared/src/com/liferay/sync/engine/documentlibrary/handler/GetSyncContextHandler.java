@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.liferay.sync.engine.documentlibrary.event.Event;
 import com.liferay.sync.engine.documentlibrary.model.SyncContext;
+import com.liferay.sync.engine.documentlibrary.model.SyncUser;
 import com.liferay.sync.engine.model.SyncAccount;
 import com.liferay.sync.engine.service.SyncAccountService;
 import com.liferay.sync.engine.util.ReleaseInfo;
@@ -47,7 +48,20 @@ public class GetSyncContextHandler extends BaseJSONHandler {
 	@Override
 	protected boolean handlePortalException(String exception) throws Exception {
 		if (exception.equals(
-				"com.liferay.sync.SyncServicesUnavailableException")) {
+				"com.liferay.portal.kernel.jsonwebservice." +
+					"NoSuchJSONWebServiceException") ||
+			exception.equals("java.lang.RuntimeException")) {
+
+			SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
+				getSyncAccountId());
+
+			syncAccount.setState(SyncAccount.STATE_DISCONNECTED);
+			syncAccount.setUiEvent(SyncAccount.UI_EVENT_SYNC_WEB_MISSING);
+
+			return true;
+		}
+		else if (exception.equals(
+					"com.liferay.sync.SyncServicesUnavailableException")) {
 
 			SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
 				getSyncAccountId());
@@ -98,7 +112,9 @@ public class GetSyncContextHandler extends BaseJSONHandler {
 			syncAccount.setUiEvent(SyncAccount.UI_EVENT_SYNC_WEB_OUT_OF_DATE);
 		}
 
-		syncAccount.setUserId(syncContext.getUserId());
+		SyncUser syncUser = syncContext.getSyncUser();
+
+		syncAccount.setUserId(syncUser.getUserId());
 
 		SyncAccountService.update(syncAccount);
 	}

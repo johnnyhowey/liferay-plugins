@@ -20,7 +20,6 @@ import com.liferay.sync.engine.model.SyncWatchEvent;
 import com.liferay.sync.engine.service.SyncAccountService;
 import com.liferay.sync.engine.service.SyncFileService;
 import com.liferay.sync.engine.service.SyncWatchEventService;
-import com.liferay.sync.engine.util.FilePathNameUtil;
 import com.liferay.sync.engine.util.FileUtil;
 
 import java.nio.file.Files;
@@ -52,7 +51,7 @@ public class SyncWatchEventProcessor implements Runnable {
 			SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
 				syncWatchEvent.getSyncAccountId());
 
-			if (syncAccount.getState() == SyncAccount.STATE_DISCONNECTED) {
+			if (syncAccount.getState() != SyncAccount.STATE_CONNECTED) {
 				continue;
 			}
 
@@ -108,7 +107,7 @@ public class SyncWatchEventProcessor implements Runnable {
 			syncAccount = SyncAccountService.fetchSyncAccount(
 				syncWatchEvent.getSyncAccountId());
 
-			if (syncAccount.getState() != SyncAccount.STATE_DISCONNECTED) {
+			if (syncAccount.getState() == SyncAccount.STATE_CONNECTED) {
 				SyncWatchEventService.deleteSyncWatchEvent(
 					syncWatchEvent.getSyncWatchEventId());
 			}
@@ -127,12 +126,10 @@ public class SyncWatchEventProcessor implements Runnable {
 		Path parentTargetFilePath = targetFilePath.getParent();
 
 		SyncFile parentSyncFile = SyncFileService.fetchSyncFile(
-			FilePathNameUtil.getFilePathName(parentTargetFilePath),
-			syncWatchEvent.getSyncAccountId());
+			parentTargetFilePath.toString(), syncWatchEvent.getSyncAccountId());
 
 		SyncFile syncFile = SyncFileService.fetchSyncFile(
-			FilePathNameUtil.getFilePathName(targetFilePath),
-			syncWatchEvent.getSyncAccountId());
+			targetFilePath.toString(), syncWatchEvent.getSyncAccountId());
 
 		if (syncFile == null) {
 			syncFile = SyncFileService.fetchSyncFileByFileKey(
@@ -177,7 +174,7 @@ public class SyncWatchEventProcessor implements Runnable {
 		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
 			syncWatchEvent.getSyncAccountId());
 
-		if (syncAccount.getState() != SyncAccount.STATE_DISCONNECTED) {
+		if (syncAccount.getState() == SyncAccount.STATE_CONNECTED) {
 			SyncWatchEvent relatedSyncWatchEvent =
 				SyncWatchEventService.fetchSyncWatchEvent(
 					SyncWatchEvent.EVENT_TYPE_DELETE,
@@ -197,8 +194,7 @@ public class SyncWatchEventProcessor implements Runnable {
 		Path parentTargetFilePath = targetFilePath.getParent();
 
 		SyncFile parentSyncFile = SyncFileService.fetchSyncFile(
-			FilePathNameUtil.getFilePathName(parentTargetFilePath),
-			syncWatchEvent.getSyncAccountId());
+			parentTargetFilePath.toString(), syncWatchEvent.getSyncAccountId());
 
 		SyncFile syncFile = SyncFileService.fetchSyncFileByFileKey(
 			FileUtil.getFileKey(targetFilePath),
@@ -240,7 +236,7 @@ public class SyncWatchEventProcessor implements Runnable {
 		SyncAccount syncAccount = SyncAccountService.fetchSyncAccount(
 			syncWatchEvent.getSyncAccountId());
 
-		if (syncAccount.getState() != SyncAccount.STATE_DISCONNECTED) {
+		if (syncAccount.getState() == SyncAccount.STATE_CONNECTED) {
 			SyncWatchEvent relatedSyncWatchEvent =
 				SyncWatchEventService.fetchSyncWatchEvent(
 					SyncWatchEvent.EVENT_TYPE_DELETE,
@@ -258,8 +254,7 @@ public class SyncWatchEventProcessor implements Runnable {
 		Path filePath = Paths.get(syncWatchEvent.getFilePathName());
 
 		SyncFile syncFile = SyncFileService.fetchSyncFile(
-			FilePathNameUtil.getFilePathName(filePath),
-			syncWatchEvent.getSyncAccountId());
+			filePath.toString(), syncWatchEvent.getSyncAccountId());
 
 		if (syncFile == null) {
 			return;
@@ -275,8 +270,7 @@ public class SyncWatchEventProcessor implements Runnable {
 		Path filePath = Paths.get(syncWatchEvent.getFilePathName());
 
 		SyncFile syncFile = SyncFileService.fetchSyncFile(
-			FilePathNameUtil.getFilePathName(filePath),
-			syncWatchEvent.getSyncAccountId());
+			filePath.toString(), syncWatchEvent.getSyncAccountId());
 
 		if (syncFile == null) {
 			return;
