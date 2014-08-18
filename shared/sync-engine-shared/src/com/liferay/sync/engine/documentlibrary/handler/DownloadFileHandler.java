@@ -19,12 +19,12 @@ import com.liferay.sync.engine.model.SyncAccount;
 import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.service.SyncAccountService;
 import com.liferay.sync.engine.service.SyncFileService;
-import com.liferay.sync.engine.util.FileUtil;
 import com.liferay.sync.engine.util.IODeltaUtil;
 import com.liferay.sync.engine.util.StreamUtil;
 
 import java.io.InputStream;
 
+import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -87,9 +87,9 @@ public class DownloadFileHandler extends BaseHandler {
 
 		InputStream inputStream = null;
 
-		try {
-			SyncFile syncFile = (SyncFile)getParameterValue("syncFile");
+		SyncFile syncFile = (SyncFile)getParameterValue("syncFile");
 
+		try {
 			Path filePath = Paths.get(syncFile.getFilePathName());
 
 			HttpEntity httpEntity = httpResponse.getEntity();
@@ -114,6 +114,10 @@ public class DownloadFileHandler extends BaseHandler {
 					StandardCopyOption.REPLACE_EXISTING);
 			}
 
+			Files.move(
+				tempFilePath, filePath, StandardCopyOption.ATOMIC_MOVE,
+				StandardCopyOption.REPLACE_EXISTING);
+
 			if (syncFile.getFileKey() == null) {
 				syncFile.setUiEvent(SyncFile.UI_EVENT_DOWNLOADED_NEW);
 			}
@@ -121,14 +125,23 @@ public class DownloadFileHandler extends BaseHandler {
 				syncFile.setUiEvent(SyncFile.UI_EVENT_DOWNLOADED_UPDATE);
 			}
 
-			syncFile.setFileKey(FileUtil.getFileKey(tempFilePath));
 			syncFile.setState(SyncFile.STATE_SYNCED);
 
 			SyncFileService.update(syncFile);
 
-			Files.move(
-				tempFilePath, filePath, StandardCopyOption.ATOMIC_MOVE,
-				StandardCopyOption.REPLACE_EXISTING);
+			SyncFileService.updateFileKeySyncFile(syncFile);
+		}
+		catch (Exception e) {
+			if (e instanceof FileSystemException) {
+				String message = e.getMessage();
+
+				if (message.contains("File name too long")) {
+					syncFile.setState(SyncFile.STATE_ERROR);
+					syncFile.setUiEvent(SyncFile.UI_EVENT_FILE_NAME_TOO_LONG);
+
+					SyncFileService.update(syncFile);
+				}
+			}
 		}
 		finally {
 			StreamUtil.cleanUp(inputStream);

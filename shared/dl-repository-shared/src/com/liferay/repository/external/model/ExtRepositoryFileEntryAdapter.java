@@ -29,6 +29,7 @@ import com.liferay.portal.model.Lock;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.persistence.LockUtil;
 import com.liferay.portlet.documentlibrary.NoSuchFileVersionException;
+import com.liferay.portlet.documentlibrary.model.DLFileEntryConstants;
 import com.liferay.portlet.documentlibrary.util.DLUtil;
 import com.liferay.repository.external.ExtRepositoryAdapter;
 import com.liferay.repository.external.ExtRepositoryFileEntry;
@@ -268,7 +269,7 @@ public class ExtRepositoryFileEntryAdapter
 
 	@Override
 	public StagedModelType getStagedModelType() {
-		return new StagedModelType(FileEntry.class);
+		return new StagedModelType(DLFileEntryConstants.getClassName());
 	}
 
 	@Override
