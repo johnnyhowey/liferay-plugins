@@ -17,6 +17,7 @@ package com.liferay.sync.engine.documentlibrary.handler;
 import com.liferay.sync.engine.documentlibrary.event.Event;
 import com.liferay.sync.engine.model.SyncFile;
 import com.liferay.sync.engine.service.SyncFileService;
+import com.liferay.sync.engine.util.FileUtil;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -35,7 +36,8 @@ public class BaseSyncDLObjectHandler extends BaseJSONHandler {
 			SyncFile sourceSyncFile, SyncFile targetSyncFile)
 		throws Exception {
 
-		String targetSyncFileName = targetSyncFile.getName();
+		String targetSyncFileName = FileUtil.getSanitizedFileName(
+			targetSyncFile.getName(), targetSyncFile.getExtension());
 
 		Path sourceFilePath = Paths.get(sourceSyncFile.getFilePathName());
 
@@ -62,7 +64,11 @@ public class BaseSyncDLObjectHandler extends BaseJSONHandler {
 
 			return true;
 		}
-		else if (!targetSyncFileName.equals(sourceSyncFile.getName())) {
+
+		String sourceSyncFileName = FileUtil.getSanitizedFileName(
+			sourceSyncFile.getName(), sourceSyncFile.getExtension());
+
+		if (!targetSyncFileName.equals(sourceSyncFileName)) {
 			Path sourceSyncFilePath = Paths.get(
 				sourceSyncFile.getFilePathName());
 

@@ -121,12 +121,40 @@ public class FileUtil {
 		return getFileKey(filePath);
 	}
 
-	public static String getFilePathName(String first, String... more) {
+	public static Path getFilePath(String first, String... more) {
 		FileSystem fileSystem = FileSystems.getDefault();
 
-		Path filePath = fileSystem.getPath(first, more);
+		return fileSystem.getPath(first, more);
+	}
+
+	public static String getFilePathName(String first, String... more) {
+		Path filePath = getFilePath(first, more);
 
 		return filePath.toString();
+	}
+
+	public static String getSanitizedFileName(String title, String extension) {
+		String fileName = title.replace("/", "_");
+
+		if ((extension != null) && !extension.equals("") &&
+			!fileName.endsWith("." + extension)) {
+
+			fileName += "." + extension;
+		}
+
+		if (fileName.length() > 255) {
+			int x = fileName.length() - 1;
+
+			if ((extension != null) && !extension.equals("")) {
+				x = fileName.lastIndexOf("." + extension);
+			}
+
+			int y = x - (fileName.length() - 255);
+
+			fileName = fileName.substring(0, y) + fileName.substring(x);
+		}
+
+		return fileName;
 	}
 
 	public static boolean hasFileChanged(SyncFile syncFile) throws IOException {
