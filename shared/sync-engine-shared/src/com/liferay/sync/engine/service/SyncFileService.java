@@ -397,12 +397,9 @@ public class SyncFileService {
 		}
 	}
 
-	public static SyncFile fetchSyncFile(
-		String filePathName, long syncAccountId) {
-
+	public static SyncFile fetchSyncFile(String filePathName) {
 		try {
-			return _syncFilePersistence.fetchByFPN_S(
-				filePathName, syncAccountId);
+			return _syncFilePersistence.fetchByFilePathName(filePathName);
 		}
 		catch (SQLException sqle) {
 			if (_logger.isDebugEnabled()) {
@@ -460,40 +457,11 @@ public class SyncFileService {
 		}
 	}
 
-	public static List<SyncFile> findSyncFiles(String filePathName) {
-		try {
-			return _syncFilePersistence.findByFilePathName(filePathName);
-		}
-		catch (SQLException sqle) {
-			if (_logger.isDebugEnabled()) {
-				_logger.debug(sqle.getMessage(), sqle);
-			}
-
-			return Collections.emptyList();
-		}
-	}
-
 	public static List<SyncFile> findSyncFiles(
-		String checksum, long syncAccountId) {
+		String filePathName, long localSyncTime) {
 
 		try {
-			return _syncFilePersistence.findByC_S(checksum, syncAccountId);
-		}
-		catch (SQLException sqle) {
-			if (_logger.isDebugEnabled()) {
-				_logger.debug(sqle.getMessage(), sqle);
-			}
-
-			return Collections.emptyList();
-		}
-	}
-
-	public static List<SyncFile> findSyncFiles(
-		String filePathName, long localSyncTime, long syncAccountId) {
-
-		try {
-			return _syncFilePersistence.findByF_L_S(
-				filePathName, localSyncTime, syncAccountId);
+			return _syncFilePersistence.findByF_L(filePathName, localSyncTime);
 		}
 		catch (SQLException sqle) {
 			if (_logger.isDebugEnabled()) {
@@ -511,16 +479,18 @@ public class SyncFileService {
 
 		try {
 			_syncFilePersistence = new SyncFilePersistence();
+
+			registerModelListener(new SyncFileModelListener());
+
+			return _syncFilePersistence;
 		}
 		catch (SQLException sqle) {
 			if (_logger.isDebugEnabled()) {
 				_logger.debug(sqle.getMessage(), sqle);
 			}
+
+			return null;
 		}
-
-		_syncFilePersistence.registerModelListener(new SyncFileModelListener());
-
-		return _syncFilePersistence;
 	}
 
 	public static long getSyncFilesCount(int uiEvent) {
@@ -660,7 +630,7 @@ public class SyncFileService {
 
 		Path deltaFilePath = null;
 
-		String name = String.valueOf(filePath.getFileName());
+		String name = _getName(filePath, syncFile);
 		String sourceChecksum = syncFile.getChecksum();
 		String sourceFileName = syncFile.getName();
 		String sourceVersion = syncFile.getVersion();
@@ -815,6 +785,21 @@ public class SyncFileService {
 
 			return null;
 		}
+	}
+
+	private static String _getName(Path filePath, SyncFile syncFile) {
+		String name = String.valueOf(filePath.getFileName());
+
+		String sanitizedFileName = FileUtil.getSanitizedFileName(
+			syncFile.getName(), syncFile.getExtension());
+
+		if (sanitizedFileName.equals(
+				FileUtil.getSanitizedFileName(name, syncFile.getExtension()))) {
+
+			name = syncFile.getName();
+		}
+
+		return name;
 	}
 
 	private static Logger _logger = LoggerFactory.getLogger(
