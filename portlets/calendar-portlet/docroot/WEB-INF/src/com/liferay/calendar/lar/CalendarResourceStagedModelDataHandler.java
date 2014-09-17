@@ -156,9 +156,6 @@ public class CalendarResourceStagedModelDataHandler
 		long userId = portletDataContext.getUserId(
 			calendarResource.getUserUuid());
 
-		StagedModelDataHandlerUtil.importReferenceStagedModels(
-			portletDataContext, calendarResource, Calendar.class);
-
 		long classPK = getClassPK(portletDataContext, calendarResource, userId);
 		Map<Locale, String> calendarResourceNameMap =
 			getCalendarResourceNameMap(portletDataContext, calendarResource);
