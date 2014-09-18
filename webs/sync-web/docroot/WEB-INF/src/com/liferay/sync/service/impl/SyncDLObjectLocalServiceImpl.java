@@ -64,6 +64,19 @@ public class SyncDLObjectLocalServiceImpl
 			syncDLObject.setType(type);
 			syncDLObject.setTypePK(typePK);
 			syncDLObject.setTypeUuid(typeUuid);
+
+			if (type.equals(SyncConstants.TYPE_PRIVATE_WORKING_COPY)) {
+				SyncDLObject approvedSyncDLObject =
+					syncDLObjectPersistence.fetchByT_T(
+						SyncConstants.TYPE_FILE, typePK);
+
+				approvedSyncDLObject.setModifiedTime(modifiedTime);
+				approvedSyncDLObject.setLockExpirationDate(lockExpirationDate);
+				approvedSyncDLObject.setLockUserId(lockUserId);
+				approvedSyncDLObject.setLockUserName(lockUserName);
+
+				syncDLObjectPersistence.update(approvedSyncDLObject);
+			}
 		}
 		else if (syncDLObject.getModifiedTime() >= modifiedTime) {
 			return null;
@@ -76,7 +89,7 @@ public class SyncDLObjectLocalServiceImpl
 				DLFileEntry dlFileEntry =
 					dlFileEntryLocalService.fetchDLFileEntry(typePK);
 
-				if ((dlFileEntry != null) && !dlFileEntry.isCheckedOut()) {
+				if ((dlFileEntry == null) || !dlFileEntry.isCheckedOut()) {
 					syncDLObjectPersistence.remove(pwcSyncDLObject);
 				}
 			}

@@ -79,7 +79,7 @@ public class PushNotificationsDeviceLocalServiceImpl
 			long toUserId, JSONObject jsonObject, int start, int end)
 		throws PortalException {
 
-		addUserDetails(jsonObject);
+		addFromUserDetails(jsonObject);
 
 		for (Map.Entry<String, PushNotificationsSender> entry :
 				_pushNotificationsSenders.entrySet()) {
@@ -114,19 +114,22 @@ public class PushNotificationsDeviceLocalServiceImpl
 		}
 	}
 
-	protected void addUserDetails(JSONObject jsonObject)
+	protected void addFromUserDetails(JSONObject jsonObject)
 		throws PortalException {
 
-		long userId = jsonObject.getLong(
-			PushNotificationsConstants.FROM_USER_ID);
+		JSONObject fromUserJSONObject = jsonObject.getJSONObject(
+			PushNotificationsConstants.FROM_USER);
 
-		User user = userLocalService.getUser(userId);
+		long fromUserId = fromUserJSONObject.getLong(
+			PushNotificationsConstants.USER_ID);
 
-		jsonObject.put(
+		User user = userLocalService.getUser(fromUserId);
+
+		fromUserJSONObject.put(
 			PushNotificationsConstants.FULL_NAME, user.getFullName());
-		jsonObject.put(
+		fromUserJSONObject.put(
 			PushNotificationsConstants.PORTRAIT_ID, user.getPortraitId());
-		jsonObject.put(PushNotificationsConstants.UUID, user.getUuid());
+		fromUserJSONObject.put(PushNotificationsConstants.UUID, user.getUuid());
 	}
 
 	protected List<PushNotificationsDevice> getPushNotificationsDevices(
