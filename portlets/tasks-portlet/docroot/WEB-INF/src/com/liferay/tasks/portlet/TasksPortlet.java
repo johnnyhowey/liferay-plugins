@@ -27,12 +27,15 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.Layout;
+import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.PortletURLFactoryUtil;
 import com.liferay.portlet.asset.AssetTagException;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.service.MBMessageServiceUtil;
 import com.liferay.tasks.model.TasksEntry;
@@ -248,6 +251,22 @@ public class TasksPortlet extends MVCPortlet {
 		portletURL.setWindowState(LiferayWindowState.POP_UP);
 
 		actionResponse.sendRedirect(portletURL.toString());
+	}
+
+	public void updateViewCount(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		long tasksEntryId = ParamUtil.getLong(actionRequest, "tasksEntryId");
+
+		TasksEntry tasksEntry = TasksEntryLocalServiceUtil.fetchTasksEntry(
+			tasksEntryId);
+
+		User user = UserLocalServiceUtil.getDefaultUser(
+			tasksEntry.getCompanyId());
+
+		AssetEntryLocalServiceUtil.incrementViewCounter(
+			user.getUserId(), TasksEntry.class.getName(), tasksEntryId);
 	}
 
 }
