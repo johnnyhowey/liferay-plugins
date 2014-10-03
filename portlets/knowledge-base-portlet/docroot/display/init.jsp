@@ -17,8 +17,11 @@
 <%@ include file="/init.jsp" %>
 
 <%
+PortalPreferences portalPreferences = PortletPreferencesFactoryUtil.getPortalPreferences(liferayPortletRequest);
+
 String portletResource = ParamUtil.getString(request, "portletResource");
 
+long resourceClassNameId = GetterUtil.getLong(portletPreferences.getValue("resourceClassNameId", null), PortalUtil.getClassNameId(KBFolderConstants.getClassName()));
 long resourcePrimKey = GetterUtil.getLong(portletPreferences.getValue("resourcePrimKey", null));
 
 boolean enableKBArticleDescription = GetterUtil.getBoolean(portletPreferences.getValue("enableKBArticleDescription", null));
