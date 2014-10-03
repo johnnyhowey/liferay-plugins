@@ -12,7 +12,7 @@
  * details.
  */
 
-package com.liferay.sync.service.persistence;
+package com.liferay.knowledgebase.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
 
@@ -20,11 +20,11 @@ import aQute.bnd.annotation.ProviderType;
  * @author Brian Wing Shun Chan
  */
 @ProviderType
-public interface SyncDLObjectFinder {
-	public java.util.List<com.liferay.sync.model.SyncDLObject> filterFindByC_R(
-		long companyId, long repositoryId);
+public interface KBArticleFinder {
+	public int countByUrlTitle(long groupId, java.lang.String kbFolderUrlTitle,
+		java.lang.String kbArticleUrlTitle, int[] status);
 
-	public java.util.List<com.liferay.sync.model.SyncDLObject> filterFindByC_M_R_P(
-		long companyId, long modifiedTime, long repositoryId,
-		long parentFolderId);
+	public java.util.List<com.liferay.knowledgebase.model.KBArticle> findByUrlTitle(
+		long groupId, java.lang.String kbFolderUrlTitle,
+		java.lang.String kbArticleUrlTitle, int[] status, int start, int end);
 }
