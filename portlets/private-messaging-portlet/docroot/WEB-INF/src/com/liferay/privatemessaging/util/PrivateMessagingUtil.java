@@ -116,7 +116,7 @@ public class PrivateMessagingUtil {
 			Sort sort = SortFactoryUtil.getSort(User.class, "firstName", "asc");
 
 			BaseModelSearchResult<User> baseModelSearchResult =
-				UserLocalServiceUtil.searchUsers(
+				UserLocalServiceUtil.searchUsersWithoutAddress(
 					user.getCompanyId(), keywords,
 					WorkflowConstants.STATUS_APPROVED, params, start, end,
 					sort);
