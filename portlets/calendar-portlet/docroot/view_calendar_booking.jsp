@@ -38,6 +38,8 @@ java.util.Calendar endTimeJCalendar = JCalendarUtil.getJCalendar(endTime, userTi
 boolean allDay = BeanParamUtil.getBoolean(calendarBooking, request, "allDay");
 
 AssetEntry layoutAssetEntry = AssetEntryLocalServiceUtil.getEntry(CalendarBooking.class.getName(), calendarBooking.getCalendarBookingId());
+
+AssetEntryLocalServiceUtil.incrementViewCounter(0, CalendarBooking.class.getName(), calendarBooking.getCalendarBookingId(), 1);
 %>
 
 <liferay-ui:header

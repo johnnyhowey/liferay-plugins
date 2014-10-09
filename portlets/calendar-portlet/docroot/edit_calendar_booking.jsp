@@ -117,6 +117,10 @@ else if (calendar != null) {
 }
 
 List<Calendar> manageableCalendars = CalendarServiceUtil.search(themeDisplay.getCompanyId(), null, null, null, true, QueryUtil.ALL_POS, QueryUtil.ALL_POS, new CalendarNameComparator(true), ActionKeys.MANAGE_BOOKINGS);
+
+if (calendarBooking != null) {
+	AssetEntryLocalServiceUtil.incrementViewCounter(0, CalendarBooking.class.getName(), calendarBooking.getCalendarBookingId(), 1);
+}
 %>
 
 <liferay-portlet:actionURL name="updateCalendarBooking" var="updateCalendarBookingURL" />
