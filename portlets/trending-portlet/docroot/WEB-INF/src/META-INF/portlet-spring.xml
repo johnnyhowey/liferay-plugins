@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="com.liferay.trending.service.AssetTrendingEntryLocalService" class="com.liferay.trending.service.impl.AssetTrendingEntryLocalServiceImpl" />
+	<bean id="com.liferay.trending.service.persistence.AssetTrendingEntryPersistence" class="com.liferay.trending.service.persistence.impl.AssetTrendingEntryPersistenceImpl" parent="basePersistence" />
+</beans>
