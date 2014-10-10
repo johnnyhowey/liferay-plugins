@@ -35,98 +35,143 @@ public class AssetTrendingEntryLocalServiceClp
 				"com.liferay.assettrending.model.AssetTrendingEntry"
 			};
 
-		_methodName1 = "createAssetTrendingEntry";
+		_methodName1 = "addAssetTrendingEntry";
 
-		_methodParameterTypes1 = new String[] { "long" };
-
-		_methodName2 = "deleteAssetTrendingEntry";
-
-		_methodParameterTypes2 = new String[] {
-				"com.liferay.assettrending.model.AssetTrendingEntry"
+		_methodParameterTypes1 = new String[] {
+				"long", "long", "java.util.Date", "java.util.Date", "long",
+				"long", "long", "int", "double", "double", "int"
 			};
+
+		_methodName2 = "createAssetTrendingEntry";
+
+		_methodParameterTypes2 = new String[] { "long" };
 
 		_methodName3 = "deleteAssetTrendingEntry";
 
-		_methodParameterTypes3 = new String[] { "long" };
-
-		_methodName4 = "deletePersistedModel";
-
-		_methodParameterTypes4 = new String[] {
-				"com.liferay.portal.model.PersistedModel"
+		_methodParameterTypes3 = new String[] {
+				"com.liferay.assettrending.model.AssetTrendingEntry"
 			};
 
-		_methodName5 = "dynamicQuery";
+		_methodName4 = "deleteAssetTrendingEntry";
 
-		_methodParameterTypes5 = new String[] {  };
+		_methodParameterTypes4 = new String[] { "long" };
 
-		_methodName6 = "dynamicQuery";
+		_methodName5 = "deleteAssetTrendingEntry";
+
+		_methodParameterTypes5 = new String[] { "long", "long" };
+
+		_methodName6 = "deletePersistedModel";
 
 		_methodParameterTypes6 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+				"com.liferay.portal.model.PersistedModel"
 			};
 
 		_methodName7 = "dynamicQuery";
 
-		_methodParameterTypes7 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
-			};
+		_methodParameterTypes7 = new String[] {  };
 
 		_methodName8 = "dynamicQuery";
 
 		_methodParameterTypes8 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+			};
+
+		_methodName9 = "dynamicQuery";
+
+		_methodParameterTypes9 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
+			};
+
+		_methodName10 = "dynamicQuery";
+
+		_methodParameterTypes10 = new String[] {
 				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int",
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			};
 
-		_methodName9 = "dynamicQueryCount";
+		_methodName11 = "dynamicQueryCount";
 
-		_methodParameterTypes9 = new String[] {
+		_methodParameterTypes11 = new String[] {
 				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
 			};
 
-		_methodName10 = "dynamicQueryCount";
+		_methodName12 = "dynamicQueryCount";
 
-		_methodParameterTypes10 = new String[] {
+		_methodParameterTypes12 = new String[] {
 				"com.liferay.portal.kernel.dao.orm.DynamicQuery",
 				"com.liferay.portal.kernel.dao.orm.Projection"
 			};
 
-		_methodName11 = "fetchAssetTrendingEntry";
+		_methodName13 = "fetchAssetTrendingEntry";
 
-		_methodParameterTypes11 = new String[] { "long" };
+		_methodParameterTypes13 = new String[] { "long" };
 
-		_methodName12 = "getActionableDynamicQuery";
-
-		_methodParameterTypes12 = new String[] {  };
-
-		_methodName13 = "getAssetTrendingEntries";
-
-		_methodParameterTypes13 = new String[] { "int", "int" };
-
-		_methodName14 = "getAssetTrendingEntriesCount";
+		_methodName14 = "getActionableDynamicQuery";
 
 		_methodParameterTypes14 = new String[] {  };
 
-		_methodName15 = "getAssetTrendingEntry";
+		_methodName15 = "getAssetTrendingEntries";
 
-		_methodParameterTypes15 = new String[] { "long" };
+		_methodParameterTypes15 = new String[] {
+				"java.lang.String", "java.util.Date", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
 
-		_methodName16 = "getBeanIdentifier";
+		_methodName16 = "getAssetTrendingEntries";
 
-		_methodParameterTypes16 = new String[] {  };
+		_methodParameterTypes16 = new String[] { "int", "int" };
 
-		_methodName17 = "getPersistedModel";
+		_methodName17 = "getAssetTrendingEntriesCount";
 
-		_methodParameterTypes17 = new String[] { "java.io.Serializable" };
+		_methodParameterTypes17 = new String[] {  };
 
-		_methodName19 = "setBeanIdentifier";
+		_methodName18 = "getAssetTrendingEntriesCount";
 
-		_methodParameterTypes19 = new String[] { "java.lang.String" };
+		_methodParameterTypes18 = new String[] {
+				"java.lang.String", "java.util.Date"
+			};
 
-		_methodName20 = "updateAssetTrendingEntry";
+		_methodName19 = "getAssetTrendingEntry";
 
-		_methodParameterTypes20 = new String[] {
+		_methodParameterTypes19 = new String[] { "long" };
+
+		_methodName20 = "getAssetTrendingEntry";
+
+		_methodParameterTypes20 = new String[] { "long", "long" };
+
+		_methodName21 = "getBeanIdentifier";
+
+		_methodParameterTypes21 = new String[] {  };
+
+		_methodName22 = "getPersistedModel";
+
+		_methodParameterTypes22 = new String[] { "java.io.Serializable" };
+
+		_methodName24 = "setBeanIdentifier";
+
+		_methodParameterTypes24 = new String[] { "java.lang.String" };
+
+		_methodName25 = "updateAssetTrendingEntry";
+
+		_methodParameterTypes25 = new String[] {
 				"com.liferay.assettrending.model.AssetTrendingEntry"
+			};
+
+		_methodName26 = "updateAssetTrendingEntry";
+
+		_methodParameterTypes26 = new String[] {
+				"com.liferay.assettrending.model.AssetTrendingEntry", "double"
+			};
+
+		_methodName27 = "updateAssetTrendingEntry";
+
+		_methodParameterTypes27 = new String[] { "long", "long", "double" };
+
+		_methodName28 = "updateAssetTrendingEntry";
+
+		_methodParameterTypes28 = new String[] {
+				"long", "long", "java.util.Date", "java.util.Date", "long",
+				"long", "long", "int", "double", "double", "int"
 			};
 	}
 
@@ -158,13 +203,63 @@ public class AssetTrendingEntryLocalServiceClp
 	}
 
 	@Override
-	public com.liferay.assettrending.model.AssetTrendingEntry createAssetTrendingEntry(
-		long assetTrendingEntryId) {
+	public com.liferay.assettrending.model.AssetTrendingEntry addAssetTrendingEntry(
+		long groupId, long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate, long assetEntryId, long classNameId,
+		long classPK, int commentCount, double priority, double ratingScore,
+		int viewCount) {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableLocalService.invokeMethod(_methodName1,
 					_methodParameterTypes1,
+					new Object[] {
+						groupId,
+						
+					companyId,
+						
+					ClpSerializer.translateInput(createDate),
+						
+					ClpSerializer.translateInput(modifiedDate),
+						
+					assetEntryId,
+						
+					classNameId,
+						
+					classPK,
+						
+					commentCount,
+						
+					priority,
+						
+					ratingScore,
+						
+					viewCount
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.assettrending.model.AssetTrendingEntry)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry createAssetTrendingEntry(
+		long assetTrendingEntryId) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName2,
+					_methodParameterTypes2,
 					new Object[] { assetTrendingEntryId });
 		}
 		catch (Throwable t) {
@@ -188,8 +283,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName2,
-					_methodParameterTypes2,
+			returnObj = _invokableLocalService.invokeMethod(_methodName3,
+					_methodParameterTypes3,
 					new Object[] {
 						ClpSerializer.translateInput(assetTrendingEntry)
 					});
@@ -216,8 +311,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName3,
-					_methodParameterTypes3,
+			returnObj = _invokableLocalService.invokeMethod(_methodName4,
+					_methodParameterTypes4,
 					new Object[] { assetTrendingEntryId });
 		}
 		catch (Throwable t) {
@@ -240,14 +335,39 @@ public class AssetTrendingEntryLocalServiceClp
 	}
 
 	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry deleteAssetTrendingEntry(
+		long classNameId, long classPK) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName5,
+					_methodParameterTypes5,
+					new Object[] { classNameId, classPK });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.assettrending.model.AssetTrendingEntry)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public com.liferay.portal.model.PersistedModel deletePersistedModel(
 		com.liferay.portal.model.PersistedModel persistedModel)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName4,
-					_methodParameterTypes4,
+			returnObj = _invokableLocalService.invokeMethod(_methodName6,
+					_methodParameterTypes6,
 					new Object[] { ClpSerializer.translateInput(persistedModel) });
 		}
 		catch (Throwable t) {
@@ -274,8 +394,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName5,
-					_methodParameterTypes5, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName7,
+					_methodParameterTypes7, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -298,8 +418,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName6,
-					_methodParameterTypes6,
+			returnObj = _invokableLocalService.invokeMethod(_methodName8,
+					_methodParameterTypes8,
 					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
@@ -324,8 +444,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName7,
-					_methodParameterTypes7,
+			returnObj = _invokableLocalService.invokeMethod(_methodName9,
+					_methodParameterTypes9,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -357,8 +477,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName8,
-					_methodParameterTypes8,
+			returnObj = _invokableLocalService.invokeMethod(_methodName10,
+					_methodParameterTypes10,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -390,8 +510,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName9,
-					_methodParameterTypes9,
+			returnObj = _invokableLocalService.invokeMethod(_methodName11,
+					_methodParameterTypes11,
 					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
@@ -416,8 +536,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName10,
-					_methodParameterTypes10,
+			returnObj = _invokableLocalService.invokeMethod(_methodName12,
+					_methodParameterTypes12,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -445,8 +565,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName11,
-					_methodParameterTypes11,
+			returnObj = _invokableLocalService.invokeMethod(_methodName13,
+					_methodParameterTypes13,
 					new Object[] { assetTrendingEntryId });
 		}
 		catch (Throwable t) {
@@ -469,8 +589,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName12,
-					_methodParameterTypes12, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName14,
+					_methodParameterTypes14, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -489,12 +609,54 @@ public class AssetTrendingEntryLocalServiceClp
 
 	@Override
 	public java.util.List<com.liferay.assettrending.model.AssetTrendingEntry> getAssetTrendingEntries(
+		java.lang.String classNameIds, java.util.Date createDate, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName15,
+					_methodParameterTypes15,
+					new Object[] {
+						ClpSerializer.translateInput(classNameIds),
+						
+					ClpSerializer.translateInput(createDate),
+						
+					start,
+						
+					end,
+						
+					ClpSerializer.translateInput(orderByComparator)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.assettrending.model.AssetTrendingEntry>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.liferay.assettrending.model.AssetTrendingEntry> getAssetTrendingEntries(
 		int start, int end) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName13,
-					_methodParameterTypes13, new Object[] { start, end });
+			returnObj = _invokableLocalService.invokeMethod(_methodName16,
+					_methodParameterTypes16, new Object[] { start, end });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -516,11 +678,45 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName14,
-					_methodParameterTypes14, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName17,
+					_methodParameterTypes17, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public int getAssetTrendingEntriesCount(java.lang.String classNameIds,
+		java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName18,
+					_methodParameterTypes18,
+					new Object[] {
+						ClpSerializer.translateInput(classNameIds),
+						
+					ClpSerializer.translateInput(createDate)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -541,8 +737,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName15,
-					_methodParameterTypes15,
+			returnObj = _invokableLocalService.invokeMethod(_methodName19,
+					_methodParameterTypes19,
 					new Object[] { assetTrendingEntryId });
 		}
 		catch (Throwable t) {
@@ -565,12 +761,37 @@ public class AssetTrendingEntryLocalServiceClp
 	}
 
 	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry getAssetTrendingEntry(
+		long classNameId, long classPK) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20,
+					new Object[] { classNameId, classPK });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.assettrending.model.AssetTrendingEntry)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public java.lang.String getBeanIdentifier() {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName16,
-					_methodParameterTypes16, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -594,8 +815,8 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName17,
-					_methodParameterTypes17,
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22,
 					new Object[] { ClpSerializer.translateInput(primaryKeyObj) });
 		}
 		catch (Throwable t) {
@@ -627,8 +848,8 @@ public class AssetTrendingEntryLocalServiceClp
 	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
-			_invokableLocalService.invokeMethod(_methodName19,
-				_methodParameterTypes19,
+			_invokableLocalService.invokeMethod(_methodName24,
+				_methodParameterTypes24,
 				new Object[] { ClpSerializer.translateInput(beanIdentifier) });
 		}
 		catch (Throwable t) {
@@ -650,10 +871,115 @@ public class AssetTrendingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName20,
-					_methodParameterTypes20,
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
 					new Object[] {
 						ClpSerializer.translateInput(assetTrendingEntry)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.assettrending.model.AssetTrendingEntry)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		com.liferay.assettrending.model.AssetTrendingEntry assetTrendingEntry,
+		double trendingScore) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26,
+					new Object[] {
+						ClpSerializer.translateInput(assetTrendingEntry),
+						
+					trendingScore
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.assettrending.model.AssetTrendingEntry)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		long classNameId, long classPK, double ratingScore) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
+					new Object[] { classNameId, classPK, ratingScore });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.assettrending.model.AssetTrendingEntry)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		long groupId, long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate, long assetEntryId, long classNameId,
+		long classPK, int commentCount, double priority, double ratingScore,
+		int viewCount) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28,
+					new Object[] {
+						groupId,
+						
+					companyId,
+						
+					ClpSerializer.translateInput(createDate),
+						
+					ClpSerializer.translateInput(modifiedDate),
+						
+					assetEntryId,
+						
+					classNameId,
+						
+					classPK,
+						
+					commentCount,
+						
+					priority,
+						
+					ratingScore,
+						
+					viewCount
 					});
 		}
 		catch (Throwable t) {
@@ -708,8 +1034,24 @@ public class AssetTrendingEntryLocalServiceClp
 	private String[] _methodParameterTypes16;
 	private String _methodName17;
 	private String[] _methodParameterTypes17;
+	private String _methodName18;
+	private String[] _methodParameterTypes18;
 	private String _methodName19;
 	private String[] _methodParameterTypes19;
 	private String _methodName20;
 	private String[] _methodParameterTypes20;
+	private String _methodName21;
+	private String[] _methodParameterTypes21;
+	private String _methodName22;
+	private String[] _methodParameterTypes22;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
+	private String _methodName26;
+	private String[] _methodParameterTypes26;
+	private String _methodName27;
+	private String[] _methodParameterTypes27;
+	private String _methodName28;
+	private String[] _methodParameterTypes28;
 }

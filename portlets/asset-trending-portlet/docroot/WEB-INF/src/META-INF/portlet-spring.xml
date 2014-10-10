@@ -3,4 +3,5 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" default-destroy-method="destroy" default-init-method="afterPropertiesSet" xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<bean id="com.liferay.assettrending.service.AssetTrendingEntryLocalService" class="com.liferay.assettrending.service.impl.AssetTrendingEntryLocalServiceImpl" />
 	<bean id="com.liferay.assettrending.service.persistence.AssetTrendingEntryPersistence" class="com.liferay.assettrending.service.persistence.impl.AssetTrendingEntryPersistenceImpl" parent="basePersistence" />
+	<bean id="com.liferay.assettrending.service.persistence.AssetTrendingEntryFinder" class="com.liferay.assettrending.service.persistence.impl.AssetTrendingEntryFinderImpl" parent="basePersistence" />
 </beans>

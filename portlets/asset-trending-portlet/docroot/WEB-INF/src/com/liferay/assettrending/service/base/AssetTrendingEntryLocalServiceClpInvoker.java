@@ -119,13 +119,62 @@ public class AssetTrendingEntryLocalServiceClpInvoker {
 				"com.liferay.assettrending.model.AssetTrendingEntry"
 			};
 
-		_methodName41 = "getBeanIdentifier";
+		_methodName43 = "getBeanIdentifier";
 
-		_methodParameterTypes41 = new String[] {  };
+		_methodParameterTypes43 = new String[] {  };
 
-		_methodName42 = "setBeanIdentifier";
+		_methodName44 = "setBeanIdentifier";
 
-		_methodParameterTypes42 = new String[] { "java.lang.String" };
+		_methodParameterTypes44 = new String[] { "java.lang.String" };
+
+		_methodName49 = "addAssetTrendingEntry";
+
+		_methodParameterTypes49 = new String[] {
+				"long", "long", "java.util.Date", "java.util.Date", "long",
+				"long", "long", "int", "double", "double", "int"
+			};
+
+		_methodName50 = "deleteAssetTrendingEntry";
+
+		_methodParameterTypes50 = new String[] { "long", "long" };
+
+		_methodName51 = "getAssetTrendingEntries";
+
+		_methodParameterTypes51 = new String[] {
+				"java.lang.String", "java.util.Date", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName52 = "getAssetTrendingEntriesCount";
+
+		_methodParameterTypes52 = new String[] {
+				"java.lang.String", "java.util.Date"
+			};
+
+		_methodName53 = "getAssetTrendingEntry";
+
+		_methodParameterTypes53 = new String[] { "long" };
+
+		_methodName54 = "getAssetTrendingEntry";
+
+		_methodParameterTypes54 = new String[] { "long", "long" };
+
+		_methodName55 = "updateAssetTrendingEntry";
+
+		_methodParameterTypes55 = new String[] {
+				"com.liferay.assettrending.model.AssetTrendingEntry", "double"
+			};
+
+		_methodName56 = "updateAssetTrendingEntry";
+
+		_methodParameterTypes56 = new String[] {
+				"long", "long", "java.util.Date", "java.util.Date", "long",
+				"long", "long", "int", "double", "double", "int"
+			};
+
+		_methodName57 = "updateAssetTrendingEntry";
+
+		_methodParameterTypes57 = new String[] { "long", "long", "double" };
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -227,16 +276,87 @@ public class AssetTrendingEntryLocalServiceClpInvoker {
 			return AssetTrendingEntryLocalServiceUtil.updateAssetTrendingEntry((com.liferay.assettrending.model.AssetTrendingEntry)arguments[0]);
 		}
 
-		if (_methodName41.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes41, parameterTypes)) {
+		if (_methodName43.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
 			return AssetTrendingEntryLocalServiceUtil.getBeanIdentifier();
 		}
 
-		if (_methodName42.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
+		if (_methodName44.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes44, parameterTypes)) {
 			AssetTrendingEntryLocalServiceUtil.setBeanIdentifier((java.lang.String)arguments[0]);
 
 			return null;
+		}
+
+		if (_methodName49.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes49, parameterTypes)) {
+			return AssetTrendingEntryLocalServiceUtil.addAssetTrendingEntry(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(), (java.util.Date)arguments[2],
+				(java.util.Date)arguments[3], ((Long)arguments[4]).longValue(),
+				((Long)arguments[5]).longValue(),
+				((Long)arguments[6]).longValue(),
+				((Integer)arguments[7]).intValue(),
+				((Double)arguments[8]).doubleValue(),
+				((Double)arguments[9]).doubleValue(),
+				((Integer)arguments[10]).intValue());
+		}
+
+		if (_methodName50.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes50, parameterTypes)) {
+			return AssetTrendingEntryLocalServiceUtil.deleteAssetTrendingEntry(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName51.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes51, parameterTypes)) {
+			return AssetTrendingEntryLocalServiceUtil.getAssetTrendingEntries((java.lang.String)arguments[0],
+				(java.util.Date)arguments[1],
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue(),
+				(com.liferay.portal.kernel.util.OrderByComparator)arguments[4]);
+		}
+
+		if (_methodName52.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes52, parameterTypes)) {
+			return AssetTrendingEntryLocalServiceUtil.getAssetTrendingEntriesCount((java.lang.String)arguments[0],
+				(java.util.Date)arguments[1]);
+		}
+
+		if (_methodName53.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes53, parameterTypes)) {
+			return AssetTrendingEntryLocalServiceUtil.getAssetTrendingEntry(((Long)arguments[0]).longValue());
+		}
+
+		if (_methodName54.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes54, parameterTypes)) {
+			return AssetTrendingEntryLocalServiceUtil.getAssetTrendingEntry(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName55.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes55, parameterTypes)) {
+			return AssetTrendingEntryLocalServiceUtil.updateAssetTrendingEntry((com.liferay.assettrending.model.AssetTrendingEntry)arguments[0],
+				((Double)arguments[1]).doubleValue());
+		}
+
+		if (_methodName56.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes56, parameterTypes)) {
+			return AssetTrendingEntryLocalServiceUtil.updateAssetTrendingEntry(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(), (java.util.Date)arguments[2],
+				(java.util.Date)arguments[3], ((Long)arguments[4]).longValue(),
+				((Long)arguments[5]).longValue(),
+				((Long)arguments[6]).longValue(),
+				((Integer)arguments[7]).intValue(),
+				((Double)arguments[8]).doubleValue(),
+				((Double)arguments[9]).doubleValue(),
+				((Integer)arguments[10]).intValue());
+		}
+
+		if (_methodName57.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes57, parameterTypes)) {
+			return AssetTrendingEntryLocalServiceUtil.updateAssetTrendingEntry(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				((Double)arguments[2]).doubleValue());
 		}
 
 		throw new UnsupportedOperationException();
@@ -278,8 +398,26 @@ public class AssetTrendingEntryLocalServiceClpInvoker {
 	private String[] _methodParameterTypes17;
 	private String _methodName18;
 	private String[] _methodParameterTypes18;
-	private String _methodName41;
-	private String[] _methodParameterTypes41;
-	private String _methodName42;
-	private String[] _methodParameterTypes42;
+	private String _methodName43;
+	private String[] _methodParameterTypes43;
+	private String _methodName44;
+	private String[] _methodParameterTypes44;
+	private String _methodName49;
+	private String[] _methodParameterTypes49;
+	private String _methodName50;
+	private String[] _methodParameterTypes50;
+	private String _methodName51;
+	private String[] _methodParameterTypes51;
+	private String _methodName52;
+	private String[] _methodParameterTypes52;
+	private String _methodName53;
+	private String[] _methodParameterTypes53;
+	private String _methodName54;
+	private String[] _methodParameterTypes54;
+	private String _methodName55;
+	private String[] _methodParameterTypes55;
+	private String _methodName56;
+	private String[] _methodParameterTypes56;
+	private String _methodName57;
+	private String[] _methodParameterTypes57;
 }

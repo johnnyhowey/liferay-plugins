@@ -17,21 +17,12 @@ package com.liferay.assettrending.model.impl;
 import aQute.bnd.annotation.ProviderType;
 
 /**
- * The extended model implementation for the AssetTrendingEntry service. Represents a row in the &quot;AssetTrendingEntry&quot; database table, with each column mapped to a property of this class.
- *
- * <p>
- * Helper methods and all application logic should be put in this class. Whenever methods are added, rerun ServiceBuilder to copy their definitions into the {@link com.liferay.assettrending.model.AssetTrendingEntry} interface.
- * </p>
- *
- * @author Brian Wing Shun Chan
+ * @author Lin Cui
  */
 @ProviderType
 public class AssetTrendingEntryImpl extends AssetTrendingEntryBaseImpl {
-	/**
-	 * NOTE FOR DEVELOPERS:
-	 *
-	 * Never reference this class directly. All methods that expect a asset trending entry model instance should use the {@link com.liferay.assettrending.model.AssetTrendingEntry} interface instead.
-	 */
+
 	public AssetTrendingEntryImpl() {
 	}
+
 }

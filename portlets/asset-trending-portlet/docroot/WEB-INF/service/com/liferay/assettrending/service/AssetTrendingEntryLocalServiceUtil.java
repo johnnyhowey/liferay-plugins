@@ -53,6 +53,17 @@ public class AssetTrendingEntryLocalServiceUtil {
 		return getService().addAssetTrendingEntry(assetTrendingEntry);
 	}
 
+	public static com.liferay.assettrending.model.AssetTrendingEntry addAssetTrendingEntry(
+		long groupId, long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate, long assetEntryId, long classNameId,
+		long classPK, int commentCount, double priority, double ratingScore,
+		int viewCount) {
+		return getService()
+				   .addAssetTrendingEntry(groupId, companyId, createDate,
+			modifiedDate, assetEntryId, classNameId, classPK, commentCount,
+			priority, ratingScore, viewCount);
+	}
+
 	/**
 	* Creates a new asset trending entry with the primary key. Does not add the asset trending entry to the database.
 	*
@@ -86,6 +97,11 @@ public class AssetTrendingEntryLocalServiceUtil {
 		long assetTrendingEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().deleteAssetTrendingEntry(assetTrendingEntryId);
+	}
+
+	public static com.liferay.assettrending.model.AssetTrendingEntry deleteAssetTrendingEntry(
+		long classNameId, long classPK) {
+		return getService().deleteAssetTrendingEntry(classNameId, classPK);
 	}
 
 	/**
@@ -184,6 +200,16 @@ public class AssetTrendingEntryLocalServiceUtil {
 		return getService().getActionableDynamicQuery();
 	}
 
+	public static java.util.List<com.liferay.assettrending.model.AssetTrendingEntry> getAssetTrendingEntries(
+		java.lang.String classNameIds, java.util.Date createDate, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .getAssetTrendingEntries(classNameIds, createDate, start,
+			end, orderByComparator);
+	}
+
 	/**
 	* Returns a range of all the asset trending entries.
 	*
@@ -209,6 +235,13 @@ public class AssetTrendingEntryLocalServiceUtil {
 		return getService().getAssetTrendingEntriesCount();
 	}
 
+	public static int getAssetTrendingEntriesCount(
+		java.lang.String classNameIds, java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService()
+				   .getAssetTrendingEntriesCount(classNameIds, createDate);
+	}
+
 	/**
 	* Returns the asset trending entry with the primary key.
 	*
@@ -220,6 +253,11 @@ public class AssetTrendingEntryLocalServiceUtil {
 		long assetTrendingEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService().getAssetTrendingEntry(assetTrendingEntryId);
+	}
+
+	public static com.liferay.assettrending.model.AssetTrendingEntry getAssetTrendingEntry(
+		long classNameId, long classPK) {
+		return getService().getAssetTrendingEntry(classNameId, classPK);
 	}
 
 	/**
@@ -261,6 +299,30 @@ public class AssetTrendingEntryLocalServiceUtil {
 	public static com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
 		com.liferay.assettrending.model.AssetTrendingEntry assetTrendingEntry) {
 		return getService().updateAssetTrendingEntry(assetTrendingEntry);
+	}
+
+	public static com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		com.liferay.assettrending.model.AssetTrendingEntry assetTrendingEntry,
+		double trendingScore) {
+		return getService()
+				   .updateAssetTrendingEntry(assetTrendingEntry, trendingScore);
+	}
+
+	public static com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		long classNameId, long classPK, double ratingScore) {
+		return getService()
+				   .updateAssetTrendingEntry(classNameId, classPK, ratingScore);
+	}
+
+	public static com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		long groupId, long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate, long assetEntryId, long classNameId,
+		long classPK, int commentCount, double priority, double ratingScore,
+		int viewCount) {
+		return getService()
+				   .updateAssetTrendingEntry(groupId, companyId, createDate,
+			modifiedDate, assetEntryId, classNameId, classPK, commentCount,
+			priority, ratingScore, viewCount);
 	}
 
 	public static void clearService() {

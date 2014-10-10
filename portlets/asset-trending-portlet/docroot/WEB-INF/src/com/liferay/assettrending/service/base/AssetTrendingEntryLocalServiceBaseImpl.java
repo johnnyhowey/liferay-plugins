@@ -18,6 +18,7 @@ import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.assettrending.model.AssetTrendingEntry;
 import com.liferay.assettrending.service.AssetTrendingEntryLocalService;
+import com.liferay.assettrending.service.persistence.AssetTrendingEntryFinder;
 import com.liferay.assettrending.service.persistence.AssetTrendingEntryPersistence;
 
 import com.liferay.portal.kernel.bean.BeanReference;
@@ -341,6 +342,25 @@ public abstract class AssetTrendingEntryLocalServiceBaseImpl
 	}
 
 	/**
+	 * Returns the asset trending entry finder.
+	 *
+	 * @return the asset trending entry finder
+	 */
+	public AssetTrendingEntryFinder getAssetTrendingEntryFinder() {
+		return assetTrendingEntryFinder;
+	}
+
+	/**
+	 * Sets the asset trending entry finder.
+	 *
+	 * @param assetTrendingEntryFinder the asset trending entry finder
+	 */
+	public void setAssetTrendingEntryFinder(
+		AssetTrendingEntryFinder assetTrendingEntryFinder) {
+		this.assetTrendingEntryFinder = assetTrendingEntryFinder;
+	}
+
+	/**
 	 * Returns the counter local service.
 	 *
 	 * @return the counter local service
@@ -582,6 +602,8 @@ public abstract class AssetTrendingEntryLocalServiceBaseImpl
 	protected com.liferay.assettrending.service.AssetTrendingEntryLocalService assetTrendingEntryLocalService;
 	@BeanReference(type = AssetTrendingEntryPersistence.class)
 	protected AssetTrendingEntryPersistence assetTrendingEntryPersistence;
+	@BeanReference(type = AssetTrendingEntryFinder.class)
+	protected AssetTrendingEntryFinder assetTrendingEntryFinder;
 	@BeanReference(type = com.liferay.counter.service.CounterLocalService.class)
 	protected com.liferay.counter.service.CounterLocalService counterLocalService;
 	@BeanReference(type = com.liferay.portal.service.ClassNameLocalService.class)

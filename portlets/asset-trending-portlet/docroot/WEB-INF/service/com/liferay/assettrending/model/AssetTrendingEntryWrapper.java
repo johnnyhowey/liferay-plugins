@@ -164,8 +164,7 @@ public class AssetTrendingEntryWrapper implements AssetTrendingEntry,
 	}
 
 	@Override
-	public int compareTo(
-		com.liferay.assettrending.model.AssetTrendingEntry assetTrendingEntry) {
+	public int compareTo(AssetTrendingEntry assetTrendingEntry) {
 		return _assetTrendingEntry.compareTo(assetTrendingEntry);
 	}
 
@@ -553,12 +552,12 @@ public class AssetTrendingEntryWrapper implements AssetTrendingEntry,
 	}
 
 	@Override
-	public com.liferay.portal.model.CacheModel<com.liferay.assettrending.model.AssetTrendingEntry> toCacheModel() {
+	public com.liferay.portal.model.CacheModel<AssetTrendingEntry> toCacheModel() {
 		return _assetTrendingEntry.toCacheModel();
 	}
 
 	@Override
-	public com.liferay.assettrending.model.AssetTrendingEntry toEscapedModel() {
+	public AssetTrendingEntry toEscapedModel() {
 		return new AssetTrendingEntryWrapper(_assetTrendingEntry.toEscapedModel());
 	}
 
@@ -568,7 +567,7 @@ public class AssetTrendingEntryWrapper implements AssetTrendingEntry,
 	}
 
 	@Override
-	public com.liferay.assettrending.model.AssetTrendingEntry toUnescapedModel() {
+	public AssetTrendingEntry toUnescapedModel() {
 		return new AssetTrendingEntryWrapper(_assetTrendingEntry.toUnescapedModel());
 	}
 

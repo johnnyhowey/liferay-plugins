@@ -59,6 +59,12 @@ public interface AssetTrendingEntryLocalService extends BaseLocalService,
 	public com.liferay.assettrending.model.AssetTrendingEntry addAssetTrendingEntry(
 		com.liferay.assettrending.model.AssetTrendingEntry assetTrendingEntry);
 
+	public com.liferay.assettrending.model.AssetTrendingEntry addAssetTrendingEntry(
+		long groupId, long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate, long assetEntryId, long classNameId,
+		long classPK, int commentCount, double priority, double ratingScore,
+		int viewCount);
+
 	/**
 	* Creates a new asset trending entry with the primary key. Does not add the asset trending entry to the database.
 	*
@@ -89,6 +95,9 @@ public interface AssetTrendingEntryLocalService extends BaseLocalService,
 	public com.liferay.assettrending.model.AssetTrendingEntry deleteAssetTrendingEntry(
 		long assetTrendingEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException;
+
+	public com.liferay.assettrending.model.AssetTrendingEntry deleteAssetTrendingEntry(
+		long classNameId, long classPK);
 
 	/**
 	* @throws PortalException
@@ -170,6 +179,13 @@ public interface AssetTrendingEntryLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<com.liferay.assettrending.model.AssetTrendingEntry> getAssetTrendingEntries(
+		java.lang.String classNameIds, java.util.Date createDate, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
 	/**
 	* Returns a range of all the asset trending entries.
 	*
@@ -193,6 +209,11 @@ public interface AssetTrendingEntryLocalService extends BaseLocalService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public int getAssetTrendingEntriesCount();
 
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getAssetTrendingEntriesCount(java.lang.String classNameIds,
+		java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.PortalException;
+
 	/**
 	* Returns the asset trending entry with the primary key.
 	*
@@ -204,6 +225,10 @@ public interface AssetTrendingEntryLocalService extends BaseLocalService,
 	public com.liferay.assettrending.model.AssetTrendingEntry getAssetTrendingEntry(
 		long assetTrendingEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException;
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public com.liferay.assettrending.model.AssetTrendingEntry getAssetTrendingEntry(
+		long classNameId, long classPK);
 
 	/**
 	* Returns the Spring bean ID for this bean.
@@ -239,4 +264,17 @@ public interface AssetTrendingEntryLocalService extends BaseLocalService,
 	@com.liferay.portal.kernel.search.Indexable(type = IndexableType.REINDEX)
 	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
 		com.liferay.assettrending.model.AssetTrendingEntry assetTrendingEntry);
+
+	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		com.liferay.assettrending.model.AssetTrendingEntry assetTrendingEntry,
+		double trendingScore);
+
+	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		long classNameId, long classPK, double ratingScore);
+
+	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		long groupId, long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate, long assetEntryId, long classNameId,
+		long classPK, int commentCount, double priority, double ratingScore,
+		int viewCount);
 }

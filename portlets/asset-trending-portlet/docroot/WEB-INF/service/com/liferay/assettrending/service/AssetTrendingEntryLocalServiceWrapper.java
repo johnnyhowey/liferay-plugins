@@ -46,6 +46,17 @@ public class AssetTrendingEntryLocalServiceWrapper
 		return _assetTrendingEntryLocalService.addAssetTrendingEntry(assetTrendingEntry);
 	}
 
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry addAssetTrendingEntry(
+		long groupId, long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate, long assetEntryId, long classNameId,
+		long classPK, int commentCount, double priority, double ratingScore,
+		int viewCount) {
+		return _assetTrendingEntryLocalService.addAssetTrendingEntry(groupId,
+			companyId, createDate, modifiedDate, assetEntryId, classNameId,
+			classPK, commentCount, priority, ratingScore, viewCount);
+	}
+
 	/**
 	* Creates a new asset trending entry with the primary key. Does not add the asset trending entry to the database.
 	*
@@ -82,6 +93,13 @@ public class AssetTrendingEntryLocalServiceWrapper
 		long assetTrendingEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _assetTrendingEntryLocalService.deleteAssetTrendingEntry(assetTrendingEntryId);
+	}
+
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry deleteAssetTrendingEntry(
+		long classNameId, long classPK) {
+		return _assetTrendingEntryLocalService.deleteAssetTrendingEntry(classNameId,
+			classPK);
 	}
 
 	/**
@@ -191,6 +209,16 @@ public class AssetTrendingEntryLocalServiceWrapper
 		return _assetTrendingEntryLocalService.getActionableDynamicQuery();
 	}
 
+	@Override
+	public java.util.List<com.liferay.assettrending.model.AssetTrendingEntry> getAssetTrendingEntries(
+		java.lang.String classNameIds, java.util.Date createDate, int start,
+		int end,
+		com.liferay.portal.kernel.util.OrderByComparator orderByComparator)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _assetTrendingEntryLocalService.getAssetTrendingEntries(classNameIds,
+			createDate, start, end, orderByComparator);
+	}
+
 	/**
 	* Returns a range of all the asset trending entries.
 	*
@@ -219,6 +247,14 @@ public class AssetTrendingEntryLocalServiceWrapper
 		return _assetTrendingEntryLocalService.getAssetTrendingEntriesCount();
 	}
 
+	@Override
+	public int getAssetTrendingEntriesCount(java.lang.String classNameIds,
+		java.util.Date createDate)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _assetTrendingEntryLocalService.getAssetTrendingEntriesCount(classNameIds,
+			createDate);
+	}
+
 	/**
 	* Returns the asset trending entry with the primary key.
 	*
@@ -231,6 +267,13 @@ public class AssetTrendingEntryLocalServiceWrapper
 		long assetTrendingEntryId)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _assetTrendingEntryLocalService.getAssetTrendingEntry(assetTrendingEntryId);
+	}
+
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry getAssetTrendingEntry(
+		long classNameId, long classPK) {
+		return _assetTrendingEntryLocalService.getAssetTrendingEntry(classNameId,
+			classPK);
 	}
 
 	/**
@@ -278,6 +321,32 @@ public class AssetTrendingEntryLocalServiceWrapper
 	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
 		com.liferay.assettrending.model.AssetTrendingEntry assetTrendingEntry) {
 		return _assetTrendingEntryLocalService.updateAssetTrendingEntry(assetTrendingEntry);
+	}
+
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		com.liferay.assettrending.model.AssetTrendingEntry assetTrendingEntry,
+		double trendingScore) {
+		return _assetTrendingEntryLocalService.updateAssetTrendingEntry(assetTrendingEntry,
+			trendingScore);
+	}
+
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		long classNameId, long classPK, double ratingScore) {
+		return _assetTrendingEntryLocalService.updateAssetTrendingEntry(classNameId,
+			classPK, ratingScore);
+	}
+
+	@Override
+	public com.liferay.assettrending.model.AssetTrendingEntry updateAssetTrendingEntry(
+		long groupId, long companyId, java.util.Date createDate,
+		java.util.Date modifiedDate, long assetEntryId, long classNameId,
+		long classPK, int commentCount, double priority, double ratingScore,
+		int viewCount) {
+		return _assetTrendingEntryLocalService.updateAssetTrendingEntry(groupId,
+			companyId, createDate, modifiedDate, assetEntryId, classNameId,
+			classPK, commentCount, priority, ratingScore, viewCount);
 	}
 
 	/**
