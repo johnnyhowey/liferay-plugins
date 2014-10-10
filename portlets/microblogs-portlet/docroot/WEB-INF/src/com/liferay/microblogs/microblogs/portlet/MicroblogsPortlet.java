@@ -18,19 +18,19 @@
 package com.liferay.microblogs.microblogs.portlet;
 
 import com.liferay.microblogs.model.MicroblogsEntry;
+import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
 import com.liferay.microblogs.service.MicroblogsEntryServiceUtil;
+import com.liferay.microblogs.util.MicroblogsUtil;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.theme.ThemeDisplay;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portlet.asset.service.AssetEntryLocalServiceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -87,34 +87,33 @@ public class MicroblogsPortlet extends MVCPortlet {
 		}
 	}
 
+	public void updateMicroblogsEntryViewCount(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		long microblogsEntryId = ParamUtil.getLong(
+			actionRequest, "microblogsEntryId");
+
+		MicroblogsEntry microblogsEntry =
+			MicroblogsEntryLocalServiceUtil.fetchMicroblogsEntry(
+				microblogsEntryId);
+
+		if (microblogsEntry == null) {
+			return;
+		}
+
+		AssetEntryLocalServiceUtil.incrementViewCounter(
+			0, MicroblogsEntry.class.getName(), microblogsEntryId, 1);
+	}
+
 	protected String[] getAssetTagNames(String content) {
 		List<String> assetTagNames = new ArrayList<String>();
 
-		Matcher matcher = _assetTagPattern.matcher(content);
+		assetTagNames.addAll(MicroblogsUtil.getHashtags(content));
 
-		while (matcher.find()) {
-			String assetTagName = matcher.group();
-
-			assetTagName = assetTagName.substring(1);
-
-			assetTagNames.add(assetTagName);
-		}
-
-		matcher = _userTagPattern.matcher(content);
-
-		while (matcher.find()) {
-			String assetTagName = matcher.group();
-
-			assetTagName = assetTagName.replace("[@", StringPool.BLANK);
-			assetTagName = assetTagName.replace("]", StringPool.BLANK);
-
-			assetTagNames.add(assetTagName);
-		}
+		assetTagNames.addAll(MicroblogsUtil.getTaggedUsersScreenNames(content));
 
 		return assetTagNames.toArray(new String[assetTagNames.size()]);
 	}
-
-	private Pattern _assetTagPattern = Pattern.compile("\\#\\S*");
-	private Pattern _userTagPattern = Pattern.compile("\\[\\@\\S*\\]");
 
 }
