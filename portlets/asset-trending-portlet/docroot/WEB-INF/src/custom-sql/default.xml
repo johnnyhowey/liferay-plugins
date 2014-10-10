@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<custom-sql>
+	<sql id="com.liferay.assettrending.service.persistence.AssetTrendingEntryFinder.countAssets">
+		<![CDATA[
+			SELECT
+				COUNT(DISTINCT AssetTrendingEntry.assetTrendingEntryId) AS COUNT_VALUE
+			FROM
+				AssetTrendingEntry
+			WHERE
+				[$ASSET_TRENDING_ENTRY_IN_CLASS_NAME_IDS$]
+				(
+					AssetTrendingEntry.createDate >= ? OR ? IS NULL
+				)
+		]]>
+	</sql>
+	<sql id="com.liferay.assettrending.service.persistence.AssetTrendingEntryFinder.findAssets">
+		<![CDATA[
+			SELECT
+				DISTINCT AssetTrendingEntry.*
+			FROM
+				AssetTrendingEntry
+			WHERE
+				[$ASSET_TRENDING_ENTRY_IN_CLASS_NAME_IDS$]
+				(
+					AssetTrendingEntry.createDate >= ? OR ? IS NULL
+				)
+		]]>
+	</sql>
+</custom-sql>
