@@ -15,6 +15,7 @@
 package com.liferay.google.mail.groups.util;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.api.services.groupssettings.Groupssettings;
 import com.google.api.services.groupssettings.model.Groups;
 
@@ -69,7 +70,24 @@ public class GoogleGroupssettingsUtil {
 			Groupssettings.Groups.Update update = groupssettingsGroups.update(
 				groupEmailAddress, groups);
 
-			update.execute();
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					update.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);

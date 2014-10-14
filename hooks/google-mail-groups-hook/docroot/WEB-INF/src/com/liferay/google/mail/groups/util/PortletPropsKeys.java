@@ -29,6 +29,12 @@ public class PortletPropsKeys {
 
 	public static final String EMAIL_PREFIX = "email.prefix";
 
+	public static final String GOOGLE_API_RETRY_ATTEMPTS =
+		"google.api.retry.attempts";
+
+	public static final String GOOGLE_API_RETRY_INTERVAL =
+		"google.api.retry.interval";
+
 	public static final String GOOGLE_API_SERVICE_ACCOUNT_ID =
 		"google.api.service.account.id";
 

@@ -43,7 +43,24 @@ public class GoogleDirectoryUtil {
 
 			Directory.Groups.Insert insert = groups.insert(group);
 
-			insert.execute();
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					insert.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
@@ -66,14 +83,28 @@ public class GoogleDirectoryUtil {
 			Directory.Members.Insert insert = members.insert(
 				groupEmailAddress, member);
 
-			insert.execute();
-		}
-		catch (GoogleJsonResponseException gjre) {
-			if (gjre.getStatusCode() == _ERROR_CONFLICT) {
-				return;
-			}
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
 
-			throw new PortalException(gjre);
+				try {
+					insert.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (gjre.getStatusCode() == _ERROR_CONFLICT) {
+						return;
+					}
+
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
@@ -90,7 +121,24 @@ public class GoogleDirectoryUtil {
 
 			Directory.Groups.Delete delete = groups.delete(groupEmailAddress);
 
-			delete.execute();
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					delete.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
@@ -104,12 +152,35 @@ public class GoogleDirectoryUtil {
 		try {
 			Directory directory = getDirectory();
 
+			Group group = getGroup(groupEmailAddress);
+
+			if (group == null) {
+				return;
+			}
+
 			Directory.Members members = directory.members();
 
 			Directory.Members.Delete delete = members.delete(
 				groupEmailAddress, emailAddress);
 
-			delete.execute();
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					delete.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
@@ -193,7 +264,24 @@ public class GoogleDirectoryUtil {
 			Directory.Members.Update update = members.update(
 				groupEmailAddress, userEmailAddress, member);
 
-			update.execute();
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					update.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);

@@ -21,6 +21,8 @@ import com.google.api.services.groupssettings.model.Groups;
 import com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -170,16 +172,28 @@ public class GoogleMailGroupsUtil {
 
 				List<String> groupMemberEmailAddresses =
 					new ArrayList<String>();
+				Members members = null;
 
 				String groupEmailAddress = getGroupEmailAddress(group);
 
 				if (GoogleDirectoryUtil.getGroup(groupEmailAddress) == null) {
-					GoogleDirectoryUtil.addGroup(
-						group.getDescriptiveName(), groupEmailAddress);
-				}
+					try {
+						GoogleDirectoryUtil.addGroup(
+							group.getDescriptiveName(), groupEmailAddress);
+					}
+					catch (Exception e) {
+						_log.error(
+							"Unable to add Google group for " +
+								group.getDescriptiveName(),
+							e);
 
-				Members members = GoogleDirectoryUtil.getGroupMembers(
-					groupEmailAddress);
+						return;
+					}
+				}
+				else {
+					members = GoogleDirectoryUtil.getGroupMembers(
+						groupEmailAddress);
+				}
 
 				if ((members != null) && (members.getMembers() != null)) {
 					for (Member member : members.getMembers()) {
@@ -212,8 +226,20 @@ public class GoogleMailGroupsUtil {
 						continue;
 					}
 
-					GoogleDirectoryUtil.deleteGroupMember(
-						groupEmailAddress, groupMemberEmailAddress);
+					try {
+						GoogleDirectoryUtil.deleteGroupMember(
+							groupEmailAddress, groupMemberEmailAddress);
+					}
+					catch (Exception e) {
+						StringBundler sb = new StringBundler(4);
+
+						sb.append("Unable to delete ");
+						sb.append(groupMemberEmailAddress);
+						sb.append(" from Google group ");
+						sb.append(groupEmailAddress);
+
+						_log.error(sb.toString(), e);
+					}
 				}
 
 				for (String emailAddress : emailAddresses) {
@@ -221,8 +247,20 @@ public class GoogleMailGroupsUtil {
 						continue;
 					}
 
-					GoogleDirectoryUtil.addGroupMember(
-						groupEmailAddress, emailAddress);
+					try {
+						GoogleDirectoryUtil.addGroupMember(
+							groupEmailAddress, emailAddress);
+					}
+					catch (Exception e) {
+						StringBundler sb = new StringBundler(4);
+
+						sb.append("Unable to add ");
+						sb.append(emailAddress);
+						sb.append(" to Google group ");
+						sb.append(groupEmailAddress);
+
+						_log.error(sb.toString(), e);
+					}
 				}
 
 				checkLargeGroup(group);
@@ -300,5 +338,7 @@ public class GoogleMailGroupsUtil {
 		GoogleDirectoryUtil.updateGroupMember(
 			groupEmailAddress, userEmailAddress, member);
 	}
+
+	private static Log _log = LogFactoryUtil.getLog(GoogleMailGroupsUtil.class);
 
 }
