@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.MapUtil;
+import com.liferay.portal.kernel.util.SetUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
@@ -48,6 +49,7 @@ import com.liferay.portal.search.solr.facet.SolrFacetFieldCollector;
 import com.liferay.portal.search.solr.facet.SolrFacetQueryCollector;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -256,9 +258,15 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 			return;
 		}
 
-		String[] selectedFieldNames = queryConfig.getSelectedFieldNames();
+		Set<String> selectedFieldNames = SetUtil.fromArray(
+			queryConfig.getSelectedFieldNames());
 
-		solrQuery.setFields(selectedFieldNames);
+		if (!selectedFieldNames.contains(Field.UID)) {
+			selectedFieldNames.add(Field.UID);
+		}
+
+		solrQuery.setFields(
+			selectedFieldNames.toArray(new String[selectedFieldNames.size()]));
 	}
 
 	protected void addSnippets(
@@ -270,18 +278,11 @@ public class SolrIndexSearcher extends BaseIndexSearcher {
 			return;
 		}
 
-		addSnippets(
-			solrDocument, document, queryTerms, highlights,
-			Field.ASSET_CATEGORY_TITLES, queryConfig.getLocale());
-		addSnippets(
-			solrDocument, document, queryTerms, highlights, Field.CONTENT,
-			queryConfig.getLocale());
-		addSnippets(
-			solrDocument, document, queryTerms, highlights, Field.DESCRIPTION,
-			queryConfig.getLocale());
-		addSnippets(
-			solrDocument, document, queryTerms, highlights, Field.TITLE,
-			queryConfig.getLocale());
+		for (String highlightFieldName : queryConfig.getHighlightFieldNames()) {
+			addSnippets(
+				solrDocument, document, queryTerms, highlights,
+				highlightFieldName, queryConfig.getLocale());
+		}
 	}
 
 	protected void addSnippets(

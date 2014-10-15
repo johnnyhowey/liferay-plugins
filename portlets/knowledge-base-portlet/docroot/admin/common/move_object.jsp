@@ -17,6 +17,8 @@
 <%@ include file="/admin/init.jsp" %>
 
 <%
+KBArticle kbArticle = (KBArticle)request.getAttribute(WebKeys.KNOWLEDGE_BASE_KB_ARTICLE);
+
 int status = (Integer)request.getAttribute(WebKeys.KNOWLEDGE_BASE_STATUS);
 
 long kbArticleClassNameId = PortalUtil.getClassNameId(KBArticleConstants.getClassName());
@@ -26,12 +28,21 @@ long resourcePrimKey = ParamUtil.getLong(request, "resourcePrimKey");
 long parentResourceClassNameId = ParamUtil.getLong(request, "parentResourceClassNameId");
 long parentResourcePrimKey = ParamUtil.getLong(request, "parentResourcePrimKey");
 
+if (kbArticle != null) {
+	resourceClassNameId = kbArticle.getClassNameId();
+	resourcePrimKey = kbArticle.getResourcePrimKey();
+	parentResourceClassNameId = kbArticle.getParentResourceClassNameId();
+	parentResourcePrimKey = kbArticle.getParentResourcePrimKey();
+}
+
 String title = null;
 String parentTitle = null;
 double priority = KBArticleConstants.DEFAULT_PRIORITY;
 
 if (resourceClassNameId == kbArticleClassNameId) {
-	KBArticle kbArticle = KBArticleServiceUtil.getLatestKBArticle(resourcePrimKey, status);
+	if (kbArticle == null) {
+		kbArticle = KBArticleServiceUtil.fetchLatestKBArticle(resourcePrimKey, status);
+	}
 
 	title = kbArticle.getTitle();
 	parentTitle = kbArticle.getParentTitle(locale, status);
@@ -88,10 +99,10 @@ else {
 </aui:form>
 
 <aui:script>
-	function <portlet:namespace />selectKBObject(parentTitle, parentPriority, parentResourcePrimKey, parentResourceClassNameId) {
+	function <portlet:namespace />selectKBObject(parentResource, parentPriority, parentResourcePrimKey, parentResourceClassNameId) {
 		document.<portlet:namespace />fm.<portlet:namespace />parentPriority.value = parentPriority;
+		document.<portlet:namespace />fm.<portlet:namespace />parentResource.value = parentResource;
 		document.<portlet:namespace />fm.<portlet:namespace />parentResourceClassNameId.value = parentResourceClassNameId;
 		document.<portlet:namespace />fm.<portlet:namespace />parentResourcePrimKey.value = parentResourcePrimKey;
-		document.<portlet:namespace />fm.<portlet:namespace />parentTitle.value = parentTitle;
 	}
 </aui:script>

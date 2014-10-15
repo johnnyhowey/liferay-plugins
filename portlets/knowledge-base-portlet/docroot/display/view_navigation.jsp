@@ -51,9 +51,18 @@ String currentKBFolderUrlTitle = preferredKBFolderUrlTitle;
 if (rootResourcePrimKey != KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 	KBFolder kbFolder = KBFolderServiceUtil.getKBFolder(rootResourcePrimKey);
 
-	PortalUtil.setPageTitle(contentRootPrefix + " " + kbFolder.getName(), request);
+	String pageTitle = contentRootPrefix + " " + kbFolder.getName();
+
+	if (kbArticle != null) {
+		pageTitle = kbArticle.getTitle() + " - " + pageTitle;
+	}
+
+	PortalUtil.setPageTitle(pageTitle, request);
 
 	currentKBFolderUrlTitle = kbFolder.getUrlTitle();
+}
+else if (kbArticle != null) {
+	PortalUtil.setPageTitle(kbArticle.getTitle(), request);
 }
 %>
 
@@ -65,7 +74,11 @@ if (rootResourcePrimKey != KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 		%>
 
 		<c:if test="<%= kbFolders.size() > 1 %>">
-			<liferay-portlet:actionURL name="updateRootKBFolderId" var="updateRootKBFolderIdURL" />
+			<liferay-portlet:actionURL name="updateRootKBFolderId" var="updateRootKBFolderIdURL">
+				<c:if test="<%= kbArticle != null %>">
+					<portlet:param name="urlTitle" value="<%= kbArticle.getUrlTitle() %>" />
+				</c:if>
+			</liferay-portlet:actionURL>
 
 			<div class="kbarticle-root-selector kb-field-wrapper">
 				<aui:form action="<%= updateRootKBFolderIdURL %>" name="updateRootKBFolderIdFm">

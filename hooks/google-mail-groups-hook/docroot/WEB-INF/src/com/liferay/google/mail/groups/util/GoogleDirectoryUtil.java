@@ -22,6 +22,7 @@ import com.google.api.services.admin.directory.model.Member;
 import com.google.api.services.admin.directory.model.Members;
 
 import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.util.StringPool;
 
 /**
  * @author Matthew Kong
@@ -43,7 +44,26 @@ public class GoogleDirectoryUtil {
 
 			Directory.Groups.Insert insert = groups.insert(group);
 
-			insert.execute();
+			insert.setFields(StringPool.BLANK);
+
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					insert.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
@@ -66,14 +86,30 @@ public class GoogleDirectoryUtil {
 			Directory.Members.Insert insert = members.insert(
 				groupEmailAddress, member);
 
-			insert.execute();
-		}
-		catch (GoogleJsonResponseException gjre) {
-			if (gjre.getStatusCode() == _ERROR_CONFLICT) {
-				return;
-			}
+			insert.setFields(StringPool.BLANK);
 
-			throw new PortalException(gjre);
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					insert.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (gjre.getStatusCode() == _ERROR_CONFLICT) {
+						return;
+					}
+
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
@@ -90,7 +126,26 @@ public class GoogleDirectoryUtil {
 
 			Directory.Groups.Delete delete = groups.delete(groupEmailAddress);
 
-			delete.execute();
+			delete.setFields(StringPool.BLANK);
+
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					delete.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
@@ -104,12 +159,37 @@ public class GoogleDirectoryUtil {
 		try {
 			Directory directory = getDirectory();
 
+			Group group = getGroup(groupEmailAddress);
+
+			if (group == null) {
+				return;
+			}
+
 			Directory.Members members = directory.members();
 
 			Directory.Members.Delete delete = members.delete(
 				groupEmailAddress, emailAddress);
 
-			delete.execute();
+			delete.setFields(StringPool.BLANK);
+
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					delete.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
@@ -193,7 +273,26 @@ public class GoogleDirectoryUtil {
 			Directory.Members.Update update = members.update(
 				groupEmailAddress, userEmailAddress, member);
 
-			update.execute();
+			update.setFields(StringPool.BLANK);
+
+			for (int i = 1; i <= PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS;
+					i++) {
+
+				try {
+					update.execute();
+
+					return;
+				}
+				catch (GoogleJsonResponseException gjre) {
+					if (i == PortletPropsValues.GOOGLE_API_RETRY_ATTEMPTS) {
+						throw new PortalException(gjre);
+					}
+					else {
+						Thread.sleep(
+							PortletPropsValues.GOOGLE_API_RETRY_INTERVAL);
+					}
+				}
+			}
 		}
 		catch (Exception e) {
 			throw new PortalException(e);
