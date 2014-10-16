@@ -178,6 +178,16 @@ public interface AssetSharingEntryLocalService extends BaseLocalService,
 	public com.liferay.portal.kernel.dao.orm.ActionableDynamicQuery getActionableDynamicQuery();
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public java.util.List<java.lang.Object[]> getAssetEntriesByUserId(
+		long userId, long[] classNameIds,
+		java.util.Map<java.lang.Long, long[]> sharedToClassNameIdsClassPKs,
+		int start, int end);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public int getAssetEntriesByUserIdCount(long userId, long[] classNameIds,
+		java.util.Map<java.lang.Long, long[]> sharedToClassNameIdsClassPKs);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry> getAssetSharingEntries(
 		long classNameId, long classPK);
 

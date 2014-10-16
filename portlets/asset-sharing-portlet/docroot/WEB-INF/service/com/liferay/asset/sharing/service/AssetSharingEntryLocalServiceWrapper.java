@@ -212,6 +212,22 @@ public class AssetSharingEntryLocalServiceWrapper
 	}
 
 	@Override
+	public java.util.List<java.lang.Object[]> getAssetEntriesByUserId(
+		long userId, long[] classNameIds,
+		java.util.Map<java.lang.Long, long[]> sharedToClassNameIdsClassPKs,
+		int start, int end) {
+		return _assetSharingEntryLocalService.getAssetEntriesByUserId(userId,
+			classNameIds, sharedToClassNameIdsClassPKs, start, end);
+	}
+
+	@Override
+	public int getAssetEntriesByUserIdCount(long userId, long[] classNameIds,
+		java.util.Map<java.lang.Long, long[]> sharedToClassNameIdsClassPKs) {
+		return _assetSharingEntryLocalService.getAssetEntriesByUserIdCount(userId,
+			classNameIds, sharedToClassNameIdsClassPKs);
+	}
+
+	@Override
 	public java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry> getAssetSharingEntries(
 		long classNameId, long classPK) {
 		return _assetSharingEntryLocalService.getAssetSharingEntries(classNameId,
