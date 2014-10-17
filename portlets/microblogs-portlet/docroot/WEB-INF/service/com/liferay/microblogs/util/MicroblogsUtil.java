@@ -26,6 +26,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.notifications.UserNotificationManagerUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -105,6 +106,53 @@ public class MicroblogsUtil {
 		}
 
 		return jsonArray;
+	}
+
+	public static int getNotificationType(
+			MicroblogsEntry microblogsEntry, long userId, int deliveryType)
+		throws PortalException {
+
+		if (isTaggedUser(
+				microblogsEntry.getMicroblogsEntryId(), false, userId) &&
+			UserNotificationManagerUtil.isDeliver(
+				userId, PortletKeys.MICROBLOGS, 0,
+				MicroblogsEntryConstants.TYPE_TAG, deliveryType)) {
+
+			return MicroblogsEntryConstants.TYPE_TAG;
+		}
+		else if (microblogsEntry.getType() ==
+					MicroblogsEntryConstants.TYPE_REPLY) {
+
+			long parentMicroblogsEntryId = getParentMicroblogsEntryId(
+				microblogsEntry);
+
+			if ((getParentMicroblogsUserId(microblogsEntry) == userId) &&
+				UserNotificationManagerUtil.isDeliver(
+						userId, PortletKeys.MICROBLOGS, 0,
+						MicroblogsEntryConstants.TYPE_REPLY, deliveryType)) {
+
+				return MicroblogsEntryConstants.TYPE_REPLY;
+			}
+			else if (hasReplied(parentMicroblogsEntryId, userId) &&
+					 UserNotificationManagerUtil.isDeliver(
+						userId, PortletKeys.MICROBLOGS, 0,
+						MicroblogsEntryConstants.TYPE_REPLY_TO_REPLY,
+						deliveryType)) {
+
+				return MicroblogsEntryConstants.TYPE_REPLY_TO_REPLY;
+			}
+			else if (MicroblogsUtil.isTaggedUser(
+						parentMicroblogsEntryId, true, userId) &&
+					 UserNotificationManagerUtil.isDeliver(
+						userId, PortletKeys.MICROBLOGS, 0,
+						MicroblogsEntryConstants.TYPE_REPLY_TO_TAG,
+						deliveryType)) {
+
+				return MicroblogsEntryConstants.TYPE_REPLY_TO_TAG;
+			}
+		}
+
+		return 0;
 	}
 
 	public static long getParentMicroblogsEntryId(
