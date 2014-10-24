@@ -79,7 +79,7 @@ if (entry.getPriority() > 0) {
 		</div>
 
 		<div class="entry-time">
-			<%= Time.getRelativeTimeDescription(entry.getDisplayDate(), locale, timeZone) %>
+			<%= Time.getRelativeTimeDescription(entry.getDisplayDate(), locale, timeZone, dateFormatDate) %>
 		</div>
 	</div>
 

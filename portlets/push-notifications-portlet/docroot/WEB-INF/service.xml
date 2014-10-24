@@ -2,7 +2,7 @@
 <!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
 
 <service-builder package-path="com.liferay.pushnotifications" auto-namespace-tables="false">
-	<author>Silvio Santos</author>
+	<author>Bruno Farache</author>
 	<namespace>PushNotifications</namespace>
 	<entity name="PushNotificationsDevice" local-service="true" remote-service="true">
 
@@ -31,6 +31,35 @@
 		<finder name="U_P" return-type="Collection">
 			<finder-column name="userId" />
 			<finder-column name="platform" />
+		</finder>
+	</entity>
+	<entity name="PushNotificationsEntry" local-service="true" remote-service="true">
+
+		<!-- PK fields -->
+
+		<column name="pushNotificationsEntryId" type="long" primary="true" />
+
+		<!-- Audit fields -->
+
+		<column name="userId" type="long" />
+		<column name="createTime" type="long" />
+
+		<!-- Other fields -->
+
+		<column name="parentPushNotificationsEntryId" type="long" />
+		<column name="payload" type="String" />
+
+		<!-- Order -->
+
+		<order by="asc">
+			<order-column name="createTime" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="C_P" return-type="Collection">
+			<finder-column name="createTime" comparator="&gt;" />
+			<finder-column name="parentPushNotificationsEntryId" />
 		</finder>
 	</entity>
 </service-builder>

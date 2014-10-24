@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.messaging.Message;
 import com.liferay.portal.kernel.messaging.MessageListener;
-import com.liferay.pushnotifications.service.PushNotificationsDeviceLocalServiceUtil;
+import com.liferay.pushnotifications.service.PushNotificationsEntryLocalServiceUtil;
 import com.liferay.pushnotifications.util.PushNotificationsConstants;
 
 /**
@@ -34,10 +34,10 @@ public class PushNotificationsMessageListener implements MessageListener {
 		JSONObject jsonObject = (JSONObject)message.getPayload();
 
 		JSONObject toUserJSONObject = jsonObject.getJSONObject(
-			PushNotificationsConstants.TO_USER);
+			PushNotificationsConstants.KEY_TO_USER);
 
 		long toUserId = toUserJSONObject.getLong(
-			PushNotificationsConstants.USER_ID);
+			PushNotificationsConstants.KEY_USER_ID);
 
 		if (_log.isDebugEnabled()) {
 			_log.debug(
@@ -45,7 +45,7 @@ public class PushNotificationsMessageListener implements MessageListener {
 		}
 
 		try {
-			PushNotificationsDeviceLocalServiceUtil.sendPushNotification(
+			PushNotificationsEntryLocalServiceUtil.sendPushNotification(
 				toUserId, jsonObject, QueryUtil.ALL_POS, QueryUtil.ALL_POS);
 		}
 		catch (Exception e) {

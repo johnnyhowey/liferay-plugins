@@ -17,6 +17,7 @@ package com.liferay.jsonwebserviceclient;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 
 import java.io.IOException;
 
@@ -33,6 +34,11 @@ import javax.security.auth.login.CredentialException;
 public abstract class BaseJSONWebServiceClientHandler {
 
 	public abstract JSONWebServiceClient getJSONWebServiceClient();
+
+	protected BaseJSONWebServiceClientHandler() {
+		_objectMapper.configure(
+			DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+	}
 
 	protected String doGet(String url, String... parametersArray)
 		throws CredentialException, IOException {

@@ -21,7 +21,7 @@ import com.liferay.portal.service.ServiceWrapper;
 /**
  * Provides a wrapper for {@link PushNotificationsDeviceService}.
  *
- * @author Silvio Santos
+ * @author Bruno Farache
  * @see PushNotificationsDeviceService
  * @generated
  */
@@ -71,18 +71,6 @@ public class PushNotificationsDeviceServiceWrapper
 		throws java.lang.Throwable {
 		return _pushNotificationsDeviceService.invokeMethod(name,
 			parameterTypes, arguments);
-	}
-
-	@Override
-	public void sendPushNotification(java.lang.String payload)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		_pushNotificationsDeviceService.sendPushNotification(payload);
-	}
-
-	@Override
-	public void sendPushNotification(long toUserId, java.lang.String payload)
-		throws com.liferay.portal.kernel.exception.PortalException {
-		_pushNotificationsDeviceService.sendPushNotification(toUserId, payload);
 	}
 
 	/**
