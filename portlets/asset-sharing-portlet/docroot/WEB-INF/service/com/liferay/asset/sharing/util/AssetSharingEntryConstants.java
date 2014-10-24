@@ -12,32 +12,13 @@
  * details.
  */
 
-package com.liferay.asset.sharing;
-
-import aQute.bnd.annotation.ProviderType;
-
-import com.liferay.portal.NoSuchModelException;
+package com.liferay.asset.sharing.util;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Sherry Yang
  */
-@ProviderType
-public class NoSuchEntryException extends NoSuchModelException {
+public class AssetSharingEntryConstants {
 
-	public NoSuchEntryException() {
-		super();
-	}
-
-	public NoSuchEntryException(String msg) {
-		super(msg);
-	}
-
-	public NoSuchEntryException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public NoSuchEntryException(Throwable cause) {
-		super(cause);
-	}
+	public static final int TYPE_EVERYONE = 0;
 
 }

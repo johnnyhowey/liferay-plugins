@@ -29,113 +29,190 @@ public class AssetSharingEntryLocalServiceClp
 		InvokableLocalService invokableLocalService) {
 		_invokableLocalService = invokableLocalService;
 
-		_methodName0 = "addAssetSharingEntry";
+		_methodName0 = "addAssetSharingEntries";
 
-		_methodParameterTypes0 = new String[] {
-				"com.liferay.asset.sharing.model.AssetSharingEntry"
-			};
+		_methodParameterTypes0 = new String[] { "long", "long", "java.util.Map" };
 
-		_methodName1 = "createAssetSharingEntry";
+		_methodName1 = "addAssetSharingEntry";
 
 		_methodParameterTypes1 = new String[] {
-				"com.liferay.asset.sharing.service.persistence.AssetSharingEntryPK"
-			};
-
-		_methodName2 = "deleteAssetSharingEntry";
-
-		_methodParameterTypes2 = new String[] {
 				"com.liferay.asset.sharing.model.AssetSharingEntry"
 			};
 
-		_methodName3 = "deleteAssetSharingEntry";
+		_methodName2 = "addAssetSharingEntry";
+
+		_methodParameterTypes2 = new String[] { "long", "long", "long", "long" };
+
+		_methodName3 = "createAssetSharingEntry";
 
 		_methodParameterTypes3 = new String[] {
 				"com.liferay.asset.sharing.service.persistence.AssetSharingEntryPK"
 			};
 
-		_methodName4 = "deletePersistedModel";
+		_methodName4 = "deleteAssetSharingEntries";
 
-		_methodParameterTypes4 = new String[] {
-				"com.liferay.portal.model.PersistedModel"
+		_methodParameterTypes4 = new String[] { "long", "long" };
+
+		_methodName5 = "deleteAssetSharingEntry";
+
+		_methodParameterTypes5 = new String[] {
+				"com.liferay.asset.sharing.model.AssetSharingEntry"
 			};
 
-		_methodName5 = "dynamicQuery";
-
-		_methodParameterTypes5 = new String[] {  };
-
-		_methodName6 = "dynamicQuery";
+		_methodName6 = "deleteAssetSharingEntry";
 
 		_methodParameterTypes6 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+				"com.liferay.asset.sharing.service.persistence.AssetSharingEntryPK"
 			};
 
-		_methodName7 = "dynamicQuery";
+		_methodName7 = "deletePersistedModel";
 
 		_methodParameterTypes7 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
+				"com.liferay.portal.model.PersistedModel"
 			};
 
 		_methodName8 = "dynamicQuery";
 
-		_methodParameterTypes8 = new String[] {
-				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int",
-				"com.liferay.portal.kernel.util.OrderByComparator"
-			};
+		_methodParameterTypes8 = new String[] {  };
 
-		_methodName9 = "dynamicQueryCount";
+		_methodName9 = "dynamicQuery";
 
 		_methodParameterTypes9 = new String[] {
 				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
 			};
 
-		_methodName10 = "dynamicQueryCount";
+		_methodName10 = "dynamicQuery";
 
 		_methodParameterTypes10 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int"
+			};
+
+		_methodName11 = "dynamicQuery";
+
+		_methodParameterTypes11 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery", "int", "int",
+				"com.liferay.portal.kernel.util.OrderByComparator"
+			};
+
+		_methodName12 = "dynamicQueryCount";
+
+		_methodParameterTypes12 = new String[] {
+				"com.liferay.portal.kernel.dao.orm.DynamicQuery"
+			};
+
+		_methodName13 = "dynamicQueryCount";
+
+		_methodParameterTypes13 = new String[] {
 				"com.liferay.portal.kernel.dao.orm.DynamicQuery",
 				"com.liferay.portal.kernel.dao.orm.Projection"
 			};
 
-		_methodName11 = "fetchAssetSharingEntry";
+		_methodName14 = "fetchAssetSharingEntry";
 
-		_methodParameterTypes11 = new String[] {
+		_methodParameterTypes14 = new String[] {
 				"com.liferay.asset.sharing.service.persistence.AssetSharingEntryPK"
 			};
 
-		_methodName12 = "getActionableDynamicQuery";
+		_methodName15 = "getActionableDynamicQuery";
 
-		_methodParameterTypes12 = new String[] {  };
+		_methodParameterTypes15 = new String[] {  };
 
-		_methodName13 = "getAssetSharingEntries";
+		_methodName16 = "getAssetEntriesByUserId";
 
-		_methodParameterTypes13 = new String[] { "int", "int" };
+		_methodParameterTypes16 = new String[] {
+				"long", "long[][]", "java.util.Map", "int", "int"
+			};
 
-		_methodName14 = "getAssetSharingEntriesCount";
+		_methodName17 = "getAssetEntriesByUserIdCount";
 
-		_methodParameterTypes14 = new String[] {  };
+		_methodParameterTypes17 = new String[] {
+				"long", "long[][]", "java.util.Map"
+			};
 
-		_methodName15 = "getAssetSharingEntry";
+		_methodName18 = "getAssetSharingEntries";
 
-		_methodParameterTypes15 = new String[] {
+		_methodParameterTypes18 = new String[] { "long", "long" };
+
+		_methodName19 = "getAssetSharingEntries";
+
+		_methodParameterTypes19 = new String[] { "long", "long", "long" };
+
+		_methodName20 = "getAssetSharingEntries";
+
+		_methodParameterTypes20 = new String[] { "int", "int" };
+
+		_methodName21 = "getAssetSharingEntriesCount";
+
+		_methodParameterTypes21 = new String[] {  };
+
+		_methodName22 = "getAssetSharingEntry";
+
+		_methodParameterTypes22 = new String[] {
 				"com.liferay.asset.sharing.service.persistence.AssetSharingEntryPK"
 			};
 
-		_methodName16 = "getBeanIdentifier";
+		_methodName23 = "getBeanIdentifier";
 
-		_methodParameterTypes16 = new String[] {  };
+		_methodParameterTypes23 = new String[] {  };
 
-		_methodName17 = "getPersistedModel";
+		_methodName24 = "getPersistedModel";
 
-		_methodParameterTypes17 = new String[] { "java.io.Serializable" };
+		_methodParameterTypes24 = new String[] { "java.io.Serializable" };
 
-		_methodName19 = "setBeanIdentifier";
+		_methodName25 = "getSharedToAssetSharingEntries";
 
-		_methodParameterTypes19 = new String[] { "java.lang.String" };
+		_methodParameterTypes25 = new String[] {
+				"long", "long", "long", "int", "int"
+			};
 
-		_methodName20 = "updateAssetSharingEntry";
+		_methodName26 = "getSharedToAssetSharingEntries";
 
-		_methodParameterTypes20 = new String[] {
+		_methodParameterTypes26 = new String[] { "long", "long", "int", "int" };
+
+		_methodName27 = "getSharedToAssetSharingEntriesCount";
+
+		_methodParameterTypes27 = new String[] { "long", "long", "long" };
+
+		_methodName28 = "getSharedToAssetSharingEntriesCount";
+
+		_methodParameterTypes28 = new String[] { "long", "long" };
+
+		_methodName30 = "setBeanIdentifier";
+
+		_methodParameterTypes30 = new String[] { "java.lang.String" };
+
+		_methodName31 = "updateAssetSharingEntry";
+
+		_methodParameterTypes31 = new String[] {
 				"com.liferay.asset.sharing.model.AssetSharingEntry"
 			};
+	}
+
+	@Override
+	public void addAssetSharingEntries(long classNameId, long classPK,
+		java.util.Map<java.lang.Long, long[]> sharedToClassPKsMap) {
+		try {
+			_invokableLocalService.invokeMethod(_methodName0,
+				_methodParameterTypes0,
+				new Object[] {
+					classNameId,
+					
+				classPK,
+					
+				ClpSerializer.translateInput(sharedToClassPKsMap)
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
 	}
 
 	@Override
@@ -144,8 +221,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName0,
-					_methodParameterTypes0,
+			returnObj = _invokableLocalService.invokeMethod(_methodName1,
+					_methodParameterTypes1,
 					new Object[] { ClpSerializer.translateInput(
 							assetSharingEntry) });
 		}
@@ -165,13 +242,42 @@ public class AssetSharingEntryLocalServiceClp
 	}
 
 	@Override
+	public void addAssetSharingEntry(long classNameId, long classPK,
+		long sharedToClassNameId, long sharedToClassPK) {
+		try {
+			_invokableLocalService.invokeMethod(_methodName2,
+				_methodParameterTypes2,
+				new Object[] {
+					classNameId,
+					
+				classPK,
+					
+				sharedToClassNameId,
+					
+				sharedToClassPK
+				});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
 	public com.liferay.asset.sharing.model.AssetSharingEntry createAssetSharingEntry(
 		com.liferay.asset.sharing.service.persistence.AssetSharingEntryPK assetSharingEntryPK) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName1,
-					_methodParameterTypes1,
+			returnObj = _invokableLocalService.invokeMethod(_methodName3,
+					_methodParameterTypes3,
 					new Object[] {
 						ClpSerializer.translateInput(assetSharingEntryPK)
 					});
@@ -192,13 +298,32 @@ public class AssetSharingEntryLocalServiceClp
 	}
 
 	@Override
+	public void deleteAssetSharingEntries(long classNameId, long classPK) {
+		try {
+			_invokableLocalService.invokeMethod(_methodName4,
+				_methodParameterTypes4, new Object[] { classNameId, classPK });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+	}
+
+	@Override
 	public com.liferay.asset.sharing.model.AssetSharingEntry deleteAssetSharingEntry(
 		com.liferay.asset.sharing.model.AssetSharingEntry assetSharingEntry) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName2,
-					_methodParameterTypes2,
+			returnObj = _invokableLocalService.invokeMethod(_methodName5,
+					_methodParameterTypes5,
 					new Object[] { ClpSerializer.translateInput(
 							assetSharingEntry) });
 		}
@@ -224,8 +349,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName3,
-					_methodParameterTypes3,
+			returnObj = _invokableLocalService.invokeMethod(_methodName6,
+					_methodParameterTypes6,
 					new Object[] {
 						ClpSerializer.translateInput(assetSharingEntryPK)
 					});
@@ -256,8 +381,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName4,
-					_methodParameterTypes4,
+			returnObj = _invokableLocalService.invokeMethod(_methodName7,
+					_methodParameterTypes7,
 					new Object[] { ClpSerializer.translateInput(persistedModel) });
 		}
 		catch (Throwable t) {
@@ -284,8 +409,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName5,
-					_methodParameterTypes5, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName8,
+					_methodParameterTypes8, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -308,8 +433,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName6,
-					_methodParameterTypes6,
+			returnObj = _invokableLocalService.invokeMethod(_methodName9,
+					_methodParameterTypes9,
 					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
@@ -334,8 +459,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName7,
-					_methodParameterTypes7,
+			returnObj = _invokableLocalService.invokeMethod(_methodName10,
+					_methodParameterTypes10,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -367,8 +492,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName8,
-					_methodParameterTypes8,
+			returnObj = _invokableLocalService.invokeMethod(_methodName11,
+					_methodParameterTypes11,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -400,8 +525,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName9,
-					_methodParameterTypes9,
+			returnObj = _invokableLocalService.invokeMethod(_methodName12,
+					_methodParameterTypes12,
 					new Object[] { ClpSerializer.translateInput(dynamicQuery) });
 		}
 		catch (Throwable t) {
@@ -426,8 +551,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName10,
-					_methodParameterTypes10,
+			returnObj = _invokableLocalService.invokeMethod(_methodName13,
+					_methodParameterTypes13,
 					new Object[] {
 						ClpSerializer.translateInput(dynamicQuery),
 						
@@ -455,8 +580,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName11,
-					_methodParameterTypes11,
+			returnObj = _invokableLocalService.invokeMethod(_methodName14,
+					_methodParameterTypes14,
 					new Object[] {
 						ClpSerializer.translateInput(assetSharingEntryPK)
 					});
@@ -481,8 +606,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName12,
-					_methodParameterTypes12, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName15,
+					_methodParameterTypes15, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -500,13 +625,131 @@ public class AssetSharingEntryLocalServiceClp
 	}
 
 	@Override
+	public java.util.List<java.lang.Object[]> getAssetEntriesByUserId(
+		long userId, long[] classNameIds,
+		java.util.Map<java.lang.Long, long[]> sharedToClassPKsMap, int start,
+		int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName16,
+					_methodParameterTypes16,
+					new Object[] {
+						userId,
+						
+					ClpSerializer.translateInput(classNameIds),
+						
+					ClpSerializer.translateInput(sharedToClassPKsMap),
+						
+					start,
+						
+					end
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<java.lang.Object[]>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public int getAssetEntriesByUserIdCount(long userId, long[] classNameIds,
+		java.util.Map<java.lang.Long, long[]> sharedToClassPKsMap) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName17,
+					_methodParameterTypes17,
+					new Object[] {
+						userId,
+						
+					ClpSerializer.translateInput(classNameIds),
+						
+					ClpSerializer.translateInput(sharedToClassPKsMap)
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry> getAssetSharingEntries(
+		long classNameId, long classPK) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName18,
+					_methodParameterTypes18,
+					new Object[] { classNameId, classPK });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry> getAssetSharingEntries(
+		long classNameId, long classPK, long sharedToClassNameId) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName19,
+					_methodParameterTypes19,
+					new Object[] { classNameId, classPK, sharedToClassNameId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
 	public java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry> getAssetSharingEntries(
 		int start, int end) {
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName13,
-					_methodParameterTypes13, new Object[] { start, end });
+			returnObj = _invokableLocalService.invokeMethod(_methodName20,
+					_methodParameterTypes20, new Object[] { start, end });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -528,8 +771,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName14,
-					_methodParameterTypes14, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName21,
+					_methodParameterTypes21, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -553,8 +796,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName15,
-					_methodParameterTypes15,
+			returnObj = _invokableLocalService.invokeMethod(_methodName22,
+					_methodParameterTypes22,
 					new Object[] {
 						ClpSerializer.translateInput(assetSharingEntryPK)
 					});
@@ -583,8 +826,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName16,
-					_methodParameterTypes16, new Object[] {  });
+			returnObj = _invokableLocalService.invokeMethod(_methodName23,
+					_methodParameterTypes23, new Object[] {  });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -608,8 +851,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName17,
-					_methodParameterTypes17,
+			returnObj = _invokableLocalService.invokeMethod(_methodName24,
+					_methodParameterTypes24,
 					new Object[] { ClpSerializer.translateInput(primaryKeyObj) });
 		}
 		catch (Throwable t) {
@@ -632,6 +875,131 @@ public class AssetSharingEntryLocalServiceClp
 	}
 
 	@Override
+	public java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry> getSharedToAssetSharingEntries(
+		long classNameId, long sharedToClassNameId, long sharedToClassPK,
+		int start, int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName25,
+					_methodParameterTypes25,
+					new Object[] {
+						classNameId,
+						
+					sharedToClassNameId,
+						
+					sharedToClassPK,
+						
+					start,
+						
+					end
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry> getSharedToAssetSharingEntries(
+		long sharedToClassNameId, long sharedToClassPK, int start, int end) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName26,
+					_methodParameterTypes26,
+					new Object[] {
+						sharedToClassNameId,
+						
+					sharedToClassPK,
+						
+					start,
+						
+					end
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (java.util.List<com.liferay.asset.sharing.model.AssetSharingEntry>)ClpSerializer.translateOutput(returnObj);
+	}
+
+	@Override
+	public int getSharedToAssetSharingEntriesCount(long classNameId,
+		long sharedToClassNameId, long sharedToClassPK) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName27,
+					_methodParameterTypes27,
+					new Object[] {
+						classNameId,
+						
+					sharedToClassNameId,
+						
+					sharedToClassPK
+					});
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
+	public int getSharedToAssetSharingEntriesCount(long sharedToClassNameId,
+		long sharedToClassPK) {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableLocalService.invokeMethod(_methodName28,
+					_methodParameterTypes28,
+					new Object[] { sharedToClassNameId, sharedToClassPK });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return ((Integer)returnObj).intValue();
+	}
+
+	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable {
@@ -641,8 +1009,8 @@ public class AssetSharingEntryLocalServiceClp
 	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		try {
-			_invokableLocalService.invokeMethod(_methodName19,
-				_methodParameterTypes19,
+			_invokableLocalService.invokeMethod(_methodName30,
+				_methodParameterTypes30,
 				new Object[] { ClpSerializer.translateInput(beanIdentifier) });
 		}
 		catch (Throwable t) {
@@ -664,8 +1032,8 @@ public class AssetSharingEntryLocalServiceClp
 		Object returnObj = null;
 
 		try {
-			returnObj = _invokableLocalService.invokeMethod(_methodName20,
-					_methodParameterTypes20,
+			returnObj = _invokableLocalService.invokeMethod(_methodName31,
+					_methodParameterTypes31,
 					new Object[] { ClpSerializer.translateInput(
 							assetSharingEntry) });
 		}
@@ -721,8 +1089,30 @@ public class AssetSharingEntryLocalServiceClp
 	private String[] _methodParameterTypes16;
 	private String _methodName17;
 	private String[] _methodParameterTypes17;
+	private String _methodName18;
+	private String[] _methodParameterTypes18;
 	private String _methodName19;
 	private String[] _methodParameterTypes19;
 	private String _methodName20;
 	private String[] _methodParameterTypes20;
+	private String _methodName21;
+	private String[] _methodParameterTypes21;
+	private String _methodName22;
+	private String[] _methodParameterTypes22;
+	private String _methodName23;
+	private String[] _methodParameterTypes23;
+	private String _methodName24;
+	private String[] _methodParameterTypes24;
+	private String _methodName25;
+	private String[] _methodParameterTypes25;
+	private String _methodName26;
+	private String[] _methodParameterTypes26;
+	private String _methodName27;
+	private String[] _methodParameterTypes27;
+	private String _methodName28;
+	private String[] _methodParameterTypes28;
+	private String _methodName30;
+	private String[] _methodParameterTypes30;
+	private String _methodName31;
+	private String[] _methodParameterTypes31;
 }

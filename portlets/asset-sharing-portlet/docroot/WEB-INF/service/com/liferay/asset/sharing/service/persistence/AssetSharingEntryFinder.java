@@ -12,32 +12,20 @@
  * details.
  */
 
-package com.liferay.asset.sharing;
+package com.liferay.asset.sharing.service.persistence;
 
 import aQute.bnd.annotation.ProviderType;
-
-import com.liferay.portal.NoSuchModelException;
 
 /**
  * @author Brian Wing Shun Chan
  */
 @ProviderType
-public class NoSuchEntryException extends NoSuchModelException {
+public interface AssetSharingEntryFinder {
+	public int countAssetEntriesByUserId(long userId, long[] classNameIds,
+		java.util.Map<java.lang.Long, long[]> sharedToClassPKsMap);
 
-	public NoSuchEntryException() {
-		super();
-	}
-
-	public NoSuchEntryException(String msg) {
-		super(msg);
-	}
-
-	public NoSuchEntryException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
-
-	public NoSuchEntryException(Throwable cause) {
-		super(cause);
-	}
-
+	public java.util.List<java.lang.Object[]> findAssetEntriesByUserId(
+		long userId, long[] classNameIds,
+		java.util.Map<java.lang.Long, long[]> sharedToClassPKsMap, int start,
+		int end);
 }
