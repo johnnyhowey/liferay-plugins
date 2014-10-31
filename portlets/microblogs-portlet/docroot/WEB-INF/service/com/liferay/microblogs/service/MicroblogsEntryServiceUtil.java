@@ -42,12 +42,12 @@ public class MicroblogsEntryServiceUtil {
 	 * Never modify this class directly. Add custom service methods to {@link com.liferay.microblogs.service.impl.MicroblogsEntryServiceImpl} and rerun ServiceBuilder to regenerate this class.
 	 */
 	public static com.liferay.microblogs.model.MicroblogsEntry addMicroblogsEntry(
-		long userId, java.lang.String content, int type, long receiverUserId,
+		long userId, java.lang.String content, int type,
 		long receiverMicroblogsEntryId, int socialRelationType,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
-				   .addMicroblogsEntry(userId, content, type, receiverUserId,
+				   .addMicroblogsEntry(userId, content, type,
 			receiverMicroblogsEntryId, socialRelationType, serviceContext);
 	}
 

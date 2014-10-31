@@ -15,7 +15,6 @@
 			<validator name="required" />
 		</field>
 		<field name="type" type="int" />
-		<field name="receiverUserId" type="long" />
 		<field name="receiverMicroblogsEntryId" type="long" />
 		<field name="socialRelationType" type="int" />
 	</model>

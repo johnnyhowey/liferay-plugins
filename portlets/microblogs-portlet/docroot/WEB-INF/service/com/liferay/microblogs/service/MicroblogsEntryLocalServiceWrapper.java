@@ -48,24 +48,23 @@ public class MicroblogsEntryLocalServiceWrapper
 
 	@Override
 	public com.liferay.microblogs.model.MicroblogsEntry addMicroblogsEntry(
-		long userId, java.lang.String content, int type, long receiverUserId,
+		long userId, java.lang.String content, int type,
 		long receiverMicroblogsEntryId, int socialRelationType,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _microblogsEntryLocalService.addMicroblogsEntry(userId, content,
-			type, receiverUserId, receiverMicroblogsEntryId,
-			socialRelationType, serviceContext);
+			type, receiverMicroblogsEntryId, socialRelationType, serviceContext);
 	}
 
 	@Override
 	public com.liferay.microblogs.model.MicroblogsEntry addMicroblogsEntry(
 		long userId, long creatorClassNameId, long creatorClassPK,
-		java.lang.String content, int type, long receiverUserId,
-		long receiverMicroblogsEntryId, int socialRelationType,
+		java.lang.String content, int type, long receiverMicroblogsEntryId,
+		int socialRelationType,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return _microblogsEntryLocalService.addMicroblogsEntry(userId,
-			creatorClassNameId, creatorClassPK, content, type, receiverUserId,
+			creatorClassNameId, creatorClassPK, content, type,
 			receiverMicroblogsEntryId, socialRelationType, serviceContext);
 	}
 
@@ -357,20 +356,6 @@ public class MicroblogsEntryLocalServiceWrapper
 		long receiverMicroblogsEntryId) {
 		return _microblogsEntryLocalService.getReceiverMicroblogsEntryMicroblogsEntriesCount(type,
 			receiverMicroblogsEntryId);
-	}
-
-	@Override
-	public java.util.List<com.liferay.microblogs.model.MicroblogsEntry> getReceiverUserMicroblogsEntries(
-		int type, long receiverUserId, int start, int end) {
-		return _microblogsEntryLocalService.getReceiverUserMicroblogsEntries(type,
-			receiverUserId, start, end);
-	}
-
-	@Override
-	public int getReceiverUserMicroblogsEntriesCount(int type,
-		long receiverUserId) {
-		return _microblogsEntryLocalService.getReceiverUserMicroblogsEntriesCount(type,
-			receiverUserId);
 	}
 
 	@Override

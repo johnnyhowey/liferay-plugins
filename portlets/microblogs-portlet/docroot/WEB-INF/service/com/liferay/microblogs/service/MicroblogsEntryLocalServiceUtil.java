@@ -54,25 +54,25 @@ public class MicroblogsEntryLocalServiceUtil {
 	}
 
 	public static com.liferay.microblogs.model.MicroblogsEntry addMicroblogsEntry(
-		long userId, java.lang.String content, int type, long receiverUserId,
+		long userId, java.lang.String content, int type,
 		long receiverMicroblogsEntryId, int socialRelationType,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
-				   .addMicroblogsEntry(userId, content, type, receiverUserId,
+				   .addMicroblogsEntry(userId, content, type,
 			receiverMicroblogsEntryId, socialRelationType, serviceContext);
 	}
 
 	public static com.liferay.microblogs.model.MicroblogsEntry addMicroblogsEntry(
 		long userId, long creatorClassNameId, long creatorClassPK,
-		java.lang.String content, int type, long receiverUserId,
-		long receiverMicroblogsEntryId, int socialRelationType,
+		java.lang.String content, int type, long receiverMicroblogsEntryId,
+		int socialRelationType,
 		com.liferay.portal.service.ServiceContext serviceContext)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		return getService()
 				   .addMicroblogsEntry(userId, creatorClassNameId,
-			creatorClassPK, content, type, receiverUserId,
-			receiverMicroblogsEntryId, socialRelationType, serviceContext);
+			creatorClassPK, content, type, receiverMicroblogsEntryId,
+			socialRelationType, serviceContext);
 	}
 
 	/**
@@ -337,19 +337,6 @@ public class MicroblogsEntryLocalServiceUtil {
 		return getService()
 				   .getReceiverMicroblogsEntryMicroblogsEntriesCount(type,
 			receiverMicroblogsEntryId);
-	}
-
-	public static java.util.List<com.liferay.microblogs.model.MicroblogsEntry> getReceiverUserMicroblogsEntries(
-		int type, long receiverUserId, int start, int end) {
-		return getService()
-				   .getReceiverUserMicroblogsEntries(type, receiverUserId,
-			start, end);
-	}
-
-	public static int getReceiverUserMicroblogsEntriesCount(int type,
-		long receiverUserId) {
-		return getService()
-				   .getReceiverUserMicroblogsEntriesCount(type, receiverUserId);
 	}
 
 	public static java.util.List<com.liferay.microblogs.model.MicroblogsEntry> getUserMicroblogsEntries(

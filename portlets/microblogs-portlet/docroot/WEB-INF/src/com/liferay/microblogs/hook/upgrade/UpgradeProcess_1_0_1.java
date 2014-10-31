@@ -15,30 +15,24 @@
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 
-package com.liferay.microblogs.model.impl;
+package com.liferay.microblogs.hook.upgrade;
 
-import com.liferay.microblogs.model.MicroblogsEntry;
-import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.microblogs.hook.upgrade.v1_0_1.UpgradeUserNotificationEvent;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Evan Thibodeau
  */
-public class MicroblogsEntryImpl extends MicroblogsEntryBaseImpl {
+public class UpgradeProcess_1_0_1 extends UpgradeProcess {
 
-	public MicroblogsEntryImpl() {
+	@Override
+	public int getThreshold() {
+		return 101;
 	}
 
-	public long getReceiverUserId() throws PortalException {
-		if (getMicroblogsEntryId() == getReceiverMicroblogsEntryId()) {
-			return getUserId();
-		}
-
-		MicroblogsEntry microblogsEntry =
-			MicroblogsEntryLocalServiceUtil.getMicroblogsEntry(
-				getReceiverMicroblogsEntryId());
-
-		return microblogsEntry.getUserId();
+	@Override
+	protected void doUpgrade() throws Exception {
+		upgrade(UpgradeUserNotificationEvent.class);
 	}
 
 }

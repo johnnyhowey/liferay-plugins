@@ -63,7 +63,6 @@ public class MicroblogsEntryWrapper implements MicroblogsEntry,
 		attributes.put("creatorClassPK", getCreatorClassPK());
 		attributes.put("content", getContent());
 		attributes.put("type", getType());
-		attributes.put("receiverUserId", getReceiverUserId());
 		attributes.put("receiverMicroblogsEntryId",
 			getReceiverMicroblogsEntryId());
 		attributes.put("socialRelationType", getSocialRelationType());
@@ -131,12 +130,6 @@ public class MicroblogsEntryWrapper implements MicroblogsEntry,
 
 		if (type != null) {
 			setType(type);
-		}
-
-		Long receiverUserId = (Long)attributes.get("receiverUserId");
-
-		if (receiverUserId != null) {
-			setReceiverUserId(receiverUserId);
 		}
 
 		Long receiverMicroblogsEntryId = (Long)attributes.get(
@@ -265,24 +258,10 @@ public class MicroblogsEntryWrapper implements MicroblogsEntry,
 		return _microblogsEntry.getReceiverMicroblogsEntryId();
 	}
 
-	/**
-	* Returns the receiver user ID of this microblogs entry.
-	*
-	* @return the receiver user ID of this microblogs entry
-	*/
 	@Override
-	public long getReceiverUserId() {
+	public long getReceiverUserId()
+		throws com.liferay.portal.kernel.exception.PortalException {
 		return _microblogsEntry.getReceiverUserId();
-	}
-
-	/**
-	* Returns the receiver user uuid of this microblogs entry.
-	*
-	* @return the receiver user uuid of this microblogs entry
-	*/
-	@Override
-	public java.lang.String getReceiverUserUuid() {
-		return _microblogsEntry.getReceiverUserUuid();
 	}
 
 	/**
@@ -481,26 +460,6 @@ public class MicroblogsEntryWrapper implements MicroblogsEntry,
 	@Override
 	public void setReceiverMicroblogsEntryId(long receiverMicroblogsEntryId) {
 		_microblogsEntry.setReceiverMicroblogsEntryId(receiverMicroblogsEntryId);
-	}
-
-	/**
-	* Sets the receiver user ID of this microblogs entry.
-	*
-	* @param receiverUserId the receiver user ID of this microblogs entry
-	*/
-	@Override
-	public void setReceiverUserId(long receiverUserId) {
-		_microblogsEntry.setReceiverUserId(receiverUserId);
-	}
-
-	/**
-	* Sets the receiver user uuid of this microblogs entry.
-	*
-	* @param receiverUserUuid the receiver user uuid of this microblogs entry
-	*/
-	@Override
-	public void setReceiverUserUuid(java.lang.String receiverUserUuid) {
-		_microblogsEntry.setReceiverUserUuid(receiverUserUuid);
 	}
 
 	/**

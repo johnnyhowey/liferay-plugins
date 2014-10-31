@@ -44,7 +44,6 @@ public class MicroblogsEntrySoap implements Serializable {
 		soapModel.setCreatorClassPK(model.getCreatorClassPK());
 		soapModel.setContent(model.getContent());
 		soapModel.setType(model.getType());
-		soapModel.setReceiverUserId(model.getReceiverUserId());
 		soapModel.setReceiverMicroblogsEntryId(model.getReceiverMicroblogsEntryId());
 		soapModel.setSocialRelationType(model.getSocialRelationType());
 
@@ -181,14 +180,6 @@ public class MicroblogsEntrySoap implements Serializable {
 		_type = type;
 	}
 
-	public long getReceiverUserId() {
-		return _receiverUserId;
-	}
-
-	public void setReceiverUserId(long receiverUserId) {
-		_receiverUserId = receiverUserId;
-	}
-
 	public long getReceiverMicroblogsEntryId() {
 		return _receiverMicroblogsEntryId;
 	}
@@ -215,7 +206,6 @@ public class MicroblogsEntrySoap implements Serializable {
 	private long _creatorClassPK;
 	private String _content;
 	private int _type;
-	private long _receiverUserId;
 	private long _receiverMicroblogsEntryId;
 	private int _socialRelationType;
 }

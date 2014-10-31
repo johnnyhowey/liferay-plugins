@@ -92,7 +92,6 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		attributes.put("creatorClassPK", getCreatorClassPK());
 		attributes.put("content", getContent());
 		attributes.put("type", getType());
-		attributes.put("receiverUserId", getReceiverUserId());
 		attributes.put("receiverMicroblogsEntryId",
 			getReceiverMicroblogsEntryId());
 		attributes.put("socialRelationType", getSocialRelationType());
@@ -163,12 +162,6 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 
 		if (type != null) {
 			setType(type);
-		}
-
-		Long receiverUserId = (Long)attributes.get("receiverUserId");
-
-		if (receiverUserId != null) {
-			setReceiverUserId(receiverUserId);
 		}
 
 		Long receiverMicroblogsEntryId = (Long)attributes.get(
@@ -438,45 +431,6 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 	}
 
 	@Override
-	public long getReceiverUserId() {
-		return _receiverUserId;
-	}
-
-	@Override
-	public void setReceiverUserId(long receiverUserId) {
-		_receiverUserId = receiverUserId;
-
-		if (_microblogsEntryRemoteModel != null) {
-			try {
-				Class<?> clazz = _microblogsEntryRemoteModel.getClass();
-
-				Method method = clazz.getMethod("setReceiverUserId", long.class);
-
-				method.invoke(_microblogsEntryRemoteModel, receiverUserId);
-			}
-			catch (Exception e) {
-				throw new UnsupportedOperationException(e);
-			}
-		}
-	}
-
-	@Override
-	public String getReceiverUserUuid() {
-		try {
-			User user = UserLocalServiceUtil.getUserById(getReceiverUserId());
-
-			return user.getUuid();
-		}
-		catch (PortalException pe) {
-			return StringPool.BLANK;
-		}
-	}
-
-	@Override
-	public void setReceiverUserUuid(String receiverUserUuid) {
-	}
-
-	@Override
 	public long getReceiverMicroblogsEntryId() {
 		return _receiverMicroblogsEntryId;
 	}
@@ -522,6 +476,25 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 			catch (Exception e) {
 				throw new UnsupportedOperationException(e);
 			}
+		}
+	}
+
+	@Override
+	public long getReceiverUserId() {
+		try {
+			String methodName = "getReceiverUserId";
+
+			Class<?>[] parameterTypes = new Class<?>[] {  };
+
+			Object[] parameterValues = new Object[] {  };
+
+			Long returnObj = (Long)invokeOnRemoteModel(methodName,
+					parameterTypes, parameterValues);
+
+			return returnObj;
+		}
+		catch (Exception e) {
+			throw new UnsupportedOperationException(e);
 		}
 	}
 
@@ -606,7 +579,6 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		clone.setCreatorClassPK(getCreatorClassPK());
 		clone.setContent(getContent());
 		clone.setType(getType());
-		clone.setReceiverUserId(getReceiverUserId());
 		clone.setReceiverMicroblogsEntryId(getReceiverMicroblogsEntryId());
 		clone.setSocialRelationType(getSocialRelationType());
 
@@ -672,7 +644,7 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(27);
+		StringBundler sb = new StringBundler(25);
 
 		sb.append("{microblogsEntryId=");
 		sb.append(getMicroblogsEntryId());
@@ -694,8 +666,6 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		sb.append(getContent());
 		sb.append(", type=");
 		sb.append(getType());
-		sb.append(", receiverUserId=");
-		sb.append(getReceiverUserId());
 		sb.append(", receiverMicroblogsEntryId=");
 		sb.append(getReceiverMicroblogsEntryId());
 		sb.append(", socialRelationType=");
@@ -707,7 +677,7 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 
 	@Override
 	public String toXmlString() {
-		StringBundler sb = new StringBundler(43);
+		StringBundler sb = new StringBundler(40);
 
 		sb.append("<model><model-name>");
 		sb.append("com.liferay.microblogs.model.MicroblogsEntry");
@@ -754,10 +724,6 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 		sb.append(getType());
 		sb.append("]]></column-value></column>");
 		sb.append(
-			"<column><column-name>receiverUserId</column-name><column-value><![CDATA[");
-		sb.append(getReceiverUserId());
-		sb.append("]]></column-value></column>");
-		sb.append(
 			"<column><column-name>receiverMicroblogsEntryId</column-name><column-value><![CDATA[");
 		sb.append(getReceiverMicroblogsEntryId());
 		sb.append("]]></column-value></column>");
@@ -781,7 +747,6 @@ public class MicroblogsEntryClp extends BaseModelImpl<MicroblogsEntry>
 	private long _creatorClassPK;
 	private String _content;
 	private int _type;
-	private long _receiverUserId;
 	private long _receiverMicroblogsEntryId;
 	private int _socialRelationType;
 	private BaseModel<?> _microblogsEntryRemoteModel;

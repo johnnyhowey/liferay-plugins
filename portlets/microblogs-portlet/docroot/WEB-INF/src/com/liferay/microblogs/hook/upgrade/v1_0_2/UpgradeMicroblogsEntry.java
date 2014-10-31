@@ -15,30 +15,20 @@
  * Liferay Social Office. If not, see http://www.gnu.org/licenses/agpl-3.0.html.
  */
 
-package com.liferay.microblogs.model.impl;
+package com.liferay.microblogs.hook.upgrade.v1_0_2;
 
-import com.liferay.microblogs.model.MicroblogsEntry;
-import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
-import com.liferay.portal.kernel.exception.PortalException;
+import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 
 /**
- * @author Brian Wing Shun Chan
+ * @author Matthew Kong
  */
-public class MicroblogsEntryImpl extends MicroblogsEntryBaseImpl {
+public class UpgradeMicroblogsEntry extends UpgradeProcess {
 
-	public MicroblogsEntryImpl() {
-	}
-
-	public long getReceiverUserId() throws PortalException {
-		if (getMicroblogsEntryId() == getReceiverMicroblogsEntryId()) {
-			return getUserId();
+	@Override
+	protected void doUpgrade() throws Exception {
+		if (tableHasColumn("MicroblogsEntry", "receiverUserId")) {
+			runSQL("alter table MicroblogsEntry drop column receiverUserId");
 		}
-
-		MicroblogsEntry microblogsEntry =
-			MicroblogsEntryLocalServiceUtil.getMicroblogsEntry(
-				getReceiverMicroblogsEntryId());
-
-		return microblogsEntry.getUserId();
 	}
 
 }

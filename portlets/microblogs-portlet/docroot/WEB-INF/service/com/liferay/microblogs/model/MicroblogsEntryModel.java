@@ -233,34 +233,6 @@ public interface MicroblogsEntryModel extends AuditedModel,
 	public void setType(int type);
 
 	/**
-	 * Returns the receiver user ID of this microblogs entry.
-	 *
-	 * @return the receiver user ID of this microblogs entry
-	 */
-	public long getReceiverUserId();
-
-	/**
-	 * Sets the receiver user ID of this microblogs entry.
-	 *
-	 * @param receiverUserId the receiver user ID of this microblogs entry
-	 */
-	public void setReceiverUserId(long receiverUserId);
-
-	/**
-	 * Returns the receiver user uuid of this microblogs entry.
-	 *
-	 * @return the receiver user uuid of this microblogs entry
-	 */
-	public String getReceiverUserUuid();
-
-	/**
-	 * Sets the receiver user uuid of this microblogs entry.
-	 *
-	 * @param receiverUserUuid the receiver user uuid of this microblogs entry
-	 */
-	public void setReceiverUserUuid(String receiverUserUuid);
-
-	/**
 	 * Returns the receiver microblogs entry ID of this microblogs entry.
 	 *
 	 * @return the receiver microblogs entry ID of this microblogs entry
