@@ -140,6 +140,12 @@ $defaultTextColor: #202020;
 			position: relative;
 		}
 
+		.split > .dropdown-toggle:before {
+			color: #FFF;
+			display: block;
+			height: 24px;
+		}
+
 		.user-notifications-count {
 			background-color: #FFF;
 
@@ -198,7 +204,7 @@ $defaultTextColor: #202020;
 
 /* ---------- Notifications ---------- */
 
-.dockbar-user-notifications, .notifications-portlet {
+.dockbar-user-notifications {
 	.dropdown-menu {
 		background-color: #FAFAFA;
 	}
@@ -210,7 +216,9 @@ $defaultTextColor: #202020;
 			border-bottom-color: #EEE;
 		}
 	}
+}
 
+.dockbar-user-notifications, .notifications-portlet {
 	.user-notification .lfr-icon-menu {
 		&.open .dropdown-toggle, .dropdown-toggle:hover  {
 			box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
