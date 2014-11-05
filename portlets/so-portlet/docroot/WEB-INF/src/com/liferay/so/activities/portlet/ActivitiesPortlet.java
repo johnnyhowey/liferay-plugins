@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.HtmlUtil;
@@ -49,11 +50,12 @@ import com.liferay.portlet.messageboards.util.comparator.MessageCreateDateCompar
 import com.liferay.portlet.social.model.SocialActivitySet;
 import com.liferay.portlet.social.service.SocialActivitySetLocalServiceUtil;
 import com.liferay.so.activities.util.ActivitiesUtil;
-import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
 
 import java.io.IOException;
+
 import java.text.DateFormat;
 import java.text.Format;
+
 import java.util.Date;
 import java.util.List;
 
@@ -192,9 +194,8 @@ public class ActivitiesPortlet extends MVCPortlet {
 			MicroblogsEntryLocalServiceUtil.getMicroblogsEntry(
 				microblogsEntryId);
 
-		ServiceContext serviceContext =
-			ServiceContextFactory.getInstance(
-				MicroblogsEntry.class.getName(), actionRequest);
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+			MicroblogsEntry.class.getName(), actionRequest);
 
 		MicroblogsEntryServiceUtil.addMicroblogsEntry(
 			themeDisplay.getUserId(), microblogsEntry.getContent(),
