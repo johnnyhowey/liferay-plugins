@@ -32,6 +32,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Repository;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.ac.AccessControlled;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.ServiceContext;
@@ -98,7 +99,7 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 
 					fileEntry = dlAppService.updateFileEntry(
 						fileEntry.getFileEntryId(), sourceFileName, mimeType,
-						title, description, changeLog, true, file,
+						title, description, changeLog, false, file,
 						serviceContext);
 
 					return toSyncDLObject(
@@ -417,9 +418,12 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 		return portletPreferences;
 	}
 
+	@AccessControlled(guestAccessEnabled = true)
 	@Override
 	public SyncContext getSyncContext(String uuid) throws PortalException {
 		try {
+			User user = getGuestOrUser();
+
 			SyncContext syncContext = new SyncContext();
 
 			PluginPackage syncWebPluginPackage =
@@ -427,22 +431,25 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 
 			syncContext.setPluginVersion(syncWebPluginPackage.getVersion());
 
-			syncContext.setPortalBuildNumber(ReleaseInfo.getBuildNumber());
+			if (!user.isDefaultUser()) {
+				syncContext.setPortalBuildNumber(ReleaseInfo.getBuildNumber());
 
-			PluginPackage soPortletPluginPackage =
-				DeployManagerUtil.getInstalledPluginPackage("so-portlet");
+				PluginPackage soPortletPluginPackage =
+					DeployManagerUtil.getInstalledPluginPackage("so-portlet");
 
-			syncContext.setPortletPreferencesMap(getPortletPreferencesMap());
+				syncContext.setPortletPreferencesMap(
+					getPortletPreferencesMap());
 
-			if (soPortletPluginPackage != null) {
-				syncContext.setSocialOfficeInstalled(true);
+				if (soPortletPluginPackage != null) {
+					syncContext.setSocialOfficeInstalled(true);
+				}
+				else {
+					syncContext.setSocialOfficeInstalled(false);
+				}
+
+				syncContext.setUser(user);
+				syncContext.setUserSitesGroups(getUserSitesGroups());
 			}
-			else {
-				syncContext.setSocialOfficeInstalled(false);
-			}
-
-			syncContext.setUser(getUser());
-			syncContext.setUserSitesGroups(getUserSitesGroups());
 
 			return syncContext;
 		}
@@ -518,7 +525,23 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	@Override
 	public List<Group> getUserSitesGroups() throws PortalException {
 		try {
-			return groupService.getUserSitesGroups();
+			List<Group> groups = new ArrayList<Group>();
+
+			for (Group userSiteGroup : groupService.getUserSitesGroups()) {
+				boolean syncEnabled = GetterUtil.getBoolean(
+					userSiteGroup.getTypeSettingsProperty("syncEnabled"), true);
+
+				if (syncEnabled) {
+					if (userSiteGroup.isGuest()) {
+						userSiteGroup.setName(
+							userSiteGroup.getDescriptiveName());
+					}
+
+					groups.add(userSiteGroup);
+				}
+			}
+
+			return groups;
 		}
 		catch (PortalException pe) {
 			throw new PortalException(pe.getClass().getName(), pe);
@@ -725,22 +748,22 @@ public class SyncDLObjectServiceImpl extends SyncDLObjectServiceBaseImpl {
 	protected SyncDLObject checkModifiedTime(
 			SyncDLObject syncDLObject, long typePk)
 		throws PortalException {
-	
+
 		DynamicQuery dynamicQuery = DLSyncEventLocalServiceUtil.dynamicQuery();
-	
+
 		dynamicQuery.add(RestrictionsFactoryUtil.eq("typePK", typePk));
-	
+
 		List<DLSyncEvent> dlSyncEvents =
 			DLSyncEventLocalServiceUtil.dynamicQuery(dynamicQuery);
-	
+
 		if (dlSyncEvents.isEmpty()) {
 			return syncDLObject;
 		}
-	
+
 		DLSyncEvent dlSyncEvent = dlSyncEvents.get(0);
-	
+
 		syncDLObject.setModifiedTime(dlSyncEvent.getModifiedTime());
-	
+
 		return syncDLObject;
 	}
 
