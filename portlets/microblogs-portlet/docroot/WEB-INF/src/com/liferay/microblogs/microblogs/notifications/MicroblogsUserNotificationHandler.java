@@ -20,71 +20,35 @@ package com.liferay.microblogs.microblogs.notifications;
 import com.liferay.microblogs.model.MicroblogsEntry;
 import com.liferay.microblogs.model.MicroblogsEntryConstants;
 import com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil;
-import com.liferay.microblogs.util.MicroblogsUtil;
 import com.liferay.microblogs.util.PortletKeys;
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.notifications.BaseUserNotificationHandler;
+import com.liferay.portal.kernel.notifications.BaseModelUserNotificationHandler;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.model.User;
-import com.liferay.portal.model.UserNotificationEvent;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserLocalServiceUtil;
-import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.util.PortalUtil;
-import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
-import com.liferay.portlet.asset.model.AssetRendererFactory;
 
 /**
  * @author Jonathan Lee
  */
 public class MicroblogsUserNotificationHandler
-	extends BaseUserNotificationHandler {
+	extends BaseModelUserNotificationHandler {
 
 	public MicroblogsUserNotificationHandler() {
 		setPortletId(PortletKeys.MICROBLOGS);
 	}
 
 	@Override
-	protected String getBody(
-			UserNotificationEvent userNotificationEvent,
-			ServiceContext serviceContext)
-		throws Exception {
-
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			userNotificationEvent.getPayload());
-
-		long microblogsEntryId = jsonObject.getLong("classPK");
+	protected String getTitle(
+		JSONObject jsonObject, AssetRenderer assetRenderer,
+		ServiceContext serviceContext) {
 
 		MicroblogsEntry microblogsEntry =
 			MicroblogsEntryLocalServiceUtil.fetchMicroblogsEntry(
-				microblogsEntryId);
-
-		if (microblogsEntry == null) {
-			UserNotificationEventLocalServiceUtil.deleteUserNotificationEvent(
-				userNotificationEvent.getUserNotificationEventId());
-
-			return null;
-		}
-
-		String title = getBodyTitle(microblogsEntry, serviceContext);
-
-		String body = MicroblogsUtil.getProcessedContent(
-			StringUtil.shorten(microblogsEntry.getContent(), 50),
-			serviceContext);
-
-		return StringUtil.replace(
-			getBodyTemplate(), new String[] {"[$BODY$]", "[$TITLE$]"},
-			new String[] {body, title});
-	}
-
-	protected String getBodyTitle(
-			MicroblogsEntry microblogsEntry, ServiceContext serviceContext)
-		throws PortalException {
+				assetRenderer.getClassPK());
 
 		String title = StringPool.BLANK;
 
@@ -92,71 +56,45 @@ public class MicroblogsUserNotificationHandler
 			PortalUtil.getUserName(
 				microblogsEntry.getUserId(), StringPool.BLANK));
 
-		long parentMicroblogsEntryId =
-			MicroblogsUtil.getParentMicroblogsEntryId(microblogsEntry);
+		int notificationType = jsonObject.getInt("notificationType");
 
-		if (MicroblogsUtil.isTaggedUser(
-				microblogsEntry.getMicroblogsEntryId(), false,
-				serviceContext.getUserId())) {
+		if (notificationType ==
+				MicroblogsEntryConstants.NOTIFICATION_TYPE_REPLY) {
+
+			title = serviceContext.translate(
+				"x-commented-on-your-post", userFullName);
+		}
+		else if (notificationType ==
+					MicroblogsEntryConstants.
+						NOTIFICATION_TYPE_REPLY_TO_REPLIED) {
+
+			long parentMicroblogsEntryUserId =
+				microblogsEntry.fetchParentMicroblogsEntryUserId();
+
+			User user = UserLocalServiceUtil.fetchUser(
+				parentMicroblogsEntryUserId);
+
+			if (user != null) {
+				title = serviceContext.translate(
+					"x-also-commented-on-x's-post", userFullName,
+					user.getFullName());
+			}
+		}
+		else if (notificationType ==
+					MicroblogsEntryConstants.
+						NOTIFICATION_TYPE_REPLY_TO_TAGGED) {
+
+			title = serviceContext.translate(
+				"x-commented-on-a-post-you-are-tagged-in", userFullName);
+		}
+		else if (notificationType ==
+					MicroblogsEntryConstants.NOTIFICATION_TYPE_TAG) {
 
 			title = serviceContext.translate(
 				"x-tagged-you-in-a-post", userFullName);
 		}
-		else if (microblogsEntry.getType() ==
-					MicroblogsEntryConstants.TYPE_REPLY) {
-
-			if (MicroblogsUtil.getParentMicroblogsUserId(microblogsEntry) ==
-					serviceContext.getUserId()) {
-
-				title = serviceContext.translate(
-					"x-commented-on-your-post", userFullName);
-			}
-			else if (MicroblogsUtil.hasReplied(
-						parentMicroblogsEntryId,
-						serviceContext.getUserId())) {
-
-				User receiverUser = UserLocalServiceUtil.fetchUser(
-					microblogsEntry.getReceiverUserId());
-
-				if (receiverUser != null) {
-					title = serviceContext.translate(
-						"x-also-commented-on-x's-post", userFullName,
-						receiverUser.getFullName());
-				}
-			}
-			else if (MicroblogsUtil.isTaggedUser(
-						parentMicroblogsEntryId, true,
-						serviceContext.getUserId())) {
-
-				title = serviceContext.translate(
-					"x-commented-on-a-post-you-are-tagged-in", userFullName);
-			}
-		}
 
 		return title;
-	}
-
-	@Override
-	protected String getLink(
-			UserNotificationEvent userNotificationEvent,
-			ServiceContext serviceContext)
-		throws Exception {
-
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject(
-			userNotificationEvent.getPayload());
-
-		long microblogsEntryId = jsonObject.getLong("classPK");
-
-		AssetRendererFactory assetRendererFactory =
-			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
-				MicroblogsEntry.class.getName());
-
-		AssetRenderer assetRenderer = assetRendererFactory.getAssetRenderer(
-			microblogsEntryId);
-
-		return assetRenderer.getURLViewInContext(
-			serviceContext.getLiferayPortletRequest(),
-			serviceContext.getLiferayPortletResponse(), null);
 	}
 
 }

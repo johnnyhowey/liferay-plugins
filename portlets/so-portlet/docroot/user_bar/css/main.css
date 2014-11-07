@@ -140,6 +140,12 @@ $defaultTextColor: #202020;
 			position: relative;
 		}
 
+		.split > .dropdown-toggle:before {
+			color: #FFF;
+			display: block;
+			height: 24px;
+		}
+
 		.user-notifications-count {
 			background-color: #FFF;
 
@@ -198,19 +204,21 @@ $defaultTextColor: #202020;
 
 /* ---------- Notifications ---------- */
 
-.dockbar-user-notifications, .notifications-portlet {
+.dockbar-user-notifications {
 	.dropdown-menu {
 		background-color: #FAFAFA;
 	}
 
-	.actionable, .non-actionable {
+	.actionable, .nonactionable {
 		border: 1px solid #EEE;
 
 		.user-notifications-header {
 			border-bottom-color: #EEE;
 		}
 	}
+}
 
+.dockbar-user-notifications, .notifications-portlet {
 	.user-notification .lfr-icon-menu {
 		&.open .dropdown-toggle, .dropdown-toggle:hover  {
 			box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
@@ -473,7 +481,7 @@ $defaultTextColor: #202020;
 							padding-left: 30px;
 						}
 
-						.non-actionable .user-notification:hover {
+						.nonactionable .user-notification:hover {
 							background-color: rgba(0, 0, 0, 0.2);
 						}
 					}
@@ -499,7 +507,7 @@ $defaultTextColor: #202020;
 	/* ---------- Notifications ---------- */
 
 	.dockbar-user-notifications {
-		.actionable, .non-actionable {
+		.actionable, .nonactionable {
 			background: transparent;
 			border-bottom-width: 0;
 
