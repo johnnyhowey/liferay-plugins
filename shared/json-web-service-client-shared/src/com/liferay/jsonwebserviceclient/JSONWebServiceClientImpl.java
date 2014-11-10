@@ -16,6 +16,7 @@ package com.liferay.jsonwebserviceclient;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
+import java.io.UnsupportedEncodingException;
 
 import java.net.SocketException;
 import java.net.UnknownHostException;
@@ -35,8 +36,6 @@ import javax.net.ssl.SSLException;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-
-import javax.security.auth.login.CredentialException;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -162,7 +161,7 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 
 	@Override
 	public String doGet(String url, Map<String, String> parameters)
-		throws CredentialException, IOException {
+		throws JSONWebServiceTransportException {
 
 		List<NameValuePair> nameValuePairs = toNameValuePairs(parameters);
 
@@ -188,32 +187,38 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 
 	@Override
 	public String doPost(String url, Map<String, String> parameters)
-		throws CredentialException, IOException {
+		throws JSONWebServiceTransportException {
 
 		if (_logger.isDebugEnabled()) {
 			_logger.debug(
 				"Sending POST request to " + _login + "@" + _hostName + url);
 		}
 
-		HttpPost httpPost = new HttpPost(url);
+		try {
+			HttpPost httpPost = new HttpPost(url);
 
-		List<NameValuePair> nameValuePairs = toNameValuePairs(parameters);
+			List<NameValuePair> nameValuePairs = toNameValuePairs(parameters);
 
-		HttpEntity httpEntity = new UrlEncodedFormEntity(
-			nameValuePairs, "utf8");
+			HttpEntity httpEntity = new UrlEncodedFormEntity(
+				nameValuePairs, "utf8");
 
-		for (String key : _headers.keySet()) {
-			httpPost.addHeader(key, _headers.get(key));
+			for (String key : _headers.keySet()) {
+				httpPost.addHeader(key, _headers.get(key));
+			}
+
+			httpPost.setEntity(httpEntity);
+
+			return execute(httpPost);
 		}
-
-		httpPost.setEntity(httpEntity);
-
-		return execute(httpPost);
+		catch (UnsupportedEncodingException uee) {
+			throw new JSONWebServiceTransportException.CommunicationFailure(
+				uee);
+		}
 	}
 
 	@Override
 	public String doPostAsJSON(String url, String json)
-		throws CredentialException, IOException {
+		throws JSONWebServiceTransportException {
 
 		HttpPost httpPost = new HttpPost(url);
 
@@ -293,7 +298,7 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 	}
 
 	protected String execute(HttpRequestBase httpRequestBase)
-		throws CredentialException, IOException {
+		throws JSONWebServiceTransportException {
 
 		HttpHost httpHost = new HttpHost(_hostName, _hostPort, _protocol);
 
@@ -308,28 +313,22 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 			StatusLine statusLine = httpResponse.getStatusLine();
 
 			if (statusLine.getStatusCode() ==
-					HttpServletResponse.SC_NOT_FOUND) {
+					HttpServletResponse.SC_UNAUTHORIZED) {
 
-				if (_logger.isWarnEnabled()) {
-					_logger.warn("Status code " + statusLine.getStatusCode());
-				}
-
-				return null;
-			}
-			else if (statusLine.getStatusCode() ==
-						HttpServletResponse.SC_UNAUTHORIZED) {
-
-				throw new CredentialException(
+				throw new JSONWebServiceTransportException.
+					AuthenticationFailure(
 					"Not authorized to access JSON web service");
 			}
-			else if (statusLine.getStatusCode() ==
-						HttpServletResponse.SC_SERVICE_UNAVAILABLE) {
-
-				throw new JSONWebServiceUnavailableException(
-					"Service unavailable");
+			else if (statusLine.getStatusCode() != HttpServletResponse.SC_OK) {
+				throw new JSONWebServiceTransportException.CommunicationFailure(
+					statusLine.getStatusCode());
 			}
 
 			return EntityUtils.toString(httpResponse.getEntity(), "utf8");
+		}
+		catch (IOException ioe) {
+			throw new JSONWebServiceTransportException.CommunicationFailure(
+				"Unable to transmit request", ioe);
 		}
 		finally {
 			httpRequestBase.releaseConnection();
