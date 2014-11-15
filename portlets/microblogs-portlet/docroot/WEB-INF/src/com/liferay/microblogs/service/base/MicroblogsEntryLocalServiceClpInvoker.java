@@ -130,14 +130,14 @@ public class MicroblogsEntryLocalServiceClpInvoker {
 		_methodName51 = "addMicroblogsEntry";
 
 		_methodParameterTypes51 = new String[] {
-				"long", "long", "long", "java.lang.String", "int", "long",
-				"long", "int", "com.liferay.portal.service.ServiceContext"
+				"long", "long", "long", "java.lang.String", "int", "long", "int",
+				"com.liferay.portal.service.ServiceContext"
 			};
 
 		_methodName52 = "addMicroblogsEntry";
 
 		_methodParameterTypes52 = new String[] {
-				"long", "java.lang.String", "int", "long", "long", "int",
+				"long", "java.lang.String", "int", "long", "int",
 				"com.liferay.portal.service.ServiceContext"
 			};
 
@@ -184,67 +184,81 @@ public class MicroblogsEntryLocalServiceClpInvoker {
 				"long", "long", "int", "int", "int"
 			};
 
-		_methodName62 = "getMicroblogsEntriesCount";
+		_methodName62 = "getMicroblogsEntries";
 
-		_methodParameterTypes62 = new String[] { "long", "long" };
+		_methodParameterTypes62 = new String[] {
+				"long", "long", "java.lang.String", "int", "int"
+			};
 
-		_methodName63 = "getMicroblogsEntriesCount";
+		_methodName63 = "getMicroblogsEntries";
 
-		_methodParameterTypes63 = new String[] { "long", "long", "int" };
+		_methodParameterTypes63 = new String[] {
+				"long", "java.lang.String", "int", "int"
+			};
 
-		_methodName64 = "getMicroblogsEntry";
+		_methodName64 = "getMicroblogsEntriesCount";
 
-		_methodParameterTypes64 = new String[] { "long" };
+		_methodParameterTypes64 = new String[] { "long", "long" };
 
-		_methodName65 = "getReceiverMicroblogsEntryMicroblogsEntries";
+		_methodName65 = "getMicroblogsEntriesCount";
 
-		_methodParameterTypes65 = new String[] { "int", "long", "int", "int" };
+		_methodParameterTypes65 = new String[] { "long", "long", "int" };
 
-		_methodName66 = "getReceiverMicroblogsEntryMicroblogsEntries";
+		_methodName66 = "getMicroblogsEntriesCount";
 
 		_methodParameterTypes66 = new String[] {
+				"long", "long", "java.lang.String"
+			};
+
+		_methodName67 = "getMicroblogsEntriesCount";
+
+		_methodParameterTypes67 = new String[] { "long", "java.lang.String" };
+
+		_methodName68 = "getMicroblogsEntry";
+
+		_methodParameterTypes68 = new String[] { "long" };
+
+		_methodName69 = "getParentMicroblogsEntryMicroblogsEntries";
+
+		_methodParameterTypes69 = new String[] { "int", "long", "int", "int" };
+
+		_methodName70 = "getParentMicroblogsEntryMicroblogsEntries";
+
+		_methodParameterTypes70 = new String[] {
 				"int", "long", "int", "int",
 				"com.liferay.portal.kernel.util.OrderByComparator"
 			};
 
-		_methodName67 = "getReceiverMicroblogsEntryMicroblogsEntriesCount";
+		_methodName71 = "getParentMicroblogsEntryMicroblogsEntriesCount";
 
-		_methodParameterTypes67 = new String[] { "int", "long" };
+		_methodParameterTypes71 = new String[] { "int", "long" };
 
-		_methodName68 = "getReceiverUserMicroblogsEntries";
+		_methodName72 = "getUserMicroblogsEntries";
 
-		_methodParameterTypes68 = new String[] { "int", "long", "int", "int" };
+		_methodParameterTypes72 = new String[] { "long", "int", "int" };
 
-		_methodName69 = "getReceiverUserMicroblogsEntriesCount";
+		_methodName73 = "getUserMicroblogsEntries";
 
-		_methodParameterTypes69 = new String[] { "int", "long" };
+		_methodParameterTypes73 = new String[] { "long", "int", "int", "int" };
 
-		_methodName70 = "getUserMicroblogsEntries";
+		_methodName74 = "getUserMicroblogsEntriesCount";
 
-		_methodParameterTypes70 = new String[] { "long", "int", "int" };
+		_methodParameterTypes74 = new String[] { "long" };
 
-		_methodName71 = "getUserMicroblogsEntries";
+		_methodName75 = "getUserMicroblogsEntriesCount";
 
-		_methodParameterTypes71 = new String[] { "long", "int", "int", "int" };
+		_methodParameterTypes75 = new String[] { "long", "int" };
 
-		_methodName72 = "getUserMicroblogsEntriesCount";
+		_methodName76 = "updateAsset";
 
-		_methodParameterTypes72 = new String[] { "long" };
-
-		_methodName73 = "getUserMicroblogsEntriesCount";
-
-		_methodParameterTypes73 = new String[] { "long", "int" };
-
-		_methodName74 = "updateAsset";
-
-		_methodParameterTypes74 = new String[] {
+		_methodParameterTypes76 = new String[] {
 				"com.liferay.microblogs.model.MicroblogsEntry", "long[][]",
 				"java.lang.String[][]"
 			};
 
-		_methodName75 = "updateMicroblogsEntry";
+		_methodName77 = "updateMicroblogsEntry";
 
-		_methodParameterTypes75 = new String[] {
+		_methodParameterTypes77 = new String[] {
 				"long", "java.lang.String", "int",
 				"com.liferay.portal.service.ServiceContext"
 			};
@@ -369,9 +383,8 @@ public class MicroblogsEntryLocalServiceClpInvoker {
 				(java.lang.String)arguments[3],
 				((Integer)arguments[4]).intValue(),
 				((Long)arguments[5]).longValue(),
-				((Long)arguments[6]).longValue(),
-				((Integer)arguments[7]).intValue(),
-				(com.liferay.portal.service.ServiceContext)arguments[8]);
+				((Integer)arguments[6]).intValue(),
+				(com.liferay.portal.service.ServiceContext)arguments[7]);
 		}
 
 		if (_methodName52.equals(name) &&
@@ -380,9 +393,8 @@ public class MicroblogsEntryLocalServiceClpInvoker {
 				(java.lang.String)arguments[1],
 				((Integer)arguments[2]).intValue(),
 				((Long)arguments[3]).longValue(),
-				((Long)arguments[4]).longValue(),
-				((Integer)arguments[5]).intValue(),
-				(com.liferay.portal.service.ServiceContext)arguments[6]);
+				((Integer)arguments[4]).intValue(),
+				(com.liferay.portal.service.ServiceContext)arguments[5]);
 		}
 
 		if (_methodName53.equals(name) &&
@@ -450,95 +462,110 @@ public class MicroblogsEntryLocalServiceClpInvoker {
 
 		if (_methodName62.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes62, parameterTypes)) {
-			return MicroblogsEntryLocalServiceUtil.getMicroblogsEntriesCount(((Long)arguments[0]).longValue(),
-				((Long)arguments[1]).longValue());
+			return MicroblogsEntryLocalServiceUtil.getMicroblogsEntries(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(),
+				(java.lang.String)arguments[2],
+				((Integer)arguments[3]).intValue(),
+				((Integer)arguments[4]).intValue());
 		}
 
 		if (_methodName63.equals(name) &&
 				Arrays.deepEquals(_methodParameterTypes63, parameterTypes)) {
+			return MicroblogsEntryLocalServiceUtil.getMicroblogsEntries(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1],
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue());
+		}
+
+		if (_methodName64.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes64, parameterTypes)) {
+			return MicroblogsEntryLocalServiceUtil.getMicroblogsEntriesCount(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue());
+		}
+
+		if (_methodName65.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes65, parameterTypes)) {
 			return MicroblogsEntryLocalServiceUtil.getMicroblogsEntriesCount(((Long)arguments[0]).longValue(),
 				((Long)arguments[1]).longValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName64.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes64, parameterTypes)) {
+		if (_methodName66.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes66, parameterTypes)) {
+			return MicroblogsEntryLocalServiceUtil.getMicroblogsEntriesCount(((Long)arguments[0]).longValue(),
+				((Long)arguments[1]).longValue(), (java.lang.String)arguments[2]);
+		}
+
+		if (_methodName67.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes67, parameterTypes)) {
+			return MicroblogsEntryLocalServiceUtil.getMicroblogsEntriesCount(((Long)arguments[0]).longValue(),
+				(java.lang.String)arguments[1]);
+		}
+
+		if (_methodName68.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes68, parameterTypes)) {
 			return MicroblogsEntryLocalServiceUtil.getMicroblogsEntry(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName65.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes65, parameterTypes)) {
-			return MicroblogsEntryLocalServiceUtil.getReceiverMicroblogsEntryMicroblogsEntries(((Integer)arguments[0]).intValue(),
+		if (_methodName69.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes69, parameterTypes)) {
+			return MicroblogsEntryLocalServiceUtil.getParentMicroblogsEntryMicroblogsEntries(((Integer)arguments[0]).intValue(),
 				((Long)arguments[1]).longValue(),
 				((Integer)arguments[2]).intValue(),
 				((Integer)arguments[3]).intValue());
 		}
 
-		if (_methodName66.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes66, parameterTypes)) {
-			return MicroblogsEntryLocalServiceUtil.getReceiverMicroblogsEntryMicroblogsEntries(((Integer)arguments[0]).intValue(),
+		if (_methodName70.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
+			return MicroblogsEntryLocalServiceUtil.getParentMicroblogsEntryMicroblogsEntries(((Integer)arguments[0]).intValue(),
 				((Long)arguments[1]).longValue(),
 				((Integer)arguments[2]).intValue(),
 				((Integer)arguments[3]).intValue(),
 				(com.liferay.portal.kernel.util.OrderByComparator<com.liferay.microblogs.model.MicroblogsEntry>)arguments[4]);
 		}
 
-		if (_methodName67.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes67, parameterTypes)) {
-			return MicroblogsEntryLocalServiceUtil.getReceiverMicroblogsEntryMicroblogsEntriesCount(((Integer)arguments[0]).intValue(),
+		if (_methodName71.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
+			return MicroblogsEntryLocalServiceUtil.getParentMicroblogsEntryMicroblogsEntriesCount(((Integer)arguments[0]).intValue(),
 				((Long)arguments[1]).longValue());
 		}
 
-		if (_methodName68.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes68, parameterTypes)) {
-			return MicroblogsEntryLocalServiceUtil.getReceiverUserMicroblogsEntries(((Integer)arguments[0]).intValue(),
-				((Long)arguments[1]).longValue(),
-				((Integer)arguments[2]).intValue(),
-				((Integer)arguments[3]).intValue());
-		}
-
-		if (_methodName69.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes69, parameterTypes)) {
-			return MicroblogsEntryLocalServiceUtil.getReceiverUserMicroblogsEntriesCount(((Integer)arguments[0]).intValue(),
-				((Long)arguments[1]).longValue());
-		}
-
-		if (_methodName70.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes70, parameterTypes)) {
+		if (_methodName72.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes72, parameterTypes)) {
 			return MicroblogsEntryLocalServiceUtil.getUserMicroblogsEntries(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue());
 		}
 
-		if (_methodName71.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes71, parameterTypes)) {
+		if (_methodName73.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes73, parameterTypes)) {
 			return MicroblogsEntryLocalServiceUtil.getUserMicroblogsEntries(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue(),
 				((Integer)arguments[2]).intValue(),
 				((Integer)arguments[3]).intValue());
 		}
 
-		if (_methodName72.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes72, parameterTypes)) {
+		if (_methodName74.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes74, parameterTypes)) {
 			return MicroblogsEntryLocalServiceUtil.getUserMicroblogsEntriesCount(((Long)arguments[0]).longValue());
 		}
 
-		if (_methodName73.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes73, parameterTypes)) {
+		if (_methodName75.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes75, parameterTypes)) {
 			return MicroblogsEntryLocalServiceUtil.getUserMicroblogsEntriesCount(((Long)arguments[0]).longValue(),
 				((Integer)arguments[1]).intValue());
 		}
 
-		if (_methodName74.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes74, parameterTypes)) {
+		if (_methodName76.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes76, parameterTypes)) {
 			MicroblogsEntryLocalServiceUtil.updateAsset((com.liferay.microblogs.model.MicroblogsEntry)arguments[0],
 				(long[])arguments[1], (java.lang.String[])arguments[2]);
 
 			return null;
 		}
 
-		if (_methodName75.equals(name) &&
-				Arrays.deepEquals(_methodParameterTypes75, parameterTypes)) {
+		if (_methodName77.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes77, parameterTypes)) {
 			return MicroblogsEntryLocalServiceUtil.updateMicroblogsEntry(((Long)arguments[0]).longValue(),
 				(java.lang.String)arguments[1],
 				((Integer)arguments[2]).intValue(),
@@ -638,4 +665,8 @@ public class MicroblogsEntryLocalServiceClpInvoker {
 	private String[] _methodParameterTypes74;
 	private String _methodName75;
 	private String[] _methodParameterTypes75;
+	private String _methodName76;
+	private String[] _methodParameterTypes76;
+	private String _methodName77;
+	private String[] _methodParameterTypes77;
 }

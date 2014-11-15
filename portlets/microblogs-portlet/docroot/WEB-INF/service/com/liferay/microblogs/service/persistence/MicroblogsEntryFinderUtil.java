@@ -20,7 +20,7 @@ import com.liferay.portal.kernel.bean.PortletBeanLocatorUtil;
 import com.liferay.portal.kernel.util.ReferenceRegistry;
 
 /**
- * @author Brian Wing Shun Chan
+ * @generated
  */
 @ProviderType
 public class MicroblogsEntryFinderUtil {
@@ -36,9 +36,21 @@ public class MicroblogsEntryFinderUtil {
 		return getFinder().countByU_ATN(userId, assetTagName);
 	}
 
+	public static int countByCCNI_ATN(long creatorClassNameId,
+		java.lang.String assetTagName) {
+		return getFinder().countByCCNI_ATN(creatorClassNameId, assetTagName);
+	}
+
 	public static int countByU_T_MU(long userId, int type,
 		long microblogsEntryUserId) {
 		return getFinder().countByU_T_MU(userId, type, microblogsEntryUserId);
+	}
+
+	public static int countByCCNI_CCPK_ATN(long creatorClassNameId,
+		long creatorClassPK, java.lang.String assetTagName) {
+		return getFinder()
+				   .countByCCNI_CCPK_ATN(creatorClassNameId, creatorClassPK,
+			assetTagName);
 	}
 
 	public static java.util.List<com.liferay.microblogs.model.MicroblogsEntry> findByUserId(
@@ -56,10 +68,25 @@ public class MicroblogsEntryFinderUtil {
 		return getFinder().findByU_ATN(userId, assetTagName, start, end);
 	}
 
+	public static java.util.List<com.liferay.microblogs.model.MicroblogsEntry> findByCCNI_ATN(
+		long creatorClassNameId, java.lang.String assetTagName, int start,
+		int end) {
+		return getFinder()
+				   .findByCCNI_ATN(creatorClassNameId, assetTagName, start, end);
+	}
+
 	public static java.util.List<com.liferay.microblogs.model.MicroblogsEntry> findByU_T_MU(
 		long userId, int type, long microblogsEntryUserId, int start, int end) {
 		return getFinder()
 				   .findByU_T_MU(userId, type, microblogsEntryUserId, start, end);
+	}
+
+	public static java.util.List<com.liferay.microblogs.model.MicroblogsEntry> findByCCNI_CCPK_ATN(
+		long creatorClassNameId, long creatorClassPK,
+		java.lang.String assetTagName, int start, int end) {
+		return getFinder()
+				   .findByCCNI_CCPK_ATN(creatorClassNameId, creatorClassPK,
+			assetTagName, start, end);
 	}
 
 	public static MicroblogsEntryFinder getFinder() {

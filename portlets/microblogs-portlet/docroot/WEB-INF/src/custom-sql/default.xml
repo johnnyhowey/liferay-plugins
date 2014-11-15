@@ -7,24 +7,27 @@
 				COUNT(DISTINCT MicroblogsEntry.microblogsEntryId) AS COUNT_VALUE
 			FROM
 				MicroblogsEntry
-			INNER JOIN
+			LEFT JOIN
 				SocialRelation ON
+					(MicroblogsEntry.userId = SocialRelation.userId2)
+			WHERE
+				(
 					(
-						(MicroblogsEntry.userId = SocialRelation.userId2) AND
 						(MicroblogsEntry.socialRelationType = ?) AND
 						(SocialRelation.userId1 = ?) AND
 						(SocialRelation.type_ <> ?)
 					) OR
 					(
 						(MicroblogsEntry.socialRelationType = SocialRelation.type_) AND
-						(MicroblogsEntry.userId = SocialRelation.userId2) AND
 						(SocialRelation.userId1 = ?)
 					) OR
 					(
 						MicroblogsEntry.userId = ?
 					)
-			WHERE
-				(MicroblogsEntry.type_ <> ?)
+				) AND
+				(
+					MicroblogsEntry.type_ <> ?
+				)
 		]]>
 	</sql>
 	<sql id="com.liferay.microblogs.service.persistence.MicroblogsEntryFinder.countByU_MU">
@@ -33,9 +36,12 @@
 				COUNT(DISTINCT MicroblogsEntry.microblogsEntryId) AS COUNT_VALUE
 			FROM
 				MicroblogsEntry
+			LLEFT JOIN
+				MicroblogsEntry AS TEMP_TABLE ON
+					(MicroblogsEntry.parentMicroblogsEntryId = TEMP_TABLE.microblogsEntryId)
 			LEFT JOIN
 				SocialRelation ON
-					(MicroblogsEntry.receiverUserId = SocialRelation.userId2) AND
+					(TEMP_TABLE.userId = SocialRelation.userId2) AND
 					(MicroblogsEntry.socialRelationType = SocialRelation.type_)
 			WHERE
 				(
@@ -57,8 +63,11 @@
 			FROM
 				MicroblogsEntry
 			LEFT JOIN
+				MicroblogsEntry AS TEMP_TABLE ON
+					(MicroblogsEntry.parentMicroblogsEntryId = TEMP_TABLE.microblogsEntryId)
+			LEFT JOIN
 				SocialRelation ON
-					(MicroblogsEntry.receiverUserId = SocialRelation.userId2) AND
+					(TEMP_TABLE.userId = SocialRelation.userId2) AND
 					(MicroblogsEntry.socialRelationType = SocialRelation.type_)
 			INNER JOIN
 				AssetEntry ON
@@ -85,6 +94,26 @@
 				)
 		]]>
 	</sql>
+	<sql id="com.liferay.microblogs.service.persistence.MicroblogsEntryFinder.countByCCNI_ATN">
+		<![CDATA[
+			SELECT
+				COUNT(DISTINCT MicroblogsEntry.microblogsEntryId) AS COUNT_VALUE
+			FROM
+				MicroblogsEntry
+			INNER JOIN
+				AssetEntry ON
+					(AssetEntry.classPK = MicroblogsEntry.microblogsEntryId)
+			INNER JOIN
+				AssetEntries_AssetTags ON
+					(AssetEntries_AssetTags.entryId = AssetEntry.entryId)
+			INNER JOIN
+				AssetTag ON
+					(AssetTag.tagId = AssetEntries_AssetTags.tagId)
+			WHERE
+				(MicroblogsEntry.creatorClassNameId = ?) AND
+				(AssetTag.name = ?)
+		]]>
+	</sql>
 	<sql id="com.liferay.microblogs.service.persistence.MicroblogsEntryFinder.countByU_T_MU">
 		<![CDATA[
 			SELECT
@@ -92,8 +121,11 @@
 			FROM
 				MicroblogsEntry
 			LEFT JOIN
+				MicroblogsEntry AS TEMP_TABLE ON
+					(MicroblogsEntry.parentMicroblogsEntryId = TEMP_TABLE.microblogsEntryId)
+			LEFT JOIN
 				SocialRelation ON
-					(MicroblogsEntry.receiverUserId = SocialRelation.userId2) AND
+					(TEMP_TABLE.userId = SocialRelation.userId2) AND
 					(MicroblogsEntry.socialRelationType = SocialRelation.type_)
 			WHERE
 				(
@@ -108,30 +140,54 @@
 				)
 		]]>
 	</sql>
+	<sql id="com.liferay.microblogs.service.persistence.MicroblogsEntryFinder.countByCCNI_CCPK_ATN">
+		<![CDATA[
+			SELECT
+				COUNT(DISTINCT MicroblogsEntry.microblogsEntryId) AS COUNT_VALUE
+			FROM
+				MicroblogsEntry
+			INNER JOIN
+				AssetEntry ON
+					(AssetEntry.classPK = MicroblogsEntry.microblogsEntryId)
+			INNER JOIN
+				AssetEntries_AssetTags ON
+					(AssetEntries_AssetTags.entryId = AssetEntry.entryId)
+			INNER JOIN
+				AssetTag ON
+					(AssetTag.tagId = AssetEntries_AssetTags.tagId)
+			WHERE
+				(MicroblogsEntry.creatorClassNameId = ?) AND
+				(MicroblogsEntry.creatorClassPK = ?) AND
+				(AssetTag.name = ?)
+		]]>
+	</sql>
 	<sql id="com.liferay.microblogs.service.persistence.MicroblogsEntryFinder.findByUserId">
 		<![CDATA[
 			SELECT
 				DISTINCT MicroblogsEntry.microblogsEntryId, MicroblogsEntry.createDate
 			FROM
 				MicroblogsEntry
-			INNER JOIN
+			LEFT JOIN
 				SocialRelation ON
+					(MicroblogsEntry.userId = SocialRelation.userId2)
+			WHERE
+				(
 					(
-						(MicroblogsEntry.userId = SocialRelation.userId2) AND
 						(MicroblogsEntry.socialRelationType = ?) AND
 						(SocialRelation.userId1 = ?) AND
 						(SocialRelation.type_ <> ?)
 					) OR
 					(
 						(MicroblogsEntry.socialRelationType = SocialRelation.type_) AND
-						(MicroblogsEntry.userId = SocialRelation.userId2) AND
 						(SocialRelation.userId1 = ?)
 					) OR
 					(
 						MicroblogsEntry.userId = ?
 					)
-			WHERE
-				(MicroblogsEntry.type_ <> ?)
+				) AND
+				(
+					MicroblogsEntry.type_ <> ?
+				)
 			ORDER BY
 				MicroblogsEntry.createDate DESC
 		]]>
@@ -143,8 +199,11 @@
 			FROM
 				MicroblogsEntry
 			LEFT JOIN
+				MicroblogsEntry AS TEMP_TABLE ON
+					(MicroblogsEntry.parentMicroblogsEntryId = TEMP_TABLE.microblogsEntryId)
+			LEFT JOIN
 				SocialRelation ON
-					(MicroblogsEntry.receiverUserId = SocialRelation.userId2) AND
+					(TEMP_TABLE.userId = SocialRelation.userId2) AND
 					(MicroblogsEntry.socialRelationType = SocialRelation.type_)
 			WHERE
 				(
@@ -168,8 +227,11 @@
 			FROM
 				MicroblogsEntry
 			LEFT JOIN
+				MicroblogsEntry AS TEMP_TABLE ON
+					(MicroblogsEntry.parentMicroblogsEntryId = TEMP_TABLE.microblogsEntryId)
+			LEFT JOIN
 				SocialRelation ON
-					(MicroblogsEntry.receiverUserId = SocialRelation.userId2) AND
+					(TEMP_TABLE.userId = SocialRelation.userId2) AND
 					(MicroblogsEntry.socialRelationType = SocialRelation.type_)
 			INNER JOIN
 				AssetEntry ON
@@ -198,6 +260,28 @@
 				MicroblogsEntry.createDate DESC
 		]]>
 	</sql>
+	<sql id="com.liferay.microblogs.service.persistence.MicroblogsEntryFinder.findByCCNI_ATN">
+		<![CDATA[
+			SELECT
+				DISTINCT {MicroblogsEntry.*}
+			FROM
+				MicroblogsEntry
+			INNER JOIN
+				AssetEntry ON
+					(AssetEntry.classPK = MicroblogsEntry.microblogsEntryId)
+			INNER JOIN
+				AssetEntries_AssetTags ON
+					(AssetEntries_AssetTags.entryId = AssetEntry.entryId)
+			INNER JOIN
+				AssetTag ON
+					(AssetTag.tagId = AssetEntries_AssetTags.tagId)
+			WHERE
+				(MicroblogsEntry.creatorClassNameId = ?) AND
+				(AssetTag.name = ?)
+			ORDER BY
+				MicroblogsEntry.createDate DESC
+		]]>
+	</sql>
 	<sql id="com.liferay.microblogs.service.persistence.MicroblogsEntryFinder.findByU_T_MU">
 		<![CDATA[
 			SELECT
@@ -205,8 +289,11 @@
 			FROM
 				MicroblogsEntry
 			LEFT JOIN
+				MicroblogsEntry AS TEMP_TABLE ON
+					(MicroblogsEntry.parentMicroblogsEntryId = TEMP_TABLE.microblogsEntryId)
+			LEFT JOIN
 				SocialRelation ON
-					(MicroblogsEntry.receiverUserId = SocialRelation.userId2) AND
+					(TEMP_TABLE.userId = SocialRelation.userId2) AND
 					(MicroblogsEntry.socialRelationType = SocialRelation.type_)
 			WHERE
 				(
@@ -219,6 +306,29 @@
 				(
 					MicroblogsEntry.userId = ?
 				)
+			ORDER BY
+				MicroblogsEntry.createDate DESC
+		]]>
+	</sql>
+	<sql id="com.liferay.microblogs.service.persistence.MicroblogsEntryFinder.findByCCNI_CCPK_ATN">
+		<![CDATA[
+			SELECT
+				DISTINCT {MicroblogsEntry.*}
+			FROM
+				MicroblogsEntry
+			INNER JOIN
+				AssetEntry ON
+					(AssetEntry.classPK = MicroblogsEntry.microblogsEntryId)
+			INNER JOIN
+				AssetEntries_AssetTags ON
+					(AssetEntries_AssetTags.entryId = AssetEntry.entryId)
+			INNER JOIN
+				AssetTag ON
+					(AssetTag.tagId = AssetEntries_AssetTags.tagId)
+			WHERE
+				(MicroblogsEntry.creatorClassNameId = ?) AND
+				(MicroblogsEntry.creatorClassPK = ?) AND
+				(AssetTag.name = ?)
 			ORDER BY
 				MicroblogsEntry.createDate DESC
 		]]>
