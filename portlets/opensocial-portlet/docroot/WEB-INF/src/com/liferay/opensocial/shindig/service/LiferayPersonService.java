@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,6 +15,7 @@
 package com.liferay.opensocial.shindig.service;
 
 import com.liferay.compat.portal.util.PortalUtil;
+import com.liferay.opensocial.shindig.util.ShindigUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
@@ -50,11 +51,11 @@ import org.apache.shindig.protocol.RestfulCollection;
 import org.apache.shindig.social.core.model.ListFieldImpl;
 import org.apache.shindig.social.core.model.NameImpl;
 import org.apache.shindig.social.core.model.PersonImpl;
-import org.apache.shindig.social.opensocial.model.ListField.Field;
 import org.apache.shindig.social.opensocial.model.ListField;
+import org.apache.shindig.social.opensocial.model.ListField.Field;
 import org.apache.shindig.social.opensocial.model.Name;
-import org.apache.shindig.social.opensocial.model.Person.Gender;
 import org.apache.shindig.social.opensocial.model.Person;
+import org.apache.shindig.social.opensocial.model.Person.Gender;
 import org.apache.shindig.social.opensocial.spi.CollectionOptions;
 import org.apache.shindig.social.opensocial.spi.GroupId;
 import org.apache.shindig.social.opensocial.spi.PersonService;
@@ -170,6 +171,10 @@ public class LiferayPersonService implements PersonService {
 			long userIdLong = GetterUtil.getLong(userIdString);
 
 			User user = UserLocalServiceUtil.getUserById(userIdLong);
+
+			if (!ShindigUtil.isValidUser(user)) {
+				return null;
+			}
 
 			person = getUserPerson(user, fields, securityToken);
 		}

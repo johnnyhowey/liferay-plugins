@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,6 +15,8 @@
 package com.liferay.knowledgebase.hook.action;
 
 import com.liferay.compat.portal.kernel.util.ArrayUtil;
+import com.liferay.compat.portal.kernel.util.ListUtil;
+import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.knowledgebase.NoSuchArticleException;
 import com.liferay.knowledgebase.admin.util.AdminUtil;
 import com.liferay.knowledgebase.model.KBArticle;
@@ -27,11 +29,11 @@ import com.liferay.portal.kernel.portlet.LiferayWindowState;
 import com.liferay.portal.kernel.struts.BaseStrutsAction;
 import com.liferay.portal.kernel.struts.StrutsAction;
 import com.liferay.portal.kernel.util.GetterUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Layout;
@@ -119,7 +121,7 @@ public class FindKBArticleAction extends BaseStrutsAction {
 			long plid, int status, HttpServletRequest request)
 		throws Exception {
 
-		String portletId = PortletKeys.KNOWLEDGE_BASE_ARTICLE_DEFAULT_INSTANCE;
+		String portletId = getPortletId(plid);
 
 		PortletURL portletURL = getKBArticleURL(plid, portletId, request);
 
@@ -134,7 +136,13 @@ public class FindKBArticleAction extends BaseStrutsAction {
 		}
 
 		portletURL.setPortletMode(PortletMode.VIEW);
-		portletURL.setWindowState(LiferayWindowState.MAXIMIZED);
+
+		if (Validator.equals(
+				portletId,
+				PortletKeys.KNOWLEDGE_BASE_ARTICLE_DEFAULT_INSTANCE)) {
+
+			portletURL.setWindowState(LiferayWindowState.MAXIMIZED);
+		}
 
 		return portletURL;
 	}
@@ -304,6 +312,19 @@ public class FindKBArticleAction extends BaseStrutsAction {
 		}
 
 		return portletURL;
+	}
+
+	protected String getPortletId(long plid) throws Exception {
+		Layout layout = LayoutLocalServiceUtil.getLayout(plid);
+
+		long selPlid = PortalUtil.getPlidFromPortletId(
+			layout.getGroupId(), PortletKeys.KNOWLEDGE_BASE_DISPLAY);
+
+		if (selPlid != LayoutConstants.DEFAULT_PARENT_LAYOUT_ID) {
+			return PortletKeys.KNOWLEDGE_BASE_DISPLAY;
+		}
+
+		return PortletKeys.KNOWLEDGE_BASE_ARTICLE_DEFAULT_INSTANCE;
 	}
 
 	protected boolean isValidPlid(long plid) throws Exception {

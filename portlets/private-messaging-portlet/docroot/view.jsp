@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -44,7 +44,24 @@ long mbThreadId = ParamUtil.getLong(request, "mbThreadId");
 <aui:script use="liferay-plugin-privatemessaging">
 	Liferay.PrivateMessaging.init(
 		{
-			namespace: '<portlet:namespace />'
+			deleteMessagesURL: '<%= _getActionURL("deleteMessages", layout.getPlid(), request, themeDisplay) %>',
+			markMessagesAsReadURL: '<%= _getActionURL("markMessagesAsRead", layout.getPlid(), request, themeDisplay) %>',
+			markMessagesAsUnreadURL: '<%= _getActionURL("markMessagesAsUnread", layout.getPlid(), request, themeDisplay) %>',
+			namespace: '<portlet:namespace />',
+
+			<%
+			LiferayPortletURL redirectURL = PortletURLFactoryUtil.create(request, "1_WAR_privatemessagingportlet", layout.getPlid(), PortletRequest.RENDER_PHASE);
+
+			redirectURL.setWindowState(LiferayWindowState.NORMAL);
+
+			LiferayPortletURL newMessageURL = PortletURLFactoryUtil.create(request, "1_WAR_privatemessagingportlet", layout.getPlid(), PortletRequest.RESOURCE_PHASE);
+
+			newMessageURL.setParameter("mvcPath", "/new_message.jsp");
+			newMessageURL.setParameter("redirect", redirectURL.toString());
+			newMessageURL.setWindowState(LiferayWindowState.EXCLUSIVE);
+			%>
+
+			newMessageURL: '<%= newMessageURL %>'
 		}
 	);
 </aui:script>

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -56,6 +56,7 @@ page import="com.liferay.socialcoding.service.JIRAIssueLocalServiceUtil" %><%@
 page import="com.liferay.socialcoding.service.SVNRepositoryLocalServiceUtil" %><%@
 page import="com.liferay.socialcoding.service.SVNRevisionLocalServiceUtil" %><%@
 page import="com.liferay.socialcoding.svn.util.SVNConstants" %><%@
+page import="com.liferay.socialcoding.util.PortletPropsValues" %><%@
 page import="com.liferay.util.RSSUtil" %>
 
 <%@ page import="com.sun.syndication.feed.synd.SyndContent" %><%@

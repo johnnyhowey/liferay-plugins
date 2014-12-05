@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,6 +22,7 @@ import com.liferay.socialcoding.service.JIRAActionLocalServiceUtil;
 import com.liferay.socialcoding.service.JIRAChangeGroupLocalServiceUtil;
 import com.liferay.socialcoding.service.JIRAChangeItemLocalServiceUtil;
 import com.liferay.socialcoding.service.JIRAIssueLocalServiceUtil;
+import com.liferay.socialcoding.service.JIRAProjectLocalServiceUtil;
 import com.liferay.socialcoding.service.SVNRepositoryLocalServiceUtil;
 import com.liferay.socialcoding.service.SVNRevisionLocalServiceUtil;
 
@@ -47,6 +48,8 @@ public class ClpMessageListener extends BaseMessageListener {
 			JIRAChangeItemLocalServiceUtil.clearService();
 
 			JIRAIssueLocalServiceUtil.clearService();
+
+			JIRAProjectLocalServiceUtil.clearService();
 
 			SVNRepositoryLocalServiceUtil.clearService();
 

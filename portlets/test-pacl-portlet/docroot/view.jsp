@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -337,15 +337,24 @@
 	java.lang.Thread#getContextClassLoader=
 
 		<%
-		new SecurityExceptionTest(out, themeDisplay, true) {
+		if (ServerDetector.isWebLogic()) {
 
-			protected void test() throws Exception {
-				Thread thread = Thread.currentThread();
+			// In WebLogic, the context classloader is always the JSP class
+			// loader. Therefore, there is no security check.
 
-				thread.getContextClassLoader();
-			}
+			out.print("PASSED");
+		}
+		else {
+			new SecurityExceptionTest(out, themeDisplay, true) {
 
-		};
+				protected void test() throws Exception {
+					Thread thread = Thread.currentThread();
+
+					thread.getContextClassLoader();
+				}
+
+			};
+		}
 		%>
 
 </p>
@@ -658,15 +667,7 @@
 	new FileSecurityExceptionTest(out, themeDisplay, true) {
 
 		protected void test() throws Exception {
-			testDeleteWithFile("../webapps/chat-portlet/WEB-INF/liferay-releng.properties");
-		}
-
-	};
-
-	new FileSecurityExceptionTest(out, themeDisplay, true) {
-
-		protected void test() throws Exception {
-			testDeleteWithFileUtil("../webapps/chat-portlet/WEB-INF/liferay-releng.properties");
+			testDelete("../webapps/chat-portlet/WEB-INF/liferay-releng.properties");
 		}
 
 	};
@@ -674,15 +675,7 @@
 	new FileSecurityExceptionTest(out, themeDisplay, false) {
 
 		protected void test() throws Exception {
-			testDeleteWithFile("../webapps/chat-portlet/WEB-INF/src/com/liferay/chat/util/ChatConstants.java");
-		}
-
-	};
-
-	new FileSecurityExceptionTest(out, themeDisplay, false) {
-
-		protected void test() throws Exception {
-			testDeleteWithFileUtil("../webapps/chat-portlet/WEB-INF/src/com/liferay/chat/util/ChatConstants.java");
+			testDelete("../webapps/chat-portlet/WEB-INF/src/com/liferay/chat/util/ChatConstants.java");
 		}
 
 	};
@@ -955,12 +948,12 @@
 </p>
 
 <p>
-	en_UK=<%= _assertEquals(LanguageUtil.get(Locale.UK, "stars"), "David Beckham") %><br />
-	en_US=<%= _assertEquals(LanguageUtil.get(Locale.US, "stars"), "Stars") %><br />
-	es_ES=<%= _assertEquals(LanguageUtil.get(new Locale("es"), "stars"), "Estrellas") %><br />
-	it_IT=<%= _assertEquals(LanguageUtil.get(Locale.ITALY, "stars"), "Stelle") %><br />
-	pt_BR=<%= _assertEquals(LanguageUtil.get(new Locale("pt", "BR"), "stars"), "Ricardo Kaka") %><br />
-	pt_PT=<%= _assertEquals(LanguageUtil.get(new Locale("pt", "PT"), "stars"), "Cristiano Ronaldo") %>
+	en_UK=<%= _assertEquals(LanguageUtil.get(LocaleUtil.UK, "stars"), "David Beckham") %><br />
+	en_US=<%= _assertEquals(LanguageUtil.get(LocaleUtil.US, "stars"), "Stars") %><br />
+	es_ES=<%= _assertEquals(LanguageUtil.get(LocaleUtil.SPAIN, "stars"), "Estrellas") %><br />
+	it_IT=<%= _assertEquals(LanguageUtil.get(LocaleUtil.ITALY, "stars"), "Stelle") %><br />
+	pt_BR=<%= _assertEquals(LanguageUtil.get(LocaleUtil.BRAZIL, "stars"), "Ricardo Kaka") %><br />
+	pt_PT=<%= _assertEquals(LanguageUtil.get(LocaleUtil.PORTUGAL, "stars"), "Cristiano Ronaldo") %>
 </p>
 
 <p>
@@ -968,7 +961,7 @@
 </p>
 
 <p>
-	locales.beta=<%= _assertFalse(LanguageUtil.isBetaLocale(Locale.US)) %><br />
+	locales.beta=<%= _assertFalse(LanguageUtil.isBetaLocale(LocaleUtil.US)) %><br />
 
 	<%
 	String phoneNumber = PhoneNumberFormatUtil.format("123");
@@ -1440,7 +1433,7 @@
 	TestPACLUtil.class#_log=
 
 		<%
-		new SecurityExceptionTest(out, themeDisplay, true) {
+		new SecurityExceptionTest(out, themeDisplay, false) {
 
 			protected void test() throws Exception {
 				Class<?> clazz = TestPACLUtil.class;
@@ -2777,11 +2770,11 @@ String dbType = db.getType();
 <p>
 
 	<%
-	Map<String, Boolean> results = TestPACLUtil.testCurrentThread(themeDisplay.getUserId());
+	Map<String, Boolean> testPACLUtilResults = TestPACLUtil.testCurrentThread(themeDisplay.getUserId());
 	%>
 
-	PortalServiceUtil#getBuildNumber=<%= _assertTrue(results.get("PortalServiceUtil#getBuildNumber")) %><br />
-	UserLocalServiceUtil#getUser=<%= _assertTrue(results.get("UserLocalServiceUtil#getUser")) %>
+	PortalServiceUtil#getBuildNumber=<%= _assertTrue(testPACLUtilResults.get("PortalServiceUtil#getBuildNumber")) %><br />
+	UserLocalServiceUtil#getUser=<%= _assertTrue(testPACLUtilResults.get("UserLocalServiceUtil#getUser")) %>
 </p>
 
 <p>
@@ -2791,11 +2784,11 @@ String dbType = db.getType();
 <p>
 
 	<%
-	results = TestPACLUtil.testMessageBusThread(themeDisplay.getUserId());
+	testPACLUtilResults = TestPACLUtil.testMessageBusThread(themeDisplay.getUserId());
 	%>
 
-	PortalServiceUtil#getBuildNumber=<%= _assertTrue(results.get("PortalServiceUtil#getBuildNumber")) %><br />
-	UserLocalServiceUtil#getUser=<%= _assertTrue(results.get("UserLocalServiceUtil#getUser")) %>
+	PortalServiceUtil#getBuildNumber=<%= _assertTrue(testPACLUtilResults.get("PortalServiceUtil#getBuildNumber")) %><br />
+	UserLocalServiceUtil#getUser=<%= _assertTrue(testPACLUtilResults.get("UserLocalServiceUtil#getUser")) %>
 </p>
 
 <p>
@@ -2805,11 +2798,11 @@ String dbType = db.getType();
 <p>
 
 	<%
-	results = TestPACLUtil.testNewThread(themeDisplay.getUserId());
+	testPACLUtilResults = TestPACLUtil.testNewThread(themeDisplay.getUserId());
 	%>
 
-	PortalServiceUtil#getBuildNumber=<%= _assertTrue(results.get("PortalServiceUtil#getBuildNumber")) %><br />
-	UserLocalServiceUtil#getUser=<%= _assertTrue(results.get("UserLocalServiceUtil#getUser")) %>
+	PortalServiceUtil#getBuildNumber=<%= _assertTrue(testPACLUtilResults.get("PortalServiceUtil#getBuildNumber")) %><br />
+	UserLocalServiceUtil#getUser=<%= _assertTrue(testPACLUtilResults.get("UserLocalServiceUtil#getUser")) %>
 </p>
 
 <p>
@@ -2858,7 +2851,7 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 		super(writer, themeDisplay, expectSecurityException);
 	}
 
-	protected void testDeleteWithFile(String fileName) throws Exception {
+	protected void testDelete(String fileName) throws Exception {
 		fileName = TestPACLUtil.translateFileName(fileName);
 
 		writer.write(fileName);
@@ -2866,68 +2859,7 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 
 		File file = new File(fileName);
 
-		byte[] bytes = null;
-
-		try {
-			bytes = FileUtil.getBytes(file);
-		}
-		catch (SecurityException se) {
-			throw new Exception(se.getMessage(), se);
-		}
-
-		if (file.delete()) {
-			try {
-				FileUtil.write(file, bytes);
-			}
-			catch (SecurityException se) {
-				throw new Exception(se.getMessage(), se);
-			}
-
-			if (expectSecurityException) {
-				throw new SecurityException();
-			}
-		}
-		else {
-			if (!expectSecurityException) {
-				throw new SecurityException();
-			}
-		}
-	}
-
-	protected void testDeleteWithFileUtil(String fileName) throws Exception {
-		fileName = TestPACLUtil.translateFileName(fileName);
-
-		writer.write(fileName);
-		writer.write("=");
-
-		File file = new File(fileName);
-
-		byte[] bytes = null;
-
-		try {
-			bytes = FileUtil.getBytes(file);
-		}
-		catch (SecurityException se) {
-			throw new Exception(se.getMessage(), se);
-		}
-
-		if (FileUtil.delete(file)) {
-			try {
-				FileUtil.write(file, bytes);
-			}
-			catch (SecurityException se) {
-				throw new Exception(se.getMessage(), se);
-			}
-
-			if (expectSecurityException) {
-				throw new SecurityException();
-			}
-		}
-		else {
-			if (!expectSecurityException) {
-				throw new SecurityException();
-			}
-		}
+		PortalFilePermission.checkDelete(file.getPath());
 	}
 
 	protected void testExecute(String cmd) throws Exception {
@@ -2961,7 +2893,9 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 		writer.write(fileName);
 		writer.write("=");
 
-		FileUtil.read(fileName);
+		File file = new File(fileName);
+
+		PortalFilePermission.checkRead(file.getPath());
 	}
 
 	protected void testWriteWithFile(String fileName) throws Exception {
@@ -2988,9 +2922,7 @@ private class FileSecurityExceptionTest extends SecurityExceptionTest {
 
 		File file = new File(fileName);
 
-		byte[] bytes = FileUtil.getBytes(file);
-
-		FileUtil.write(file, bytes);
+		PortalFilePermission.checkWrite(file.getPath());
 	}
 
 }
@@ -3072,6 +3004,8 @@ private class SecurityExceptionTest {
 			}
 		}
 		catch (Exception e) {
+			e.printStackTrace();
+
 			writer.write("FAILED with " + e.getMessage());
 		}
 

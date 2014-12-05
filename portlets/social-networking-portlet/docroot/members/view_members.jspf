@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -21,6 +21,8 @@ SearchContainer searchContainer = new SearchContainer(renderRequest, null, null,
 
 LinkedHashMap<String, Object> userParams = new LinkedHashMap<String, Object>();
 
+userParams.put("inherit", Boolean.TRUE);
+
 if (organization != null) {
 	userParams.put("usersOrgs", new Long(organization.getOrganizationId()));
 }
@@ -32,9 +34,7 @@ int total = UserLocalServiceUtil.searchCount(company.getCompanyId(), null, Workf
 
 searchContainer.setTotal(total);
 
-OrderByComparator obc = OrderByComparatorFactoryUtil.create("User_", "loginDate", false, "firstName", true, "lastName", true);
-
-List<User> results = UserLocalServiceUtil.search(company.getCompanyId(), null, WorkflowConstants.STATUS_APPROVED, userParams, searchContainer.getStart(), searchContainer.getEnd(), obc);
+List<User> results = UserLocalServiceUtil.search(company.getCompanyId(), null, WorkflowConstants.STATUS_APPROVED, userParams, searchContainer.getStart(), searchContainer.getEnd(), new UserLoginDateComparator());
 
 searchContainer.setResults(results);
 

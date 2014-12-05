@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,19 +18,19 @@ import java.io.IOException;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
+import javax.portlet.EventRequest;
+import javax.portlet.EventResponse;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.filter.ActionFilter;
+import javax.portlet.filter.EventFilter;
 import javax.portlet.filter.FilterChain;
 import javax.portlet.filter.FilterConfig;
 import javax.portlet.filter.RenderFilter;
 import javax.portlet.filter.ResourceFilter;
-
-import javax.xml.stream.EventFilter;
-import javax.xml.stream.events.XMLEvent;
 
 /**
  * @author Neil Griffin
@@ -38,13 +38,11 @@ import javax.xml.stream.events.XMLEvent;
 public class CDIPortletFilter
 	implements ActionFilter, EventFilter, RenderFilter, ResourceFilter {
 
-	public boolean accept(XMLEvent xmlEvent) {
-		return false;
-	}
-
+	@Override
 	public void destroy() {
 	}
 
+	@Override
 	public void doFilter(
 			ActionRequest actionRequest, ActionResponse actionResponse,
 			FilterChain filterChain)
@@ -62,6 +60,25 @@ public class CDIPortletFilter
 		filterChain.doFilter(actionRequest, actionResponse);
 	}
 
+	@Override
+	public void doFilter(
+			EventRequest eventRequest, EventResponse eventResponse,
+			FilterChain filterChain)
+		throws IOException, PortletException {
+
+		CDIRequestFactory cdiRequestFactory = getCDIRequestFactory();
+
+		eventRequest = cdiRequestFactory.getCDIEventRequest(eventRequest);
+
+		CDIResponseFactory cdiResponseFactory = getCDIResponseFactory();
+
+		eventResponse = cdiResponseFactory.getCDIEventResponse(
+			eventResponse, eventRequest.getLocale());
+
+		filterChain.doFilter(eventRequest, eventResponse);
+	}
+
+	@Override
 	public void doFilter(
 			RenderRequest renderRequest, RenderResponse renderResponse,
 			FilterChain filterChain)
@@ -79,6 +96,7 @@ public class CDIPortletFilter
 		filterChain.doFilter(renderRequest, renderResponse);
 	}
 
+	@Override
 	public void doFilter(
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse,
 			FilterChain filterChain)
@@ -97,6 +115,7 @@ public class CDIPortletFilter
 		filterChain.doFilter(resourceRequest, resourceResponse);
 	}
 
+	@Override
 	public void init(FilterConfig filterConfig) {
 	}
 

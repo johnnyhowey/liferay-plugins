@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,8 +15,6 @@
 package com.liferay.opensocial.shindig.servlet;
 
 import com.google.inject.Injector;
-
-import com.liferay.portal.kernel.util.ServerDetector;
 
 import java.io.IOException;
 
@@ -58,14 +56,9 @@ public class AuthenticationServletFilter
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 
-		// LPS-23577
+		// LPS-23577 and LPS-41715
 
-		if (ServerDetector.isWebSphere()) {
-			injector = null;
-		}
-		else {
-			super.init(filterConfig);
-		}
+		injector = null;
 	}
 
 	private void _init(ServletContext servletContext) throws ServletException {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,6 +14,7 @@
 
 package com.liferay.portal.workflow.kaleo.service.impl;
 
+import com.liferay.compat.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.dao.orm.Criterion;
 import com.liferay.portal.kernel.dao.orm.Disjunction;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
@@ -329,11 +330,11 @@ public class KaleoInstanceLocalServiceImpl
 			dynamicQuery.add(userIdProperty.eq(userId));
 		}
 
-		if ((assetClassNames != null) && (assetClassNames.length > 0)) {
+		if (ArrayUtil.isNotEmpty(assetClassNames)) {
 			dynamicQuery.add(getAssetClassNames(assetClassNames));
 		}
 
-		if ((assetClassPKs != null) && (assetClassPKs.length > 0)) {
+		if (ArrayUtil.isNotEmpty(assetClassPKs)) {
 			dynamicQuery.add(getAssetClassPKs(assetClassPKs));
 		}
 

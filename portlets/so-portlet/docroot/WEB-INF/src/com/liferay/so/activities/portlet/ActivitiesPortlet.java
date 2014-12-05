@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,6 +17,7 @@
 
 package com.liferay.so.activities.portlet;
 
+import com.liferay.compat.portal.kernel.util.ListUtil;
 import com.liferay.compat.portal.kernel.util.Time;
 import com.liferay.compat.util.bridges.mvc.MVCPortlet;
 import com.liferay.microblogs.model.MicroblogsEntry;
@@ -29,7 +30,6 @@ import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.HtmlUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -39,6 +39,9 @@ import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
+import com.liferay.portlet.documentlibrary.model.DLFileEntry;
+import com.liferay.portlet.documentlibrary.model.DLFileVersion;
+import com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil;
 import com.liferay.portlet.messageboards.model.MBMessage;
 import com.liferay.portlet.messageboards.model.MBMessageDisplay;
 import com.liferay.portlet.messageboards.model.MBThread;
@@ -48,6 +51,7 @@ import com.liferay.portlet.messageboards.service.MBMessageServiceUtil;
 import com.liferay.portlet.messageboards.util.comparator.MessageCreateDateComparator;
 import com.liferay.so.activities.model.SocialActivitySet;
 import com.liferay.so.activities.service.SocialActivitySetLocalServiceUtil;
+import com.liferay.so.activities.util.SocialActivityKeyConstants;
 
 import java.io.IOException;
 
@@ -80,9 +84,23 @@ public class ActivitiesPortlet extends MVCPortlet {
 		String className = activitySet.getClassName();
 		long classPK = activitySet.getClassPK();
 
-		if (activitySet.getActivityCount() > 1 ) {
-			className = SocialActivitySet.class.getName();
-			classPK = activitySet.getActivitySetId();
+		if (className.equals(DLFileEntry.class.getName())) {
+			if ((activitySet.getActivityCount() > 1 ) &&
+				(activitySet.getType() ==
+					SocialActivityKeyConstants.DL_ADD_FILE_ENTRY)) {
+
+				className = SocialActivitySet.class.getName();
+				classPK = activitySet.getActivitySetId();
+			}
+			else {
+				className = DLFileVersion.class.getName();
+
+				DLFileVersion dlFileVersion =
+					DLFileVersionLocalServiceUtil.getLatestFileVersion(
+						classPK, false);
+
+				classPK = dlFileVersion.getFileVersionId();
+			}
 		}
 
 		MBMessageDisplay mbMessageDisplay =
@@ -130,7 +148,7 @@ public class ActivitiesPortlet extends MVCPortlet {
 				getReceiverMicroblogsEntryMicroblogsEntries(
 					MicroblogsEntryConstants.TYPE_REPLY,
 					activitySet.getClassPK(), QueryUtil.ALL_POS,
-					QueryUtil.ALL_POS, null);
+					QueryUtil.ALL_POS);
 
 		for (MicroblogsEntry microblogsEntry : microblogsEntries) {
 			JSONObject microblogsEntryJSONObject = getJSONObject(
@@ -157,7 +175,10 @@ public class ActivitiesPortlet extends MVCPortlet {
 			actionRequest, ActionRequest.ACTION_NAME);
 
 		try {
-			if (actionName.equals("updateComment")) {
+			if (actionName.equals("repostMicroblogsEntry")) {
+				repostMicroblogsEntry(actionRequest, actionResponse);
+			}
+			else if (actionName.equals("updateComment")) {
 				String className = ParamUtil.getString(
 					actionRequest, "className");
 
@@ -172,6 +193,31 @@ public class ActivitiesPortlet extends MVCPortlet {
 		catch (Exception e) {
 			throw new PortletException(e);
 		}
+	}
+
+	public void repostMicroblogsEntry(
+			ActionRequest actionRequest, ActionResponse actionResponse)
+		throws Exception {
+
+		ThemeDisplay themeDisplay = (ThemeDisplay)actionRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
+		long microblogsEntryId = ParamUtil.getLong(
+			actionRequest, "microblogsEntryId");
+
+		MicroblogsEntry microblogsEntry =
+			MicroblogsEntryLocalServiceUtil.getMicroblogsEntry(
+				microblogsEntryId);
+
+		ServiceContext serviceContext =
+			ServiceContextFactory.getInstance(
+				MicroblogsEntry.class.getName(), actionRequest);
+
+		MicroblogsEntryServiceUtil.addMicroblogsEntry(
+			themeDisplay.getUserId(), microblogsEntry.getContent(),
+			MicroblogsEntryConstants.TYPE_REPOST, microblogsEntry.getUserId(),
+			microblogsEntry.getMicroblogsEntryId(),
+			microblogsEntry.getSocialRelationType(), serviceContext);
 	}
 
 	@Override
@@ -305,7 +351,8 @@ public class ActivitiesPortlet extends MVCPortlet {
 			MicroblogsEntry microblogsEntry = null;
 
 			if (cmd.equals(Constants.DELETE)) {
-				MicroblogsEntryServiceUtil.deleteMicroblogsEntry(classPK);
+				MicroblogsEntryServiceUtil.deleteMicroblogsEntry(
+					microblogsEntryId);
 			}
 			else if (classPK > 0) {
 				MicroblogsEntry currentMicroblogsEntry =
@@ -359,6 +406,11 @@ public class ActivitiesPortlet extends MVCPortlet {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		jsonObject.put("body", HtmlUtil.escape(body));
+
+		if ((userId <= 0) || (userId != themeDisplay.getUserId())) {
+			jsonObject.put("commentControlsClass", "aui-helper-hidden");
+		}
+
 		jsonObject.put(
 			"mbMessageIdOrMicroblogsEntryId", mbMessageIdOrMicroblogsEntryId);
 		jsonObject.put(

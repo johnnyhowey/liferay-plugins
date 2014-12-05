@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -32,6 +32,8 @@ catch (UnknownChannelException e) {
 }
 
 notificationEvents = new ArrayList<NotificationEvent>(notificationEvents);
+
+ListUtil.sort(notificationEvents, new NotificationEventComparator(false));
 
 Iterator<NotificationEvent> iterator = notificationEvents.iterator();
 
@@ -79,7 +81,7 @@ while (iterator.hasNext()) {
 		%>
 
 			<c:choose>
-				<c:when test="<%= portletId.equals(PortletKeys.ANNOUNCEMENTS) %>">
+				<c:when test="<%= portletId.equals(PortletKeys.ANNOUNCEMENTS) || portletId.equals(PortletKeys.SO_ANNOUNCEMENTS) %>">
 					<%@ include file="/notifications/view_announcement.jspf" %>
 				</c:when>
 				<c:when test="<%= portletId.equals(PortletKeys.SO_INVITE_MEMBERS) %>">

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,12 +40,10 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 	public KaleoTaskAssignmentClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return KaleoTaskAssignment.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return KaleoTaskAssignment.class.getName();
 	}
@@ -58,12 +56,10 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 		setKaleoTaskAssignmentId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_kaleoTaskAssignmentId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -612,7 +608,6 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 			new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public KaleoTaskAssignment toUnescapedModel() {
 		return this;
 	}
@@ -729,7 +724,6 @@ public class KaleoTaskAssignmentClp extends BaseModelImpl<KaleoTaskAssignment>
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(52);
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -163,30 +163,22 @@ public class AkismetEditPageAction extends BaseStrutsPortletAction {
 		if (spam) {
 			pattern = "version-x-was-marked-as-spam";
 
-			// Latest version
-
-			if (wikiPage.getVersion() >= latestVersion) {
-				if (previousVersionWikiPage != null) {
-					WikiPageLocalServiceUtil.revertPage(
-						themeDisplay.getUserId(), wikiPage.getNodeId(),
-						wikiPage.getTitle(), previousVersion, serviceContext);
-				}
-				else {
-					WikiPageLocalServiceUtil.updatePage(
-						themeDisplay.getUserId(), wikiPage.getNodeId(),
-						wikiPage.getTitle(), latestVersion, null,
-						StringPool.BLANK, true, wikiPage.getFormat(),
-						wikiPage.getParentTitle(), wikiPage.getRedirectTitle(),
-						serviceContext);
-				}
-			}
-
 			// Selected version
 
 			wikiPage.setStatus(WorkflowConstants.STATUS_APPROVED);
 			wikiPage.setSummary(AkismetConstants.WIKI_PAGE_PENDING_APPROVAL);
 
 			wikiPage = WikiPageLocalServiceUtil.updateWikiPage(wikiPage);
+
+			// Latest version
+
+			if ((wikiPage.getVersion() >= latestVersion) &&
+				(previousVersionWikiPage != null)) {
+
+				WikiPageLocalServiceUtil.revertPage(
+					themeDisplay.getUserId(), wikiPage.getNodeId(),
+					wikiPage.getTitle(), previousVersion, serviceContext);
+			}
 
 			// Akismet
 
@@ -196,6 +188,13 @@ public class AkismetEditPageAction extends BaseStrutsPortletAction {
 		}
 		else {
 			pattern = "version-x-was-marked-as-not-spam";
+
+			// Selected version
+
+			wikiPage.setStatus(WorkflowConstants.STATUS_APPROVED);
+			wikiPage.setSummary(StringPool.BLANK);
+
+			wikiPage = WikiPageLocalServiceUtil.updateWikiPage(wikiPage);
 
 			// Latest version
 
@@ -209,13 +208,6 @@ public class AkismetEditPageAction extends BaseStrutsPortletAction {
 			else {
 				SessionMessages.add(actionRequest, "anotherUserHasMadeChanges");
 			}
-
-			// Selected version
-
-			wikiPage.setStatus(WorkflowConstants.STATUS_APPROVED);
-			wikiPage.setSummary(StringPool.BLANK);
-
-			wikiPage = WikiPageLocalServiceUtil.updateWikiPage(wikiPage);
 
 			// Akismet
 

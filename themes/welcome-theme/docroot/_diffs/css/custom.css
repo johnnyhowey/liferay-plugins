@@ -18,7 +18,7 @@ h1 {
 	width: 700px;
 }
 
-/* ---------- Skip to Content ---------- */
+/* ---------- Skip to content ---------- */
 
 #skip-to-content {
 	clip: rect(0 0 0 0);
@@ -57,7 +57,7 @@ h1 {
 	}
 }
 
-/* ---------- Sign In ---------- */
+/* ---------- Sign in ---------- */
 
 #sign-in {
 	background: #2CABE2;
@@ -115,7 +115,7 @@ h1 {
 		&:last-child {
 			border-right-width: 0;
 		}
-		
+
 		&.selected a {
 			background: #2CABE2;
 			color: #FFF;
@@ -192,10 +192,10 @@ h1 {
 .navigation-wrapper {
 	position: relative;
 	width: 100%;
-	
+
 	.content-area {
 		display: none;
-		
+
 		&.selected {
 			display: block;
 			height: 304px;
@@ -327,7 +327,7 @@ h1 {
 		border-width: 0;
 		padding-left: 10px;
 	}
-	
+
 	#getting-started, #ide, #social-office {
 		.footer-logo {
 			background-image: url(../images/custom/footer_sprite.png);
@@ -348,7 +348,7 @@ h1 {
 	}
 }
 
-/* ---------- Internet Explorer ---------- */
+/* ---------- Internet explorer ---------- */
 
 .ie6 {
 	#skip-to-content {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -272,23 +272,21 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 
 			return dynamicQuery(dynamicQuery, start, end, orderByComparator);
 		}
-		else {
-			KaleoTaskInstanceTokenQuery kaleoTaskInstanceTokenQuery =
-				new KaleoTaskInstanceTokenQuery(serviceContext);
 
-			kaleoTaskInstanceTokenQuery.setAssigneeClassName(
-				User.class.getName());
-			kaleoTaskInstanceTokenQuery.setAssigneeClassPK(
-				serviceContext.getUserId());
-			kaleoTaskInstanceTokenQuery.setCompleted(completed);
-			kaleoTaskInstanceTokenQuery.setEnd(end);
-			kaleoTaskInstanceTokenQuery.setKaleoInstanceId(kaleoInstanceId);
-			kaleoTaskInstanceTokenQuery.setOrderByComparator(orderByComparator);
-			kaleoTaskInstanceTokenQuery.setStart(start);
+		KaleoTaskInstanceTokenQuery kaleoTaskInstanceTokenQuery =
+			new KaleoTaskInstanceTokenQuery(serviceContext);
 
-			return kaleoTaskInstanceTokenFinder.findKaleoTaskInstanceTokens(
-				kaleoTaskInstanceTokenQuery);
-		}
+		kaleoTaskInstanceTokenQuery.setAssigneeClassName(User.class.getName());
+		kaleoTaskInstanceTokenQuery.setAssigneeClassPK(
+			serviceContext.getUserId());
+		kaleoTaskInstanceTokenQuery.setCompleted(completed);
+		kaleoTaskInstanceTokenQuery.setEnd(end);
+		kaleoTaskInstanceTokenQuery.setKaleoInstanceId(kaleoInstanceId);
+		kaleoTaskInstanceTokenQuery.setOrderByComparator(orderByComparator);
+		kaleoTaskInstanceTokenQuery.setStart(start);
+
+		return kaleoTaskInstanceTokenFinder.findKaleoTaskInstanceTokens(
+			kaleoTaskInstanceTokenQuery);
 	}
 
 	public KaleoTaskInstanceToken getKaleoTaskInstanceTokens(
@@ -359,19 +357,17 @@ public class KaleoTaskInstanceTokenLocalServiceImpl
 
 			return (int)dynamicQueryCount(dynamicQuery);
 		}
-		else {
-			KaleoTaskInstanceTokenQuery kaleoTaskInstanceTokenQuery =
-				new KaleoTaskInstanceTokenQuery(serviceContext);
 
-			kaleoTaskInstanceTokenQuery.setAssigneeClassName(
-				User.class.getName());
-			kaleoTaskInstanceTokenQuery.setAssigneeClassPK(
-				serviceContext.getUserId());
-			kaleoTaskInstanceTokenQuery.setCompleted(completed);
+		KaleoTaskInstanceTokenQuery kaleoTaskInstanceTokenQuery =
+			new KaleoTaskInstanceTokenQuery(serviceContext);
 
-			return kaleoTaskInstanceTokenFinder.countKaleoTaskInstanceTokens(
-				kaleoTaskInstanceTokenQuery);
-		}
+		kaleoTaskInstanceTokenQuery.setAssigneeClassName(User.class.getName());
+		kaleoTaskInstanceTokenQuery.setAssigneeClassPK(
+			serviceContext.getUserId());
+		kaleoTaskInstanceTokenQuery.setCompleted(completed);
+
+		return kaleoTaskInstanceTokenFinder.countKaleoTaskInstanceTokens(
+			kaleoTaskInstanceTokenQuery);
 	}
 
 	public int getKaleoTaskInstanceTokensCount(

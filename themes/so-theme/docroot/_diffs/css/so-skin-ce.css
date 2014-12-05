@@ -676,7 +676,11 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	direction: rtl;
 }
 
-/* ---------- Portal Tool Tips ---------- */
+.rtl .lfr-header-row .lfr-actions.show-arrow.direction-down .lfr-trigger strong a {
+	padding: 0 20px 0 4px;
+}
+
+/* ---------- Portal tool tips ---------- */
 
 .portal-tool-tip {
 	font-size: 1.2em;
@@ -756,7 +760,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	display: none;
 }
 
-/* ---------- Dynamic Uploader ---------- */
+/* ---------- Dynamic uploader ---------- */
 
 .lfr-upload-container .upload-error .error-message {
 	background-color: #FDD;
@@ -792,7 +796,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	font-weight: bold;
 }
 
-/* ---------- Search Iterator ---------- */
+/* ---------- Search iterator ---------- */
 
 .taglib-search-iterator {
 	 .result-title img {
@@ -920,31 +924,33 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		color: #8D071F;
 	}
 
-	.entry-body, .entry-footer {
-		border-color: #F4A425;
-	}
-
-	.entry .title {
-		background: #F4A425;
-		color: #FFF;
-
-		a {
-			color: #FFF;
-			text-decoration: underline;
-		}
-	}
-
 	.entry-footer-toolbar {
 		background: #E7E7E7;
 	}
 
-	.important-entry {
-		.entry-body, .entry-footer {
-			border-color: #B20000;
+	.unread-entries {
+		.entry .title {
+			background: #F4A425;
+			color: #FFF;
+
+			a {
+				color: #FFF;
+				text-decoration: underline;
+			}
 		}
 
-		.title {
-			background: #B20000;
+		.entry-body, .entry-footer {
+			border-color: #F4A425;
+		}
+
+		.important-entry {
+			.title {
+				background: #B20000;
+			}
+
+			.entry-body, .entry-footer {
+				border-color: #B20000;
+			}
 		}
 	}
 }
@@ -1074,9 +1080,8 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 
 	.lfr-meta-actions {
-		margin-top: -36px;
+		margin-bottom: 1em;
 		padding: 4px;
-		position: absolute;
 		right: 0;
 		width: auto;
 
@@ -1450,7 +1455,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 		}
 	}
 
-	.select-documents .aui-field-element{
+	.select-documents .aui-field-element {
 		padding: 5px 6px 6px;
 	}
 
@@ -1644,10 +1649,6 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 /* Faceted Search */
 
 .portlet-search {
-	.portlet-topper {
-		display: none;
-	}
-
 	.aui-form fieldset.aui-fieldset {
 		border-bottom: 1px solid $gray-dark;
 	}
@@ -2380,7 +2381,11 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 }
 
-/* ---------- Internet Explorer ---------- */
+.page-maximized .portlet-search .portlet-topper {
+	display: none;
+}
+
+/* ---------- Internet explorer ---------- */
 
 .ie7 {
 	#so-sidebar {
@@ -2549,7 +2554,7 @@ input[type=button], input[type=reset], input[type=submit], .aui-button button, .
 	}
 }
 
-/* ---------- Fluid Layout ---------- */
+/* ---------- Fluid layout ---------- */
 
 body.so-layout-fluid, body.so-layout-fluid-ad {
 	#banner #heading, #content, #footer {

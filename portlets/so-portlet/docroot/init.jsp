@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -27,20 +27,21 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-<%@ page import="com.liferay.compat.portal.util.PortalUtil" %><%@
+<%@ page import="com.liferay.compat.portal.kernel.notifications.ChannelHubManagerUtil" %><%@
+page import="com.liferay.compat.portal.kernel.util.ListUtil" %><%@
+page import="com.liferay.compat.portal.kernel.util.StringUtil" %><%@
+page import="com.liferay.compat.portal.util.PortalUtil" %><%@
+page import="com.liferay.portal.NoSuchRoleException" %><%@
 page import="com.liferay.portal.kernel.dao.orm.QueryUtil" %><%@
-page import="com.liferay.portal.kernel.dao.search.DAOParamUtil" %><%@
 page import="com.liferay.portal.kernel.dao.search.RowChecker" %><%@
-page import="com.liferay.portal.kernel.dao.search.SearchContainer" %><%@
 page import="com.liferay.portal.kernel.json.JSONFactoryUtil" %><%@
 page import="com.liferay.portal.kernel.json.JSONObject" %><%@
 page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.language.UnicodeLanguageUtil" %><%@
 page import="com.liferay.portal.kernel.notifications.Channel" %><%@
-page import="com.liferay.portal.kernel.notifications.ChannelHubManagerUtil" %><%@
 page import="com.liferay.portal.kernel.notifications.NotificationEvent" %><%@
+page import="com.liferay.portal.kernel.notifications.NotificationEventComparator" %><%@
 page import="com.liferay.portal.kernel.notifications.UnknownChannelException" %><%@
-page import="com.liferay.portal.kernel.portlet.LiferayPortletResponse" %><%@
 page import="com.liferay.portal.kernel.portlet.LiferayWindowState" %><%@
 page import="com.liferay.portal.kernel.servlet.SessionMessages" %><%@
 page import="com.liferay.portal.kernel.util.CalendarFactoryUtil" %><%@
@@ -52,7 +53,6 @@ page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
 page import="com.liferay.portal.kernel.util.HtmlUtil" %><%@
 page import="com.liferay.portal.kernel.util.ParamUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
-page import="com.liferay.portal.kernel.util.StringUtil" %><%@
 page import="com.liferay.portal.kernel.util.UnicodeProperties" %><%@
 page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.kernel.workflow.WorkflowConstants" %><%@
@@ -76,12 +76,13 @@ page import="com.liferay.portal.service.UserNotificationEventLocalServiceUtil" %
 page import="com.liferay.portal.service.permission.GroupPermissionUtil" %><%@
 page import="com.liferay.portal.service.permission.PortalPermissionUtil" %><%@
 page import="com.liferay.portal.util.comparator.RoleNameComparator" %><%@
-page import="com.liferay.portal.util.comparator.UserFirstNameComparator" %><%@
 page import="com.liferay.portlet.PortletURLFactoryUtil" %><%@
-page import="com.liferay.portlet.expando.model.ExpandoBridge" %><%@
 page import="com.liferay.portlet.social.model.SocialActivityFeedEntry" %><%@
 page import="com.liferay.portlet.social.model.SocialRelationConstants" %><%@
 page import="com.liferay.portlet.social.model.SocialRequestConstants" %><%@
+page import="com.liferay.portlet.social.model.SocialRequestFeedEntry" %><%@
+page import="com.liferay.portlet.social.service.SocialRequestInterpreterLocalServiceUtil" %><%@
+page import="com.liferay.portlet.social.service.SocialRequestLocalServiceUtil" %><%@
 page import="com.liferay.portlet.usersadmin.util.UsersAdminUtil" %><%@
 page import="com.liferay.so.activities.service.SocialActivityInterpreterLocalServiceUtil" %><%@
 page import="com.liferay.so.invitemembers.util.InviteMembersConstants" %><%@
@@ -89,7 +90,6 @@ page import="com.liferay.so.model.ProjectsEntry" %><%@
 page import="com.liferay.so.model.impl.ProjectsEntryImpl" %><%@
 page import="com.liferay.so.service.MemberRequestLocalServiceUtil" %><%@
 page import="com.liferay.so.service.ProjectsEntryLocalServiceUtil" %><%@
-page import="com.liferay.so.service.SocialOfficeServiceUtil" %><%@
 page import="com.liferay.so.sites.util.SitesUtil" %><%@
 page import="com.liferay.so.util.GroupConstants" %><%@
 page import="com.liferay.so.util.PortletKeys" %><%@
@@ -102,11 +102,9 @@ page import="com.liferay.so.util.RoleConstants" %>
 page import="java.util.Calendar" %><%@
 page import="java.util.Date" %><%@
 page import="java.util.Iterator" %><%@
-page import="java.util.LinkedHashMap" %><%@
 page import="java.util.List" %>
 
-<%@ page import="javax.portlet.PortletMode" %><%@
-page import="javax.portlet.PortletRequest" %><%@
+<%@ page import="javax.portlet.PortletRequest" %><%@
 page import="javax.portlet.PortletURL" %><%@
 page import="javax.portlet.WindowState" %>
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,6 +22,7 @@ import com.liferay.portal.workflow.kaleo.model.KaleoInstance;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoTask;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken;
+import com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.util.KaleoTaskAssignmentInstanceUtil;
 import com.liferay.portal.workflow.kaleo.util.WorkflowContextUtil;
@@ -58,6 +59,10 @@ public class RulesContextBuilder {
 			workflowContext.size() + 4);
 
 		facts.add(
+			new Fact<KaleoInstanceToken>(
+				"kaleoInstanceToken",
+				executionContext.getKaleoInstanceToken()));
+		facts.add(
 			new Fact<Map<String, Serializable>>(
 				"workflowContext", workflowContext));
 
@@ -65,12 +70,25 @@ public class RulesContextBuilder {
 			executionContext.getKaleoTaskInstanceToken();
 
 		if (kaleoTaskInstanceToken != null) {
+			facts.add(
+				new Fact<KaleoTaskInstanceToken>(
+					"kaleoTaskInstanceToken", kaleoTaskInstanceToken));
+
 			KaleoTask kaleoTask = kaleoTaskInstanceToken.getKaleoTask();
 
 			facts.add(new Fact<String>("taskName", kaleoTask.getName()));
 
-			facts.add(
-				new Fact<Long>("userId", kaleoTaskInstanceToken.getUserId()));
+			if (kaleoTaskInstanceToken.getCompletionUserId() != 0) {
+				facts.add(
+					new Fact<Long>(
+						"userId",
+						kaleoTaskInstanceToken.getCompletionUserId()));
+			}
+			else {
+				facts.add(
+					new Fact<Long>(
+						"userId", kaleoTaskInstanceToken.getUserId()));
+			}
 
 			List<WorkflowTaskAssignee> workflowTaskAssignees =
 				KaleoTaskAssignmentInstanceUtil.getWorkflowTaskAssignees(
@@ -85,6 +103,13 @@ public class RulesContextBuilder {
 				executionContext.getKaleoInstanceToken();
 
 			facts.add(new Fact<Long>("userId", kaleoInstanceToken.getUserId()));
+		}
+
+		if (executionContext.getKaleoTimerInstanceToken() != null) {
+			facts.add(
+				new Fact<KaleoTimerInstanceToken>(
+					"kaleoTimerInstanceToken",
+					executionContext.getKaleoTimerInstanceToken()));
 		}
 
 		return facts;

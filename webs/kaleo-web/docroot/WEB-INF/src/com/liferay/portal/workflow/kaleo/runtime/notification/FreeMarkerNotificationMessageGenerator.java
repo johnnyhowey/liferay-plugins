@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,6 +22,7 @@ import com.liferay.portal.workflow.kaleo.model.KaleoInstance;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstanceToken;
 import com.liferay.portal.workflow.kaleo.model.KaleoTask;
 import com.liferay.portal.workflow.kaleo.model.KaleoTaskInstanceToken;
+import com.liferay.portal.workflow.kaleo.model.KaleoTimerInstanceToken;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.util.KaleoTaskAssignmentInstanceUtil;
 import com.liferay.portal.workflow.kaleo.util.WorkflowContextUtil;
@@ -90,6 +91,9 @@ public class FreeMarkerNotificationMessageGenerator
 			freeMarkerContext.put(entry.getKey(), entry.getValue());
 		}
 
+		freeMarkerContext.put(
+			"kaleoInstanceToken", executionContext.getKaleoInstanceToken());
+
 		KaleoTaskInstanceToken kaleoTaskInstanceToken =
 			executionContext.getKaleoTaskInstanceToken();
 
@@ -97,8 +101,11 @@ public class FreeMarkerNotificationMessageGenerator
 			KaleoTask kaleoTask = kaleoTaskInstanceToken.getKaleoTask();
 
 			freeMarkerContext.put("taskName", kaleoTask.getName());
-
+			freeMarkerContext.put(
+				"kaleoTaskInstanceToken", kaleoTaskInstanceToken);
 			freeMarkerContext.put("userId", kaleoTaskInstanceToken.getUserId());
+			freeMarkerContext.put(
+				"userName", kaleoTaskInstanceToken.getUserName());
 
 			List<WorkflowTaskAssignee> workflowTaskAssignees =
 				KaleoTaskAssignmentInstanceUtil.getWorkflowTaskAssignees(
@@ -112,6 +119,14 @@ public class FreeMarkerNotificationMessageGenerator
 				executionContext.getKaleoInstanceToken();
 
 			freeMarkerContext.put("userId", kaleoInstanceToken.getUserId());
+		}
+
+		KaleoTimerInstanceToken kaleoTimerInstanceToken =
+				executionContext.getKaleoTimerInstanceToken();
+
+		if (kaleoTimerInstanceToken != null) {
+			freeMarkerContext.put(
+				"kaleoTimerInstanceToken", kaleoTimerInstanceToken);
 		}
 	}
 

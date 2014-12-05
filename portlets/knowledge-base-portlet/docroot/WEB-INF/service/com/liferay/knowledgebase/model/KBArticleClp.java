@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -42,12 +42,10 @@ public class KBArticleClp extends BaseModelImpl<KBArticle> implements KBArticle 
 	public KBArticleClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return KBArticle.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return KBArticle.class.getName();
 	}
@@ -60,12 +58,10 @@ public class KBArticleClp extends BaseModelImpl<KBArticle> implements KBArticle 
 		setKbArticleId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_kbArticleId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -1023,7 +1019,6 @@ public class KBArticleClp extends BaseModelImpl<KBArticle> implements KBArticle 
 			new Class[] { KBArticle.class }, new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public KBArticle toUnescapedModel() {
 		return this;
 	}
@@ -1159,7 +1154,6 @@ public class KBArticleClp extends BaseModelImpl<KBArticle> implements KBArticle 
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(76);
 

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -45,7 +45,7 @@ if (entry.getPriority() > 0) {
 }
 %>
 
-<div class="entry<%= className %>" id="<portlet:namespace /><%= entry.getEntryId() %>">
+<div class="entry<%= className %>" data-entryId="<%= entry.getEntryId() %>" id="<portlet:namespace /><%= entry.getEntryId() %>">
 	<div class="user-portrait">
 		<span class="avatar">
 
@@ -62,7 +62,7 @@ if (entry.getPriority() > 0) {
 	<div class="entry-data">
 		<div class="entry-header">
 			<div class="entry-time">
-				<%= Time.getRelativeTimeDescription(entry.getDisplayDate().getTime(), locale, themeDisplay.getTimeZone()) %>
+				<%= Time.getRelativeTimeDescription(entry.getDisplayDate(), locale, timeZone) %>
 			</div>
 
 			<div class="entry-action">

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,7 +16,6 @@ package com.liferay.akismet.service.impl;
 
 import com.liferay.akismet.model.AkismetData;
 import com.liferay.akismet.service.base.AkismetDataLocalServiceBaseImpl;
-import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 
@@ -36,7 +35,7 @@ public class AkismetDataLocalServiceImpl
 	public void deleteAkismetData(String className, long classPK)
 		throws PortalException, SystemException {
 
-		long classNameId = PortalUtil.getClassNameId(className);
+		long classNameId = classNameLocalService.getClassNameId(className);
 
 		akismetDataPersistence.removeByC_C(classNameId, classPK);
 	}
@@ -44,7 +43,7 @@ public class AkismetDataLocalServiceImpl
 	public AkismetData fetchAkismetData(String className, long classPK)
 		throws SystemException {
 
-		long classNameId = PortalUtil.getClassNameId(className);
+		long classNameId = classNameLocalService.getClassNameId(className);
 
 		return akismetDataPersistence.fetchByC_C(classNameId, classPK);
 	}
@@ -54,7 +53,7 @@ public class AkismetDataLocalServiceImpl
 			String referrer, String userAgent, String userIP, String userURL)
 		throws SystemException {
 
-		long classNameId = PortalUtil.getClassNameId(className);
+		long classNameId = classNameLocalService.getClassNameId(className);
 
 		AkismetData akismetData = akismetDataPersistence.fetchByC_C(
 			classNameId, classPK);

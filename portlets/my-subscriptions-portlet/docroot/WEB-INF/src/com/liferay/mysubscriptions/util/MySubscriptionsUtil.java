@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,6 +15,7 @@
 package com.liferay.mysubscriptions.util;
 
 import com.liferay.compat.portal.util.PortalUtil;
+import com.liferay.knowledgebase.util.PortletKeys;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.StringBundler;
@@ -25,7 +26,6 @@ import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.Portal;
-import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.asset.AssetRendererFactoryRegistryUtil;
 import com.liferay.portlet.asset.model.AssetRenderer;
 import com.liferay.portlet.asset.model.AssetRendererFactory;
@@ -65,6 +65,11 @@ public class MySubscriptionsUtil {
 
 		if (className.equals(BlogsEntry.class.getName())) {
 			return PortalUtil.getLayoutFullURL(classPK, PortletKeys.BLOGS);
+		}
+
+		if (className.equals(_KNOWLEDGE_BASE_MODEL_CLASSNAME)) {
+			return PortalUtil.getLayoutFullURL(
+				classPK, PortletKeys.KNOWLEDGE_BASE_DISPLAY);
 		}
 
 		if (className.equals(Layout.class.getName())) {
@@ -122,6 +127,9 @@ public class MySubscriptionsUtil {
 
 			return bookmarksFolder.getName();
 		}
+		else if (className.equals(_KNOWLEDGE_BASE_MODEL_CLASSNAME)) {
+			title = "Knowledge Base Article at ";
+		}
 		else if (className.equals(Layout.class.getName())) {
 			Layout layout = LayoutLocalServiceUtil.getLayout(classPK);
 
@@ -136,12 +144,10 @@ public class MySubscriptionsUtil {
 			return wikiNode.getName();
 		}
 
-		try {
-			Group group = GroupLocalServiceUtil.getGroup(classPK);
+		Group group = GroupLocalServiceUtil.fetchGroup(classPK);
 
+		if (group != null) {
 			title += group.getDescriptiveName(locale);
-		}
-		catch (Exception e) {
 		}
 
 		if (Validator.isNull(title)) {
@@ -169,5 +175,8 @@ public class MySubscriptionsUtil {
 
 		return assetRendererFactory.getAssetRenderer(classPK);
 	}
+
+	private static final String _KNOWLEDGE_BASE_MODEL_CLASSNAME =
+		"com.liferay.knowledgebase.model.KBArticle";
 
 }

@@ -5,7 +5,7 @@ html body {
 	padding-bottom: 24px;
 }
 
-/* ---------- Bottom Dock ---------- */
+/* ---------- Bottom dock ---------- */
 
 .chat-bar {
 	background: #E5E5E5 url(../images/btm-dock_bg.png) repeat-x;
@@ -31,7 +31,7 @@ html body {
 	float: left;
 }
 
-/* ---------- Bottom Dock Tabs ---------- */
+/* ---------- Bottom dock tabs ---------- */
 .chat-bar {
 	div ul {
 		&, li {
@@ -96,7 +96,7 @@ html body {
 		float: right;
 	}
 
-	/* ---------- Bottom Dock Popups ---------- */
+	/* ---------- Bottom dock popups ---------- */
 
 	.chat-panel {
 		bottom: 24px;
@@ -132,7 +132,7 @@ html body {
 	display: block;
 }
 
-/* ---------- Online Users ---------- */
+/* ---------- Online users ---------- */
 
 .buddy-list {
 	.search-buddies .aui-field-content {
@@ -141,6 +141,9 @@ html body {
 
 	.search-buddies-field {
 		background: url(@theme_image_path@/common/search.png) no-repeat 5px 50%;
+
+		@include box-sizing(border-box);
+
 		padding-left: 25px;
 		width: 100%;
 	}
@@ -220,7 +223,7 @@ html body {
 	}
 }
 
-/* ---------- Popup Window ---------- */
+/* ---------- Popup window ---------- */
 
 .chat-portlet .chat-settings {
 	.settings {
@@ -267,6 +270,7 @@ html body {
 	border: 1px solid #262626;
 	font: 11px Tahoma, Geneva, sans-serif;
 	min-width: 226px;
+	max-width: 452px;
 	position: relative;
 }
 
@@ -342,6 +346,8 @@ html body {
 	height: 192px;
 	overflow-y: scroll;
 	padding: 2px;
+	overflow-x: auto;
+	word-wrap: break-word;
 
 	.blurb {
 		margin: 0;

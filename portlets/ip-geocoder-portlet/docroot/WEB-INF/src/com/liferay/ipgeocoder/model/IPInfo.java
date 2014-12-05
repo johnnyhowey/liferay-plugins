@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -26,6 +26,33 @@ public class IPInfo {
 		_location = location;
 	}
 
+	public String getCity() {
+		if (_location == null) {
+			return null;
+		}
+		else {
+			return _location.city;
+		}
+	}
+
+	public String getCountryCode() {
+		if (_location == null) {
+			return null;
+		}
+		else {
+			return _location.countryCode;
+		}
+	}
+
+	public String getCountryName() {
+		if (_location == null) {
+			return null;
+		}
+		else {
+			return _location.countryName;
+		}
+	}
+
 	public String getIpAddress() {
 		return _ipAddress;
 	}
@@ -45,6 +72,24 @@ public class IPInfo {
 		}
 		else {
 			return _location.longitude;
+		}
+	}
+
+	public String getPostalCode() {
+		if (_location == null) {
+			return null;
+		}
+		else {
+			return _location.postalCode;
+		}
+	}
+
+	public String getRegion() {
+		if (_location == null) {
+			return null;
+		}
+		else {
+			return _location.region;
 		}
 	}
 

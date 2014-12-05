@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,17 +14,18 @@
 
 package com.liferay.marketplace.store.portlet;
 
+import com.liferay.compat.portal.kernel.util.HttpUtil;
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.compat.util.bridges.mvc.MVCPortlet;
 import com.liferay.marketplace.model.App;
 import com.liferay.marketplace.service.AppLocalServiceUtil;
 import com.liferay.marketplace.service.AppServiceUtil;
 import com.liferay.marketplace.util.MarketplaceUtil;
+import com.liferay.marketplace.util.PortletPropsValues;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -60,6 +61,17 @@ public class StorePortlet extends MVCPortlet {
 		String url = ParamUtil.getString(actionRequest, "url");
 		String version = ParamUtil.getString(actionRequest, "version");
 
+		if (!url.startsWith(PortletPropsValues.MARKETPLACE_URL)) {
+			JSONObject jsonObject = getAppJSONObject(remoteAppId);
+
+			jsonObject.put("cmd", "downloadApp");
+			jsonObject.put("message", "fail");
+
+			writeJSON(actionRequest, actionResponse, jsonObject);
+
+			return;
+		}
+
 		url = getRemoteAppPackageURL(
 			themeDisplay.getCompanyId(), themeDisplay.getUserId(), token, url);
 
@@ -74,15 +86,7 @@ public class StorePortlet extends MVCPortlet {
 
 			FileUtil.write(tempFile, inputStream);
 
-			App app = AppLocalServiceUtil.fetchRemoteApp(remoteAppId);
-
-			if (app == null) {
-				app = AppServiceUtil.addApp(remoteAppId, version, tempFile);
-			}
-			else {
-				app = AppServiceUtil.updateApp(
-					app.getAppId(), version, tempFile);
-			}
+			App app = AppServiceUtil.updateApp(remoteAppId, version, tempFile);
 
 			JSONObject jsonObject = getAppJSONObject(app.getRemoteAppId());
 
@@ -200,6 +204,17 @@ public class StorePortlet extends MVCPortlet {
 		String version = ParamUtil.getString(actionRequest, "version");
 		String url = ParamUtil.getString(actionRequest, "url");
 
+		if (!url.startsWith(PortletPropsValues.MARKETPLACE_URL)) {
+			JSONObject jsonObject = getAppJSONObject(remoteAppId);
+
+			jsonObject.put("cmd", "updateApp");
+			jsonObject.put("message", "fail");
+
+			writeJSON(actionRequest, actionResponse, jsonObject);
+
+			return;
+		}
+
 		url = getRemoteAppPackageURL(
 			themeDisplay.getCompanyId(), themeDisplay.getUserId(), token, url);
 
@@ -214,15 +229,7 @@ public class StorePortlet extends MVCPortlet {
 
 			FileUtil.write(tempFile, inputStream);
 
-			App app = AppLocalServiceUtil.fetchRemoteApp(remoteAppId);
-
-			if (app == null) {
-				app = AppServiceUtil.addApp(remoteAppId, version, tempFile);
-			}
-			else {
-				app = AppServiceUtil.updateApp(
-					app.getAppId(), version, tempFile);
-			}
+			AppServiceUtil.updateApp(remoteAppId, version, tempFile);
 
 			AppServiceUtil.installApp(remoteAppId);
 

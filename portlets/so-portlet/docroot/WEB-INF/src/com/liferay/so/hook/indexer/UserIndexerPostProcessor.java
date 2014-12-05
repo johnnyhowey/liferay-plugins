@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,15 +17,21 @@
 
 package com.liferay.so.hook.indexer;
 
+import com.liferay.compat.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.search.BaseIndexerPostProcessor;
 import com.liferay.portal.kernel.search.BooleanQuery;
 import com.liferay.portal.kernel.search.Document;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.search.SearchContext;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.User;
+import com.liferay.portal.service.UserLocalServiceUtil;
+import com.liferay.portal.util.comparator.UserFirstNameComparator;
+import com.liferay.portlet.social.model.SocialRelationConstants;
 import com.liferay.so.model.ProjectsEntry;
 import com.liferay.so.service.ProjectsEntryLocalServiceUtil;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
@@ -49,6 +55,31 @@ public class UserIndexerPostProcessor extends BaseIndexerPostProcessor {
 				contextQuery.addRequiredTerm(
 					"projectTitles", String.valueOf(projectTitles), true);
 			}
+
+			Object socialRelationType = params.get("socialRelationType");
+
+			if (Validator.isNotNull(socialRelationType)) {
+				Long[] socialRelationTypeValues = (Long[])socialRelationType;
+
+				contextQuery.addRequiredTerm(
+					"socialRelationships", socialRelationTypeValues[0]);
+			}
+
+			Object usersGroups = params.get("usersGroups");
+
+			if (Validator.isNotNull(usersGroups)) {
+				if (usersGroups instanceof Long[]) {
+					Long[] groupIds = (Long[])usersGroups;
+
+					for (long groupId : groupIds) {
+						contextQuery.addRequiredTerm("groupIds", groupId);
+					}
+				}
+				else {
+					contextQuery.addRequiredTerm(
+						"groupIds", String.valueOf(usersGroups));
+				}
+			}
 		}
 	}
 
@@ -71,6 +102,33 @@ public class UserIndexerPostProcessor extends BaseIndexerPostProcessor {
 		}
 
 		document.addKeyword("projectTitles", projectTitles);
+
+		int count = UserLocalServiceUtil.getSocialUsersCount(
+			user.getUserId(), SocialRelationConstants.TYPE_BI_CONNECTION);
+
+		List<Long> socialRelationshipUserIds = new ArrayList<Long>();
+
+		int pages = count / Indexer.DEFAULT_INTERVAL;
+
+		for (int i = 0; i <= pages; i++) {
+			int start = (i * Indexer.DEFAULT_INTERVAL);
+			int end = start + Indexer.DEFAULT_INTERVAL;
+
+			List<User> socialRelationshipUsers =
+				UserLocalServiceUtil.getSocialUsers(
+					user.getUserId(),
+					SocialRelationConstants.TYPE_BI_CONNECTION, start, end,
+					new UserFirstNameComparator(true));
+
+			for (User socialRelationshipUser : socialRelationshipUsers) {
+				socialRelationshipUserIds.add(
+					socialRelationshipUser.getUserId());
+			}
+		}
+
+		document.addKeyword(
+			"socialRelationships",
+			ArrayUtil.toLongArray(socialRelationshipUserIds));
 	}
 
 	@Override

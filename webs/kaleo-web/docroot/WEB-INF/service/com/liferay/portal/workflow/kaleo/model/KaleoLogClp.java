@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -39,12 +39,10 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 	public KaleoLogClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return KaleoLog.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return KaleoLog.class.getName();
 	}
@@ -57,12 +55,10 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		setKaleoLogId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_kaleoLogId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -1016,7 +1012,6 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 			new Class[] { KaleoLog.class }, new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public KaleoLog toUnescapedModel() {
 		return this;
 	}
@@ -1175,7 +1170,6 @@ public class KaleoLogClp extends BaseModelImpl<KaleoLog> implements KaleoLog {
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(94);
 

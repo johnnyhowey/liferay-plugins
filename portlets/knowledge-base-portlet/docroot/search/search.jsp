@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -43,6 +43,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 		<%
 		SearchContext searchContext = SearchContextFactory.getInstance(request);
 
+		searchContext.setAttribute("paginationType", "regular");
 		searchContext.setEnd(searchContainer.getEnd());
 		searchContext.setKeywords(keywords);
 		searchContext.setStart(searchContainer.getStart());
@@ -92,7 +93,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 			href="<%= rowURL %>"
 			name="title"
 			orderable="<%= true %>"
-			value="<%= (String)tuple.getObject(1) %>"
+			value="<%= HtmlUtil.escape((String)tuple.getObject(1)) %>"
 		/>
 
 		<c:if test="<%= showKBArticleAuthorColumn %>">
@@ -101,7 +102,7 @@ String orderByType = ParamUtil.getString(request, "orderByType", "desc");
 				name="author"
 				orderable="<%= true %>"
 				orderableProperty="user-name"
-				value="<%= (String)tuple.getObject(2) %>"
+				value="<%= HtmlUtil.escape((String)tuple.getObject(2)) %>"
 			/>
 		</c:if>
 

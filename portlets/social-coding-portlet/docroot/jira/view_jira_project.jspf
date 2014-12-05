@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,7 +15,7 @@
 --%>
 
 <%
-String jiraURL = "http://support.liferay.com/secure/IssueNavigator.jspa?reset=true&pid=" + projectId;
+String jiraURL = PortletPropsValues.JIRA_URL + "/secure/IssueNavigator.jspa?reset=true&pid=" + projectId;
 
 Date lastWeek = JIRAUtil.getJIRADate(-1);
 
@@ -35,17 +35,17 @@ Object[][] jiraProjectRowsArray = new Object[][] {
 		jiraURL + "&assigneeSelect=specificuser&assignee=" + jiraUserId
 	},
 	new Object[] {
-		"open", request.getContextPath() + "/jira/images/status_open.png",
+		"open", PortalUtil.getPathContext(request) + "/jira/images/status_open.png",
 		jiraURL + "&assigneeSelect=specificuser&assignee=" + jiraUserId + "&resolution=-1",
 		new Integer(assignedIssuesOpenCount), new Integer(assignedIssuesTotalCount)
 	},
 	new Object[] {
-		"closed", request.getContextPath() + "/jira/images/status_closed.png",
+		"closed", PortalUtil.getPathContext(request) + "/jira/images/status_closed.png",
 		jiraURL + "&assigneeSelect=specificuser&assignee=" + jiraUserId + "&status=" + JIRAConstants.STATUS_CLOSED,
 		new Integer(assignedIssuesClosedCount), new Integer(assignedIssuesTotalCount)
 	},
 	new Object[] {
-		"last-week", request.getContextPath() + "/jira/images/calendar.png",
+		"last-week", PortalUtil.getPathContext(request) + "/jira/images/calendar.png",
 		jiraURL + "&assigneeSelect=specificuser&assignee=" + jiraUserId + "&updated:previous=-1w",
 		new Integer(assignedIssuesLastWeekCount), new Integer(assignedIssuesTotalCount)
 	},
@@ -54,17 +54,17 @@ Object[][] jiraProjectRowsArray = new Object[][] {
 		jiraURL + "&reporterSelect=specificuser&reporter=" + jiraUserId
 	},
 	new Object[] {
-		"open", request.getContextPath() + "/jira/images/status_open.png",
+		"open", PortalUtil.getPathContext(request) + "/jira/images/status_open.png",
 		jiraURL + "&reporterSelect=specificuser&reporter=" + jiraUserId + "&resolution=-1",
 		new Integer(reporterIssuesOpenCount), new Integer(reporterIssuesTotalCount)
 	},
 	new Object[] {
-		"closed", request.getContextPath() + "/jira/images/status_closed.png",
+		"closed", PortalUtil.getPathContext(request) + "/jira/images/status_closed.png",
 		jiraURL + "&reporterSelect=specificuser&reporter=" + jiraUserId + "&status=" + JIRAConstants.STATUS_CLOSED,
 		new Integer(reporterIssuesClosedCount), new Integer(reporterIssuesTotalCount)
 	},
 	new Object[] {
-		"last-week", request.getContextPath() + "/jira/images/calendar.png",
+		"last-week", PortalUtil.getPathContext(request) + "/jira/images/calendar.png",
 		jiraURL + "&reporterSelect=specificuser&reporter=" + jiraUserId + "&updated:previous=-1w",
 		new Integer(reporterIssuesLastWeekCount), new Integer(reporterIssuesTotalCount)
 	}
@@ -72,7 +72,7 @@ Object[][] jiraProjectRowsArray = new Object[][] {
 %>
 
 <div class="project-title">
-	<strong><a href="http://issues.liferay.com/browse/<%= projectKey %>" target="_blank"><%= projectName %></a></strong>
+	<strong><a href="<%= PortletPropsValues.JIRA_URL %>/browse/<%= projectKey %>" target="_blank"><%= projectName %></a></strong>
 </div>
 
 <table class="jira-summary lfr-table">
@@ -92,7 +92,7 @@ for (int j = 0; j < jiraProjectRowsArray.length; j++) {
 					<br />
 				</c:if>
 
-				<a href="<%= url %>" target="_blank"><em><liferay-ui:message key="<%= message %>" /></em></a>
+				<a href="<%= HtmlUtil.escapeAttribute(url) %>" target="_blank"><em><liferay-ui:message key="<%= message %>" /></em></a>
 			</td>
 		</tr>
 

@@ -8,7 +8,7 @@
 		margin: 1em 0;
 
 		li {
-			background: url(@portal_ctx@/html/icons/sites_admin.png) no-repeat 10px 3px;
+			background: url(@portal_ctx@/html/icons/sites_admin.png) no-repeat 10px 50%;
 			border: 1px solid #E8EFF4;
 			margin: 4px;
 			padding: 3px 10px 3px 30px;
@@ -68,9 +68,10 @@
 			&.more {
 				background-image: url(@theme_image_path@/common/view.png);
 
-				a {
+				a, a:hover {
+					border-top: 1px solid #C8C9CA;
 					color: #8F0920;
-					font-weight: bold;
+					padding: 0.5em 33px;
 				}
 			}
 
@@ -154,6 +155,14 @@
 
 			.leave a {
 				background: url(@theme_image_path@/common/leave.png) no-repeat 0 50%;
+
+				&.disabled {
+					filter: alpha(opacity=20);
+					height: 16px;
+					margin: 0 5px;
+					opacity: 0.2;
+					width: 16px;
+				}
 			}
 
 			.delete a {

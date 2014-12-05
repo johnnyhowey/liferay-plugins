@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -19,16 +19,26 @@
 
 <%@ include file="/init.jsp" %>
 
-<%@ page import="com.liferay.microblogs.model.MicroblogsEntry" %><%@
+<%@ page import="com.liferay.compat.portal.kernel.util.Time" %><%@
+page import="com.liferay.microblogs.model.MicroblogsEntry" %><%@
 page import="com.liferay.microblogs.model.MicroblogsEntryConstants" %><%@
 page import="com.liferay.microblogs.service.MicroblogsEntryLocalServiceUtil" %><%@
 page import="com.liferay.portal.service.ServiceContextFactory" %><%@
+page import="com.liferay.portlet.documentlibrary.model.DLFileEntry" %><%@
+page import="com.liferay.portlet.documentlibrary.model.DLFileVersion" %><%@
+page import="com.liferay.portlet.documentlibrary.service.DLFileVersionLocalServiceUtil" %><%@
+page import="com.liferay.portlet.messageboards.model.MBMessage" %><%@
 page import="com.liferay.portlet.messageboards.service.MBMessageLocalServiceUtil" %><%@
 page import="com.liferay.so.activities.model.SocialActivitySet" %><%@
-page import="com.liferay.so.activities.service.SocialActivitySetLocalServiceUtil" %>
+page import="com.liferay.so.activities.service.SocialActivitySetLocalServiceUtil" %><%@
+page import="com.liferay.so.activities.util.SocialActivityKeyConstants" %>
 
 <%
 String tabs1 = ParamUtil.getString(request, "tabs1", "all");
 
 Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(locale, timeZone);
+%>
+
+<%!
+private static final int _DELTA = 10;
 %>

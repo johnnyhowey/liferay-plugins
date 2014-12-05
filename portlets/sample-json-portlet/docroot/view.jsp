@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,12 +19,14 @@
 <%@ taglib uri="http://liferay.com/tld/aui" prefix="aui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
+<%@ page import="com.liferay.compat.portal.util.PortalUtil" %>
+
 <portlet:defineObjects />
 
 <div id="<portlet:namespace />json"></div>
 
 <liferay-util:html-bottom>
-	<script src="<%= request.getContextPath() %>/servlet/do?id=<portlet:namespace />json&callback=<portlet:namespace />printJSON" type="text/javascript"></script>
+	<script src="<%= PortalUtil.getPathContext(request) %>/servlet/do?id=<portlet:namespace />json&callback=<portlet:namespace />printJSON" type="text/javascript"></script>
 </liferay-util:html-bottom>
 
 <aui:script position="inline">

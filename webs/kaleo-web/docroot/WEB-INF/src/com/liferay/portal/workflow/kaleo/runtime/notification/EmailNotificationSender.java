@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,14 +15,18 @@
 package com.liferay.portal.workflow.kaleo.runtime.notification;
 
 import com.liferay.mail.service.MailServiceUtil;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.mail.MailMessage;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroupGroupRole;
 import com.liferay.portal.model.UserGroupRole;
 import com.liferay.portal.service.RoleLocalServiceUtil;
+import com.liferay.portal.service.UserGroupGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserGroupRoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.workflow.kaleo.model.KaleoInstance;
@@ -34,7 +38,9 @@ import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 
 import java.io.Serializable;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -196,7 +202,18 @@ public class EmailNotificationSender implements NotificationSender {
 		throws Exception {
 
 		if (roleType == RoleConstants.TYPE_REGULAR) {
-			List<User> users = UserLocalServiceUtil.getRoleUsers(roleId);
+			Role role = RoleLocalServiceUtil.getRole(roleId);
+
+			LinkedHashMap<String, Object> params =
+				new LinkedHashMap<String, Object>();
+
+			params.put("inherit", Boolean.TRUE);
+			params.put("usersRoles", role.getRoleId());
+
+			List<User> users = UserLocalServiceUtil.search(
+				role.getCompanyId(), null, WorkflowConstants.STATUS_APPROVED,
+				params, QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+				(OrderByComparator)null);
 
 			for (User user : users) {
 				if (user.isActive()) {
@@ -208,6 +225,8 @@ public class EmailNotificationSender implements NotificationSender {
 			}
 		}
 		else {
+			List<User> users = new ArrayList<User>();
+
 			KaleoInstanceToken kaleoInstanceToken =
 				executionContext.getKaleoInstanceToken();
 
@@ -216,8 +235,23 @@ public class EmailNotificationSender implements NotificationSender {
 					kaleoInstanceToken.getGroupId(), roleId);
 
 			for (UserGroupRole userGroupRole : userGroupRoles) {
-				User user = userGroupRole.getUser();
+				users.add(userGroupRole.getUser());
+			}
 
+			List<UserGroupGroupRole> userGroupGroupRoles =
+				UserGroupGroupRoleLocalServiceUtil.
+					getUserGroupGroupRolesByGroupAndRole(
+						kaleoInstanceToken.getGroupId(), roleId);
+
+			for (UserGroupGroupRole userGroupGroupRole : userGroupGroupRoles) {
+				List<User> userGroupUsers =
+					UserLocalServiceUtil.getUserGroupUsers(
+						userGroupGroupRole.getUserGroupId());
+
+				users.addAll(userGroupUsers);
+			}
+
+			for (User user : users) {
 				if (user.isActive()) {
 					InternetAddress internetAddress = new InternetAddress(
 						user.getEmailAddress(), user.getFullName());

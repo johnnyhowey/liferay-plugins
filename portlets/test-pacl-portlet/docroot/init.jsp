@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -28,6 +28,8 @@ page import="com.liferay.chat.model.EntryClp" %><%@
 page import="com.liferay.chat.service.EntryLocalService" %><%@
 page import="com.liferay.chat.service.EntryLocalServiceUtil" %><%@
 page import="com.liferay.chat.service.StatusLocalServiceUtil" %><%@
+page import="com.liferay.compat.portal.kernel.util.HttpUtil" %><%@
+page import="com.liferay.compat.portal.kernel.util.LocaleUtil" %><%@
 page import="com.liferay.compat.portal.util.PortalUtil" %><%@
 page import="com.liferay.portal.kernel.dao.db.DB" %><%@
 page import="com.liferay.portal.kernel.dao.db.DBFactoryUtil" %><%@
@@ -47,11 +49,11 @@ page import="com.liferay.portal.kernel.messaging.Message" %><%@
 page import="com.liferay.portal.kernel.messaging.MessageBusUtil" %><%@
 page import="com.liferay.portal.kernel.portlet.PortletClassLoaderUtil" %><%@
 page import="com.liferay.portal.kernel.search.SearchEngineUtil" %><%@
-page import="com.liferay.portal.kernel.util.FileUtil" %><%@
-page import="com.liferay.portal.kernel.util.HttpUtil" %><%@
+page import="com.liferay.portal.kernel.security.pacl.permission.PortalFilePermission" %><%@
 page import="com.liferay.portal.kernel.util.OSDetector" %><%@
 page import="com.liferay.portal.kernel.util.PortalClassLoaderUtil" %><%@
 page import="com.liferay.portal.kernel.util.PropsKeys" %><%@
+page import="com.liferay.portal.kernel.util.ServerDetector" %><%@
 page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.model.Group" %><%@
 page import="com.liferay.portal.model.GroupWrapper" %><%@
@@ -98,7 +100,6 @@ page import="java.sql.Statement" %>
 
 <%@ page import="java.util.ArrayList" %><%@
 page import="java.util.List" %><%@
-page import="java.util.Locale" %><%@
 page import="java.util.Map" %>
 
 <%@ page import="javax.crypto.Cipher" %><%@

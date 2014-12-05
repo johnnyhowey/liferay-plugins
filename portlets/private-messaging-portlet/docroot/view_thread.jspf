@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -72,16 +72,16 @@ String subject = PrivateMessagingUtil.getThreadSubject(mbThreadId);
 					<portlet:param name="privateLayout" value="<%= Boolean.FALSE.toString() %>" />
 				</liferay-portlet:actionURL>
 
-				<a class="profile-link" href="<%= publicPagesURL %>"><%= curUser.getFullName() %></a>
+				<a class="profile-link" href="<%= publicPagesURL %>"><%= HtmlUtil.escape(curUser.getFullName()) %></a>
 			</c:when>
 			<c:otherwise>
 				<c:choose>
 					<c:when test="<%= curUser.isActive() %>">
-						<span class="profile-link"><%= curUser.getFullName() %></span>
+						<span class="profile-link"><%= HtmlUtil.escape(curUser.getFullName()) %></span>
 					</c:when>
 					<c:otherwise>
 						<liferay-ui:icon-help message="deleted-user">
-							<span class="profile-link line-through"><%= curUser.getFullName() %></span>
+							<span class="profile-link line-through"><%= HtmlUtil.escape(curUser.getFullName()) %></span>
 						</liferay-ui:icon-help>
 					</c:otherwise>
 				</c:choose>
@@ -196,7 +196,12 @@ iteratorURL.setParameter("mbThreadId", String.valueOf(mbThreadId));
 				</span>
 
 				<div class="body">
-					<%= StringUtil.replace(mbMessage.getBody(), "\n", "<br />") %>
+
+					<%
+					String body = _convertToHyperlink(mbMessage.getBody());
+					%>
+
+					<%= StringUtil.replace(body, "\n", "<br />") %>
 
 					<c:if test="<%= mbMessage.isAttachments() %>">
 						<hr />
@@ -311,3 +316,17 @@ iteratorURL.setParameter("mbThreadId", String.valueOf(mbThreadId));
 		}
 	).render();
 </aui:script>
+
+<%!
+private String _convertToHyperlink(String body) throws Exception {
+	if (body == null) {
+		return null;
+	}
+
+	Matcher matcher = _urlPattern.matcher(body);
+
+	return matcher.replaceAll("<a target=\"_blank\" href=\"$1\">$1</a>");
+}
+
+private static Pattern _urlPattern = Pattern.compile("(((https?|ftp):\\/\\/|mailto:)\\S+)");
+%>

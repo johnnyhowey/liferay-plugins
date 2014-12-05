@@ -182,6 +182,9 @@ AUI.add(
 						instance._defaultMessageError = config.defaultMessageError;
 						instance._defaultMessageSuccess = config.defaultMessageSuccess;
 
+						instance._deleteEntryURL = config.deleteEntryURL;
+						instance._editEntryURL = config.editEntryURL;
+
 						instance._maxResultCount = config.maxResultCount;
 
 						instance._showIcon = config.showIcon;
@@ -465,12 +468,12 @@ AUI.add(
 											filterBy: data.filterBy || filterBy,
 											keywords: data.keywords || '',
 											start: data.start || 0
-										}
+										};
 									}
 								},
 								source: url
 							}
-						)
+						);
 					},
 
 					_createContactList: function(config) {
@@ -490,7 +493,7 @@ AUI.add(
 								requestTemplate: function(query) {
 									return {
 										keywords: query
-									}
+									};
 								},
 								resultTextLocator: function(response) {
 									var result = '';
@@ -519,14 +522,9 @@ AUI.add(
 						var confirmMessageText = Lang.sub(Liferay.Language.get('are-you-sure-you-want-to-delete-x-from-your-contacts'), [contact.fullName]);
 
 						if (confirm(confirmMessageText)) {
-							var actionURL = new Liferay.PortletURL.createActionURL();
-
-							actionURL.setParameter('javax.portlet.action', 'deleteEntry');
-							actionURL.setPortletId('1_WAR_contactsportlet');
-							actionURL.setWindowState('NORMAL');
 
 							A.io.request(
-								actionURL.toString(),
+								instance._deleteEntryURL,
 								{
 									after: {
 										failure: function(event, id, obj) {
@@ -547,15 +545,26 @@ AUI.add(
 					_editEntry: function(contact) {
 						var instance = this;
 
-						var portletURL = new Liferay.PortletURL.createRenderURL();
+						var namespace = instance._namespace;
+						var portletURL = instance._editEntryURL;
 
-						portletURL.setParameter('mvcPath', '/contacts_center/edit_entry.jsp');
-						portletURL.setParameter('redirect', contact.redirect);
-						portletURL.setParameter('entryId', contact.entryId);
-						portletURL.setPortletId('1_WAR_contactsportlet');
-						portletURL.setWindowState('EXCLUSIVE');
+						var params = [];
 
-						instance.showPopup(Liferay.Language.get('update-contact'), portletURL.toString());
+						A.Object.each(
+							{
+								entryId: contact.entryId,
+								redirect: contact.redirect
+							},
+							function(item, index, collection) {
+								if (item) {
+									params.push(namespace + encodeURIComponent(index) + '=' + encodeURIComponent(item));
+								}
+							}
+						);
+
+						portletURL = Liferay.Util.addParams(params.join('&'), portletURL);
+
+						instance.showPopup(Liferay.Language.get('update-contact'), portletURL);
 					},
 
 					_getRequestTemplate: function(filterBy) {
@@ -567,7 +576,7 @@ AUI.add(
 								filterBy: filterBy,
 								keywords: query,
 								start: 0
-							}
+							};
 						};
 					},
 
@@ -1110,6 +1119,6 @@ AUI.add(
 	},
 	'',
 	{
-		requires: ['aui-dialog','aui-io-plugin','aui-toolbar','autocomplete-base','datasource-io','json-parse','liferay-portlet-base','liferay-portlet-url']
+		requires: ['aui-dialog', 'aui-io-plugin', 'aui-toolbar', 'autocomplete-base', 'datasource-io', 'json-parse', 'liferay-portlet-base', 'liferay-portlet-url']
 	}
 );

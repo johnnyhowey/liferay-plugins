@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -18,10 +18,10 @@ import com.liferay.chat.model.Status;
 import com.liferay.chat.service.StatusLocalServiceUtil;
 import com.liferay.chat.util.PortletPropsValues;
 import com.liferay.chat.util.comparator.BuddyComparator;
+import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.ContactConstants;
 import com.liferay.portal.model.User;
@@ -59,6 +59,7 @@ import org.jivesoftware.smack.packet.Presence;
  */
 public class JabberImpl implements Jabber {
 
+	@Override
 	public void disconnect(long userId) {
 		Connection connection = getConnection(userId);
 
@@ -73,6 +74,7 @@ public class JabberImpl implements Jabber {
 		_onlineUserIds.remove(userId);
 	}
 
+	@Override
 	public String getResource(String jabberId) {
 		String resource = StringUtil.extractLast(jabberId, StringPool.AT);
 
@@ -85,10 +87,12 @@ public class JabberImpl implements Jabber {
 		return resource;
 	}
 
+	@Override
 	public String getScreenName(String jabberId) {
 		return StringUtil.extractFirst(jabberId, StringPool.AT);
 	}
 
+	@Override
 	public List<Object[]> getStatuses(
 		long companyId, long userId, List<Object[]> buddies) {
 
@@ -169,6 +173,7 @@ public class JabberImpl implements Jabber {
 		}
 	}
 
+	@Override
 	public void login(long userId, String password) {
 		try {
 			connect(userId, password);
@@ -218,6 +223,7 @@ public class JabberImpl implements Jabber {
 		}
 	}
 
+	@Override
 	public void sendMessage(long fromUserId, long toUserId, String content) {
 		try {
 			if (Validator.isNull(content)) {
@@ -279,13 +285,13 @@ public class JabberImpl implements Jabber {
 					}
 				}
 			}
-
 		}
 		catch (Exception e) {
 			_log.error(e, e);
 		}
 	}
 
+	@Override
 	public void updatePassword(long userId, String password) {
 		if (!PortletPropsValues.JABBER_IMPORT_USER_ENABLED ||
 			(password == null)) {
@@ -309,6 +315,7 @@ public class JabberImpl implements Jabber {
 		}
 	}
 
+	@Override
 	public void updateStatus(long userId, int online) {
 		updateStatus(userId, online, null);
 	}

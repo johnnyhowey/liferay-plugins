@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,12 +40,10 @@ public class KaleoTaskInstanceTokenClp extends BaseModelImpl<KaleoTaskInstanceTo
 	public KaleoTaskInstanceTokenClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return KaleoTaskInstanceToken.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return KaleoTaskInstanceToken.class.getName();
 	}
@@ -58,12 +56,10 @@ public class KaleoTaskInstanceTokenClp extends BaseModelImpl<KaleoTaskInstanceTo
 		setKaleoTaskInstanceTokenId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_kaleoTaskInstanceTokenId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -766,7 +762,6 @@ public class KaleoTaskInstanceTokenClp extends BaseModelImpl<KaleoTaskInstanceTo
 			new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public KaleoTaskInstanceToken toUnescapedModel() {
 		return this;
 	}
@@ -892,7 +887,6 @@ public class KaleoTaskInstanceTokenClp extends BaseModelImpl<KaleoTaskInstanceTo
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(61);
 

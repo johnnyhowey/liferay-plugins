@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,9 +20,9 @@ import com.liferay.akismet.util.AkismetConstants;
 import com.liferay.akismet.util.AkismetUtil;
 import com.liferay.akismet.util.PortletPropsKeys;
 import com.liferay.akismet.util.PrefsPortletPropsUtil;
+import com.liferay.compat.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
-import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.util.ObjectValuePair;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
@@ -309,6 +309,12 @@ public class AkismetMBMessageLocalServiceImpl
 			long userId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
 
+		if (serviceContext.getWorkflowAction() !=
+				WorkflowConstants.ACTION_PUBLISH) {
+
+			return false;
+		}
+
 		if (!AkismetUtil.hasRequiredInfo(serviceContext)) {
 			return false;
 		}
@@ -326,6 +332,12 @@ public class AkismetMBMessageLocalServiceImpl
 	protected boolean isMessageBoardsEnabled(
 			long userId, long groupId, ServiceContext serviceContext)
 		throws PortalException, SystemException {
+
+		if (serviceContext.getWorkflowAction() !=
+				WorkflowConstants.ACTION_PUBLISH) {
+
+			return false;
+		}
 
 		if (!AkismetUtil.hasRequiredInfo(serviceContext)) {
 			return false;

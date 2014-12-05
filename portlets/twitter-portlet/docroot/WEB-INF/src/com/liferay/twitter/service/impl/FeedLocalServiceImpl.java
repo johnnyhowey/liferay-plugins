@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,6 +14,7 @@
 
 package com.liferay.twitter.service.impl;
 
+import com.liferay.compat.portal.kernel.util.LocaleUtil;
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.dao.shard.ShardUtil;
@@ -42,7 +43,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Brian Wing Shun Chan
@@ -143,7 +143,7 @@ public class FeedLocalServiceImpl extends FeedLocalServiceBaseImpl {
 				JSONObject statusJSONObject = jsonArray.getJSONObject(i);
 
 				SimpleDateFormat sdf = new SimpleDateFormat(
-					"EEE MMM d hh:mm:ss Z yyyy", Locale.US);
+					"EEE MMM d hh:mm:ss Z yyyy", LocaleUtil.US);
 
 				Date createDate = null;
 

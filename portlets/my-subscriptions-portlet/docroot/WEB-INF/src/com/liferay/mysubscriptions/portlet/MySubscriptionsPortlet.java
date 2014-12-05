@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,10 +14,12 @@
 
 package com.liferay.mysubscriptions.portlet;
 
+import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.compat.util.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
+import com.liferay.portal.model.Subscription;
+import com.liferay.portal.security.auth.PrincipalException;
 import com.liferay.portal.service.SubscriptionLocalServiceUtil;
 import com.liferay.portal.theme.ThemeDisplay;
 
@@ -45,9 +47,18 @@ public class MySubscriptionsPortlet extends MVCPortlet {
 			ParamUtil.getString(actionRequest, "subscriptionIds"), 0L);
 
 		for (long subscriptionId : subscriptionIds) {
-			if (subscriptionId > 0) {
-				SubscriptionLocalServiceUtil.deleteSubscription(subscriptionId);
+			if (subscriptionId <= 0) {
+				continue;
 			}
+
+			Subscription subscription =
+				SubscriptionLocalServiceUtil.getSubscription(subscriptionId);
+
+			if (themeDisplay.getUserId() != subscription.getUserId()) {
+				throw new PrincipalException();
+			}
+
+			SubscriptionLocalServiceUtil.deleteSubscription(subscription);
 		}
 	}
 

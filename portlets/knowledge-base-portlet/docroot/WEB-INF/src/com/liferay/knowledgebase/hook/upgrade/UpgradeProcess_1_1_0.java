@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,6 +14,7 @@
 
 package com.liferay.knowledgebase.hook.upgrade;
 
+import com.liferay.compat.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.knowledgebase.hook.upgrade.v1_1_0.UpgradeClassName;
 import com.liferay.knowledgebase.hook.upgrade.v1_1_0.UpgradeExpandoTable;
 import com.liferay.knowledgebase.hook.upgrade.v1_1_0.UpgradeKBArticle;
@@ -23,7 +24,6 @@ import com.liferay.knowledgebase.hook.upgrade.v1_1_0.UpgradePortletPreferences;
 import com.liferay.knowledgebase.hook.upgrade.v1_1_0.UpgradeResourceAction;
 import com.liferay.knowledgebase.hook.upgrade.v1_1_0.UpgradeResourcePermission;
 import com.liferay.portal.kernel.cache.MultiVMPoolUtil;
-import com.liferay.portal.kernel.upgrade.UpgradeProcess;
 import com.liferay.portal.service.ClassNameLocalServiceUtil;
 import com.liferay.portal.service.ResourceActionLocalServiceUtil;
 

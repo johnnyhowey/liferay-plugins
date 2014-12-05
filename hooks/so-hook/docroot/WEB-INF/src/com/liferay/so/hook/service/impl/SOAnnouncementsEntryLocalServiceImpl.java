@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,26 +17,33 @@
 
 package com.liferay.so.hook.service.impl;
 
+import com.liferay.compat.portal.kernel.notifications.ChannelHubManagerUtil;
+import com.liferay.compat.portal.kernel.util.ListUtil;
 import com.liferay.compat.portal.kernel.util.Time;
-import com.liferay.compat.portal.util.PortalUtil;
-import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
+import com.liferay.portal.kernel.messaging.DestinationNames;
+import com.liferay.portal.kernel.messaging.MessageBusUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
+import com.liferay.portal.kernel.search.Indexer;
 import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.util.PortletKeys;
 import com.liferay.portlet.announcements.model.AnnouncementsEntry;
@@ -44,8 +51,8 @@ import com.liferay.portlet.announcements.service.AnnouncementsEntryLocalService;
 import com.liferay.portlet.announcements.service.AnnouncementsEntryLocalServiceWrapper;
 import com.liferay.portlet.announcements.service.persistence.AnnouncementsEntryFinderUtil;
 
-import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -118,7 +125,7 @@ public class SOAnnouncementsEntryLocalServiceImpl
 		for (AnnouncementsEntry announcementEntry : announcementEntries) {
 			Date displayDate = announcementEntry.getDisplayDate();
 
-			if (displayDate.after(announcementEntry.getCreateDate())) {
+			if (!displayDate.after(announcementEntry.getCreateDate())) {
 				sendNotificationEvent(announcementEntry);
 			}
 		}
@@ -142,45 +149,10 @@ public class SOAnnouncementsEntryLocalServiceImpl
 		notificationEventJSONObject.put(
 			"userId", announcementEntry.getUserId());
 
-		List<User> users = Collections.emptyList();
-
-		if (announcementEntry.getClassNameId() == 0) {
-			users = UserLocalServiceUtil.getUsers(
-				QueryUtil.ALL_POS, QueryUtil.ALL_POS);
-		}
-		else {
-			String className = PortalUtil.getClassName(
-				announcementEntry.getClassNameId());
-
-			if (className.equals(Group.class.getName())) {
-				users = UserLocalServiceUtil.getGroupUsers(
-					announcementEntry.getClassPK());
-			}
-			else if (className.equals(Organization.class.getName())) {
-				users = UserLocalServiceUtil.getOrganizationUsers(
-					announcementEntry.getClassPK());
-			}
-			else if (className.equals(Role.class.getName())) {
-				users = UserLocalServiceUtil.getRoleUsers(
-					announcementEntry.getClassPK());
-			}
-			else if (className.equals(UserGroup.class.getName())) {
-				users = UserLocalServiceUtil.getUserGroupUsers(
-					announcementEntry.getClassPK());
-			}
-		}
-
-		for (User user : users) {
-			NotificationEvent notificationEvent =
-				NotificationEventFactoryUtil.createNotificationEvent(
-					System.currentTimeMillis(), "6_WAR_soportlet",
-					notificationEventJSONObject);
-
-			notificationEvent.setDeliveryRequired(0);
-
-			ChannelHubManagerUtil.sendNotificationEvent(
-				user.getCompanyId(), user.getUserId(), notificationEvent);
-		}
+		MessageBusUtil.sendMessage(
+			DestinationNames.ASYNC_SERVICE,
+			new NotificationRunnable(
+				announcementEntry, notificationEventJSONObject));
 	}
 
 	private static final long _ANNOUNCEMENTS_ENTRY_CHECK_INTERVAL =
@@ -193,5 +165,130 @@ public class SOAnnouncementsEntryLocalServiceImpl
 		SOAnnouncementsEntryLocalServiceImpl.class);
 
 	private Date _previousCheckDate;
+
+	private static class NotificationRunnable implements Runnable {
+
+		public NotificationRunnable(
+			AnnouncementsEntry announcementEntry,
+			JSONObject notificationEventJSONObject) {
+
+			_announcementEntry = announcementEntry;
+			_notificationEventJSONObject = notificationEventJSONObject;
+		}
+
+		@Override
+		public void run() {
+			try {
+				sendUserNotifications(
+					_announcementEntry, _notificationEventJSONObject);
+			}
+			catch (Throwable t) {
+				throw new RuntimeException(t);
+			}
+		}
+
+		protected void sendUserNotifications(
+				AnnouncementsEntry announcementEntry,
+				JSONObject notificationEventJSONObject)
+			throws PortalException, SystemException {
+
+			int count = 0;
+
+			LinkedHashMap<String, Object> params =
+				new LinkedHashMap<String, Object>();
+
+			if (announcementEntry.getClassNameId() == 0) {
+				count = UserLocalServiceUtil.getUsersCount();
+			}
+			else {
+				String className = announcementEntry.getClassName();
+
+				long classPK = announcementEntry.getClassPK();
+
+				if (classPK > 0) {
+					if (className.equals(Group.class.getName())) {
+						params.put("inherit", Boolean.TRUE);
+						params.put("usersGroups", classPK);
+					}
+					else if (className.equals(Organization.class.getName())) {
+						Organization organization =
+							OrganizationLocalServiceUtil.fetchOrganization(
+								classPK);
+
+						if (organization == null) {
+							return;
+						}
+
+						params.put(
+							"usersOrgsTree",
+							ListUtil.fromArray(
+								new Organization[]{organization}));
+					}
+					else if (className.equals(Role.class.getName())) {
+						Role role = RoleLocalServiceUtil.fetchRole(classPK);
+
+						if (role == null) {
+							return;
+						}
+
+						if (role.getType() ==
+								RoleConstants.TYPE_REGULAR) {
+
+							params.put("inherit", Boolean.TRUE);
+							params.put("usersRoles", classPK);
+						}
+						else {
+							params.put(
+								"userGroupRole",
+								new Long[] {Long.valueOf(0), classPK});
+						}
+					}
+					else if (className.equals(UserGroup.class.getName())) {
+						params.put("usersUserGroups", classPK);
+					}
+				}
+
+				count = UserLocalServiceUtil.searchCount(
+					announcementEntry.getCompanyId(), null,
+					WorkflowConstants.STATUS_APPROVED, params);
+			}
+
+			int pages = count / Indexer.DEFAULT_INTERVAL;
+
+			for (int i = 0; i <= pages; i++) {
+				List<User> users = null;
+
+				int start = (i * Indexer.DEFAULT_INTERVAL);
+				int end = start + Indexer.DEFAULT_INTERVAL;
+
+				if (announcementEntry.getClassNameId() == 0) {
+					users = UserLocalServiceUtil.getUsers(start, end);
+				}
+				else {
+					users = UserLocalServiceUtil.search(
+						announcementEntry.getCompanyId(), null,
+						WorkflowConstants.STATUS_APPROVED, params, start, end,
+						(OrderByComparator)null);
+				}
+
+				for (User user : users) {
+					NotificationEvent notificationEvent =
+						NotificationEventFactoryUtil.createNotificationEvent(
+							System.currentTimeMillis(), "6_WAR_soportlet",
+							notificationEventJSONObject);
+
+					notificationEvent.setDeliveryRequired(0);
+
+					ChannelHubManagerUtil.sendNotificationEvent(
+						user.getCompanyId(), user.getUserId(),
+						notificationEvent);
+				}
+			}
+		}
+
+		private AnnouncementsEntry _announcementEntry;
+		private JSONObject _notificationEventJSONObject;
+
+	}
 
 }

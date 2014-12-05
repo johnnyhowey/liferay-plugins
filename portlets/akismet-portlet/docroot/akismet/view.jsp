@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -25,6 +25,8 @@
 		<aui:input label="enabled-for-message-boards" name="messageBoardsEnabled" type="checkbox" value="<%= AkismetUtil.isMessageBoardsEnabled(company.getCompanyId()) %>" />
 
 		<aui:input label="enabled-for-discussions" name="discussionsEnabled" type="checkbox" value="<%= AkismetUtil.isDiscussionsEnabled(company.getCompanyId()) %>" />
+
+		<aui:input label="enabled-for-wiki" name="wikiEnabled" type="checkbox" value="<%= AkismetUtil.isWikiEnabled(company.getCompanyId()) %>" />
 
 		<aui:input label="api-key" name="apiKey" type="text" value="<%= PrefsPortletPropsUtil.getString(company.getCompanyId(), PortletPropsKeys.AKISMET_API_KEY) %>" />
 

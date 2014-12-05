@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,12 +40,10 @@ public class SVNRevisionClp extends BaseModelImpl<SVNRevision>
 	public SVNRevisionClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return SVNRevision.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return SVNRevision.class.getName();
 	}
@@ -58,12 +56,10 @@ public class SVNRevisionClp extends BaseModelImpl<SVNRevision>
 		setSvnRevisionId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_svnRevisionId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -365,7 +361,6 @@ public class SVNRevisionClp extends BaseModelImpl<SVNRevision>
 			new Class[] { SVNRevision.class }, new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public SVNRevision toUnescapedModel() {
 		return this;
 	}
@@ -454,7 +449,6 @@ public class SVNRevisionClp extends BaseModelImpl<SVNRevision>
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(22);
 

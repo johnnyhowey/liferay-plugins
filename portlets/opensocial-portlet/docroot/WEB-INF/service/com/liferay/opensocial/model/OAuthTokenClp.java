@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,12 +41,10 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 	public OAuthTokenClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return OAuthToken.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return OAuthToken.class.getName();
 	}
@@ -59,12 +57,10 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 		setOAuthTokenId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_oAuthTokenId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -544,7 +540,6 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 			new Class[] { OAuthToken.class }, new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public OAuthToken toUnescapedModel() {
 		return this;
 	}
@@ -649,7 +644,6 @@ public class OAuthTokenClp extends BaseModelImpl<OAuthToken>
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(46);
 

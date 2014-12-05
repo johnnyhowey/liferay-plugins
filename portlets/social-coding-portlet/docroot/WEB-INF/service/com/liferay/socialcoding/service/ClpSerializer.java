@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,8 +14,6 @@
 
 package com.liferay.socialcoding.service;
 
-import com.liferay.portal.kernel.exception.PortalException;
-import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayOutputStream;
 import com.liferay.portal.kernel.log.Log;
@@ -29,6 +27,7 @@ import com.liferay.socialcoding.model.JIRAActionClp;
 import com.liferay.socialcoding.model.JIRAChangeGroupClp;
 import com.liferay.socialcoding.model.JIRAChangeItemClp;
 import com.liferay.socialcoding.model.JIRAIssueClp;
+import com.liferay.socialcoding.model.JIRAProjectClp;
 import com.liferay.socialcoding.model.SVNRepositoryClp;
 import com.liferay.socialcoding.model.SVNRevisionClp;
 
@@ -123,6 +122,10 @@ public class ClpSerializer {
 			return translateInputJIRAIssue(oldModel);
 		}
 
+		if (oldModelClassName.equals(JIRAProjectClp.class.getName())) {
+			return translateInputJIRAProject(oldModel);
+		}
+
 		if (oldModelClassName.equals(SVNRepositoryClp.class.getName())) {
 			return translateInputSVNRepository(oldModel);
 		}
@@ -186,6 +189,16 @@ public class ClpSerializer {
 		return newModel;
 	}
 
+	public static Object translateInputJIRAProject(BaseModel<?> oldModel) {
+		JIRAProjectClp oldClpModel = (JIRAProjectClp)oldModel;
+
+		BaseModel<?> newModel = oldClpModel.getJIRAProjectRemoteModel();
+
+		newModel.setModelAttributes(oldClpModel.getModelAttributes());
+
+		return newModel;
+	}
+
 	public static Object translateInputSVNRepository(BaseModel<?> oldModel) {
 		SVNRepositoryClp oldClpModel = (SVNRepositoryClp)oldModel;
 
@@ -241,6 +254,11 @@ public class ClpSerializer {
 		if (oldModelClassName.equals(
 					"com.liferay.socialcoding.model.impl.JIRAIssueImpl")) {
 			return translateOutputJIRAIssue(oldModel);
+		}
+
+		if (oldModelClassName.equals(
+					"com.liferay.socialcoding.model.impl.JIRAProjectImpl")) {
+			return translateOutputJIRAProject(oldModel);
 		}
 
 		if (oldModelClassName.equals(
@@ -307,6 +325,13 @@ public class ClpSerializer {
 
 				return throwable;
 			}
+			catch (ClassNotFoundException cnfe) {
+				if (_log.isInfoEnabled()) {
+					_log.info("Do not use reflection to translate throwable");
+				}
+
+				_useReflectionToTranslateThrowable = false;
+			}
 			catch (SecurityException se) {
 				if (_log.isInfoEnabled()) {
 					_log.info("Do not use reflection to translate throwable");
@@ -325,42 +350,46 @@ public class ClpSerializer {
 
 		String className = clazz.getName();
 
-		if (className.equals(PortalException.class.getName())) {
-			return new PortalException();
-		}
-
-		if (className.equals(SystemException.class.getName())) {
-			return new SystemException();
-		}
-
 		if (className.equals(
 					"com.liferay.socialcoding.NoSuchJIRAActionException")) {
-			return new com.liferay.socialcoding.NoSuchJIRAActionException();
+			return new com.liferay.socialcoding.NoSuchJIRAActionException(throwable.getMessage(),
+				throwable.getCause());
 		}
 
 		if (className.equals(
 					"com.liferay.socialcoding.NoSuchJIRAChangeGroupException")) {
-			return new com.liferay.socialcoding.NoSuchJIRAChangeGroupException();
+			return new com.liferay.socialcoding.NoSuchJIRAChangeGroupException(throwable.getMessage(),
+				throwable.getCause());
 		}
 
 		if (className.equals(
 					"com.liferay.socialcoding.NoSuchJIRAChangeItemException")) {
-			return new com.liferay.socialcoding.NoSuchJIRAChangeItemException();
+			return new com.liferay.socialcoding.NoSuchJIRAChangeItemException(throwable.getMessage(),
+				throwable.getCause());
 		}
 
 		if (className.equals(
 					"com.liferay.socialcoding.NoSuchJIRAIssueException")) {
-			return new com.liferay.socialcoding.NoSuchJIRAIssueException();
+			return new com.liferay.socialcoding.NoSuchJIRAIssueException(throwable.getMessage(),
+				throwable.getCause());
+		}
+
+		if (className.equals(
+					"com.liferay.socialcoding.NoSuchJIRAProjectException")) {
+			return new com.liferay.socialcoding.NoSuchJIRAProjectException(throwable.getMessage(),
+				throwable.getCause());
 		}
 
 		if (className.equals(
 					"com.liferay.socialcoding.NoSuchSVNRepositoryException")) {
-			return new com.liferay.socialcoding.NoSuchSVNRepositoryException();
+			return new com.liferay.socialcoding.NoSuchSVNRepositoryException(throwable.getMessage(),
+				throwable.getCause());
 		}
 
 		if (className.equals(
 					"com.liferay.socialcoding.NoSuchSVNRevisionException")) {
-			return new com.liferay.socialcoding.NoSuchSVNRevisionException();
+			return new com.liferay.socialcoding.NoSuchSVNRevisionException(throwable.getMessage(),
+				throwable.getCause());
 		}
 
 		return throwable;
@@ -402,6 +431,16 @@ public class ClpSerializer {
 		newModel.setModelAttributes(oldModel.getModelAttributes());
 
 		newModel.setJIRAIssueRemoteModel(oldModel);
+
+		return newModel;
+	}
+
+	public static Object translateOutputJIRAProject(BaseModel<?> oldModel) {
+		JIRAProjectClp newModel = new JIRAProjectClp();
+
+		newModel.setModelAttributes(oldModel.getModelAttributes());
+
+		newModel.setJIRAProjectRemoteModel(oldModel);
 
 		return newModel;
 	}

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,10 +17,10 @@
 
 package com.liferay.so.sites.portlet;
 
+import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.compat.util.bridges.mvc.MVCPortlet;
 import com.liferay.portal.DuplicateGroupException;
 import com.liferay.portal.GroupNameException;
-import com.liferay.portal.kernel.dao.search.DAOParamUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -32,7 +32,6 @@ import com.liferay.portal.kernel.util.MethodKey;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.PortalClassInvoker;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
@@ -41,7 +40,9 @@ import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutSet;
 import com.liferay.portal.model.LayoutSetPrototype;
 import com.liferay.portal.model.MembershipRequestConstants;
+import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
+import com.liferay.portal.model.UserGroup;
 import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
@@ -50,9 +51,11 @@ import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetLocalServiceUtil;
 import com.liferay.portal.service.LayoutSetPrototypeServiceUtil;
 import com.liferay.portal.service.MembershipRequestLocalServiceUtil;
+import com.liferay.portal.service.OrganizationLocalServiceUtil;
 import com.liferay.portal.service.PortletPreferencesLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.ServiceContextFactory;
+import com.liferay.portal.service.UserGroupLocalServiceUtil;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.permission.GroupPermissionUtil;
 import com.liferay.portal.theme.ThemeDisplay;
@@ -184,9 +187,12 @@ public class SitesPortlet extends MVCPortlet {
 			ResourceRequest resourceRequest, ResourceResponse resourceResponse)
 		throws Exception {
 
+		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
+			WebKeys.THEME_DISPLAY);
+
 		boolean directory = ParamUtil.getBoolean(resourceRequest, "directory");
 		int end = ParamUtil.getInteger(resourceRequest, "end", 10);
-		String keywords = DAOParamUtil.getLike(resourceRequest, "keywords");
+		String keywords = ParamUtil.getString(resourceRequest, "keywords");
 		int maxResultSize = ParamUtil.getInteger(
 			resourceRequest, "maxResultSize", 10);
 		String searchTab = ParamUtil.getString(resourceRequest, "searchTab");
@@ -204,9 +210,6 @@ public class SitesPortlet extends MVCPortlet {
 
 		jsonObject.put("options", optionsJSONObject);
 
-		ThemeDisplay themeDisplay = (ThemeDisplay)resourceRequest.getAttribute(
-			WebKeys.THEME_DISPLAY);
-
 		List<Group> groups = null;
 		int groupsCount = 0;
 
@@ -220,7 +223,7 @@ public class SitesPortlet extends MVCPortlet {
 		}
 		else if (searchTab.equals("my-favorites")) {
 			groups = SitesUtil.getFavoriteSitesGroups(
-				themeDisplay.getUserId(), keywords, 0, end);
+				themeDisplay.getUserId(), keywords, start, end);
 			groupsCount = SitesUtil.getFavoriteSitesGroupsCount(
 				themeDisplay.getUserId(), keywords);
 		}
@@ -346,8 +349,9 @@ public class SitesPortlet extends MVCPortlet {
 					groupJSONObject.put("membershipRequested", true);
 				}
 			}
-			else if (GroupLocalServiceUtil.hasUserGroup(
-						themeDisplay.getUserId(), group.getGroupId())) {
+			else if (member &&
+					 !isOrganizationOrUserGroupMember(
+						themeDisplay.getUserId(), group)) {
 
 				siteAssignmentsPortletURL.setParameter(
 					"removeUserIds", String.valueOf(themeDisplay.getUserId()));
@@ -358,7 +362,7 @@ public class SitesPortlet extends MVCPortlet {
 						ActionKeys.ASSIGN_MEMBERS)) {
 
 					groupJSONObject.put(
-						"leaveUrl", siteAssignmentsPortletURL.toString());
+						"leaveURL", siteAssignmentsPortletURL.toString());
 				}
 			}
 
@@ -598,6 +602,39 @@ public class SitesPortlet extends MVCPortlet {
 		}
 
 		return StringUtil.split(GetterUtil.getString(value), 0L);
+	}
+
+	protected boolean isOrganizationOrUserGroupMember(long userId, Group group)
+		throws Exception {
+
+		if (group.isOrganization()) {
+			return true;
+		}
+
+		List<Organization> organizations =
+			OrganizationLocalServiceUtil.getGroupOrganizations(
+				group.getGroupId());
+
+		for (Organization organization : organizations) {
+			if (OrganizationLocalServiceUtil.hasUserOrganization(
+					userId, organization.getOrganizationId())) {
+
+				return true;
+			}
+		}
+
+		List<UserGroup> userGroups =
+			UserGroupLocalServiceUtil.getUserUserGroups(userId);
+
+		for (UserGroup userGroup : userGroups) {
+			if (UserGroupLocalServiceUtil.hasGroupUserGroup(
+					group.getGroupId(), userGroup.getUserGroupId())) {
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	protected void setCustomJspServletContextName(Group group)

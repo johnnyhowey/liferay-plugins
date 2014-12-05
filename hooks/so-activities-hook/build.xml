@@ -2,5 +2,7 @@
 <!DOCTYPE project>
 
 <project name="so-activities-hook" basedir="." default="deploy">
+	<property name="import.shared" value="so-activities-shared" />
+
 	<import file="../build-common-hook.xml" />
 </project>

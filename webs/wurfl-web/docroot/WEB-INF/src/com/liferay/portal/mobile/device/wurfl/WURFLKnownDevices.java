@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Affero General Public License as published by the Free
@@ -13,6 +13,7 @@
 
 package com.liferay.portal.mobile.device.wurfl;
 
+import com.liferay.compat.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.mobile.device.Capability;
@@ -178,7 +179,7 @@ public class WURFLKnownDevices implements KnownDevices {
 	}
 
 	protected void updateDevicesIds(Device device, String... capabilityNames) {
-		if ((capabilityNames == null) || (capabilityNames.length == 0)) {
+		if (ArrayUtil.isEmpty(capabilityNames)) {
 			return;
 		}
 

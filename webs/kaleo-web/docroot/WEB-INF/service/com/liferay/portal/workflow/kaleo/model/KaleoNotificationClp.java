@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,12 +40,10 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 	public KaleoNotificationClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return KaleoNotification.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return KaleoNotification.class.getName();
 	}
@@ -58,12 +56,10 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 		setKaleoNotificationId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_kaleoNotificationId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -634,7 +630,6 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 			new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public KaleoNotification toUnescapedModel() {
 		return this;
 	}
@@ -754,7 +749,6 @@ public class KaleoNotificationClp extends BaseModelImpl<KaleoNotification>
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(55);
 

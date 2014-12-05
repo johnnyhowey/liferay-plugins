@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,12 +41,10 @@ public class JIRAChangeGroupClp extends BaseModelImpl<JIRAChangeGroup>
 	public JIRAChangeGroupClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return JIRAChangeGroup.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return JIRAChangeGroup.class.getName();
 	}
@@ -59,12 +57,10 @@ public class JIRAChangeGroupClp extends BaseModelImpl<JIRAChangeGroup>
 		setJiraChangeGroupId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_jiraChangeGroupId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -259,7 +255,6 @@ public class JIRAChangeGroupClp extends BaseModelImpl<JIRAChangeGroup>
 			new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public JIRAChangeGroup toUnescapedModel() {
 		return this;
 	}
@@ -335,7 +330,6 @@ public class JIRAChangeGroupClp extends BaseModelImpl<JIRAChangeGroup>
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(16);
 

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,50 +17,49 @@
  */
 --%>
 
-<div class="portrait-social-activities">
+<%
+for (SocialActivitySet activitySet : results) {
+	SocialActivityFeedEntry activityFeedEntry = SocialActivityInterpreterLocalServiceUtil.interpret("SO", activitySet, ServiceContextFactory.getInstance(request));
 
-	<%
-	for (SocialActivitySet activitySet : results) {
-		SocialActivityFeedEntry activityFeedEntry = SocialActivityInterpreterLocalServiceUtil.interpret("SO", activitySet, ServiceContextFactory.getInstance(request));
+	if (activityFeedEntry == null) {
+		continue;
+	}
 
-		if (activityFeedEntry == null) {
-			continue;
+	Portlet portlet = PortletLocalServiceUtil.getPortletById(activityFeedEntry.getPortletId());
+%>
+
+	<div class="activity-item <%= portlet.getCssClassWrapper() %>-activity" id="<portlet:namespace /><%= activitySet.getActivitySetId() %>">
+
+		<%
+		User activitySetUser = UserLocalServiceUtil.fetchUser(activitySet.getUserId());
+
+		String userDisplayURL = StringPool.BLANK;
+		String userFullName = StringPool.BLANK;
+		String userPortraitURL = StringPool.BLANK;
+
+		if (activitySetUser != null) {
+			userDisplayURL = activitySetUser.getDisplayURL(themeDisplay);
+			userFullName = activitySetUser.getFullName();
+			userPortraitURL = activitySetUser.getPortraitURL(themeDisplay);
 		}
+		%>
 
-		Portlet portlet = PortletLocalServiceUtil.getPortletById(activityFeedEntry.getPortletId());
-	%>
+		<div class="user-portrait">
+			<span class="avatar">
+				<a href="<%= userDisplayURL %>">
+					<img alt="<%= userFullName %>" src="<%= userPortraitURL %>" />
+				</a>
+			</span>
+		</div>
 
-		<div class="activity-item <%= portlet.getCssClassWrapper() %>-activity" id="<portlet:namespace /><%= activitySet.getActivitySetId() %>">
+		<div class="activity-data">
 
-			<%
-			User activitySetUser = UserLocalServiceUtil.fetchUser(activitySet.getUserId());
+			<%= activityFeedEntry.getTitle() %>
 
-			String userDisplayURL = StringPool.BLANK;
-			String userFullName = StringPool.BLANK;
-			String userPortraitURL = StringPool.BLANK;
+			<%= activityFeedEntry.getBody() %>
 
-			if (activitySetUser != null) {
-				userDisplayURL = activitySetUser.getDisplayURL(themeDisplay);
-				userFullName = activitySetUser.getFullName();
-				userPortraitURL = activitySetUser.getPortraitURL(themeDisplay);
-			}
-			%>
-
-			<div class="user-portrait">
-				<span class="avatar">
-					<a href="<%= userDisplayURL %>">
-						<img alt="<%= userFullName %>" src="<%= userPortraitURL %>" />
-					</a>
-				</span>
-			</div>
-
-			<div class="activity-data">
-
-				<%= activityFeedEntry.getTitle() %>
-
-				<%= activityFeedEntry.getBody() %>
-
-				<div class="activity-footer">
+			<div class="activity-footer">
+				<c:if test="<%= !Validator.equals(activitySet.getClassName(), MBMessage.class.getName()) %>">
 					<div class="activity-footer-toolbar">
 						<c:if test="<%= Validator.isNotNull(activityFeedEntry.getLink()) %>">
 							<span class="action"><%= activityFeedEntry.getLink() %></span>
@@ -72,9 +71,18 @@
 						String className = activitySet.getClassName();
 						long classPK = activitySet.getClassPK();
 
-						if (activitySet.getActivityCount() > 1 ) {
-							className = SocialActivitySet.class.getName();
-							classPK = activitySet.getActivitySetId();
+						if (className.equals(DLFileEntry.class.getName())) {
+							if ((activitySet.getActivityCount() > 1) && (activitySet.getType() == SocialActivityKeyConstants.DL_ADD_FILE_ENTRY)) {
+								className = SocialActivitySet.class.getName();
+								classPK = activitySet.getActivitySetId();
+							}
+							else {
+								className = DLFileVersion.class.getName();
+
+								DLFileVersion dlFileVersion = DLFileVersionLocalServiceUtil.getLatestFileVersion(classPK, false);
+
+								classPK = dlFileVersion.getFileVersionId();
+							}
 						}
 
 						if (className.equals(MicroblogsEntry.class.getName())) {
@@ -84,6 +92,19 @@
 							commentsCount = MBMessageLocalServiceUtil.getDiscussionMessagesCount(className, classPK, WorkflowConstants.STATUS_APPROVED);
 						}
 						%>
+
+						<c:if test="<%= className.equals(MicroblogsEntry.class.getName()) && (activitySet.getUserId() != user.getUserId()) %>">
+
+							<%
+							MicroblogsEntry microblogsEntry = MicroblogsEntryLocalServiceUtil.fetchMicroblogsEntry(classPK);
+							%>
+
+							<c:if test="<%= (microblogsEntry != null) && (microblogsEntry.getSocialRelationType() == MicroblogsEntryConstants.TYPE_EVERYONE) %>">
+								<span class="repost action">
+									<a data-microblogsEntryId="<%= classPK %>" href="javascript:;"><liferay-ui:message key="repost" /></a>
+								</span>
+							</c:if>
+						</c:if>
 
 						<span class="view-comments action">
 							<a data-activitySetId="<%= activitySet.getActivitySetId() %>" href="javascript:;"><%= commentsCount > 0 ? commentsCount : StringPool.BLANK %> <liferay-ui:message key='<%= commentsCount > 1 ? "comments" : "comment" %>' /></a>
@@ -97,40 +118,34 @@
 					</div>
 
 					<%@ include file="/activities/view_comments.jspf" %>
-				</div>
+				</c:if>
 			</div>
 		</div>
+	</div>
 
-		<aui:script use="aui-base">
-			var entry = A.one('#<portlet:namespace /><%= activitySet.getActivitySetId() %>');
+	<aui:script use="aui-base">
+		var entry = A.one('#<portlet:namespace /><%= activitySet.getActivitySetId() %>');
 
-			var subentry = entry.one('.activity-subentry');
+		var subentry = entry.one('.activity-subentry');
 
-			if (subentry != null) {
-				var body = entry.one('.grouped-activity-body');
+		if (subentry != null) {
+			var body = entry.one('.grouped-activity-body');
 
-				if (body.outerHeight() > (subentry.outerHeight() * 3)) {
-					var toggle = entry.one('.toggle-action');
+			if (body.outerHeight() > (subentry.outerHeight() * 3)) {
+				var toggle = entry.one('.toggle');
 
-					toggle.removeClass('aui-helper-hidden');
+				toggle.removeClass('aui-helper-hidden');
 
-					entry.addClass('toggler-content-collapsed')
-				}
-				else {
-					var bodyContainer = entry.one('.grouped-activity-body-container');
-
-					bodyContainer.setStyle('height', 'auto');
-				}
+				entry.addClass('toggler-content-collapsed')
 			}
-		</aui:script>
+			else {
+				var bodyContainer = entry.one('.grouped-activity-body-container');
 
-	<%
-	}
-	%>
+				bodyContainer.setStyle('height', 'auto');
+			}
+		}
+	</aui:script>
 
-	<c:if test="<%= results.size() <= 0 %>">
-		<div class="portlet-msg-info">
-			<liferay-ui:message key="there-are-no-recent-activities" />
-		</div>
-	</c:if>
-</div>
+<%
+}
+%>

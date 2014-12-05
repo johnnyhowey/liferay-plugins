@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -15,6 +15,8 @@
 package com.liferay.knowledgebase.service.impl;
 
 import com.liferay.compat.portal.kernel.util.ArrayUtil;
+import com.liferay.compat.portal.kernel.util.ListUtil;
+import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.compat.portal.kernel.util.Time;
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.knowledgebase.KBArticleContentException;
@@ -53,12 +55,10 @@ import com.liferay.portal.kernel.search.IndexerRegistryUtil;
 import com.liferay.portal.kernel.search.SearchEngineUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.FileUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.StreamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -78,10 +78,10 @@ import com.liferay.portlet.documentlibrary.FileNameException;
 import com.liferay.portlet.documentlibrary.NoSuchDirectoryException;
 import com.liferay.portlet.documentlibrary.store.DLStoreUtil;
 
+import java.io.File;
 import java.io.InputStream;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1241,23 +1241,55 @@ public class KBArticleLocalServiceImpl extends KBArticleLocalServiceBaseImpl {
 	protected void checkAttachments(long companyId)
 		throws PortalException, SystemException {
 
-		String dirName = _TEMP_DIR_NAME_PREFIX.concat(StringPool.SLASH).concat(
-			String.valueOf(counterLocalService.increment()));
+		if (!DLStoreUtil.hasDirectory(
+				companyId, CompanyConstants.SYSTEM, _TEMP_DIR_NAME_PREFIX)) {
 
-		DLStoreUtil.addDirectory(companyId, CompanyConstants.SYSTEM, dirName);
-
-		String[] fileNames = DLStoreUtil.getFileNames(
-			companyId, CompanyConstants.SYSTEM, _TEMP_DIR_NAME_PREFIX);
-
-		Arrays.sort(fileNames);
-
-		for (int i = 0; i < fileNames.length - 50; i++) {
-			DLStoreUtil.deleteDirectory(
-				companyId, CompanyConstants.SYSTEM, fileNames[i]);
+			return;
 		}
 
-		DLStoreUtil.deleteDirectory(
-			companyId, CompanyConstants.SYSTEM, dirName);
+		Date now = new Date();
+
+		String[] dirNames = DLStoreUtil.getFileNames(
+			companyId, CompanyConstants.SYSTEM, _TEMP_DIR_NAME_PREFIX);
+
+		for (String dirName : dirNames) {
+			String[] attachmentDirNames = DLStoreUtil.getFileNames(
+				companyId, CompanyConstants.SYSTEM,
+				KnowledgeBaseUtil.trimLeadingSlash(dirName));
+
+			for (String attachmentDirName : attachmentDirNames) {
+				String[] fileNames = DLStoreUtil.getFileNames(
+					companyId, CompanyConstants.SYSTEM,
+					KnowledgeBaseUtil.trimLeadingSlash(attachmentDirName));
+
+				File file = null;
+
+				for (String fileName : fileNames) {
+					try {
+						file = DLStoreUtil.getFile(
+							companyId, CompanyConstants.SYSTEM,
+							KnowledgeBaseUtil.trimLeadingSlash(fileName));
+					}
+					catch (Exception e) {
+						if (_log.isWarnEnabled()) {
+							_log.warn(
+								"Unable to get temp file: " + e.getMessage());
+						}
+					}
+
+					if (file != null) {
+						break;
+					}
+				}
+
+				if ((file != null) &&
+					(now.getTime() - file.lastModified()) > Time.DAY) {
+
+					DLStoreUtil.deleteDirectory(
+						companyId, CompanyConstants.SYSTEM, dirName);
+				}
+			}
+		}
 	}
 
 	protected void deleteAssets(KBArticle kbArticle)

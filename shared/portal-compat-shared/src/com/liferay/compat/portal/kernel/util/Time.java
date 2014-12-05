@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -29,6 +29,18 @@ import java.util.TimeZone;
  */
 public class Time extends com.liferay.portal.kernel.util.Time {
 
+	public static final String DURATION_FORMAT = "HH:mm:ss.SSS";
+
+	public static String getDuration(long milliseconds) {
+		return getSimpleDate(new Date(milliseconds), DURATION_FORMAT);
+	}
+
+	public static String getRelativeTimeDescription(
+		Date date, Locale locale, TimeZone timeZone) {
+
+		return getRelativeTimeDescription(date.getTime(), locale, timeZone);
+	}
+
 	public static String getRelativeTimeDescription(
 		long milliseconds, Locale locale, TimeZone timeZone) {
 
@@ -39,12 +51,14 @@ public class Time extends com.liferay.portal.kernel.util.Time {
 
 		long millisAgo = System.currentTimeMillis() - milliseconds;
 
-		if (millisAgo <= Time.MINUTE) {
-			return LanguageUtil.get(locale, "about-a-minute-ago");
-		}
-		else if (millisAgo < Time.HOUR) {
-			return LanguageUtil.format(
-				locale, "x-minutes-ago", (millisAgo / Time.MINUTE));
+		if (millisAgo < Time.HOUR) {
+			long minutes = millisAgo / Time.MINUTE;
+
+			if (minutes <= 1) {
+				return LanguageUtil.get(locale, "about-a-minute-ago");
+			}
+
+			return LanguageUtil.format(locale, "x-minutes-ago", minutes);
 		}
 		else if ((millisAgo / Time.HOUR) == 1) {
 			return LanguageUtil.get(locale, "about-an-hour-ago");

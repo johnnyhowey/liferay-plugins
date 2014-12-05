@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -16,6 +16,7 @@ package com.liferay.akismet.moderation.portlet;
 
 import com.liferay.akismet.util.AkismetConstants;
 import com.liferay.akismet.util.AkismetUtil;
+import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.compat.util.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -25,7 +26,6 @@ import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.security.auth.PrincipalException;
@@ -113,7 +113,9 @@ public class ModerationPortlet extends MVCPortlet {
 				themeDisplay.getUserId(), mbMessageId,
 				WorkflowConstants.STATUS_APPROVED, serviceContext);
 
-			AkismetUtil.submitHam(mbMessage);
+			if (AkismetUtil.isMessageBoardsEnabled(mbMessage.getCompanyId())) {
+				AkismetUtil.submitHam(mbMessage);
+			}
 		}
 	}
 
@@ -154,6 +156,13 @@ public class ModerationPortlet extends MVCPortlet {
 			if (previousVersionWikiPage != null) {
 				previousContent = previousVersionWikiPage.getContent();
 			}
+
+			// Selected version
+
+			wikiPage.setStatus(WorkflowConstants.STATUS_APPROVED);
+			wikiPage.setSummary(StringPool.BLANK);
+
+			wikiPage = WikiPageLocalServiceUtil.updateWikiPage(wikiPage);
 
 			// Latest version
 
@@ -196,24 +205,19 @@ public class ModerationPortlet extends MVCPortlet {
 				wikiPageLinks.add(sb.toString());
 			}
 
-			// Selected version
-
-			wikiPage.setStatus(WorkflowConstants.STATUS_APPROVED);
-			wikiPage.setSummary(StringPool.BLANK);
-
-			wikiPage = WikiPageLocalServiceUtil.updateWikiPage(wikiPage);
-
 			// Akismet
 
-			AkismetUtil.submitHam(wikiPage);
+			if (AkismetUtil.isWikiEnabled(wikiPage.getCompanyId())) {
+				AkismetUtil.submitHam(wikiPage);
+			}
 		}
 
 		if (!wikiPageLinks.isEmpty()) {
-			SessionMessages.add(actionRequest, "request_processed");
-
 			SessionMessages.add(
 				actionRequest, "anotherUserHasMadeChangesToThesePages",
 				StringUtil.merge(wikiPageLinks, "<br />"));
+
+			addSuccessMessage(actionRequest, actionResponse);
 
 			super.sendRedirect(actionRequest, actionResponse);
 		}

@@ -32,7 +32,18 @@ a {
 	@include clear-both;
 }
 
-/* ---------- Forms Custom ---------- */
+/* ---------- Forms custom ---------- */
+
+.aui-panel-hd .aui-toolbar-content {
+	padding: 0.125em;
+
+	.aui-state-default {
+		background: transparent none;
+		border-width: 0;
+
+		@include box-shadow(none);
+	}
+}
 
 .aui-panel-hd, .lfr-panel.lfr-extended .lfr-panel-titlebar {
 	@include normal-gradient;
@@ -122,7 +133,7 @@ a {
 	}
 }
 
-/* --------- Calendar --------- */
+/* ---------- Calendar ---------- */
 
 .aui-calendar-content .aui-calendar-day {
 	&, &.aui-state-default {
@@ -142,11 +153,22 @@ a {
 	}
 }
 
+.aui-search-bar, .lfr-search-combobox {
+	.aui-field-content, .aui-button-content {
+		display: inline;
+		vertical-align: top;
+	}
+
+	.aui-button-input {
+		padding: 0.37em 0.70em 0.38em;
+	}
+}
+
 .hidden-accessible, #navigation h1 {
 	@include hidden-accessible;
 }
 
-/* --------- Forms --------- */
+/* ---------- Forms ---------- */
 
 fieldset {
 	@include default-border;
@@ -212,6 +234,10 @@ input, textarea {
 	}
 }
 
+.rtl .lfr-header-row .lfr-actions.show-arrow.direction-down .lfr-trigger strong a {
+	padding: 0 20px 0 4px;
+}
+
 .aui-menu-content, .lfr-menu-list ul {
 	@include menu-style;
 
@@ -265,18 +291,21 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 
 /* ---------- Layout ---------- */
 
-.portlet-column-content {
+.portlet-column {
 	border: solid $defaultBorderColor;
-	border-width: 0 1px;
+	border-width: 0 1px 0 0;
 	margin: 0 0 0 -1px;
-	padding: 0;
+
+	&, .portlet-column-content {
+		padding: 0;
+	}
 }
 
-.portlet-column-content-only, .ltr .portlet-column-content-last, .rtl .portlet-column-content-first {
+.portlet-column-only, .ltr .portlet-column-last, .rtl .portlet-column-first {
 	border-right-width: 0;
 }
 
-.portlet-column-last .portlet-column-content {
+.portlet-column-last .portlet-column {
 	border-left-width: 0;
 }
 
@@ -293,6 +322,10 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 		margin-bottom: -1px;
 		max-width: 33.333%;
 
+		span, a {
+			padding: 0.4em 25px 0.4em 0.75em;
+		}
+
 		span {
 			display: block;
 		}
@@ -301,12 +334,11 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 			color: $defaultTextColor;
 			display: block;
 			font-weight: normal;
+			margin: -0.4em -25px -0.4em -0.75em;
 			margin-left: -5px;
 			overflow: hidden;
-			padding: 0.4em 25px 0.4em 0.75em;
 			text-overflow: ellipsis;
 			white-space: pre;
-			width: 87%;
 
 			&:hover {
 				color: $blue;
@@ -328,7 +360,7 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 	}
 }
 
-/* ---------- Site Breadcrumbs ---------- */
+/* ---------- Site breadcrumbs ---------- */
 
 .site-breadcrumbs .breadcrumbs-horizontal {
 	border-top: 1px solid $defaultBorderColor;
@@ -376,20 +408,33 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 	}
 
 	.avatar {
-		background: none 50% 50% no-repeat;
-		background-size: cover;
 		display: inline-block;
 		margin: -0.62em 0.5em -0.55em -0.86em;
-		overflow: hidden;
 		vertical-align: middle;
 
 		&, img {
 			height: 55px;
 			width: 55px;
 		}
+	}
+}
+
+#banner, #navigation {
+	.avatar {
+		background: none 50% 50% no-repeat;
+		background-size: cover;
+		overflow: hidden;
 
 		img {
 			visibility: hidden;
+		}
+	}
+}
+
+.ie {
+	#banner, #navigation {
+		.avatar img {
+			visibility: visible;
 		}
 	}
 }
@@ -431,10 +476,8 @@ input.aui-form-validator-error, textarea.aui-form-validator-error, select.aui-fo
 		}
 	}
 
-	&.focus {
-		.search-controls {
-			display: block;
-		}
+	&.focus .search-controls {
+		display: block;
 	}
 }
 
@@ -447,14 +490,11 @@ div#navigation {
 
 	.avatar {
 		display: block;
-		height: 155px;
 		overflow: hidden;
 		position: relative;
-		width: 155px;
 
-		img {
-			height: auto;
-			min-height: 155px;
+		&, img {
+			height: 155px;
 			width: 155px;
 		}
 
@@ -465,10 +505,8 @@ div#navigation {
 			visibility: hidden;
 		}
 
-		&:hover {
-			.edit-portrait {
-				visibility: visible;
-			}
+		&:hover .edit-portrait {
+			visibility: visible;
 		}
 	}
 
@@ -546,6 +584,10 @@ div#navigation {
 	width: 100%;
 
 	@include box-shadow(-4px 0 15px -7px rgba(0,0,0, 0.6));
+}
+
+.aui-dialog-iframe-popup #main-content {
+	float: none;
 }
 
 .aui-tabview-list {
@@ -769,7 +811,7 @@ div#navigation {
 	display: block;
 }
 
-/* ---------- Top Links Component ---------- */
+/* ---------- Top links component ---------- */
 
 .top-links {
 	background: $controlBgColor;
@@ -839,7 +881,7 @@ div#navigation {
 	padding: 0 0.2em;
 }
 
-/* ---------- LFR Header Row ---------- */
+/* ---------- LFR header row ---------- */
 
 .lfr-header-row {
 	.lfr-actions {
@@ -872,7 +914,7 @@ div#navigation {
 	}
 }
 
-/* ---------- Document Library ---------- */
+/* ---------- Document library ---------- */
 
 .portlet-document-library {
 	.lfr-app-column-view {
@@ -927,18 +969,8 @@ div#navigation {
 			width: auto;
 		}
 
-		.aui-field-input-text {
-			@include border-radius(4px 0 0 4px);
-
-			padding: 4px 4px 5px;
-		}
-
 		.aui-button-input {
 			border-left-width: 0;
-
-			@include border-radius(0 4px 4px 0);
-
-			padding: 4px 0.4em;
 		}
 	}
 
@@ -977,6 +1009,20 @@ div#navigation {
 		.aui-searchcontainer-content {
 			border-width: 0;
 			margin: 0 -1px;
+		}
+
+		.lfr-actions {
+			&, .lfr-trigger, &.aui-state-active .lfr-trigger {
+				background: transparent none;
+				border-width: 0;
+
+				@include box-shadow(none);
+			}
+
+			.lfr-trigger strong {
+				min-width: 0;
+				width: auto;
+			}
 		}
 
 		table .lfr-actions {
@@ -1133,7 +1179,7 @@ div#navigation {
 	}
 }
 
-/* ---------- Microblogs Portlet ---------- */
+/* ---------- Microblogs portlet ---------- */
 
 .microblogs-portlet {
 	.aui-tabview-list {
@@ -1195,7 +1241,7 @@ div#navigation {
 	top: 0;
 }
 
-/* ---------- Activities Portlet ---------- */
+/* ---------- Activities portlet ---------- */
 
 .so-portlet-activities {
 	h3 {
@@ -1252,14 +1298,6 @@ div#navigation {
 		font-size: 1em;
 		margin: 0.5em 0 1em;
 		width: 110px;
-	}
-
-	.user-portrait {
-		left: 65px;
-	}
-
-	.activity-data {
-		margin-left: 110px;
 	}
 }
 
@@ -1415,7 +1453,7 @@ div#navigation {
 	}
 }
 
-/* ---------- Blogs Aggregator ---------- */
+/* ---------- Blogs aggregator ---------- */
 
 .portlet-blogs-aggregator {
 	.entry-author, .entry-date {
@@ -1552,7 +1590,7 @@ div#navigation {
 	padding: 10px;
 }
 
-/* ---------- Contacts Portlet ---------- */
+/* ---------- Contacts portlet ---------- */
 
 .contacts-portlet {
 	.contacts-profile {
@@ -1660,12 +1698,14 @@ div#navigation {
 		border-bottom-width: 0;
 	}
 
-	.contacts-profile .lfr-contact-grid-item {
-		padding-top: 20px;
-	}
+	.contacts-profile {
+		.lfr-contact-grid-item {
+			padding-top: 20px;
+		}
 
-	.contacts-profile .user-information-column-1 {
-		float: none;
+		.user-information-column-1 {
+			float: none;
+		}
 	}
 
 	.lfr-app-column-view .contacts-profile .lfr-contact-grid-item {
@@ -1695,7 +1735,7 @@ div#navigation {
 	border-bottom-width: 1px;
 }
 
-/* ---------- Private Messaging ---------- */
+/* ---------- Private messaging ---------- */
 
 .private-messaging-portlet {
 	.controls {
@@ -1751,7 +1791,7 @@ div#navigation {
 	}
 }
 
-/* ---------- Message Boards ---------- */
+/* ---------- Message boards ---------- */
 
 .portlet-message-boards {
 	.category-current {
@@ -2076,7 +2116,7 @@ div#navigation {
 	}
 }
 
-/* ---------- Tasks Portlet ---------- */
+/* ---------- Tasks portlet ---------- */
 
 .tasks-portlet {
 	.aui-tabview-list, .control-wrapper, .filter-wrapper, .list-wrapper, .tasks-options {
@@ -2101,15 +2141,17 @@ div#navigation {
 	}
 }
 
-/* ---------- Invite Members ---------- */
+/* ---------- Invite members ---------- */
 
 .so-portlet-invite-members {
-	.invite-members {
-		margin: 1em;
-	}
+	background-color: $controlBgColor;
+	border: 1px solid $defaultBorderColor;
+	border-width: 1px 0;
+	margin-top: -1px;
+	padding: 0.8em 1em;
 }
 
-/* ---------- SO Portlet Sites ---------- */
+/* ---------- SO portlet sites ---------- */
 
 .aui-dialog-bd .so-sites-directory {
 	.taglib-header {
@@ -2117,7 +2159,7 @@ div#navigation {
 	}
 }
 
-/* ---------- Wiki Portlet ---------- */
+/* ---------- Wiki portlet ---------- */
 
 .portlet-wiki {
 	.page-actions {
@@ -2152,7 +2194,7 @@ div#navigation {
 	}
 }
 
-/* ---------- Portlet Typography ---------- */
+/* ---------- Portlet typography ---------- */
 
 .portlet-message-boards .thread-body, .portlet-wiki .wiki-body, .portlet-blogs .entry-body {
 	line-height: 1.5em;

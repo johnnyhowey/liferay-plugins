@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -172,7 +172,7 @@ TasksEntry tasksEntry = TasksEntryLocalServiceUtil.fetchTasksEntry(tasksEntryId)
 										}
 									},
 									data: {
-										tasksEntryId: <%= tasksEntry.getTasksEntryId() %>
+										<portlet:namespace />tasksEntryId: <%= tasksEntry.getTasksEntryId() %>
 									}
 								}
 							);
@@ -194,9 +194,9 @@ TasksEntry tasksEntry = TasksEntryLocalServiceUtil.fetchTasksEntry(tasksEntryId)
 										}
 									},
 									data: {
-										tasksEntryId: <%= tasksEntry.getTasksEntryId() %>,
-										resolverUserId: <%= user.getUserId() %>,
-										status: status
+										<portlet:namespace />tasksEntryId: <%= tasksEntry.getTasksEntryId() %>,
+										<portlet:namespace />resolverUserId: <%= user.getUserId() %>,
+										<portlet:namespace />status: status
 									}
 								}
 							);
@@ -212,6 +212,6 @@ TasksEntry tasksEntry = TasksEntryLocalServiceUtil.fetchTasksEntry(tasksEntryId)
 
 		<liferay-ui:tabs names="comments" />
 
-		<%@ include file="/tasks/view_comments.jsp" %>
+		<%@ include file="/tasks/view_comments.jspf" %>
 	</c:otherwise>
 </c:choose>

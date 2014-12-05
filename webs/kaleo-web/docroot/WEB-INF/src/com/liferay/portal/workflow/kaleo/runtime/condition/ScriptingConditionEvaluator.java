@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -20,6 +20,9 @@ import com.liferay.portal.kernel.scripting.ScriptingUtil;
 import com.liferay.portal.workflow.kaleo.model.KaleoCondition;
 import com.liferay.portal.workflow.kaleo.runtime.ExecutionContext;
 import com.liferay.portal.workflow.kaleo.runtime.util.ScriptingContextBuilderUtil;
+import com.liferay.portal.workflow.kaleo.util.WorkflowContextUtil;
+
+import java.io.Serializable;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -42,6 +45,13 @@ public class ScriptingConditionEvaluator implements ConditionEvaluator {
 			kaleoCondition.getScriptLanguage(), kaleoCondition.getScript());
 
 		String returnValue = (String)results.get(_RETURN_VALUE);
+
+		Map<String, Serializable> resultsWorkflowContext =
+			(Map<String, Serializable>)results.get(
+				WorkflowContextUtil.WORKFLOW_CONTEXT_NAME);
+
+		WorkflowContextUtil.mergeWorkflowContexts(
+			executionContext, resultsWorkflowContext);
 
 		if (returnValue != null) {
 			return returnValue;

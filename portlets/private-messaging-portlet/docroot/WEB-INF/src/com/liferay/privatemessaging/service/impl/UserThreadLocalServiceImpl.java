@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,6 +17,8 @@
 
 package com.liferay.privatemessaging.service.impl;
 
+import com.liferay.compat.portal.kernel.notifications.ChannelHubManagerUtil;
+import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.NoSuchUserException;
@@ -25,13 +27,12 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.mail.MailMessage;
-import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.util.CharPool;
+import com.liferay.portal.kernel.util.FastDateFormatConstants;
 import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.ObjectValuePair;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Company;
@@ -462,10 +463,9 @@ public class UserThreadLocalServiceImpl extends UserThreadLocalServiceBaseImpl {
 			InternetAddress to = new InternetAddress(
 				recipient.getEmailAddress());
 
-			Format dateFormatDateTime =
-				FastDateFormatFactoryUtil.getSimpleDateFormat(
-					"MMMMM d 'at' h:mm a", recipient.getLocale(),
-					recipient.getTimeZone());
+			Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(
+				FastDateFormatConstants.LONG, FastDateFormatConstants.SHORT,
+				recipient.getLocale(), recipient.getTimeZone());
 
 			String userThreadBody = StringUtil.replace(
 				body,

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,16 +17,17 @@
 
 package com.liferay.microblogs.service.impl;
 
+import com.liferay.compat.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.microblogs.UnsupportedMicroblogsEntryException;
 import com.liferay.microblogs.microblogs.social.MicroblogsActivityKeys;
 import com.liferay.microblogs.model.MicroblogsEntry;
 import com.liferay.microblogs.model.MicroblogsEntryConstants;
 import com.liferay.microblogs.service.base.MicroblogsEntryLocalServiceBaseImpl;
+import com.liferay.microblogs.util.comparator.EntryCreateDateComparator;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -106,6 +107,8 @@ public class MicroblogsEntryLocalServiceImpl
 		JSONObject extraDataJSONObject = JSONFactoryUtil.createJSONObject();
 
 		extraDataJSONObject.put("content", microblogsEntry.getContent());
+		extraDataJSONObject.put(
+			"receiverMicroblogsEntryId", receiverMicroblogsEntryId);
 
 		SocialActivityLocalServiceUtil.addActivity(
 			userId, 0, MicroblogsEntry.class.getName(), microblogsEntryId,
@@ -184,6 +187,15 @@ public class MicroblogsEntryLocalServiceImpl
 		throws PortalException, SystemException {
 
 		return microblogsEntryPersistence.findByPrimaryKey(microblogsEntryId);
+	}
+
+	public List<MicroblogsEntry> getReceiverMicroblogsEntryMicroblogsEntries(
+			int type, long receiverMicroblogsEntryId, int start, int end)
+		throws SystemException {
+
+		return microblogsEntryPersistence.findByT_RMEI(
+			type, receiverMicroblogsEntryId, start, end,
+			new EntryCreateDateComparator(true));
 	}
 
 	public List<MicroblogsEntry> getReceiverMicroblogsEntryMicroblogsEntries(

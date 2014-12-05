@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,15 +17,17 @@
 
 package com.liferay.so.announcements.portlet;
 
+import com.liferay.compat.portal.kernel.util.StringUtil;
+import com.liferay.compat.portlet.announcements.service.util.AnnouncementsEntryServiceUtil;
 import com.liferay.compat.util.bridges.mvc.MVCPortlet;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
+import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.servlet.SessionErrors;
 import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portlet.announcements.EntryContentException;
@@ -33,13 +35,13 @@ import com.liferay.portlet.announcements.EntryDisplayDateException;
 import com.liferay.portlet.announcements.EntryExpirationDateException;
 import com.liferay.portlet.announcements.EntryTitleException;
 import com.liferay.portlet.announcements.EntryURLException;
-import com.liferay.portlet.announcements.service.AnnouncementsEntryServiceUtil;
 
 import java.util.Calendar;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
 import javax.portlet.PortletException;
+import javax.portlet.PortletURL;
 
 /**
  * @author Raymond Augé
@@ -51,13 +53,26 @@ public class AnnouncementsPortlet extends MVCPortlet {
 			ActionRequest actionRequest, ActionResponse actionResponse)
 		throws Exception {
 
+		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
 		long entryId = ParamUtil.getLong(actionRequest, "entryId");
 
-		AnnouncementsEntryServiceUtil.deleteEntry(entryId);
+		try {
+			AnnouncementsEntryServiceUtil.deleteEntry(entryId);
 
-		SessionMessages.add(actionRequest, "announcementDeleted");
+			SessionMessages.add(actionRequest, "announcementDeleted");
 
-		sendRedirect(actionRequest, actionResponse);
+			jsonObject.put("success", true);
+		}
+		catch (Exception e) {
+			jsonObject.put(
+				"message",
+				translate(
+					actionRequest, "the-announcement-could-not-be-deleted"));
+			jsonObject.put("success", false);
+		}
+
+		writeJSON(actionRequest, actionResponse, jsonObject);
 	}
 
 	@Override
@@ -102,8 +117,18 @@ public class AnnouncementsPortlet extends MVCPortlet {
 				SessionMessages.add(actionRequest, "announcementUpdated");
 			}
 
-			jsonObject.put(
-				"redirect", ParamUtil.getString(actionRequest, "redirect"));
+			LiferayPortletResponse liferayPortletResponse =
+				(LiferayPortletResponse)actionResponse;
+
+			PortletURL portletURL = liferayPortletResponse.createRenderURL();
+
+			portletURL.setParameter("mvcPath", "/manage_entries.jsp");
+			portletURL.setParameter(
+				"distributionScope",
+				ParamUtil.getString(actionRequest, "distributionScope"));
+
+			jsonObject.put("redirect", portletURL.toString());
+
 			jsonObject.put("success", true);
 		}
 		catch (Exception e) {
@@ -222,9 +247,9 @@ public class AnnouncementsPortlet extends MVCPortlet {
 			AnnouncementsEntryServiceUtil.addEntry(
 				themeDisplay.getPlid(), classNameId, classPK, title, content,
 				url, type, displayDateMonth, displayDateDay, displayDateYear,
-				displayDateHour, displayDateMinute, expirationDateMonth,
-				expirationDateDay, expirationDateYear, expirationDateHour,
-				expirationDateMinute, priority, alert);
+				displayDateHour, displayDateMinute, displayImmediately,
+				expirationDateMonth, expirationDateDay, expirationDateYear,
+				expirationDateHour, expirationDateMinute, priority, alert);
 		}
 		else {
 

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -39,15 +39,13 @@ List<MailFile> mailFiles = new ArrayList<MailFile>();
 
 try {
 	for (int i = 1; i <= attachmentCount; i++) {
-		File file = uploadPortletRequest.getFile(
-			 "attachment" + i, true);
+		File file = uploadPortletRequest.getFile("attachment" + i, true);
 
-		String fileName = uploadPortletRequest.getFileName(
-			 "attachment" + i);
+		String fileName = uploadPortletRequest.getFileName("attachment" + i);
 
 		long size = uploadPortletRequest.getSize("attachment" + i);
 
-		if (file == null) {
+		if (Validator.isNull(fileName)) {
 			continue;
 		}
 

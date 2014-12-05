@@ -5,12 +5,19 @@ AUI.add(
 			init: function(params) {
 				var instance = this;
 
-				instance.namespace = params.namespace;
+				var namespace = params.namespace;
 
-				instance.checkAll = A.one('#' + instance.namespace + 'checkAll');
-				instance.userThreadsSearchContainer = A.one('#' + instance.namespace + 'userThreadsSearchContainer');
+				instance.namespace = namespace;
 
-				instance.privateMessagingContainer = A.one('#p_p_id' + params.namespace + ' .private-messaging-container');
+				instance.newMessageURL = params.newMessageURL;
+				instance.deleteMessagesURL = params.deleteMessagesURL;
+				instance.markMessagesAsReadURL = params.markMessagesAsReadURL;
+				instance.markMessagesAsUnreadURL = params.markMessagesAsUnreadURL;
+
+				instance.checkAll = A.one('#' + namespace + 'checkAll');
+				instance.userThreadsSearchContainer = A.one('#' + namespace + 'userThreadsSearchContainer');
+
+				instance.privateMessagingContainer = A.one('#p_p_id' + namespace + ' .private-messaging-container');
 
 				if (instance.privateMessagingContainer) {
 					instance._assignEvents();
@@ -21,7 +28,7 @@ AUI.add(
 				var instance = this;
 
 				A.io.request(
-					instance._getActionURL('deleteMessages').toString(),
+					instance.deleteMessagesURL,
 					{
 						data: {
 							mbThreadIds: mbThreadIds
@@ -41,7 +48,7 @@ AUI.add(
 				var instance = this;
 
 				A.io.request(
-					instance._getActionURL('markMessagesAsRead').toString(),
+					instance.markMessagesAsReadURL,
 					{
 						data: {
 							mbThreadIds: mbThreadIds
@@ -61,7 +68,7 @@ AUI.add(
 				var instance = this;
 
 				A.io.request(
-					instance._getActionURL('markMessagesAsUnread').toString(),
+					instance.markMessagesAsUnreadURL,
 					{
 						data: {
 							mbThreadIds: mbThreadIds
@@ -80,18 +87,6 @@ AUI.add(
 			newMessage: function(mbThreadId) {
 				var instance = this;
 
-				var redirectURL = new Liferay.PortletURL.createRenderURL();
-
-				redirectURL.setWindowState('NORMAL');
-
-				var portletURL = new Liferay.PortletURL.createResourceURL();
-
-				portletURL.setPortletId('1_WAR_privatemessagingportlet');
-				portletURL.setWindowState('EXCLUSIVE');
-
-				portletURL.setParameter('mvcPath', '/new_message.jsp');
-				portletURL.setParameter('redirect', redirectURL.toString());
-
 				new A.Dialog(
 					{
 						align: Liferay.Util.Window.ALIGN_CENTER,
@@ -104,8 +99,10 @@ AUI.add(
 				).plug(
 					A.Plugin.IO,
 					{
-						data: {mbThreadId: mbThreadId},
-						uri: portletURL.toString()
+						data: {
+							mbThreadId: mbThreadId
+						},
+						uri: instance.newMessageURL
 					}
 				).render();
 			},
@@ -156,9 +153,9 @@ AUI.add(
 					function(event) {
 						var checkBox = event.target;
 
-						var  privateMessages = instance.privateMessagingContainer.all('input[type=checkbox]');
+						var privateMessages = instance.privateMessagingContainer.all('input[type=checkbox]');
 
-						privateMessages.set('checked', checkBox.get('checked'));
+						privateMessages.attr('checked', checkBox.get('checked'));
 					},
 					'.check-all'
 				);
@@ -178,24 +175,6 @@ AUI.add(
 					},
 					'.results-row input[type=checkbox]'
 				);
-			},
-
-			_getActionURL: function(name) {
-				var instance = this;
-
-				var windowState = 'NORMAL';
-
-				if (themeDisplay.isStateMaximized()) {
-					windowState = 'MAXIMIZED';
-				}
-
-				var portletURL = new Liferay.PortletURL.createActionURL();
-
-				portletURL.setParameter('javax.portlet.action', name);
-				portletURL.setPortletId('1_WAR_privatemessagingportlet');
-				portletURL.setWindowState(windowState);
-
-				return portletURL;
 			},
 
 			_getSelectedMessageIds: function() {

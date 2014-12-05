@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -189,7 +189,7 @@
 				<table border="0" cellpadding="0" cellspacing="0" width="579">
 				<tr>
 					<td align="center">
-						<img alt="<liferay-ui:message key="chart" />" src="<%= HttpUtil.getProtocol(request) %>://chart.bigcharts.com/bc3/quickchart/chart.asp?symb=<%= symbol %>&freq=<%= freq %>&time=<%= time %>" />
+						<img alt="<liferay-ui:message key="chart" />" src="<%= HttpUtil.getProtocol(request) %>://bigcharts.marketwatch.com/kaavio.Webhost/charts/big.chart?symb=<%= symbol %>&freq=<%= freq %>&time=<%= time %>" />
 					</td>
 				</tr>
 				</table>

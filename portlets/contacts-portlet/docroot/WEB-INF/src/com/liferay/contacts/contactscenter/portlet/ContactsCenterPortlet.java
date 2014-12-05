@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,6 +17,11 @@
 
 package com.liferay.contacts.contactscenter.portlet;
 
+import com.liferay.compat.portal.kernel.notifications.ChannelHubManagerUtil;
+import com.liferay.compat.portal.kernel.portlet.PortletResponseUtil;
+import com.liferay.compat.portal.kernel.util.ListUtil;
+import com.liferay.compat.portal.kernel.util.StringUtil;
+import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.compat.util.bridges.mvc.MVCPortlet;
 import com.liferay.contacts.DuplicateEntryEmailAddressException;
 import com.liferay.contacts.EntryEmailAddressException;
@@ -50,18 +55,14 @@ import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
-import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
-import com.liferay.portal.kernel.portlet.PortletResponseUtil;
 import com.liferay.portal.kernel.util.CalendarFactoryUtil;
-import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
 import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UniqueList;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
@@ -145,6 +146,9 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			if (type == SocialRelationConstants.TYPE_UNI_ENEMY) {
 				SocialRelationLocalServiceUtil.deleteRelations(
 					themeDisplay.getUserId(), userId);
+
+				SocialRelationLocalServiceUtil.deleteRelations(
+					userId, themeDisplay.getUserId());
 			}
 			else if (blocked) {
 				continue;
@@ -776,7 +780,12 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			Layout layout = themeDisplay.getLayout();
 
 			if (group.isUser() && layout.isPublicLayout()) {
-				params.put("socialRelation", new Long[] {group.getClassPK()});
+				params.put(
+					"socialRelationType",
+					new Long[] {
+						group.getClassPK(),
+						(long)SocialRelationConstants.TYPE_BI_CONNECTION
+					});
 			}
 			else if (filterBy.startsWith(ContactsConstants.FILTER_BY_TYPE)) {
 				params.put(

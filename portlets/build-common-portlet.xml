@@ -1,18 +1,20 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
 
-<project name="build-common-portlet">
+<project name="build-common-portlet" xmlns:antelope="antlib:ise.antelope.tasks">
 	<import file="../build-common-plugin.xml" />
 
 	<target name="build-css">
 		<java
 			classname="com.liferay.portal.tools.SassToCssBuilder"
 			classpathref="portal.classpath"
+			failonerror="true"
 			fork="true"
 			newenvironment="true"
 		>
 			<jvmarg value="-Dliferay.lib.portal.dir=${app.server.lib.portal.dir}" />
 			<arg value="sass.dir=${basedir}/docroot" />
+			<arg value="sass.docroot.dir=${basedir}/docroot" />
 		</java>
 	</target>
 
@@ -20,5 +22,44 @@
 		<antcall target="build-css" />
 
 		<antcall target="build-common-plugin.war" />
+
+		<loadfile property="portlet.xml.content" srcFile="docroot/WEB-INF/portlet.xml" />
+
+		<if>
+			<contains string="${portlet.xml.content}" substring="com.liferay.alloy.mvc.AlloyPortlet" />
+			<then>
+				<for param="dir">
+					<dirset dir="docroot/WEB-INF/jsp" includes="*" />
+					<sequential>
+						<if>
+							<available file="@{dir}/views" type="dir" />
+							<then>
+								<antelope:stringutil property="basedir" string="${basedir}">
+									<antelope:replace regex="\\" replacement="/" />
+								</antelope:stringutil>
+
+								<antelope:stringutil property="dir" string="@{dir}">
+									<antelope:replace regex="\\" replacement="/" />
+								</antelope:stringutil>
+
+								<antelope:stringutil property="dir" string="${dir}">
+									<antelope:replace regex="${basedir}/docroot/" replacement="" />
+								</antelope:stringutil>
+
+								<zip
+									destfile="${plugin.file}"
+									update="true"
+								>
+									<mappedresources>
+										<globmapper from="*" to="${dir}/views/touch.jsp" />
+										<javaresource classpathref="portal.classpath" name="com/liferay/portal/deploy/dependencies/touch.jsp" />
+									</mappedresources>
+								</zip>
+							</then>
+						</if>
+					</sequential>
+				</for>
+			</then>
+		</if>
 	</target>
 </project>

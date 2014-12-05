@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -30,6 +30,7 @@ import java.util.List;
  */
 public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 
+	@Override
 	public Entry addEntry(
 			long createDate, long fromUserId, long toUserId, String content)
 		throws SystemException {
@@ -78,6 +79,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		return entry;
 	}
 
+	@Override
 	public Entry addEntry(long fromUserId, long toUserId, String content)
 		throws SystemException {
 
@@ -86,11 +88,13 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		return addEntry(createDate, fromUserId, toUserId, content);
 	}
 
+	@Override
 	public void deleteEntries(long userId) throws SystemException {
 		entryPersistence.removeByFromUserId(userId);
 		entryPersistence.removeByToUserId(userId);
 	}
 
+	@Override
 	public List<Entry> getNewEntries(
 			long userId, long createDate, int start, int end)
 		throws SystemException {
@@ -98,6 +102,7 @@ public class EntryLocalServiceImpl extends EntryLocalServiceBaseImpl {
 		return entryFinder.findByNew(userId, createDate, start, end);
 	}
 
+	@Override
 	public List<Entry> getOldEntries(long createDate, int start, int end)
 		throws SystemException {
 

@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -47,6 +47,14 @@ String secureToken = ShindigUtil.createSecurityToken(ownerId, themeDisplay.getUs
 String userPrefsKey = ShindigUtil.getColumnUserPrefs(renderResponse.getNamespace(), themeDisplay);
 
 JSONObject userPrefsJSONObject = ExpandoValueServiceUtil.getJSONData(themeDisplay.getCompanyId(), Layout.class.getName(), ShindigUtil.getTableOpenSocial(), userPrefsKey, themeDisplay.getPlid());
+
+String userPrefsJSON = "{}";
+
+if (userPrefsJSONObject != null) {
+	userPrefsJSON = String.valueOf(userPrefsJSONObject);
+
+	userPrefsJSON = userPrefsJSON.replace(StringPool.BACK_SLASH, StringPool.DOUBLE_BACK_SLASH);
+}
 %>
 
 <div class="gadgets-gadget-chrome" id="<portlet:namespace />gadget"></div>
@@ -67,14 +75,14 @@ JSONObject userPrefsJSONObject = ExpandoValueServiceUtil.getJSONData(themeDispla
 			requiresPubsub: <%= requiresPubsub %>,
 			scrolling: <%= modulePrefs.getScrolling() %>,
 			secureToken: '<%= secureToken %>',
-			serverBase: '<%= renderRequest.getContextPath() %>/gadgets/',
+			serverBase: '<%= PortalUtil.getPathContext(renderRequest) %>/gadgets/',
 			specUrl: '<%= gadget.getUrl() %>',
 			store: new Liferay.OpenSocial.Store.Expando(
 				{
 					userPrefsKey: '<%= userPrefsKey %>'
 				}
 			),
-			userPrefs: A.JSON.parse('<%= String.valueOf(userPrefsJSONObject) %>'),
+			userPrefs: A.JSON.parse('<%= userPrefsJSON %>'),
 			view: '<%= view %>',
 			viewParams: '<%= ParamUtil.getString(renderRequest, "viewParams") %>'
 		}

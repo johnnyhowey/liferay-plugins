@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -116,19 +116,18 @@ public interface JIRAIssueModel extends BaseModel<JIRAIssue> {
 	public void setProjectId(long projectId);
 
 	/**
-	 * Returns the key of this j i r a issue.
+	 * Returns the issue number of this j i r a issue.
 	 *
-	 * @return the key of this j i r a issue
+	 * @return the issue number of this j i r a issue
 	 */
-	@AutoEscape
-	public String getKey();
+	public long getIssueNumber();
 
 	/**
-	 * Sets the key of this j i r a issue.
+	 * Sets the issue number of this j i r a issue.
 	 *
-	 * @param key the key of this j i r a issue
+	 * @param issueNumber the issue number of this j i r a issue
 	 */
-	public void setKey(String key);
+	public void setIssueNumber(long issueNumber);
 
 	/**
 	 * Returns the summary of this j i r a issue.

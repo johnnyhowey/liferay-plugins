@@ -18,12 +18,19 @@
 	<property name="plugin.name" value="${ant.project.name}" />
 
 	<if>
-		<antelope:endswith string="${plugin.name}" with="-shared" />
+		<or>
+			<antelope:endswith string="${plugin.name}" with="-ext" />
+			<antelope:endswith string="${plugin.name}" with="-hook" />
+			<antelope:endswith string="${plugin.name}" with="-layouttpl" />
+			<antelope:endswith string="${plugin.name}" with="-portlet" />
+			<antelope:endswith string="${plugin.name}" with="-theme" />
+			<antelope:endswith string="${plugin.name}" with="-web" />
+		</or>
 		<then>
-			<property name="plugin.packaging" value="jar" />
+			<property name="plugin.packaging" value="war" />
 		</then>
 		<else>
-			<property name="plugin.packaging" value="war" />
+			<property name="plugin.packaging" value="jar" />
 		</else>
 	</if>
 
@@ -202,11 +209,27 @@
 	</target>
 
 	<target name="build-lang">
-		<antcall target="build-lang-cmd">
-			<param name="lang.dir" value="docroot/WEB-INF/src/content" />
-			<param name="lang.file" value="Language" />
-			<param name="lang.translate" value="true" />
-		</antcall>
+		<if>
+			<available file="docroot/WEB-INF/src/content" />
+			<then>
+				<antcall target="build-lang-cmd">
+					<param name="lang.dir" value="docroot/WEB-INF/src/content" />
+					<param name="lang.file" value="Language" />
+					<param name="lang.translate" value="true" />
+				</antcall>
+			</then>
+		</if>
+
+		<if>
+			<available file="src/content" />
+			<then>
+				<antcall target="build-lang-cmd">
+					<param name="lang.dir" value="src/content" />
+					<param name="lang.file" value="Language" />
+					<param name="lang.translate" value="true" />
+				</antcall>
+			</then>
+		</if>
 	</target>
 
 	<target name="build-lang-cmd">
@@ -531,6 +554,7 @@
 		<delete file="${plugin.src.file}" />
 
 		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="docroot" includes="**/*.processed" />
 			<fileset dir="docroot" includes="**/.sass-cache/**" />
 			<fileset dir="docroot" includes="**/.sprite.png" />
 			<fileset dir="docroot" includes="**/.sprite.properties" />
@@ -542,40 +566,45 @@
 
 	<target name="clean-portal-dependencies">
 		<if>
-			<available file="docroot/WEB-INF/lib" />
+			<equals arg1="${plugins.war.clean.portal.dependencies}" arg2="true" />
 			<then>
-				<delete>
-					<fileset dir="docroot/WEB-INF/lib" includes="${required.portal.jars}" />
-					<fileset dir="docroot/WEB-INF/lib" includes="${plugin.jars}" />
-				</delete>
-			</then>
-		</if>
+				<if>
+					<available file="docroot/WEB-INF/lib" />
+					<then>
+						<delete>
+							<fileset dir="docroot/WEB-INF/lib" includes="${required.portal.jars}" />
+							<fileset dir="docroot/WEB-INF/lib" includes="${plugin.jars}" />
+						</delete>
+					</then>
+				</if>
 
-		<if>
-			<available file="docroot/WEB-INF/tld" />
-			<then>
-				<delete>
-					<fileset dir="docroot/WEB-INF/tld" includes="${plugin.tlds}" />
-				</delete>
-			</then>
-		</if>
+				<if>
+					<available file="docroot/WEB-INF/tld" />
+					<then>
+						<delete>
+							<fileset dir="docroot/WEB-INF/tld" includes="${plugin.tlds}" />
+						</delete>
+					</then>
+				</if>
 
-		<if>
-			<available file="tmp/WEB-INF/lib" />
-			<then>
-				<delete>
-					<fileset dir="tmp/WEB-INF/lib" includes="${required.portal.jars}" />
-					<fileset dir="tmp/WEB-INF/lib" includes="${plugin.jars}" />
-				</delete>
-			</then>
-		</if>
+				<if>
+					<available file="tmp/WEB-INF/lib" />
+					<then>
+						<delete>
+							<fileset dir="tmp/WEB-INF/lib" includes="${required.portal.jars}" />
+							<fileset dir="tmp/WEB-INF/lib" includes="${plugin.jars}" />
+						</delete>
+					</then>
+				</if>
 
-		<if>
-			<available file="tmp/WEB-INF/tld" />
-			<then>
-				<delete>
-					<fileset dir="tmp/WEB-INF/tld" includes="${plugin.tlds}" />
-				</delete>
+				<if>
+					<available file="tmp/WEB-INF/tld" />
+					<then>
+						<delete>
+							<fileset dir="tmp/WEB-INF/tld" includes="${plugin.tlds}" />
+						</delete>
+					</then>
+				</if>
 			</then>
 		</if>
 	</target>
@@ -697,32 +726,41 @@ Please find a solution that does not require portal-impl.jar.
 
 		<if>
 			<and>
+				<available file="docroot/WEB-INF/liferay-hook.xml" />
 				<available file="docroot/WEB-INF/src/content" />
-				<resourcecontains resource="docroot/WEB-INF/liferay-hook.xml" substring="&lt;language-properties&gt;content/Language*.properties&lt;/language-properties&gt;" />
 			</and>
 			<then>
-				<pathconvert pathsep="${line.separator}&#x9;" property="language.properties.elements">
-					<fileset dir="docroot/WEB-INF/src/content">
-						<include name="Language*.properties" />
-					</fileset>
-					<mapper>
-						<chainedmapper>
-							<flattenmapper />
-							<globmapper
-								from="Language*.properties"
-								to="&lt;language-properties&gt;content/Language*.properties&lt;/language-properties&gt;"
-							/>
-						</chainedmapper>
-					</mapper>
-				</pathconvert>
+				<loadfile property="liferay-hook.xml.content" srcFile="docroot/WEB-INF/liferay-hook.xml" />
 
-				<copy file="docroot/WEB-INF/liferay-hook.xml" overwrite="true" tofile="docroot/WEB-INF/liferay-hook.xml.processed">
-					<filterchain>
-						<tokenfilter>
-							<replacestring from="&lt;language-properties&gt;content/Language*.properties&lt;/language-properties&gt;" to="${language.properties.elements}" />
-						</tokenfilter>
-					</filterchain>
-				</copy>
+				<if>
+					<contains string="${liferay-hook.xml.content}" substring="&lt;language-properties&gt;content/Language*.properties&lt;/language-properties&gt;" />
+					<then>
+						<pathconvert pathsep="${line.separator}&#x9;" property="language.properties.elements">
+							<fileset dir="docroot/WEB-INF/src/content">
+								<include name="Language*.properties" />
+							</fileset>
+							<mapper>
+								<chainedmapper>
+									<flattenmapper />
+									<globmapper
+										from="Language*.properties"
+										to="&lt;language-properties&gt;content/Language*.properties&lt;/language-properties&gt;"
+									/>
+								</chainedmapper>
+							</mapper>
+						</pathconvert>
+
+						<copy file="docroot/WEB-INF/liferay-hook.xml" overwrite="true" tofile="docroot/WEB-INF/liferay-hook.xml.processed">
+							<filterchain>
+								<tokenfilter>
+									<replacestring from="&lt;language-properties&gt;content/Language*.properties&lt;/language-properties&gt;" to="${language.properties.elements}" />
+								</tokenfilter>
+							</filterchain>
+						</copy>
+
+						<var name="language.properties.elements" unset="true" />
+					</then>
+				</if>
 			</then>
 		</if>
 
@@ -785,6 +823,97 @@ Please find a solution that does not require portal-impl.jar.
 						</if>
 					</sequential>
 				</for>
+			</then>
+		</if>
+	</target>
+
+	<target name="compile-jsp">
+		<antcall target="compile" />
+
+		<if>
+			<not>
+				<equals arg1="${app.server.type}" arg2="tomcat" />
+			</not>
+			<then>
+				<fail>Compiling JSPs with ${app.server.type} is not supported.</fail>
+			</then>
+		</if>
+
+		<property name="jspc.classes.dir" value="classes/${app.server.type}" />
+
+		<if>
+			<and>
+				<equals arg1="${app.server.type}" arg2="tomcat" />
+				<equals arg1="${ant.java.version}" arg2="1.5" />
+			</and>
+			<then>
+				<var name="jspc.java.home" value="${jdk.windows.home}" />
+			</then>
+			<else>
+				<var name="jspc.java.home" value="${env.JAVA_HOME}" />
+			</else>
+		</if>
+
+		<path id="jspc.classpath">
+			<pathelement location="${jspc.java.home}/jre/lib/rt.jar" />
+			<fileset dir="${app.server.lib.global.dir}" includes="*.jar" />
+			<pathelement location="${app.server.lib.portal.dir}/ant.jar" />
+			<pathelement location="docroot/WEB-INF/classes" />
+			<fileset dir="docroot/WEB-INF/lib" includes="*.jar" />
+			<pathelement location="${app.server.dir}/bin/tomcat-juli.jar" />
+			<pathelement location="${app.server.dir}/lib/el-api.jar" />
+			<pathelement location="${app.server.dir}/lib/jasper.jar" />
+			<pathelement location="${app.server.dir}/lib/jasper-el.jar" />
+			<pathelement location="${app.server.dir}/lib/jasper-jdt.jar" />
+			<pathelement location="${app.server.dir}/lib/jsp-api.jar" />
+			<pathelement location="${app.server.dir}/lib/servlet-api.jar" />
+			<pathelement location="${app.server.dir}/lib/tomcat-api.jar" />
+			<pathelement location="${app.server.dir}/lib/tomcat-util.jar" />
+		</path>
+
+		<delete dir="${jspc.classes.dir}" quiet="true" />
+
+		<java
+			classname="org.apache.jasper.JspC"
+			classpathref="jspc.classpath"
+			fork="true"
+			jvm="${jspc.java.home}/bin/java"
+			newenvironment="true"
+			outputproperty="jspc.output"
+		>
+			<arg line="-d ${jspc.classes.dir} -webapp docroot" />
+		</java>
+
+		<echo>${jspc.output}</echo>
+
+		<if>
+			<contains string="${jspc.output}" substring="JasperException" />
+			<then>
+				<delete dir="${jspc.classes.dir}" quiet="true" />
+
+				<fail>JSPs failed to compile.</fail>
+			</then>
+		</if>
+
+		<javac
+			classpathref="jspc.classpath"
+			compiler="${javac.compiler}"
+			deprecation="${javac.deprecation}"
+			destdir="${jspc.classes.dir}"
+			encoding="${javac.encoding}"
+			errorProperty="jspc.javac.fail"
+			failonerror="false"
+			includeAntRuntime="false"
+			nowarn="on"
+			srcdir="${jspc.classes.dir}"
+		/>
+
+		<delete dir="${jspc.classes.dir}" quiet="true" />
+
+		<if>
+			<istrue value="${jspc.javac.fail}"/>
+			<then>
+				<fail>JSPs failed to compile.</fail>
 			</then>
 		</if>
 	</target>
@@ -1185,7 +1314,7 @@ Please find a solution that does not require portal-impl.jar.
 
 	<target name="publish-remote-m2-release" depends="jar-javadoc,jar-source,war">
 		<antcall target="build-common-ivy.publish">
-			<param name="ivy.publish.resolver" value="sonatype-m2-staging" />
+			<param name="ivy.publish.resolver" value="sonatype-m2-release" />
 		</antcall>
 	</target>
 
@@ -1235,7 +1364,7 @@ Please find a solution that does not require portal-impl.jar.
 			<available file="test/integration" type="dir" />
 			<then>
 				<resourcecount property="test.integration.count">
-					<fileset dir="test-classes/integration" includes="**/${class}.class" />
+					<fileset dir="test-classes/integration" includes="**/${test.class}.class" />
 				</resourcecount>
 			</then>
 		</if>
@@ -1244,7 +1373,7 @@ Please find a solution that does not require portal-impl.jar.
 			<available file="test/unit" type="dir" />
 			<then>
 				<resourcecount property="test.unit.count">
-					<fileset dir="test-classes/unit" includes="**/${class}.class" />
+					<fileset dir="test-classes/unit" includes="**/${test.class}.class" />
 				</resourcecount>
 			</then>
 		</if>
@@ -1263,17 +1392,17 @@ Please find a solution that does not require portal-impl.jar.
 			<else>
 				<if>
 					<not>
-						<isset property="class" />
+						<isset property="test.class" />
 					</not>
 					<then>
-						<fail>Missing class argument. Use "ant test-class -Dclass=TestClassName".</fail>
+						<fail>Use "ant test-class -Dtest.class=StringUtilTest".</fail>
 					</then>
 					<elseif>
 						<not>
 							<isset property="test.type" />
 						</not>
 						<then>
-							<fail>Class ${class} cannot be found.</fail>
+							<fail>Test class ${test.class} cannot be found.</fail>
 						</then>
 					</elseif>
 				</if>
@@ -1304,7 +1433,7 @@ Please find a solution that does not require portal-impl.jar.
 					<formatter type="brief" usefile="false" />
 					<formatter type="xml" />
 					<batchtest todir="test-results/${test.type}">
-						<fileset dir="test-classes/${test.type}" includes="**/${class}.class">
+						<fileset dir="test-classes/${test.type}" includes="**/${test.class}.class">
 							<filename regex="${junit.test.excludes}" negate="true" />
 						</fileset>
 					</batchtest>
@@ -1314,7 +1443,7 @@ Please find a solution that does not require portal-impl.jar.
 	</target>
 
 	<target name="test-integration" depends="compile,compile-test-integration">
-		<property name="class" value="*Test" />
+		<property name="test.class" value="*Test" />
 
 		<ant target="test-cmd" inheritrefs="true">
 			<property name="junit.forkmode" value="once" />
@@ -1323,7 +1452,7 @@ Please find a solution that does not require portal-impl.jar.
 	</target>
 
 	<target name="test-unit" depends="compile,compile-test-unit">
-		<property name="class" value="*Test" />
+		<property name="test.class" value="*Test" />
 
 		<ant target="test-cmd" inheritrefs="true">
 			<property name="junit.forkmode" value="perTest" />
@@ -1396,7 +1525,7 @@ Please find a solution that does not require portal-impl.jar.
 				<zip destfile="${plugin.src.file}">
 					<zipfileset
 						dir="${docroot.dir}"
-						excludes="${liferay-hook.xml.excludes}"
+						excludes="${liferay-hook.xml.excludes},**/classes/**,**/lib/**"
 						prefix="${plugin.name}-src-${plugin.full.version}"
 					/>
 					<zipfileset
@@ -1405,6 +1534,35 @@ Please find a solution that does not require portal-impl.jar.
 						includes="WEB-INF/liferay-hook.xml.processed"
 					/>
 				</zip>
+
+				<if>
+					<not>
+						<equals arg1="${plugin.name}" arg2="portal-compat-shared" />
+					</not>
+					<then>
+						<if>
+							<isset property="import.shared" />
+							<then>
+								<var name="import.shared" value="portal-compat-shared,${import.shared}" />
+							</then>
+							<else>
+								<var name="import.shared" value="portal-compat-shared" />
+							</else>
+						</if>
+					</then>
+				</if>
+
+				<for list="${import.shared}" param="import.shared.current">
+					<sequential>
+						<zip destfile="${plugin.src.file}" update="true">
+							<zipfileset
+								dir="${sdk.dir}/shared/@{import.shared.current}"
+								excludes="build.xml,**/classes/**,**/lib/**"
+								prefix="@{import.shared.current}-src"
+							/>
+						</zip>
+					</sequential>
+				</for>
 			</then>
 		</if>
 	</target>

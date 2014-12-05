@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,13 +14,15 @@
  */
 --%>
 
-<%@ include file="/WEB-INF/jsp/ams/controllers/init.jsp" %>
-
-<%@ page import="com.liferay.ams.model.Asset" %>
-<%@ page import="com.liferay.ams.service.AssetLocalServiceUtil" %>
+<%@ include file="/WEB-INF/jsp/ams/controllers/init.jspf" %>
+<%@ include file="/WEB-INF/jsp/util/asset_indexer.jspf" %>
 
 <%!
 public class AlloyControllerImpl extends BaseAlloyControllerImpl {
+
+	public AlloyControllerImpl() {
+		setPermissioned(true);
+	}
 
 	public void delete() throws Exception {
 		long assetId = ParamUtil.getLong(request, "id");
@@ -35,13 +37,23 @@ public class AlloyControllerImpl extends BaseAlloyControllerImpl {
 	}
 
 	public void index() throws Exception {
-		List<Asset> assets = AssetLocalServiceUtil.getAssets(QueryUtil.ALL_POS, QueryUtil.ALL_POS);
+		AlloySearchResult alloySearchResult = search(null);
 
-		renderRequest.setAttribute("assets", assets);
+		renderRequest.setAttribute("alloySearchResult", alloySearchResult);
+
+		respondWith(alloySearchResult);
 	}
 
 	public void save() throws Exception {
 		Asset asset = AssetLocalServiceUtil.createAsset(0);
+
+		String message = _validateSave();
+
+		if (Validator.isNotNull(message)) {
+			renderError(message);
+
+			return;
+		}
 
 		updateModel(asset);
 
@@ -50,6 +62,8 @@ public class AlloyControllerImpl extends BaseAlloyControllerImpl {
 		String redirect = ParamUtil.getString(request, "redirect");
 
 		redirectTo(redirect);
+
+		respondWith(asset);
 	}
 
 	public void view() throws Exception {
@@ -58,7 +72,30 @@ public class AlloyControllerImpl extends BaseAlloyControllerImpl {
 		Asset asset = AssetLocalServiceUtil.getAsset(assetId);
 
 		renderRequest.setAttribute("asset", asset);
+
+		respondWith(indexer.getDocument(asset));
 	}
+
+	@Override
+	protected Indexer buildIndexer() {
+		return AssetIndexer.getInstance();
+	}
+
+	private String _validateSave() throws Exception {
+		String serialNumber = ParamUtil.getString(request, "serialNumber");
+
+		Pattern pattern = Pattern.compile(_SERIAL_NUMBER_REGEX);
+
+		Matcher matcher = pattern.matcher(serialNumber);
+
+		if (!matcher.find()) {
+			return "the-serial-number-is-invalid";
+		}
+
+		return StringPool.BLANK;
+	}
+
+	private static final String _SERIAL_NUMBER_REGEX = "^[a-zA-Z0-9]+$";
 
 }
 %>

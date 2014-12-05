@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,6 +14,8 @@
 
 package com.liferay.portal.workflow.kaleo;
 
+import com.liferay.portal.DuplicateLockException;
+import com.liferay.portal.kernel.dao.orm.QueryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -22,11 +24,13 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.workflow.WorkflowException;
 import com.liferay.portal.kernel.workflow.WorkflowTask;
 import com.liferay.portal.kernel.workflow.WorkflowTaskManager;
+import com.liferay.portal.model.Lock;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroupGroupRole;
 import com.liferay.portal.model.UserGroupRole;
+import com.liferay.portal.service.LockLocalServiceUtil;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.service.UserGroupGroupRoleLocalServiceUtil;
@@ -48,7 +52,9 @@ import com.liferay.portal.workflow.kaleo.util.WorkflowContextUtil;
 import java.io.Serializable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,17 +105,36 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 			Map<String, Serializable> workflowContext)
 		throws WorkflowException {
 
-		ServiceContext serviceContext = new ServiceContext();
-
-		serviceContext.setCompanyId(companyId);
-		serviceContext.setUserId(userId);
-
-		WorkflowTaskAdapter workflowTaskAdapter =
-			(WorkflowTaskAdapter)_taskManager.completeWorkflowTask(
-				workflowTaskInstanceId, transitionName, comment,
-				workflowContext, serviceContext);
+		Lock lock = null;
 
 		try {
+			lock = LockLocalServiceUtil.lock(
+				userId, WorkflowTask.class.getName(), workflowTaskInstanceId,
+				String.valueOf(userId), false, 1000);
+		}
+		catch (Exception e) {
+			if (e instanceof DuplicateLockException) {
+				throw new WorkflowException(
+					"Workflow task " + workflowTaskInstanceId +
+						" is locked by user " + userId,
+					e);
+			}
+
+			throw new WorkflowException(
+				"Unable to lock workflow task " + workflowTaskInstanceId, e);
+		}
+
+		try {
+			ServiceContext serviceContext = new ServiceContext();
+
+			serviceContext.setCompanyId(companyId);
+			serviceContext.setUserId(userId);
+
+			WorkflowTaskAdapter workflowTaskAdapter =
+				(WorkflowTaskAdapter)_taskManager.completeWorkflowTask(
+					workflowTaskInstanceId, transitionName, comment,
+					workflowContext, serviceContext);
+
 			KaleoTaskInstanceToken kaleoTaskInstanceToken =
 				workflowTaskAdapter.getKaleoTaskInstanceToken();
 
@@ -127,15 +152,26 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 				WorkflowConstants.CONTEXT_TRANSITION_NAME, transitionName);
 
 			ExecutionContext executionContext = new ExecutionContext(
-				kaleoInstanceToken, workflowContext, serviceContext);
+				kaleoInstanceToken, kaleoTaskInstanceToken, workflowContext,
+				serviceContext);
 
 			_kaleoSignaler.signalExit(transitionName, executionContext);
+
+			return workflowTaskAdapter;
 		}
 		catch (Exception e) {
 			throw new WorkflowException("Unable to complete task", e);
 		}
-
-		return workflowTaskAdapter;
+		finally {
+			try {
+				LockLocalServiceUtil.unlock(lock.getClassName(), lock.getKey());
+			}
+			catch (SystemException se) {
+				throw new WorkflowException(
+					"Unable to unlock workflow task " + workflowTaskInstanceId,
+					se);
+			}
+		}
 	}
 
 	@Override
@@ -147,6 +183,10 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 			KaleoTaskInstanceToken kaleoTaskInstanceToken =
 				KaleoTaskInstanceTokenLocalServiceUtil.
 					getKaleoTaskInstanceToken(workflowTaskInstanceId);
+
+			if (kaleoTaskInstanceToken.isCompleted()) {
+				return Collections.emptyList();
+			}
 
 			KaleoTask kaleoTask = kaleoTaskInstanceToken.getKaleoTask();
 			KaleoNode kaleoNode = kaleoTask.getKaleoNode();
@@ -223,10 +263,21 @@ public class WorkflowTaskManagerImpl implements WorkflowTaskManager {
 					}
 				}
 				else {
-					long[] userIds = UserLocalServiceUtil.getRoleUserIds(
-						kaleoTaskAssignment.getAssigneeClassPK());
+					LinkedHashMap<String, Object> params =
+						new LinkedHashMap<String, Object>();
 
-					pooledActors.addAll(userIds);
+					params.put("inherit", Boolean.TRUE);
+					params.put("usersRoles", role.getRoleId());
+
+					List<User> users = UserLocalServiceUtil.search(
+						role.getCompanyId(), null,
+						WorkflowConstants.STATUS_APPROVED, params,
+						QueryUtil.ALL_POS, QueryUtil.ALL_POS,
+						(OrderByComparator)null);
+
+					for (User user : users) {
+						pooledActors.add(user.getUserId());
+					}
 				}
 			}
 

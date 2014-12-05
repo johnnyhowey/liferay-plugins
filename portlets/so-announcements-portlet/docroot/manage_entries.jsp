@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -46,6 +46,8 @@ portletURL.setWindowState(LiferayWindowState.POP_UP);
 	<liferay-ui:success key="announcementAdded" message="the-announcement-was-successfully-added" />
 	<liferay-ui:success key="announcementDeleted" message="the-announcement-was-successfully-deleted" />
 	<liferay-ui:success key="announcementUpdated" message="the-announcement-was-successfully-updated" />
+
+	<div id="<portlet:namespace />errorMessage"></div>
 
 	<aui:fieldset cssClass="distribution-scope-container">
 
@@ -144,6 +146,51 @@ portletURL.setWindowState(LiferayWindowState.POP_UP);
 	</c:if>
 </aui:form>
 
+<aui:script use="aui-base">
+	var announcementEntries = A.one('#p_p_id<portlet:namespace />');
+
+	announcementEntries.delegate(
+		'click',
+		function(event) {
+			event.preventDefault();
+
+			if (confirm('<%= UnicodeLanguageUtil.get(pageContext,"are-you-sure-you-want-to-delete-the-selected-entry") %>')) {
+				var deleteNode = event.currentTarget.ancestor('.delete-entry');
+
+				var entryId = deleteNode.attr('data-entryId');
+
+				var uri = '<liferay-portlet:actionURL name="deleteEntry"><portlet:param name="redirect" value="<%= currentURL %>" /></liferay-portlet:actionURL>';
+
+				uri = Liferay.Util.addParams('<portlet:namespace />entryId=' + entryId, uri)
+
+				A.io.request(
+					uri,
+					{
+						after: {
+							success: function(event, id, obj) {
+								var responseData = this.get('responseData');
+
+								if (!responseData.success) {
+									var message = A.one('#<portlet:namespace />errorMessage');
+
+									if (message) {
+										message.html('<span class="portlet-msg-error">' + responseData.message + '</span>');
+									}
+								}
+								else {
+									Liferay.Portlet.refresh('#p_p_id<portlet:namespace />');
+								}
+							}
+						},
+						dataType: 'json',
+					}
+				);
+			}
+		},
+		'.delete-entry a'
+	);
+</aui:script>
+
 <aui:script>
 	function <portlet:namespace />manageAddEntry() {
 		var A = AUI();
@@ -158,13 +205,13 @@ portletURL.setWindowState(LiferayWindowState.POP_UP);
 		addEntryURL.setWindowState(LiferayWindowState.POP_UP);
 		%>
 
-		var addEntryURL = "<%= addEntryURL.toString() %>&distributionScope=" + optValue;
+		var addEntryURL = Liferay.Util.addParams('<portlet:namespace />distributionScope=' + optValue, '<%= addEntryURL.toString() %>');
 
 		window.location = addEntryURL;
 	}
 
 	function <portlet:namespace />selectDistributionScope(distributionScope) {
-		var url = "<%= portletURL.toString() %>&<portlet:namespace />distributionScope=" + distributionScope;
+		var url = Liferay.Util.addParams('<portlet:namespace />distributionScope=' + distributionScope, '<%= portletURL.toString() %>');
 
 		submitForm(document.<portlet:namespace />fm, url);
 	}

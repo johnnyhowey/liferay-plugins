@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -69,7 +69,7 @@ portletURL.setParameter("meetupsEntryId", String.valueOf(meetupsEntryId));
 String thumbnailURL = null;
 
 if (meetupsEntry.getThumbnailId() == 0) {
-	thumbnailURL = request.getContextPath() + "/meetups/images/calendar.png";
+	thumbnailURL = PortalUtil.getPathContext(request) + "/meetups/images/calendar.png";
 }
 else {
 	thumbnailURL = themeDisplay.getPathImage() + "/meetups?img_id=" + meetupsEntry.getThumbnailId() + "&t=" + WebServerServletTokenUtil.getToken(meetupsEntry.getThumbnailId());

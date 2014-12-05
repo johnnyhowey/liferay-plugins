@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -57,7 +57,7 @@ AssetRenderer assetRenderer = MySubscriptionsUtil.getAssetRenderer(subscription.
 	<c:if test="<%= displayPopupHREF != null %>">
 		<liferay-ui:icon
 			message="view-in-popup"
-			src="../portlet/pop_up.png"
+			src='<%= themeDisplay.getPathThemeImages() + "/portlet/pop_up.png" %>'
 			url="<%= displayPopupHREF %>"
 		/>
 	</c:if>

@@ -14,7 +14,14 @@ AUI().use(
 				instance._setupProgressBar();
 
 				instance._currentTab = param.currentTab;
+				instance._namespace = param.namespace;
 				instance._taskListURL = param.taskListURL;
+			},
+
+			initUpcomingTasks: function(param) {
+				var instance = this;
+
+				instance._upcomingTasksListURL = param.upcomingTasksListURL;
 			},
 
 			clearFilters: function() {
@@ -105,6 +112,14 @@ AUI().use(
 
 				instance._taskList = A.one('.tasks-portlet .list-wrapper');
 
+				if (!instance._taskList) {
+					instance._taskList = A.one('.upcoming-tasks-portlet .tasks-entries-container');
+
+					if (!url) {
+						url = instance._upcomingTasksListURL;
+					}
+				}
+
 				if (!instance._taskList.io) {
 					instance._taskList.plug(
 						A.Plugin.IO,
@@ -115,12 +130,12 @@ AUI().use(
 				if (!url) {
 					url = instance._taskListURL;
 
-					var data = {
-						assetTagIds: instance._getAssetTagIds(),
-						groupId: instance._getGroupId(),
-						tabs1: instance._currentTab,
-						tabs2: showAll ? 'all' : 'open'
-					};
+					var data = {};
+
+					data[instance._namespace + 'assetTagIds'] = instance._getAssetTagIds();
+					data[instance._namespace + 'groupId'] = instance._getGroupId();
+					data[instance._namespace + 'tabs1'] = instance._currentTab;
+					data[instance._namespace + 'tabs2'] = showAll ? 'all' : 'open';
 
 					instance._taskList.io.set('data', data);
 				}

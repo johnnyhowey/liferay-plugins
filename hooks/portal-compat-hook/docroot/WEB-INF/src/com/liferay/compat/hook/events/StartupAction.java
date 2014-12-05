@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -19,10 +19,22 @@ import com.liferay.portal.kernel.events.ActionException;
 import com.liferay.portal.kernel.events.SimpleAction;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.UnicodeProperties;
+import com.liferay.portal.model.ResourceConstants;
+import com.liferay.portal.model.Role;
+import com.liferay.portal.model.RoleConstants;
+import com.liferay.portal.security.permission.ActionKeys;
+import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
+import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portlet.documentlibrary.model.DLFileEntry;
 import com.liferay.portlet.expando.model.ExpandoBridge;
+import com.liferay.portlet.expando.model.ExpandoColumn;
 import com.liferay.portlet.expando.model.ExpandoColumnConstants;
+import com.liferay.portlet.expando.model.ExpandoTableConstants;
+import com.liferay.portlet.expando.service.ExpandoColumnLocalServiceUtil;
 import com.liferay.portlet.expando.util.ExpandoBridgeFactoryUtil;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Brian Wing Shun Chan
@@ -60,6 +72,35 @@ public class StartupAction extends SimpleAction {
 			expandoBridge.setAttributeProperties(
 				DLUtil.MANUAL_CHECK_IN_REQUIRED, properties, false);
 		}
+
+		ExpandoColumn expandoColumn = ExpandoColumnLocalServiceUtil.getColumn(
+			companyId, DLFileEntry.class.getName(),
+			ExpandoTableConstants.DEFAULT_TABLE_NAME,
+			DLUtil.MANUAL_CHECK_IN_REQUIRED);
+
+		Map<Long, String[]> roleIdsToActionIds = new HashMap<Long, String[]>();
+
+		Role role = RoleLocalServiceUtil.getRole(
+			companyId, RoleConstants.GUEST);
+
+		roleIdsToActionIds.put(
+			role.getRoleId(), new String[] {ActionKeys.VIEW});
+
+		role = RoleLocalServiceUtil.getRole(
+			companyId, RoleConstants.POWER_USER);
+
+		roleIdsToActionIds.put(
+			role.getRoleId(), new String[] {ActionKeys.UPDATE});
+
+		role = RoleLocalServiceUtil.getRole(companyId, RoleConstants.USER);
+
+		roleIdsToActionIds.put(
+			role.getRoleId(), new String[] {ActionKeys.UPDATE});
+
+		ResourcePermissionLocalServiceUtil.setResourcePermissions(
+			companyId, ExpandoColumn.class.getName(),
+			ResourceConstants.SCOPE_INDIVIDUAL,
+			String.valueOf(expandoColumn.getColumnId()), roleIdsToActionIds);
 	}
 
 }

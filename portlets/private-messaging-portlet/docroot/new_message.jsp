@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -88,6 +88,24 @@ to = sb.toString() + to;
 			<liferay-ui:message key="attachments" />
 		</label>
 
+		<%
+		long fileMaxSize = PrefsPropsUtil.getLong(PropsKeys.DL_FILE_MAX_SIZE);
+
+		if (fileMaxSize == 0) {
+			fileMaxSize = PrefsPropsUtil.getLong(PropsKeys.UPLOAD_SERVLET_REQUEST_IMPL_MAX_SIZE);
+		}
+
+		fileMaxSize /= 1024;
+		%>
+
+		<aui:field-wrapper>
+			<c:if test="<%= fileMaxSize != 0 %>">
+				<div class="portlet-msg-info">
+					<%= LanguageUtil.format(pageContext, "upload-documents-no-larger-than-x-k", String.valueOf(fileMaxSize), false) %>
+				</div>
+			</c:if>
+		</aui:field-wrapper>
+
 		<aui:input label="" name="msgFile1" type="file" />
 
 		<aui:input label="" name="msgFile2" type="file" />
@@ -150,9 +168,16 @@ to = sb.toString() + to;
 			A.io.request(
 				'<liferay-portlet:resourceURL id="checkData"><liferay-portlet:param name="redirect" value="<%= PortalUtil.getLayoutURL(themeDisplay) %>" /></liferay-portlet:resourceURL>',
 				{
-					after: {
-						success: function(event, id, obj) {
-							var responseData = this.get('responseData');
+					dataType: 'json',
+					form: {
+						id: form.getDOM(),
+						upload: true
+					},
+					on: {
+						complete: function(event, id, obj) {
+							var responseText = obj.responseText;
+
+							var responseData = A.JSON.parse(responseText);
 
 							if (responseData.success) {
 								submitForm(document.<portlet:namespace />fm);
@@ -168,10 +193,6 @@ to = sb.toString() + to;
 
 							loadingMask.hide();
 						}
-					},
-					dataType: 'json',
-					form: {
-						id: form.getDOM()
 					}
 				}
 			);

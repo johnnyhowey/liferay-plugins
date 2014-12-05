@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This file is part of Liferay Social Office. Liferay Social Office is free
  * software: you can redistribute it and/or modify it under the terms of the GNU
@@ -17,6 +17,10 @@
 
 package com.liferay.so.service.impl;
 
+import com.liferay.compat.portal.kernel.notifications.ChannelHubManagerUtil;
+import com.liferay.compat.portal.kernel.util.HttpUtil;
+import com.liferay.compat.portal.kernel.util.StringUtil;
+import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.mail.service.MailServiceUtil;
 import com.liferay.portal.NoSuchUserException;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -24,19 +28,18 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.mail.MailMessage;
-import com.liferay.portal.kernel.notifications.ChannelHubManagerUtil;
 import com.liferay.portal.kernel.notifications.NotificationEvent;
 import com.liferay.portal.kernel.notifications.NotificationEventFactoryUtil;
-import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
+import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.User;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.WorkflowDefinitionLinkLocalServiceUtil;
 import com.liferay.so.MemberRequestAlreadyUsedException;
 import com.liferay.so.MemberRequestInvalidUserException;
 import com.liferay.so.invitemembers.util.InviteMembersConstants;
@@ -257,8 +260,21 @@ public class MemberRequestLocalServiceImpl
 		return memberRequest;
 	}
 
+	protected static String addParameterWithPortletNamespace(
+		String url, String name, String value) {
+
+		String portletId = HttpUtil.getParameter(url, "p_p_id", false);
+
+		if (Validator.isNotNull(portletId)) {
+			name = PortalUtil.getPortletNamespace(portletId) + name;
+		}
+
+		return HttpUtil.addParameter(url, name, value);
+	}
+
 	protected String getCreateAccountURL(
-		MemberRequest memberRequest, ServiceContext serviceContext) {
+			MemberRequest memberRequest, ServiceContext serviceContext)
+		throws PortalException, SystemException {
 
 		String createAccountURL = (String)serviceContext.getAttribute(
 			"createAccountURL");
@@ -267,13 +283,18 @@ public class MemberRequestLocalServiceImpl
 			createAccountURL = serviceContext.getPortalURL();
 		}
 
-		String redirectURL = getRedirectURL(serviceContext);
+		createAccountURL = addParameterWithPortletNamespace(
+			createAccountURL, "key", memberRequest.getKey());
 
-		redirectURL = HttpUtil.addParameter(
-			redirectURL, "key", memberRequest.getKey());
+		if (!WorkflowDefinitionLinkLocalServiceUtil.hasWorkflowDefinitionLink(
+				memberRequest.getCompanyId(),
+				WorkflowConstants.DEFAULT_GROUP_ID, User.class.getName(), 0)) {
 
-		createAccountURL = HttpUtil.addParameter(
-			createAccountURL, "redirect", redirectURL);
+			String redirectURL = getRedirectURL(serviceContext);
+
+			createAccountURL = addParameterWithPortletNamespace(
+				createAccountURL, "redirect", redirectURL);
+		}
 
 		return createAccountURL;
 	}

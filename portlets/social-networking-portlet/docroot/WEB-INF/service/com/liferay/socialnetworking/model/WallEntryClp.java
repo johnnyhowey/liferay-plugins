@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,12 +41,10 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 	public WallEntryClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return WallEntry.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return WallEntry.class.getName();
 	}
@@ -59,12 +57,10 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 		setWallEntryId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_wallEntryId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -376,7 +372,6 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 			new Class[] { WallEntry.class }, new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public WallEntry toUnescapedModel() {
 		return this;
 	}
@@ -463,7 +458,6 @@ public class WallEntryClp extends BaseModelImpl<WallEntry> implements WallEntry 
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(28);
 

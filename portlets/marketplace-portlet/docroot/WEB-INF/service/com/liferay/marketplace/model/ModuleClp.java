@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -38,12 +38,10 @@ public class ModuleClp extends BaseModelImpl<Module> implements Module {
 	public ModuleClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return Module.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return Module.class.getName();
 	}
@@ -56,12 +54,10 @@ public class ModuleClp extends BaseModelImpl<Module> implements Module {
 		setModuleId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_moduleId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -253,7 +249,6 @@ public class ModuleClp extends BaseModelImpl<Module> implements Module {
 			new Class[] { Module.class }, new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public Module toUnescapedModel() {
 		return this;
 	}
@@ -328,7 +323,6 @@ public class ModuleClp extends BaseModelImpl<Module> implements Module {
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(16);
 

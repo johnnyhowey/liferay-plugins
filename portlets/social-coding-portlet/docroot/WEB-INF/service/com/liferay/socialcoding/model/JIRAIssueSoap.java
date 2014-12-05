@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -34,7 +34,7 @@ public class JIRAIssueSoap implements Serializable {
 		soapModel.setCreateDate(model.getCreateDate());
 		soapModel.setModifiedDate(model.getModifiedDate());
 		soapModel.setProjectId(model.getProjectId());
-		soapModel.setKey(model.getKey());
+		soapModel.setIssueNumber(model.getIssueNumber());
 		soapModel.setSummary(model.getSummary());
 		soapModel.setDescription(model.getDescription());
 		soapModel.setReporterJiraUserId(model.getReporterJiraUserId());
@@ -125,12 +125,12 @@ public class JIRAIssueSoap implements Serializable {
 		_projectId = projectId;
 	}
 
-	public String getKey() {
-		return _key;
+	public long getIssueNumber() {
+		return _issueNumber;
 	}
 
-	public void setKey(String key) {
-		_key = key;
+	public void setIssueNumber(long issueNumber) {
+		_issueNumber = issueNumber;
 	}
 
 	public String getSummary() {
@@ -185,7 +185,7 @@ public class JIRAIssueSoap implements Serializable {
 	private Date _createDate;
 	private Date _modifiedDate;
 	private long _projectId;
-	private String _key;
+	private long _issueNumber;
 	private String _summary;
 	private String _description;
 	private String _reporterJiraUserId;

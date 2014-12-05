@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,11 +40,30 @@ public class IPGeocoderUtil {
 			return null;
 		}
 
+		String city = GetterUtil.getString(ipInfoJSON.getString("city"));
+		String countryName = GetterUtil.getString(
+			ipInfoJSON.getString("countryName"));
+		String countryCode = GetterUtil.getString(
+			ipInfoJSON.getString("countryCode"));
 		float latitude = GetterUtil.getFloat(ipInfoJSON.getString("latitude"));
 		float longitude = GetterUtil.getFloat(
 			ipInfoJSON.getString("longitude"));
+		String postalCode = GetterUtil.getString(
+			ipInfoJSON.getString("postalCode"));
+		String region = GetterUtil.getString(ipInfoJSON.getString("region"));
 
-		return new IPInfo(ipAddress, latitude, longitude);
+		IPInfo ipInfo = new IPInfo();
+
+		ipInfo.setCity(city);
+		ipInfo.setCountryCode(countryCode);
+		ipInfo.setCountryName(countryName);
+		ipInfo.setIpAddress(ipAddress);
+		ipInfo.setLatitude(latitude);
+		ipInfo.setLongitude(longitude);
+		ipInfo.setPostalCode(postalCode);
+		ipInfo.setRegion(region);
+
+		return ipInfo;
 	}
 
 }

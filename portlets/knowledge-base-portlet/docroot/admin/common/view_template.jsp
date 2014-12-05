@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -22,7 +22,7 @@ KBTemplate kbTemplate = (KBTemplate)request.getAttribute(WebKeys.KNOWLEDGE_BASE_
 
 <div class="float-container kb-entity-header">
 	<div class="kb-title">
-		<%= kbTemplate.getTitle() %>
+		<%= HtmlUtil.escape(kbTemplate.getTitle()) %>
 	</div>
 
 	<div class="kb-tools">

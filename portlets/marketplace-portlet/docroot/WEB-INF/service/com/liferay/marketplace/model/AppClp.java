@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -40,12 +40,10 @@ public class AppClp extends BaseModelImpl<App> implements App {
 	public AppClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return App.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return App.class.getName();
 	}
@@ -58,12 +56,10 @@ public class AppClp extends BaseModelImpl<App> implements App {
 		setAppId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_appId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -493,7 +489,6 @@ public class AppClp extends BaseModelImpl<App> implements App {
 			new Class[] { App.class }, new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public App toUnescapedModel() {
 		return this;
 	}
@@ -583,7 +578,6 @@ public class AppClp extends BaseModelImpl<App> implements App {
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(31);
 

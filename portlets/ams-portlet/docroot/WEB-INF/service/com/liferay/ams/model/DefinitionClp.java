@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -41,12 +41,10 @@ public class DefinitionClp extends BaseModelImpl<Definition>
 	public DefinitionClp() {
 	}
 
-	@Override
 	public Class<?> getModelClass() {
 		return Definition.class;
 	}
 
-	@Override
 	public String getModelClassName() {
 		return Definition.class.getName();
 	}
@@ -59,12 +57,10 @@ public class DefinitionClp extends BaseModelImpl<Definition>
 		setDefinitionId(primaryKey);
 	}
 
-	@Override
 	public Serializable getPrimaryKeyObj() {
 		return new Long(_definitionId);
 	}
 
-	@Override
 	public void setPrimaryKeyObj(Serializable primaryKeyObj) {
 		setPrimaryKey(((Long)primaryKeyObj).longValue());
 	}
@@ -516,7 +512,6 @@ public class DefinitionClp extends BaseModelImpl<Definition>
 			new Class[] { Definition.class }, new AutoEscapeBeanHandler(this));
 	}
 
-	@Override
 	public Definition toUnescapedModel() {
 		return this;
 	}
@@ -618,7 +613,6 @@ public class DefinitionClp extends BaseModelImpl<Definition>
 		return sb.toString();
 	}
 
-	@Override
 	public String toXmlString() {
 		StringBundler sb = new StringBundler(43);
 

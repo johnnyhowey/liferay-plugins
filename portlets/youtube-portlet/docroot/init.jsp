@@ -1,6 +1,6 @@
 <%--
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -23,10 +23,10 @@
 <%@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %>
 <%@ taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
-<%@ page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
+<%@ page import="com.liferay.compat.portal.kernel.util.HttpUtil" %><%@
+page import="com.liferay.portal.kernel.language.LanguageUtil" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.GetterUtil" %><%@
-page import="com.liferay.portal.kernel.util.HttpUtil" %><%@
 page import="com.liferay.portal.kernel.util.StringBundler" %><%@
 page import="com.liferay.portal.kernel.util.StringPool" %><%@
 page import="com.liferay.portal.kernel.util.Validator" %>
@@ -34,30 +34,18 @@ page import="com.liferay.portal.kernel.util.Validator" %>
 <portlet:defineObjects />
 
 <%
-int annotations = GetterUtil.getInteger(portletPreferences.getValue("annotations", StringPool.BLANK), 1);
+boolean annotations = GetterUtil.getBoolean(portletPreferences.getValue("annotations", "true"));
 boolean autoplay = GetterUtil.getBoolean(portletPreferences.getValue("autoplay", "false"));
-String borderColor = portletPreferences.getValue("borderColor", StringPool.BLANK);
-int closedCaptioning = GetterUtil.getInteger(portletPreferences.getValue("closedCaptioning", StringPool.BLANK), 0);
-boolean enableEnhancedGenieMenu = GetterUtil.getBoolean(portletPreferences.getValue("enableEnhancedGenieMenu", "false"));
-boolean enableFullscreen = GetterUtil.getBoolean(portletPreferences.getValue("enableFullscreen", "false"));
+boolean closedCaptioning = GetterUtil.getBoolean(portletPreferences.getValue("closedCaptioning", "false"));
 boolean enableKeyboardControls = GetterUtil.getBoolean(portletPreferences.getValue("enableKeyboardControls", "true"));
-boolean enableRelatedVideos = GetterUtil.getBoolean(portletPreferences.getValue("enableRelatedVideos", "false"));
-boolean enableSearch = GetterUtil.getBoolean(portletPreferences.getValue("enableSearch", "false"));
-boolean hd = GetterUtil.getBoolean(portletPreferences.getValue("hd", "false"));
 String height = portletPreferences.getValue("height", "360");
 boolean loop = GetterUtil.getBoolean(portletPreferences.getValue("loop", "false"));
-String playerColor = portletPreferences.getValue("playerColor", StringPool.BLANK);
-boolean showInfo = GetterUtil.getBoolean(portletPreferences.getValue("showInfo", "true"));
-boolean showThickerBorder = GetterUtil.getBoolean(portletPreferences.getValue("showThickerBorder", "false"));
 boolean showThumbnail = GetterUtil.getBoolean(portletPreferences.getValue("showThumbnail", "false"));
 String startTime = portletPreferences.getValue("startTime", StringPool.BLANK);
 String url = portletPreferences.getValue("url", StringPool.BLANK);
 String width = portletPreferences.getValue("width", "480");
 
 String id = url.replaceAll("^.*?v=([a-zA-Z0-9_-]+).*$", "$1");
-
-String borderColorHex = "0x" + borderColor.replaceAll("#", "").replaceAll("^(.)(.)(.)$", "$1$1$2$2$3$3").toLowerCase();
-String playerColorHex = "0x" + playerColor.replaceAll("#", "").replaceAll("^(.)(.)(.)$", "$1$1$2$2$3$3").toLowerCase();
 
 String presetSize = width + "x" + height;
 

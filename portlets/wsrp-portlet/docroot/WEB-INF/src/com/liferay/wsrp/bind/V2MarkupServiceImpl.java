@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -14,6 +14,10 @@
 
 package com.liferay.wsrp.bind;
 
+import com.liferay.compat.portal.kernel.servlet.HttpHeaders;
+import com.liferay.compat.portal.kernel.util.ArrayUtil;
+import com.liferay.compat.portal.kernel.util.HttpUtil;
+import com.liferay.compat.portal.kernel.util.StringUtil;
 import com.liferay.compat.portal.util.PortalUtil;
 import com.liferay.portal.NoSuchLayoutException;
 import com.liferay.portal.kernel.dao.shard.ShardUtil;
@@ -21,16 +25,13 @@ import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayWindowState;
-import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.util.Base64;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.Http;
-import com.liferay.portal.kernel.util.HttpUtil;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.kernel.util.PropsUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
-import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.LayoutConstants;
@@ -689,7 +690,7 @@ public class V2MarkupServiceImpl
 	}
 
 	protected String getURL(
-			String lifecycle, String resourceId, MimeRequest mimeRequest,
+			String lifecycle, String resourceID, MimeRequest mimeRequest,
 			PortletContext portletContext, WSRPProducer wsrpProducer)
 		throws Exception {
 
@@ -738,9 +739,9 @@ public class V2MarkupServiceImpl
 		sb.append("&p_p_mode=");
 		sb.append(HttpUtil.encodeURL(portletMode));
 
-		if (lifecycle.equals("2") && Validator.isNotNull(resourceId)) {
+		if (lifecycle.equals("2") && Validator.isNotNull(resourceID)) {
 			sb.append("&p_p_resource_id=");
-			sb.append(resourceId);
+			sb.append(resourceID);
 		}
 
 		sb.append("&p_p_isolated=1");

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2000-2013 Liferay, Inc. All rights reserved.
+ * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
  * This library is free software; you can redistribute it and/or modify it under
  * the terms of the GNU Lesser General Public License as published by the Free
@@ -35,13 +35,21 @@ import javax.servlet.annotation.WebListener;
 @WebListener
 public class CDIContextListener implements ServletContextListener {
 
+	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 	}
 
+	@Override
 	public void contextInitialized(ServletContextEvent servletContextEvent) {
+		BeanManager beanManager = CDIBeanManagerUtil.getBeanManager();
+
+		if (beanManager != null) {
+			return;
+		}
+
 		ServletContext servletContext = servletContextEvent.getServletContext();
 
-		BeanManager beanManager = (BeanManager)servletContext.getAttribute(
+		beanManager = (BeanManager)servletContext.getAttribute(
 			BeanManager.class.getName());
 
 		if (beanManager == null) {

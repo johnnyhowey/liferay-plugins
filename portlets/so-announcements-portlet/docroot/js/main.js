@@ -1,14 +1,22 @@
 AUI().use(
 	'aui-base',
+	'aui-io-plugin',
 	'transition',
 	function(A) {
 		Liferay.namespace('Announcements');
 
 		Liferay.Announcements = {
-			toggleEntry: function(event, portletNamespace) {
-				var entryId = event.currentTarget.attr('data-entryId');
+			init: function(config) {
+				var instance = this;
 
-				var entry = A.one('#' + portletNamespace + entryId);
+				instance._namespace = config.namespace;
+				instance._viewEntriesURL = config.viewEntriesURL;
+			},
+
+			toggleEntry: function(event) {
+				var entry = event.currentTarget.ancestor('.entry');
+
+				var entryId = entry.attr('data-entryId');
 
 				var content = entry.one('.entry-content');
 				var contentContainer = entry.one('.entry-content-container');
@@ -43,6 +51,67 @@ AUI().use(
 						height: contentHeight
 					}
 				);
+			},
+
+			transitionEntry: function(id) {
+				var entry = A.one(id);
+
+				entry.transition(
+					{
+						opacity: {
+							duration: .5,
+							value: 0
+						}
+					}
+				);
+			},
+
+			updateEntries: function(readEntries, start) {
+				var instance = this;
+
+				var url = Liferay.Util.addParams(instance._namespace + 'readEntries=' + readEntries, instance._viewEntriesURL) || instance._viewEntriesURL;
+
+				if (readEntries) {
+					var header = A.one('#' + instance._namespace + 'readEntriesContainer .entries .header');
+
+					if (header) {
+						var expanded = 'false';
+
+						if (header.hasClass('aui-toggler-header-expanded')) {
+							expanded = 'true';
+						}
+
+						url = Liferay.Util.addParams(instance._namespace + 'expanded=' + expanded, url) || url;
+					}
+
+					var node = A.one('#' + instance._namespace + 'readEntriesContainer');
+				}
+				else {
+					var node = A.one('#' + instance._namespace + 'unreadEntriesContainer');
+				}
+
+				if (node) {
+					var entries = node.one('.entries');
+
+					if (entries) {
+						var start = (start == null) ? entries.attr('data-start') : start;
+
+						url = Liferay.Util.addParams(instance._namespace + 'start=' + start, url) || url;
+					}
+
+					if (!node.io) {
+						node.plug(
+							A.Plugin.IO,
+							{
+								autoLoad: false
+							}
+						);
+					}
+
+					node.io.set('uri', url);
+
+					node.io.start();
+				}
 			}
 		};
 	}
