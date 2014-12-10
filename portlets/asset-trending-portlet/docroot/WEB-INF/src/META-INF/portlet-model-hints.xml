@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<model-hints>
+	<model name="com.liferay.assettrending.model.AssetTrendingEntry">
+		<field name="assetTrendingEntryId" type="long" />
+		<field name="groupId" type="long" />
+		<field name="companyId" type="long" />
+		<field name="createDate" type="Date" />
+		<field name="modifiedDate" type="Date" />
+		<field name="assetEntryId" type="long" />
+		<field name="classNameId" type="long" />
+		<field name="classPK" type="long" />
+		<field name="commentCount" type="int" />
+		<field name="payload" type="String" />
+		<field name="priority" type="double" />
+		<field name="ratingScore" type="double" />
+		<field name="trendingScore" type="double" />
+		<field name="viewCount" type="int" />
+	</model>
+</model-hints>

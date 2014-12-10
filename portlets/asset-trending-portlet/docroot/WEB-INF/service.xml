@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE service-builder PUBLIC "-//Liferay//DTD Service Builder 6.2.0//EN" "http://www.liferay.com/dtd/liferay-service-builder_6_2_0.dtd">
+
+<service-builder package-path="com.liferay.assettrending" auto-namespace-tables="false">
+	<namespace>AssetTrending</namespace>
+	<entity name="AssetTrendingEntry" local-service="true" remote-service="false">
+
+		<!-- PK fields -->
+
+		<column name="assetTrendingEntryId" type="long" primary="true" />
+
+		<!-- Group instance -->
+
+		<column name="groupId" type="long" />
+
+		<!-- Audit fields -->
+
+		<column name="companyId" type="long" />
+		<column name="createDate" type="Date" />
+		<column name="modifiedDate" type="Date" />
+
+		<!-- Other fields -->
+
+		<column name="assetEntryId" type="long" />
+		<column name="classNameId" type="long" />
+		<column name="classPK" type="long" />
+		<column name="commentCount" type="int" />
+		<column name="payload" type="String" />
+		<column name="priority" type="double" />
+		<column name="ratingScore" type="double" />
+		<column name="trendingScore" type="double" />
+		<column name="viewCount" type="int" />
+
+		<!-- Order -->
+
+		<order by="desc">
+			<order-column name="viewCount" />
+		</order>
+
+		<!-- Finder methods -->
+
+		<finder name="AssetEntryId" return-type="AssetTrendingEntry" unique="true">
+			<finder-column name="assetEntryId" />
+		</finder>
+		<finder name="C_C" return-type="AssetTrendingEntry" unique="true">
+			<finder-column name="classNameId" />
+			<finder-column name="classPK" />
+		</finder>
+	</entity>
+</service-builder>
