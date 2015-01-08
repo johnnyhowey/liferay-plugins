@@ -36,6 +36,22 @@ public class PushNotificationsEntryServiceImpl
 
 	@AccessControlled(guestAccessEnabled = true)
 	@Override
+	public PushNotificationsEntry addPushNotificationsEntry(
+			long parentPushNotificationsEntryId, String payload)
+		throws PortalException {
+
+		PushNotificationsPermission.check(
+			getPermissionChecker(), ActionKeys.ADD_ENTRY);
+
+		JSONObject payloadJSONObject = JSONFactoryUtil.createJSONObject(
+			payload);
+
+		return pushNotificationsEntryLocalService.addPushNotificationsEntry(
+			getUserId(), parentPushNotificationsEntryId, payloadJSONObject);
+	}
+
+	@AccessControlled(guestAccessEnabled = true)
+	@Override
 	public PushNotificationsEntry addPushNotificationsEntry(String payload)
 		throws PortalException {
 
@@ -50,18 +66,10 @@ public class PushNotificationsEntryServiceImpl
 	}
 
 	@Override
-	public PushNotificationsEntry dislikePushNotificationsEntry(
-			long pushNotificationsEntryId)
-		throws PortalException {
-
-		return pushNotificationsEntryLocalService.dislikePushNotificationsEntry(
-			getUserId(), pushNotificationsEntryId);
-	}
-
-	@Override
 	public List<PushNotificationsEntry> getPushNotificationsEntries(
-		long parentPushNotificationsEntryId, long lastAccessTime, int start,
-		int end) {
+			long parentPushNotificationsEntryId, long lastAccessTime, int start,
+			int end)
+		throws PortalException {
 
 		return pushNotificationsEntryLocalService.getPushNotificationsEntries(
 			parentPushNotificationsEntryId, lastAccessTime, start, end);
@@ -73,6 +81,15 @@ public class PushNotificationsEntryServiceImpl
 		throws PortalException {
 
 		return pushNotificationsEntryLocalService.likePushNotificationsEntry(
+			getUserId(), pushNotificationsEntryId);
+	}
+
+	@Override
+	public PushNotificationsEntry unlikePushNotificationsEntry(
+			long pushNotificationsEntryId)
+		throws PortalException {
+
+		return pushNotificationsEntryLocalService.unlikePushNotificationsEntry(
 			getUserId(), pushNotificationsEntryId);
 	}
 

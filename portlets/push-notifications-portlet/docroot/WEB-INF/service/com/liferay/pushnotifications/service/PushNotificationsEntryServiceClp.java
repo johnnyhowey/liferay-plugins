@@ -30,11 +30,11 @@ public class PushNotificationsEntryServiceClp
 
 		_methodName0 = "addPushNotificationsEntry";
 
-		_methodParameterTypes0 = new String[] { "java.lang.String" };
+		_methodParameterTypes0 = new String[] { "long", "java.lang.String" };
 
-		_methodName1 = "dislikePushNotificationsEntry";
+		_methodName1 = "addPushNotificationsEntry";
 
-		_methodParameterTypes1 = new String[] { "long" };
+		_methodParameterTypes1 = new String[] { "java.lang.String" };
 
 		_methodName2 = "getBeanIdentifier";
 
@@ -51,18 +51,26 @@ public class PushNotificationsEntryServiceClp
 		_methodName6 = "setBeanIdentifier";
 
 		_methodParameterTypes6 = new String[] { "java.lang.String" };
+
+		_methodName7 = "unlikePushNotificationsEntry";
+
+		_methodParameterTypes7 = new String[] { "long" };
 	}
 
 	@Override
 	public com.liferay.pushnotifications.model.PushNotificationsEntry addPushNotificationsEntry(
-		java.lang.String payload)
+		long parentPushNotificationsEntryId, java.lang.String payload)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableService.invokeMethod(_methodName0,
 					_methodParameterTypes0,
-					new Object[] { ClpSerializer.translateInput(payload) });
+					new Object[] {
+						parentPushNotificationsEntryId,
+						
+					ClpSerializer.translateInput(payload)
+					});
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -84,15 +92,15 @@ public class PushNotificationsEntryServiceClp
 	}
 
 	@Override
-	public com.liferay.pushnotifications.model.PushNotificationsEntry dislikePushNotificationsEntry(
-		long pushNotificationsEntryId)
+	public com.liferay.pushnotifications.model.PushNotificationsEntry addPushNotificationsEntry(
+		java.lang.String payload)
 		throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
 			returnObj = _invokableService.invokeMethod(_methodName1,
 					_methodParameterTypes1,
-					new Object[] { pushNotificationsEntryId });
+					new Object[] { ClpSerializer.translateInput(payload) });
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
@@ -139,7 +147,7 @@ public class PushNotificationsEntryServiceClp
 	@Override
 	public java.util.List<com.liferay.pushnotifications.model.PushNotificationsEntry> getPushNotificationsEntries(
 		long parentPushNotificationsEntryId, long lastAccessTime, int start,
-		int end) {
+		int end) throws com.liferay.portal.kernel.exception.PortalException {
 		Object returnObj = null;
 
 		try {
@@ -157,6 +165,10 @@ public class PushNotificationsEntryServiceClp
 		}
 		catch (Throwable t) {
 			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
 
 			if (t instanceof RuntimeException) {
 				throw (RuntimeException)t;
@@ -227,6 +239,36 @@ public class PushNotificationsEntryServiceClp
 		}
 	}
 
+	@Override
+	public com.liferay.pushnotifications.model.PushNotificationsEntry unlikePushNotificationsEntry(
+		long pushNotificationsEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		Object returnObj = null;
+
+		try {
+			returnObj = _invokableService.invokeMethod(_methodName7,
+					_methodParameterTypes7,
+					new Object[] { pushNotificationsEntryId });
+		}
+		catch (Throwable t) {
+			t = ClpSerializer.translateThrowable(t);
+
+			if (t instanceof com.liferay.portal.kernel.exception.PortalException) {
+				throw (com.liferay.portal.kernel.exception.PortalException)t;
+			}
+
+			if (t instanceof RuntimeException) {
+				throw (RuntimeException)t;
+			}
+			else {
+				throw new RuntimeException(t.getClass().getName() +
+					" is not a valid exception");
+			}
+		}
+
+		return (com.liferay.pushnotifications.model.PushNotificationsEntry)ClpSerializer.translateOutput(returnObj);
+	}
+
 	private InvokableService _invokableService;
 	private String _methodName0;
 	private String[] _methodParameterTypes0;
@@ -240,4 +282,6 @@ public class PushNotificationsEntryServiceClp
 	private String[] _methodParameterTypes5;
 	private String _methodName6;
 	private String[] _methodParameterTypes6;
+	private String _methodName7;
+	private String[] _methodParameterTypes7;
 }

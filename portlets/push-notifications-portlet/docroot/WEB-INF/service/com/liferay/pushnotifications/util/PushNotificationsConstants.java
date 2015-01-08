@@ -19,14 +19,12 @@ package com.liferay.pushnotifications.util;
  */
 public class PushNotificationsConstants {
 
-	public static final String KEY_FROM_USER = "fromUser";
-
 	public static final String KEY_FULL_NAME = "fullName";
 
 	public static final String KEY_MESSAGE = "message";
 
 	public static final String KEY_PARENT_PUSH_NOTIFICATIONS_ENTRY_ID =
-		"parentEntryId";
+		"parentPushNotificationsEntryId";
 
 	public static final String KEY_PAYLOAD = "payload";
 
@@ -42,16 +40,18 @@ public class PushNotificationsConstants {
 
 	public static final String KEY_PORTRAIT_ID = "portraitId";
 
+	public static final String KEY_PUSH_NOTIFICATIONS_ENTRY_ID =
+		"pushNotificationsEntryId";
+
 	public static final String KEY_TO_USER = "toUser";
 
 	public static final String KEY_TYPE = "type";
 
+	public static final String KEY_USER = "user";
+
 	public static final String KEY_USER_ID = "userId";
 
 	public static final String KEY_UUID = "uuid";
-
-	public static final long VALUE_PARENT_PUSH_NOTIFICATIONS_ENTRY_ID_DEFAULT =
-		0;
 
 	public static final String VALUE_TYPE_POLLS = "polls";
 

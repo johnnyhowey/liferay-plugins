@@ -51,11 +51,12 @@ public interface PushNotificationsEntryService extends BaseService,
 	 */
 	@com.liferay.portal.security.ac.AccessControlled(guestAccessEnabled = true)
 	public com.liferay.pushnotifications.model.PushNotificationsEntry addPushNotificationsEntry(
-		java.lang.String payload)
+		long parentPushNotificationsEntryId, java.lang.String payload)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
-	public com.liferay.pushnotifications.model.PushNotificationsEntry dislikePushNotificationsEntry(
-		long pushNotificationsEntryId)
+	@com.liferay.portal.security.ac.AccessControlled(guestAccessEnabled = true)
+	public com.liferay.pushnotifications.model.PushNotificationsEntry addPushNotificationsEntry(
+		java.lang.String payload)
 		throws com.liferay.portal.kernel.exception.PortalException;
 
 	/**
@@ -68,7 +69,7 @@ public interface PushNotificationsEntryService extends BaseService,
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public java.util.List<com.liferay.pushnotifications.model.PushNotificationsEntry> getPushNotificationsEntries(
 		long parentPushNotificationsEntryId, long lastAccessTime, int start,
-		int end);
+		int end) throws com.liferay.portal.kernel.exception.PortalException;
 
 	@Override
 	public java.lang.Object invokeMethod(java.lang.String name,
@@ -85,4 +86,8 @@ public interface PushNotificationsEntryService extends BaseService,
 	* @param beanIdentifier the Spring bean ID for this bean
 	*/
 	public void setBeanIdentifier(java.lang.String beanIdentifier);
+
+	public com.liferay.pushnotifications.model.PushNotificationsEntry unlikePushNotificationsEntry(
+		long pushNotificationsEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException;
 }

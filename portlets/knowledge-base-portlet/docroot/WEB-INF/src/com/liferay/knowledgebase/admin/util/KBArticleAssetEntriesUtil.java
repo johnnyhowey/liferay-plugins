@@ -138,8 +138,9 @@ public class KBArticleAssetEntriesUtil {
 				JournalArticleLocalServiceUtil.getLatestArticle(classPK);
 
 			portletURL = PortletURLFactoryUtil.create(
-				request, PortletKeys.JOURNAL_CONTENT, themeDisplay.getPlid(),
-				PortletRequest.RENDER_PHASE);
+				request,
+				"com_liferay_journal_content_web_portlet_JournalContentPortlet",
+				themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 
 			portletURL.setParameter("struts_action", "/journal_content/view");
 			portletURL.setParameter(

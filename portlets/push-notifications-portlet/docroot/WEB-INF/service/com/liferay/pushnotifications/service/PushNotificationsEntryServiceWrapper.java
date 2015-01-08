@@ -36,16 +36,17 @@ public class PushNotificationsEntryServiceWrapper
 
 	@Override
 	public com.liferay.pushnotifications.model.PushNotificationsEntry addPushNotificationsEntry(
-		java.lang.String payload)
+		long parentPushNotificationsEntryId, java.lang.String payload)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _pushNotificationsEntryService.addPushNotificationsEntry(payload);
+		return _pushNotificationsEntryService.addPushNotificationsEntry(parentPushNotificationsEntryId,
+			payload);
 	}
 
 	@Override
-	public com.liferay.pushnotifications.model.PushNotificationsEntry dislikePushNotificationsEntry(
-		long pushNotificationsEntryId)
+	public com.liferay.pushnotifications.model.PushNotificationsEntry addPushNotificationsEntry(
+		java.lang.String payload)
 		throws com.liferay.portal.kernel.exception.PortalException {
-		return _pushNotificationsEntryService.dislikePushNotificationsEntry(pushNotificationsEntryId);
+		return _pushNotificationsEntryService.addPushNotificationsEntry(payload);
 	}
 
 	/**
@@ -61,7 +62,7 @@ public class PushNotificationsEntryServiceWrapper
 	@Override
 	public java.util.List<com.liferay.pushnotifications.model.PushNotificationsEntry> getPushNotificationsEntries(
 		long parentPushNotificationsEntryId, long lastAccessTime, int start,
-		int end) {
+		int end) throws com.liferay.portal.kernel.exception.PortalException {
 		return _pushNotificationsEntryService.getPushNotificationsEntries(parentPushNotificationsEntryId,
 			lastAccessTime, start, end);
 	}
@@ -89,6 +90,13 @@ public class PushNotificationsEntryServiceWrapper
 	@Override
 	public void setBeanIdentifier(java.lang.String beanIdentifier) {
 		_pushNotificationsEntryService.setBeanIdentifier(beanIdentifier);
+	}
+
+	@Override
+	public com.liferay.pushnotifications.model.PushNotificationsEntry unlikePushNotificationsEntry(
+		long pushNotificationsEntryId)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return _pushNotificationsEntryService.unlikePushNotificationsEntry(pushNotificationsEntryId);
 	}
 
 	/**

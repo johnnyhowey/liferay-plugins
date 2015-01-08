@@ -14,6 +14,7 @@
 
 package com.liferay.knowledgebase.hook.upgrade;
 
+import com.liferay.knowledgebase.hook.upgrade.v1_3_4.UpgradeKBComment;
 import com.liferay.knowledgebase.hook.upgrade.v1_3_4.UpgradePortletPreferences;
 import com.liferay.knowledgebase.hook.upgrade.v1_3_4.UpgradeResourceAction;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
@@ -30,6 +31,7 @@ public class UpgradeProcess_1_3_4 extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
+		upgrade(UpgradeKBComment.class);
 		upgrade(UpgradePortletPreferences.class);
 		upgrade(UpgradeResourceAction.class);
 	}
