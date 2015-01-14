@@ -23,11 +23,16 @@
 Group group = themeDisplay.getScopeGroup();
 
 List<SocialActivitySet> results = null;
+
+int count = 0;
 int total = 0;
 
 int start = ParamUtil.getInteger(request, "start");
 int end = start + _DELTA;
 
+int offset = 0;
+
+do {
 if (group.isUser()) {
 	if (layout.isPrivateLayout()) {
 		if (tabs1.equals("connections")) {
@@ -63,6 +68,17 @@ else {
 %>
 
 <%@ include file="/activities/view_activity_sets_feed.jspf" %>
+
+<%
+start = start + offset;
+end = start + _DELTA;
+offset = 0;
+} while ((count < _DELTA) && (!results.isEmpty()));
+%>
+
+<aui:script>
+_start = <%= start %>;
+</aui:script>
 
 <c:if test="<%= (results.isEmpty()) %>">
 	<div class="no-activities">
