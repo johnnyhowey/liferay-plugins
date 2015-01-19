@@ -220,7 +220,7 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 		return _hostName;
 	}
 
-	public int getPort() {
+	public int getHostPort() {
 		return _hostPort;
 	}
 
@@ -383,7 +383,7 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 	protected List<NameValuePair> toNameValuePairs(
 		Map<String, String> parameters) {
 
-		List<NameValuePair> nameValuePairs = new LinkedList<NameValuePair>();
+		List<NameValuePair> nameValuePairs = new LinkedList<>();
 
 		for (Map.Entry<String, String> entry : parameters.entrySet()) {
 			String key = entry.getKey();

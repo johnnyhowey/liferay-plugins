@@ -27,27 +27,176 @@
 	</target>
 
 	<target name="build-summary">
-		<java
-			classname="com.liferay.portal.tools.PluginsSummaryBuilder"
-			classpathref="portal.classpath"
-			fork="true"
-			newenvironment="true"
-		>
-			<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
-			<jvmarg value="-Dplugins.dir=${sdk.dir}" />
-		</java>
+		<exec executable="git" outputproperty="git.branch">
+			<arg line="rev-parse --abbrev-ref HEAD"/>
+		</exec>
 
-		<java
-			classname="com.liferay.portal.tools.XSLTBuilder"
-			classpathref="portal.classpath"
-			fork="true"
-			newenvironment="true"
-		>
-			<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
-			<arg value="${sdk.dir}/summary.xml" />
-			<arg value="${sdk.dir}/summary.xsl" />
-			<arg value="${sdk.dir}/summary.html" />
-		</java>
+		<if>
+			<or>
+				<equals arg1="${git.branch}" arg2="master" />
+				<matches pattern="ee-.*x$" string="${git.branch}" />
+			</or>
+			<then>
+				<delete>
+					<fileset dir="." includes="**/liferay-releng.changelog" />
+					<fileset dir="." includes="**/liferay-releng.changelog.md5" />
+				</delete>
+
+				<copy todir="${sdk.dir}" overwrite="true">
+					<fileset dir="${release.plugins.dir}">
+						<include name="**/liferay-plugin-package.properties" />
+					</fileset>
+				</copy>
+			</then> 
+			<else>
+				<java
+					classname="com.liferay.portal.tools.PluginsSummaryBuilder"
+					classpathref="portal.classpath"
+					fork="true"
+					newenvironment="true"
+				>
+					<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
+					<jvmarg value="-Dplugins.dir=${sdk.dir}" />
+				</java>
+
+				<java
+					classname="com.liferay.portal.tools.XSLTBuilder"
+					classpathref="portal.classpath"
+					fork="true"
+					newenvironment="true"
+				>
+					<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
+					<arg value="${sdk.dir}/summary.xml" />
+					<arg value="${sdk.dir}/summary.xsl" />
+					<arg value="${sdk.dir}/summary.html" />
+				</java>
+			</else>
+		</if>
+	</target>
+
+	<target name="download-nodejs">
+		<if>
+			<os arch="x86_32" family="mac" />
+			<then>
+				<propertycopy from="nodejs.url[osx32]" name="nodejs.url" />
+			</then>
+			<elseif>
+				<os arch="x86_64" family="mac" />
+				<then>
+					<propertycopy from="nodejs.url[osx64]" name="nodejs.url" />
+				</then>
+			</elseif>
+			<elseif>
+				<os arch="amd" family="unix" />
+				<then>
+					<propertycopy from="nodejs.url[linux32]" name="nodejs.url" />
+				</then>
+			</elseif>
+			<elseif>
+				<os arch="amd64" family="unix" />
+				<then>
+					<propertycopy from="nodejs.url[linux64]" name="nodejs.url" />
+				</then>
+			</elseif>
+			<elseif>
+				<os arch="x86" family="windows" />
+				<then>
+					<propertycopy from="nodejs.url[windows32]" name="nodejs.url" />
+				</then>
+			</elseif>
+			<elseif>
+				<os arch="amd64" family="windows" />
+				<then>
+					<propertycopy from="nodejs.url[windows64]" name="nodejs.url" />
+				</then>
+			</elseif>
+		</if>
+
+		<if>
+			<not>
+				<isset property="nodejs.url" />
+			</not>
+			<then>
+				<fail>
+.
+
+Unable to automatically detect the current operating system and architecture.
+Please manually set the property "nodejs.url" in build.properties to the
+location of NodeJS. An example value for OSX on a 64 bit architecture is
+${nodejs.url[osx64]}.
+				</fail>
+			</then>
+		</if>
+
+		<if>
+			<not>
+				<available file="tools/node-v${nodejs.version}" />
+			</not>
+			<then>
+				<antelope:stringutil string="${nodejs.url}" property="nodejs.file.beginindex">
+					<antelope:lastindexof string="/" />
+				</antelope:stringutil>
+
+				<math
+					datatype="int"
+					operand1="${nodejs.file.beginindex}"
+					operand2="1"
+					operation="+"
+					result="nodejs.file.beginindex"
+				/>
+
+				<antelope:stringutil string="${nodejs.url}" property="nodejs.file">
+					<antelope:substring beginindex="${nodejs.file.beginindex}" />
+				</antelope:stringutil>
+
+				<get dest="${nodejs.file}" src="${nodejs.url}" />
+
+				<if>
+					<contains string="${nodejs.file}" substring=".tar.gz" />
+					<then>
+						<untar
+							compression="gzip"
+							dest="tools"
+							src="${nodejs.file}"
+						/>
+
+						<antelope:stringutil string="${nodejs.file}" property="nodejs.dir.endindex">
+							<antelope:lastindexof string=".tar.gz" />
+						</antelope:stringutil>
+
+						<antelope:stringutil string="${nodejs.file}" property="nodejs.dir">
+							<antelope:substring endindex="${nodejs.dir.endindex}" />
+						</antelope:stringutil>
+
+						<delete dir="tools/node-v${nodejs.version}" />
+
+						<move file="tools/${nodejs.dir}" tofile="tools/node-v${nodejs.version}" />
+					</then>
+					<else>
+						<move file="${nodejs.file}" todir="tools/templates/node-v${nodejs.version}" />
+					</else>
+				</if>
+
+				<delete file="${nodejs.file}" />
+
+				<if>
+					<os family="windows" />
+					<then>
+						<get
+							dest="npm.zip"
+							src="${nodejs.npm.url}"
+						/>
+
+						<unzip
+							dest="tools/templates/node-v${nodejs.version}"
+							src="npm.zip"
+						/>
+
+						<delete file="npm.zip" />
+					</then>
+				</if>
+			</then>
+		</if>
 	</target>
 
 	<target name="ear">
@@ -56,7 +205,7 @@
 
 		<copy todir="dist" overwrite="yes">
 			<fileset
-				dir="${sdk.dir}/tools/ear_tmpl"
+				dir="${sdk.dir}/tools/templates/ear_tmpl"
 			/>
 		</copy>
 

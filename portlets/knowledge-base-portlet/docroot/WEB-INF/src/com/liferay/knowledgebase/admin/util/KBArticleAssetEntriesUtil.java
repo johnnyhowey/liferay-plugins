@@ -94,7 +94,7 @@ public class KBArticleAssetEntriesUtil {
 		long[] tagIds = AssetTagLocalServiceUtil.getTagIds(
 			groupIds, StringUtil.split(ListUtil.toString(assetTags, "name")));
 
-		Set<Long> filteredTagIds = new LinkedHashSet<Long>();
+		Set<Long> filteredTagIds = new LinkedHashSet<>();
 
 		for (long tagId : tagIds) {
 			try {
@@ -138,8 +138,9 @@ public class KBArticleAssetEntriesUtil {
 				JournalArticleLocalServiceUtil.getLatestArticle(classPK);
 
 			portletURL = PortletURLFactoryUtil.create(
-				request, PortletKeys.JOURNAL_CONTENT, themeDisplay.getPlid(),
-				PortletRequest.RENDER_PHASE);
+				request,
+				"com_liferay_journal_content_web_portlet_JournalContentPortlet",
+				themeDisplay.getPlid(), PortletRequest.RENDER_PHASE);
 
 			portletURL.setParameter("struts_action", "/journal_content/view");
 			portletURL.setParameter(

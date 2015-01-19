@@ -39,6 +39,7 @@ import com.liferay.portal.kernel.uuid.PortalUUIDUtil;
 import com.liferay.portal.model.Group;
 import com.liferay.portal.model.Layout;
 import com.liferay.portal.model.User;
+import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.ServiceContext;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
@@ -222,8 +223,11 @@ public class ShindigUtil {
 		if (folder == null) {
 			ServiceContext serviceContext = new ServiceContext();
 
-			serviceContext.setAddGroupPermissions(true);
-			serviceContext.setAddGuestPermissions(true);
+			serviceContext.setGroupPermissions(
+				new String[] {
+					ActionKeys.ADD_DOCUMENT, ActionKeys.DELETE,
+					ActionKeys.UPDATE, ActionKeys.VIEW});
+			serviceContext.setGuestPermissions(new String[] {ActionKeys.VIEW});
 			serviceContext.setScopeGroupId(repositoryId);
 
 			folder = DLAppServiceUtil.addFolder(
@@ -469,7 +473,7 @@ public class ShindigUtil {
 		new AutoResetThreadLocal<String>(
 			ShindigUtil.class + "._host", StringPool.BLANK);
 	private static Set<String> _ignoreGadgetSpecCache =
-		new ConcurrentHashSet<String>();
+		new ConcurrentHashSet<>();
 
 	@Inject
 	private static Processor _processor;

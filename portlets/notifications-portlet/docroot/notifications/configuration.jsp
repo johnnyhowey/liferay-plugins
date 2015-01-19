@@ -36,10 +36,11 @@
 	userNotificationDefinitionsMap.putAll(UserNotificationManagerUtil.getUserNotificationDefinitions());
 
 	for (Map.Entry<String, List<UserNotificationDefinition>> entry : userNotificationDefinitionsMap.entrySet()) {
+		Portlet portlet = PortletLocalServiceUtil.getPortletById(entry.getKey());
 	%>
 
 		<table class="notification-deliveries table table-condensed">
-			<caption><%= PortalUtil.getPortletTitle(entry.getKey(), locale) %></caption>
+			<caption><%= PortalUtil.getPortletTitle(portlet, application, locale) %></caption>
 			<tbody>
 
 			<%

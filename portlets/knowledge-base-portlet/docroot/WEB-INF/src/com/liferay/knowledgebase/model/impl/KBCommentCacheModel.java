@@ -18,6 +18,7 @@ import aQute.bnd.annotation.ProviderType;
 
 import com.liferay.knowledgebase.model.KBComment;
 
+import com.liferay.portal.kernel.util.HashUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.model.CacheModel;
@@ -39,6 +40,30 @@ import java.util.Date;
 @ProviderType
 public class KBCommentCacheModel implements CacheModel<KBComment>,
 	Externalizable {
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (!(obj instanceof KBCommentCacheModel)) {
+			return false;
+		}
+
+		KBCommentCacheModel kbCommentCacheModel = (KBCommentCacheModel)obj;
+
+		if (kbCommentId == kbCommentCacheModel.kbCommentId) {
+			return true;
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return HashUtil.hash(0, kbCommentId);
+	}
+
 	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(27);
@@ -65,8 +90,8 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 		sb.append(classPK);
 		sb.append(", content=");
 		sb.append(content);
-		sb.append(", helpful=");
-		sb.append(helpful);
+		sb.append(", userRating=");
+		sb.append(userRating);
 		sb.append(", status=");
 		sb.append(status);
 		sb.append("}");
@@ -121,7 +146,7 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 			kbCommentImpl.setContent(content);
 		}
 
-		kbCommentImpl.setHelpful(helpful);
+		kbCommentImpl.setUserRating(userRating);
 		kbCommentImpl.setStatus(status);
 
 		kbCommentImpl.resetOriginalValues();
@@ -142,7 +167,7 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 		classNameId = objectInput.readLong();
 		classPK = objectInput.readLong();
 		content = objectInput.readUTF();
-		helpful = objectInput.readBoolean();
+		userRating = objectInput.readInt();
 		status = objectInput.readInt();
 	}
 
@@ -180,7 +205,7 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 			objectOutput.writeUTF(content);
 		}
 
-		objectOutput.writeBoolean(helpful);
+		objectOutput.writeInt(userRating);
 		objectOutput.writeInt(status);
 	}
 
@@ -195,6 +220,6 @@ public class KBCommentCacheModel implements CacheModel<KBComment>,
 	public long classNameId;
 	public long classPK;
 	public String content;
-	public boolean helpful;
+	public int userRating;
 	public int status;
 }

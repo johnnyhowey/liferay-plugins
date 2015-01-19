@@ -15,7 +15,13 @@
 package com.liferay.knowledgebase.hook.upgrade.v1_3_4;
 
 import com.liferay.knowledgebase.util.ActionKeys;
+import com.liferay.portal.kernel.dao.jdbc.DataAccess;
 import com.liferay.portal.kernel.upgrade.UpgradeProcess;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * @author Adolfo Pérez
@@ -24,10 +30,45 @@ public class UpgradeResourceAction extends UpgradeProcess {
 
 	@Override
 	protected void doUpgrade() throws Exception {
-		runSQL(
-			"update ResourceAction set actionId = '" +
-				ActionKeys.VIEW_SUGGESTIONS + "' where actionId = " +
-					"'VIEW_KB_FEEDBACK'");
+		if (_hasViewFeedbackResourceAction()) {
+			runSQL(
+				"delete from ResourceAction where actionId = '" +
+					ActionKeys.VIEW_SUGGESTIONS + "'");
+
+			runSQL(
+				"update ResourceAction set actionId = '" +
+					ActionKeys.VIEW_SUGGESTIONS + "' where actionId = '" +
+						_ACTION_ID_VIEW_KB_FEEDBACK + "'");
+		}
 	}
+
+	private boolean _hasViewFeedbackResourceAction() throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			con = DataAccess.getUpgradeOptimizedConnection();
+
+			ps = con.prepareStatement(
+				"select count(*) from ResourceAction where actionId = ?");
+
+			ps.setString(1, _ACTION_ID_VIEW_KB_FEEDBACK);
+
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				return rs.getInt(1) > 0;
+			}
+
+			return false;
+		}
+		finally {
+			DataAccess.cleanUp(con, ps, rs);
+		}
+	}
+
+	private static final String _ACTION_ID_VIEW_KB_FEEDBACK =
+		"VIEW_KB_FEEDBACK";
 
 }
