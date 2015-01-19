@@ -51,16 +51,16 @@ KBSuggestionListDisplayContext kbSuggestionListDisplayContext = (KBSuggestionLis
 
 			<div class="kb-article-comment-helpful">
 				<c:choose>
-					<c:when test="<%= kbComment.getHelpful() %>">
+					<c:when test="<%= kbComment.getUserRating() == KBCommentConstants.USER_RATING_LIKE %>">
 						<span class="icon icon-thumbs-up"></span>
 
 						<liferay-ui:message key="the-user-liked-the-article" />
 					</c:when>
-					<c:otherwise>
+					<c:when test="<%= kbComment.getUserRating() == KBCommentConstants.USER_RATING_DISLIKE %>">
 						<span class="icon icon-thumbs-down"></span>
 
 						<liferay-ui:message key="the-user-did-not-like-the-article" />
-					</c:otherwise>
+					</c:when>
 				</c:choose>
 			</div>
 
@@ -110,7 +110,7 @@ KBSuggestionListDisplayContext kbSuggestionListDisplayContext = (KBSuggestionLis
 						<portlet:param name="kbCommentId" value="<%= String.valueOf(kbComment.getKbCommentId()) %>" />
 					</liferay-portlet:actionURL>
 
-					<aui:button cssClass="kb-suggestion-delete" href="<%= kbSuggestionListDisplayContext.getViewSuggestionURL(deleteURL, kbSuggestionListDisplayContext.getSelectedNavItem()) %>" value="delete" />
+					<aui:button cssClass="kb-suggestion-delete" data-href="<%= kbSuggestionListDisplayContext.getViewSuggestionURL(deleteURL, kbSuggestionListDisplayContext.getSelectedNavItem()) %>" value="delete" />
 				</c:if>
 			</div>
 		</td>

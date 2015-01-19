@@ -29,4 +29,10 @@ public class KBCommentConstants {
 
 	public static final int STATUS_NONE = -2;
 
+	public static final int USER_RATING_DISLIKE = 0;
+
+	public static final int USER_RATING_LIKE = 1;
+
+	public static final int USER_RATING_NONE = 2;
+
 }

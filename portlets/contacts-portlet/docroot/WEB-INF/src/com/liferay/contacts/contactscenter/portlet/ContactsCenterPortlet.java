@@ -77,6 +77,7 @@ import com.liferay.portal.model.UserNotificationDeliveryConstants;
 import com.liferay.portal.model.Website;
 import com.liferay.portal.service.RoleLocalServiceUtil;
 import com.liferay.portal.service.ServiceContext;
+import com.liferay.portal.service.ServiceContextFactory;
 import com.liferay.portal.service.UserLocalServiceUtil;
 import com.liferay.portal.service.UserNotificationEventLocalServiceUtil;
 import com.liferay.portal.service.UserServiceUtil;
@@ -209,7 +210,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 		long[] userIds = StringUtil.split(
 			ParamUtil.getString(resourceRequest, "userIds"), 0L);
 
-		List<User> users = new ArrayList<User>(userIds.length);
+		List<User> users = new ArrayList<>(userIds.length);
 
 		for (long userId : userIds) {
 			User user = UserServiceUtil.getUserById(userId);
@@ -805,8 +806,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 			}
 		}
 		else {
-			LinkedHashMap<String, Object> params =
-				new LinkedHashMap<String, Object>();
+			LinkedHashMap<String, Object> params = new LinkedHashMap<>();
 
 			params.put("inherit", Boolean.TRUE);
 
@@ -850,7 +850,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 						new Long(siteAdministratorRole.getRoleId())
 					});
 
-				Set<User> users = new HashSet<User>();
+				Set<User> users = new HashSet<>();
 
 				users.addAll(
 					UserLocalServiceUtil.search(
@@ -876,7 +876,7 @@ public class ContactsCenterPortlet extends MVCPortlet {
 						QueryUtil.ALL_POS, QueryUtil.ALL_POS,
 						(OrderByComparator)null));
 
-				usersList = new ArrayList<User>(users);
+				usersList = new ArrayList<>(users);
 
 				ListUtil.sort(usersList, new UserLastNameComparator(true));
 			}
@@ -1090,13 +1090,12 @@ public class ContactsCenterPortlet extends MVCPortlet {
 
 		User user = themeDisplay.getUser();
 
-		long[] assetCategoryIds = StringUtil.split(
-			ParamUtil.getString(actionRequest, "assetCategoryNames"), 0L);
-		String[] assetTagNames = StringUtil.split(
-			ParamUtil.getString(actionRequest, "assetTagNames"));
+		ServiceContext serviceContext = ServiceContextFactory.getInstance(
+				User.class.getName(), actionRequest);
 
 		UserLocalServiceUtil.updateAsset(
-			user.getUserId(), user, assetCategoryIds, assetTagNames);
+			user.getUserId(), user, serviceContext.getAssetCategoryIds(),
+			serviceContext.getAssetTagNames());
 	}
 
 	protected void updatePhoneNumbers(ActionRequest actionRequest)

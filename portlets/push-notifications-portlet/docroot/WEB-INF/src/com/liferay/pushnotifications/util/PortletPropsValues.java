@@ -36,6 +36,6 @@ public class PortletPropsValues {
 		PortletProps.get(PortletPropsKeys.APPLE_CERTIFICATE_PATH));
 
 	public static final boolean APPLE_SANDBOX = GetterUtil.getBoolean(
-		PortletProps.get(PortletPropsKeys.APPLE_SANDBOX));
+		PortletProps.get(PortletPropsKeys.APPLE_SANDBOX), true);
 
 }
