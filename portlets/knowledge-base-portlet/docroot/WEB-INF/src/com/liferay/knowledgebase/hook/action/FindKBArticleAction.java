@@ -125,7 +125,7 @@ public class FindKBArticleAction extends BaseStrutsAction {
 			long plid, boolean privateLayout, KBArticle kbArticle)
 		throws Exception {
 
-		List<Layout> candidateLayouts = new ArrayList<Layout>();
+		List<Layout> candidateLayouts = new ArrayList<>();
 
 		Group group = GroupLocalServiceUtil.getGroup(kbArticle.getGroupId());
 
@@ -407,9 +407,7 @@ public class FindKBArticleAction extends BaseStrutsAction {
 	protected boolean isParentFolder(long resourcePrimKey, long kbFolderId)
 		throws PortalException {
 
-		while (kbFolderId !=
-					KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
-
+		while (kbFolderId != KBFolderConstants.DEFAULT_PARENT_FOLDER_ID) {
 			if (resourcePrimKey == kbFolderId) {
 				return true;
 			}

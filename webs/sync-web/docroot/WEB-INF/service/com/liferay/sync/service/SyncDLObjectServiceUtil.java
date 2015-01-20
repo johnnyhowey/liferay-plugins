@@ -165,6 +165,15 @@ public class SyncDLObjectServiceUtil {
 		return getService().getPortletPreferences();
 	}
 
+	public static com.liferay.sync.model.SyncContext getSyncContext()
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().getSyncContext();
+	}
+
+	/**
+	* @deprecated As of 7.0.0, replaced by {@link #getSyncContext()}
+	*/
+	@Deprecated
 	public static com.liferay.sync.model.SyncContext getSyncContext(
 		java.lang.String uuid)
 		throws com.liferay.portal.kernel.exception.PortalException {
@@ -259,6 +268,12 @@ public class SyncDLObjectServiceUtil {
 	*/
 	public static void setBeanIdentifier(java.lang.String beanIdentifier) {
 		getService().setBeanIdentifier(beanIdentifier);
+	}
+
+	public static java.util.Map<java.lang.String, java.lang.Object> updateFileEntries(
+		java.io.File zipFile)
+		throws com.liferay.portal.kernel.exception.PortalException {
+		return getService().updateFileEntries(zipFile);
 	}
 
 	public static com.liferay.sync.model.SyncDLObject updateFileEntry(

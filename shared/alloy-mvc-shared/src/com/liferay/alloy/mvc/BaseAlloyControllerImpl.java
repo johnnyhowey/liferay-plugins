@@ -61,6 +61,7 @@ import com.liferay.portal.kernel.util.ParamUtil;
 import com.liferay.portal.kernel.util.ServiceBeanMethodInvocationFactoryUtil;
 import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.model.AttachedModel;
@@ -74,10 +75,13 @@ import com.liferay.portal.model.User;
 import com.liferay.portal.theme.ThemeDisplay;
 import com.liferay.portal.util.PortalUtil;
 
+import java.io.PrintWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 
 import java.lang.reflect.Method;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -146,36 +150,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		}
 
 		if (lifecycle.equals(PortletRequest.ACTION_PHASE)) {
-			Class<?> superClass = clazz.getSuperclass();
-
-			Method executeActionMethod = superClass.getDeclaredMethod(
-				"executeAction", new Class<?>[] {Method.class});
-
-			try {
-				ServiceBeanMethodInvocationFactoryUtil.proceed(
-					this, BaseAlloyControllerImpl.class, executeActionMethod,
-					new Object[] {method}, new String[] {"transactionAdvice"});
-			}
-			catch (Exception e) {
-				log.error(e, e);
-
-				actionRequest.setAttribute(
-					CALLED_PROCESS_ACTION, Boolean.TRUE.toString());
-
-				String message = "an-unexpected-system-error-occurred";
-
-				Throwable rootCause = getRootCause(e);
-
-				if (rootCause instanceof AlloyException) {
-					message = rootCause.getMessage();
-				}
-
-				renderError(message);
-
-				actionRequest.setAttribute(VIEW_PATH, viewPath);
-
-				PortalUtil.copyRequestParameters(actionRequest, actionResponse);
-			}
+			executeAction(method);
 		}
 		else if (lifecycle.equals(PortletRequest.RENDER_PHASE)) {
 			executeRender(method);
@@ -293,6 +268,28 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		indexModel(baseModel);
 	}
 
+	protected void addOpenerSuccessMessage() {
+		Map<String, String> data = (Map<String, String>)SessionMessages.get(
+			request,
+			portlet.getPortletId() +
+				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA);
+
+		if ((data == null) ||
+			!GetterUtil.getBoolean(data.get("addSuccessMessage"))) {
+
+			return;
+		}
+
+		addSuccessMessage();
+
+		data.put("addSuccessMessage", StringPool.FALSE);
+
+		SessionMessages.add(
+			request,
+			portlet.getPortletId() +
+				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA, data);
+	}
+
 	protected void addSuccessMessage() {
 		String successMessage = ParamUtil.getString(
 			portletRequest, "successMessage");
@@ -331,41 +328,44 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		return null;
 	}
 
+	protected String buildResponseContent(
+			Object data, String message, int status)
+		throws Exception {
+
+		String responseContent = StringPool.BLANK;
+
+		if (isRespondingTo("json")) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+			if (data instanceof Exception) {
+				String stackTrace = getStackTrace((Exception)data);
+
+				jsonObject.put("data", stackTrace);
+			}
+			else {
+				jsonObject.put(
+					"data",
+					JSONFactoryUtil.createJSONObject(String.valueOf(data)));
+			}
+
+			jsonObject.put("message", message);
+			jsonObject.put("status", status);
+
+			responseContent = jsonObject.toString();
+		}
+
+		return responseContent;
+	}
+
 	protected MessageListener buildSchedulerMessageListener() {
 		return null;
 	}
 
-	protected String createJSONResponseContent(
-		JSONObject dataJSONObject, String message, String status) {
-
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-
-		jsonObject.put("data", dataJSONObject);
-		jsonObject.put("message", message);
-		jsonObject.put("status", status);
-
-		return jsonObject.toString();
-	}
-
-	@Transactional(
-		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRES_NEW,
-		rollbackFor = {Exception.class}
-	)
 	protected void executeAction(Method method) throws Exception {
-		if (method != null) {
-			method.invoke(this);
-		}
+		executeResource(method);
 
 		actionRequest.setAttribute(
 			CALLED_PROCESS_ACTION, Boolean.TRUE.toString());
-
-		if (Validator.isNotNull(format)) {
-			if (format.equals("json")) {
-				writeResponse(responseContent, ContentTypes.APPLICATION_JSON);
-			}
-
-			return;
-		}
 
 		if (Validator.isNotNull(viewPath)) {
 			actionRequest.setAttribute(VIEW_PATH, viewPath);
@@ -382,21 +382,13 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 			(String)request.getAttribute(CALLED_PROCESS_ACTION));
 
 		if (!calledProcessAction) {
-			if (method != null) {
-				method.invoke(this);
-			}
+			executeResource(method);
+
+			addOpenerSuccessMessage();
 		}
 
 		if (Validator.isNull(viewPath)) {
 			viewPath = actionPath;
-		}
-
-		if (Validator.isNotNull(format)) {
-			if (format.equals("json")) {
-				writeResponse(responseContent, ContentTypes.APPLICATION_JSON);
-			}
-
-			return;
 		}
 
 		String includePath = buildIncludePath(viewPath);
@@ -440,8 +432,41 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	}
 
 	protected void executeResource(Method method) throws Exception {
-		if (method != null) {
-			method.invoke(this);
+		try {
+			if (method != null) {
+				Class<?> superClass = clazz.getSuperclass();
+
+				Method invokeMethod = superClass.getDeclaredMethod(
+					"invoke", new Class<?>[] {Method.class});
+
+				ServiceBeanMethodInvocationFactoryUtil.proceed(
+					this, BaseAlloyControllerImpl.class, invokeMethod,
+					new Object[] {method}, new String[] {"transactionAdvice"});
+			}
+		}
+		catch (Exception e) {
+			log.error(e, e);
+
+			String message = "an-unexpected-system-error-occurred";
+
+			Throwable rootCause = getRootCause(e);
+
+			if (rootCause instanceof AlloyException) {
+				message = rootCause.getMessage();
+			}
+
+			renderError(HttpServletResponse.SC_BAD_REQUEST, e, message);
+		}
+		finally {
+			if (isRespondingTo()) {
+				String contentType = response.getContentType();
+
+				if (isRespondingTo("json")) {
+					contentType = ContentTypes.APPLICATION_JSON;
+				}
+
+				writeResponse(responseContent, contentType);
+			}
 		}
 	}
 
@@ -511,8 +536,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 			Object... attributes)
 		throws Exception {
 
-		Map<String, Serializable> attributesMap =
-			new HashMap<String, Serializable>();
+		Map<String, Serializable> attributesMap = new HashMap<>();
 
 		if ((attributes.length == 0) || ((attributes.length % 2) != 0)) {
 			throw new Exception("Arguments length is not an even number");
@@ -527,6 +551,16 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		}
 
 		return attributesMap;
+	}
+
+	protected String getStackTrace(Exception e) {
+		StringWriter stringWriter = new StringWriter();
+
+		PrintWriter printWriter = new PrintWriter(stringWriter);
+
+		e.printStackTrace(printWriter);
+
+		return stringWriter.toString();
 	}
 
 	protected boolean hasPermission() {
@@ -693,7 +727,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 	}
 
 	protected void initMethods() {
-		methodsMap = new HashMap<String, Method>();
+		methodsMap = new HashMap<>();
 
 		Method[] methods = clazz.getMethods();
 
@@ -831,6 +865,24 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		user = themeDisplay.getUser();
 	}
 
+	@SuppressWarnings("unused")
+	@Transactional(
+		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRES_NEW,
+		rollbackFor = {Exception.class}
+	)
+	protected void invoke(Method method) throws Exception {
+		method.invoke(this);
+	}
+
+	protected boolean isRespondingTo() {
+		return Validator.isNotNull(format);
+	}
+
+	protected boolean isRespondingTo(String format) {
+		return StringUtil.equalsIgnoreCase(this.format, format);
+	}
+
+	@SuppressWarnings("unused")
 	@Transactional(
 		isolation = Isolation.PORTAL, propagation = Propagation.REQUIRES_NEW,
 		rollbackFor = {Exception.class}
@@ -872,18 +924,80 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		viewPath = actionPath;
 	}
 
-	protected void renderError(String pattern, Object... arguments) {
-		if (Validator.isNotNull(format) && format.equals("json")) {
-			responseContent = createJSONResponseContent(
-				null, translate(pattern, arguments), "error");
+	protected void renderError(
+			int status, Exception e, String pattern, Object... arguments)
+		throws Exception {
+
+		Throwable rootCause = getRootCause(e);
+
+		if (isRespondingTo()) {
+			responseContent = buildResponseContent(
+				rootCause, translate(pattern, arguments), status);
 
 			return;
 		}
 
 		portletRequest.setAttribute("arguments", arguments);
+
+		String stackTrace = getStackTrace((Exception)rootCause);
+
+		portletRequest.setAttribute("data", stackTrace);
+
 		portletRequest.setAttribute("pattern", pattern);
+		portletRequest.setAttribute("status", status);
 
 		render(_VIEW_PATH_ERROR);
+	}
+
+	protected void renderError(int status, String pattern, Object... arguments)
+		throws Exception {
+
+		AlloyException alloyException = new AlloyException(
+			translate("unspecified-cause"));
+
+		renderError(status, alloyException, pattern, arguments);
+	}
+
+	protected void renderError(String pattern, Object... arguments)
+		throws Exception {
+
+		renderError(HttpServletResponse.SC_BAD_REQUEST, pattern, arguments);
+	}
+
+	protected boolean respondWith(int status, Object object) throws Exception {
+		String data = StringPool.BLANK;
+
+		if (isRespondingTo("json")) {
+			JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
+
+			if (object instanceof AlloySearchResult) {
+				Hits hits = ((AlloySearchResult)object).getHits();
+
+				Document[] documents = hits.getDocs();
+
+				jsonObject.put(controllerPath, toJSONArray(documents));
+			}
+			else if (object instanceof Collection) {
+				Object[] objects =
+					((Collection)object).toArray(new BaseModel[0]);
+
+				jsonObject.put(controllerPath, toJSONArray(objects));
+			}
+			else {
+				jsonObject = toJSONObject(object);
+			}
+
+			data = jsonObject.toString();
+		}
+
+		responseContent = buildResponseContent(data, StringPool.BLANK, status);
+
+		return true;
+	}
+
+	@SuppressWarnings("unused")
+	protected boolean respondWith(Object object) throws Exception {
+		return respondWith(HttpServletResponse.SC_OK, object);
 	}
 
 	protected AlloySearchResult search(
@@ -1069,67 +1183,37 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		groupedModel.setGroupId(themeDisplay.getScopeGroupId());
 	}
 
-	protected void setJSONResponseContent(AlloySearchResult alloySearchResult)
-		throws Exception {
+	protected void setOpenerSuccessMessage() {
+		SessionMessages.add(
+			portletRequest,
+			portlet.getPortletId() + SessionMessages.KEY_SUFFIX_REFRESH_PORTLET,
+			portlet.getPortletId());
 
-		Hits hits = alloySearchResult.getHits();
+		Map<String, String> data = new HashMap<>();
 
-		Document[] documents = hits.getDocs();
+		data.put("addSuccessMessage", StringPool.TRUE);
 
-		setJSONResponseContent(documents);
-	}
-
-	protected void setJSONResponseContent(BaseModel<?> baseModel)
-		throws Exception {
-
-		responseContent = createJSONResponseContent(
-			toJSONObject(baseModel), null, "success");
-	}
-
-	protected void setJSONResponseContent(Document document) throws Exception {
-		responseContent = createJSONResponseContent(
-			toJSONObject(document), null, "success");
-	}
-
-	protected void setJSONResponseContent(Document[] documents)
-		throws Exception {
-
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-
-		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-
-		for (Document document : documents) {
-			jsonArray.put(toJSONObject(document));
-		}
-
-		jsonObject.put(controllerPath, jsonArray);
-
-		responseContent = createJSONResponseContent(
-			jsonObject, null, "success");
-	}
-
-	protected void setJSONResponseContent(List<BaseModel<?>> baseModels)
-		throws Exception {
-
-		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
-
-		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
-
-		for (BaseModel<?> baseModel : baseModels) {
-			jsonArray.put(toJSONObject(baseModel));
-		}
-
-		jsonObject.put(controllerPath, jsonArray);
-
-		responseContent = createJSONResponseContent(
-			jsonObject, null, "success");
+		SessionMessages.add(
+			request,
+			portlet.getPortletId() +
+				SessionMessages.KEY_SUFFIX_REFRESH_PORTLET_DATA, data);
 	}
 
 	protected void setPermissioned(boolean permissioned) {
 		this.permissioned = permissioned;
 	}
 
-	protected JSONObject toJSONObject(BaseModel<?> baseModel) {
+	protected JSONArray toJSONArray(Object[] objects) throws Exception {
+		JSONArray jsonArray = JSONFactoryUtil.createJSONArray();
+
+		for (Object object : objects) {
+			jsonArray.put(toJSONObject(object));
+		}
+
+		return jsonArray;
+	}
+
+	protected JSONObject toJSONObject(BaseModel<?> baseModel) throws Exception {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		Map<String, Object> modelAttributes = baseModel.getModelAttributes();
@@ -1143,7 +1227,7 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		return jsonObject;
 	}
 
-	protected JSONObject toJSONObject(Document document) {
+	protected JSONObject toJSONObject(Document document) throws Exception {
 		JSONObject jsonObject = JSONFactoryUtil.createJSONObject();
 
 		Map<String, Field> fields = document.getFields();
@@ -1155,6 +1239,21 @@ public abstract class BaseAlloyControllerImpl implements AlloyController {
 		}
 
 		return jsonObject;
+	}
+
+	protected JSONObject toJSONObject(Object object) throws Exception {
+		if (object instanceof BaseModel<?>) {
+			return toJSONObject((BaseModel<?>)object);
+		}
+		else if (object instanceof Document) {
+			return toJSONObject((Document)object);
+		}
+		else if (object instanceof JSONObject) {
+			return (JSONObject)object;
+		}
+
+		throw new AlloyException(
+			"Unable to convert " + object + " to a JSON object");
 	}
 
 	protected String translate(String pattern, Object... arguments) {

@@ -34,6 +34,7 @@ import com.liferay.knowledgebase.util.WebKeys;
 import com.liferay.portal.NoSuchSubscriptionException;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.servlet.SessionErrors;
+import com.liferay.portal.kernel.servlet.SessionMessages;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -149,9 +150,14 @@ public class AdminPortlet extends BaseKBPortlet {
 
 			serviceContext.setGuestPermissions(new String[] {ActionKeys.VIEW});
 
-			KBArticleServiceUtil.addKBArticlesMarkdown(
-				themeDisplay.getScopeGroupId(), parentKBFolderId, fileName,
-				inputStream, serviceContext);
+			int importedKBArticlesCount =
+				KBArticleServiceUtil.addKBArticlesMarkdown(
+					themeDisplay.getScopeGroupId(), parentKBFolderId, fileName,
+					inputStream, serviceContext);
+
+			SessionMessages.add(
+				actionRequest, "importedKBArticlesCount",
+				importedKBArticlesCount);
 		}
 		catch (KBArticleImportException kbaie) {
 			SessionErrors.add(actionRequest, kbaie.getClass(), kbaie);
@@ -253,8 +259,7 @@ public class AdminPortlet extends BaseKBPortlet {
 
 		Enumeration<String> enu = actionRequest.getParameterNames();
 
-		Map<Long, Double> resourcePrimKeyToPriorityMap =
-			new HashMap<Long, Double>();
+		Map<Long, Double> resourcePrimKeyToPriorityMap = new HashMap<>();
 
 		while (enu.hasMoreElements()) {
 			String name = enu.nextElement();

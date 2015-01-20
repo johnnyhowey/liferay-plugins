@@ -109,7 +109,7 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	public ExtRepositoryFolderAdapter addFolder(
-			long parentFolderId, String name, String description,
+			long userId, long parentFolderId, String name, String description,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -590,7 +590,7 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 			String extRepositoryFolderKey = getExtRepositoryObjectKey(folderId);
 
 			count += _extRepository.getExtRepositoryObjectsCount(
-				ExtRepositoryObjectType.OBJECT, extRepositoryFolderKey);
+				ExtRepositoryObjectType.FILE, extRepositoryFolderKey);
 		}
 
 		return count;
@@ -646,7 +646,7 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 		List<String> extRepositorySubfolderKeys =
 			_extRepository.getSubfolderKeys(extRepositoryFolderKey, recurse);
 
-		List<Long> subfolderIds = new ArrayList<Long>();
+		List<Long> subfolderIds = new ArrayList<>();
 
 		for (String extRepositorySubfolderKey : extRepositorySubfolderKeys) {
 			Object[] ids = getRepositoryEntryIds(extRepositorySubfolderKey);
@@ -726,7 +726,8 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	public FileEntry moveFileEntry(
-			long fileEntryId, long newFolderId, ServiceContext serviceContext)
+			long userId, long fileEntryId, long newFolderId,
+			ServiceContext serviceContext)
 		throws PortalException {
 
 		String extRepositoryFileEntryKey = getExtRepositoryObjectKey(
@@ -750,7 +751,7 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 	@Override
 	public ExtRepositoryFolderAdapter moveFolder(
-			long folderId, long newParentFolderId,
+			long userId, long folderId, long newParentFolderId,
 			ServiceContext serviceContext)
 		throws PortalException {
 
@@ -892,9 +893,9 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 
 		QueryConfig queryConfig = searchContext.getQueryConfig();
 
-		List<Document> documents = new ArrayList<Document>();
-		List<String> snippets = new ArrayList<String>();
-		List<Float> scores = new ArrayList<Float>();
+		List<Document> documents = new ArrayList<>();
+		List<String> snippets = new ArrayList<>();
+		List<Float> scores = new ArrayList<>();
 
 		int total = 0;
 
@@ -1096,14 +1097,13 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 	private <T extends ExtRepositoryObjectAdapter<?>> List<T> _filterByMimeType(
 		List<T> extRepositoryObjects, String[] mimeTypes) {
 
-		if (mimeTypes == null) {
+		if (ArrayUtil.isEmpty(mimeTypes)) {
 			return extRepositoryObjects;
 		}
 
-		Set<String> allowedMimeTypes = new HashSet<String>(
-			Arrays.asList(mimeTypes));
+		Set<String> allowedMimeTypes = new HashSet<>(Arrays.asList(mimeTypes));
 
-		List<T> filteredExtRepositoryObjects = new ArrayList<T>();
+		List<T> filteredExtRepositoryObjects = new ArrayList<>();
 
 		for (T extRepositoryObject : extRepositoryObjects) {
 			if (extRepositoryObject instanceof ExtRepositoryFileEntryAdapter) {
@@ -1269,7 +1269,7 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 		throws PortalException {
 
 		List<ExtRepositoryFileVersionAdapter> extRepositoryFileVersionAdapters =
-			new ArrayList<ExtRepositoryFileVersionAdapter>();
+			new ArrayList<>();
 
 		for (ExtRepositoryFileVersion extRepositoryFileVersion :
 				extRepositoryFileVersions) {
@@ -1374,7 +1374,7 @@ public class ExtRepositoryAdapter extends BaseRepositoryImpl {
 				List<? extends ExtRepositoryObject> extRepositoryObjects)
 		throws PortalException {
 
-		List<T> extRepositoryObjectAdapters = new ArrayList<T>();
+		List<T> extRepositoryObjectAdapters = new ArrayList<>();
 
 		for (ExtRepositoryObject extRepositoryObject : extRepositoryObjects) {
 			extRepositoryObjectAdapters.add(
