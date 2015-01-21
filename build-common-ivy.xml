@@ -461,6 +461,15 @@
 					<var name="plugin.ivy.resolve.transitive.dependencies" value="${ivy.resolve.transitive.dependencies}" />
 				</else>
 			</if>
+
+			<if>
+				<not>
+					<available file="@{module.dir}/build.gradle" />
+				</not>
+				<then>
+					<touch file="@{module.dir}/build.gradle" />
+				</then>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -579,7 +588,7 @@
 			description="${ivy.pom.description}"
 			ivyfile="ivy.xml"
 			pomfile="${plugin.pom.file}"
-			templatefile="${sdk.dir}/tools/pom_tmpl/template.pom"
+			templatefile="${sdk.dir}/tools/templates/pom_tmpl/template.pom"
 		>
 			<mapping conf="default" scope="compile" />
 			<mapping conf="provided" scope="provided" />

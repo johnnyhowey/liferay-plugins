@@ -1,4 +1,4 @@
-@import "compass";
+@import "bourbon";
 @import "mixins";
 
 /* ---------- Configuration ---------- */
@@ -23,6 +23,10 @@
 	.kb-submit-buttons {
 		margin: 0;
 		padding: 10px 0 0;
+	}
+
+	.social-boomarks-options {
+		margin-left: 15px;
 	}
 }
 
@@ -356,10 +360,6 @@
 		label {
 			display: inherit;
 		}
-	}
-
-	.kb-new-parent .control-group-inline {
-		margin-bottom: 0;
 	}
 
 	.kb-panel-separator {

@@ -51,6 +51,7 @@ import com.liferay.portal.kernel.sanitizer.SanitizerUtil;
 import com.liferay.portal.kernel.search.Indexable;
 import com.liferay.portal.kernel.search.IndexableType;
 import com.liferay.portal.kernel.systemevent.SystemEvent;
+import com.liferay.portal.kernel.util.ArrayUtil;
 import com.liferay.portal.kernel.util.ContentTypes;
 import com.liferay.portal.kernel.util.HtmlUtil;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -1029,12 +1030,14 @@ public class CalendarBookingLocalServiceImpl
 			calendarBookingPersistence.findByParentCalendarBookingId(
 				calendarBooking.getCalendarBookingId());
 
-		Set<Long> existingCalendarBookingIds = new HashSet<Long>(
+		Set<Long> existingCalendarBookingIds = new HashSet<>(
 			childCalendarIds.length);
 
 		for (CalendarBooking childCalendarBooking : childCalendarBookings) {
 			if (childCalendarBooking.isMasterBooking() ||
-				childCalendarBooking.isDenied()) {
+				(childCalendarBooking.isDenied() &&
+				 ArrayUtil.contains(
+					 childCalendarIds, childCalendarBooking.getCalendarId()))) {
 
 				continue;
 			}
@@ -1117,8 +1120,7 @@ public class CalendarBookingLocalServiceImpl
 	protected void updateChildCalendarBookings(
 		CalendarBooking calendarBooking, Date modifiedDate, String recurrence) {
 
-		List<CalendarBooking> childCalendarBookings =
-			new ArrayList<CalendarBooking>();
+		List<CalendarBooking> childCalendarBookings = new ArrayList<>();
 
 		if (calendarBooking.isMasterBooking()) {
 			childCalendarBookings = getChildCalendarBookings(
