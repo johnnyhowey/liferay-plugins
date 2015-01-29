@@ -33,7 +33,7 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 	}
 
 	protected void upgradeNotifications() throws Exception {
-		if (!hasTable("Notifications_UserNotificationEvent")) {
+		if (!hasTable("Notifications_UserEvent")) {
 			return;
 		}
 
@@ -46,7 +46,7 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 
 			ps = con.prepareStatement(
 				"select userNotificationEventId, actionRequired from " +
-					"Notifications_UserNotificationEvent");
+					"Notifications_UserEvent");
 
 			rs = ps.executeQuery();
 
@@ -69,7 +69,7 @@ public class UpgradeUserNotificationEvent extends UpgradeProcess {
 			DataAccess.cleanUp(con, ps, rs);
 		}
 
-		runSQL("drop table Notifications_UserNotificationEvent");
+		runSQL("drop table Notifications_UserEvent");
 	}
 
 }
