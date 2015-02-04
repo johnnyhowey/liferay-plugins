@@ -60,6 +60,7 @@
 				<path refid="lib.classpath" />
 				<path refid="portal.classpath" />
 				<fileset dir="${app.server.lib.portal.dir}" includes="commons-digester.jar,commons-lang.jar,easyconf.jar" />
+				<fileset dir="${sdk.dir}/dependencies/org.freemarker/lib" includes="*.jar" />
 				<fileset dir="${service.base.dir}/lib" includes="*.jar" />
 				<pathelement location="${sdk.dir}/misc" />
 				<pathelement location="${service.base.dir}/classes" />
@@ -345,8 +346,8 @@
 		<path id="wsdd.classpath">
 			<path refid="lib.classpath" />
 			<path refid="portal.classpath" />
-			<fileset dir="docroot/WEB-INF/lib" includes="*.jar" />
-			<pathelement location="docroot/WEB-INF/classes" />
+			<fileset dir="${plugin.lib.dir}" includes="*.jar" />
+			<pathelement location="${plugin.classes.dir}" />
 		</path>
 
 		<if>
@@ -369,10 +370,10 @@
 		>
 			<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
 			<jvmarg value="-Dorg.apache.commons.logging.Log=org.apache.commons.logging.impl.Log4JLogger" />
-			<arg value="wsdd.input.file=docroot/WEB-INF/service.xml" />
-			<arg value="wsdd.server.config.file=docroot/WEB-INF/server-config.wsdd" />
+			<arg value="wsdd.input.file=${plugin.source.dir}/../service.xml" />
+			<arg value="wsdd.server.config.file=${plugin.source.dir}/../server-config.wsdd" />
 			<arg value="wsdd.service.namespace=Plugin" />
-			<arg value="wsdd.output.path=docroot/WEB-INF/src/" />
+			<arg value="wsdd.output.path=${plugin.source.dir}/" />
 		</java>
 
 		<if>
@@ -388,6 +389,35 @@
 			<contains string="${build-wsdd.output}" substring="IOException" />
 			<then>
 				<fail>WSDD Builder generated exceptions.</fail>
+			</then>
+		</if>
+
+		<if>
+			<available file="bnd.bnd" />
+			<then>
+				<property file="bnd.bnd" prefix="bnd." />
+
+				<echo file="${plugin.name}-wsdd.bnd">Bundle-SymbolicName: ${bnd.Bundle-SymbolicName}.wsdd
+Bundle-Name: ${bnd.Bundle-Name} WSDD descriptors
+Bundle-Version: ${bnd.Bundle-Version}
+Fragment-Host: ${bnd.Bundle-SymbolicName}
+Include-Resource: WEB-INF/=server-config.wsdd,classes;filter:=*.wsdd
+				</echo>
+
+				<bndexpand propertyfile="${sdk.dir}/common.bnd" />
+
+				<baseline-jar
+					bndRootFile="${sdk.dir}/common.bnd"
+					file="${basedir}/${plugin.name}-wsdd.bnd"
+					outputPath="${plugin.wsdd.file}"
+					sourcePath="${basedir}"
+				>
+					<classpath>
+						<pathelement location="${plugin.classes.dir}" />
+					</classpath>
+				</baseline-jar>
+
+				<delete file="${basedir}/${plugin.name}-wsdd.bnd" failonerror="false" />
 			</then>
 		</if>
 	</target>
@@ -813,7 +843,7 @@
 
 		<test-cmd
 			module.dir="${basedir}"
-			junit.forkmode="once" 
+			junit.forkmode="once"
 			test.class="${test.classes}"
 			test.type="integration"
 		/>
