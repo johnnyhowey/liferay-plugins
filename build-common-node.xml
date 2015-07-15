@@ -149,6 +149,12 @@ ${nodejs.url[osx64]}.
 							/>
 						</then>
 					</if>
+
+					<node-execute
+						node.args="config set cache ${sdk.tools.dir}/node-v${nodejs.version}/.cache --global"
+						node.command="npm"
+						node.working.dir="${sdk.tools.dir}/node-v${nodejs.version}"
+					/>
 				</then>
 			</if>
 		</sequential>
@@ -156,20 +162,25 @@ ${nodejs.url[osx64]}.
 
 	<macrodef name="download-node-module">
 		<attribute name="node.module.name" />
+		<attribute name="node.module.version" />
 
 		<sequential>
+			<loadfile failonerror="false" property="package.json.content" srcFile="${sdk.tools.dir}/node-v${nodejs.version}/node_modules/@{node.module.name}/package.json" />
+
 			<if>
 				<not>
-					<available file="${sdk.tools.dir}/node-v${nodejs.version}/node_modules/@{node.module.name}" />
+					<contains string="${package.json.content}" substring="&quot;version&quot;: &quot;@{node.module.version}&quot;" />
 				</not>
 				<then>
 					<node-execute
-						node.args="install @{node.module.name}"
+						node.args="install @{node.module.name}@&quot;@{node.module.version}&quot;"
 						node.command="npm"
 						node.working.dir="${sdk.tools.dir}/node-v${nodejs.version}"
 					/>
 				</then>
 			</if>
+
+			<var name="package.json.content" unset="true" />
 		</sequential>
 	</macrodef>
 
@@ -191,9 +202,19 @@ ${nodejs.url[osx64]}.
 				</then>
 			</if>
 
-			<exec dir="@{node.working.dir}" executable="${sdk.tools.dir}/node-v${nodejs.version}/bin/@{node.command}">
-				<arg line="@{node.command.args} @{node.args}" />
-			</exec>
+			<if>
+				<os family="unix" />
+				<then>
+					<exec dir="@{node.working.dir}" executable="${sdk.tools.dir}/node-v${nodejs.version}/bin/@{node.command}">
+						<arg line="@{node.command.args} @{node.args}" />
+					</exec>
+				</then>
+				<else>
+					<exec dir="@{node.working.dir}" executable="${sdk.tools.dir}/node-v${nodejs.version}/@{node.command}.cmd">
+						<arg line="@{node.command.args} @{node.args}" />
+					</exec>
+				</else>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -221,14 +242,17 @@ ${nodejs.url[osx64]}.
 
 			<download-node-module
 				node.module.name="babel"
+				node.module.version="${nodejs.modules.version[babel]}"
 			/>
 
 			<download-node-module
 				node.module.name="lfr-amd-loader"
+				node.module.version="${nodejs.modules.version[lfr-amd-loader]}"
 			/>
 
 			<download-node-module
 				node.module.name="lfr-module-config-generator"
+				node.module.version="${nodejs.modules.version[lfr-module-config-generator]}"
 			/>
 
 			<pathconvert pathsep=" " property="transpile.files" setonempty="false" refid="transpile.fileset" >
