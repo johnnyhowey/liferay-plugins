@@ -30,6 +30,8 @@ import com.liferay.portal.kernel.io.unsync.UnsyncByteArrayInputStream;
 import com.liferay.portal.kernel.repository.model.FileEntry;
 import com.liferay.portal.kernel.util.MapUtil;
 import com.liferay.portal.kernel.util.StreamUtil;
+import com.liferay.portal.kernel.util.StringPool;
+import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.kernel.xml.Element;
 import com.liferay.portal.portletfilerepository.PortletFileRepositoryUtil;
@@ -225,6 +227,14 @@ public class KBArticleStagedModelDataHandler
 				KBFolderConstants.DEFAULT_PARENT_FOLDER_ID);
 		}
 
+		String urlTitle = kbArticle.getUrlTitle();
+
+		if (Validator.isNotNull(urlTitle) &&
+			!urlTitle.startsWith(StringPool.SLASH)) {
+
+			kbArticle.setUrlTitle(StringPool.SLASH + urlTitle);
+		}
+
 		String[] sections = AdminUtil.unescapeSections(kbArticle.getSections());
 
 		ServiceContext serviceContext = portletDataContext.createServiceContext(
@@ -283,16 +293,34 @@ public class KBArticleStagedModelDataHandler
 			}
 		}
 		else {
-			importedKBArticle = KBArticleLocalServiceUtil.addKBArticle(
-				userId, kbArticle.getParentResourceClassNameId(),
-				parentResourcePrimKey, kbArticle.getTitle(),
-				kbArticle.getUrlTitle(), kbArticle.getContent(),
-				kbArticle.getDescription(), kbArticle.getSourceURL(), sections,
-				null, serviceContext);
+			if (resourcePrimaryKey != kbArticle.getResourcePrimKey()) {
+				KBArticleLocalServiceUtil.updateKBArticle(
+					userId, resourcePrimaryKey, kbArticle.getTitle(),
+					kbArticle.getContent(), kbArticle.getDescription(),
+					kbArticle.getSourceURL(), sections, null, null,
+					serviceContext);
 
-			KBArticleLocalServiceUtil.updatePriority(
-				importedKBArticle.getResourcePrimKey(),
-				kbArticle.getPriority());
+				KBArticleLocalServiceUtil.moveKBArticle(
+					userId, resourcePrimaryKey,
+					kbArticle.getParentResourceClassNameId(),
+					parentResourcePrimKey, kbArticle.getPriority());
+
+				importedKBArticle =
+					KBArticleLocalServiceUtil.getLatestKBArticle(
+						resourcePrimaryKey, WorkflowConstants.STATUS_APPROVED);
+			}
+			else {
+				importedKBArticle = KBArticleLocalServiceUtil.addKBArticle(
+					userId, kbArticle.getParentResourceClassNameId(),
+					parentResourcePrimKey, kbArticle.getTitle(),
+					kbArticle.getUrlTitle(), kbArticle.getContent(),
+					kbArticle.getDescription(), kbArticle.getSourceURL(),
+					sections, null, serviceContext);
+
+				KBArticleLocalServiceUtil.updatePriority(
+					importedKBArticle.getResourcePrimKey(),
+					kbArticle.getPriority());
+			}
 		}
 
 		importKBArticleAttachments(
