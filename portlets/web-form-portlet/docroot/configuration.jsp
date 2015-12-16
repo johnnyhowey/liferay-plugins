@@ -48,17 +48,20 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 	<aui:input name="<%= Constants.CMD %>" type="hidden" value="<%= Constants.UPDATE %>" />
 	<aui:input name="redirect" type="hidden" value="<%= configurationRenderURL %>" />
 
+	<liferay-ui:error exception="<%= ColumnNameException.class %>" message="please-enter-valid-field-names" />
 	<liferay-ui:error exception="<%= DuplicateColumnNameException.class %>" message="please-enter-unique-field-names" />
 
 	<liferay-ui:panel-container extended="<%= Boolean.TRUE %>" id="webFormConfiguration" persistState="<%= true %>">
 		<liferay-ui:panel collapsible="<%= true %>" extended="<%= true %>" id="webFormGeneral" persistState="<%= true %>" title="form-information">
 			<aui:fieldset>
+				<liferay-ui:error key="successURLInvalid" message="please-enter-a-valid-url" />
+
 				<aui:field-wrapper cssClass="lfr-input-text-container" label="title">
-					<liferay-ui:input-localized name="title" xml="<%= titleXml %>" />
+					<liferay-ui:input-localized cssClass="form-control lfr-input-text" name="title" xml="<%= titleXml %>" />
 				</aui:field-wrapper>
 
 				<aui:field-wrapper cssClass="lfr-textarea-container" label="description">
-					<liferay-ui:input-localized name="description" type="textarea" xml="<%= descriptionXml %>" />
+					<liferay-ui:input-localized cssClass="form-control lfr-input-text" name="description" type="textarea" xml="<%= descriptionXml %>" />
 				</aui:field-wrapper>
 
 				<aui:input name="preferences--requireCaptcha--" type="checkbox" value="<%= requireCaptcha %>" />
@@ -210,26 +213,23 @@ if (WebFormUtil.getTableRowsCount(company.getCompanyId(), databaseTableName) > 0
 			var optionalControl = formRow.one('.optional-control').ancestor();
 			var paragraphDiv = formRow.one('.paragraph');
 
-			if (value === 'paragraph') {
+			var paragraph = value === 'paragraph'
+
+			if (paragraph) {
 				var inputName = labelName.one('input.field');
 
 				var formFieldsIndex = instance.attr('id').match(/\d+$/);
 
 				inputName.val('<liferay-ui:message key="paragraph" />' + formFieldsIndex);
 				inputName.fire('change');
-
-				labelName.hide();
-				optionalControl.hide();
-				paragraphDiv.show();
-
-				optionalControl.all('input[type="checkbox"]').attr('checked', 'true');
-				optionalControl.all('input[type="hidden"]').attr('value', 'true');
 			}
-			else {
-				labelName.show();
-				optionalControl.show();
-				paragraphDiv.hide();
-			}
+
+			labelName.toggle(!paragraph);
+			optionalControl.toggle(!paragraph);
+			paragraphDiv.toggle(paragraph);
+
+			optionalControl.all('input[type="checkbox"]').attr('checked', paragraph);
+			optionalControl.all('input[type="hidden"]').attr('value', paragraph);
 		};
 
 		var webFields = A.one('.webFields');

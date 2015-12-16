@@ -2450,12 +2450,10 @@
 </p>
 
 <%
-DB db = DBFactoryUtil.getDB();
-
-String dbType = db.getType();
+DB db = DBManagerUtil.getDB();
 %>
 
-<c:if test="<%= dbType.equals(DB.TYPE_MYSQL) %>">
+<c:if test="<%= db.getDBType() == DBType.MYSQL %>">
 	<p>
 		<h3>Replace</h3>
 	</p>
@@ -2593,7 +2591,7 @@ String dbType = db.getType();
 
 </p>
 
-<c:if test="<%= dbType.equals(DB.TYPE_MYSQL) %>">
+<c:if test="<%= db.getDBType() == DBType.MYSQL %>">
 	<p>
 		<h3>Truncate</h3>
 	</p>
@@ -2998,7 +2996,7 @@ private class SQLSecurityExceptionTest extends SecurityExceptionTest {
 	}
 
 	protected void executeDB(String sql) throws Exception {
-		DB db = DBFactoryUtil.getDB();
+		DB db = DBManagerUtil.getDB();
 
 		db.runSQL(sql);
 	}

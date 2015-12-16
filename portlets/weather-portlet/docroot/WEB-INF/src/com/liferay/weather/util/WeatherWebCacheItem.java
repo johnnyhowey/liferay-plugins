@@ -32,12 +32,14 @@ import com.liferay.weather.model.Weather;
  */
 public class WeatherWebCacheItem implements WebCacheItem {
 
-	public WeatherWebCacheItem(String zip) {
+	public WeatherWebCacheItem(String zip, String apiKey) {
 		_zip = zip;
 
 		if (_zip.equals("Frankfurt/Main")) {
 			_zip = "Frankfurt, Germany";
 		}
+
+		_apiKey = apiKey;
 	}
 
 	@Override
@@ -62,7 +64,8 @@ public class WeatherWebCacheItem implements WebCacheItem {
 	protected Weather doConvert() throws Exception {
 		String xml = HttpUtil.URLtoString(
 			"http://api.openweathermap.org/data/2.5/weather?q=" +
-				HttpUtil.encodeURL(_zip) + "&units=imperial&mode=xml");
+				HttpUtil.encodeURL(_zip) + "&units=imperial&mode=xml&APPID=" +
+					_apiKey);
 
 		Document document = SAXReaderUtil.read(xml);
 
@@ -93,6 +96,7 @@ public class WeatherWebCacheItem implements WebCacheItem {
 
 	private static final long _REFRESH_TIME = Time.MINUTE * 60;
 
+	private String _apiKey;
 	private String _zip;
 
 }

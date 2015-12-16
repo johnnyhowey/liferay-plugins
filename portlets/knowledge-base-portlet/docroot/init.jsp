@@ -26,15 +26,14 @@ taglib uri="http://liferay.com/tld/ui" prefix="liferay-ui" %><%@
 taglib uri="http://liferay.com/tld/util" prefix="liferay-util" %>
 
 <%@ page import="com.liferay.journal.model.JournalArticle" %><%@
-page import="com.liferay.knowledgebase.DuplicateKBArticleUrlTitleException" %><%@
 page import="com.liferay.knowledgebase.DuplicateKBFolderNameException" %><%@
-page import="com.liferay.knowledgebase.InvalidKBArticleUrlTitleException" %><%@
 page import="com.liferay.knowledgebase.InvalidKBFolderNameException" %><%@
 page import="com.liferay.knowledgebase.KBArticleContentException" %><%@
 page import="com.liferay.knowledgebase.KBArticleImportException" %><%@
 page import="com.liferay.knowledgebase.KBArticlePriorityException" %><%@
 page import="com.liferay.knowledgebase.KBArticleSourceURLException" %><%@
 page import="com.liferay.knowledgebase.KBArticleTitleException" %><%@
+page import="com.liferay.knowledgebase.KBArticleUrlTitleException" %><%@
 page import="com.liferay.knowledgebase.KBCommentContentException" %><%@
 page import="com.liferay.knowledgebase.KBTemplateContentException" %><%@
 page import="com.liferay.knowledgebase.KBTemplateTitleException" %><%@
@@ -89,6 +88,7 @@ page import="com.liferay.portal.kernel.search.Indexer" %><%@
 page import="com.liferay.portal.kernel.search.IndexerRegistryUtil" %><%@
 page import="com.liferay.portal.kernel.search.SearchContext" %><%@
 page import="com.liferay.portal.kernel.search.SearchContextFactory" %><%@
+page import="com.liferay.portal.kernel.upload.UploadRequestSizeException" %><%@
 page import="com.liferay.portal.kernel.util.ArrayUtil" %><%@
 page import="com.liferay.portal.kernel.util.Constants" %><%@
 page import="com.liferay.portal.kernel.util.FastDateFormatConstants" %><%@
@@ -110,6 +110,7 @@ page import="com.liferay.portal.kernel.util.Tuple" %><%@
 page import="com.liferay.portal.kernel.util.UnicodeFormatter" %><%@
 page import="com.liferay.portal.kernel.util.Validator" %><%@
 page import="com.liferay.portal.kernel.workflow.WorkflowConstants" %><%@
+page import="com.liferay.portal.model.ModelHintsUtil" %><%@
 page import="com.liferay.portal.model.Ticket" %><%@
 page import="com.liferay.portal.model.TicketConstants" %><%@
 page import="com.liferay.portal.model.User" %><%@

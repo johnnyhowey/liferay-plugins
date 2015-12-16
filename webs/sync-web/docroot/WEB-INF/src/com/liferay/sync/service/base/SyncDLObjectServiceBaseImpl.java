@@ -16,7 +16,7 @@ package com.liferay.sync.service.base;
 
 import com.liferay.portal.kernel.bean.BeanReference;
 import com.liferay.portal.kernel.dao.db.DB;
-import com.liferay.portal.kernel.dao.db.DBFactoryUtil;
+import com.liferay.portal.kernel.dao.db.DBManagerUtil;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdate;
 import com.liferay.portal.kernel.dao.jdbc.SqlUpdateFactoryUtil;
 import com.liferay.portal.kernel.exception.SystemException;
@@ -664,6 +664,25 @@ public abstract class SyncDLObjectServiceBaseImpl extends BaseServiceImpl
 		this.dlFileVersionPersistence = dlFileVersionPersistence;
 	}
 
+	/**
+	 * Returns the d l trash remote service.
+	 *
+	 * @return the d l trash remote service
+	 */
+	public com.liferay.portlet.documentlibrary.service.DLTrashService getDLTrashService() {
+		return dlTrashService;
+	}
+
+	/**
+	 * Sets the d l trash remote service.
+	 *
+	 * @param dlTrashService the d l trash remote service
+	 */
+	public void setDLTrashService(
+		com.liferay.portlet.documentlibrary.service.DLTrashService dlTrashService) {
+		this.dlTrashService = dlTrashService;
+	}
+
 	public void afterPropertiesSet() {
 		Class<?> clazz = getClass();
 
@@ -721,7 +740,7 @@ public abstract class SyncDLObjectServiceBaseImpl extends BaseServiceImpl
 		try {
 			DataSource dataSource = syncDLObjectPersistence.getDataSource();
 
-			DB db = DBFactoryUtil.getDB();
+			DB db = DBManagerUtil.getDB();
 
 			sql = db.buildSQL(sql);
 			sql = PortalUtil.transformSQL(sql);
@@ -800,6 +819,8 @@ public abstract class SyncDLObjectServiceBaseImpl extends BaseServiceImpl
 	protected com.liferay.portlet.documentlibrary.service.DLFileVersionService dlFileVersionService;
 	@BeanReference(type = DLFileVersionPersistence.class)
 	protected DLFileVersionPersistence dlFileVersionPersistence;
+	@BeanReference(type = com.liferay.portlet.documentlibrary.service.DLTrashService.class)
+	protected com.liferay.portlet.documentlibrary.service.DLTrashService dlTrashService;
 	private ClassLoader _classLoader;
 	private SyncDLObjectServiceClpInvoker _clpInvoker = new SyncDLObjectServiceClpInvoker();
 }
