@@ -22,6 +22,7 @@ import com.liferay.message.boards.web.constants.MBPortletKeys;
 import com.liferay.portal.kernel.configuration.Filter;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.language.LanguageUtil;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.Validator;
@@ -34,7 +35,6 @@ import com.liferay.portal.model.PortletConstants;
 import com.liferay.portal.model.ResourceConstants;
 import com.liferay.portal.model.Role;
 import com.liferay.portal.model.RoleConstants;
-import com.liferay.portal.security.permission.ActionKeys;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
 import com.liferay.portal.service.ResourceLocalServiceUtil;
 import com.liferay.portal.service.ResourcePermissionLocalServiceUtil;
@@ -47,6 +47,7 @@ import com.liferay.site.navigation.breadcrumb.web.constants.BreadcrumbPortletKey
 import com.liferay.util.portlet.PortletProps;
 import com.liferay.wiki.constants.WikiPortletKeys;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -64,12 +65,17 @@ public class LayoutUtil {
 			String layoutTemplateId)
 		throws Exception {
 
+		Map<Locale, String> friendlyURLMap = new HashMap<>();
+
+		friendlyURLMap.put(LocaleUtil.getDefault(), friendlyURL);
+
 		ServiceContext serviceContext = new ServiceContext();
 
 		Layout layout = LayoutLocalServiceUtil.addLayout(
 			group.getCreatorUserId(), group.getGroupId(), privateLayout,
 			parentLayoutId, nameMap, null, null, null, null,
-			LayoutConstants.TYPE_PORTLET, false, friendlyURL, serviceContext);
+			LayoutConstants.TYPE_PORTLET, StringPool.BLANK, false,
+			friendlyURLMap, serviceContext);
 
 		LayoutTypePortlet layoutTypePortlet =
 			(LayoutTypePortlet)layout.getLayoutType();

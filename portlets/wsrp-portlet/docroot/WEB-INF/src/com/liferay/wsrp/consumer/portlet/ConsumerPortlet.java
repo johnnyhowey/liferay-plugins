@@ -19,6 +19,7 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.LiferayPortletURL;
 import com.liferay.portal.kernel.portlet.PortletResponseUtil;
+import com.liferay.portal.kernel.security.auth.AuthTokenUtil;
 import com.liferay.portal.kernel.servlet.HttpHeaders;
 import com.liferay.portal.kernel.upload.UploadPortletRequest;
 import com.liferay.portal.kernel.util.ArrayUtil;
@@ -43,7 +44,6 @@ import com.liferay.portal.model.ListType;
 import com.liferay.portal.model.Phone;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.Website;
-import com.liferay.portal.security.auth.AuthTokenUtil;
 import com.liferay.portal.service.AddressLocalServiceUtil;
 import com.liferay.portal.service.EmailAddressLocalServiceUtil;
 import com.liferay.portal.service.ListTypeServiceUtil;
@@ -587,7 +587,7 @@ public class ConsumerPortlet extends GenericPortlet {
 
 		Online online = new Online();
 
-		String email = getOnlineEmail(user, "E-mail");
+		String email = getOnlineEmail(user, "email");
 
 		if (email != null) {
 			online.setEmail(email);
@@ -875,7 +875,7 @@ public class ConsumerPortlet extends GenericPortlet {
 		Telecom telecom = new Telecom();
 
 		TelephoneNum faxTelephoneNum = getTelephoneNum(
-			user, listTypeName + " Fax");
+			user, listTypeName + "-fax");
 
 		if (faxTelephoneNum != null) {
 			telecom.setFax(faxTelephoneNum);
@@ -923,7 +923,7 @@ public class ConsumerPortlet extends GenericPortlet {
 
 		userProfile.setBdate(bdate);
 
-		Contact businessInfoContact = getContact(user, "Business");
+		Contact businessInfoContact = getContact(user, "business");
 
 		userProfile.setBusinessInfo(businessInfoContact);
 
@@ -931,7 +931,7 @@ public class ConsumerPortlet extends GenericPortlet {
 
 		userProfile.setGender(gender);
 
-		Contact homeInfoContact = getContact(user, "Personal");
+		Contact homeInfoContact = getContact(user, "personal");
 
 		userProfile.setHomeInfo(homeInfoContact);
 

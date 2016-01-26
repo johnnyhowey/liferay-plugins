@@ -17,8 +17,8 @@
 
 package com.liferay.so.sites.portlet;
 
-import com.liferay.portal.DuplicateGroupException;
-import com.liferay.portal.GroupKeyException;
+import com.liferay.portal.exception.DuplicateGroupException;
+import com.liferay.portal.exception.GroupKeyException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -27,6 +27,8 @@ import com.liferay.portal.kernel.portlet.LiferayPortletResponse;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCPortlet;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
 import com.liferay.portal.kernel.util.ClassResolverUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.GetterUtil;
@@ -49,8 +51,6 @@ import com.liferay.portal.model.MembershipRequestConstants;
 import com.liferay.portal.model.Organization;
 import com.liferay.portal.model.User;
 import com.liferay.portal.model.UserGroup;
-import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.security.permission.PermissionChecker;
 import com.liferay.portal.service.GroupLocalServiceUtil;
 import com.liferay.portal.service.GroupServiceUtil;
 import com.liferay.portal.service.LayoutLocalServiceUtil;
@@ -685,7 +685,7 @@ public class SitesPortlet extends MVCPortlet {
 	}
 
 	private static final String _CLASS_NAME =
-		"com.liferay.portlet.sites.util.SitesUtil";
+		"com.liferay.sites.kernel.util.SitesUtil";
 
 	private static MethodKey _mergeLayoutSetPrototypeLayoutsMethodKey =
 		new MethodKey(

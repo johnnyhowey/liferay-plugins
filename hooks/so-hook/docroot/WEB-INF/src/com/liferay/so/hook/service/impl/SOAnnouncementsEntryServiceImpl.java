@@ -20,11 +20,11 @@ package com.liferay.so.hook.service.impl;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.portlet.PortletProvider;
 import com.liferay.portal.kernel.portlet.PortletProviderUtil;
+import com.liferay.portal.kernel.security.auth.PrincipalException;
+import com.liferay.portal.kernel.security.permission.ActionKeys;
+import com.liferay.portal.kernel.security.permission.PermissionChecker;
+import com.liferay.portal.kernel.security.permission.PermissionThreadLocal;
 import com.liferay.portal.model.Group;
-import com.liferay.portal.security.auth.PrincipalException;
-import com.liferay.portal.security.permission.ActionKeys;
-import com.liferay.portal.security.permission.PermissionChecker;
-import com.liferay.portal.security.permission.PermissionThreadLocal;
 import com.liferay.portal.service.permission.PortletPermissionUtil;
 import com.liferay.portal.util.PortalUtil;
 import com.liferay.portlet.announcements.model.AnnouncementsEntry;
@@ -49,10 +49,10 @@ public class SOAnnouncementsEntryServiceImpl
 			long plid, long classNameId, long classPK, String title,
 			String content, String url, String type, int displayDateMonth,
 			int displayDateDay, int displayDateYear, int displayDateHour,
-			int displayDateMinute, int expirationDateMonth,
-			int expirationDateDay, int expirationDateYear,
-			int expirationDateHour, int expirationDateMinute, int priority,
-			boolean alert)
+			int displayDateMinute, boolean displayImmediately,
+			int expirationDateMonth, int expirationDateDay,
+			int expirationDateYear, int expirationDateHour,
+			int expirationDateMinute, int priority, boolean alert)
 		throws PortalException {
 
 		AnnouncementsEntry announcementEntry = null;
@@ -61,9 +61,9 @@ public class SOAnnouncementsEntryServiceImpl
 			announcementEntry = super.addEntry(
 				plid, classNameId, classPK, title, content, url, type,
 				displayDateMonth, displayDateDay, displayDateYear,
-				displayDateHour, displayDateMinute, expirationDateMonth,
-				expirationDateDay, expirationDateYear, expirationDateHour,
-				expirationDateMinute, priority, alert);
+				displayDateHour, displayDateMinute, displayImmediately,
+				expirationDateMonth, expirationDateDay, expirationDateYear,
+				expirationDateHour, expirationDateMinute, priority, alert);
 		}
 		catch (PrincipalException pe) {
 			String className = PortalUtil.getClassName(classNameId);
@@ -83,8 +83,9 @@ public class SOAnnouncementsEntryServiceImpl
 					permissionChecker.getUserId(), classNameId, classPK, title,
 					content, url, type, displayDateMonth, displayDateDay,
 					displayDateYear, displayDateHour, displayDateMinute,
-					expirationDateMonth, expirationDateDay, expirationDateYear,
-					expirationDateHour, expirationDateMinute, priority, alert);
+					displayImmediately, expirationDateMonth, expirationDateDay,
+					expirationDateYear, expirationDateHour,
+					expirationDateMinute, priority, alert);
 			}
 			else {
 				throw pe;
