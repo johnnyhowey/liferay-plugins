@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE project>
 
-<project name="plugins" basedir="." default="all" xmlns:antelope="antlib:ise.antelope.tasks">
+<project name="plugins" basedir="." default="all" xmlns:antelope="antlib:ise.antelope.tasks" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 	<import file="build-common.xml" />
 
 	<condition property="plugins.includes.path" value="">
@@ -23,6 +23,44 @@
 	</path>
 
 	<pathconvert pathsep="," property="plugins.includes.path" refid="plugins.includes.path" targetos="unix" />
+
+	<macrodef name="extract-plugins-sdk">
+		<attribute default="false" name="plugins.sdk.with.dependencies" />
+
+		<sequential>
+			<var name="plugins.sdk.name" value="com.liferay.portal.plugins.sdk" />
+			<var name="plugins.sdk.zip.excludes" value="*.iml,.git/**,.ivy/**,build.*.properties,dist/**,hooks/*-hook/**,layouttpl/*-layouttpl/**,portlets/*-portlet/**,private-plugins.txt,shared/*-shared/**,source_formatter_*,suites/**,summary.*,themes/*-theme/**,tmp/**,tools/node-*/**,webs/*-web/**" />
+
+			<if>
+				<istrue value="@{plugins.sdk.with.dependencies}" />
+				<then>
+					<var name="plugins.sdk.name" value="${plugins.sdk.name}.with.dependencies" />
+				</then>
+				<else>
+					<var name="plugins.sdk.zip.excludes" value="${plugins.sdk.zip.excludes},dependencies/**/ivy.xml.MD5,dependencies/**/lib/**,lib/**,ivy.xml.MD5" />
+				</else>
+			</if>
+
+			<var name="plugins.sdk.name" value="${plugins.sdk.name}-${lp.version}" />
+
+			<mkdir dir="dist" />
+
+			<delete file="dist/${plugins.sdk.name}.zip" />
+
+			<zip destfile="dist/${plugins.sdk.name}.zip" duplicate="preserve">
+				<zipfileset
+					dir="."
+					excludes="${plugins.sdk.zip.excludes}"
+					prefix="${plugins.sdk.name}"
+				/>
+				<zipfileset
+					dir="."
+					includes="lib/ant-contrib.jar,lib/antelopetasks.jar,lib/bcpg-jdk16.jar,lib/bcprov-jdk16.jar"
+					prefix="${plugins.sdk.name}"
+				/>
+			</zip>
+		</sequential>
+	</macrodef>
 
 	<target name="all">
 		<antcall target="clean" />
@@ -83,126 +121,12 @@
 		</if>
 	</target>
 
-	<target name="ear">
-		<delete dir="dist/liferay-portal.ear" />
-		<delete dir="dist/modules" />
-
-		<copy todir="dist" overwrite="yes">
-			<fileset
-				dir="${sdk.dir}/tools/templates/ear_tmpl"
-			/>
-		</copy>
-
-		<copy todir="dist/modules/APP-INF/lib">
-			<fileset dir="${app.server.lib.global.dir}">
-				<include name="*.jar" />
-			</fileset>
-		</copy>
-
-		<fileset dir="dist/modules" id="ear.dependency.libraries">
-			<include name="APP-INF/lib/*.jar" />
-		</fileset>
-
-		<pathconvert pathsep=" " property="ear.dependency.libraries.converted" refid="ear.dependency.libraries">
-			<mapper>
-				<chainedmapper>
-					<flattenmapper />
-					<globmapper from="*.jar" to="APP-INF/lib/*.jar" />
-				</chainedmapper>
-			</mapper>
-		</pathconvert>
-
-		<war
-			basedir="${app.server.portal.dir}"
-			destfile="dist/modules/liferay-portal.war"
-		>
-			<manifest>
-				<attribute name="Class-Path" value="${ear.dependency.libraries.converted}" />
-			</manifest>
-		</war>
-
-		<for param="module.full.path">
-			<path>
-				<dirset
-					dir="${app.server.deploy.dir}"
-					excludes="${plugins.ear.excludes}"
-					includes="${plugins.ear.includes}"
-				/>
-			</path>
-			<sequential>
-				<antelope:stringutil string="@{module.full.path}" property="module.full.path.unix">
-					<antelope:replace regex="\\" replacement="/" />
-				</antelope:stringutil>
-
-				<antelope:grep in="${module.full.path.unix}" regex="(.*/)(.*)" group="2" property="module.name" />
-
-				<war
-					basedir="@{module.full.path}"
-					destfile="dist/modules/${module.name}.war"
-				/>
-			</sequential>
-		</for>
-
-		<fileset dir="dist/modules" id="ear.modules">
-			<include name="*.war" />
-		</fileset>
-
-		<pathconvert pathsep="," property="ear.modules.converted" refid="ear.modules">
-			<mapper>
-				<chainedmapper>
-					<flattenmapper />
-				</chainedmapper>
-			</mapper>
-		</pathconvert>
-
-		<java
-			classname="com.liferay.portal.tools.EARBuilder"
-			classpathref="portal.classpath"
-			fork="true"
-			newenvironment="true"
-		>
-			<jvmarg value="-Dexternal-properties=com/liferay/portal/tools/dependencies/portal-tools.properties" />
-			<arg value="${basedir}/dist/modules/META-INF/application.xml" />
-			<arg value="${ear.modules.converted}" />
-			<arg value="${plugins.ear.portal.context.path}" />
-		</java>
-
-		<ear
-			appxml="dist/modules/META-INF/application.xml"
-			basedir="dist/modules"
-			destfile="dist/liferay-portal.ear"
-			excludes="META-INF/application.xml"
-			includes="**/*.jar,*.war,META-INF/*.xml"
-		/>
-
-		<delete dir="dist/modules" />
+	<target name="extract-plugins-sdk">
+		<extract-plugins-sdk />
 	</target>
 
-	<target name="extract-plugins-sdk">
-		<mkdir dir="dist" />
-
-		<delete file="dist/liferay-plugins-sdk-${lp.version}.zip" />
-
-		<ant dir="webs/resources-importer-web" target="clean" inheritAll="false" />
-
-		<zip destfile="dist/liferay-plugins-sdk-${lp.version}.zip">
-			<zipfileset
-				dir="."
-				excludes="*.iml,.bnd/**,.git/**,.ivy/**,build.*.properties,dependencies/**/ivy.xml.MD5,dependencies/**/lib/**,dist/**,ext/*-ext/**,hooks/*-hook/**,lib/**,ivy.xml.MD5,layouttpl/*-layouttpl/**,portlets/*-portlet/**,private-plugins.txt,shared/*-shared/**,source_formatter_*,suites/**,summary.*,themes/*-theme/**,tmp/**,tools/node-*/**,webs/*-web/**"
-				prefix="liferay-plugins-sdk-${lp.version}"
-			/>
-			<zipfileset
-				dir="."
-				excludes="**/releng/**"
-				includes="webs/resources-importer-web/**"
-				prefix="liferay-plugins-sdk-${lp.version}"
-			/>
-			<zipfileset
-				dir="."
-				includes="lib/ant-contrib.jar,lib/antelopetasks.jar,lib/bcpg-jdk16.jar,lib/bcprov-jdk16.jar"
-				prefix="liferay-plugins-sdk-${lp.version}"
-			/>
-		</zip>
+	<target name="extract-plugins-sdk-with-dependencies">
+		<extract-plugins-sdk plugins.sdk.with.dependencies="true" />
 	</target>
 
 	<target name="format-javadoc">
@@ -211,6 +135,62 @@
 		<ant dir="portlets" target="format-javadoc" inheritAll="false" />
 		<ant dir="themes" target="format-javadoc" inheritAll="false" />
 		<ant dir="webs" target="format-javadoc" inheritAll="false" />
+	</target>
+
+	<target name="publish-sdk" depends="extract-plugins-sdk-with-dependencies">
+		<fail message="Please run either publish-sdk-release or publish-sdk-snapshot instead of this target.">
+			<condition>
+				<not>
+					<istrue value="${publish.sdk}" />
+				</not>
+			</condition>
+		</fail>
+
+		<condition property="remote.repository.password" value="${sonatype.snapshot.password}" else="${sonatype.release.password}">
+			<istrue value="${snapshot}" />
+		</condition>
+
+		<condition property="remote.repository.url" value="${sonatype.snapshot.url}" else="${sonatype.release.url}">
+			<istrue value="${snapshot}" />
+		</condition>
+
+		<condition property="remote.repository.username" value="${sonatype.snapshot.username}" else="${sonatype.release.username}">
+			<istrue value="${snapshot}" />
+		</condition>
+
+		<condition property="snapshot.version.suffix" value="-SNAPSHOT" else="">
+			<istrue value="${snapshot}" />
+		</condition>
+
+		<move file="dist/com.liferay.portal.plugins.sdk.with.dependencies-${lp.version}.zip" tofile="dist/com.liferay.portal.plugins.sdk.with.dependencies-${lp.version}${snapshot.version.suffix}.zip" />
+
+		<artifact:pom artifactId="com.liferay.portal.plugins.sdk.with.dependencies" groupId="com.liferay.portal" id="plugins.sdk.pom" packaging="zip" version="${lp.version}${snapshot.version.suffix}" />
+
+		<artifact:writepom pomRefId="plugins.sdk.pom" file="dist/plugins.sdk.pom" />
+
+		<artifact:deploy file="dist/com.liferay.portal.plugins.sdk.with.dependencies-${lp.version}${snapshot.version.suffix}.zip">
+			<pom file="dist/plugins.sdk.pom" />
+			<remoteRepository url="${remote.repository.url}">
+				<authentication password="${remote.repository.password}" username="${remote.repository.username}" />
+			</remoteRepository>
+		</artifact:deploy>
+
+		<delete file="dist/plugins.sdk.pom" />
+	</target>
+
+	<target name="publish-sdk-release">
+		<antcall target="publish-sdk">
+			<param name="lp.version" value="${lp.version}" />
+			<param name="publish.sdk" value="true" />
+		</antcall>
+	</target>
+
+	<target name="publish-sdk-snapshot">
+		<antcall target="publish-sdk">
+			<param name="lp.version" value="${lp.version}" />
+			<param name="publish.sdk" value="true" />
+			<param name="snapshot" value="true" />
+		</antcall>
 	</target>
 
 	<target name="setup-eclipse">
